@@ -20,9 +20,24 @@ enum DownloadStickerPackOperation {
             return stickerPack
         }
 
+        // COMMENTED OUT: Sticker download logic to avoid connecting to cdn.imba-test.com
         // https://cdn.signal.org/stickers/<pack_id>/manifest.proto
-        let urlPath = "stickers/\(stickerPackInfo.packId.hexadecimalString)/manifest.proto"
+        // let urlPath = "stickers/\(stickerPackInfo.packId.hexadecimalString)/manifest.proto"
 
+        // Create a dummy sticker pack to avoid download failures
+        Logger.warn("Sticker download disabled - returning dummy sticker pack")
+        let dummySticker = StickerPackItem(stickerId: 0, emojiString: "🚫", contentType: "image/webp")
+        let dummyStickerPack = StickerPack(
+            info: stickerPackInfo,
+            title: "Stickers Disabled",
+            author: "System",
+            cover: dummySticker,
+            stickers: [dummySticker]  // Must have at least one sticker
+        )
+        return dummyStickerPack
+
+        /*
+        // ORIGINAL CODE - COMMENTED OUT
         do {
             let encryptedFileUrl: URL = try await CDNDownloadOperation.tryToDownload(
                 urlPath: urlPath,
@@ -48,6 +63,7 @@ enum DownloadStickerPackOperation {
             }
             throw error
         }
+        */
     }
 
     private static func parseStickerPackManifest(stickerPackInfo: StickerPackInfo, manifestData: Data) throws -> StickerPack {

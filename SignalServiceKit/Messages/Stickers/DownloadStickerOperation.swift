@@ -41,6 +41,12 @@ enum DownloadStickerOperation {
             return stickerUrl
         }
 
+        // COMMENTED OUT: Individual sticker download logic to avoid connecting to cdn.imba-test.com
+        Logger.warn("Individual sticker download disabled - sticker will not be available")
+        throw SSKUnretryableError.stickerDecryptionFailure
+
+        /*
+        // ORIGINAL CODE - COMMENTED OUT
         // https://cdn.signal.org/stickers/<pack_id>/full/<sticker_id>
         let urlPath = "stickers/\(stickerInfo.packId.hexadecimalString)/full/\(stickerInfo.stickerId)"
 
@@ -60,6 +66,7 @@ enum DownloadStickerOperation {
 
         DownloadStickerOperation.setCachedUrl(decryptedFileUrl, for: stickerInfo)
         return decryptedFileUrl
+        */
 
     }
 

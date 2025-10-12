@@ -108,6 +108,15 @@ public class BadgeAssets {
         let spriteUrl = fileUrlForSpritesheet()
         guard !OWSFileSystem.fileOrFolderExists(url: spriteUrl) else { return }
 
+        // COMMENTED OUT: Badge sprite download disabled to avoid connecting to updates2.signal.org
+        Logger.warn("Badge sprite download disabled - creating empty placeholder file")
+
+        // Create an empty placeholder file to avoid repeated download attempts
+        try Data().write(to: spriteUrl)
+        return
+
+        /*
+        // ORIGINAL CODE - COMMENTED OUT
         // TODO: Badges — Censorship circumvention
         let urlSession = SSKEnvironment.shared.signalServiceRef.urlSessionForUpdates2()
         let result = try await urlSession.performDownload(remoteSourceUrl.absoluteString, method: .get)
@@ -119,11 +128,14 @@ public class BadgeAssets {
             throw OWSAssertionError("Invalid sprite")
         }
         try OWSFileSystem.moveFile(from: resultUrl, to: spriteUrl)
+        */
     }
 
     private func extractSpritesFromSpritesheetIfNecessary() throws {
         guard Data.ows_isValidImage(atPath: fileUrlForSpritesheet().path) else {
-            throw OWSAssertionError("Invalid spritesheet source image")
+            // If spritesheet is invalid (likely our empty placeholder), skip extraction
+            Logger.warn("Badge sprite extraction skipped - spritesheet is empty placeholder")
+            return
         }
 
         guard let source = CGImageSourceCreateWithURL(fileUrlForSpritesheet() as CFURL, nil) else {
