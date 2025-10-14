@@ -157,8 +157,8 @@ public class TSConstantsProduction: TSConstantsProtocol {
 
     public let mainServiceIdentifiedURL = "https://chat.imba-test.com"
     public let mainServiceUnidentifiedURL = "https://ud-chat.signal.org"
-    public let textSecureCDN0ServerURL = "https://cdn.imba-test.com"
-    public let textSecureCDN2ServerURL = "https://storage.googleapis.com/bachat"
+    public let textSecureCDN0ServerURL = "https://s3.us-west-2.amazonaws.com"
+    public let textSecureCDN2ServerURL = "https://storage.googleapis.com"
     public let textSecureCDN3ServerURL = "https://cdn3.imba-test.com"
     public let storageServiceURL = "https://storage.imba-test.com"
     public let sfuURL = "https://sfu.imba-test.com"
@@ -168,7 +168,7 @@ public class TSConstantsProduction: TSConstantsProtocol {
     public let challengeCaptchaURL = "https://signalcaptchas.org/challenge/generate.html"
     public let kUDTrustRoot = "BX4nQt7OxWnkqgcYeYyIA1XX43ZfPTEfusNoYTV5NJlj"
     public let updatesURL = "https://updates.signal.org"
-    public let updates2URL = "https://updates2.signal.org"
+    public let updates2URL = "https://s3.us-west-2.amazonaws.com"
 
     public let censorshipFReflectorHost = "reflector-signal.global.ssl.fastly.net"
     public let censorshipGReflectorHost = "reflector-nrgwuv7kwq-uc.a.run.app"
@@ -180,15 +180,15 @@ public class TSConstantsProduction: TSConstantsProtocol {
     public let storageServiceCensorshipPrefix = "storage"
     public let svr2CensorshipPrefix = "svr2"
 
-    public let svr2Enclave = MrEnclave("a75542d82da9f6914a1e31f8a7407053b99cc99a0e7291d8fbd394253e19b036")
+    public let svr2Enclave = MrEnclave("b49a2d7aa6a92623713541be3342cc2432cbb4052a9ab83b50aef3375651e68f")
 
     // An array of previously used enclaves that we should try and restore
     // key material from during registration. These must be ordered from
     // newest to oldest, so we check the latest enclaves for backups before
     // checking earlier enclaves.
     public let svr2PreviousEnclaves: [MrEnclave] = [
-        MrEnclave("a75542d82da9f6914a1e31f8a7407053b99cc99a0e7291d8fbd394253e19b036"),
-        MrEnclave("a75542d82da9f6914a1e31f8a7407053b99cc99a0e7291d8fbd394253e19b036"),
+        MrEnclave("b49a2d7aa6a92623713541be3342cc2432cbb4052a9ab83b50aef3375651e68f"),
+        MrEnclave("b49a2d7aa6a92623713541be3342cc2432cbb4052a9ab83b50aef3375651e68f"),
     ]
 
     public let applicationGroup = "group." + Bundle.main.bundleIdPrefix + ".signal.group"

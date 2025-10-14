@@ -160,7 +160,7 @@ extension SignalServiceType {
                 baseUrl: URL(string: TSConstants.textSecureCDN2ServerURL)!,
                 censorshipCircumventionSupported: true,
                 censorshipCircumventionPathPrefix: TSConstants.cdn2CensorshipPrefix,
-                shouldUseSignalCertificate: true,
+                shouldUseSignalCertificate: false, // Use system certificates for Google Cloud Storage
                 shouldHandleRemoteDeprecation: false,
                 type: self
             )
