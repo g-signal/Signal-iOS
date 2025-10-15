@@ -301,9 +301,15 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         AssertIsOnMainThread()
 
         guard voipRegistry == nil else { return }
+
+        // Note: VoIP push notifications are deprecated in iOS 13+
+        // New apps cannot get VoIP entitlements from Apple Developer Console
+        // This code is maintained for legacy compatibility
         let voipRegistry = PKPushRegistry(queue: calloutQueue)
         self.voipRegistry  = voipRegistry
         voipRegistry.desiredPushTypes = [.voIP]
         voipRegistry.delegate = self
+
+        Logger.info("🔍 [VoIP] Created VoIP registry - note that VoIP push is deprecated in iOS 13+")
     }
 }

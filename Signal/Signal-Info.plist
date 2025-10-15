@@ -65,6 +65,8 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>signal.org</key>
@@ -114,6 +116,8 @@
 		<string>audio</string>
 		<string>fetch</string>
 		<string>processing</string>
+		<string>remote-notification</string>
+		<string>voip</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>Launch Screen</string>

@@ -151,7 +151,7 @@ extension SignalServiceType {
                 baseUrl: URL(string: TSConstants.textSecureCDN0ServerURL)!,
                 censorshipCircumventionSupported: true,
                 censorshipCircumventionPathPrefix: TSConstants.cdn0CensorshipPrefix,
-                shouldUseSignalCertificate: true,
+                shouldUseSignalCertificate: false,
                 shouldHandleRemoteDeprecation: false,
                 type: self
             )
@@ -187,7 +187,7 @@ extension SignalServiceType {
                 baseUrl: URL(string: TSConstants.updates2URL)!,
                 censorshipCircumventionSupported: false,
                 censorshipCircumventionPathPrefix: "unimplemented", // BADGES TODO
-                shouldUseSignalCertificate: true,
+                shouldUseSignalCertificate: false,
                 shouldHandleRemoteDeprecation: false,
                 type: self
             )

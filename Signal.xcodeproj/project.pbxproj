@@ -5774,7 +5774,7 @@
 		C597942EF64D456BBE9782A2 /* Pods-SignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalTests.debug.xcconfig"; path = "Target Support Files/Pods-SignalTests/Pods-SignalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D2179CFB16BB0B3A0006F3AB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		D2179CFD16BB0B480006F3AB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		D221A089169C9E5E00537ABF /* Signal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Signal.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D221A089169C9E5E00537ABF /* B&A.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "B&A.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D221A08D169C9E5E00537ABF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D221A08F169C9E5E00537ABF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D221A091169C9E5E00537ABF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -11320,7 +11320,7 @@
 		D221A08A169C9E5E00537ABF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D221A089169C9E5E00537ABF /* Signal.app */,
+				D221A089169C9E5E00537ABF /* B&A.app */,
 				342FFE8827245850000AC89F /* SignalNSE.appex */,
 				F9C5C897289451B900548EEE /* SignalServiceKit.framework */,
 				F9C5C89E289451B900548EEE /* SignalServiceKitTests.xctest */,
@@ -14836,7 +14836,7 @@
 			);
 			name = Signal;
 			productName = RedPhone;
-			productReference = D221A089169C9E5E00537ABF /* Signal.app */;
+			productReference = D221A089169C9E5E00537ABF /* B&A.app */;
 			productType = "com.apple.product-type.application";
 		};
 		D221A0A9169C9E5F00537ABF /* SignalTests */ = {
@@ -14943,7 +14943,6 @@
 					};
 					D221A088169C9E5E00537ABF = {
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -20168,9 +20167,10 @@
 					"@executable_path/Frameworks",
 				);
 				LLVM_LTO = NO;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX).signal";
-				PRODUCT_NAME = Signal;
+				PRODUCT_NAME = "B&A";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				SIGNAL_BUNDLEID_PREFIX = group.ba;
@@ -20425,9 +20425,10 @@
 					"@executable_path/Frameworks",
 				);
 				LLVM_LTO = NO;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX).signal";
-				PRODUCT_NAME = Signal;
+				PRODUCT_NAME = "B&A";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				SIGNAL_BUNDLEID_PREFIX = group.ba;
@@ -20787,9 +20788,10 @@
 					"@executable_path/Frameworks",
 				);
 				LLVM_LTO = NO;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX).signal";
-				PRODUCT_NAME = Signal;
+				PRODUCT_NAME = "B&A";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				SIGNAL_BUNDLEID_PREFIX = group.ba;
@@ -20809,6 +20811,8 @@
 				CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Signal/Signal-AppStore.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 362WY7UW9U;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -20827,9 +20831,11 @@
 					"@executable_path/Frameworks",
 				);
 				LLVM_LTO = NO;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX).signal";
-				PRODUCT_NAME = Signal;
+				PRODUCT_NAME = "B&A";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = iphoneos;
 				SIGNAL_BUNDLEID_PREFIX = group.ba;

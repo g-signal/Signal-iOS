@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Signal_60x60.png",
+      "filename" : "icon_60x60@2x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Signal_120x120.png",
+      "filename" : "icon_40x40@3x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Signal_180x180.png",
+      "filename" : "icon_60x60@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
