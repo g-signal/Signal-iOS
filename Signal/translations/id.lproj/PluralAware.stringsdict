@@ -451,7 +451,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Performa grup Signal bisa optimal dengan jumlah anggota %1$d atau kurang. Menambah anggota lebih banyak akan menyebabkan pengiriman dan penerimaan pesan menjadi lambat.</string>
+			<string>Performa grup B&amp;A bisa optimal dengan jumlah anggota %1$d atau kurang. Menambah anggota lebih banyak akan menyebabkan pengiriman dan penerimaan pesan menjadi lambat.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -591,7 +591,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Signal akan berdering untuk %2$@, %3$@, dan %1$d lainnya</string>
+			<string>B&amp;A akan berdering untuk %2$@, %3$@, dan %1$d lainnya</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -843,7 +843,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Agar &quot;%2$@&quot; tetap terhubung, buka Signal di perangkat tersebut dalam %1$d hari.</string>
+			<string>Agar &quot;%2$@&quot; tetap terhubung, buka B&amp;A di perangkat tersebut dalam %1$d hari.</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1025,7 +1025,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Semua Koneksi Signal · %1$d Penonton</string>
+			<string>Semua Koneksi B&amp;A · %1$d Penonton</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1039,7 +1039,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Semua Koneksi Signal · %1$d Dikecualikan</string>
+			<string>Semua Koneksi B&amp;A · %1$d Dikecualikan</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>

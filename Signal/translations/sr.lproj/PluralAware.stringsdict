@@ -515,9 +515,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Signal групе најбоље функционишу када је број чланова %1$d или мање. Ако додате више чланова долазиће до кашњења у слању и примању порука.</string>
+			<string>B&amp;A групе најбоље функционишу када је број чланова %1$d или мање. Ако додате више чланова долазиће до кашњења у слању и примању порука.</string>
 			<key>other</key>
-			<string>Signal групе најбоље функционишу када је број чланова %1$d или мање. Ако додате више чланова долазиће до кашњења у слању и примању порука.</string>
+			<string>B&amp;A групе најбоље функционишу када је број чланова %1$d или мање. Ако додате више чланова долазиће до кашњења у слању и примању порука.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -675,9 +675,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Signal ће позвати кориснике %2$@, %3$@ и још %1$d особу</string>
+			<string>B&amp;A ће позвати кориснике %2$@, %3$@ и још %1$d особу</string>
 			<key>other</key>
-			<string>Signal ће позвати кориснике %2$@, %3$@ и још њих %1$d</string>
+			<string>B&amp;A ће позвати кориснике %2$@, %3$@ и још њих %1$d</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -963,9 +963,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Да би уређај „%2$@“ остао повезан, отворите Signal на том уређају у року од једног дана.</string>
+			<string>Да би уређај „%2$@“ остао повезан, отворите B&amp;A на том уређају у року од једног дана.</string>
 			<key>other</key>
-			<string>Да би уређај „%2$@“ остао повезан, отворите Signal на том уређају у року од %1$d дана.</string>
+			<string>Да би уређај „%2$@“ остао повезан, отворите B&amp;A на том уређају у року од %1$d дана.</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1171,9 +1171,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Све Signal везе · Гледалаца: %1$d</string>
+			<string>Све B&amp;A везе · Гледалаца: %1$d</string>
 			<key>other</key>
-			<string>Све Signal везе · Гледалаца: %1$d</string>
+			<string>Све B&amp;A везе · Гледалаца: %1$d</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1187,9 +1187,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Све Signal везе · Изузетих особа: %1$d</string>
+			<string>Све B&amp;A везе · Изузетих особа: %1$d</string>
 			<key>other</key>
-			<string>Све Signal везе · Изузетих особа: %1$d</string>
+			<string>Све B&amp;A везе · Изузетих особа: %1$d</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>

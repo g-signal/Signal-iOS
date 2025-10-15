@@ -2,7 +2,7 @@
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "לא עכשיו";
 
 /* Title for the 'about' help section */
-"ABOUT_SECTION_TITLE" = "אודות Signal";
+"ABOUT_SECTION_TITLE" = "אודות B&A";
 
 /* Accessibility label for attachment. */
 "ACCESSIBILITY_LABEL_ATTACHMENT" = "צרופה";
@@ -32,7 +32,7 @@
 "ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_CONFIRM_BUTTON" = "יצוא דוח";
 
 /* Users can request a report of their account data. Before they get their account export, they are warned to only share account data with trustworthy sources. This is the message on that warning. */
-"ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_MESSAGE" = "כדאי לשתף את נתוני חשבון Signal שלך רק עם אנשים או אפליקציות שבוטחים בהם.";
+"ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_MESSAGE" = "כדאי לשתף את נתוני חשבון B&A שלך רק עם אנשים או אפליקציות שבוטחים בהם.";
 
 /* Users can request a report of their account data. If this request fails (probably because of a network connection problem), they will see an error sheet. This is the message on that error. */
 "ACCOUNT_DATA_REPORT_ERROR_MESSAGE" = "כדאי לבדוק את החיבור שלך ולנסות שוב.";
@@ -56,16 +56,16 @@
 "ACCOUNT_DATA_REPORT_EXPORT_REPORT_BUTTON" = "יצוא דוח";
 
 /* Users can request a report of their account data. This text appears at the bottom of this screen, offering more information. */
-"ACCOUNT_DATA_REPORT_FOOTER" = "הדוח שלך נוצר רק בזמן הייצוא ואינו מאוחסן על ידי Signal במכשיר שלך.";
+"ACCOUNT_DATA_REPORT_FOOTER" = "הדוח שלך נוצר רק בזמן הייצוא ואינו מאוחסן על ידי B&A במכשיר שלך.";
 
 /* Users can request a report of their account data. This is the subtitle on the screen where they do this, giving them more information. */
-"ACCOUNT_DATA_REPORT_SUBTITLE" = "אפשר להוריד ולייצא דוח של נתוני חשבון Signal שלך. הדוח הזה לא כולל הודעות או מדיה.";
+"ACCOUNT_DATA_REPORT_SUBTITLE" = "אפשר להוריד ולייצא דוח של נתוני חשבון B&A שלך. הדוח הזה לא כולל הודעות או מדיה.";
 
 /* Users can request a report of their account data. This is the title on the screen where they do this. */
 "ACCOUNT_DATA_REPORT_TITLE" = "נתוני החשבון שלך";
 
 /* Label for 'invite' button in contact view. */
-"ACTION_INVITE" = "הזמן אל Signal";
+"ACTION_INVITE" = "הזמן אל B&A";
 
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "שלח הודעה";
@@ -77,7 +77,7 @@
 "ACTION_VIDEO_CALL" = "שיחת וידאו";
 
 /* Label for 'voice call' button in contact view. */
-"ACTION_VOICE_CALL" = "שיחת Signal";
+"ACTION_VOICE_CALL" = "שיחת B&A";
 
 /* The title for the 'add group members' view. */
 "ADD_GROUP_MEMBERS_VIEW_TITLE" = "הוסף חברי קבוצה";
@@ -191,46 +191,46 @@
 "ALL_MEDIA_THUMBNAIL_LABEL_VIDEO" = "סרטון";
 
 /* Title for the view of all your signal connections */
-"ALL_SIGNAL_CONNECTIONS_TITLE" = "כל חברי ה–Signal";
+"ALL_SIGNAL_CONNECTIONS_TITLE" = "כל חברי ה–B&A";
 
 /* notification body */
 "APN_Message" = "ייתכן שיש לך הודעות חדשות";
 
 /* Default message for the 'app launch failed' alert. */
-"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "Signal אינו יכול להיות מופעל. אנא שלח יומן ניפוי תקלים אל support@signal.org כך שנוכל לפתור סוגייה זו.";
+"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A אינו יכול להיות מופעל. אנא שלח יומן ניפוי תקלים אל support@signal.org כך שנוכל לפתור סוגייה זו.";
 
 /* Button to try launching the app even though the last launch failed */
-"APP_LAUNCH_FAILURE_CONTINUE" = "פתח את Signal במקום";
+"APP_LAUNCH_FAILURE_CONTINUE" = "פתח את B&A במקום";
 
 /* Message for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
 "APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "מומלץ לשלוח יומן ניפוי באגים ל–support@signal.org כדי שנוכל לטפל בבעיה.";
 
 /* Title for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
-"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "פתיחת Signal נכשלה";
+"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "פתיחת B&A נכשלה";
 
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "לא היה ניתן לטעון מסד נתונים";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
-"APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "אנא שדרג אל הגרסה האחרונה של Signal.";
+"APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "אנא שדרג אל הגרסה האחרונה של B&A.";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "גרסת מסד נתונים בלתי ידועה.";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "אל Signal הייתה בעיה בזמן ניסיון לפתוח. אנא שלח יומן ניפוי תקלים אל support@signal.org כדי לעזור לפתור את הסוגייה הזו.";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "אל B&A הייתה בעיה בזמן ניסיון לפתוח. אנא שלח יומן ניפוי תקלים אל support@signal.org כדי לעזור לפתור את הסוגייה הזו.";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "לא היה ניתן לפתוח את Signal";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "לא היה ניתן לפתוח את B&A";
 
 /* Error description indicating that the app crashed because there was low storage space available on the device. */
-"APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_MESSAGE" = "Signal לא יכול להיפתח כי למכשיר שלך אין מספיק נפח אחסון פנוי. כדי להשתמש ב-Signal, צריך לפנות מקום על ידי ניהול האחסון שלך באזור ההגדרות.";
+"APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_MESSAGE" = "B&A לא יכול להיפתח כי למכשיר שלך אין מספיק נפח אחסון פנוי. כדי להשתמש ב-B&A, צריך לפנות מקום על ידי ניהול האחסון שלך באזור ההגדרות.";
 
 /* Error title indicating that the app crashed because there was low storage space available on the device. */
 "APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_TITLE" = "נפח אחסון נמוך";
 
 /* Error indicating that the app could not restore transferred data. */
-"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "לא הצלחנו לשחזר את הנתונים שהועברו מהמכשיר הישן שלכם. אנא שלחו יומן ניפוי באגים ל–support@signal.org כדי שנוכל לפתור בעיה זו. אם תתקינו מחדש את Signal, היסטוריית ההודעות שלכם תאבד.";
+"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "לא הצלחנו לשחזר את הנתונים שהועברו מהמכשיר הישן שלכם. אנא שלחו יומן ניפוי באגים ל–support@signal.org כדי שנוכל לפתור בעיה זו. אם תתקינו מחדש את B&A, היסטוריית ההודעות שלכם תאבד.";
 
 /* Error indicating that the app could not restore transferred data. */
 "APP_LAUNCH_FAILURE_RESTORE_FAILED_TITLE" = "לא היה ניתן להשלים את ההעברה";
@@ -245,7 +245,7 @@
 "APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "גרסה %1$@ זמינה כעת להורדה מחנות האפליקציות";
 
 /* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "גרסה חדשה של Signal זמינה";
+"APP_UPDATE_NAG_ALERT_TITLE" = "גרסה חדשה של B&A זמינה";
 
 /* Label for the 'update' button in the 'new app version available' alert. */
 "APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "עדכן";
@@ -298,7 +298,7 @@
 /* Apple Pay donation error for decline failures where the payment cannot be authorized. */
 "APPLE_PAY_DONATION_ERROR_PAYMENT_CANNOT_BE_AUTHORIZED" = "בדוק ששיטת התשלום שלך מעודכנת ב־Apple Pay. אם היא לא, עדכן אותה ונסה שוב.";
 
-/* On the iOS home screen, if you tap and hold the Signal icon, this shortcut will appear. Tapping it will let users send a new message. You may want to refer to similar behavior in other iOS apps, such as Messages, for equivalent strings. */
+/* On the iOS home screen, if you tap and hold the B&A icon, this shortcut will appear. Tapping it will let users send a new message. You may want to refer to similar behavior in other iOS apps, such as Messages, for equivalent strings. */
 "APPLICATION_SHORTCUT_NEW_MESSAGE" = "הודעה חדשה";
 
 /* Label for the archive button for conversations list view */
@@ -319,7 +319,7 @@
 /* Error that outgoing attachments could not be exported. */
 "ATTACHMENT_APPROVAL_FAILED_TO_EXPORT" = "הצרופה נכשלה להיות מיוצאת.";
 
-/* alert text when Signal was unable to save a copy of the attachment to the system photo library */
+/* alert text when B&A was unable to save a copy of the attachment to the system photo library */
 "ATTACHMENT_APPROVAL_FAILED_TO_SAVE" = "נכשל לשמור";
 
 /* Format string for file extension label in call interstitial view */
@@ -376,16 +376,16 @@
 /* Accessibility hint describing what you can do with the attachment button */
 "ATTACHMENT_HINT" = "בחר מדיה לשלוח";
 
-/* Button in chat attachment panel that allows to select photos/videos Signal has access to. */
+/* Button in chat attachment panel that allows to select photos/videos B&A has access to. */
 "ATTACHMENT_KEYBOARD_BUTTON_MANAGE" = "ניהול";
 
 /* A button to select a contact from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_CONTACT" = "איש קשר";
 
-/* Button in a context menu from the 'manage' button in attachment panel that allows to select more photos/videos to give Signal access to */
+/* Button in a context menu from the 'manage' button in attachment panel that allows to select more photos/videos to give B&A access to */
 "ATTACHMENT_KEYBOARD_CONTEXT_MENU_BUTTON_SELECT_MORE" = "בחירת תמונות נוספות";
 
-/* Button in a context menu from the 'manage' button in attachment panel that opens the iOS system settings for Signal to update access permissions */
+/* Button in a context menu from the 'manage' button in attachment panel that opens the iOS system settings for B&A to update access permissions */
 "ATTACHMENT_KEYBOARD_CONTEXT_MENU_BUTTON_SYSTEM_SETTINGS" = "לך אל הגדרות";
 
 /* A button to select a file from the Attachment Keyboard */
@@ -394,8 +394,8 @@
 /* A button to select a GIF from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_GIF" = "GIF";
 
-/* Text in chat attachment panel when Signal only has access to some photos/videos. This string is in a compact horizontal space, so it should be short if possible. */
-"ATTACHMENT_KEYBOARD_LIMITED_ACCESS" = "ל–Signal יש גישה מוגבלת לתמונות";
+/* Text in chat attachment panel when B&A only has access to some photos/videos. This string is in a compact horizontal space, so it should be short if possible. */
+"ATTACHMENT_KEYBOARD_LIMITED_ACCESS" = "ל–B&A יש גישה מוגבלת לתמונות";
 
 /* A button to select a location from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_LOCATION" = "מיקום";
@@ -406,10 +406,10 @@
 /* First block of text in chat attachment panel when there's no recent photos to show. */
 "ATTACHMENT_KEYBOARD_NO_MEDIA_TITLE" = "אין תמונות או סרטונים";
 
-/* Text in chat attachment panel explaining that user needs to give Signal permission to access photos. */
-"ATTACHMENT_KEYBOARD_NO_PHOTO_ACCESS" = "ל–Signal אין גישה לתמונות או לסרטונים שלך. כדי לאפשר גישה, יש לפתוח את ההגדרות וללחוץ על ׳תמונות׳";
+/* Text in chat attachment panel explaining that user needs to give B&A permission to access photos. */
+"ATTACHMENT_KEYBOARD_NO_PHOTO_ACCESS" = "ל–B&A אין גישה לתמונות או לסרטונים שלך. כדי לאפשר גישה, יש לפתוח את ההגדרות וללחוץ על ׳תמונות׳";
 
-/* Button in chat attachment panel to let user open Settings app and give Signal persmission to access photos. */
+/* Button in chat attachment panel to let user open Settings app and give B&A persmission to access photos. */
 "ATTACHMENT_KEYBOARD_OPEN_SETTINGS" = "פתיחת הגדרות";
 
 /* A button to select a payment from the Attachment Keyboard */
@@ -485,7 +485,7 @@
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "הודעה קולית לא זמינה";
 
 /* Username for backup key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "גיבויי Signal";
+"AUTOFILL_BACKUP_KEY_USERNAME" = "גיבויי B&A";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "בחר צבע";
@@ -515,7 +515,7 @@
 "BACKUP_ENABLEMENT_REMINDER_MEGAPHONE_ACTION" = "הפעל";
 
 /* Body for Backup enablement reminder megaphone */
-"BACKUP_ENABLEMENT_REMINDER_MEGAPHONE_BODY" = "ככה, לא מאבדים אף הודעה כשמחליפים טלפון או מתקינים מחדש את Signal.";
+"BACKUP_ENABLEMENT_REMINDER_MEGAPHONE_BODY" = "ככה, לא מאבדים אף הודעה כשמחליפים טלפון או מתקינים מחדש את B&A.";
 
 /* Title for Backup enablement reminder megaphone */
 "BACKUP_ENABLEMENT_REMINDER_MEGAPHONE_TITLE" = "הפעלת גיבויים מוצפנים";
@@ -545,7 +545,7 @@
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "מפתח הגיבוי נכון. שמור על המפתח שלך במקום בטוח.";
 
 /* Body for a sheet warning users to their 'Backup Key' safe. */
-"BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "Signal לא תוכל לעזור לך לשחזר את הגיבוי שלך אם איבדת את המפתח שלך. חשוב לאחסן אותו במקום בטוח ומאובטח, ולא לשתף אותו עם אחרים.";
+"BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "B&A לא תוכל לעזור לך לשחזר את הגיבוי שלך אם איבדת את המפתח שלך. חשוב לאחסן אותו במקום בטוח ומאובטח, ולא לשתף אותו עם אחרים.";
 
 /* Title for a sheet warning users to their 'Backup Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_TITLE" = "יש לשמור על בטיחות המפתח שלך";
@@ -569,13 +569,13 @@
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "אפשר למחוק את הגיבוי בכל עת";
 
 /* Subtitle for a view introducing Backups during an onboarding flow. */
-"BACKUP_ONBOARDING_INTRO_SUBTITLE" = "אפשר לגבות את ההודעות והמדיה ששלך באמצעות שירות האחסון המאובטח המוצפן מקצה לקצה של Signal. ככה, לא מאבדים אף הודעה כשמחליפים טלפון או מתקינים מחדש את Signal.";
+"BACKUP_ONBOARDING_INTRO_SUBTITLE" = "אפשר לגבות את ההודעות והמדיה ששלך באמצעות שירות האחסון המאובטח המוצפן מקצה לקצה של B&A. ככה, לא מאבדים אף הודעה כשמחליפים טלפון או מתקינים מחדש את B&A.";
 
 /* Title for a view introducing Backups during an onboarding flow. */
-"BACKUP_ONBOARDING_INTRO_TITLE" = "גיבויי Signal";
+"BACKUP_ONBOARDING_INTRO_TITLE" = "גיבויי B&A";
 
 /* Subtitle for a view introducing the 'Backup Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "מפתח הגיבוי שלך הוא קוד בן 64 ספרות שמאפשר לך לשחזר את הגיבוי שלך בעת התקנה מחדש של Signal.\n\nאם שכחת את המפתח שלך, לא תהיה לך אפשרות לשחזר את הגיבוי. Signal לא תוכל לעזור לך לשחזר את הגיבוי שלך.";
+"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "מפתח הגיבוי שלך הוא קוד בן 64 ספרות שמאפשר לך לשחזר את הגיבוי שלך בעת התקנה מחדש של B&A.\n\nאם שכחת את המפתח שלך, לא תהיה לך אפשרות לשחזר את הגיבוי. B&A לא תוכל לעזור לך לשחזר את הגיבוי שלך.";
 
 /* Title for a view introducing the 'Backup Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "מפתח הגיבוי שלך";
@@ -668,16 +668,16 @@
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_RENEWAL_FORMAT" = "מתחדש ב–%1$@";
 
 /* Footer for a menu section related to settings for when Backups are disabled. */
-"BACKUP_SETTINGS_BACKUPS_DISABLED_SECTION_FOOTER" = "הגיבויים הושבתו והנתונים שלך נמחקו משירות האחסון המאובטח של Signal.";
+"BACKUP_SETTINGS_BACKUPS_DISABLED_SECTION_FOOTER" = "הגיבויים הושבתו והנתונים שלך נמחקו משירות האחסון המאובטח של B&A.";
 
 /* Description for a progress view tracking media being downloaded in service of disabling Backups. */
-"BACKUP_SETTINGS_BACKUPS_DISABLING_DOWNLOADING_MEDIA_PROGRESS_VIEW_DESCRIPTION" = "הגיבויים הושבתו, וכל מדיה שאינה נמצאת על המכשיר כעת נמצאת בתהליך הורדה. ברגע שההורדה תסתיים, הנתונים שלך יימחקו משירות האחסון המאובטח של Signal.";
+"BACKUP_SETTINGS_BACKUPS_DISABLING_DOWNLOADING_MEDIA_PROGRESS_VIEW_DESCRIPTION" = "הגיבויים הושבתו, וכל מדיה שאינה נמצאת על המכשיר כעת נמצאת בתהליך הורדה. ברגע שההורדה תסתיים, הנתונים שלך יימחקו משירות האחסון המאובטח של B&A.";
 
 /* Message for a view indicating we failed to delete the user's Backup due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_MESSAGE" = "אירעה שגיאה. יש ליצור קשר עם התמיכה.";
 
 /* Header for a menu section related to settings for when disabling Backups encountered an unexpected error. */
-"BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_SECTION_HEADER" = "אירעה שגיאה בעת מחיקת הנתונים שלך משירות האחסון המאובטח של Signal.";
+"BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_SECTION_HEADER" = "אירעה שגיאה בעת מחיקת הנתונים שלך משירות האחסון המאובטח של B&A.";
 
 /* Title for a view indicating we failed to delete the user's Backup due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_TITLE" = "מחיקת הגיבוי נכשלה";
@@ -686,7 +686,7 @@
 "BACKUP_SETTINGS_BACKUPS_DISABLING_PROGRESS_VIEW_DESCRIPTION" = "גיבוי במחיקה…";
 
 /* Header for a menu section related to disabling Backups. */
-"BACKUP_SETTINGS_BACKUPS_DISABLING_SECTION_HEADER" = "הגיבויים הושבתו והנתונים שלך יימחקו משירות האחסון המאובטח של Signal.";
+"BACKUP_SETTINGS_BACKUPS_DISABLING_SECTION_HEADER" = "הגיבויים הושבתו והנתונים שלך יימחקו משירות האחסון המאובטח של B&A.";
 
 /* Header for a menu section related to settings for when Backups are enabled. */
 "BACKUP_SETTINGS_BACKUPS_ENABLED_SECTION_HEADER" = "פרטי גיבוי";
@@ -707,13 +707,13 @@
 "BACKUP_SETTINGS_DISABLING_CONFIRMATION_ACTION_SHEET_TITLE" = "לכבות ולמחוק גיבויים?";
 
 /* Message shown in an action sheet when the user disables Backups, explaining that their media is downloading first. */
-"BACKUP_SETTINGS_DISABLING_DOWNLOADS_STARTED_ACTION_SHEET_MESSAGE" = "יש לך מדיה בגיבוי שאינה נמצאת במכשיר זה. ייתכן שהורדת הגיבוי שלך תיקח זמן רב, יש להשאיר את Signal פתוחה כדי למנוע הפרעות.";
+"BACKUP_SETTINGS_DISABLING_DOWNLOADS_STARTED_ACTION_SHEET_MESSAGE" = "יש לך מדיה בגיבוי שאינה נמצאת במכשיר זה. ייתכן שהורדת הגיבוי שלך תיקח זמן רב, יש להשאיר את B&A פתוחה כדי למנוע הפרעות.";
 
 /* Title shown in an action sheet when the user disables Backups, explaining that their media is downloading first. */
 "BACKUP_SETTINGS_DISABLING_DOWNLOADS_STARTED_ACTION_SHEET_TITLE" = "מורידים את הגיבוי שלך";
 
 /* Message shown in an action sheet indicating we failed to delete the user's Backup due to an unexpected error. */
-"BACKUP_SETTINGS_DISABLING_ERROR_GENERIC_ERROR_ACTION_SHEET_MESSAGE" = "אירעה שגיאה בעת מחיקת הנתונים שלך משירות האחסון המאובטח של Signal.";
+"BACKUP_SETTINGS_DISABLING_ERROR_GENERIC_ERROR_ACTION_SHEET_MESSAGE" = "אירעה שגיאה בעת מחיקת הנתונים שלך משירות האחסון המאובטח של B&A.";
 
 /* Title shown in an action sheet indicating we failed to delete the user's Backup due to an unexpected error. */
 "BACKUP_SETTINGS_DISABLING_ERROR_GENERIC_ERROR_ACTION_SHEET_TITLE" = "מחיקת הגיבוי נכשלה";
@@ -782,7 +782,7 @@
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_LATER_ACTION" = "הורדה אחר כך";
 
 /* Message for an action sheet allowing users to download their offloaded media. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_MESSAGE" = "יש לך מדיה בגיבוי שאינה נמצאת במכשיר זה. ייתכן שההורדה תיקח זמן רב, יש להשאיר את Signal פתוחה כדי למנוע הפרעות בהורדה.";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_MESSAGE" = "יש לך מדיה בגיבוי שאינה נמצאת במכשיר זה. ייתכן שההורדה תיקח זמן רב, יש להשאיר את B&A פתוחה כדי למנוע הפרעות בהורדה.";
 
 /* Action in an action sheet allowing users to download their offloaded media now. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_NOW_ACTION" = "להוריד עכשיו";
@@ -803,7 +803,7 @@
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE_FOR_TESTERS" = "מדיה שאינה בשימוש תוסר, אך ניתן להוריד אותה מהגיבוי שלך בכל עת כל עוד את/ה בסטטוס של בודק/ת.";
 
 /* Footer for a toggle allowing users to change the Optimize Local Storage setting, if the toggle is unavailable. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_UNAVAILABLE" = "ניתן להשתמש באופטימיזציה של אחסון רק עם אפשרות הגיבוי בתשלום של Signal. אפשר לשדרג את תכנית הגיבוי שלך כדי להתחיל להשתמש בפיצ׳ר.";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_UNAVAILABLE" = "ניתן להשתמש באופטימיזציה של אחסון רק עם אפשרות הגיבוי בתשלום של B&A. אפשר לשדרג את תכנית הגיבוי שלך כדי להתחיל להשתמש בפיצ׳ר.";
 
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "אופטימיזציה של אחסון במכשיר";
@@ -839,10 +839,10 @@
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "לגבות אחר כך";
 
 /* Title for a sheet shown after the user enables backups. */
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "ברוכ/ה הבא/ה אל גיבויי Signal. אפשר להתחיל את הגיבוי.";
+"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "ברוכ/ה הבא/ה אל גיבויי B&A. אפשר להתחיל את הגיבוי.";
 
 /* Title for the 'Backup' settings menu. */
-"BACKUPS_SETTINGS_TITLE" = "גיבויי Signal";
+"BACKUPS_SETTINGS_TITLE" = "גיבויי B&A";
 
 /* Section header for badge view section in the badge configuration page */
 "BADGE_CONFIGURATION_BADGE_SECTION_TITLE" = "התגים שלי";
@@ -850,14 +850,14 @@
 /* The title for the badge configuration page */
 "BADGE_CONFIGURATION_TITLE" = "תגים";
 
-/* When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to Signal\" button will be shown. This is the text in that button. */
+/* When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to B&A\" button will be shown. This is the text in that button. */
 "BADGE_DETAILS_DONATE_TO_SIGNAL" = "ביצוע תרומה עכשיו";
 
 /* When viewing someone else's donor badge, you'll see a sheet. This is the title on that sheet. Embeds {badge owner's short name} */
-"BADGE_DETAILS_TITLE_FOR_SUPPORTER" = "Signal מקבלת תמיכה מ%1$@";
+"BADGE_DETAILS_TITLE_FOR_SUPPORTER" = "B&A מקבלת תמיכה מ%1$@";
 
 /* String explaining to the user that their boost badge has expired on the badge expiry sheet. */
-"BADGE_EXPIRED_BOOST_BODY" = "תג הבוסט שלכם פג תוקף והוא לא גלוי יותר בפרופיל שלכם.\n\nאפשר להמשיך להשתמש ב–Signal אבל כדי לתמוך בטכנולוגיה שנבנתה עבורכם, נשמח אם תשקלו להפוך לתורמים על בסיס חודשי.";
+"BADGE_EXPIRED_BOOST_BODY" = "תג הבוסט שלכם פג תוקף והוא לא גלוי יותר בפרופיל שלכם.\n\nאפשר להמשיך להשתמש ב–B&A אבל כדי לתמוך בטכנולוגיה שנבנתה עבורכם, נשמח אם תשקלו להפוך לתורמים על בסיס חודשי.";
 
 /* String explaining to the user that their boost badge has expired while they are a current subscription sustainer on the badge expiry sheet. */
 "BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "תג הבוסט שלך פג תוקף והוא לא גלוי יותר בפרופיל שלך.\n\nאפשר להפעיל מחדש את תג הבוסט שלך למשך 30 ימים נוספים עם תרומה חד פעמית.";
@@ -883,7 +883,7 @@
 /* Title for a sheet explaining that a bank transfer donation is complete, and that you have received a badge. */
 "BADGE_THANKS_BANK_DONATION_COMPLETE_TITLE" = "תרומה הושלמה";
 
-/* When you make a donation to Signal, you will receive a badge. A thank-you sheet appears when this happens. This is the body text on that sheet. */
+/* When you make a donation to B&A, you will receive a badge. A thank-you sheet appears when this happens. This is the body text on that sheet. */
 "BADGE_THANKS_BODY" = "אפשר לבחור להציג את התג הזה בפרופיל כדי להשוויץ בתמיכה שלך.";
 
 /* Label prompting the user to display the new badge on their profile on the badge thank you sheet. */
@@ -892,7 +892,7 @@
 /* Label prompting the user to feature the new badge on their profile on the badge thank you sheet. */
 "BADGE_THANKS_MAKE_FEATURED" = "הוספת תג לפרופיל";
 
-/* When you make a donation to Signal, you will receive a badge. A thank-you sheet appears when this happens. This is the title of that sheet. */
+/* When you make a donation to B&A, you will receive a badge. A thank-you sheet appears when this happens. This is the title of that sheet. */
 "BADGE_THANKS_TITLE" = "תודה על התמיכה שלך!";
 
 /* Footer explaining that only one badge can be featured at a time on the thank you sheet. */
@@ -901,19 +901,19 @@
 /* On the bank donation screen, show a link below the input form to show help about finding account info. */
 "BANK_DONATION_FOOTER_FIND_ACCOUNT_INFO" = "מציאת פרטי חשבון";
 
-/* On the bank transfer donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their bank information (2) tell them that Signal does not collect or store their personal information. */
-"BANK_DONATION_SUBHEADER_TEXT" = "יש להזין את פרטי הבנק שלך. Signal לא אוספת או מאחסנת את המידע האישי שלך.";
+/* On the bank transfer donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their bank information (2) tell them that B&A does not collect or store their personal information. */
+"BANK_DONATION_SUBHEADER_TEXT" = "יש להזין את פרטי הבנק שלך. B&A לא אוספת או מאחסנת את המידע האישי שלך.";
 
-/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button to agree to the mandate. */
+/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button to agree to the mandate. */
 "BANK_MANDATE_AGREE" = "הסכמה";
 
-/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button that shows more of the mandate if it is not all visible. */
+/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button that shows more of the mandate if it is not all visible. */
 "BANK_MANDATE_READ_MORE" = "קרא עוד";
 
-/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a subtitle about the payment processor Stripe above that mandate. */
-"BANK_MANDATE_SUBTITLE" = "Stripe מעבדת תרומות שמתבצעות עבור Signal. Signal לא אוספת או מאחסנת את המידע האישי שלך.";
+/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is a subtitle about the payment processor Stripe above that mandate. */
+"BANK_MANDATE_SUBTITLE" = "Stripe מעבדת תרומות שמתבצעות עבור B&A. B&A לא אוספת או מאחסנת את המידע האישי שלך.";
 
-/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is the title above that mandate. */
+/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is the title above that mandate. */
 "BANK_MANDATE_TITLE" = "העברה בנקאית";
 
 /* Accessibility label for banner close button */
@@ -1067,7 +1067,7 @@
 "CALL_AUDIO_MISSED_WEEK_NOTIFICATION_BODY_FORMAT" = "📞 שיחה קולית שלא נענתה ביום %1$@";
 
 /* Alert message when calling and permissions for microphone are missing */
-"CALL_AUDIO_PERMISSION_MESSAGE" = "אתה יכול לאפשר גישה אל מיקרופון ביישום הגדרות של iOS כדי לבצע שיחות ולהקליט הודעות קוליות ב־Signal.";
+"CALL_AUDIO_PERMISSION_MESSAGE" = "אתה יכול לאפשר גישה אל מיקרופון ביישום הגדרות של iOS כדי לבצע שיחות ולהקליט הודעות קוליות ב־B&A.";
 
 /* Alert title when calling and permissions for microphone are missing */
 "CALL_AUDIO_PERMISSION_TITLE" = "נדרשת גישה למיקרופון";
@@ -1132,8 +1132,8 @@
 /* Tappable label that appears below a user's name on a toast when they request to join a call link. */
 "CALL_LINK_JOIN_REQUEST_PROMPT" = "רוצה להצטרף…";
 
-/* Shown in a message bubble when you send a call link in a Signal chat */
-"CALL_LINK_LINK_PREVIEW_DESCRIPTION" = "אפשר להשתמש בלינק הזה כדי להצטרף לשיחת Signal";
+/* Shown in a message bubble when you send a call link in a B&A chat */
+"CALL_LINK_LINK_PREVIEW_DESCRIPTION" = "אפשר להשתמש בלינק הזה כדי להצטרף לשיחת B&A";
 
 /* Text that appears on a toast in a call lobby before joining a call link informing the user what information will be shared with other call members when they have phone number sharing turned off. */
 "CALL_LINK_LOBBY_SHARING_INFO_PHONE_NUMBER_SHARING_OFF" = "כל מי שיצטרפו לשיחה הזו באמצעות הלינק יוכלו לראות את השם והתמונה שלך.";
@@ -1156,8 +1156,8 @@
 /* Name of a toggle switch to enable/disable admin approval for joining a Call Link. */
 "CALL_LINK_REQUIRE_APPROVAL" = "לדרוש אישור מנהל/ת";
 
-/* Button to open UI to share a Call Link with someone on Signal. */
-"CALL_LINK_SHARE_VIA_SIGNAL" = "שיתוף לינק דרך Signal";
+/* Button to open UI to share a Call Link with someone on B&A. */
+"CALL_LINK_SHARE_VIA_SIGNAL" = "שיתוף לינק דרך B&A";
 
 /* Button to open the system share sheet to share a Call Link. */
 "CALL_LINK_SHARE_VIA_SYSTEM" = "שתף קישור";
@@ -1262,10 +1262,10 @@
 "CALLING_MEMBER_VIEW_YOUR_CAMERA_IS_OFF" = "המצלמה שלך כבויה";
 
 /* The generic name used for calls if CallKit privacy is enabled */
-"CALLKIT_ANONYMOUS_CONTACT_NAME" = "משתמש Signal";
+"CALLKIT_ANONYMOUS_CONTACT_NAME" = "משתמש B&A";
 
 /* The generic name used for group calls if CallKit privacy is enabled */
-"CALLKIT_ANONYMOUS_GROUP_NAME" = "קבוצת Signal";
+"CALLKIT_ANONYMOUS_GROUP_NAME" = "קבוצת B&A";
 
 /* Title for the calls list view. */
 "CALLS_LIST_TITLE" = "שיחות";
@@ -1414,32 +1414,32 @@
 /* Alert shown when the user needs to exchange messages to see the safety number. */
 "CANT_VERIFY_IDENTITY_EXCHANGE_MESSAGES" = "מספר בטיחות ייווצר עם אדם זה אחרי שתחליפו ביניכם הודעות.";
 
-/* Users can donate to Signal with a credit or debit card. If their card number is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a credit or debit card. If their card number is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_CARD_NUMBER_GENERIC_ERROR" = "מספר כרטיס לא תקין";
 
-/* Users can donate to Signal with a credit or debit card. This is the label for the card number field on that screen. */
+/* Users can donate to B&A with a credit or debit card. This is the label for the card number field on that screen. */
 "CARD_DONATION_CARD_NUMBER_LABEL" = "מספר כרטיס";
 
-/* Users can donate to Signal with a credit or debit card. If their card verification code (CVV) is invalid for reasons we cannot determine, this generic error message will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a credit or debit card. If their card verification code (CVV) is invalid for reasons we cannot determine, this generic error message will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_CVV_GENERIC_ERROR" = "CVV לא חוקי";
 
-/* Users can donate to Signal with a credit or debit card. This is the label for the card verification code (CVV) field on that screen. */
+/* Users can donate to B&A with a credit or debit card. This is the label for the card verification code (CVV) field on that screen. */
 "CARD_DONATION_CVV_LABEL" = "CVV";
 
-/* Users can donate to Signal with a credit or debit card. If their card verification code (CVV) is too long, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a credit or debit card. If their card verification code (CVV) is too long, this error will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_CVV_TOO_LONG_ERROR" = "הקוד ארוך מדי";
 
-/* Users can donate to Signal with a credit or debit card. If their expiration date is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a credit or debit card. If their expiration date is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_EXPIRATION_DATE_GENERIC_ERROR" = "תאריך תפ׳ לא תקף";
 
-/* Users can donate to Signal with a credit or debit card. This is the label for the expiration date field on that screen. Try to use a short string to make space in the UI. (For example, the English text uses \"Exp. Date\" instead of \"Expiration Date\"). */
+/* Users can donate to B&A with a credit or debit card. This is the label for the expiration date field on that screen. Try to use a short string to make space in the UI. (For example, the English text uses \"Exp. Date\" instead of \"Expiration Date\"). */
 "CARD_DONATION_EXPIRATION_DATE_LABEL" = "תאריך תפוגה";
 
-/* Users can donate to Signal with a credit or debit card. This is the label for the card expiration date field on that screen. */
+/* Users can donate to B&A with a credit or debit card. This is the label for the card expiration date field on that screen. */
 "CARD_DONATION_EXPIRATION_DATE_PLACEHOLDER" = "חודש/שנה";
 
 /* Users can choose to learn more about their credit/debit card donations, which will open a sheet with additional information. This is the body text of that sheet. */
-"CARD_DONATION_READ_MORE_SHEET_BODY" = "Signal לא אוספת או מאחסנת את המידע האישי שלך בעת ביצוע תרומה.\n\nאנחנו משתמשים ב–Stripe בתור מעבד התשלומים שלנו כדי לקבל את התרומות שלך. אנחנו לא ניגשים לשום מידע שהם מקבלים ממך ולא מאחסנים או שומרים אותו.\n\nSignal אינה מקשרת את התרומה שלך לחשבון Signal שלך ואין לה אפשרות לעשות זאת.\n\nתודה על התמיכה שלך!";
+"CARD_DONATION_READ_MORE_SHEET_BODY" = "B&A לא אוספת או מאחסנת את המידע האישי שלך בעת ביצוע תרומה.\n\nאנחנו משתמשים ב–Stripe בתור מעבד התשלומים שלנו כדי לקבל את התרומות שלך. אנחנו לא ניגשים לשום מידע שהם מקבלים ממך ולא מאחסנים או שומרים אותו.\n\nB&A אינה מקשרת את התרומה שלך לחשבון B&A שלך ואין לה אפשרות לעשות זאת.\n\nתודה על התמיכה שלך!";
 
 /* Users can choose to learn more about their credit/debit card donations, which will open a sheet with additional information. This is the title of that sheet. */
 "CARD_DONATION_READ_MORE_SHEET_TITLE" = "המידע שלך פרטי";
@@ -1447,8 +1447,8 @@
 /* On the credit/debit card donation screen, a small amount of information text is shown. Users can click this link to learn more information. */
 "CARD_DONATION_SUBHEADER_LEARN_MORE" = "למד עוד.";
 
-/* On the credit/debit card donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their credit/debit card information (2) tell them that Signal does not collect or store their personal information. */
-"CARD_DONATION_SUBHEADER_TEXT" = "יש להזין את פרטי הכרטיס שלך. Signal לא אוספת או מאחסנת את המידע האישי שלך.";
+/* On the credit/debit card donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their credit/debit card information (2) tell them that B&A does not collect or store their personal information. */
+"CARD_DONATION_SUBHEADER_TEXT" = "יש להזין את פרטי הכרטיס שלך. B&A לא אוספת או מאחסנת את המידע האישי שלך.";
 
 /* Title for the 'censorship circumvention country' view. */
 "CENSORSHIP_CIRCUMVENTION_COUNTRY_VIEW_TITLE" = "בחר מדינה";
@@ -1568,7 +1568,7 @@
 "CHOOSE_BACKUP_PLAN_SUBSCRIBE_PAID_BUTTON_TEXT" = "רכישת מנוי עבור %1$@/חודש";
 
 /* Subtitle for a view allowing users to choose a Backup plan. */
-"CHOOSE_BACKUP_PLAN_SUBTITLE" = "כל הגיבויים מוצפנים מקצה לקצה. Signal היא ארגון ללא מטרות רווח—התשלום על גיבויים עוזר לתמוך במשימה שלנו.";
+"CHOOSE_BACKUP_PLAN_SUBTITLE" = "כל הגיבויים מוצפנים מקצה לקצה. B&A היא ארגון ללא מטרות רווח—התשלום על גיבויים עוזר לתמוך במשימה שלנו.";
 
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "בחירת תכנית הגיבוי שלך";
@@ -1580,7 +1580,7 @@
 "COMPARE_SAFETY_NUMBER_ACTION" = "השווה עם לוח עריכה";
 
 /* Accessibility hint describing what you can do with the compose button */
-"COMPOSE_BUTTON_HINT" = "אפשר לבחור או לחפש משתמש/ת Signal כדי להתחיל איתו או איתה צ׳אט.";
+"COMPOSE_BUTTON_HINT" = "אפשר לבחור או לחפש משתמש/ת B&A כדי להתחיל איתו או איתה צ׳אט.";
 
 /* Accessibility label from compose button. */
 "COMPOSE_BUTTON_LABEL" = "חַבֵּר";
@@ -1607,13 +1607,13 @@
 "COMPOSE_SCREEN_LIMITED_CONTACTS_CTA" = "ניהול";
 
 /* Multi-line label explaining why compose-screen contact picker is empty. */
-"COMPOSE_SCREEN_LIMITED_CONTACTS_PERMISSION" = "ל–Signal יש גישה מוגבלת לאנשי הקשר שלך";
+"COMPOSE_SCREEN_LIMITED_CONTACTS_PERMISSION" = "ל–B&A יש גישה מוגבלת לאנשי הקשר שלך";
 
 /* Button to open settings from an empty compose-screen contact picker. */
 "COMPOSE_SCREEN_MISSING_CONTACTS_CTA" = "פתיחת הגדרות";
 
 /* Multi-line label explaining why compose-screen contact picker is empty. */
-"COMPOSE_SCREEN_MISSING_CONTACTS_PERMISSION" = "אתה יכול לאפשר גישה אל אנשי קשר ביישום הגדרות של iOS כדי לראות אילו מאנשי הקשר שלך הם משתמשי Signal.";
+"COMPOSE_SCREEN_MISSING_CONTACTS_PERMISSION" = "אתה יכול לאפשר גישה אל אנשי קשר ביישום הגדרות של iOS כדי לראות אילו מאנשי הקשר שלך הם משתמשי B&A.";
 
 /* Configure reactions title text */
 "CONFIGURE_REACTIONS" = "התאמה אישית של תגובות";
@@ -1655,10 +1655,10 @@
 "CONTACT_ABOUT_SHEET_PROFILE_NAMES_EDUCATION" = "שמות פרופילים אינם מאומתים";
 
 /* Message for a tooltip that appears above a parenthesized name for another user, indicating that that name is the name the other user set for themself. Embeds {{name}} */
-"CONTACT_ABOUT_SHEET_SECONDARY_NAME_TOOLTIP_MESSAGE" = "״%1$@״ הוא שם הפרופיל שהאדם הזה יצר לעצמו ב–Signal.";
+"CONTACT_ABOUT_SHEET_SECONDARY_NAME_TOOLTIP_MESSAGE" = "״%1$@״ הוא שם הפרופיל שהאדם הזה יצר לעצמו ב–B&A.";
 
 /* A label indicating a user is a signal connection. */
-"CONTACT_ABOUT_SHEET_SIGNAL_CONNECTION_LABEL" = "חבר/ת Signal";
+"CONTACT_ABOUT_SHEET_SIGNAL_CONNECTION_LABEL" = "חבר/ת B&A";
 
 /* The title for a contact 'about' sheet. */
 "CONTACT_ABOUT_SHEET_TITLE" = "אודות";
@@ -1700,7 +1700,7 @@
 "CONTACT_NOTE_TITLE" = "הערה";
 
 /* Body for contact permission action sheet */
-"CONTACT_PERMISSION_ACTION_SHEET_2_BODY" = "כדי למצוא אנשים שמכירים ב–Signal:";
+"CONTACT_PERMISSION_ACTION_SHEET_2_BODY" = "כדי למצוא אנשים שמכירים ב–B&A:";
 
 /* First step for contact permission action sheet */
 "CONTACT_PERMISSION_ACTION_SHEET_2_STEP_ONE" = "הקש על ”לך אל הגדרות” למטה";
@@ -1733,10 +1733,10 @@
 "CONTACT_PERMISSION_REMINDER_MEGAPHONE_ACTION" = "התר גישה";
 
 /* Body for contact permission reminder megaphone */
-"CONTACT_PERMISSION_REMINDER_MEGAPHONE_BODY" = "לאפשר גישה לאנשי הקשר שלך כדי למצוא אותם במהירות ב–Signal.";
+"CONTACT_PERMISSION_REMINDER_MEGAPHONE_BODY" = "לאפשר גישה לאנשי הקשר שלך כדי למצוא אותם במהירות ב–B&A.";
 
 /* Title for contact permission reminder megaphone */
-"CONTACT_PERMISSION_REMINDER_MEGAPHONE_TITLE" = "חיפוש אנשי קשר ב–Signal";
+"CONTACT_PERMISSION_REMINDER_MEGAPHONE_TITLE" = "חיפוש אנשי קשר ב–B&A";
 
 /* Label for a contact's phone number. */
 "CONTACT_PHONE" = "טלפון";
@@ -1760,7 +1760,7 @@
 "CONTACT_SHARE_INVALID_CONTACT" = "איש קשר בלתי תקף.";
 
 /* Alert body when contacts disabled while trying to share a contact. */
-"CONTACT_SHARING_NO_ACCESS_BODY" = "Signal זקוקה לגישה לאנשי הקשר שלך. צריך ללכת להגדרות iOS ולהפעיל גישה לאנשי קשר. אנשי הקשר שלך מוצפנים ואינם גלויים לשירות Signal.";
+"CONTACT_SHARING_NO_ACCESS_BODY" = "B&A זקוקה לגישה לאנשי הקשר שלך. צריך ללכת להגדרות iOS ולהפעיל גישה לאנשי קשר. אנשי הקשר שלך מוצפנים ואינם גלויים לשירות B&A.";
 
 /* Alert title when contacts disabled while trying to share a contact. */
 "CONTACT_SHARING_NO_ACCESS_TITLE" = "אפשר גישה אל אנשי קשר";
@@ -1814,7 +1814,7 @@
 "CONTACT_SUPPORT_FILTER_SOMETHING_NOT_WORKING_SHORT" = "משהו לא עובד";
 
 /* Alert body */
-"CONTACT_SUPPORT_PROMPT_ERROR_ALERT_BODY" = "Signal לא היה יכול להשלים את בקשת התמיכה שלך.";
+"CONTACT_SUPPORT_PROMPT_ERROR_ALERT_BODY" = "B&A לא היה יכול להשלים את בקשת התמיכה שלך.";
 
 /* button text */
 "CONTACT_SUPPORT_PROMPT_ERROR_TRY_AGAIN" = "נסה שוב";
@@ -1943,7 +1943,7 @@
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "בחר מי יכול לערוך את השם, התמונה, התיאור וקוצב זמן ההודעות הנעלמות של הקבוצה.";
 
 /* Footer string for a contact's badges in conversation settings */
-"CONVERSATION_SETTINGS_BADGES_FOOTER" = "השג תגים עבור הפרופיל שלך ע״י תמיכה ב־Signal. הקש על תג כדי ללמוד עוד.";
+"CONVERSATION_SETTINGS_BADGES_FOOTER" = "השג תגים עבור הפרופיל שלך ע״י תמיכה ב־B&A. הקש על תג כדי ללמוד עוד.";
 
 /* Header title for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_HEADER" = "תגים";
@@ -2146,10 +2146,10 @@
 /* Label for button that enables you to make a new call link. */
 "CREATE_CALL_LINK_LABEL" = "יצירת לינק לשיחה";
 
-/* Body text for an interactive in-app prompt to set up a Signal username. */
+/* Body text for an interactive in-app prompt to set up a B&A username. */
 "CREATE_USERNAME_MEGAPHONE_BODY" = "מעכשיו: פרטיות מספר טלפון, שמות משתמש אופציונליים ולינקים.";
 
-/* Title for an interactive in-app prompt to set up a Signal username. */
+/* Title for an interactive in-app prompt to set up a B&A username. */
 "CREATE_USERNAME_MEGAPHONE_TITLE" = "דרכים חדשות להתחבר";
 
 /* Credit/debit card donation error for decline failures where the card has expired. */
@@ -2201,7 +2201,7 @@
 "DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "הרץ";
 
 /* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "זה יסייע לנו לפתור את הבעיה שלך ועשוי לקחת מספר דקות. אפשר לסגור את Signal בזמן שאנחנו מריצים את הבדיקה, אבל חשוב לחזור כדי להגיש את הלוגים שלך.";
+"DATABASE_INTEGRITY_CHECK_MESSAGE" = "זה יסייע לנו לפתור את הבעיה שלך ועשוי לקחת מספר דקות. אפשר לסגור את B&A בזמן שאנחנו מריצים את הבדיקה, אבל חשוב לחזור כדי להגיש את הלוגים שלך.";
 
 /* Button to skip database integrity check step */
 "DATABASE_INTEGRITY_CHECK_SKIP" = "דלג";
@@ -2215,20 +2215,20 @@
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "בעיה בשחזור נתונים";
 
-/* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
+/* On the database recovery screen, if the user's device storage is nearly full, B&A will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
 "DATABASE_RECOVERY_MORE_STORAGE_SPACE_NEEDED_CONTINUE_ANYWAY" = "להמשיך בכל זאת";
 
-/* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the line of text on that screen. Embeds an amount like \"2GB\". */
+/* On the database recovery screen, if the user's device storage is nearly full, B&A will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the line of text on that screen. Embeds an amount like \"2GB\". */
 "DATABASE_RECOVERY_MORE_STORAGE_SPACE_NEEDED_DESCRIPTION" = "על מנת להשלים את שחזור הנתונים, אנחנו ממליצים שיהיו לך לפחות %1$@ של שטח אחסון פנוי במכשיר שלך.";
 
-/* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the title of that screen. */
+/* On the database recovery screen, if the user's device storage is nearly full, B&A will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the title of that screen. */
 "DATABASE_RECOVERY_MORE_STORAGE_SPACE_NEEDED_TITLE" = "דרוש עוד שטח אחסון";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) This is the description on the screen where we show an error message. */
-"DATABASE_RECOVERY_RECOVERY_FAILED_DESCRIPTION" = "לא הצלחנו לשחזר את היסטוריית ההודעות שלך. באפשרותך להמשיך להשתמש ב–Signal לאחר התקנה מחדש. מומלץ לשלוח יומן ניפוי באגים כדי שנוכל להבין טוב יותר מה השתבש.";
+"DATABASE_RECOVERY_RECOVERY_FAILED_DESCRIPTION" = "לא הצלחנו לשחזר את היסטוריית ההודעות שלך. באפשרותך להמשיך להשתמש ב–B&A לאחר התקנה מחדש. מומלץ לשלוח יומן ניפוי באגים כדי שנוכל להבין טוב יותר מה השתבש.";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) This button lets them delete all of their data. */
-"DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_BUTTON" = "איפוס של Signal";
+"DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_BUTTON" = "איפוס של B&A";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) If they want to delete the app and restart, they will be presented with a confirmation dialog. This is the final button they will press before their data is reset. */
 "DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_CONFIRMATION_CONFIRM" = "אפס";
@@ -2237,7 +2237,7 @@
 "DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_CONFIRMATION_DESCRIPTION" = "פרטי החשבון, הפרופיל, וכל ההודעות שלך ימחקו. האפליקציה תיסגר לאחר השלמת התהליך.";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) If they want to delete the app and restart, they will be presented with a confirmation dialog. This is the title of that dialog. */
-"DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_CONFIRMATION_TITLE" = "איפוס של Signal";
+"DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_CONFIRMATION_TITLE" = "איפוס של B&A";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) They were asked to submit a debug log. This is the button that submits this log. */
 "DATABASE_RECOVERY_RECOVERY_FAILED_SUBMIT_DEBUG_LOG_BUTTON" = "הגש יומן ניפוי תקלים";
@@ -2312,7 +2312,7 @@
 "DELETE_ACCOUNT_CONFIRMATION_ACTION_SHEEET_ACTION" = "מחיקת חשבון";
 
 /* Title for the action sheet message of the 'delete account confirmation' view controller. */
-"DELETE_ACCOUNT_CONFIRMATION_ACTION_SHEEET_MESSAGE" = "זה ימחק את חשבון Signal שלך ויאפס את היישום. היישום ייסגר לאחר שתהליך זה יושלם.";
+"DELETE_ACCOUNT_CONFIRMATION_ACTION_SHEEET_MESSAGE" = "זה ימחק את חשבון B&A שלך ויאפס את היישום. היישום ייסגר לאחר שתהליך זה יושלם.";
 
 /* Title for the action sheet confirmation title of the 'delete account confirmation' view controller. */
 "DELETE_ACCOUNT_CONFIRMATION_ACTION_SHEEET_TITLE" = "בטוח שבא לך למחוק את החשבון שלך?";
@@ -2336,7 +2336,7 @@
 "DELETE_ACCOUNT_CONFIRMATION_PHONE_NUMBER_TITLE" = "מספר טלפון";
 
 /* Section header */
-"DELETE_ACCOUNT_CONFIRMATION_SECTION_TITLE" = "אשר את מספר Signal שלך";
+"DELETE_ACCOUNT_CONFIRMATION_SECTION_TITLE" = "אשר את מספר B&A שלך";
 
 /* Title for the 'delete account' confirmation view. */
 "DELETE_ACCOUNT_CONFIRMATION_TITLE" = "מחיקת חשבון";
@@ -2353,7 +2353,7 @@
 /* 'Delete' button label on the delete contact confirmation action sheet */
 "DELETE_CONTACT_ACTION_SHEET_BUTTON" = "מחיקה";
 
-/* An explanation of what happens in Signal when you remove a system contact. */
+/* An explanation of what happens in B&A when you remove a system contact. */
 "DELETE_CONTACT_ACTION_SHEET_EXPLANATION" = "האדם הזה ימחק מאנשי הקשר של הטלפון שלך. לא נציג לך את האדם הזה בזמן החיפוש. אם היא או הוא ישלחו לך הודעה בעתיד, תופיע אצלך בקשת הודעה.";
 
 /* Title of action sheet confirming the user wants to delete a system contact. */
@@ -2387,18 +2387,18 @@
 "DELETED_USER" = "חשבון שנמחק";
 
 /* Notification warning the user that they have been de-registered. */
-"DEREGISTRATION_NOTIFICATION" = "התנתקת מ–Signal במכשיר זה.";
+"DEREGISTRATION_NOTIFICATION" = "התנתקת מ–B&A במכשיר זה.";
 
 /* Label for button that lets users re-register using the same phone number. */
 "DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "רשום מחדש מספר טלפון זה";
 
 /* Label warning the user that they have been de-registered. */
-"DEREGISTRATION_WARNING" = "המכשיר הזה כבר לא רשום. זה כנראה בגלל שרשמת את מספר הטלפון שלך ב–Signal על מכשיר אחר.";
+"DEREGISTRATION_WARNING" = "המכשיר הזה כבר לא רשום. זה כנראה בגלל שרשמת את מספר הטלפון שלך ב–B&A על מכשיר אחר.";
 
 /* If the user has been deregistered, they'll see a warning. This is This is the call to action on that warning. */
 "DEREGISTRATION_WARNING_ACTION_TITLE" = "רישום מכשיר מחדש";
 
-/* {{Short Date}} when device last communicated with Signal Server. */
+/* {{Short Date}} when device last communicated with B&A Server. */
 "DEVICE_LAST_ACTIVE_AT_LABEL" = "פעיל בפעם האחרונה %1$@";
 
 /* {{Short Date}} when device was linked. */
@@ -2462,7 +2462,7 @@
 "DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "תצוגה קטנה יותר";
 
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
-"DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "לא הצלחנו להשלים את ההעברה. חשוב לוודא ש–Signal פתוחה בשני המכשירים שלך ולנסות שוב.";
+"DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "לא הצלחנו להשלים את ההעברה. חשוב לוודא ש–B&A פתוחה בשני המכשירים שלך ולנסות שוב.";
 
 /* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "לא היה ניתן לוודא את המכשיר החדש שלך, אנא נסה שוב";
@@ -2480,13 +2480,13 @@
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "אין מספיק שטח פנוי כדי להשלים את ההעברה";
 
 /* An error indicating the user must update their device before trying to transfer. */
-"DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "עדכן אל הגרסה האחרונה של Signal ונסה שוב";
+"DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "עדכן אל הגרסה האחרונה של B&A ונסה שוב";
 
 /* Button shown to expand a QR code and view it fullscreen. */
 "DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "תצוגה גדולה יותר";
 
 /* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "העבר את חשבון Signal שלך אל מכשיר iOS חדש. וודא שהמכשיר החדש שלך בקרבה ושהוא דלוק.";
+"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "העבר את חשבון B&A שלך אל מכשיר iOS חדש. וודא שהמכשיר החדש שלך בקרבה ושהוא דלוק.";
 
 /* The title on the acttion sheet prompting the user if they want to transfer their device. */
 "DEVICE_TRANSFER_PROMPT_TITLE" = "העבר חשבון";
@@ -2504,7 +2504,7 @@
 "DEVICE_TRANSFER_QRCODE_TITLE" = "סריקת קוד QR";
 
 /* The explanation on the view that shows receiving progress */
-"DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "השאר את שני המכשירים קרובים זה לזה. אל תכבה אף מכשיר והשאר את Signal פתוח. העברות מוצפנות מקצה־אל־קצה.";
+"DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "השאר את שני המכשירים קרובים זה לזה. אל תכבה אף מכשיר והשאר את B&A פתוח. העברות מוצפנות מקצה־אל־קצה.";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "מקבל נתונים";
@@ -2519,7 +2519,7 @@
 "DEVICE_TRANSFER_SCANNING_TITLE" = "החזק את המכשיר החדש שלך בפני המצלמה";
 
 /* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "השאר את שני המכשירים קרובים זה לזה. אל תכבה אף מכשיר והשאר את Signal פתוח.";
+"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "השאר את שני המכשירים קרובים זה לזה. אל תכבה אף מכשיר והשאר את B&A פתוח.";
 
 /* The title on the action sheet that shows transfer progress */
 "DEVICE_TRANSFER_TRANSFERRING_TITLE" = "מעביר נתונים";
@@ -2587,10 +2587,10 @@
 /* Section title for the 'domain fronting country' view. */
 "DOMAIN_FRONTING_COUNTRY_VIEW_SECTION_HEADER" = "מיקום עקיפת צנזורה";
 
-/* Users can donate to Signal with a credit or debit card. This is the heading on that screen, telling them how much they'll donate. Embeds {{formatted amount of money}}, such as \"$20\". */
+/* Users can donate to B&A with a credit or debit card. This is the heading on that screen, telling them how much they'll donate. Embeds {{formatted amount of money}}, such as \"$20\". */
 "DONATE_BUTTON" = "תרומה של %1$@";
 
-/* Users can donate to Signal with a credit or debit card. This is the heading on that screen, telling them how much they'll donate every month. Embeds {{formatted amount of money}}, such as \"$20\". */
+/* Users can donate to B&A with a credit or debit card. This is the heading on that screen, telling them how much they'll donate every month. Embeds {{formatted amount of money}}, such as \"$20\". */
 "DONATE_BUTTON_MONTHLY" = "תרומה של %1$@/בחודש";
 
 /* When users make donations, they can choose which payment method they want to use. This is the text on the button that lets them choose to pay with bank transfer. */
@@ -2609,13 +2609,13 @@
 "DONATE_CHOOSE_PAYMENT_METHOD_SHEET_SUBTITLE_FOR_ONE_TIME_DONATION" = "קבלת תג %1$@ למשך 30 יום";
 
 /* When users make donations on a friend's behalf, they see a sheet that lets them pick a payment method. This is the title on that sheet. Embeds {{amount of money}}, such as \"$5\". */
-"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_DONATION_ON_BEHALF_OF_A_FRIEND" = "תרומה של %1$@ ל–Signal";
+"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_DONATION_ON_BEHALF_OF_A_FRIEND" = "תרומה של %1$@ ל–B&A";
 
 /* When users make monthly donations, they see a sheet that lets them pick a payment method. This is the title on that sheet. Embeds {{amount of money per month}}, such as \"$5/month\". */
-"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_MONTHLY_DONATION" = "תרומה של %1$@ ל–Signal";
+"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_MONTHLY_DONATION" = "תרומה של %1$@ ל–B&A";
 
 /* When users make one-time donations, they see a sheet that lets them pick a payment method. This is the title on that sheet. Embeds {{amount of money}}, such as \"$5\". */
-"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_ONE_TIME_DONATION" = "תרומה של %1$@ ל–Signal";
+"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_ONE_TIME_DONATION" = "תרומה של %1$@ ל–B&A";
 
 /* Users can donate on a friend's behalf and can optionally add a message. This is tells users about that optional message. */
 "DONATE_ON_BEHALF_OF_A_FRIEND_ADDITIONAL_MESSAGE_INFO" = "נעדכן את הנמען/ת על התרומה בהודעת 1–על–1. אפשר להוסיף הודעה משלך למטה.";
@@ -2647,10 +2647,10 @@
 /* Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently processing via non-bank payment. */
 "DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_UPDATING_YOUR_SUBSCRIPTION" = "התרומה שלך עדיין בתהליך עיבוד. זה יכול לקחת מספר דקות בהתאם לחיבור שלך. יש להמתין עד שתשלום זה יסתיים לפני עדכון המנוי שלך.";
 
-/* If the user tries to donate to Signal but no amount is selected, this error message is shown. */
+/* If the user tries to donate to B&A but no amount is selected, this error message is shown. */
 "DONATE_SCREEN_ERROR_NO_AMOUNT_SELECTED" = "יש לבחור סכום לתרומה.";
 
-/* If the user tries to donate to Signal but they've entered an amount that's too small, this error message is shown. Embeds {{currency string}}, such as \"$5\". */
+/* If the user tries to donate to B&A but they've entered an amount that's too small, this error message is shown. Embeds {{currency string}}, such as \"$5\". */
 "DONATE_SCREEN_ERROR_SELECT_A_LARGER_AMOUNT_FORMAT" = "הסכום המינימלי שאפשר לתרום הוא %1$@.";
 
 /* Title for an alert presented when the user tries to make a donation, but already has a donation that is currently awaiting authorization. */
@@ -2726,7 +2726,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_BADGE_REDEEMED" = "מומש";
 
 /* Users can donate on behalf of a friend, and the friend will receive a badge. This is a short paragraph on the screen where users choose the badge their friend will receive. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_CHOOSE_BADGE_DESCRIPTION" = "אפשר לתמוך ב–Signal על ידי ביצוע תרומה בשביל חבר/ה או קרוב/ת משפחה שמשתמשים ב–Signal. הוא או היא יקבלו את האפשרות להשוויץ בתמיכה שלהם בפרופיל.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_CHOOSE_BADGE_DESCRIPTION" = "אפשר לתמוך ב–B&A על ידי ביצוע תרומה בשביל חבר/ה או קרוב/ת משפחה שמשתמשים ב–B&A. הוא או היא יקבלו את האפשרות להשוויץ בתמיכה שלהם בפרופיל.";
 
 /* Users can donate on behalf of a friend, and the friend will receive a badge. This is the title on the screen where users choose the badge their friend will receive. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_CHOOSE_BADGE_TITLE" = "ביצוע תרומה בשביל חבר/ה";
@@ -2750,7 +2750,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_FAILED_ERROR_TITLE" = "תשלום נכשל";
 
 /* Users can donate on a friend's behalf. If the payment was processed but the donation failed to send, this error message will be shown. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_SUCCEEDED_BUT_MESSAGE_FAILED_ERROR_BODY" = "התשלום שלך עבד אבל Signal לא הצליחה לשלוח את ההודעה על התרומה. יש ליצור קשר עם התמיכה.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_SUCCEEDED_BUT_MESSAGE_FAILED_ERROR_BODY" = "התשלום שלך עבד אבל B&A לא הצליחה לשלוח את ההודעה על התרומה. יש ליצור קשר עם התמיכה.";
 
 /* Users can donate on a friend's behalf. If the payment was processed but the donation failed to send, an error dialog will be shown. This is the title of that dialog. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_SUCCEEDED_BUT_MESSAGE_FAILED_ERROR_TITLE" = "התרומה נכשלה";
@@ -2762,7 +2762,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_PREVIEW_OUTGOING" = "✨ תרמת בשביל %1$@";
 
 /* You received a donation from a friend. This is the title of that message in the chat. Embeds {{short contact name}}. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_RECEIVED_TITLE_FORMAT" = "%1$@ תרם/ה ל–Signal בשמך";
+"DONATION_ON_BEHALF_OF_A_FRIEND_RECEIVED_TITLE_FORMAT" = "%1$@ תרם/ה ל–B&A בשמך";
 
 /* Users can donate on a friend's behalf. This is the error message that appears if the try to do this, but the recipient is blocked. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_RECIPIENT_IS_BLOCKED_ERROR_BODY" = "אין לך אפשרות לתרום בשביל המשתמש/ת כי חסמת אותם.";
@@ -2786,7 +2786,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_SENT_TITLE_FORMAT" = "תרומה בשם %1$@";
 
 /* When you donate on behalf of a friend, a thank-you sheet will appear. This is the text on that sheet. Embeds {{recipient name}}. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_THANKS_BODY_FORMAT" = "ביצעת תרומה ל–Signal בשם %1$@. הוא או היא יקבלו את האפשרות להשוויץ בתמיכה שלהם בפרופיל.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_THANKS_BODY_FORMAT" = "ביצעת תרומה ל–B&A בשם %1$@. הוא או היא יקבלו את האפשרות להשוויץ בתמיכה שלהם בפרופיל.";
 
 /* When you donate on behalf of a friend, a thank-you sheet will appear. This is the title on that sheet. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_THANKS_TITLE" = "תודה על התמיכה שלך!";
@@ -2795,19 +2795,19 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_VIEW" = "הצגה";
 
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ ביצע/ה תרומה ל–Signal בשמך! אפשר להשוויץ בתמיכה שלך ב–Signal בפרופיל.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ ביצע/ה תרומה ל–B&A בשמך! אפשר להשוויץ בתמיכה שלך ב–B&A בפרופיל.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
+/* There is a screen where users can read more about their donation to B&A. This is the 1st paragraph of that screen. */
 "DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "תכתובת פרטית. בלי מודעות פרסום, בלי מעקב, בלי פיקוח.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "Signal נתמכת על ידי התרומות שלך, מה שאומר שהפרטיות שלך נמצאת במרכז סדר העדיפויות שלנו. Signal נבנתה בשבילך; לא בשביל הנתונים שלך ולא בשביל רווחים.";
+/* There is a screen where users can read more about their donation to B&A. This is the 2nd paragraph of that screen. */
+"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "B&A נתמכת על ידי התרומות שלך, מה שאומר שהפרטיות שלך נמצאת במרכז סדר העדיפויות שלנו. B&A נבנתה בשבילך; לא בשביל הנתונים שלך ולא בשביל רווחים.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "אם יש לך אפשרות, נשמח לקבל ממך תרומה עוד היום כדי לשמור על Signal כיפית, מהימנה וזמינה לכולם.";
+/* There is a screen where users can read more about their donation to B&A. This is the 3rd paragraph of that screen. */
+"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "אם יש לך אפשרות, נשמח לקבל ממך תרומה עוד היום כדי לשמור על B&A כיפית, מהימנה וזמינה לכולם.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "Signal היא שונה.";
+/* There is a screen where users can read more about their donation to B&A. This is the title of that screen. */
+"DONATION_READ_MORE_SCREEN_TITLE" = "B&A היא שונה.";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "סכום";
@@ -2822,7 +2822,7 @@
 "DONATION_RECEIPT_EXPORT_RECEIPT_BUTTON" = "שתף קבלה";
 
 /* Footer text at the bottom of donation receipts */
-"DONATION_RECEIPT_FOOTER" = "תודה לך על תמיכה ב־Signal. התרומה שלך עוזרת לתדלק את המשימה של פיתוח טכנולוגית פרטיות בקוד פתוח שמגינה על חופשי ביטוי ומאפשרת תקשורת עולמית מאובטחת עבור מיליוני אנשים ברחבי העולם. אם אתה תושב ארצות הברית, אנא שמור את הקבלה הזאת עבור רישומי המס שלך. הקרן של טכנולוגית Signal היא ארגון ללא מטרות רווח פטור ממס בארצות הברית תחת קטע 501c3 של קוד ההכנסה הפנימית. מספר זהות המס שלנו הוא 82-4506840.";
+"DONATION_RECEIPT_FOOTER" = "תודה לך על תמיכה ב־B&A. התרומה שלך עוזרת לתדלק את המשימה של פיתוח טכנולוגית פרטיות בקוד פתוח שמגינה על חופשי ביטוי ומאפשרת תקשורת עולמית מאובטחת עבור מיליוני אנשים ברחבי העולם. אם אתה תושב ארצות הברית, אנא שמור את הקבלה הזאת עבור רישומי המס שלך. הקרן של טכנולוגית B&A היא ארגון ללא מטרות רווח פטור ממס בארצות הברית תחת קטע 501c3 של קוד ההכנסה הפנימית. מספר זהות המס שלנו הוא 82-4506840.";
 
 /* Title for receipts for donations given on a friend's behalf */
 "DONATION_RECEIPT_FOR_DONATION_ON_BEHALF_OF_A_FRIEND" = "תרומה בשביל חבר/ה";
@@ -2843,7 +2843,7 @@
 "DONATION_RECEIPTS" = "קבלות תרומה";
 
 /* Text at the bottom of the donation receipts list, telling users that receipts might not be available */
-"DONATION_RECEIPTS_MIGHT_BE_MISSING_IF_YOU_REINSTALLED" = "אם התקנת מחדש את Signal, קבלות מתרומות קודמות לא יהיו זמינות.";
+"DONATION_RECEIPTS_MIGHT_BE_MISSING_IF_YOU_REINSTALLED" = "אם התקנת מחדש את B&A, קבלות מתרומות קודמות לא יהיו זמינות.";
 
 /* Error message displayed if something goes wrong with 3DSecure/iDEAL payment authorization.  This will be encountered if the user cancels the webview before authrizing the payment. */
 "DONATION_REDIRECT_ERROR_CANCELLED_MESSAGE" = "התשלום בוטל. יש לנסות שוב.";
@@ -2858,7 +2858,7 @@
 "DONATION_SCREEN_DONATE_BUTTON" = "ביצוע תרומה";
 
 /* On donation screens, a small amount of information text is shown. This is the subtitle for that text. */
-"DONATION_SCREENS_HEADER_DESCRIPTION" = "תכתובת פרטית, ממומנת על ידך. בלי מודעות פרסום, בלי מעקב, בלי פשרות. תורמים עכשיו ותומכים ב–Signal.";
+"DONATION_SCREENS_HEADER_DESCRIPTION" = "תכתובת פרטית, ממומנת על ידך. בלי מודעות פרסום, בלי מעקב, בלי פשרות. תורמים עכשיו ותומכים ב–B&A.";
 
 /* On donation screens, a small amount of information text is shown. Users can click this link to learn more information. */
 "DONATION_SCREENS_HEADER_READ_MORE" = "קרא עוד";
@@ -2935,8 +2935,8 @@
 /* Title for the \"donate for a friend\" button on the donation view. */
 "DONATION_VIEW_DONATE_ON_BEHALF_OF_A_FRIEND" = "ביצוע תרומה בשביל חבר/ה";
 
-/* Text describing to the user that they're going to pay a donation to Signal */
-"DONATION_VIEW_DONATION_TO_SIGNAL" = "תרומה אל Signal";
+/* Text describing to the user that they're going to pay a donation to B&A */
+"DONATION_VIEW_DONATION_TO_SIGNAL" = "תרומה אל B&A";
 
 /* Title for the 'Donor FAQ' button on the donation screen */
 "DONATION_VIEW_DONOR_FAQ" = "שאלות נפוצות של תורמים";
@@ -2947,8 +2947,8 @@
 /* Title for the 'Badges' button on the donation screen */
 "DONATION_VIEW_MANAGE_BADGES" = "תגים";
 
-/* Text describing to the user that they're going to pay a monthly donation to Signal */
-"DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "תרומה חודשית ל–Signal";
+/* Text describing to the user that they're going to pay a monthly donation to B&A */
+"DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "תרומה חודשית ל–B&A";
 
 /* Title for the 'more' section on the donation screen */
 "DONATION_VIEW_MORE_SECTION_TITLE" = "עוד";
@@ -2959,8 +2959,8 @@
 /* Title for the \"other ways to donate\" section on the donation view. */
 "DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "דרכים אחרות לתרום";
 
-/* Title on the 'Donate to Signal' screen */
-"DONATION_VIEW_TITLE" = "תרומה ל–Signal";
+/* Title on the 'Donate to B&A' screen */
+"DONATION_VIEW_TITLE" = "תרומה ל–B&A";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "מטבע";
@@ -2971,17 +2971,17 @@
 /* Title for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_TITLE" = "ללחוץ פעמיים כדי לערוך";
 
-/* Alert body for when the user has just tried to edit a contacts after declining to give Signal contacts permissions */
+/* Alert body for when the user has just tried to edit a contacts after declining to give B&A contacts permissions */
 "EDIT_CONTACT_WITHOUT_CONTACTS_PERMISSION_ALERT_BODY" = "אתה יכול לאפשר גישה ביישום הגדרות של iOS.";
 
-/* Alert title for when the user has just tried to edit a contacts after declining to give Signal contacts permissions */
-"EDIT_CONTACT_WITHOUT_CONTACTS_PERMISSION_ALERT_TITLE" = "Signal צריך גישה אל אנשי הקשר כדי לערוך מידע איש קשר";
+/* Alert title for when the user has just tried to edit a contacts after declining to give B&A contacts permissions */
+"EDIT_CONTACT_WITHOUT_CONTACTS_PERMISSION_ALERT_TITLE" = "B&A צריך גישה אל אנשי הקשר כדי לערוך מידע איש קשר";
 
 /* The navbar title for the 'update group' view. */
 "EDIT_GROUP_DEFAULT_TITLE" = "ערוך קבוצה";
 
 /* Error message indicating the a user can't be added to a group. */
-"EDIT_GROUP_ERROR_CANNOT_ADD_MEMBER" = "משתמש זה אינו יכול להתווסף אל הקבוצה עד שהוא ישדרג את Signal.";
+"EDIT_GROUP_ERROR_CANNOT_ADD_MEMBER" = "משתמש זה אינו יכול להתווסף אל הקבוצה עד שהוא ישדרג את B&A.";
 
 /* Error message indicating that an avatar image is invalid and cannot be used. */
 "EDIT_GROUP_ERROR_INVALID_AVATAR" = "תמונה בלתי תקפה.";
@@ -3007,11 +3007,11 @@
 /* Edit failed for an unexpected reason */
 "EDIT_MESSAGE_SEND_MESSAGE_UNKNOWN_ERROR" = "EDIT_MESSAGE_SEND_MESSAGE_UNKNOWN_ERROR";
 
-/* body of email sent to contacts when inviting to install Signal. Embeds {{link to install Signal}} and {{link to the Signal home page}} */
-"EMAIL_INVITE_BODY" = "היי,\n\nלאחרונה עברתי להשתמש ב–Signal כדי לשמור על הצ׳אטים ב–iPhone שלי פרטיים. זה יהיה מעולה אם גם לך תהיה את האפליקציה, כדי שנוכל לדעת בוודאות שרק לנו יש גישה להודעות ולשיחות הקוליות שלנו.\n\nSignal זמינה עבור iPhone, Android, ושולחן העבודה. אפשר להוריד אותה כאן: %1$@\n\nSignal עובדת כמו אפליקציית ההודעות הקיימת שלך. אפשר לשלוח תמונות וסרטונים, לבצע שיחות ולהתחיל צ׳אטים קבוצתיים. החלק הכי טוב הוא שאף אחד לא יכול לראות שום דבר מזה, אפילו לא האנשים שיוצרים את Signal!\n\nאפשר לקרוא עוד על Signal כאן: %2$@";
+/* body of email sent to contacts when inviting to install B&A. Embeds {{link to install B&A}} and {{link to the B&A home page}} */
+"EMAIL_INVITE_BODY" = "היי,\n\nלאחרונה עברתי להשתמש ב–B&A כדי לשמור על הצ׳אטים ב–iPhone שלי פרטיים. זה יהיה מעולה אם גם לך תהיה את האפליקציה, כדי שנוכל לדעת בוודאות שרק לנו יש גישה להודעות ולשיחות הקוליות שלנו.\n\nB&A זמינה עבור iPhone, Android, ושולחן העבודה. אפשר להוריד אותה כאן: %1$@\n\nB&A עובדת כמו אפליקציית ההודעות הקיימת שלך. אפשר לשלוח תמונות וסרטונים, לבצע שיחות ולהתחיל צ׳אטים קבוצתיים. החלק הכי טוב הוא שאף אחד לא יכול לראות שום דבר מזה, אפילו לא האנשים שיוצרים את B&A!\n\nאפשר לקרוא עוד על B&A כאן: %2$@";
 
-/* subject of email sent to contacts when inviting to install Signal */
-"EMAIL_INVITE_SUBJECT" = "בוא נחליף אל Signal";
+/* subject of email sent to contacts when inviting to install B&A */
+"EMAIL_INVITE_SUBJECT" = "בוא נחליף אל B&A";
 
 /* Description for the fallback support sheet if user cannot send email */
 "EMAIL_SIGNAL_MESSAGE" = "המכשיר שלך אינו מתוצר לשלוח דוא״ל. כדי לשלוח בקשת תמיכה, הגדר דוא״ל במכשיר שלך או שלח דוא״ל אל support@signal.org";
@@ -3050,7 +3050,7 @@
 "EMOJI_CATEGORY_TRAVEL_NAME" = "טיול ומקומות";
 
 /* Full width label displayed when attempting to compose message */
-"EMPTY_CONTACTS_LABEL_LINE1" = "לאף אחד מאנשי הקשר שלך אין Signal.";
+"EMPTY_CONTACTS_LABEL_LINE1" = "לאף אחד מאנשי הקשר שלך אין B&A.";
 
 /* Full width label displayed when attempting to compose message */
 "EMPTY_CONTACTS_LABEL_LINE2" = "למה אינך מזמין מישהו?";
@@ -3116,7 +3116,7 @@
 "ERROR_DESCRIPTION_UNKNOWN_ERROR" = "התרחשה שגיאה לא ידועה";
 
 /* Error message when attempting to send message */
-"ERROR_DESCRIPTION_UNREGISTERED_RECIPIENT" = "לא ניתן לשלוח הודעה כי האדם הזה לא משתמש יותר ב–Signal.";
+"ERROR_DESCRIPTION_UNREGISTERED_RECIPIENT" = "לא ניתן לשלוח הודעה כי האדם הזה לא משתמש יותר ב–B&A.";
 
 /* Error message indicating that attachment upload(s) failed. */
 "ERROR_MESSAGE_ATTACHMENT_UPLOAD_FAILED" = "העלאת הקובץ המצורף נכשלה.";
@@ -3161,10 +3161,10 @@
 "ERROR_NETWORK_FAILURE" = "שגיאת רשת";
 
 /* Format string for an error alert notification message. Embeds {{ error string }} */
-"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "עזור לנו לשפר את Signal ע״י דיווח על שגיאה זו ביחד עם יומני ניפוי תקלים מהמכשיר שלך אל support@signal.org; %1$@";
+"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "עזור לנו לשפר את B&A ע״י דיווח על שגיאה זו ביחד עם יומני ניפוי תקלים מהמכשיר שלך אל support@signal.org; %1$@";
 
 /* Format string for an error alert notification title. */
-"ERROR_NOTIFICATION_TITLE" = "Signal בטא: שגיאה התרחשה";
+"ERROR_NOTIFICATION_TITLE" = "B&A בטא: שגיאה התרחשה";
 
 /* Error indicating a send failure due to a delinked application. */
 "ERROR_SENDING_DELINKED" = "המכשיר שלך אינו מקושר יותר. אנא קשר מחדש כדי לשלוח הודעות נוספות.";
@@ -3173,7 +3173,7 @@
 "ERROR_SENDING_DEREGISTERED" = "המכשיר שלך אינו רשום יותר. אנא הירשם מחדש כדי לשלוח הודעות נוספות.";
 
 /* Error indicating a send failure due to an expired application. */
-"ERROR_SENDING_EXPIRED" = "גרסת Signal שלך פגה. אנא עדכן כדי לשלוח הודעות נוספות.";
+"ERROR_SENDING_EXPIRED" = "גרסת B&A שלך פגה. אנא עדכן כדי לשלוח הודעות נוספות.";
 
 /* Format string for 'unregistered user' error. Embeds {{the unregistered user's name or signal id}}. */
 "ERROR_UNREGISTERED_USER_FORMAT" = "משתמש בלתי רשום: %1$@";
@@ -3185,19 +3185,19 @@
 "EXIT_REREGISTRATION" = "יציאה מהרשמה";
 
 /* Label notifying the user that the app has expired. */
-"EXPIRATION_ERROR" = "גרסה זו של Signal כבר לא בתוקף. צריך לעדכן כדי לשלוח ולקבל הודעות.";
+"EXPIRATION_ERROR" = "גרסה זו של B&A כבר לא בתוקף. צריך לעדכן כדי לשלוח ולקבל הודעות.";
 
-/* If the user's app is too old, they'll be shown a warning asking them to upgrade. This is the text on the warning, and tapping it will open the App Store page for Signal. */
+/* If the user's app is too old, they'll be shown a warning asking them to upgrade. This is the text on the warning, and tapping it will open the App Store page for B&A. */
 "EXPIRATION_WARNING_ACTION_TITLE" = "עדכון כעת";
 
 /* Label warning the user that the app will expire soon. Embeds {{date}}. */
-"EXPIRATION_WARNING_SOON" = "גרסה זו של Signal תצא מתוקף ב–%1$@. כדאי לעדכן כדי להמשיך לשלוח הודעות.";
+"EXPIRATION_WARNING_SOON" = "גרסה זו של B&A תצא מתוקף ב–%1$@. כדאי לעדכן כדי להמשיך לשלוח הודעות.";
 
 /* Label warning the user that the app will expire today. */
-"EXPIRATION_WARNING_TODAY" = "גרסה זו של Signal פגה תוקף היום. כדאי לעדכן כדי להמשיך לשלוח הודעות.";
+"EXPIRATION_WARNING_TODAY" = "גרסה זו של B&A פגה תוקף היום. כדאי לעדכן כדי להמשיך לשלוח הודעות.";
 
 /* action sheet header when re-sending message which failed because of an invalid key signature */
-"FAILED_SENDING_BECAUSE_INVALID_KEY_SIGNATURE" = "לא ניתן לשלוח הודעה כי %1$@ צריך.ה לעדכן ולפתוח את Signal.";
+"FAILED_SENDING_BECAUSE_INVALID_KEY_SIGNATURE" = "לא ניתן לשלוח הודעה כי %1$@ צריך.ה לעדכן ולפתוח את B&A.";
 
 /* action sheet header when re-sending message which failed because of too many attempts */
 "FAILED_SENDING_BECAUSE_RATE_LIMIT" = "יותר מדי כישלונות עם איש קשר זה. אנא נסה שוב מאוחר יותר.";
@@ -3527,10 +3527,10 @@
 "GROUP_CALL_WILL_NOTIFY_TWO_PEOPLE_FORMAT" = "%1$@ ו%2$@ יקבלו התראה";
 
 /* Text shown before the user starts a group call if the user has enabled ringing and there is one other person in the group. Embeds {member name} */
-"GROUP_CALL_WILL_RING_ONE_PERSON_FORMAT" = "Signal תתקשר ל%1$@";
+"GROUP_CALL_WILL_RING_ONE_PERSON_FORMAT" = "B&A תתקשר ל%1$@";
 
 /* Text shown before the user starts a group call if the user has enabled ringing and there are two other people in the group. Embeds {{ %1$@ participant1, %2$@ participant2 }} */
-"GROUP_CALL_WILL_RING_TWO_PEOPLE_FORMAT" = "Signal תתקשר ל%1$@ ול%2$@";
+"GROUP_CALL_WILL_RING_TWO_PEOPLE_FORMAT" = "B&A תתקשר ל%1$@ ול%2$@";
 
 /* Text explaining that you are in the group call. */
 "GROUP_CALL_YOU_ARE_HERE" = "את/ה בשיחה הקבוצתית";
@@ -3739,8 +3739,8 @@
 /* Label for the 'share group link via QR code' button in the 'group link' view. */
 "GROUP_LINK_VIEW_SHARE_LINK_VIA_QR_CODE" = "קוד QR:";
 
-/* Label for the 'share group link via Signal' button in the 'group link' view. */
-"GROUP_LINK_VIEW_SHARE_LINK_VIA_SIGNAL" = "שתף באמצעות Signal";
+/* Label for the 'share group link via B&A' button in the 'group link' view. */
+"GROUP_LINK_VIEW_SHARE_LINK_VIA_SIGNAL" = "שתף באמצעות B&A";
 
 /* Message for the 'share group link' action sheet in the 'group link' view. */
 "GROUP_LINK_VIEW_SHARE_SHEET_MESSAGE" = "כל אחד עם קישור זה יכול לראות את שם הקבוצה ואת חברי הקבוצה ולבקש להצטרף. שתף אותו עם אנשים שאתה בוטח בהם.";
@@ -4105,7 +4105,7 @@
 /* Help item allowing the user to file a support request */
 "HELP_CONTACT_US" = "צור איתנו קשר";
 
-/* Help item that takes the user to the Signal support website */
+/* Help item that takes the user to the B&A support website */
 "HELP_SUPPORT_CENTER" = "מרכז תמיכה";
 
 /* A format for the 'remove user' action sheet title. Embeds {{the removed user's name or phone number}}. */
@@ -4147,16 +4147,16 @@
 /* A prefix indicating that a message preview is a draft */
 "HOME_VIEW_DRAFT_PREFIX" = "טיוטה: ";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have 1 Signal contact.  Embeds {{The name of 1 of your Signal contacts}}. */
-"HOME_VIEW_FIRST_CONVERSATION_OFFER_1_CONTACT_FORMAT" = "כמה מאנשי הקשר שלך כבר ב־Signal, כולל %1$@.";
+/* Format string for a label offering to start a new conversation with your contacts, if you have 1 B&A contact.  Embeds {{The name of 1 of your B&A contacts}}. */
+"HOME_VIEW_FIRST_CONVERSATION_OFFER_1_CONTACT_FORMAT" = "כמה מאנשי הקשר שלך כבר ב־B&A, כולל %1$@.";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have 2 Signal contacts.  Embeds {{The names of 2 of your Signal contacts}}. */
-"HOME_VIEW_FIRST_CONVERSATION_OFFER_2_CONTACTS_FORMAT" = "כמה מאנשי הקשר שלך כבר ב־Signal, כולל %1$@ ו%2$@";
+/* Format string for a label offering to start a new conversation with your contacts, if you have 2 B&A contacts.  Embeds {{The names of 2 of your B&A contacts}}. */
+"HOME_VIEW_FIRST_CONVERSATION_OFFER_2_CONTACTS_FORMAT" = "כמה מאנשי הקשר שלך כבר ב־B&A, כולל %1$@ ו%2$@";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have at least 3 Signal contacts.  Embeds {{The names of 3 of your Signal contacts}}. */
-"HOME_VIEW_FIRST_CONVERSATION_OFFER_3_CONTACTS_FORMAT" = "כמה מאנשי הקשר שלך כבר ב־Signal, כולל %1$@, %2$@ ו%3$@";
+/* Format string for a label offering to start a new conversation with your contacts, if you have at least 3 B&A contacts.  Embeds {{The names of 3 of your B&A contacts}}. */
+"HOME_VIEW_FIRST_CONVERSATION_OFFER_3_CONTACTS_FORMAT" = "כמה מאנשי הקשר שלך כבר ב־B&A, כולל %1$@, %2$@ ו%3$@";
 
-/* A label offering to start a new conversation with your contacts, if you have no Signal contacts. */
+/* A label offering to start a new conversation with your contacts, if you have no B&A contacts. */
 "HOME_VIEW_FIRST_CONVERSATION_OFFER_NO_CONTACTS" = "אפשר להתחיל את הצ׳אט הראשון שלך כאן.";
 
 /* Table cell subtitle label for a group the user has been added to. {Embeds inviter name} */
@@ -4238,7 +4238,7 @@
 "INACTIVE_LINKED_DEVICE_REMINDER_MEGAPHONE_TITLE" = "מכשיר מקושר לא פעיל";
 
 /* Body for an in-app megaphone about a user's inactive primary device. */
-"INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_BODY" = "כדי לשמור על החשבון שלך פעיל, צריך לפתוח את Signal במכשיר הראשי שלך.";
+"INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_BODY" = "כדי לשמור על החשבון שלך פעיל, צריך לפתוח את B&A במכשיר הראשי שלך.";
 
 /* Title for a button in an in-app megaphone about a user's inactive primary device, temporarily dismissing the megaphone. */
 "INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_GOT_IT_BUTTON" = "הבנתי";
@@ -4247,7 +4247,7 @@
 "INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_LEARN_MORE_BUTTON" = "למידע נוסף";
 
 /* Title for an in-app megaphone about a user's inactive primary device. */
-"INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_TITLE" = "פתח את Signal בטלפון שלך";
+"INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_TITLE" = "פתח את B&A בטלפון שלך";
 
 /* Label reminding the user that they are in archive mode, and that muted chats remain archived when they receive a new message. */
 "INBOX_VIEW_ARCHIVE_MODE_MUTED_CHATS_REMINDER" = "צ׳אטים מושתקים שמאוחסנים בארכיון יישארו בארכיון כשהודעה חדשה מגיעה.";
@@ -4283,10 +4283,10 @@
 "INFO_MESSAGE_BLOCKED_OTHER_USER" = "חסמת את האדם הזה.";
 
 /* Indicates that a previously-removed recipient has been added back to the current user's contacts. */
-"INFO_MESSAGE_CONTACT_REINSTATED" = "האדם הזה נוסף חזרה לרשימת אנשי הקשר שלך ב–Signal.";
+"INFO_MESSAGE_CONTACT_REINSTATED" = "האדם הזה נוסף חזרה לרשימת אנשי הקשר שלך ב–B&A.";
 
 /* Indicates that the recipient has been removed from the current user's contacts and that messaging them will re-add them. */
-"INFO_MESSAGE_CONTACT_REMOVED" = "הסרת את האדם הזה מרשימת אנשי הקשר שלך ב–Signal, שליחת הודעה תוסיף אותו או אותה מחדש.";
+"INFO_MESSAGE_CONTACT_REMOVED" = "הסרת את האדם הזה מרשימת אנשי הקשר שלך ב–B&A, שליחת הודעה תוסיף אותו או אותה מחדש.";
 
 /* When you start a chat with someone and then later learn their profile name, we insert an in-chat message with this string to record the identifier you originally used to contact them. Embeds {{ the identifier, either a phone number or a username }}. */
 "INFO_MESSAGE_LEARNED_PROFILE_KEY" = "התחלת את הצ׳אט הזה עם %1$@.";
@@ -4307,7 +4307,7 @@
 "INFO_MESSAGE_REPORTED_SPAM" = "דוּוח/ה כספאם";
 
 /* Body message of the alert shown when a user taps on 'learn more' via the spam info message. */
-"INFO_MESSAGE_REPORTED_SPAM_LEARN_MORE_MESSAGE" = "Signal קיבלה הודעה שהאדם הזה חשוד בשליחת ספאם. Signal לא יכולה לראות את התוכן של אף צ׳אט.";
+"INFO_MESSAGE_REPORTED_SPAM_LEARN_MORE_MESSAGE" = "B&A קיבלה הודעה שהאדם הזה חשוד בשליחת ספאם. B&A לא יכולה לראות את התוכן של אף צ׳אט.";
 
 /* Title of the alert shown when a user taps on 'learn more' via the spam info message. */
 "INFO_MESSAGE_REPORTED_SPAM_LEARN_MORE_TITLE" = "דוּוח/ה כספאם";
@@ -4324,8 +4324,8 @@
 /* Indicates that another user has changed their phone number. Embeds: {{ the user's name}} */
 "INFO_MESSAGE_USER_CHANGED_PHONE_NUMBER_FORMAT" = "%1$@ שינה/שינתה את המספר שלו/שלה.";
 
-/* Shown in inbox and conversation when a user joins Signal, embeds the new user's {{contact name}} */
-"INFO_MESSAGE_USER_JOINED_SIGNAL_BODY_FORMAT" = "%1$@ נמצא ב־Signal!";
+/* Shown in inbox and conversation when a user joins B&A, embeds the new user's {{contact name}} */
+"INFO_MESSAGE_USER_JOINED_SIGNAL_BODY_FORMAT" = "%1$@ נמצא ב־B&A!";
 
 /* Label at the top of the input text when editing a message */
 "INPUT_TOOLBAR_EDIT_MESSAGE_LABEL" = "עריכת הודעה";
@@ -4352,13 +4352,13 @@
 "INVALID_PROXY_HOST_ERROR" = "כתובת הפרוקסי שהכנסת אינה חוקית, יש לבדוק את הכתובת ולנסות שוב.";
 
 /* Alert body when contacts disabled while trying to invite contacts to signal */
-"INVITE_FLOW_REQUIRES_CONTACT_ACCESS_BODY" = "אתה יכול לאפשר גישה אל אנשי קשר ביישום הגדרות של iOS כדי להזמין את חבריך להצטרף אל Signal.";
+"INVITE_FLOW_REQUIRES_CONTACT_ACCESS_BODY" = "אתה יכול לאפשר גישה אל אנשי קשר ביישום הגדרות של iOS כדי להזמין את חבריך להצטרף אל B&A.";
 
 /* Alert title when contacts disabled while trying to invite contacts to signal */
 "INVITE_FLOW_REQUIRES_CONTACT_ACCESS_TITLE" = "אפשר גישה אל אנשי קשר";
 
 /* Label for the cell that presents the 'invite contacts' workflow. */
-"INVITE_FRIENDS_CONTACT_TABLE_BUTTON" = "הזמן חברים אל Signal";
+"INVITE_FRIENDS_CONTACT_TABLE_BUTTON" = "הזמן חברים אל B&A";
 
 /* Header label above a section for more options for adding contacts */
 "INVITE_FRIENDS_CONTACT_TABLE_HEADER" = "עוד";
@@ -4481,16 +4481,16 @@
 "LINK_DEVICE_SCANNING_INSTRUCTIONS_SHEET_TITLE" = "סריקת קוד QR";
 
 /* Body text for a sheet when a user tries to link a device informing them that they will need to authenticate their device */
-"LINK_NEW_DEVICE_AUTHENTICATION_INFO_SHEET_BODY" = "יש ללחוץ על ״המשך״ ולהזין את ביטול נעילת הטלפון שלך כדי לאשר. אין להזין את קוד ה‑PIN של Signal.";
+"LINK_NEW_DEVICE_AUTHENTICATION_INFO_SHEET_BODY" = "יש ללחוץ על ״המשך״ ולהזין את ביטול נעילת הטלפון שלך כדי לאשר. אין להזין את קוד ה‑PIN של B&A.";
 
 /* Title for a sheet when a user tries to link a device informing them that they will need to authenticate their device */
 "LINK_NEW_DEVICE_AUTHENTICATION_INFO_SHEET_TITLE" = "לפני הקישור, צריך לאשר שמדובר בך";
 
-/* Description of how and why Signal iOS uses Touch ID/Face ID/Phone Passcode to unlock device linking. */
+/* Description of how and why B&A iOS uses Touch ID/Face ID/Phone Passcode to unlock device linking. */
 "LINK_NEW_DEVICE_AUTHENTICATION_REASON" = "אימות כדי לקשר מכשיר";
 
 /* Body text for a sheet when a user has started linking a device informing them to finish the process on that other device */
-"LINK_NEW_DEVICE_FINISH_ON_OTHER_DEVICE_SHEET_BODY" = "יש לסיים את הקישור של Signal במכשיר האחר שלך.";
+"LINK_NEW_DEVICE_FINISH_ON_OTHER_DEVICE_SHEET_BODY" = "יש לסיים את הקישור של B&A במכשיר האחר שלך.";
 
 /* Title for a sheet when a user has started linking a device informing them to finish the process on that other device */
 "LINK_NEW_DEVICE_FINISH_ON_OTHER_DEVICE_SHEET_TITLE" = "יש לסיים את הקישור במכשיר האחר שלך";
@@ -4532,10 +4532,10 @@
 "LINK_PREVIEW_UNKNOWN_DOMAIN" = "תצוגה מקדימה של קישור";
 
 /* Shown in an alert when trying to edit a contact. */
-"LINKED_DEVICE_CONTACTS_NOT_ALLOWED" = "ניהול אנשי הקשר של הטלפון כבר לא זמין ב–iPad. כדי להוסיף חברי Signal לאנשי הקשר של הטלפון שלך, צריך לפתוח את Signal בטלפון.";
+"LINKED_DEVICE_CONTACTS_NOT_ALLOWED" = "ניהול אנשי הקשר של הטלפון כבר לא זמין ב–iPad. כדי להוסיף חברי B&A לאנשי הקשר של הטלפון שלך, צריך לפתוח את B&A בטלפון.";
 
 /* Shown in a banner when you tap the 'New Chat' icon at the top of the list of chats. */
-"LINKED_DEVICE_MANAGE_CONTACTS_BANNER" = "ניהול אנשי הקשר של הטלפון כבר לא נתמך ב–iPad. המכשיר הזה ימשיך לסנכרן כל שינוי ברשימת אנשי הקשר שלך מ–Signal בטלפון שלך.";
+"LINKED_DEVICE_MANAGE_CONTACTS_BANNER" = "ניהול אנשי הקשר של הטלפון כבר לא נתמך ב–iPad. המכשיר הזה ימשיך לסנכרן כל שינוי ברשימת אנשי הקשר שלך מ–B&A בטלפון שלך.";
 
 /* A button shown in a banner when you tap the 'New Chat' icon at the top of the list of chats. Tapping it opens a website with more details. */
 "LINKED_DEVICE_MANAGE_CONTACTS_LEARN_MORE" = "למידע נוסף";
@@ -4550,28 +4550,28 @@
 "LINKED_DEVICE_NOTIFICATION_TITLE" = "קישרת מכשיר חדש";
 
 /* Message for an action sheet telling users how to link a device, when trying to open an external device-linking URL. */
-"LINKED_DEVICE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "כדי לקשר שולחן עבודה או iPad לחשבון Signal זה, יש לעבור אל ״מכשירים מקושרים״ וללחוץ על \"קישור מכשיר חדש\" ולסרוק שוב את קוד ה–QR. חשוב לוודא שסורקים רק את קודי ה–QR שמגיעים ישירות מ–Signal.";
+"LINKED_DEVICE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "כדי לקשר שולחן עבודה או iPad לחשבון B&A זה, יש לעבור אל ״מכשירים מקושרים״ וללחוץ על \"קישור מכשיר חדש\" ולסרוק שוב את קוד ה–QR. חשוב לוודא שסורקים רק את קודי ה–QR שמגיעים ישירות מ–B&A.";
 
 /* Message for an action sheet telling users how to link a device, when trying to open a device-linking URL from the in-app camera. */
-"LINKED_DEVICE_URL_OPENED_ACTION_SHEET_IN_APP_CAMERA_MESSAGE" = "נראה שאת/ה מנסה לקשר מכשיר Signal. יש ללחוץ על המשך ואז ללחוץ על ״קישור מכשיר חדש״ ולסרוק שנית את קוד ה–QR.";
+"LINKED_DEVICE_URL_OPENED_ACTION_SHEET_IN_APP_CAMERA_MESSAGE" = "נראה שאת/ה מנסה לקשר מכשיר B&A. יש ללחוץ על המשך ואז ללחוץ על ״קישור מכשיר חדש״ ולסרוק שנית את קוד ה–QR.";
 
 /* Bullet point about downloads on the linked devices education sheet. Embeds {{ %1$@ iPad download link, %2$@ desktop download link }} */
 "LINKED_DEVICES_EDUCATION_POINT_DOWNLOADS" = "במכשיר האחר שלך, יש לבקר ב–%1$@ כדי להתקין את האפליקציה למכשיר iPad או %2$@ כדי להתקין את האפליקציה לשולחן העבודה.";
 
 /* Bullet point about message sync on the linked devices education sheet */
-"LINKED_DEVICES_EDUCATION_POINT_MESSAGES" = "הודעות Signal יסונכרנו עם Signal בטלפון הנייד שלך לאחר שהוא יקושר.";
+"LINKED_DEVICES_EDUCATION_POINT_MESSAGES" = "הודעות B&A יסונכרנו עם B&A בטלפון הנייד שלך לאחר שהוא יקושר.";
 
 /* Bullet point about privacy on the linked devices education sheet */
 "LINKED_DEVICES_EDUCATION_POINT_PRIVACY" = "כל התכתבות במכשירים המקושרים היא פרטית";
 
 /* Title for the linked device education sheet */
-"LINKED_DEVICES_EDUCATION_TITLE" = "Signal לשולחן העבודה או ל–iPad";
+"LINKED_DEVICES_EDUCATION_TITLE" = "B&A לשולחן העבודה או ל–iPad";
 
 /* Text that appears where the linked device list would be indicating that there are no linked devices. */
 "LINKED_DEVICES_EMPTY_STATE" = "אין מכשירים מקושרים";
 
 /* Description for header of the linked devices list */
-"LINKED_DEVICES_HEADER_DESCRIPTION" = "שימוש ב–Signal לשולחן העבודה או ל–iPad. ההודעות שלך יסונכרנו עם המכשירים המקושרים שלך.";
+"LINKED_DEVICES_HEADER_DESCRIPTION" = "שימוש ב–B&A לשולחן העבודה או ל–iPad. ההודעות שלך יסונכרנו עם המכשירים המקושרים שלך.";
 
 /* Footer text below the list of currently-linked devices */
 "LINKED_DEVICES_LIST_FOOTER" = "הודעות ופרטי צ׳אט מוגנים באמצעות הצפנה מקצה לקצה בכל המכשירים";
@@ -4613,10 +4613,10 @@
 "LINKING_SYNCING_TIMING_INFO" = "זה עשוי לקחת כמה דקות";
 
 /* Shown to users while the app is loading, asking them not to close the app. */
-"LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "אל תסגור Signal.";
+"LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "אל תסגור B&A.";
 
 /* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "על מנת להעביר את חשבון Signal שלך, אתה צריך לאפשר גישה אל רשת מקומית בשני המכשירים.";
+"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "על מנת להעביר את חשבון B&A שלך, אתה צריך לאפשר גישה אל רשת מקומית בשני המכשירים.";
 
 /* A button asking the user if they need further help getting their transfer working. */
 "LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "צריך עזרה?";
@@ -4628,7 +4628,7 @@
 "LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "הפעל את ”רשת מקומית“";
 
 /* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "נווט אל Signal";
+"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "נווט אל B&A";
 
 /* Title for local network permission action sheet */
 "LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "הפעל גישה אל רשת מקומית";
@@ -4643,7 +4643,7 @@
 "LOGGING_SECTION" = "רישום יומן";
 
 /* Footer for the 'logging' help section. */
-"LOGGING_SECTION_FOOTER" = "יומני ניפוי תקלים יכולים לעזור אל Signal לתקן סוגיות וקריסות.";
+"LOGGING_SECTION_FOOTER" = "יומני ניפוי תקלים יכולים לעזור אל B&A לתקן סוגיות וקריסות.";
 
 /* Title for the 'long text message' view. */
 "LONG_TEXT_VIEW_TITLE" = "הודעה";
@@ -4745,7 +4745,7 @@
 "MESSAGE_ACTION_DELETE_FOR_EVERYONE" = "מחיקה עבור כולם";
 
 /* A one-time confirmation that you want to delete for everyone */
-"MESSAGE_ACTION_DELETE_FOR_EVERYONE_CONFIRMATION" = "הודעה זו תימחק עבור כל מי שנמצא בצ'אט אם הם משתמשים בגרסה עדכנית של Signal. הם יוכלו לראות שמחקת הודעה.";
+"MESSAGE_ACTION_DELETE_FOR_EVERYONE_CONFIRMATION" = "הודעה זו תימחק עבור כל מי שנמצא בצ'אט אם הם משתמשים בגרסה עדכנית של B&A. הם יוכלו לראות שמחקת הודעה.";
 
 /* The title for the action sheet asking who the user wants to delete the message for. */
 "MESSAGE_ACTION_DELETE_FOR_TITLE" = "עבור מי בא לך למחוק הודעה זו?";
@@ -4790,7 +4790,7 @@
 "MESSAGE_ACTION_LINK_OPEN_LINK" = "פתח קישור";
 
 /* Label for button to open a signal proxy. */
-"MESSAGE_ACTION_LINK_OPEN_PROXY" = "פתיחת פרוקסי של Signal";
+"MESSAGE_ACTION_LINK_OPEN_PROXY" = "פתיחת פרוקסי של B&A";
 
 /* Label for button to open a sticker pack. */
 "MESSAGE_ACTION_LINK_OPEN_STICKER_PACK" = "הצג חבילת מדבקות";
@@ -4964,7 +4964,7 @@
 "MESSAGE_REQUEST_NAME_COLLISON_UPDATE_CONTACT_ACTION" = "עדכן איש קשר";
 
 /* Action sheet message to confirm reporting a conversation as spam via a message request. */
-"MESSAGE_REQUEST_REPORT_CONVERSATION_MESSAGE" = "Signal תקבל הודעה שהאדם הזה חשוד בשליחת ספאם. Signal לא יכולה לראות את התוכן של אף צ׳אט.";
+"MESSAGE_REQUEST_REPORT_CONVERSATION_MESSAGE" = "B&A תקבל הודעה שהאדם הזה חשוד בשליחת ספאם. B&A לא יכולה לראות את התוכן של אף צ׳אט.";
 
 /* Action sheet title to confirm reporting a conversation as spam via a message request. */
 "MESSAGE_REQUEST_REPORT_CONVERSATION_TITLE" = "לדווח על ספאם?";
@@ -5059,7 +5059,7 @@
 /* status message for read messages */
 "MESSAGE_STATUS_READ" = "נקרא";
 
-/* message status if message delivery to a recipient is skipped. We skip delivering group messages to users who have left the group or unregistered their Signal account. */
+/* message status if message delivery to a recipient is skipped. We skip delivering group messages to users who have left the group or unregistered their B&A account. */
 "MESSAGE_STATUS_RECIPIENT_SKIPPED" = "לא נשלח";
 
 /* Label indicating that a message failed to send. */
@@ -5092,8 +5092,8 @@
 /* info message text in conversation view for when a call was dropped because the contact is blocked in iOS settings */
 "MISSED_CALL_BLOCKED_SYSTEM_CONTACT" = "שיחה שלא נענתה מאיש קשר חסום בהגדרות הטלפון";
 
-/* Action to block contact in Signal for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
-"MISSED_CALL_BLOCKED_SYSTEM_SETTINGS_SHEET_BLOCK_ACTION" = "לחסום איש קשר גם ב–Signal";
+/* Action to block contact in B&A for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
+"MISSED_CALL_BLOCKED_SYSTEM_SETTINGS_SHEET_BLOCK_ACTION" = "לחסום איש קשר גם ב–B&A";
 
 /* Message for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
 "MISSED_CALL_BLOCKED_SYSTEM_SETTINGS_SHEET_MESSAGE" = "פספסת את השיחה בגלל שהאדם הזה חסום בהגדרות הטלפון שלך. כדי לנהל את זה, יש לעבור להגדרות > טלפון וללחוץ על אנשי קשר חסומים.";
@@ -5114,19 +5114,19 @@
 "MISSING_CAMERA_PERMISSION_MESSAGE" = "באפשרותך להפעיל גישה למצלמה באפליקציית ההגדרות של iOS.";
 
 /* Alert title */
-"MISSING_CAMERA_PERMISSION_TITLE" = "Signal צריך לקבל גישה אל מצלמה שלך.";
+"MISSING_CAMERA_PERMISSION_TITLE" = "B&A צריך לקבל גישה אל מצלמה שלך.";
 
 /* Alert body indicating the user has denied location permissions */
 "MISSING_LOCATION_PERMISSION_MESSAGE" = "אתה יכול לאפשר הרשאה זו ביישום הגדרות של iOS.";
 
 /* Alert title indicating the user has denied location permissions */
-"MISSING_LOCATION_PERMISSION_TITLE" = "Signal דורש גישה אל המיקום שלך עבור מאפיין זה.";
+"MISSING_LOCATION_PERMISSION_TITLE" = "B&A דורש גישה אל המיקום שלך עבור מאפיין זה.";
 
 /* Alert body when user has previously denied media library access */
 "MISSING_MEDIA_LIBRARY_PERMISSION_MESSAGE" = "אתה יכול לאפשר הרשאה זו ביישום הגדרות של iOS.";
 
 /* Alert title when user has previously denied media library access */
-"MISSING_MEDIA_LIBRARY_PERMISSION_TITLE" = "Signal דורש גישה אל התמונות שלך עבור מאפיין זה.";
+"MISSING_MEDIA_LIBRARY_PERMISSION_TITLE" = "B&A דורש גישה אל התמונות שלך עבור מאפיין זה.";
 
 /* An error shown as the title of an alert when try to link a new device & the user is already at the limit. */
 "MULTIDEVICE_PAIRING_MAX_DESC" = "אינך יכול לקשר עוד מכשירים כלשהם.";
@@ -5147,7 +5147,7 @@
 "MY_STORIES_SETTINGS_VISIBILITY_ALL_SIGNAL_CONNECTIONS_EXCEPT_TITLE" = "כולם חוץ מ…";
 
 /* Title for the visibility option */
-"MY_STORIES_SETTINGS_VISIBILITY_ALL_SIGNAL_CONNECTIONS_TITLE" = "כל חברי ה–Signal";
+"MY_STORIES_SETTINGS_VISIBILITY_ALL_SIGNAL_CONNECTIONS_TITLE" = "כל חברי ה–B&A";
 
 /* Title for the visibility option */
 "MY_STORIES_SETTINGS_VISIBILITY_ONLY_SHARE_WITH_TITLE" = "שיתוף רק עם…";
@@ -5309,7 +5309,7 @@
 "NICKNAME_EDITOR_DELETE_CONFIRMATION_TITLE" = "למחוק כינוי?";
 
 /* The description below the title on the profile nickname editor view. */
-"NICKNAME_EDITOR_DESCRIPTION" = "כינויים והערות מאוחסנים באמצעות Signal ומוצפנים מקצה לקצה. הם גלויים רק לך.";
+"NICKNAME_EDITOR_DESCRIPTION" = "כינויים והערות מאוחסנים באמצעות B&A ומוצפנים מקצה לקצה. הם גלויים רק לך.";
 
 /* Placeholder text it the text field for the family name in the profile nickname editor. */
 "NICKNAME_EDITOR_FAMILY_NAME_PLACEHOLDER" = "שם משפחה";
@@ -5372,7 +5372,7 @@
 "NOTIFICATION_PERMISSION_REMINDER_MEGAPHONE_TITLE" = "להפעיל התראות?";
 
 /* Shown as the body of an alert when notifications can't be shown due to an error. */
-"NOTIFICATIONS_ERROR_MESSAGE" = "יש להפעיל מחדש את ה–%1$@ שלך אם לא מתקבלות אצלך התראות Signal.";
+"NOTIFICATIONS_ERROR_MESSAGE" = "יש להפעיל מחדש את ה–%1$@ שלך אם לא מתקבלות אצלך התראות B&A.";
 
 /* Shown as the title of an alert when notifications can't be shown due to an error. */
 "NOTIFICATIONS_ERROR_TITLE" = "לא ניתן להציג התראות";
@@ -5383,7 +5383,7 @@
 /* No comment provided by engineer. */
 "NOTIFICATIONS_NONE" = "ללא שם או תוכן";
 
-/* Table cell switch label. When disabled, Signal will not play notification sounds while the app is in the foreground. */
+/* Table cell switch label. When disabled, B&A will not play notification sounds while the app is in the foreground. */
 "NOTIFICATIONS_SECTION_INAPP" = "נגן בזמן שהיישום פתוח";
 
 /* Label for settings UI that allows user to add a new notification sound. */
@@ -5429,12 +5429,12 @@
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "לדלג על הכנסת PIN?";
 
 /* The body for the device transfer 'choice' view 'transfer' option */
-"ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "שחזור הודעות הטקסט והמדיה שלך מתכנית גיבוי Signal בתשלום שלך";
+"ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "שחזור הודעות הטקסט והמדיה שלך מתכנית גיבוי B&A בתשלום שלך";
 
 /* The title for the device transfer 'choice' view 'transfer' option */
-"ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "שחזור גיבוי Signal";
+"ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "שחזור גיבוי B&A";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
+/* If a user is installing B&A on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "איך ברצונך לשחזר את היסטוריית ההודעות ונתוני החשבון שלך?";
 
 /* The body for the skip restore 'choice' option */
@@ -5446,7 +5446,7 @@
 /* The title for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_TITLE" = "הירשם בלי להעביר";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. */
+/* If a user is installing B&A on a new phone, they may be asked whether they want to restore their device from a backup. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_TITLE" = "שחזור או העברת חשבון";
 
 /* The body for the device transfer 'choice' view 'transfer' option */
@@ -5492,7 +5492,7 @@
 "ONBOARDING_MODE_SWITCH_BUTTON_REGISTERING" = "קשר iPhone";
 
 /* explanation to the user they're switching from linking to registering flow */
-"ONBOARDING_MODE_SWITCH_EXPLANATION_PROVISIONING" = "הקשה על \"רשום iPad\" תיצור חשבון Signal חדש לגמרי או תעביר חשבון קיים אל iPad זה. זה ישבית את Signal על מכשירים אחרים כלשהם שרשומים כיום עם אותו מספר טלפון.";
+"ONBOARDING_MODE_SWITCH_EXPLANATION_PROVISIONING" = "הקשה על \"רשום iPad\" תיצור חשבון B&A חדש לגמרי או תעביר חשבון קיים אל iPad זה. זה ישבית את B&A על מכשירים אחרים כלשהם שרשומים כיום עם אותו מספר טלפון.";
 
 /* explanation to the user they're switching from registering to linking flow */
 "ONBOARDING_MODE_SWITCH_EXPLANATION_REGISTERING" = "הקשה על \"קשר iPhone\" תיתן לך לחבר את הטלפון שלך אל חשבון קיים. קישור הטלפון שלך אינו מומלץ באופן כללי ויגביל מעט תפקודיות, כגון ביצוע שיחות.";
@@ -5504,13 +5504,13 @@
 "ONBOARDING_MODE_SWITCH_TITLE_REGISTERING" = "קשר iPhone זה";
 
 /* warning to the user that registering an ipad is not recommended */
-"ONBOARDING_MODE_SWITCH_WARNING_PROVISIONING" = "רישום iPad זה ישבית את Signal על מכשירים אחרים כלשהם שרשומים כיום עם אותו מספר טלפון.";
+"ONBOARDING_MODE_SWITCH_WARNING_PROVISIONING" = "רישום iPad זה ישבית את B&A על מכשירים אחרים כלשהם שרשומים כיום עם אותו מספר טלפון.";
 
 /* warning to the user that linking a phone is not recommended */
 "ONBOARDING_MODE_SWITCH_WARNING_REGISTERING" = "קישור iPhone שלך אינו מומלץ ויגביל תפקודיות ליבה.";
 
 /* Description of the 'Contacts' permission in the 'onboarding permissions' view. */
-"ONBOARDING_PERMISSIONS_CONTACTS_DESCRIPTION" = "למצוא אנשים שאת.ה מכיר.ה. אנשי הקשר שלך מוצפנים ואינם גלויים לשירות Signal.";
+"ONBOARDING_PERMISSIONS_CONTACTS_DESCRIPTION" = "למצוא אנשים שאת.ה מכיר.ה. אנשי הקשר שלך מוצפנים ואינם גלויים לשירות B&A.";
 
 /* Title introducing the 'Contacts' permission in the 'onboarding permissions' view. */
 "ONBOARDING_PERMISSIONS_CONTACTS_TITLE" = "אנשי קשר";
@@ -5522,13 +5522,13 @@
 "ONBOARDING_PERMISSIONS_NOTIFICATIONS_TITLE" = "התראות";
 
 /* Preamble of the 'onboarding permissions' view. */
-"ONBOARDING_PERMISSIONS_PREAMBLE" = "Signal רוצה לבקש את ההרשאות הבאות.";
+"ONBOARDING_PERMISSIONS_PREAMBLE" = "B&A רוצה לבקש את ההרשאות הבאות.";
 
 /* Title of the 'onboarding permissions' view. */
 "ONBOARDING_PERMISSIONS_TITLE" = "התר הרשאות";
 
 /* Explanation of the 'onboarding phone number discoverability' view. Embeds {user phone number} */
-"ONBOARDING_PHONE_NUMBER_DISCOVERABILITY_EXPLANATION_FORMAT" = "בחר מי יכול למצוא אותך ב־Signal עם מספר הטלפון שלך %1$@";
+"ONBOARDING_PHONE_NUMBER_DISCOVERABILITY_EXPLANATION_FORMAT" = "בחר מי יכול למצוא אותך ב־B&A עם מספר הטלפון שלך %1$@";
 
 /* Title of the 'onboarding phone number discoverability' view. */
 "ONBOARDING_PHONE_NUMBER_DISCOVERABILITY_TITLE" = "מי יכול למצוא אותך עם המספר שלך?";
@@ -5543,7 +5543,7 @@
 "ONBOARDING_PHONE_NUMBER_VALIDATION_WARNING" = "מספר טלפון בלתי תקף. אנא הכנס מספר טלפון תקף כדי להירשם.";
 
 /* Explanation of the 'onboarding pin attempts exhausted' view when reglock is disabled. */
-"ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_EXPLANATION" = "ניחושי PIN אזלו לך, אבל אתה עדין יכול להשיג גישה אל חשבון Signal שלך ע״י יצירת PIN חדש. למען פרטיותך ואבטחתך, חשבונך ישוחזר בלי מידע פרופיל שמור כלשהו או הגדרות שמורות כלשהן.";
+"ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_EXPLANATION" = "ניחושי PIN אזלו לך, אבל אתה עדין יכול להשיג גישה אל חשבון B&A שלך ע״י יצירת PIN חדש. למען פרטיותך ואבטחתך, חשבונך ישוחזר בלי מידע פרופיל שמור כלשהו או הגדרות שמורות כלשהן.";
 
 /* Label for the 'learn more' link when reglock is disabled in the 'onboarding pin attempts exhausted' view. */
 "ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_LEARN_MORE" = "למד עוד על קודי PIN";
@@ -5552,16 +5552,16 @@
 "ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_TITLE" = "PIN שגוי";
 
 /* Explanation of the 'onboarding pin attempts exhausted' view when it is unknown if reglock is enabled. */
-"ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_WITH_UNKNOWN_REGLOCK_EXPLANATION" = "נגמרו לך ניחושי ה–PIN, אבל עדיין אפשר לנסות לגשת לחשבון Signal שלך באמצעות אימות מספר הטלפון שלך. למען הפרטיות והאבטחה שלך, החשבון שלך ישוחזר בלי מידע פרופיל שמור או הגדרות שמורות.";
+"ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_WITH_UNKNOWN_REGLOCK_EXPLANATION" = "נגמרו לך ניחושי ה–PIN, אבל עדיין אפשר לנסות לגשת לחשבון B&A שלך באמצעות אימות מספר הטלפון שלך. למען הפרטיות והאבטחה שלך, החשבון שלך ישוחזר בלי מידע פרופיל שמור או הגדרות שמורות.";
 
 /* Explanation of 'do not have old device' flow for the 'Restore or Transfer' prompt */
-"ONBOARDING_SPLASH_DO_NOT_HAVE_OLD_DEVICE_BODY" = "או שמדובר בהתקנה חוזרת של Signal על אותו מכשיר";
+"ONBOARDING_SPLASH_DO_NOT_HAVE_OLD_DEVICE_BODY" = "או שמדובר בהתקנה חוזרת של B&A על אותו מכשיר";
 
 /* Title for the 'do not have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_DO_NOT_HAVE_OLD_DEVICE_TITLE" = "אין לי את הטלפון הישן שלי";
 
 /* Explanation of 'have old device' flow for the 'Restore or Transfer' prompt */
-"ONBOARDING_SPLASH_HAVE_OLD_DEVICE_BODY" = "אפשר לסרוק קוד QR מחשבון Signal הנוכחי שלך כדי להתחיל במהירות";
+"ONBOARDING_SPLASH_HAVE_OLD_DEVICE_BODY" = "אפשר לסרוק קוד QR מחשבון B&A הנוכחי שלך כדי להתחיל במהירות";
 
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "יש לי את הטלפון הישן שלי";
@@ -5617,20 +5617,20 @@
 /* Button text which opens the settings app */
 "OPEN_SETTINGS_BUTTON" = "הגדרות";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're on unsupported version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. */
-"OS_EXPIRED_AND_CAN_UPGRADE_OS" = "אפליקציית Signal כבר לא פועלת במכשיר הזה. כדי להשתמש ב–Signal שוב, צריך לעדכן את המכשיר לגרסה חדשה יותר של iOS.";
+/* B&A doesn't support old versions of iOS and shows a warning if you're on unsupported version. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this text. */
+"OS_EXPIRED_AND_CAN_UPGRADE_OS" = "אפליקציית B&A כבר לא פועלת במכשיר הזה. כדי להשתמש ב–B&A שוב, צריך לעדכן את המכשיר לגרסה חדשה יותר של iOS.";
 
-/* Signal doesn't support old devices. If that's the case, they'll be shown this action, and tapping it will open information about Signal's minimum supported operating systems. */
-"OS_EXPIRED_AND_DEVICE_IS_STUCK" = "אפליקציית Signal כבר לא פועלת במכשיר הזה. כדי להשתמש ב–Signal שוב, צריך להחליף למכשיר חדש יותר.";
+/* B&A doesn't support old devices. If that's the case, they'll be shown this action, and tapping it will open information about B&A's minimum supported operating systems. */
+"OS_EXPIRED_AND_DEVICE_IS_STUCK" = "אפליקציית B&A כבר לא פועלת במכשיר הזה. כדי להשתמש ב–B&A שוב, צריך להחליף למכשיר חדש יותר.";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're on an old version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this action, and tapping it will open device update instructions. */
+/* B&A doesn't support old versions of iOS and shows a warning if you're on an old version. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this action, and tapping it will open device update instructions. */
 "OS_SOON_TO_EXPIRE_ACTION_TITLE" = "עדכון כעת";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
-"OS_SOON_TO_EXPIRE_AND_CAN_UPGRADE_OS_FORMAT" = "בקרוב Signal תפסיק לתמוך בגרסת iOS של המכשיר שלך. כדי להמשיך להשתמש ב–Signal, צריך לעדכן את המכשיר לגרסה חדשה יותר של iOS עד %1$@.";
+/* B&A doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
+"OS_SOON_TO_EXPIRE_AND_CAN_UPGRADE_OS_FORMAT" = "בקרוב B&A תפסיק לתמוך בגרסת iOS של המכשיר שלך. כדי להמשיך להשתמש ב–B&A, צריך לעדכן את המכשיר לגרסה חדשה יותר של iOS עד %1$@.";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're on an old version that will soon lose support. This is the text on that warning when users can't upgrade iOS without getting a new device. Embeds {{expiration date}}. */
-"OS_SOON_TO_EXPIRE_AND_DEVICE_WILL_BE_STUCK_FORMAT" = "בקרוב Signal תפסיק לתמוך בגרסת iOS של המכשיר שלך. כדי להמשיך להשתמש ב–Signal, צריך להחליף למכשיר חדש יותר עד %1$@.";
+/* B&A doesn't support old versions of iOS and shows a warning if you're on an old version that will soon lose support. This is the text on that warning when users can't upgrade iOS without getting a new device. Embeds {{expiration date}}. */
+"OS_SOON_TO_EXPIRE_AND_DEVICE_WILL_BE_STUCK_FORMAT" = "בקרוב B&A תפסיק לתמוך בגרסת iOS של המכשיר שלך. כדי להמשיך להשתמש ב–B&A, צריך להחליף למכשיר חדש יותר עד %1$@.";
 
 /* Info Message when another user disabled disappearing messages. Embeds {{name of other user}}. */
 "OTHER_DISABLED_DISAPPEARING_MESSAGES_CONFIGURATION" = "%1$@ השבית/ה הודעות נעלמות.";
@@ -5638,23 +5638,23 @@
 /* Info Message when another user enabled disappearing messages. Embeds {{name of other user}} and {{time amount}} before messages disappear. See the *_TIME_AMOUNT strings for context. */
 "OTHER_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "%1$@ הגדיר את זמן ההודעות הנעלמות אל %2$@.";
 
-/* Label warning the user that the Signal service may be down. */
-"OUTAGE_WARNING" = "Signal חווה קשיים טכניים. אנו עובדים קשות כדי לשחזר את השירות מהר ככל האפשר.";
+/* Label warning the user that the B&A service may be down. */
+"OUTAGE_WARNING" = "B&A חווה קשיים טכניים. אנו עובדים קשות כדי לשחזר את השירות מהר ככל האפשר.";
 
 /* Label for action link when the user has an outdated payment client */
 "OUTDATED_PAYMENT_CLIENT_ACTION_TITLE" = "עדכן עכשיו";
 
-/* Label warning the user that they should update Signal to continue using payments. */
-"OUTDATED_PAYMENT_CLIENT_REMINDER_TEXT" = "יש לעדכן את Signal כדי להמשיך להשתמש בתשלומים. יתכן שהיתרה שלך לא מעודכנת.";
+/* Label warning the user that they should update B&A to continue using payments. */
+"OUTDATED_PAYMENT_CLIENT_REMINDER_TEXT" = "יש לעדכן את B&A כדי להמשיך להשתמש בתשלומים. יתכן שהיתרה שלך לא מעודכנת.";
 
 /* Body of prompt notifying registration without restore completed on the new device. */
-"OUTGOING_DEVICE_REGISTRATION_COMPLETE_BODY" = "חשבון Signal שלך הופעל במכשיר האחר שלך. Signal לא פעילה כעת במכשיר זה.";
+"OUTGOING_DEVICE_REGISTRATION_COMPLETE_BODY" = "חשבון B&A שלך הופעל במכשיר האחר שלך. B&A לא פעילה כעת במכשיר זה.";
 
 /* Title of prompt notifying registration without restore completed on the new device. */
 "OUTGOING_DEVICE_REGISTRATION_COMPLETE_TITLE" = "ההרשמה הושלמה";
 
 /* Body of prompt notifying device restore started on the new device. */
-"OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "התחילה ההעברה של חשבון Signal וההודעות שלך למכשיר האחר שלך. Signal לא פעילה כעת במכשיר זה.";
+"OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "התחילה ההעברה של חשבון B&A וההודעות שלך למכשיר האחר שלך. B&A לא פעילה כעת במכשיר זה.";
 
 /* Title of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_TITLE" = "שחזור הושלם";
@@ -5678,7 +5678,7 @@
 "OUTGOING_DEVICE_RESTORE_INITIAL_VIEW_TITLE" = "העבר חשבון";
 
 /* Body of prompt notifying device transfer completed. */
-"OUTGOING_DEVICE_TRANSFER_COMPLETE_BODY" = "חשבון Signal שלך וההודעות שלך הועברו למכשיר האחר שלך. Signal לא פעילה כעת במכשיר זה.";
+"OUTGOING_DEVICE_TRANSFER_COMPLETE_BODY" = "חשבון B&A שלך וההודעות שלך הועברו למכשיר האחר שלך. B&A לא פעילה כעת במכשיר זה.";
 
 /* Title of prompt notifying device transfer completed. */
 "OUTGOING_DEVICE_TRANSFER_COMPLETE_TITLE" = "העברה הושלמה";
@@ -5689,11 +5689,11 @@
 /* info message text in conversation view */
 "OUTGOING_MISSED_VOICE_CALL" = "שיחה קולית שלא נענתה";
 
-/* Button for action sheet shown when device transfer completes; quits the Signal app immediately (does not automatically relaunch, but the user may choose to relaunch). */
-"OUTGOING_TRANSFER_COMPLETE_EXIT_ACTION" = "יציאה מ–Signal";
+/* Button for action sheet shown when device transfer completes; quits the B&A app immediately (does not automatically relaunch, but the user may choose to relaunch). */
+"OUTGOING_TRANSFER_COMPLETE_EXIT_ACTION" = "יציאה מ–B&A";
 
 /* Message for action sheet shown when device transfer completes */
-"OUTGOING_TRANSFER_COMPLETE_MESSAGE" = "Signal יתנתק כעת במכשיר זה";
+"OUTGOING_TRANSFER_COMPLETE_MESSAGE" = "B&A יתנתק כעת במכשיר זה";
 
 /* Title for action sheet shown when device transfer completes */
 "OUTGOING_TRANSFER_COMPLETE_TITLE" = "העברה הושלמה!";
@@ -5815,7 +5815,7 @@
 /* Title for action sheet shown when unlocking with biometrics like Face ID or TouchID fails because it is disabled at a system level. */
 "PAYMENTS_LOCK_LOCAL_BIOMETRY_AUTH_DISABLED_TITLE" = "אימות ביומטרי נכשל";
 
-/* Description of how and why Signal iOS uses Touch ID/Face ID/Phone Passcode to unlock 'payments lock'. */
+/* Description of how and why B&A iOS uses Touch ID/Face ID/Phone Passcode to unlock 'payments lock'. */
 "PAYMENTS_LOCK_REASON_UNLOCK_PAYMENTS_LOCK" = "דרוש אימות כדי לאשר תשלום.";
 
 /* Label for the 'add memo' ui in the 'send payment' UI. */
@@ -5846,7 +5846,7 @@
 "PAYMENTS_NEW_PAYMENT_ERROR_INVALID_TRANSACTION" = "עסקה בלתי תקפה";
 
 /* Indicates that a payment failed due to an outdated client. */
-"PAYMENTS_NEW_PAYMENT_ERROR_OUTDATED_CLIENT" = "עדכן את Signal כדי להשתמש בתשלומים.";
+"PAYMENTS_NEW_PAYMENT_ERROR_OUTDATED_CLIENT" = "עדכן את B&A כדי להשתמש בתשלומים.";
 
 /* Indicates that an outgoing payment could not be verified in a timely way. */
 "PAYMENTS_NEW_PAYMENT_ERROR_OUTGOING_VERIFICATION_TAKING_TOO_LONG" = "תשלום אינו מוודא עדיין";
@@ -6092,13 +6092,13 @@
 "PHONE_NUMBER_DISCOVERABILITY_EVERYBODY" = "כולם";
 
 /* A user friendly description of the 'everybody' phone number discoverability mode. */
-"PHONE_NUMBER_DISCOVERABILITY_EVERYBODY_DESCRIPTION" = "כל מי שיש להם את מספר הטלפון שלך יראו אותך ב–Signal ויוכלו להתחיל איתך צ׳אט.";
+"PHONE_NUMBER_DISCOVERABILITY_EVERYBODY_DESCRIPTION" = "כל מי שיש להם את מספר הטלפון שלך יראו אותך ב–B&A ויוכלו להתחיל איתך צ׳אט.";
 
 /* A user friendly name for the 'nobody' phone number discoverability mode. */
 "PHONE_NUMBER_DISCOVERABILITY_NOBODY" = "אף אחד";
 
 /* A user friendly description of the 'nobody' phone number discoverability mode. */
-"PHONE_NUMBER_DISCOVERABILITY_NOBODY_DESCRIPTION" = "אנשים לא יוכלו לראות אותך ב–Signal אלא אם שלחת להם הודעה או שיש לך צ'אט קיים איתם.";
+"PHONE_NUMBER_DISCOVERABILITY_NOBODY_DESCRIPTION" = "אנשים לא יוכלו לראות אותך ב–B&A אלא אם שלחת להם הודעה או שיש לך צ'אט קיים איתם.";
 
 /* A format for a label showing an example phone number. Embeds {{the example phone number}}. */
 "PHONE_NUMBER_EXAMPLE_FORMAT" = "דוגמה: %1$@";
@@ -6200,22 +6200,22 @@
 "PIN_CREATION_DISABLE_CONFIRMATION_ACTION" = "השבת PIN";
 
 /* Message of the 'pin disable' action sheet. */
-"PIN_CREATION_DISABLE_CONFIRMATION_MESSAGE" = "אם תשבית את ה־PIN, תאבד את כל הנתונים כאשר תירשם מחדש אל Signal אלא אם תעביר אותו ממכשיר iOS אחר. אינך יכול להפעיל נעילת הרשמה בזמן שה־PIN מושבת.";
+"PIN_CREATION_DISABLE_CONFIRMATION_MESSAGE" = "אם תשבית את ה־PIN, תאבד את כל הנתונים כאשר תירשם מחדש אל B&A אלא אם תעביר אותו ממכשיר iOS אחר. אינך יכול להפעיל נעילת הרשמה בזמן שה־PIN מושבת.";
 
 /* Title of the 'pin disable' action sheet. */
 "PIN_CREATION_DISABLE_CONFIRMATION_TITLE" = "אזהרה";
 
 /* The explanation in the 'pin creation' view. */
-"PIN_CREATION_EXPLANATION" = "קודי PIN שומרים על מידע מאוחסן עם Signal מוצפן כך שרק אתה יכול להשיג גישה אליו. הפרופיל, ההגדרות ואנשי הקשר שלך ישוחזרו כשתתקין מחדש את Signal. לא תצטרך את ה־PIN שלך כדי לפתוח את היישום.";
+"PIN_CREATION_EXPLANATION" = "קודי PIN שומרים על מידע מאוחסן עם B&A מוצפן כך שרק אתה יכול להשיג גישה אליו. הפרופיל, ההגדרות ואנשי הקשר שלך ישוחזרו כשתתקין מחדש את B&A. לא תצטרך את ה־PIN שלך כדי לפתוח את היישום.";
 
 /* Learn more action on the pin creation view */
 "PIN_CREATION_LEARN_MORE" = "עוד על קודי PIN";
 
 /* Users can create PINs to restore their account data later. They can learn more about this on a sheet. This is the text on that sheet. */
-"PIN_CREATION_LEARN_MORE_TEXT" = "קודי PIN שומרים על המידע שלך שמאוחסן ב–Signal מוצפן כך שרק לך תהיה גישה אליו. הפרופיל, ההגדרות ואנשי הקשר שלך ישוחזרו בעת התקנה מחדש.";
+"PIN_CREATION_LEARN_MORE_TEXT" = "קודי PIN שומרים על המידע שלך שמאוחסן ב–B&A מוצפן כך שרק לך תהיה גישה אליו. הפרופיל, ההגדרות ואנשי הקשר שלך ישוחזרו בעת התקנה מחדש.";
 
 /* Users can create PINs to restore their account data later. They can learn more about this on a sheet. This is the title on that sheet. */
-"PIN_CREATION_LEARN_MORE_TITLE" = "עוד על קודי PIN של Signal";
+"PIN_CREATION_LEARN_MORE_TITLE" = "עוד על קודי PIN של B&A";
 
 /* Label indicating that the attempted PIN does not match the first PIN */
 "PIN_CREATION_MISMATCH_ERROR" = "קודי PIN אינם תואמים. נסה שוב.";
@@ -6263,7 +6263,7 @@
 "PIN_CREATION_WEAK_ERROR" = "בחר PIN חזק יותר";
 
 /* If your attempted PIN is too weak, you'll see an error message. This is the text on the error dialog. */
-"PIN_CREATION_WEAK_ERROR_MESSAGE" = "קודי PIN שומרים על המידע שלך שמאוחסן ב–Signal מוצפן כך שרק לך תהיה גישה אליו. יש לבחור PIN חזק יותר כדי להגן על החשבון שלך.";
+"PIN_CREATION_WEAK_ERROR_MESSAGE" = "קודי PIN שומרים על המידע שלך שמאוחסן ב–B&A מוצפן כך שרק לך תהיה גישה אליו. יש לבחור PIN חזק יותר כדי להגן על החשבון שלך.";
 
 /* Error body indicating that the attempt to disable a PIN failed. */
 "PIN_DISABLE_ERROR_MESSAGE" = "לא ניתן היה להשבית את ה–PIN שלך.";
@@ -6299,7 +6299,7 @@
 "PIN_REMINDER_MEGAPHONE_FEW_DAYS_TOAST" = "נזכיר לך שוב עוד מספר ימים.";
 
 /* Title for PIN reminder megaphone */
-"PIN_REMINDER_MEGAPHONE_TITLE" = "וודא את Signal PIN שלך";
+"PIN_REMINDER_MEGAPHONE_TITLE" = "וודא את B&A PIN שלך";
 
 /* Toast indicating that we'll ask you for your PIN again tomorrow, after successfully entering it. */
 "PIN_REMINDER_MEGAPHONE_TOMORROW_SUCCESSFUL_TOAST" = "PIN נכון. נזכיר לך שוב מחר.";
@@ -6323,7 +6323,7 @@
 "PIN_REMINDER_MISMATCH_ERROR" = "PIN בלתי תקף, נסה שוב.";
 
 /* The title for the 'pin reminder' dialog. */
-"PIN_REMINDER_TITLE" = "הכנס את Signal PIN שלך";
+"PIN_REMINDER_TITLE" = "הכנס את B&A PIN שלך";
 
 /* Label indicating that the attempted PIN is too short */
 "PIN_REMINDER_TOO_SHORT_ERROR" = "PIN חייב להיות לפחות 4 ספרות.";
@@ -6338,7 +6338,7 @@
 "PINS_MEGAPHONE_ACTION" = "צור PIN";
 
 /* Body for PIN megaphone when user doesn't have a PIN */
-"PINS_MEGAPHONE_BODY" = "סיים ליצור את PIN של Signal שלך.";
+"PINS_MEGAPHONE_BODY" = "סיים ליצור את PIN של B&A שלך.";
 
 /* Title for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_TITLE" = "צור PIN";
@@ -6365,19 +6365,19 @@
 "PRIVACY_VERIFICATION_FAILED_MISMATCHED_SAFETY_NUMBERS_IN_CLIPBOARD" = "המספר בלוח העריכה שלך לא נראה כמו מספר הבטיחות הנכון עבור צ׳אט זה.";
 
 /* Alert body for user error */
-"PRIVACY_VERIFICATION_FAILED_NO_SAFETY_NUMBERS_IN_CLIPBOARD" = "Signal לא היה יכול למצוא מספר ביטחון כלשהו בלוח העריכה שלך. האם העתקת אותו כראוי?";
+"PRIVACY_VERIFICATION_FAILED_NO_SAFETY_NUMBERS_IN_CLIPBOARD" = "B&A לא היה יכול למצוא מספר ביטחון כלשהו בלוח העריכה שלך. האם העתקת אותו כראוי?";
 
 /* Alert body when verifying with {{contact name}} */
-"PRIVACY_VERIFICATION_FAILED_THEY_HAVE_WRONG_KEY_FOR_ME" = "כל זוג של משתמשי Signal חולק מספר ביטחון ייחודי. חשוב לבדוק שוב ש%1$@ מציג את מספר הביטחון הייחודי *שלך*.";
+"PRIVACY_VERIFICATION_FAILED_THEY_HAVE_WRONG_KEY_FOR_ME" = "כל זוג של משתמשי B&A חולק מספר ביטחון ייחודי. חשוב לבדוק שוב ש%1$@ מציג את מספר הביטחון הייחודי *שלך*.";
 
 /* alert body */
-"PRIVACY_VERIFICATION_FAILED_WITH_OLD_LOCAL_VERSION" = "אתה מריץ גרסה ישנה של Signal. אתה צריך לעדכן גרסה לפני שתוכל לוודא.";
+"PRIVACY_VERIFICATION_FAILED_WITH_OLD_LOCAL_VERSION" = "אתה מריץ גרסה ישנה של B&A. אתה צריך לעדכן גרסה לפני שתוכל לוודא.";
 
 /* alert body */
-"PRIVACY_VERIFICATION_FAILED_WITH_OLD_REMOTE_VERSION" = "השותף שלך מריץ גרסה ישנה של Signal. הוא צריך לעדכן גרסה לפני שתוכל לוודא.";
+"PRIVACY_VERIFICATION_FAILED_WITH_OLD_REMOTE_VERSION" = "השותף שלך מריץ גרסה ישנה של B&A. הוא צריך לעדכן גרסה לפני שתוכל לוודא.";
 
 /* alert body */
-"PRIVACY_VERIFICATION_FAILURE_INVALID_QRCODE" = "הקוד הסרוק לא נראה כמו מספר ביטחון. האם שניכם על גרסה מעודכנת של Signal?";
+"PRIVACY_VERIFICATION_FAILURE_INVALID_QRCODE" = "הקוד הסרוק לא נראה כמו מספר ביטחון. האם שניכם על גרסה מעודכנת של B&A?";
 
 /* Navbar title */
 "PRIVACY_VERIFICATION_TITLE" = "אימות מספר בטיחות";
@@ -6452,7 +6452,7 @@
 "PROFILE_NAME_EDUCATION_SHEET_BULLET_3" = "אין לשתף מידע אישי עם אנשים שלא מוכרים לך";
 
 /* Header for the explainer sheet for profile names */
-"PROFILE_NAME_EDUCATION_SHEET_HEADER_FORMAT" = "<bold>שמות פרופילים</bold> ב–Signal נבחרים על ידי בעל/ת החשבון.";
+"PROFILE_NAME_EDUCATION_SHEET_HEADER_FORMAT" = "<bold>שמות פרופילים</bold> ב–B&A נבחרים על ידי בעל/ת החשבון.";
 
 /* Title for the profile name view. */
 "PROFILE_NAME_VIEW_TITLE" = "שמך";
@@ -6650,19 +6650,19 @@
 "RECIPIENT_PICKER_ERROR_USER_CANNOT_BE_SELECTED" = "המשתמש אינו יכול להיבחר.";
 
 /* Alert text. Shown after selecting a phone number that isn't valid. */
-"RECIPIENT_PICKER_INVALID_NUMBER_MESSAGE" = "%1$@ לא משתמש/ת ב–Signal. יש לנסות שוב עם מספר טלפון תקין.";
+"RECIPIENT_PICKER_INVALID_NUMBER_MESSAGE" = "%1$@ לא משתמש/ת ב–B&A. יש לנסות שוב עם מספר טלפון תקין.";
 
 /* Alert title. Shown after selecting a phone number that isn't valid. */
 "RECIPIENT_PICKER_INVALID_NUMBER_TITLE" = "מספר טלפון לא תקין";
 
-/* Button. Shown after selecting a phone number that isn't a Signal user. Tapping the button will open a view that allows the user to send an SMS message to specified phone number. */
+/* Button. Shown after selecting a phone number that isn't a B&A user. Tapping the button will open a view that allows the user to send an SMS message to specified phone number. */
 "RECIPIENT_PICKER_INVITE_ACTION" = "הזמן";
 
-/* Alert text. Shown after selecting a phone number that isn't a Signal user. */
-"RECIPIENT_PICKER_INVITE_MESSAGE" = "%1$@ לא משתמש/ת ב–Signal. רוצה להזמין את המספר הזה?";
+/* Alert text. Shown after selecting a phone number that isn't a B&A user. */
+"RECIPIENT_PICKER_INVITE_MESSAGE" = "%1$@ לא משתמש/ת ב–B&A. רוצה להזמין את המספר הזה?";
 
-/* Alert title. Shown after selecting a phone number that isn't a Signal user. */
-"RECIPIENT_PICKER_INVITE_TITLE" = "הזמנה ל–Signal";
+/* Alert title. Shown after selecting a phone number that isn't a B&A user. */
+"RECIPIENT_PICKER_INVITE_TITLE" = "הזמנה ל–B&A";
 
 /* Alert title explaining what happens if you forget your 'two-factor auth pin'. */
 "REGISTER_2FA_FORGOT_PIN_ALERT_TITLE" = "צריך עזרה?";
@@ -6725,7 +6725,7 @@
 "REGISTRATION_BACKUP_RESTORE_ERROR_GENERIC_TITLE" = "לא ניתן היה לסיים את ההעברה";
 
 /* Body for a sheet warning users about an incorrect backup key. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling Signal backups. Backups can not be recovered without this key.";
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
 /* Title for a sheet warning users about an incorrect backup key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "מפתח גיבוי שגוי";
@@ -6743,7 +6743,7 @@
 "REGISTRATION_BACKUP_RESTORE_ERROR_TRY_AGAIN_ACTION" = "נסה שוב";
 
 /* Body for a sheet warning users about an incompatible backup version. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_UNSUPPORTED_BACKUP_VERSION_BODY" = "כדי לאחסן את הגיבוי שלך, יש לוודא שיש לך את הגרסה האחרונה של Signal ולנסות שוב. אם הבעיה הזו נמשכת, יש ליצור קשר עם התמיכה.";
+"REGISTRATION_BACKUP_RESTORE_ERROR_UNSUPPORTED_BACKUP_VERSION_BODY" = "כדי לאחסן את הגיבוי שלך, יש לוודא שיש לך את הגרסה האחרונה של B&A ולנסות שוב. אם הבעיה הזו נמשכת, יש ליצור קשר עם התמיכה.";
 
 /* Title for a sheet warning users about an incompatible backup version. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_UNSUPPORTED_BACKUP_VERSION_TITLE" = "נדרש עדכון";
@@ -6755,7 +6755,7 @@
 "REGISTRATION_CANNOT_CONTINUE_WITHOUT_UPDATING_APP_ACTION" = "עדכון";
 
 /* During (re)registration, users may need to update their app to continue. They'll be presented with an alert if this is the case, prompting them to update. This is the description text on that alert. */
-"REGISTRATION_CANNOT_CONTINUE_WITHOUT_UPDATING_APP_DESCRIPTION" = "כדי להמשיך ברישום, צריך לעדכן לגרסה האחרונה של Signal.";
+"REGISTRATION_CANNOT_CONTINUE_WITHOUT_UPDATING_APP_DESCRIPTION" = "כדי להמשיך ברישום, צריך לעדכן לגרסה האחרונה של B&A.";
 
 /* During (re)registration, users may need to update their app to continue. They'll be presented with an alert if this is the case, prompting them to update. This is the title on that alert. */
 "REGISTRATION_CANNOT_CONTINUE_WITHOUT_UPDATING_APP_TITLE" = "נדרש עדכון";
@@ -6766,10 +6766,10 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "קוד מדינה";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "המשך ישבית את Signal במכשירים אחרים שרשומים כרגע עם אותו מספר טלפון.";
+/* If a user is installing B&A on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
+"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "המשך ישבית את B&A במכשירים אחרים שרשומים כרגע עם אותו מספר טלפון.";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
+/* If a user is installing B&A on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
 "REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "העברת חשבון והודעות";
 
 /* Description for the screen that allows users to enter their backup key. */
@@ -6803,7 +6803,7 @@
 "REGISTRATION_NO_BACKUP_KEY_BUTTON_TITLE" = "אין לך מפתח גיבוי?";
 
 /* Body text on a sheet with info for what to do if you don't have a backup key */
-"REGISTRATION_NO_BACKUP_KEY_SHEET_BODY" = "לא ניתן לשחזר גיבויים ללא קוד השחזור בן 64 הספרות שלהם. אם איבדת את מפתח הגיבוי, Signal לא תוכל לעזור לשחזר את הגיבוי שלך.\n\nאם יש לך את המכשיר הישן שלך, יש לך אפשרות לראות את מפתח הגיבוי באמצעות כניסה להגדרות > צ׳אטים > גיבויי Signal. לאחר מכן יש ללחוץ על ״הצגת מפתח גיבוי״.";
+"REGISTRATION_NO_BACKUP_KEY_SHEET_BODY" = "לא ניתן לשחזר גיבויים ללא קוד השחזור בן 64 הספרות שלהם. אם איבדת את מפתח הגיבוי, B&A לא תוכל לעזור לשחזר את הגיבוי שלך.\n\nאם יש לך את המכשיר הישן שלך, יש לך אפשרות לראות את מפתח הגיבוי באמצעות כניסה להגדרות > צ׳אטים > גיבויי B&A. לאחר מכן יש ללחוץ על ״הצגת מפתח גיבוי״.";
 
 /* Title for sheet with info for what to do if you don't have a backup key */
 "REGISTRATION_NO_BACKUP_KEY_SHEET_TITLE" = "אין לך מפתח גיבוי?";
@@ -6830,13 +6830,13 @@
 "REGISTRATION_PIN_CONFIRM_TITLE" = "אישור ה–PIN שלך";
 
 /* During registration, users are asked to create a PIN code. This is the subtitle on the screen where this happens. A \"learn more\" link will be added to the end of this string. */
-"REGISTRATION_PIN_CREATE_SUBTITLE" = "קודי PIN יכולים לעזור לך לשחזר את החשבון שלך ולשמור על המידע שלך מוצפן עם Signal.";
+"REGISTRATION_PIN_CREATE_SUBTITLE" = "קודי PIN יכולים לעזור לך לשחזר את החשבון שלך ולשמור על המידע שלך מוצפן עם B&A.";
 
 /* During registration, users are asked to create a PIN code. This is the title on the screen where this happens. */
 "REGISTRATION_PIN_CREATE_TITLE" = "יצירת ה–PIN שלך";
 
 /* During re-registration, users may be asked to re-enter their PIN code. This is the subtitle on the screen where this happens. A \"learn more\" link will be added to the end of this string. */
-"REGISTRATION_PIN_ENTER_EXISTING_SUBTITLE" = "קודי PIN יכולים לעזור לך לשחזר את החשבון שלך ולשמור על המידע שלך מוצפן עם Signal.";
+"REGISTRATION_PIN_ENTER_EXISTING_SUBTITLE" = "קודי PIN יכולים לעזור לך לשחזר את החשבון שלך ולשמור על המידע שלך מוצפן עם B&A.";
 
 /* During re-registration, users may be asked to re-enter their PIN code. This is the title on the screen where this happens. */
 "REGISTRATION_PIN_ENTER_EXISTING_TITLE" = "הזנת ה–PIN שלך";
@@ -6863,10 +6863,10 @@
 "REGISTRATION_PROFILE_SETUP_TITLE" = "הגדרת הפרופיל שלך";
 
 /* Error shown if an SMS/call service provider is permanently unable to send a verification code to the provided number. */
-"REGISTRATION_PROVIDER_FAILURE_MESSAGE_PERMANENT" = "Signal לא יכולה לשלוח קוד SMS בגלל בעיות עם ספק ה–SMS.";
+"REGISTRATION_PROVIDER_FAILURE_MESSAGE_PERMANENT" = "B&A לא יכולה לשלוח קוד SMS בגלל בעיות עם ספק ה–SMS.";
 
 /* Error shown if an SMS/call service provider is temporarily unable to send a verification code to the provided number. */
-"REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "Signal לא הצליחה לשלוח קוד SMS בגלל בעיות עם ספק ה–SMS. יש לנסות שוב בעוד מספר שעות.";
+"REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "B&A לא הצליחה לשלוח קוד SMS בגלל בעיות עם ספק ה–SMS. יש לנסות שוב בעוד מספר שעות.";
 
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "אתה צריך להירשם לפני שתוכל לשלוח הודעה.";
@@ -6874,8 +6874,8 @@
 /* Title for screen containing QR code that users scan with their old phone when they want to transfer/restore their message history to a new device. */
 "REGISTRATION_SCAN_QR_CODE_TITLE" = "סריקת הקוד הזה עם הטלפון הישן שלך";
 
-/* Tutorial text describing the first step to scanning the restore/transfer QR code with your old phone: opening Signal */
-"REGISTRATION_SCAN_QR_CODE_TUTORIAL_OPEN_SIGNAL" = "יש לפתוח את Signal במכשיר הישן";
+/* Tutorial text describing the first step to scanning the restore/transfer QR code with your old phone: opening B&A */
+"REGISTRATION_SCAN_QR_CODE_TUTORIAL_OPEN_SIGNAL" = "יש לפתוח את B&A במכשיר הישן";
 
 /* Tutorial text describing the third step to scanning the restore/transfer QR code with your old phone: scan the code */
 "REGISTRATION_SCAN_QR_CODE_TUTORIAL_SCAN" = "לסרוק את הקוד הזה עם המצלמה";
@@ -7040,7 +7040,7 @@
 "SAFETY_NUMBER_CONFIRMATION_VIEW_ACTION" = "הצג";
 
 /* Snippet to share {{safety number}} with a friend. sent e.g. via SMS */
-"SAFETY_NUMBER_SHARE_FORMAT" = "מספר ביטחון Signal שלנו:\n%1$@";
+"SAFETY_NUMBER_SHARE_FORMAT" = "מספר ביטחון B&A שלנו:\n%1$@";
 
 /* Title for Safety Tips button in thread details. */
 "SAFETY_TIPS_BUTTON_ACTION_TITLE" = "טיפים לבטיחות";
@@ -7058,7 +7058,7 @@
 "SAFETY_TIPS_FAKE_BUSINESS_TITLE" = "עסקים ומוסדות מזויפים";
 
 /* Message contents for the fake names safety tip. */
-"SAFETY_TIPS_FAKE_NAMES_BODY" = "Signal לעולם לא תיצור איתך קשר עבור קוד הרישום או ה–PIN שלך. יש להיזהר מבקשות שנשלחות על ידי מתחזים. שמות פרופילים נבחרים על ידי בעל/ת החשבון ואינם מאומתים.";
+"SAFETY_TIPS_FAKE_NAMES_BODY" = "B&A לעולם לא תיצור איתך קשר עבור קוד הרישום או ה–PIN שלך. יש להיזהר מבקשות שנשלחות על ידי מתחזים. שמות פרופילים נבחרים על ידי בעל/ת החשבון ואינם מאומתים.";
 
 /* Message title describing the fake names safety tip. */
 "SAFETY_TIPS_FAKE_NAMES_TITLE" = "שמות וחשבונות מזויפים";
@@ -7117,14 +7117,14 @@
 /* Indicates that Touch ID/Face ID/Phone Passcode passcode is not set. */
 "SCREEN_LOCK_ERROR_LOCAL_AUTHENTICATION_PASSCODE_NOT_SET" = "אתה חייב לאפשר קוד גישה בהגדרות iOS שלך על מנת להשתמש בנעילת מסך.";
 
-/* Description of how and why Signal iOS uses Touch ID/Face ID/Phone Passcode to unlock 'screen lock'. */
-"SCREEN_LOCK_REASON_UNLOCK_SCREEN_LOCK" = "אמת כדי לפתוח את Signal.";
+/* Description of how and why B&A iOS uses Touch ID/Face ID/Phone Passcode to unlock 'screen lock'. */
+"SCREEN_LOCK_REASON_UNLOCK_SCREEN_LOCK" = "אמת כדי לפתוח את B&A.";
 
 /* Title for alert indicating that screen lock could not be unlocked. */
 "SCREEN_LOCK_UNLOCK_FAILED" = "אימות נכשל";
 
-/* Label for button on lock screen that lets users unlock Signal. */
-"SCREEN_LOCK_UNLOCK_SIGNAL" = "שחרר נעילת Signal";
+/* Label for button on lock screen that lets users unlock B&A. */
+"SCREEN_LOCK_UNLOCK_SIGNAL" = "שחרר נעילת B&A";
 
 /* Placeholder text indicating the user can search for contacts by name, username, or phone number. */
 "SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "שם, שם משתמש או מספר";
@@ -7157,13 +7157,13 @@
 "SECONDARY_LINKING_ERROR_DIFFERENT_ACCOUNT_TITLE" = "חשבונות אינם תואמים";
 
 /* Message for error alert indicating that a linked device must be upgraded before it can be linked. */
-"SECONDARY_LINKING_ERROR_OBSOLETE_LINKED_DEVICE_MESSAGE" = "עדכן את Signal על מכשיר זה כדי לקשר אותו עם הטלפון שלך.";
+"SECONDARY_LINKING_ERROR_OBSOLETE_LINKED_DEVICE_MESSAGE" = "עדכן את B&A על מכשיר זה כדי לקשר אותו עם הטלפון שלך.";
 
 /* Title for error alert indicating that a linked device must be upgraded before it can be linked. */
 "SECONDARY_LINKING_ERROR_OBSOLETE_LINKED_DEVICE_TITLE" = "גרסה בלתי נתמכת";
 
 /* alert message for outdated linking device */
-"SECONDARY_LINKING_ERROR_OLD_VERSION_MESSAGE" = "המכשיר האחר שלך מריץ גרסת מורשת של Signal שאינה תומכת סריקת קודי QR של iPad. אנא התקן את השחרור האחרון ונסה שוב.";
+"SECONDARY_LINKING_ERROR_OLD_VERSION_MESSAGE" = "המכשיר האחר שלך מריץ גרסת מורשת של B&A שאינה תומכת סריקת קודי QR של iPad. אנא התקן את השחרור האחרון ונסה שוב.";
 
 /* alert title for outdated linking device */
 "SECONDARY_LINKING_ERROR_OLD_VERSION_TITLE" = "עדכן מכשיר סריקה";
@@ -7180,11 +7180,11 @@
 /* Message for action sheet when secondary device fails to sync messages due to an unspecified error. */
 "SECONDARY_LINKING_SYNCING_OTHER_ERROR_MESSAGE" = "לא ניתן היה להעביר את ההודעות שלך עקב שגיאה. יש לנסות שוב באמצעות קישור מחדש של המכשיר הזה.";
 
-/* Button on an action sheet to open Signal on the App Store. */
+/* Button on an action sheet to open B&A on the App Store. */
 "SECONDARY_LINKING_SYNCING_UPDATE_REQUIRED_CHECK_FOR_UPDATE_BUTTON" = "בדיקת עדכונים";
 
 /* Message for action sheet when the secondary device fails to sync messages due to an app update being required. */
-"SECONDARY_LINKING_SYNCING_UPDATE_REQUIRED_ERROR_MESSAGE" = "כדי להשלים את סנכרון ההודעות, יש לעדכן את Signal כעת.";
+"SECONDARY_LINKING_SYNCING_UPDATE_REQUIRED_ERROR_MESSAGE" = "כדי להשלים את סנכרון ההודעות, יש לעדכן את B&A כעת.";
 
 /* Title for action sheet when the secondary device fails to sync messages due to an app update being required. */
 "SECONDARY_LINKING_SYNCING_UPDATE_REQUIRED_ERROR_TITLE" = "נדרש עדכון";
@@ -7193,19 +7193,19 @@
 "SECONDARY_ONBOARDING_CHOOSE_DEVICE_NAME_PLACEHOLDER" = "בחר שם";
 
 /* header text before the user can link this device */
-"SECONDARY_ONBOARDING_GET_STARTED_BY_OPENING_PRIMARY" = "הפעל את Signal בטלפון שלך וקשר iPad זה אל החשבון שלך";
+"SECONDARY_ONBOARDING_GET_STARTED_BY_OPENING_PRIMARY" = "הפעל את B&A בטלפון שלך וקשר iPad זה אל החשבון שלך";
 
 /* Link explaining what to do when trying to link a device before having a primary device. */
-"SECONDARY_ONBOARDING_GET_STARTED_DO_NOT_HAVE_PRIMARY" = "אין לי Signal בטלפון שלי…";
+"SECONDARY_ONBOARDING_GET_STARTED_DO_NOT_HAVE_PRIMARY" = "אין לי B&A בטלפון שלי…";
 
 /* alert body */
-"SECONDARY_ONBOARDING_INSTALL_PRIMARY_FIRST_BODY" = "לך אל חנות היישומים בטלפון שלך, התקן את Signal, השלם את תהליך ההרשמה, ואז תוכל לקשר את iPad שלך אל אותו חשבון.";
+"SECONDARY_ONBOARDING_INSTALL_PRIMARY_FIRST_BODY" = "לך אל חנות היישומים בטלפון שלך, התקן את B&A, השלם את תהליך ההרשמה, ואז תוכל לקשר את iPad שלך אל אותו חשבון.";
 
 /* alert title */
-"SECONDARY_ONBOARDING_INSTALL_PRIMARY_FIRST_TITLE" = "התקן את Signal על הטלפון שלך";
+"SECONDARY_ONBOARDING_INSTALL_PRIMARY_FIRST_TITLE" = "התקן את B&A על הטלפון שלך";
 
 /* body text while displaying a QR code which, when scanned, will link this device. */
-"SECONDARY_ONBOARDING_SCAN_CODE_BODY" = "הקש על תמונת הפרופיל שלך כדי לפתוח את הגדרות Signal בטלפון שלך. לאחר מכן \"מכשירים מקושרים\" ואז \"קשר מכשיר חדש\" כדי לסרוק קוד זה עם הטלפון שלך:";
+"SECONDARY_ONBOARDING_SCAN_CODE_BODY" = "הקש על תמונת הפרופיל שלך כדי לפתוח את הגדרות B&A בטלפון שלך. לאחר מכן \"מכשירים מקושרים\" ואז \"קשר מכשיר חדש\" כדי לסרוק קוד זה עם הטלפון שלך:";
 
 /* Link text for page with troubleshooting info shown on the QR scanning screen */
 "SECONDARY_ONBOARDING_SCAN_CODE_HELP_TEXT" = "קבל עזרה בקישור iPad כאן";
@@ -7217,7 +7217,7 @@
 "SECONDARY_ONBOARDING_SCAN_CODE_TITLE" = "סרוק את קוד ה־QR עם הטלפון שלך";
 
 /* header text before the user can transfer to this device */
-"SECONDARY_TRANSFER_GET_STARTED_BY_OPENING_IPAD" = "הרץ את Signal על ה־iPad הישן שלך כדי להעביר את החשבון שלך";
+"SECONDARY_TRANSFER_GET_STARTED_BY_OPENING_IPAD" = "הרץ את B&A על ה־iPad הישן שלך כדי להעביר את החשבון שלך";
 
 /* No comment provided by engineer. */
 "SECURE_SESSION_RESET" = "שיח מאובטח אופס.";
@@ -7261,10 +7261,10 @@
 /* String describing standard quality sent media */
 "SENT_MEDIA_QUALITY_STANDARD" = "תקנית";
 
-/* Users can donate to Signal with a bank account. This is the label for email field on that screen. */
+/* Users can donate to B&A with a bank account. This is the label for email field on that screen. */
 "SEPA_DONATION_EMAIL_LABEL" = "אימייל";
 
-/* Users can donate to Signal with a bank account. This is placeholder text for the email field before the user starts typing. */
+/* Users can donate to B&A with a bank account. This is placeholder text for the email field before the user starts typing. */
 "SEPA_DONATION_EMAIL_PLACEHOLDER" = "כתובת אימייל";
 
 /* SEPA bank account donation error for insufficient funds. */
@@ -7282,32 +7282,32 @@
 /* SEPA bank account donation error for the payment not being authorizing by the account holder. */
 "SEPA_DONATION_ERROR_PAYMENT_NOT_AUTHORIZED" = "התשלום הזה בוטל על ידי בעל החשבון ולא היה ניתן לעבד אותו. לא חויבת.";
 
-/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) contains characters other than letters and numbers, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) contains characters other than letters and numbers, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_INVALID_CHARACTERS_ERROR" = "IBAN יכול להכיל רק את האותיות A–Z ואת הספרות 0–9";
 
-/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) does not pass validation, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) does not pass validation, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_INVALID_CHECK_ERROR" = "מספר IBAN לא תקין";
 
-/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) has an unsupported country code, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) has an unsupported country code, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_INVALID_COUNTRY_ERROR" = "קוד המדינה של ה‑IBAN אינו נתמך";
 
-/* Users can donate to Signal with a bank account. This is the label for IBAN (internation bank account number) field on that screen. */
+/* Users can donate to B&A with a bank account. This is the label for IBAN (internation bank account number) field on that screen. */
 "SEPA_DONATION_IBAN_LABEL" = "IBAN";
 
-/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_TOO_LONG_ERROR" = "מספר IBAN ארוך מדי";
 
-/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_TOO_SHORT_ERROR" = "מספר IBAN קצר מדי";
 
-/* Users can donate to Signal with a bank account. This is the label for name field on that screen. */
+/* Users can donate to B&A with a bank account. This is the label for name field on that screen. */
 "SEPA_DONATION_NAME_LABEL" = "שם";
 
-/* Users can donate to Signal with a bank account. This is placeholder text for the name field before the user starts typing. */
+/* Users can donate to B&A with a bank account. This is placeholder text for the name field before the user starts typing. */
 "SEPA_DONATION_NAME_PLACEHOLDER" = "שם בעל.ת חשבון הבנק";
 
 /* Description for the session refresh alert */
-"SESSION_REFRESH_ALERT_MESSAGE" = "Signal משתמשת בהצפנה מקצה לקצה ויתכן שהיא תצטרך לרענן את הצ'אט שלך מדי פעם. זה לא משפיע על אבטחת הצ'אט שלך, אבל יכול להיות שפספסת הודעה מאיש קשר זה ואפשר לבקש ממנו לשלוח אותה מחדש.";
+"SESSION_REFRESH_ALERT_MESSAGE" = "B&A משתמשת בהצפנה מקצה לקצה ויתכן שהיא תצטרך לרענן את הצ'אט שלך מדי פעם. זה לא משפיע על אבטחת הצ'אט שלך, אבל יכול להיות שפספסת הודעה מאיש קשר זה ואפשר לבקש ממנו לשלוח אותה מחדש.";
 
 /* Title for the session refresh alert */
 "SESSION_REFRESH_ALERT_TITLE" = "צ'אט רוענן";
@@ -7340,7 +7340,7 @@
 "SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_COUNTRY" = "מיקום";
 
 /* Table footer for the 'censorship circumvention' section when censorship circumvention can be manually enabled. */
-"SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER" = "אם מאופשר, Signal ינסה לעקוף צנזורה. אל תאפשר מאפיין זה אלא אם אתה במיקום שבו Signal מצונזר.";
+"SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER" = "אם מאופשר, B&A ינסה לעקוף צנזורה. אל תאפשר מאפיין זה אלא אם אתה במיקום שבו B&A מצונזר.";
 
 /* Table footer for the 'censorship circumvention' section shown when censorship circumvention has been auto-enabled based on local phone number. */
 "SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_AUTO_ENABLED" = "עקיפת צנזורה הופעלה על סמך מספר הטלפון של החשבון שלך.";
@@ -7351,8 +7351,8 @@
 /* Table footer for the 'censorship circumvention' section shown when the app is not connected to the internet. */
 "SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_NO_CONNECTION" = "עקיפת צנזורה יכולה להיפעל בעת התחברות אל האינטרנט.";
 
-/* Table footer for the 'censorship circumvention' section shown when the app is connected to the Signal service. */
-"SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_WEBSOCKET_CONNECTED" = "עקיפת צנזורה אינה הכרחית; אתה מחובר כבר אל שירות Signal.";
+/* Table footer for the 'censorship circumvention' section shown when the app is connected to the B&A service. */
+"SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_WEBSOCKET_CONNECTED" = "עקיפת צנזורה אינה הכרחית; אתה מחובר כבר אל שירות B&A.";
 
 /* Label for the 'advanced pin settings' button. */
 "SETTINGS_ADVANCED_PIN_SETTINGS" = "הגדרות PIN מתקדמות";
@@ -7373,13 +7373,13 @@
 "SETTINGS_ADVANCED_VIEW_ERROR_LOG" = "יומני שגיאות";
 
 /* Information on sheet about changing the app icon - first line */
-"SETTINGS_APP_ICON_EDUCATION_APP_NAME" = "שם האפליקציה ״Signal״ יהיה גלוי במסך הבית, באזור ההתראות ובספריית האפליקציות.";
+"SETTINGS_APP_ICON_EDUCATION_APP_NAME" = "שם האפליקציה ״B&A״ יהיה גלוי במסך הבית, באזור ההתראות ובספריית האפליקציות.";
 
 /* Information on sheet about changing the app icon - second line */
-"SETTINGS_APP_ICON_EDUCATION_HOME_SCREEN_DOCK" = "אפשר להסתיר את שם האפליקציה ״Signal״ ממסך הבית באמצעות העברת האפליקציה למקטע בתחתית מסך הבית.";
+"SETTINGS_APP_ICON_EDUCATION_HOME_SCREEN_DOCK" = "אפשר להסתיר את שם האפליקציה ״B&A״ ממסך הבית באמצעות העברת האפליקציה למקטע בתחתית מסך הבית.";
 
 /* The footer for the app icon selection settings page. */
-"SETTINGS_APP_ICON_FOOTER" = "שם האפליקציה ״Signal״ יהיה גלוי במסך הבית, באזור ההתראות ובספריית האפליקציות.";
+"SETTINGS_APP_ICON_FOOTER" = "שם האפליקציה ״B&A״ יהיה גלוי במסך הבית, באזור ההתראות ובספריית האפליקציות.";
 
 /* The title for the app icon selection settings page. */
 "SETTINGS_APP_ICON_TITLE" = "סמל האפליקציה";
@@ -7408,8 +7408,8 @@
 /* A label for the 'add phone number' button in the block list table. */
 "SETTINGS_BLOCK_LIST_ADD_BUTTON" = "הוספת משתמש/ת חסום/ה";
 
-/* A label that indicates the user has no Signal contacts that they haven't blocked. */
-"SETTINGS_BLOCK_LIST_NO_CONTACTS" = "אין לך אנשי קשר ב־Signal.";
+/* A label that indicates the user has no B&A contacts that they haven't blocked. */
+"SETTINGS_BLOCK_LIST_NO_CONTACTS" = "אין לך אנשי קשר ב־B&A.";
 
 /* A label that indicates the user's search has no matching results. */
 "SETTINGS_BLOCK_LIST_NO_SEARCH_RESULTS" = "אין תוצאות חיפוש";
@@ -7421,7 +7421,7 @@
 "SETTINGS_CALLING_HIDES_IP_ADDRESS_PREFERENCE_TITLE" = "שדר מחדש שיחות תמיד";
 
 /* User settings section footer, a detailed explanation */
-"SETTINGS_CALLING_HIDES_IP_ADDRESS_PREFERENCE_TITLE_DETAIL" = "שדר מחדש את כל השיחות דרך שרת Signal כדי למנוע את חשיפת כתובת ה־IP שלך אל אנשי הקשר שלך. אפשור יפחית איכות שיחות.";
+"SETTINGS_CALLING_HIDES_IP_ADDRESS_PREFERENCE_TITLE_DETAIL" = "שדר מחדש את כל השיחות דרך שרת B&A כדי למנוע את חשיפת כתובת ה־IP שלך אל אנשי הקשר שלך. אפשור יפחית איכות שיחות.";
 
 /* Label for the 'edit phone number' button in the 'change phone number' views. */
 "SETTINGS_CHANGE_PHONE_NUMBER_BACK_TO_EDIT_BUTTON" = "ערוך מספר";
@@ -7466,7 +7466,7 @@
 "SETTINGS_CLEAR_HISTORY" = "ניקוי היסטוריית צ׳אט";
 
 /* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "זכויות יוצרים Signal Messenger\nברישיון תחת AGPLv3";
+"SETTINGS_COPYRIGHT" = "זכויות יוצרים B&A Messenger\nברישיון תחת AGPLv3";
 
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "שימוש בנתונים";
@@ -7532,7 +7532,7 @@
 "SETTINGS_DISAPPEARING_MESSAGES_FOOTER" = "אפשר להגדיר קוצב זמן ברירת מחדל של הודעות נעלמות עבור כל הצ'אטים החדשים שהותחלו על ידך.";
 
 /* Title for the 'donate to signal' link in settings. */
-"SETTINGS_DONATE" = "תרומה ל–Signal";
+"SETTINGS_DONATE" = "תרומה ל–B&A";
 
 /* Title for help button and help pages in app settings. */
 "SETTINGS_HELP" = "עזרה";
@@ -7601,7 +7601,7 @@
 "SETTINGS_NOTIFICATION_CONTENT_TITLE" = "תוכן התראה";
 
 /* When the local device discovers a contact has recently installed signal, the app can generates a message encouraging the local user to say hello. Turning this switch off disables that feature. */
-"SETTINGS_NOTIFICATION_EVENTS_CONTACT_JOINED_SIGNAL" = "איש קשר מצטרף אל Signal";
+"SETTINGS_NOTIFICATION_EVENTS_CONTACT_JOINED_SIGNAL" = "איש קשר מצטרף אל B&A";
 
 /* table section header */
 "SETTINGS_NOTIFICATION_NOTIFY_WHEN_TITLE" = "יידע כאשר…";
@@ -7613,7 +7613,7 @@
 "SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_AGREE" = "הפעל";
 
 /* Description for the 'activate payments confirmation' UI in the payment settings. */
-"SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION" = "אפשר להשתמש ב–Signal כדי לשלוח ולקבל MobileCoin. כל התשלומים כפופים לתנאי השימוש של MobileCoin ו–MobileCoin Wallet. יש סיכוי להיתקל בבעיות או תשלומים ויתרות שיאבדו לך ולא יהיה ניתן לשחזר.";
+"SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION" = "אפשר להשתמש ב–B&A כדי לשלוח ולקבל MobileCoin. כל התשלומים כפופים לתנאי השימוש של MobileCoin ו–MobileCoin Wallet. יש סיכוי להיתקל בבעיות או תשלומים ויתרות שיאבדו לך ולא יהיה ניתן לשחזר.";
 
 /* Title for the 'activate payments confirmation' UI in the payment settings. */
 "SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_TITLE" = "הפעל";
@@ -7637,7 +7637,7 @@
 "SETTINGS_PAYMENTS_BALANCE_CONVERSION_FORMAT" = "%1$@ %2$@ בתאריך %3$@";
 
 /* Error message indicating that payments could not be activated because the feature is not currently available. */
-"SETTINGS_PAYMENTS_CANNOT_ACTIVATE_PAYMENTS_KILL_SWITCH" = "תשלומים ב־Signal אינם זמינים יותר. אתה עדיין יכול להעביר כספים אל מסחר אבל אתה לא יכול יותר לשלוח ולקבל תשלומים או להוסיף כספים.";
+"SETTINGS_PAYMENTS_CANNOT_ACTIVATE_PAYMENTS_KILL_SWITCH" = "תשלומים ב־B&A אינם זמינים יותר. אתה עדיין יכול להעביר כספים אל מסחר אבל אתה לא יכול יותר לשלוח ולקבל תשלומים או להוסיף כספים.";
 
 /* Error message indicating that payments could not be deactivated because the current balance is unavailable. */
 "SETTINGS_PAYMENTS_CANNOT_DEACTIVATE_PAYMENTS_NO_BALANCE" = "לא ניתן לבטל הפעלת תשלומים מאחר שמהאזן שלך אינו זמין. בדוק את החיבור שלך ונסה שוב.";
@@ -7646,10 +7646,10 @@
 "SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENT_NO_BALANCE" = "לא היה ניתן להשלים את התשלום מאחר שהמאזן שלך אינו זמין. בדוק את החיבור שלך ונסה שוב.";
 
 /* Error message indicating that payments cannot be sent because the feature is not currently available. */
-"SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENTS_KILL_SWITCH" = "תשלומים ב־Signal אינם זמינים יותר. אתה עדיין יכול להעביר כספים אל מסחר אבל אתה לא יכול יותר לשלוח ולקבל תשלומים או להוסיף כספים.";
+"SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENTS_KILL_SWITCH" = "תשלומים ב־B&A אינם זמינים יותר. אתה עדיין יכול להעביר כספים אל מסחר אבל אתה לא יכול יותר לשלוח ולקבל תשלומים או להוסיף כספים.";
 
 /* Error message indicating that you cannot transfer into your payments wallet because the feature is not currently available. */
-"SETTINGS_PAYMENTS_CANNOT_TRANSFER_IN_KILL_SWITCH" = "תשלומים ב־Signal אינם זמינים יותר. אתה עדיין יכול להעביר כספים אל מסחר אבל אתה לא יכול יותר לשלוח ולקבל תשלומים או להוסיף כספים.";
+"SETTINGS_PAYMENTS_CANNOT_TRANSFER_IN_KILL_SWITCH" = "תשלומים ב־B&A אינם זמינים יותר. אתה עדיין יכול להעביר כספים אל מסחר אבל אתה לא יכול יותר לשלוח ולקבל תשלומים או להוסיף כספים.";
 
 /* Message for the 'currency conversions info' alert. */
 "SETTINGS_PAYMENTS_CURRENCY_CONVERSIONS_INFO_ALERT_MESSAGE" = "המרות הן רק השערות ויתכן שהן לא מדויקות.";
@@ -7667,7 +7667,7 @@
 "SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS" = "בטל הפעלת תשלומים";
 
 /* Description for the 'deactivate payments confirmation' UI in the payment settings. */
-"SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION" = "לא תוכל לשלוח או לקבל MobileCoin ב־Signal אם תבטל הפעלת תשלומים.";
+"SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION" = "לא תוכל לשלוח או לקבל MobileCoin ב־B&A אם תבטל הפעלת תשלומים.";
 
 /* Title for the 'deactivate payments confirmation' UI in the payment settings. */
 "SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS_CONFIRM_TITLE" = "לבטל הפעלת תשלומים?";
@@ -7676,10 +7676,10 @@
 "SETTINGS_PAYMENTS_DEACTIVATE_TITLE" = "בטל הפעלת תשלומים";
 
 /* Explanation of the 'deactivate payments with balance' process in the 'deactivate payments' settings. */
-"SETTINGS_PAYMENTS_DEACTIVATE_WITH_BALANCE_EXPLANATION" = "מומלץ להעביר את הכספים שלך לכתובת ארנק אחרת לפני ביטול ההפעלה של תשלומים. במקרה של בחירה לא להעביר את הכספים עכשיו, הם יישארו בארנק שמקושר אל Signal בעת הפעלה מחדש של תשלומים.";
+"SETTINGS_PAYMENTS_DEACTIVATE_WITH_BALANCE_EXPLANATION" = "מומלץ להעביר את הכספים שלך לכתובת ארנק אחרת לפני ביטול ההפעלה של תשלומים. במקרה של בחירה לא להעביר את הכספים עכשיו, הם יישארו בארנק שמקושר אל B&A בעת הפעלה מחדש של תשלומים.";
 
 /* Description for the 'deactivate payments confirmation' UI in the payment settings. */
-"SETTINGS_PAYMENTS_DEACTIVATE_WITHOUT_TRANSFER_CONFIRM_DESCRIPTION" = "היתרה שלך תישאר בארנק שמקושר אל Signal במקרה של בחירה להפעיל מחדש את תשלומים.";
+"SETTINGS_PAYMENTS_DEACTIVATE_WITHOUT_TRANSFER_CONFIRM_DESCRIPTION" = "היתרה שלך תישאר בארנק שמקושר אל B&A במקרה של בחירה להפעיל מחדש את תשלומים.";
 
 /* Title for the 'deactivate payments confirmation' UI in the payment settings. */
 "SETTINGS_PAYMENTS_DEACTIVATE_WITHOUT_TRANSFER_CONFIRM_TITLE" = "לבטל הפעלה בלי להעביר?";
@@ -7706,7 +7706,7 @@
 "SETTINGS_PAYMENTS_HELP_CARD_ABOUT_MOBILECOIN_TITLE" = "על אודות MobileCoin";
 
 /* Description for the 'Adding to your wallet' help card in the payments settings. */
-"SETTINGS_PAYMENTS_HELP_CARD_ADDING_TO_YOUR_WALLET_DESCRIPTION" = "אתה יכול להוסיף כספים לשימוש ב־Signal ע״י שליחת MobileCoin אל כתובת הארנק שלך.";
+"SETTINGS_PAYMENTS_HELP_CARD_ADDING_TO_YOUR_WALLET_DESCRIPTION" = "אתה יכול להוסיף כספים לשימוש ב־B&A ע״י שליחת MobileCoin אל כתובת הארנק שלך.";
 
 /* Title for the 'Adding to your wallet' help card in the payments settings. */
 "SETTINGS_PAYMENTS_HELP_CARD_ADDING_TO_YOUR_WALLET_TITLE" = "הוספת כספים";
@@ -7763,7 +7763,7 @@
 "SETTINGS_PAYMENTS_OPT_IN_ACTIVATED_TOAST" = "תשלומים הופעלו.";
 
 /* Message for the 'payments opt-in' view in the app settings. */
-"SETTINGS_PAYMENTS_OPT_IN_MESSAGE" = "השתמש ב־Signal כדי לשלוח ולקבל MobileCoin, מטבע דיגיטלי חדש ממוקד פרטיות. הפעל כדי להתחיל.";
+"SETTINGS_PAYMENTS_OPT_IN_MESSAGE" = "השתמש ב־B&A כדי לשלוח ולקבל MobileCoin, מטבע דיגיטלי חדש ממוקד פרטיות. הפעל כדי להתחיל.";
 
 /* Label for 'activate' button in the 'payments opt-in' view in the app settings. */
 "SETTINGS_PAYMENTS_OPT_IN_REACTIVATE_BUTTON" = "הפעלה מחדש של תשלומים";
@@ -7781,7 +7781,7 @@
 "SETTINGS_PAYMENTS_PASSPHRASE_DISCARD_CONFIRMATION_TITLE" = "להמשיך בלי לשמור?";
 
 /* Explanation of the 'payments passphrase' in the 'view payments passphrase' settings. */
-"SETTINGS_PAYMENTS_PASSPHRASE_EXPLANATION" = "המאזן שלך ישוחזר באופן אוטומטי כשתתקין מחדש את Signal אם תאשר את PIN של Signal שלך. אתה יכול גם לשחזר את המאזן שלך ע״י שימוש במשפט השבה, שהוא משפט בן 24 מילים ייחודי לך. כתוב אותו ואחסן אותו במקום בטוח.";
+"SETTINGS_PAYMENTS_PASSPHRASE_EXPLANATION" = "המאזן שלך ישוחזר באופן אוטומטי כשתתקין מחדש את B&A אם תאשר את PIN של B&A שלך. אתה יכול גם לשחזר את המאזן שלך ע״י שימוש במשפט השבה, שהוא משפט בן 24 מילים ייחודי לך. כתוב אותו ואחסן אותו במקום בטוח.";
 
 /* Explanation of the 'payments passphrase' when there is a balance. */
 "SETTINGS_PAYMENTS_PASSPHRASE_EXPLANATION_FROM_BALANCE" = "יש לך יתרה! הגיע הזמן לשמור את משפט שחזור הסיסמה שלך—סיסמה בעלת 24 מילים שאפשר להשתמש בה כדי לשחזר את היתרה הכספית שלך.";
@@ -7886,10 +7886,10 @@
 "SETTINGS_PAYMENTS_PAYMENTS_LOCK_PROMPT_EXPLANATION_TOUCHID" = "עוזרים למנוע מאדם שמחזיק במכשיר הטלפון שלך לגשת לכספים שלך באמצעות הפעלת זיהוי טביעת אצבע. אפשר לכבות את האפשרות הזו בהגדרות.";
 
 /* Button for payments outdated sheet. */
-"SETTINGS_PAYMENTS_PAYMENTS_OUTDATED_BUTTON" = "עדכן את Signal";
+"SETTINGS_PAYMENTS_PAYMENTS_OUTDATED_BUTTON" = "עדכן את B&A";
 
 /* Message for payments outdated sheet. */
-"SETTINGS_PAYMENTS_PAYMENTS_OUTDATED_MESSAGE" = "יש לעדכן את Signal כדי להמשיך לשלוח ולקבל תשלומים, ולראות את יתרת התשלומים המעודכנת שלך.";
+"SETTINGS_PAYMENTS_PAYMENTS_OUTDATED_MESSAGE" = "יש לעדכן את B&A כדי להמשיך לשלוח ולקבל תשלומים, ולראות את יתרת התשלומים המעודכנת שלך.";
 
 /* Title for payments outdated sheet saying cant send. */
 "SETTINGS_PAYMENTS_PAYMENTS_OUTDATED_TITLE_CANT_SEND" = "לא ניתן לשלוח תשלום";
@@ -8018,7 +8018,7 @@
 "SETTINGS_PAYMENTS_TITLE" = "תשלומים";
 
 /* Error indicating that it is not valid to send yourself a payment. */
-"SETTINGS_PAYMENTS_TRANSFER_OUT_CANNOT_SEND_TO_SELF" = "אתה לא יכול להעביר אל כתובת הארנק של Signal שלך. הכנס את כתובת הארנק מהחשבון שלך במסחר נתמך.";
+"SETTINGS_PAYMENTS_TRANSFER_OUT_CANNOT_SEND_TO_SELF" = "אתה לא יכול להעביר אל כתובת הארנק של B&A שלך. הכנס את כתובת הארנק מהחשבון שלך במסחר נתמך.";
 
 /* Footer of the 'transfer currency out' view in the payment settings. */
 "SETTINGS_PAYMENTS_TRANSFER_OUT_FOOTER" = "אתה יכול להעביר MobileCoin ע״י השלמת העברה אל כתובת הארנק שסופקה ע״י המסחר. כתובת הארנק היא המחרוזת של המספרים והאותיות שמופיעה בדרך כלל מתחת אל קוד ה־QR.";
@@ -8102,7 +8102,7 @@
 "SETTINGS_PHONE_NUMBER_DISCOVERABILITY_DISABLED_TOAST" = "כדי לשנות את ההגדרה הזו, יש להגדיר את \"מי יכול לראות את המספר שלי\" כ\"אף אחד\".";
 
 /* The description for a sheet asking for confirmation that the user wants to set their phone number discoverability to 'nobody'. */
-"SETTINGS_PHONE_NUMBER_DISCOVERABILITY_NOBODY_CONFIRMATION_DESCRIPTION" = "להגדיר את ״מי יכול למצוא אותי לפי המספר שלי״ כ״אף אחד״ יקשה על אנשים למצוא אותך ב–Signal.";
+"SETTINGS_PHONE_NUMBER_DISCOVERABILITY_NOBODY_CONFIRMATION_DESCRIPTION" = "להגדיר את ״מי יכול למצוא אותי לפי המספר שלי״ כ״אף אחד״ יקשה על אנשים למצוא אותך ב–B&A.";
 
 /* The title for a sheet asking for confirmation that the user wants to set their phone number discoverability to 'nobody'. */
 "SETTINGS_PHONE_NUMBER_DISCOVERABILITY_NOBODY_CONFIRMATION_TITLE" = "להמשיך?";
@@ -8111,7 +8111,7 @@
 "SETTINGS_PHONE_NUMBER_DISCOVERABILITY_TITLE" = "מי יכול למצוא אותי לפי המספר שלי?";
 
 /* Description label for Phone Number Privacy */
-"SETTINGS_PHONE_NUMBER_PRIVACY_DESCRIPTION_LABEL" = "אפשר לבחור מי יוכל לראות את מספר הטלפון שלך ומי יוכל ליצור איתך קשר באמצעותו ב–Signal.";
+"SETTINGS_PHONE_NUMBER_PRIVACY_DESCRIPTION_LABEL" = "אפשר לבחור מי יוכל לראות את מספר הטלפון שלך ומי יוכל ליצור איתך קשר באמצעותו ב–B&A.";
 
 /* The title for phone number privacy settings. */
 "SETTINGS_PHONE_NUMBER_PRIVACY_TITLE" = "מספר טלפון";
@@ -8123,16 +8123,16 @@
 "SETTINGS_PIN_REMINDER_DISABLE_CONFIRMATION_ACTION" = "כבה תזכורות";
 
 /* The explanation for the dialog asking user to confirm their PIN to disable reminders */
-"SETTINGS_PIN_REMINDER_DISABLE_CONFIRMATION_EXPLANATION" = "וודא ששיננת או שאחסנת בבטחה את ה־PIN שלך הואיל והוא בלתי ניתן להשבה. אם תשכח את ה־PIN שלך, ייתכן שתאבד נתונים כשתרשום שוב את חשבון Signal שלך.";
+"SETTINGS_PIN_REMINDER_DISABLE_CONFIRMATION_EXPLANATION" = "וודא ששיננת או שאחסנת בבטחה את ה־PIN שלך הואיל והוא בלתי ניתן להשבה. אם תשכח את ה־PIN שלך, ייתכן שתאבד נתונים כשתרשום שוב את חשבון B&A שלך.";
 
 /* The title for the dialog asking user to confirm their PIN to disable reminders */
-"SETTINGS_PIN_REMINDER_DISABLE_CONFIRMATION_TITLE" = "אשר את ה־PIN של Signal שלך";
+"SETTINGS_PIN_REMINDER_DISABLE_CONFIRMATION_TITLE" = "אשר את ה־PIN של B&A שלך";
 
 /* Label for the 'pin reminder' switch of the privacy settings. */
 "SETTINGS_PIN_REMINDER_SWITCH_LABEL" = "תזכורות PIN";
 
 /* Footer for the 'PINs' section of the privacy settings. */
-"SETTINGS_PINS_FOOTER" = "קודי PIN שומרים על מידע שמאוחסן ב־Signal מוצפן כך שרק אתה תוכל להשיג גישה אליו. קוד ה־PIN שלך בלתי ניתן להשבה. הפרופיל, ההגדרות ואנשי הקשר שלך ישוחזרו כשתתקין מחדש את Signal.";
+"SETTINGS_PINS_FOOTER" = "קודי PIN שומרים על מידע שמאוחסן ב־B&A מוצפן כך שרק אתה תוכל להשיג גישה אליו. קוד ה־PIN שלך בלתי ניתן להשבה. הפרופיל, ההגדרות ואנשי הקשר שלך ישוחזרו כשתתקין מחדש את B&A.";
 
 /* Label for the 'pins' item of the privacy settings when the user does have a pin. */
 "SETTINGS_PINS_ITEM" = "שנה את ה־PIN שלך";
@@ -8141,7 +8141,7 @@
 "SETTINGS_PINS_ITEM_CREATE" = "צור PIN";
 
 /* Title for the 'PINs' section of the privacy settings. */
-"SETTINGS_PINS_TITLE" = "PIN של Signal";
+"SETTINGS_PINS_TITLE" = "PIN של B&A";
 
 /* Footer for table section */
 "SETTINGS_PRIVACY_ADVANCED_FOOTER" = "הגדרות של עקיפת צנזורה, שיחות ממסר, ושולח אטום.";
@@ -8168,7 +8168,7 @@
 "SETTINGS_REGISTRATION_LOCK_TURN_ON" = "הפעל";
 
 /* Body for the alert confirming that the user wants to turn on registration lock. */
-"SETTINGS_REGISTRATION_LOCK_TURN_ON_MESSAGE" = "אם תשכח את ה־PIN של Signal שלך בעת הרשמה מחדש אל Signal, תינעל מחוץ אל חשבונך למשך 7 ימים.";
+"SETTINGS_REGISTRATION_LOCK_TURN_ON_MESSAGE" = "אם תשכח את ה־PIN של B&A שלך בעת הרשמה מחדש אל B&A, תינעל מחוץ אל חשבונך למשך 7 ימים.";
 
 /* Title for the alert confirming that the user wants to turn on registration lock. */
 "SETTINGS_REGISTRATION_LOCK_TURN_ON_TITLE" = "להפעיל נעילת הרשמה?";
@@ -8198,19 +8198,19 @@
 "SETTINGS_SECTION_TITLE_CALLING" = "התקשרות";
 
 /* Section footer */
-"SETTINGS_SECURITY_DETAIL" = "השתמש בזיהוי טביעת אצבע, זיהוי פנים או סיסמת מכשיר iOS שלך כדי לשחרר נעילת Signal.";
+"SETTINGS_SECURITY_DETAIL" = "השתמש בזיהוי טביעת אצבע, זיהוי פנים או סיסמת מכשיר iOS שלך כדי לשחרר נעילת B&A.";
 
 /* Section footer */
-"SETTINGS_SECURITY_DETAIL_FACEID" = "השתמש בזיהוי פנים כדי לשחרר נעילת Signal.";
+"SETTINGS_SECURITY_DETAIL_FACEID" = "השתמש בזיהוי פנים כדי לשחרר נעילת B&A.";
 
 /* Section footer */
-"SETTINGS_SECURITY_DETAIL_OPTICID" = "שימוש ב–Optic ID כדי לשחרר את הנעילה של Signal.";
+"SETTINGS_SECURITY_DETAIL_OPTICID" = "שימוש ב–Optic ID כדי לשחרר את הנעילה של B&A.";
 
 /* Section footer */
-"SETTINGS_SECURITY_DETAIL_PASSCODE" = "השתמש בסיסמת המכשיר שלך כדי לשחרר נעילת Signal.";
+"SETTINGS_SECURITY_DETAIL_PASSCODE" = "השתמש בסיסמת המכשיר שלך כדי לשחרר נעילת B&A.";
 
 /* Section footer */
-"SETTINGS_SECURITY_DETAIL_TOUCHID" = "השתמש בזיהוי טביעת אצבע כדי לשחרר נעילת Signal.";
+"SETTINGS_SECURITY_DETAIL_TOUCHID" = "השתמש בזיהוי טביעת אצבע כדי לשחרר נעילת B&A.";
 
 /* Section header */
 "SETTINGS_SECURITY_TITLE" = "אבטחת יישום";
@@ -8225,13 +8225,13 @@
 "SETTINGS_SHARING_SUGGESTIONS" = "שתף אנשי קשר עם iOS";
 
 /* Footer for setting for enabling & disabling contact and notification sharing with iOS. */
-"SETTINGS_SHARING_SUGGESTIONS_NOTIFICATIONS_FOOTER" = "התרת גישת iOS לאנשי קשר וצ׳אטים של Signal עבור פיצ׳רים כמו הצעות שיתוף והתראות.";
+"SETTINGS_SHARING_SUGGESTIONS_NOTIFICATIONS_FOOTER" = "התרת גישת iOS לאנשי קשר וצ׳אטים של B&A עבור פיצ׳רים כמו הצעות שיתוף והתראות.";
 
 /* Label for the 'enable registration lock' switch of the privacy settings. */
 "SETTINGS_TWO_FACTOR_AUTH_SWITCH_LABEL" = "נעילת הרשמה";
 
-/* Footer for the 'two factor auth' section of the privacy settings when Signal PINs are available. */
-"SETTINGS_TWO_FACTOR_PINS_AUTH_FOOTER" = "דרוש את ה־PIN של Signal שלך כדי להירשם שוב אל Signal עם מספר הטלפון שלך.";
+/* Footer for the 'two factor auth' section of the privacy settings when B&A PINs are available. */
+"SETTINGS_TWO_FACTOR_PINS_AUTH_FOOTER" = "דרוש את ה־PIN של B&A שלך כדי להירשם שוב אל B&A עם מספר הטלפון שלך.";
 
 /* Label for the 'typing indicators' setting. */
 "SETTINGS_TYPING_INDICATORS" = "מחווני הקלדה";
@@ -8264,7 +8264,7 @@
 "SHARE_EXTENSION_LOADING" = "טוען…";
 
 /* Message indicating that the share extension cannot be used until the user has registered in the main app. */
-"SHARE_EXTENSION_NOT_REGISTERED_MESSAGE" = "הפעל את היישום Signal כדי להירשם.";
+"SHARE_EXTENSION_NOT_REGISTERED_MESSAGE" = "הפעל את היישום B&A כדי להירשם.";
 
 /* Title indicating that the share extension cannot be used until the user has registered in the main app. */
 "SHARE_EXTENSION_NOT_REGISTERED_TITLE" = "לא רשום";
@@ -8278,11 +8278,11 @@
 /* Alert title */
 "SHARE_EXTENSION_SENDING_IN_PROGRESS_TITLE" = "מעלה…";
 
-/* Shown when trying to share content to a Signal user for the share extension. Followed by failure details. */
+/* Shown when trying to share content to a B&A user for the share extension. Followed by failure details. */
 "SHARE_EXTENSION_UNABLE_TO_BUILD_ATTACHMENT_ALERT_TITLE" = "לא היה ניתן להכין צרופה";
 
 /* Title for the 'share extension' view. */
-"SHARE_EXTENSION_VIEW_TITLE" = "שתף ב־Signal";
+"SHARE_EXTENSION_VIEW_TITLE" = "שתף ב־B&A";
 
 /* Title of alert indicating sharing suggestions failed to deactivate */
 "SHARING_SUGGESTIONS_DISABLE_ERROR" = "נכשל בהשבתת הצעות שיתוף.";
@@ -8291,10 +8291,10 @@
 "SHOW_THREAD_BUTTON_TITLE" = "הצגת צ׳אט";
 
 /* Shown in the header when the user hasn't provided a custom name for a call. */
-"SIGNAL_CALL" = "שיחת Signal";
+"SIGNAL_CALL" = "שיחת B&A";
 
-/* body sent to contacts when inviting to Install Signal */
-"SMS_INVITE_BODY" = "אני מזמין אותך להתקין Signal! הנה הקישור:";
+/* body sent to contacts when inviting to Install B&A */
+"SMS_INVITE_BODY" = "אני מזמין אותך להתקין B&A! הנה הקישור:";
 
 /* An error message generically indicating that something went wrong. */
 "SOMETHING_WENT_WRONG_ERROR" = "משהו השתבש.";
@@ -8318,7 +8318,7 @@
 "SPAM_CAPTCHA_DISMISS_CONFIRMATION_TITLE" = "להמשיך בלי לוודא?";
 
 /* Body for action sheet explaining captcha requirement. */
-"SPAM_CAPTCHA_SHEET_BODY" = "כדי לעזור למנוע זבל ב‏‏־Signal, אנא השלם וידוא.\n\nלאחר וידוא, אתה יכול להמשיך להתכתב. הודעות מושהות כלשהן יישלחו באופן אוטומטי.";
+"SPAM_CAPTCHA_SHEET_BODY" = "כדי לעזור למנוע זבל ב‏‏־B&A, אנא השלם וידוא.\n\nלאחר וידוא, אתה יכול להמשיך להתכתב. הודעות מושהות כלשהן יישלחו באופן אוטומטי.";
 
 /* Title for action sheet explaining captcha requirement. */
 "SPAM_CAPTCHA_SHEET_TITLE" = "וודא כדי להמשיך להתכתב";
@@ -8357,7 +8357,7 @@
 "STICKERS_INSTALL_BUTTON" = "התקן";
 
 /* Title for the 'available built-in stickers' section of the 'manage stickers' view. */
-"STICKERS_MANAGE_VIEW_AVAILABLE_BUILT_IN_PACKS_SECTION_TITLE" = "סדרת אומנים Signal";
+"STICKERS_MANAGE_VIEW_AVAILABLE_BUILT_IN_PACKS_SECTION_TITLE" = "סדרת אומנים B&A";
 
 /* Title for the 'available known stickers' section of the 'manage stickers' view. */
 "STICKERS_MANAGE_VIEW_AVAILABLE_KNOWN_PACKS_SECTION_TITLE" = "מדבקות שקיבלת";
@@ -8636,22 +8636,22 @@
 "STORY_SETTINGS_LEARN_MORE_SHEET_BULLET_3" = "שמירה שלהם באנשי הקשר של הטלפון שלך";
 
 /* Footer for the explainer sheet for signal connections */
-"STORY_SETTINGS_LEARN_MORE_SHEET_FOOTER" = "חברי ה–Signal שלך יוכלו לראות את השם והתמונה שלך, וגם את מה ששלחת ל״הסטורי שלי״ אלא אם כן הסתרת זאת מהם.";
+"STORY_SETTINGS_LEARN_MORE_SHEET_FOOTER" = "חברי ה–B&A שלך יוכלו לראות את השם והתמונה שלך, וגם את מה ששלחת ל״הסטורי שלי״ אלא אם כן הסתרת זאת מהם.";
 
 /* Header for the explainer sheet for signal connections */
-"STORY_SETTINGS_LEARN_MORE_SHEET_HEADER_FORMAT" = "<bold>חברי Signal</bold> הם אנשים שבחרת לבטוח בהם, באמצעות אחת מהפעולות הבאות:";
+"STORY_SETTINGS_LEARN_MORE_SHEET_HEADER_FORMAT" = "<bold>חברי B&A</bold> הם אנשים שבחרת לבטוח בהם, באמצעות אחת מהפעולות הבאות:";
 
 /* Label for the stories section of the settings view */
 "STORY_SETTINGS_TITLE" = "סטוריז";
 
 /* Section footer for the 'viewers' section on the 'story settings' view */
-"STORY_SETTINGS_WHO_CAN_VIEW_THIS_FOOTER" = "אפשר לבחור אילו חברי Signal יוכלו לצפות בסטורי שלך. השינויים לא ישפיעו על סטוריז שכבר שלחת.";
+"STORY_SETTINGS_WHO_CAN_VIEW_THIS_FOOTER" = "אפשר לבחור אילו חברי B&A יוכלו לצפות בסטורי שלך. השינויים לא ישפיעו על סטוריז שכבר שלחת.";
 
 /* Section header for the 'viewers' section on the 'story settings' view */
 "STORY_SETTINGS_WHO_CAN_VIEW_THIS_HEADER" = "מי יכול לצפות בסטורי הזה";
 
 /* Header for the 'viewers' section on the 'story settings' bottom sheet */
-"STORY_SETTINGS_WHO_CAN_VIEW_THIS_SHEET_HEADER" = "אפשר לבחור אילו חברי Signal יוכלו לראות את הסטורי שלך. תמיד אפשר לשנות את זה בהגדרות הפרטיות.";
+"STORY_SETTINGS_WHO_CAN_VIEW_THIS_SHEET_HEADER" = "אפשר לבחור אילו חברי B&A יוכלו לראות את הסטורי שלך. תמיד אפשר לשנות את זה בהגדרות הפרטיות.";
 
 /* Tooltip text shown when the user selects a story as a destination for a long duration video that will be split into shorter segments. Embeds {{ segment duration in seconds }} */
 "STORY_VIDEO_SEGMENTATION_TOOLTIP_FORMAT" = "סרטונים שנשלחים לסטוריז ייחתכו לקליפים של %1$d שניות ויישלחו כסטוריז נפרדים.";
@@ -8714,12 +8714,12 @@
 "SUPPORT_EMAIL_LOG_URL_LABEL_FORMAT" = "כתובת יומן: %1$@";
 
 /* Localized subject for support request emails */
-"SUPPORT_EMAIL_SUBJECT" = "בקשת תמיכה של Signal iOS";
+"SUPPORT_EMAIL_SUBJECT" = "בקשת תמיכה של B&A iOS";
 
 /* Header for emoji mood selection */
 "SUPPORT_EMOJI_PROMPT" = "איך אתה מרגיש? (רשותי)";
 
-/* Label in support request informing user about Signal FAQ */
+/* Label in support request informing user about B&A FAQ */
 "SUPPORT_FAQ_PROMPT" = "האם קראת כבר את השאלות הנפוצות?";
 
 /* Label describing support switch to attach debug logs */
@@ -8786,7 +8786,7 @@
 "SWITCH_ON" = "מופעל";
 
 /* Name to display for the 'system' sender, e.g. for release notes and the onboarding story */
-"SYSTEM_ADDRESS_NAME" = "Signal";
+"SYSTEM_ADDRESS_NAME" = "B&A";
 
 /* Label for button to verify a user's safety number. */
 "SYSTEM_MESSAGE_ACTION_VERIFY_SAFETY_NUMBER" = "וודא";
@@ -8944,17 +8944,17 @@
 /* Label text below navbar button, embeds {{number of weeks}}. Must be very short, like 1 or 2 characters, The space is intentionally omitted between the text and the embedded duration so that we get, e.g. '5w' not '5 w'. See other *_TIME_AMOUNT strings */
 "TIME_AMOUNT_WEEKS_SHORT_FORMAT" = "%1$@שב";
 
-/* Button for bottom sheet shown when device transfer completes on the receiving device. Tapping will terminate the Signal app and trigger a notification to relaunch. */
-"TRANSFER_COMPLETE_SHEET_BUTTON" = "סגירת Signal";
+/* Button for bottom sheet shown when device transfer completes on the receiving device. Tapping will terminate the B&A app and trigger a notification to relaunch. */
+"TRANSFER_COMPLETE_SHEET_BUTTON" = "סגירת B&A";
 
 /* Subtitle for bottom sheet shown when device transfer completes on the receiving device. */
-"TRANSFER_COMPLETE_SHEET_SUBTITLE" = "כדי להתחיל להשתמש בחשבון שלך במכשיר זה, יש לסגור את Signal ולפתוח אותו מחדש.";
+"TRANSFER_COMPLETE_SHEET_SUBTITLE" = "כדי להתחיל להשתמש בחשבון שלך במכשיר זה, יש לסגור את B&A ולפתוח אותו מחדש.";
 
 /* Title for bottom sheet shown when device transfer completes on the receiving device. */
 "TRANSFER_COMPLETE_SHEET_TITLE" = "העברה הושלמה";
 
-/* Notification prompting the user to relaunch Signal after a device transfer completed. */
-"TRANSFER_RELAUNCH_NOTIFICATION" = "יש לפתוח את Signal כדי להתחיל לשלוח הודעות";
+/* Notification prompting the user to relaunch B&A after a device transfer completed. */
+"TRANSFER_RELAUNCH_NOTIFICATION" = "יש לפתוח את B&A כדי להתחיל לשלוח הודעות";
 
 /* Label for the cancel button in an alert or action sheet. */
 "TXT_CANCEL_TITLE" = "בטל";
@@ -8972,25 +8972,25 @@
 "UNKNOWN_CONTACT_BLOCK_OFFER" = "המשתמש/ת לא באנשי הקשר שלך. רוצה לחסום אותו או אותה?";
 
 /* Info message recorded in conversation history when local user receives an unknown message from a linked device and needs to upgrade. */
-"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_FROM_LINKED_DEVICE" = "אחד מהמכשירים שלך שלח הודעה שאינה יכולה להיות מעובדת או להיות מוצגת כאן מאחר שהיא משתמשת במאפיין Signal חדש.";
+"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_FROM_LINKED_DEVICE" = "אחד מהמכשירים שלך שלח הודעה שאינה יכולה להיות מעובדת או להיות מוצגת כאן מאחר שהיא משתמשת במאפיין B&A חדש.";
 
 /* Info message recorded in conversation history when local user receives an unknown message and needs to upgrade. Embeds {{user's name or phone number}}. */
-"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_WITH_NAME_FORMAT" = "%1$@ שלח לך הודעה שאינה יכולה להיות מעובדת או להיות מוצגת מאחר שהיא משתמשת במאפיין Signal חדש.";
+"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_WITH_NAME_FORMAT" = "%1$@ שלח לך הודעה שאינה יכולה להיות מעובדת או להיות מוצגת מאחר שהיא משתמשת במאפיין B&A חדש.";
 
 /* Info message recorded in conversation history when local user receives an unknown message and needs to upgrade. */
-"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_WITHOUT_NAME" = "קיבלת הודעה שאינה יכולה להיות מעובדת או להיות מוצגת מאחר שהיא משתמשת במאפיין Signal חדש.";
+"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_WITHOUT_NAME" = "קיבלת הודעה שאינה יכולה להיות מעובדת או להיות מוצגת מאחר שהיא משתמשת במאפיין B&A חדש.";
 
 /* Label for button that lets users upgrade the app. */
-"UNKNOWN_PROTOCOL_VERSION_UPGRADE_BUTTON" = "עדכן את Signal כעת";
+"UNKNOWN_PROTOCOL_VERSION_UPGRADE_BUTTON" = "עדכן את B&A כעת";
 
 /* Info message recorded in conversation history when local user has received an unknown unknown message from a linked device and has upgraded. */
-"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_FROM_LINKED_DEVICE" = "עודכן אל הגרסה האחרונה של Signal. אתה יכול לקבל כעת סוג הודעה זה במכשיר שלך.";
+"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_FROM_LINKED_DEVICE" = "עודכן אל הגרסה האחרונה של B&A. אתה יכול לקבל כעת סוג הודעה זה במכשיר שלך.";
 
 /* Info message recorded in conversation history when local user has received an unknown message and has upgraded. Embeds {{user's name or phone number}}. */
-"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_WITH_NAME_FORMAT" = "אתה יכול לבקש מן %1$@ לשלוח מחדש הודעה זו כעת כשאתה משתמש בגרסה מעודכנת של Signal.";
+"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_WITH_NAME_FORMAT" = "אתה יכול לבקש מן %1$@ לשלוח מחדש הודעה זו כעת כשאתה משתמש בגרסה מעודכנת של B&A.";
 
 /* Info message recorded in conversation history when local user has received an unknown message and has upgraded. */
-"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_WITHOUT_NAME" = "אתה יכול לבקש מן השולח לשלוח מחדש הודעה זו כעת כשאתה משתמש בגרסה מעודכנת של Signal.";
+"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_WITHOUT_NAME" = "אתה יכול לבקש מן השולח לשלוח מחדש הודעה זו כעת כשאתה משתמש בגרסה מעודכנת של B&A.";
 
 /* Label indicating an unknown user. */
 "UNKNOWN_USER" = "בלתי ידוע";
@@ -9014,13 +9014,13 @@
 "UNLINK_CONFIRMATION_ALERT_TITLE" = "לבטל קישור \"%1$@\"?";
 
 /* Label warning the user that they have been unlinked from their primary device. */
-"UNLINKED_WARNING" = "המכשיר הזה כבר לא מקושר. אפשר לקשר מחדש את Signal עם הטלפון שלך כדי להמשיך לשלוח הודעות.";
+"UNLINKED_WARNING" = "המכשיר הזה כבר לא מקושר. אפשר לקשר מחדש את B&A עם הטלפון שלך כדי להמשיך לשלוח הודעות.";
 
 /* If this device has become unlinked from their primary device, they'll see a warning. This is the call to action on that warning. */
 "UNLINKED_WARNING_ACTION_TITLE" = "קישור מכשיר מחדש";
 
 /* Alert title when unlinking device fails */
-"UNLINKING_FAILED_ALERT_TITLE" = "Signal לא היה יכול לבטל את קישור המכשיר שלך.";
+"UNLINKING_FAILED_ALERT_TITLE" = "B&A לא היה יכול לבטל את קישור המכשיר שלך.";
 
 /* Text for a toast confirming that the mic has been unmuted for a call. */
 "UNMUTE_CONFIRMATION_TOAST_LABEL" = "מיקרופון מופעל";
@@ -9037,11 +9037,11 @@
 /* No comment provided by engineer. */
 "UNSUPPORTED_ATTACHMENT" = "התקבל סוג בלתי נתמך של צרופה.";
 
-/* When inviting contacts to use Signal, this error is shown if the device doesn't support SMS or if there aren't any registered email accounts. */
+/* When inviting contacts to use B&A, this error is shown if the device doesn't support SMS or if there aren't any registered email accounts. */
 "UNSUPPORTED_FEATURE_ERROR" = "המכשיר שלך אינו תומך במאפיין זה.";
 
 /* Description for the unverified safety number change. Embeds {name of contact with identity change} */
-"UNVERIFIED_SAFETY_NUMBER_CHANGE_DESCRIPTION_FORMAT" = "מספר הביטחון שלך עם %1$@ השתנה כנראה מאחר שהצד השני התקין מחדש את Signal או שינה מכשירים. הקש וודא כדי לאשר את המספר החדש של הביטחון. זה רשותי.";
+"UNVERIFIED_SAFETY_NUMBER_CHANGE_DESCRIPTION_FORMAT" = "מספר הביטחון שלך עם %1$@ השתנה כנראה מאחר שהצד השני התקין מחדש את B&A או שינה מכשירים. הקש וודא כדי לאשר את המספר החדש של הביטחון. זה רשותי.";
 
 /* Action to verify a safety number after it has changed */
 "UNVERIFIED_SAFETY_NUMBER_VERIFY_ACTION" = "וודא";
@@ -9059,7 +9059,7 @@
 "USE_PROXY_BUTTON" = "השתמש ביפוי כוח";
 
 /* Explanation of when you should use a signal proxy */
-"USE_PROXY_EXPLANATION" = "יש להשתמש בפרוקסי רק אם אין לך אפשרות להתחבר ל–Signal דרך נתונים סלולריים או Wi-Fi.";
+"USE_PROXY_EXPLANATION" = "יש להשתמש בפרוקסי רק אם אין לך אפשרות להתחבר ל–B&A דרך נתונים סלולריים או Wi-Fi.";
 
 /* Description of username links and QR codes on the username education sheet */
 "USERNAME_EDUCATION_LINK_DESCRIPTION" = "לכל שם משתמש יש קוד QR ולינק ייחודיים שאפשר לשתף עם חברים כדי שהם יוכלו להתחיל איתך צ׳אט במהירות.";
@@ -9151,14 +9151,14 @@
 /* A message indicating that a username link the user attempted to query is no longer valid. */
 "USERNAME_LOOKUP_LINK_NO_LONGER_VALID_MESSAGE" = "לינק שם המשתמש הזה לא תקף יותר.";
 
-/* A message indicating that the given username is not associated with a registered Signal account. Embeds {{ a username }}. */
-"USERNAME_LOOKUP_NOT_FOUND_MESSAGE_FORMAT" = "%1$@ הוא/היא לא משתמש/ת Signal. וודא שהכנסת את שם המשתמש השלם.";
+/* A message indicating that the given username is not associated with a registered B&A account. Embeds {{ a username }}. */
+"USERNAME_LOOKUP_NOT_FOUND_MESSAGE_FORMAT" = "%1$@ הוא/היא לא משתמש/ת B&A. וודא שהכנסת את שם המשתמש השלם.";
 
-/* Title for an action sheet indicating that the given username is not associated with a registered Signal account. */
+/* Title for an action sheet indicating that the given username is not associated with a registered B&A account. */
 "USERNAME_LOOKUP_NOT_FOUND_TITLE" = "משתמש/ת לא נמצא/ה";
 
 /* Instructions that appear below the username QR code on a sharable exported image. */
-"USERNAME_QR_CODE_EXPORT_INSTRUCTIONS" = "אפשר לסרוק את קוד ה–QR הזה עם הטלפון שלך כדי לשוחח איתי ב–Signal.";
+"USERNAME_QR_CODE_EXPORT_INSTRUCTIONS" = "אפשר לסרוק את קוד ה–QR הזה עם הטלפון שלך כדי לשוחח איתי ב–B&A.";
 
 /* A message in a toast informing the user their username, link, and QR code have successfully been reset. Embeds {{ the user's new username }}. */
 "USERNAME_RESET_SUCCESSFUL_TOAST" = "קוד ה–QR והלינק שלך אופסו ושם המשתמש שלך הוא %1$@";
@@ -9260,7 +9260,7 @@
 "VOICE_MESSAGE_CANCEL_INSTRUCTIONS" = "החלק כדי לבטל";
 
 /* Filename for voice messages. */
-"VOICE_MESSAGE_FILE_NAME" = "signal";
+"VOICE_MESSAGE_FILE_NAME" = "B&A";
 
 /* Message for the tooltip indicating the 'voice message' needs to be held to be held down to record. */
 "VOICE_MESSAGE_TOO_SHORT_TOOLTIP" = "לחץ והחזק כדי להקליט.";

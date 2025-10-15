@@ -643,13 +643,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Групы Signal працуюць лепш за ўсё з %1$d удзельнікам. Калі дадаць больш удзельнікаў, гэта справакуе затрымку падчас адпраўкі і атрымання паведамленняў.</string>
+			<string>Групы B&amp;A працуюць лепш за ўсё з %1$d удзельнікам. Калі дадаць больш удзельнікаў, гэта справакуе затрымку падчас адпраўкі і атрымання паведамленняў.</string>
 			<key>few</key>
-			<string>Групы Signal працуюць лепш за ўсё з %1$d удзельнікамі цi менш. Калі дадаць больш удзельнікаў, гэта справакуе затрымку падчас адпраўкі і атрымання паведамленняў.</string>
+			<string>Групы B&amp;A працуюць лепш за ўсё з %1$d удзельнікамі цi менш. Калі дадаць больш удзельнікаў, гэта справакуе затрымку падчас адпраўкі і атрымання паведамленняў.</string>
 			<key>many</key>
-			<string>Групы Signal працуюць лепш за ўсё з %1$d удзельнікамі цi менш. Калі дадаць больш удзельнікаў, гэта справакуе затрымку падчас адпраўкі і атрымання паведамленняў.</string>
+			<string>Групы B&amp;A працуюць лепш за ўсё з %1$d удзельнікамі цi менш. Калі дадаць больш удзельнікаў, гэта справакуе затрымку падчас адпраўкі і атрымання паведамленняў.</string>
 			<key>other</key>
-			<string>Групы Signal працуюць лепш за ўсё з %1$d удзельнікамі цi менш. Калі дадаць больш удзельнікаў, гэта справакуе затрымку падчас адпраўкі і атрымання паведамленняў.</string>
+			<string>Групы B&amp;A працуюць лепш за ўсё з %1$d удзельнікамі цi менш. Калі дадаць больш удзельнікаў, гэта справакуе затрымку падчас адпраўкі і атрымання паведамленняў.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -843,13 +843,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Signal будзе званіць %2$@, %3$@ і яшчэ %1$d іншаму</string>
+			<string>B&amp;A будзе званіць %2$@, %3$@ і яшчэ %1$d іншаму</string>
 			<key>few</key>
-			<string>Signal будзе званіць %2$@, %3$@ і яшчэ %1$d іншым</string>
+			<string>B&amp;A будзе званіць %2$@, %3$@ і яшчэ %1$d іншым</string>
 			<key>many</key>
-			<string>Signal будзе званіць %2$@, %3$@ і яшчэ %1$d іншым</string>
+			<string>B&amp;A будзе званіць %2$@, %3$@ і яшчэ %1$d іншым</string>
 			<key>other</key>
-			<string>Signal будзе званіць %2$@, %3$@ і яшчэ %1$d іншым</string>
+			<string>B&amp;A будзе званіць %2$@, %3$@ і яшчэ %1$d іншым</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -1203,13 +1203,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Каб захаваць «%2$@» падлучаным, адкрыйце Signal на гэтай прыладзе на працягу аднаго дня.</string>
+			<string>Каб захаваць «%2$@» падлучаным, адкрыйце B&amp;A на гэтай прыладзе на працягу аднаго дня.</string>
 			<key>few</key>
-			<string>Каб захаваць «%2$@» падлучаным, адкрыйце Signal на гэтай прыладзе на працягу %1$d дзён.</string>
+			<string>Каб захаваць «%2$@» падлучаным, адкрыйце B&amp;A на гэтай прыладзе на працягу %1$d дзён.</string>
 			<key>many</key>
-			<string>Каб захаваць «%2$@» падлучаным, адкрыйце Signal на гэтай прыладзе на працягу %1$d дзён.</string>
+			<string>Каб захаваць «%2$@» падлучаным, адкрыйце B&amp;A на гэтай прыладзе на працягу %1$d дзён.</string>
 			<key>other</key>
-			<string>Каб захаваць «%2$@» падлучаным, адкрыйце Signal на гэтай прыладзе на працягу %1$d дзён.</string>
+			<string>Каб захаваць «%2$@» падлучаным, адкрыйце B&amp;A на гэтай прыладзе на працягу %1$d дзён.</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1463,13 +1463,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Усе кантакты Signal · %1$d глядач</string>
+			<string>Усе кантакты B&amp;A · %1$d глядач</string>
 			<key>few</key>
-			<string>Усе кантакты Signal · %1$d гледача</string>
+			<string>Усе кантакты B&amp;A · %1$d гледача</string>
 			<key>many</key>
-			<string>Усе кантакты Signal · %1$d гледачоў</string>
+			<string>Усе кантакты B&amp;A · %1$d гледачоў</string>
 			<key>other</key>
-			<string>Усе кантакты Signal · %1$d гледачоў</string>
+			<string>Усе кантакты B&amp;A · %1$d гледачоў</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1483,13 +1483,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Усе кантакты Signal · %1$d выключаны</string>
+			<string>Усе кантакты B&amp;A · %1$d выключаны</string>
 			<key>few</key>
-			<string>Усе кантакты Signal · %1$d выключаныя</string>
+			<string>Усе кантакты B&amp;A · %1$d выключаныя</string>
 			<key>many</key>
-			<string>Усе кантакты Signal · %1$d выключаных</string>
+			<string>Усе кантакты B&amp;A · %1$d выключаных</string>
 			<key>other</key>
-			<string>Усе кантакты Signal · %1$d выключаных</string>
+			<string>Усе кантакты B&amp;A · %1$d выключаных</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>

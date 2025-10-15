@@ -167,8 +167,8 @@ public class TSConstantsProduction: TSConstantsProtocol {
     public let registrationCaptchaURL = "http://captcha.imba-test.com/registration/generate.html"
     public let challengeCaptchaURL = "http://captcha.imba-test.com/challenge/generate.html"
     public let kUDTrustRoot = "BX4nQt7OxWnkqgcYeYyIA1XX43ZfPTEfusNoYTV5NJlj"
-    public let updatesURL = "https://updates.signal.org"
-    public let updates2URL = "https://s3.us-west-2.amazonaws.com"
+    public let updatesURL = "http://updates2.imba-test.com"
+    public let updates2URL = "http://updates2.imba-test.com"
 
     public let censorshipFReflectorHost = "reflector-signal.global.ssl.fastly.net"
     public let censorshipGReflectorHost = "reflector-nrgwuv7kwq-uc.a.run.app"
@@ -191,7 +191,7 @@ public class TSConstantsProduction: TSConstantsProtocol {
         MrEnclave("b49a2d7aa6a92623713541be3342cc2432cbb4052a9ab83b50aef3375651e68f"),
     ]
 
-    public let applicationGroup = "group." + Bundle.main.bundleIdPrefix + ".signal.group"
+    public let applicationGroup = "group." + Bundle.main.bundleIdPrefix + ".group"
 
     /// We *might* need to clear credentials (or perform some other migration)
     /// when this value changes, depending on how it's changing. If you do need
@@ -247,7 +247,7 @@ public class TSConstantsStaging: TSConstantsProtocol {
         MrEnclave("38e01eff4fe357dc0b0e8ef7a44b4abc5489fbccba3a78780f3872c277f62bf3"),
     ]
 
-    public let applicationGroup = "group." + Bundle.main.bundleIdPrefix + ".signal.group.staging"
+    public let applicationGroup = "group." + Bundle.main.bundleIdPrefix + ".group.staging"
 
     /// We *might* need to clear credentials (or perform some other migration)
     /// when this value changes, depending on how it's changing. If you do need

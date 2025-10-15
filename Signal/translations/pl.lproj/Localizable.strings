@@ -2,7 +2,7 @@
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "Nie teraz";
 
 /* Title for the 'about' help section */
-"ABOUT_SECTION_TITLE" = "O aplikacji Signal";
+"ABOUT_SECTION_TITLE" = "O aplikacji B&A";
 
 /* Accessibility label for attachment. */
 "ACCESSIBILITY_LABEL_ATTACHMENT" = "Załącznik";
@@ -32,7 +32,7 @@
 "ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_CONFIRM_BUTTON" = "Wyeksportuj raport";
 
 /* Users can request a report of their account data. Before they get their account export, they are warned to only share account data with trustworthy sources. This is the message on that warning. */
-"ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_MESSAGE" = "Udostępniaj dane swojego konta Signal wyłącznie zaufanym osobom i aplikacjom.";
+"ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_MESSAGE" = "Udostępniaj dane swojego konta B&A wyłącznie zaufanym osobom i aplikacjom.";
 
 /* Users can request a report of their account data. If this request fails (probably because of a network connection problem), they will see an error sheet. This is the message on that error. */
 "ACCOUNT_DATA_REPORT_ERROR_MESSAGE" = "Sprawdź połączenie z internetem i spróbuj ponownie.";
@@ -56,16 +56,16 @@
 "ACCOUNT_DATA_REPORT_EXPORT_REPORT_BUTTON" = "Wyeksportuj raport";
 
 /* Users can request a report of their account data. This text appears at the bottom of this screen, offering more information. */
-"ACCOUNT_DATA_REPORT_FOOTER" = "Raport jest generowany wyłącznie wtedy, gdy prosisz o eksport, i nie jest przechowywany przez Signal na Twoim urządzeniu.";
+"ACCOUNT_DATA_REPORT_FOOTER" = "Raport jest generowany wyłącznie wtedy, gdy prosisz o eksport, i nie jest przechowywany przez B&A na Twoim urządzeniu.";
 
 /* Users can request a report of their account data. This is the subtitle on the screen where they do this, giving them more information. */
-"ACCOUNT_DATA_REPORT_SUBTITLE" = "Wyeksportuj i pobierz raport z danymi swojego konta Signal. Raport nie zawiera wiadomości ani multimediów.";
+"ACCOUNT_DATA_REPORT_SUBTITLE" = "Wyeksportuj i pobierz raport z danymi swojego konta B&A. Raport nie zawiera wiadomości ani multimediów.";
 
 /* Users can request a report of their account data. This is the title on the screen where they do this. */
 "ACCOUNT_DATA_REPORT_TITLE" = "Dane Twojego konta";
 
 /* Label for 'invite' button in contact view. */
-"ACTION_INVITE" = "Zaproś do aplikacji Signal";
+"ACTION_INVITE" = "Zaproś do aplikacji B&A";
 
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "Wyślij wiadomość";
@@ -77,7 +77,7 @@
 "ACTION_VIDEO_CALL" = "Połączenie wideo";
 
 /* Label for 'voice call' button in contact view. */
-"ACTION_VOICE_CALL" = "Połączenie Signal";
+"ACTION_VOICE_CALL" = "Połączenie B&A";
 
 /* The title for the 'add group members' view. */
 "ADD_GROUP_MEMBERS_VIEW_TITLE" = "Dodaj osoby";
@@ -197,40 +197,40 @@
 "APN_Message" = "Możesz mieć nowe wiadomości";
 
 /* Default message for the 'app launch failed' alert. */
-"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "Nie udało się uruchomić aplikacji Signal. Abyśmy mogli rozwiązać ten problem, wyślij dziennik debugowania na adres support@signal.org.";
+"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "Nie udało się uruchomić aplikacji B&A. Abyśmy mogli rozwiązać ten problem, wyślij dziennik debugowania na adres support@signal.org.";
 
 /* Button to try launching the app even though the last launch failed */
-"APP_LAUNCH_FAILURE_CONTINUE" = "Mimo to otwórz Signal";
+"APP_LAUNCH_FAILURE_CONTINUE" = "Mimo to otwórz B&A";
 
 /* Message for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
 "APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "Wyślij dzienniki debugowania na adres support@signal.org, abyśmy mogli rozwiązać ten problem.";
 
 /* Title for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
-"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "Nie udało się otworzyć aplikacji Signal";
+"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "Nie udało się otworzyć aplikacji B&A";
 
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "Nie udało się wczytać bazy danych";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
-"APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "Zaktualizuj Signal do najnowszej wersji.";
+"APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "Zaktualizuj B&A do najnowszej wersji.";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "Nieznana wersja bazy danych.";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "Wystąpił problem z uruchomieniem aplikacji Signal. Abyśmy mogli rozwiązać ten problem, wyślij dziennik debugowania na adres support@signal.org.";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "Wystąpił problem z uruchomieniem aplikacji B&A. Abyśmy mogli rozwiązać ten problem, wyślij dziennik debugowania na adres support@signal.org.";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "Nie udało się otworzyć aplikacji Signal";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "Nie udało się otworzyć aplikacji B&A";
 
 /* Error description indicating that the app crashed because there was low storage space available on the device. */
-"APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_MESSAGE" = "Nie można otworzyć aplikacji Signal, ponieważ na urządzeniu jest za mało miejsca. Aby korzystać z aplikacji Signal, przejdź do ustawień pamięci urządzenia i zwolnij miejsce.";
+"APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_MESSAGE" = "Nie można otworzyć aplikacji B&A, ponieważ na urządzeniu jest za mało miejsca. Aby korzystać z aplikacji B&A, przejdź do ustawień pamięci urządzenia i zwolnij miejsce.";
 
 /* Error title indicating that the app crashed because there was low storage space available on the device. */
 "APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_TITLE" = "Za mało miejsca na urządzeniu";
 
 /* Error indicating that the app could not restore transferred data. */
-"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "Nie udało się przywrócić danych przeniesionych z Twojego starego urządzenia. Wyślij dzienniki debugowania na adres support@signal.org, abyśmy mogli rozwiązać ten problem. Jeśli ponownie zainstalujesz Signal, możesz stracić historię wiadomości.";
+"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "Nie udało się przywrócić danych przeniesionych z Twojego starego urządzenia. Wyślij dzienniki debugowania na adres support@signal.org, abyśmy mogli rozwiązać ten problem. Jeśli ponownie zainstalujesz B&A, możesz stracić historię wiadomości.";
 
 /* Error indicating that the app could not restore transferred data. */
 "APP_LAUNCH_FAILURE_RESTORE_FAILED_TITLE" = "Nie udało się przenieść danych";
@@ -245,7 +245,7 @@
 "APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "W App Store jest już dostępna wersja %1$@.";
 
 /* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "Już jest nowa wersja aplikacji Signal";
+"APP_UPDATE_NAG_ALERT_TITLE" = "Już jest nowa wersja aplikacji B&A";
 
 /* Label for the 'update' button in the 'new app version available' alert. */
 "APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "Zaktualizuj";
@@ -298,7 +298,7 @@
 /* Apple Pay donation error for decline failures where the payment cannot be authorized. */
 "APPLE_PAY_DONATION_ERROR_PAYMENT_CANNOT_BE_AUTHORIZED" = "Sprawdź czy Twoja metoda płatności w Apple Pay jest aktualna. Jeśli nie, uaktualnij ją i spróbuj ponownie.";
 
-/* On the iOS home screen, if you tap and hold the Signal icon, this shortcut will appear. Tapping it will let users send a new message. You may want to refer to similar behavior in other iOS apps, such as Messages, for equivalent strings. */
+/* On the iOS home screen, if you tap and hold the B&A icon, this shortcut will appear. Tapping it will let users send a new message. You may want to refer to similar behavior in other iOS apps, such as Messages, for equivalent strings. */
 "APPLICATION_SHORTCUT_NEW_MESSAGE" = "Nowa wiadomość";
 
 /* Label for the archive button for conversations list view */
@@ -319,7 +319,7 @@
 /* Error that outgoing attachments could not be exported. */
 "ATTACHMENT_APPROVAL_FAILED_TO_EXPORT" = "Nie udało się wyeksportować załącznika.";
 
-/* alert text when Signal was unable to save a copy of the attachment to the system photo library */
+/* alert text when B&A was unable to save a copy of the attachment to the system photo library */
 "ATTACHMENT_APPROVAL_FAILED_TO_SAVE" = "Nie udało się zapisać";
 
 /* Format string for file extension label in call interstitial view */
@@ -376,16 +376,16 @@
 /* Accessibility hint describing what you can do with the attachment button */
 "ATTACHMENT_HINT" = "Wybierz multimedia do wysłania";
 
-/* Button in chat attachment panel that allows to select photos/videos Signal has access to. */
+/* Button in chat attachment panel that allows to select photos/videos B&A has access to. */
 "ATTACHMENT_KEYBOARD_BUTTON_MANAGE" = "Zarządzaj";
 
 /* A button to select a contact from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_CONTACT" = "Kontakt";
 
-/* Button in a context menu from the 'manage' button in attachment panel that allows to select more photos/videos to give Signal access to */
+/* Button in a context menu from the 'manage' button in attachment panel that allows to select more photos/videos to give B&A access to */
 "ATTACHMENT_KEYBOARD_CONTEXT_MENU_BUTTON_SELECT_MORE" = "Wybierz więcej zdjęć";
 
-/* Button in a context menu from the 'manage' button in attachment panel that opens the iOS system settings for Signal to update access permissions */
+/* Button in a context menu from the 'manage' button in attachment panel that opens the iOS system settings for B&A to update access permissions */
 "ATTACHMENT_KEYBOARD_CONTEXT_MENU_BUTTON_SYSTEM_SETTINGS" = "Przejdź do ustawień";
 
 /* A button to select a file from the Attachment Keyboard */
@@ -394,8 +394,8 @@
 /* A button to select a GIF from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_GIF" = "GIF";
 
-/* Text in chat attachment panel when Signal only has access to some photos/videos. This string is in a compact horizontal space, so it should be short if possible. */
-"ATTACHMENT_KEYBOARD_LIMITED_ACCESS" = "Signal ma ograniczony dostęp do zdjęć";
+/* Text in chat attachment panel when B&A only has access to some photos/videos. This string is in a compact horizontal space, so it should be short if possible. */
+"ATTACHMENT_KEYBOARD_LIMITED_ACCESS" = "B&A ma ograniczony dostęp do zdjęć";
 
 /* A button to select a location from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_LOCATION" = "Lokalizacja";
@@ -406,10 +406,10 @@
 /* First block of text in chat attachment panel when there's no recent photos to show. */
 "ATTACHMENT_KEYBOARD_NO_MEDIA_TITLE" = "Brak zdjęć i wideo";
 
-/* Text in chat attachment panel explaining that user needs to give Signal permission to access photos. */
-"ATTACHMENT_KEYBOARD_NO_PHOTO_ACCESS" = "Signal nie ma dostępu do Twoich zdjęć ani wideo. Aby zezwolić na dostęp, otwórz ustawienia i wybierz opcję Zdjęcia";
+/* Text in chat attachment panel explaining that user needs to give B&A permission to access photos. */
+"ATTACHMENT_KEYBOARD_NO_PHOTO_ACCESS" = "B&A nie ma dostępu do Twoich zdjęć ani wideo. Aby zezwolić na dostęp, otwórz ustawienia i wybierz opcję Zdjęcia";
 
-/* Button in chat attachment panel to let user open Settings app and give Signal persmission to access photos. */
+/* Button in chat attachment panel to let user open Settings app and give B&A persmission to access photos. */
 "ATTACHMENT_KEYBOARD_OPEN_SETTINGS" = "Otwórz ustawienia";
 
 /* A button to select a payment from the Attachment Keyboard */
@@ -485,7 +485,7 @@
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "Wiadomość głosowa niedostępna";
 
 /* Username for backup key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "Kopie zapasowe Signal";
+"AUTOFILL_BACKUP_KEY_USERNAME" = "Kopie zapasowe B&A";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "Wybierz kolor";
@@ -515,7 +515,7 @@
 "BACKUP_ENABLEMENT_REMINDER_MEGAPHONE_ACTION" = "Włącz";
 
 /* Body for Backup enablement reminder megaphone */
-"BACKUP_ENABLEMENT_REMINDER_MEGAPHONE_BODY" = "Dzięki temu nie stracisz historii wiadomości nawet po zmianie telefonu czy ponownej instalacji aplikacji Signal.";
+"BACKUP_ENABLEMENT_REMINDER_MEGAPHONE_BODY" = "Dzięki temu nie stracisz historii wiadomości nawet po zmianie telefonu czy ponownej instalacji aplikacji B&A.";
 
 /* Title for Backup enablement reminder megaphone */
 "BACKUP_ENABLEMENT_REMINDER_MEGAPHONE_TITLE" = "Włącz tworzenie szyfrowanych kopii zapasowych";
@@ -545,7 +545,7 @@
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "Kod kopii zapasowej jest prawidłowy. Przechowuj kod w bezpiecznym miejscu.";
 
 /* Body for a sheet warning users to their 'Backup Key' safe. */
-"BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "Jeśli go zgubisz, Signal nie będzie mógł Ci pomóc w przywróceniu kopii zapasowej. Przechowuj swój kod w bezpiecznym miejscu. Nie udostępniaj kodu innym osobom.";
+"BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "Jeśli go zgubisz, B&A nie będzie mógł Ci pomóc w przywróceniu kopii zapasowej. Przechowuj swój kod w bezpiecznym miejscu. Nie udostępniaj kodu innym osobom.";
 
 /* Title for a sheet warning users to their 'Backup Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_TITLE" = "Zapisz kod w bezpiecznym miejscu";
@@ -569,13 +569,13 @@
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "Możliwość usunięcia kopii zapasowej w dowolnym momencie";
 
 /* Subtitle for a view introducing Backups during an onboarding flow. */
-"BACKUP_ONBOARDING_INTRO_SUBTITLE" = "Twórz kopie zapasowe wiadomości i multimediów w usłudze bezpiecznego przechowywania Signal, szyfrowanej metodą end-to-end. Dzięki temu nie stracisz historii wiadomości nawet po zmianie telefonu czy ponownej instalacji Signal.";
+"BACKUP_ONBOARDING_INTRO_SUBTITLE" = "Twórz kopie zapasowe wiadomości i multimediów w usłudze bezpiecznego przechowywania B&A, szyfrowanej metodą end-to-end. Dzięki temu nie stracisz historii wiadomości nawet po zmianie telefonu czy ponownej instalacji B&A.";
 
 /* Title for a view introducing Backups during an onboarding flow. */
-"BACKUP_ONBOARDING_INTRO_TITLE" = "Kopie zapasowe Signal";
+"BACKUP_ONBOARDING_INTRO_TITLE" = "Kopie zapasowe B&A";
 
 /* Subtitle for a view introducing the 'Backup Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "Kod kopii zapasowej, składający się z 64 znaków, umożliwi Ci przywrócenie kopii zapasowej po ponownej instalacji aplikacji Signal.\n\nJeśli go zapomnisz, stracisz możliwość przywrócenia kopii zapasowej. Signal nie będzie mógł pomóc w jej odzyskaniu.";
+"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "Kod kopii zapasowej, składający się z 64 znaków, umożliwi Ci przywrócenie kopii zapasowej po ponownej instalacji aplikacji B&A.\n\nJeśli go zapomnisz, stracisz możliwość przywrócenia kopii zapasowej. B&A nie będzie mógł pomóc w jej odzyskaniu.";
 
 /* Title for a view introducing the 'Backup Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "Twój kod kopii zapasowej";
@@ -668,16 +668,16 @@
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_RENEWAL_FORMAT" = "Odnowi się %1$@";
 
 /* Footer for a menu section related to settings for when Backups are disabled. */
-"BACKUP_SETTINGS_BACKUPS_DISABLED_SECTION_FOOTER" = "Tworzenie kopii zapasowych zostało wyłączone, a Twoje dane zostały usunięte z usługi bezpiecznego przechowywania Signal.";
+"BACKUP_SETTINGS_BACKUPS_DISABLED_SECTION_FOOTER" = "Tworzenie kopii zapasowych zostało wyłączone, a Twoje dane zostały usunięte z usługi bezpiecznego przechowywania B&A.";
 
 /* Description for a progress view tracking media being downloaded in service of disabling Backups. */
-"BACKUP_SETTINGS_BACKUPS_DISABLING_DOWNLOADING_MEDIA_PROGRESS_VIEW_DESCRIPTION" = "Tworzenie kopii zapasowych zostało wyłączone. Wszystkie multimedia, które nie znajdują się na urządzeniu, są właśnie pobierane. Następnie zostaną one usunięte z usługi bezpiecznego przechowywania Signal.";
+"BACKUP_SETTINGS_BACKUPS_DISABLING_DOWNLOADING_MEDIA_PROGRESS_VIEW_DESCRIPTION" = "Tworzenie kopii zapasowych zostało wyłączone. Wszystkie multimedia, które nie znajdują się na urządzeniu, są właśnie pobierane. Następnie zostaną one usunięte z usługi bezpiecznego przechowywania B&A.";
 
 /* Message for a view indicating we failed to delete the user's Backup due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_MESSAGE" = "Wystąpił błąd. Skontaktuj się z naszą pomocą techniczną.";
 
 /* Header for a menu section related to settings for when disabling Backups encountered an unexpected error. */
-"BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_SECTION_HEADER" = "Podczas usuwania danych z usługi bezpiecznego przechowywania Signal wystąpił błąd.";
+"BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_SECTION_HEADER" = "Podczas usuwania danych z usługi bezpiecznego przechowywania B&A wystąpił błąd.";
 
 /* Title for a view indicating we failed to delete the user's Backup due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_TITLE" = "Nie udało się usunąć kopii zapasowej";
@@ -686,7 +686,7 @@
 "BACKUP_SETTINGS_BACKUPS_DISABLING_PROGRESS_VIEW_DESCRIPTION" = "Usuwanie kopii zapasowej…";
 
 /* Header for a menu section related to disabling Backups. */
-"BACKUP_SETTINGS_BACKUPS_DISABLING_SECTION_HEADER" = "Tworzenie kopii zapasowych zostało wyłączone, a Twoje dane zostaną usunięte z usługi bezpiecznego przechowywania Signal.";
+"BACKUP_SETTINGS_BACKUPS_DISABLING_SECTION_HEADER" = "Tworzenie kopii zapasowych zostało wyłączone, a Twoje dane zostaną usunięte z usługi bezpiecznego przechowywania B&A.";
 
 /* Header for a menu section related to settings for when Backups are enabled. */
 "BACKUP_SETTINGS_BACKUPS_ENABLED_SECTION_HEADER" = "Szczegóły kopii zapasowej";
@@ -707,13 +707,13 @@
 "BACKUP_SETTINGS_DISABLING_CONFIRMATION_ACTION_SHEET_TITLE" = "Wyłączyć i usunąć kopie zapasowe?";
 
 /* Message shown in an action sheet when the user disables Backups, explaining that their media is downloading first. */
-"BACKUP_SETTINGS_DISABLING_DOWNLOADS_STARTED_ACTION_SHEET_MESSAGE" = "W kopii zapasowej masz multimedia, które nie zostały jeszcze pobrane na to urządzenie. Pobieranie ich z kopii zapasowej może potrwać dłuższą chwilę – aby nie przerywać tego procesu, nie zamykaj aplikacji Signal.";
+"BACKUP_SETTINGS_DISABLING_DOWNLOADS_STARTED_ACTION_SHEET_MESSAGE" = "W kopii zapasowej masz multimedia, które nie zostały jeszcze pobrane na to urządzenie. Pobieranie ich z kopii zapasowej może potrwać dłuższą chwilę – aby nie przerywać tego procesu, nie zamykaj aplikacji B&A.";
 
 /* Title shown in an action sheet when the user disables Backups, explaining that their media is downloading first. */
 "BACKUP_SETTINGS_DISABLING_DOWNLOADS_STARTED_ACTION_SHEET_TITLE" = "Trwa pobieranie kopii zapasowej";
 
 /* Message shown in an action sheet indicating we failed to delete the user's Backup due to an unexpected error. */
-"BACKUP_SETTINGS_DISABLING_ERROR_GENERIC_ERROR_ACTION_SHEET_MESSAGE" = "Podczas usuwania danych z usługi bezpiecznego przechowywania Signal wystąpił błąd.";
+"BACKUP_SETTINGS_DISABLING_ERROR_GENERIC_ERROR_ACTION_SHEET_MESSAGE" = "Podczas usuwania danych z usługi bezpiecznego przechowywania B&A wystąpił błąd.";
 
 /* Title shown in an action sheet indicating we failed to delete the user's Backup due to an unexpected error. */
 "BACKUP_SETTINGS_DISABLING_ERROR_GENERIC_ERROR_ACTION_SHEET_TITLE" = "Nie udało się usunąć kopii zapasowej";
@@ -782,7 +782,7 @@
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_LATER_ACTION" = "Pobierz później";
 
 /* Message for an action sheet allowing users to download their offloaded media. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_MESSAGE" = "W kopii zapasowej masz multimedia, które nie zostały jeszcze pobrane na to urządzenie. Pobieranie może potrwać dłuższą chwilę – aby nie przerywać tego procesu, nie zamykaj aplikacji Signal.";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_MESSAGE" = "W kopii zapasowej masz multimedia, które nie zostały jeszcze pobrane na to urządzenie. Pobieranie może potrwać dłuższą chwilę – aby nie przerywać tego procesu, nie zamykaj aplikacji B&A.";
 
 /* Action in an action sheet allowing users to download their offloaded media now. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_NOW_ACTION" = "Pobierz teraz";
@@ -803,7 +803,7 @@
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE_FOR_TESTERS" = "Nieużywane multimedia zostaną usunięte z urządzenia, ale dopóki uczestniczysz w testach usługi, w dowolnym momencie możesz pobrać te multimedia z kopii zapasowej.";
 
 /* Footer for a toggle allowing users to change the Optimize Local Storage setting, if the toggle is unavailable. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_UNAVAILABLE" = "Optymalizacja pamięci jest dostępna tylko w ramach płatnej usługi kopii zapasowych Signal. Aby korzystać z tej funkcji, wykup płatny tryb tworzenia kopii zapasowych.";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_UNAVAILABLE" = "Optymalizacja pamięci jest dostępna tylko w ramach płatnej usługi kopii zapasowych B&A. Aby korzystać z tej funkcji, wykup płatny tryb tworzenia kopii zapasowych.";
 
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "Zoptymalizuj pamięć na urządzeniu";
@@ -842,7 +842,7 @@
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "Wszystko gotowe. Możesz już utworzyć kopię zapasową";
 
 /* Title for the 'Backup' settings menu. */
-"BACKUPS_SETTINGS_TITLE" = "Kopie zapasowe Signal";
+"BACKUPS_SETTINGS_TITLE" = "Kopie zapasowe B&A";
 
 /* Section header for badge view section in the badge configuration page */
 "BADGE_CONFIGURATION_BADGE_SECTION_TITLE" = "Moje odznaki";
@@ -850,14 +850,14 @@
 /* The title for the badge configuration page */
 "BADGE_CONFIGURATION_TITLE" = "Odznaki";
 
-/* When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to Signal\" button will be shown. This is the text in that button. */
+/* When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to B&A\" button will be shown. This is the text in that button. */
 "BADGE_DETAILS_DONATE_TO_SIGNAL" = "Wpłać darowiznę teraz";
 
 /* When viewing someone else's donor badge, you'll see a sheet. This is the title on that sheet. Embeds {badge owner's short name} */
-"BADGE_DETAILS_TITLE_FOR_SUPPORTER" = "%1$@ wspiera Signal";
+"BADGE_DETAILS_TITLE_FOR_SUPPORTER" = "%1$@ wspiera B&A";
 
 /* String explaining to the user that their boost badge has expired on the badge expiry sheet. */
-"BADGE_EXPIRED_BOOST_BODY" = "Odznaka za wsparcie wygasła i nie wyświetla się już w Twoim profilu.\n\nNadal możesz korzystać z aplikacji Signal. Aby wspierać technologię rozwijaną z myślą o Tobie, rozważ przekazywanie comiesięcznej darowizny cyklicznej.";
+"BADGE_EXPIRED_BOOST_BODY" = "Odznaka za wsparcie wygasła i nie wyświetla się już w Twoim profilu.\n\nNadal możesz korzystać z aplikacji B&A. Aby wspierać technologię rozwijaną z myślą o Tobie, rozważ przekazywanie comiesięcznej darowizny cyklicznej.";
 
 /* String explaining to the user that their boost badge has expired while they are a current subscription sustainer on the badge expiry sheet. */
 "BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "Odznaka za wsparcie wygasła i nie wyświetla się już w Twoim profilu.\n\nAby reaktywować tę odznakę na kolejne 30 dni, wpłać darowiznę jednorazową.";
@@ -883,7 +883,7 @@
 /* Title for a sheet explaining that a bank transfer donation is complete, and that you have received a badge. */
 "BADGE_THANKS_BANK_DONATION_COMPLETE_TITLE" = "Darowizna przekazana";
 
-/* When you make a donation to Signal, you will receive a badge. A thank-you sheet appears when this happens. This is the body text on that sheet. */
+/* When you make a donation to B&A, you will receive a badge. A thank-you sheet appears when this happens. This is the body text on that sheet. */
 "BADGE_THANKS_BODY" = "Możesz dodać do swojego profilu tę odznakę, aby pochwalić się udzielonym nam wsparciem.";
 
 /* Label prompting the user to display the new badge on their profile on the badge thank you sheet. */
@@ -892,7 +892,7 @@
 /* Label prompting the user to feature the new badge on their profile on the badge thank you sheet. */
 "BADGE_THANKS_MAKE_FEATURED" = "Dodaj odznakę do profilu";
 
-/* When you make a donation to Signal, you will receive a badge. A thank-you sheet appears when this happens. This is the title of that sheet. */
+/* When you make a donation to B&A, you will receive a badge. A thank-you sheet appears when this happens. This is the title of that sheet. */
 "BADGE_THANKS_TITLE" = "Dziękujemy za Twoje wsparcie!";
 
 /* Footer explaining that only one badge can be featured at a time on the thank you sheet. */
@@ -901,19 +901,19 @@
 /* On the bank donation screen, show a link below the input form to show help about finding account info. */
 "BANK_DONATION_FOOTER_FIND_ACCOUNT_INFO" = "Gdzie szukać informacji o koncie";
 
-/* On the bank transfer donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their bank information (2) tell them that Signal does not collect or store their personal information. */
-"BANK_DONATION_SUBHEADER_TEXT" = "Wpisz dane do przelewu. Signal nie gromadzi ani nie przechowuje Twoich danych osobowych.";
+/* On the bank transfer donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their bank information (2) tell them that B&A does not collect or store their personal information. */
+"BANK_DONATION_SUBHEADER_TEXT" = "Wpisz dane do przelewu. B&A nie gromadzi ani nie przechowuje Twoich danych osobowych.";
 
-/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button to agree to the mandate. */
+/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button to agree to the mandate. */
 "BANK_MANDATE_AGREE" = "Zgadzam się";
 
-/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button that shows more of the mandate if it is not all visible. */
+/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button that shows more of the mandate if it is not all visible. */
 "BANK_MANDATE_READ_MORE" = "Czytaj dalej";
 
-/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a subtitle about the payment processor Stripe above that mandate. */
-"BANK_MANDATE_SUBTITLE" = "Darowizny wpłacane na rzecz aplikacji Signal są przetwarzane przez Stripe. Signal nie gromadzi ani nie przechowuje Twoich danych osobowych.";
+/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is a subtitle about the payment processor Stripe above that mandate. */
+"BANK_MANDATE_SUBTITLE" = "Darowizny wpłacane na rzecz aplikacji B&A są przetwarzane przez Stripe. B&A nie gromadzi ani nie przechowuje Twoich danych osobowych.";
 
-/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is the title above that mandate. */
+/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is the title above that mandate. */
 "BANK_MANDATE_TITLE" = "Przelew bankowy";
 
 /* Accessibility label for banner close button */
@@ -1067,7 +1067,7 @@
 "CALL_AUDIO_MISSED_WEEK_NOTIFICATION_BODY_FORMAT" = "📞 Nieodebrane połączenie głosowe (%1$@)";
 
 /* Alert message when calling and permissions for microphone are missing */
-"CALL_AUDIO_PERMISSION_MESSAGE" = "Aby dzwonić i nagrywać wiadomości głosowe w aplikacji Signal, zezwól na dostęp do mikrofonu w ustawieniach swojego urządzenia z iOS.";
+"CALL_AUDIO_PERMISSION_MESSAGE" = "Aby dzwonić i nagrywać wiadomości głosowe w aplikacji B&A, zezwól na dostęp do mikrofonu w ustawieniach swojego urządzenia z iOS.";
 
 /* Alert title when calling and permissions for microphone are missing */
 "CALL_AUDIO_PERMISSION_TITLE" = "Wymagany dostęp do mikrofonu";
@@ -1132,8 +1132,8 @@
 /* Tappable label that appears below a user's name on a toast when they request to join a call link. */
 "CALL_LINK_JOIN_REQUEST_PROMPT" = "Prosi o dołączenie…";
 
-/* Shown in a message bubble when you send a call link in a Signal chat */
-"CALL_LINK_LINK_PREVIEW_DESCRIPTION" = "Użyj tego linku, aby dołączyć do rozmowy Signal";
+/* Shown in a message bubble when you send a call link in a B&A chat */
+"CALL_LINK_LINK_PREVIEW_DESCRIPTION" = "Użyj tego linku, aby dołączyć do rozmowy B&A";
 
 /* Text that appears on a toast in a call lobby before joining a call link informing the user what information will be shared with other call members when they have phone number sharing turned off. */
 "CALL_LINK_LOBBY_SHARING_INFO_PHONE_NUMBER_SHARING_OFF" = "Każda osoba, która dołączy do rozmowy za pomocą linku, może wyświetlić Twoje imię oraz zdjęcie.";
@@ -1156,8 +1156,8 @@
 /* Name of a toggle switch to enable/disable admin approval for joining a Call Link. */
 "CALL_LINK_REQUIRE_APPROVAL" = "Wymagaj zatwierdzenia przez administratora";
 
-/* Button to open UI to share a Call Link with someone on Signal. */
-"CALL_LINK_SHARE_VIA_SIGNAL" = "Udostępnij link w aplikacji Signal";
+/* Button to open UI to share a Call Link with someone on B&A. */
+"CALL_LINK_SHARE_VIA_SIGNAL" = "Udostępnij link w aplikacji B&A";
 
 /* Button to open the system share sheet to share a Call Link. */
 "CALL_LINK_SHARE_VIA_SYSTEM" = "Udostępnij link";
@@ -1262,10 +1262,10 @@
 "CALLING_MEMBER_VIEW_YOUR_CAMERA_IS_OFF" = "Kamera jest wyłączona";
 
 /* The generic name used for calls if CallKit privacy is enabled */
-"CALLKIT_ANONYMOUS_CONTACT_NAME" = "Użytkownik aplikacji Signal";
+"CALLKIT_ANONYMOUS_CONTACT_NAME" = "Użytkownik aplikacji B&A";
 
 /* The generic name used for group calls if CallKit privacy is enabled */
-"CALLKIT_ANONYMOUS_GROUP_NAME" = "Grupa Signal";
+"CALLKIT_ANONYMOUS_GROUP_NAME" = "Grupa B&A";
 
 /* Title for the calls list view. */
 "CALLS_LIST_TITLE" = "Połączenia";
@@ -1414,32 +1414,32 @@
 /* Alert shown when the user needs to exchange messages to see the safety number. */
 "CANT_VERIFY_IDENTITY_EXCHANGE_MESSAGES" = "Numer bezpieczeństwa zostanie utworzony, gdy wymienisz z tą osobą wiadomości.";
 
-/* Users can donate to Signal with a credit or debit card. If their card number is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a credit or debit card. If their card number is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_CARD_NUMBER_GENERIC_ERROR" = "Nieprawidłowy numer karty";
 
-/* Users can donate to Signal with a credit or debit card. This is the label for the card number field on that screen. */
+/* Users can donate to B&A with a credit or debit card. This is the label for the card number field on that screen. */
 "CARD_DONATION_CARD_NUMBER_LABEL" = "Numer karty";
 
-/* Users can donate to Signal with a credit or debit card. If their card verification code (CVV) is invalid for reasons we cannot determine, this generic error message will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a credit or debit card. If their card verification code (CVV) is invalid for reasons we cannot determine, this generic error message will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_CVV_GENERIC_ERROR" = "Nieprawidłowy kod CVV";
 
-/* Users can donate to Signal with a credit or debit card. This is the label for the card verification code (CVV) field on that screen. */
+/* Users can donate to B&A with a credit or debit card. This is the label for the card verification code (CVV) field on that screen. */
 "CARD_DONATION_CVV_LABEL" = "CVV";
 
-/* Users can donate to Signal with a credit or debit card. If their card verification code (CVV) is too long, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a credit or debit card. If their card verification code (CVV) is too long, this error will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_CVV_TOO_LONG_ERROR" = "Za długi kod";
 
-/* Users can donate to Signal with a credit or debit card. If their expiration date is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a credit or debit card. If their expiration date is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_EXPIRATION_DATE_GENERIC_ERROR" = "Nieprawidł. data waż.";
 
-/* Users can donate to Signal with a credit or debit card. This is the label for the expiration date field on that screen. Try to use a short string to make space in the UI. (For example, the English text uses \"Exp. Date\" instead of \"Expiration Date\"). */
+/* Users can donate to B&A with a credit or debit card. This is the label for the expiration date field on that screen. Try to use a short string to make space in the UI. (For example, the English text uses \"Exp. Date\" instead of \"Expiration Date\"). */
 "CARD_DONATION_EXPIRATION_DATE_LABEL" = "Data waż.";
 
-/* Users can donate to Signal with a credit or debit card. This is the label for the card expiration date field on that screen. */
+/* Users can donate to B&A with a credit or debit card. This is the label for the card expiration date field on that screen. */
 "CARD_DONATION_EXPIRATION_DATE_PLACEHOLDER" = "MM/RR";
 
 /* Users can choose to learn more about their credit/debit card donations, which will open a sheet with additional information. This is the body text of that sheet. */
-"CARD_DONATION_READ_MORE_SHEET_BODY" = "Signal nie gromadzi ani nie przechowuje Twoich danych osobowych potrzebnych do wpłacenia darowizny.\n\nDo przetwarzania darowizn używamy systemu płatności Stripe. Nie zapisujemy, nie przechowujemy ani nie mamy dostępu do żadnych danych, które przekazujesz.\n\nSignal nie wiąże ani nie może powiązać darowizny z Twoim kontem Signal.\n\nDziękujemy za Twoje wsparcie!";
+"CARD_DONATION_READ_MORE_SHEET_BODY" = "B&A nie gromadzi ani nie przechowuje Twoich danych osobowych potrzebnych do wpłacenia darowizny.\n\nDo przetwarzania darowizn używamy systemu płatności Stripe. Nie zapisujemy, nie przechowujemy ani nie mamy dostępu do żadnych danych, które przekazujesz.\n\nB&A nie wiąże ani nie może powiązać darowizny z Twoim kontem B&A.\n\nDziękujemy za Twoje wsparcie!";
 
 /* Users can choose to learn more about their credit/debit card donations, which will open a sheet with additional information. This is the title of that sheet. */
 "CARD_DONATION_READ_MORE_SHEET_TITLE" = "Twoje dane są poufne";
@@ -1447,8 +1447,8 @@
 /* On the credit/debit card donation screen, a small amount of information text is shown. Users can click this link to learn more information. */
 "CARD_DONATION_SUBHEADER_LEARN_MORE" = "Dowiedz się więcej.";
 
-/* On the credit/debit card donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their credit/debit card information (2) tell them that Signal does not collect or store their personal information. */
-"CARD_DONATION_SUBHEADER_TEXT" = "Podaj dane karty. Signal nie gromadzi ani nie przechowuje Twoich danych osobowych.";
+/* On the credit/debit card donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their credit/debit card information (2) tell them that B&A does not collect or store their personal information. */
+"CARD_DONATION_SUBHEADER_TEXT" = "Podaj dane karty. B&A nie gromadzi ani nie przechowuje Twoich danych osobowych.";
 
 /* Title for the 'censorship circumvention country' view. */
 "CENSORSHIP_CIRCUMVENTION_COUNTRY_VIEW_TITLE" = "Wybierz kraj";
@@ -1568,7 +1568,7 @@
 "CHOOSE_BACKUP_PLAN_SUBSCRIBE_PAID_BUTTON_TEXT" = "Subskrybuj za %1$@/mies.";
 
 /* Subtitle for a view allowing users to choose a Backup plan. */
-"CHOOSE_BACKUP_PLAN_SUBTITLE" = "Wszystkie kopie zapasowe są szyfrowane metodą end-to-end. Signal jest organizacją non profit, a opłata za tworzenie kopii zapasowych to wsparcie w realizacji naszej misji.";
+"CHOOSE_BACKUP_PLAN_SUBTITLE" = "Wszystkie kopie zapasowe są szyfrowane metodą end-to-end. B&A jest organizacją non profit, a opłata za tworzenie kopii zapasowych to wsparcie w realizacji naszej misji.";
 
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "Wybierz tryb tworzenia kopii zapasowych";
@@ -1580,7 +1580,7 @@
 "COMPARE_SAFETY_NUMBER_ACTION" = "Porównaj ze schowkiem";
 
 /* Accessibility hint describing what you can do with the compose button */
-"COMPOSE_BUTTON_HINT" = "Wybierz lub wyszukaj użytkownika aplikacji Signal, aby utworzyć czat.";
+"COMPOSE_BUTTON_HINT" = "Wybierz lub wyszukaj użytkownika aplikacji B&A, aby utworzyć czat.";
 
 /* Accessibility label from compose button. */
 "COMPOSE_BUTTON_LABEL" = "Utwórz wiadomość";
@@ -1607,13 +1607,13 @@
 "COMPOSE_SCREEN_LIMITED_CONTACTS_CTA" = "Zarządzaj";
 
 /* Multi-line label explaining why compose-screen contact picker is empty. */
-"COMPOSE_SCREEN_LIMITED_CONTACTS_PERMISSION" = "Signal ma ograniczony dostęp do kontaktów systemowych";
+"COMPOSE_SCREEN_LIMITED_CONTACTS_PERMISSION" = "B&A ma ograniczony dostęp do kontaktów systemowych";
 
 /* Button to open settings from an empty compose-screen contact picker. */
 "COMPOSE_SCREEN_MISSING_CONTACTS_CTA" = "Otwórz ustawienia";
 
 /* Multi-line label explaining why compose-screen contact picker is empty. */
-"COMPOSE_SCREEN_MISSING_CONTACTS_PERMISSION" = "Aby sprawdzić, kto z Twoich kontaktów korzysta już z aplikacji Signal, zezwól na dostęp do kontaktów w ustawieniach swojego urządzenia z iOS.";
+"COMPOSE_SCREEN_MISSING_CONTACTS_PERMISSION" = "Aby sprawdzić, kto z Twoich kontaktów korzysta już z aplikacji B&A, zezwól na dostęp do kontaktów w ustawieniach swojego urządzenia z iOS.";
 
 /* Configure reactions title text */
 "CONFIGURE_REACTIONS" = "Skonfiguruj reakcje";
@@ -1655,10 +1655,10 @@
 "CONTACT_ABOUT_SHEET_PROFILE_NAMES_EDUCATION" = "Imiona i nazwiska w profilach nie są weryfikowane";
 
 /* Message for a tooltip that appears above a parenthesized name for another user, indicating that that name is the name the other user set for themself. Embeds {{name}} */
-"CONTACT_ABOUT_SHEET_SECONDARY_NAME_TOOLTIP_MESSAGE" = "%1$@ to imię, które ta osoba podała w swoim profilu Signal.";
+"CONTACT_ABOUT_SHEET_SECONDARY_NAME_TOOLTIP_MESSAGE" = "%1$@ to imię, które ta osoba podała w swoim profilu B&A.";
 
 /* A label indicating a user is a signal connection. */
-"CONTACT_ABOUT_SHEET_SIGNAL_CONNECTION_LABEL" = "Kontakt Signal";
+"CONTACT_ABOUT_SHEET_SIGNAL_CONNECTION_LABEL" = "Kontakt B&A";
 
 /* The title for a contact 'about' sheet. */
 "CONTACT_ABOUT_SHEET_TITLE" = "O mnie";
@@ -1700,7 +1700,7 @@
 "CONTACT_NOTE_TITLE" = "Notatka";
 
 /* Body for contact permission action sheet */
-"CONTACT_PERMISSION_ACTION_SHEET_2_BODY" = "Aby znaleźć w aplikacji Signal znajome osoby:";
+"CONTACT_PERMISSION_ACTION_SHEET_2_BODY" = "Aby znaleźć w aplikacji B&A znajome osoby:";
 
 /* First step for contact permission action sheet */
 "CONTACT_PERMISSION_ACTION_SHEET_2_STEP_ONE" = "Dotknij opcji „Przejdź do ustawień” poniżej";
@@ -1733,10 +1733,10 @@
 "CONTACT_PERMISSION_REMINDER_MEGAPHONE_ACTION" = "Zezwól na dostęp";
 
 /* Body for contact permission reminder megaphone */
-"CONTACT_PERMISSION_REMINDER_MEGAPHONE_BODY" = "Zezwól na dostęp do kontaktów, aby wyszukiwać je w aplikacji Signal.";
+"CONTACT_PERMISSION_REMINDER_MEGAPHONE_BODY" = "Zezwól na dostęp do kontaktów, aby wyszukiwać je w aplikacji B&A.";
 
 /* Title for contact permission reminder megaphone */
-"CONTACT_PERMISSION_REMINDER_MEGAPHONE_TITLE" = "Twoje kontakty w aplikacji Signal";
+"CONTACT_PERMISSION_REMINDER_MEGAPHONE_TITLE" = "Twoje kontakty w aplikacji B&A";
 
 /* Label for a contact's phone number. */
 "CONTACT_PHONE" = "Numer telefonu";
@@ -1760,7 +1760,7 @@
 "CONTACT_SHARE_INVALID_CONTACT" = "Nieprawidłowy kontakt.";
 
 /* Alert body when contacts disabled while trying to share a contact. */
-"CONTACT_SHARING_NO_ACCESS_BODY" = "Signal potrzebuje dostępu do Twoich kontaktów. Przejdź do ustawień urządzenia z iOS i włącz dostęp do kontaktów. Twoje kontakty są szyfrowane i nieczytelne dla usługi Signal.";
+"CONTACT_SHARING_NO_ACCESS_BODY" = "B&A potrzebuje dostępu do Twoich kontaktów. Przejdź do ustawień urządzenia z iOS i włącz dostęp do kontaktów. Twoje kontakty są szyfrowane i nieczytelne dla usługi B&A.";
 
 /* Alert title when contacts disabled while trying to share a contact. */
 "CONTACT_SHARING_NO_ACCESS_TITLE" = "Zezwól na dostęp do kontaktów";
@@ -1943,7 +1943,7 @@
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "Wybierz, kto może edytować nazwę, zdjęcie i opis tej grupy oraz ustalać czas, po którym wiadomości będą znikać.";
 
 /* Footer string for a contact's badges in conversation settings */
-"CONVERSATION_SETTINGS_BADGES_FOOTER" = "Wspieraj Signal, a też otrzymasz taką odznakę w swoim profilu. Stuknij odznakę, aby dowiedzieć się więcej.";
+"CONVERSATION_SETTINGS_BADGES_FOOTER" = "Wspieraj B&A, a też otrzymasz taką odznakę w swoim profilu. Stuknij odznakę, aby dowiedzieć się więcej.";
 
 /* Header title for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_HEADER" = "Odznaki";
@@ -2146,10 +2146,10 @@
 /* Label for button that enables you to make a new call link. */
 "CREATE_CALL_LINK_LABEL" = "Utwórz link do połączenia";
 
-/* Body text for an interactive in-app prompt to set up a Signal username. */
+/* Body text for an interactive in-app prompt to set up a B&A username. */
 "CREATE_USERNAME_MEGAPHONE_BODY" = "Ukrywamy numery telefonu i wprowadzamy opcjonalną nazwę użytkownika oraz linki.";
 
-/* Title for an interactive in-app prompt to set up a Signal username. */
+/* Title for an interactive in-app prompt to set up a B&A username. */
 "CREATE_USERNAME_MEGAPHONE_TITLE" = "Nawiązuj kontakt w nowy sposób";
 
 /* Credit/debit card donation error for decline failures where the card has expired. */
@@ -2201,7 +2201,7 @@
 "DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "Uruchom";
 
 /* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "Pomoże nam to w rozwiązaniu problemu i zajmie kilka minut. Możesz na ten czas zamknąć aplikację Signal, ale wróć tutaj, aby przesłać swoje dzienniki.";
+"DATABASE_INTEGRITY_CHECK_MESSAGE" = "Pomoże nam to w rozwiązaniu problemu i zajmie kilka minut. Możesz na ten czas zamknąć aplikację B&A, ale wróć tutaj, aby przesłać swoje dzienniki.";
 
 /* Button to skip database integrity check step */
 "DATABASE_INTEGRITY_CHECK_SKIP" = "Pomiń";
@@ -2215,20 +2215,20 @@
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "Problem z przywracaniem danych";
 
-/* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
+/* On the database recovery screen, if the user's device storage is nearly full, B&A will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
 "DATABASE_RECOVERY_MORE_STORAGE_SPACE_NEEDED_CONTINUE_ANYWAY" = "Mimo to kontynuuj";
 
-/* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the line of text on that screen. Embeds an amount like \"2GB\". */
+/* On the database recovery screen, if the user's device storage is nearly full, B&A will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the line of text on that screen. Embeds an amount like \"2GB\". */
 "DATABASE_RECOVERY_MORE_STORAGE_SPACE_NEEDED_DESCRIPTION" = "Aby przywracanie danych się udało, zalecamy co najmniej %1$@ wolnego miejsca na urządzeniu.";
 
-/* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the title of that screen. */
+/* On the database recovery screen, if the user's device storage is nearly full, B&A will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the title of that screen. */
 "DATABASE_RECOVERY_MORE_STORAGE_SPACE_NEEDED_TITLE" = "Potrzeba więcej miejsca na urządzeniu";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) This is the description on the screen where we show an error message. */
-"DATABASE_RECOVERY_RECOVERY_FAILED_DESCRIPTION" = "Nie udało się przywrócić historii wiadomości. Aby nadal korzystać z aplikacji Signal, zainstaluj ją ponownie. Wyślij nam dzienniki debugowania, abyśmy mogli przeanalizować, co poszło nie tak.";
+"DATABASE_RECOVERY_RECOVERY_FAILED_DESCRIPTION" = "Nie udało się przywrócić historii wiadomości. Aby nadal korzystać z aplikacji B&A, zainstaluj ją ponownie. Wyślij nam dzienniki debugowania, abyśmy mogli przeanalizować, co poszło nie tak.";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) This button lets them delete all of their data. */
-"DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_BUTTON" = "Zresetuj Signal";
+"DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_BUTTON" = "Zresetuj B&A";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) If they want to delete the app and restart, they will be presented with a confirmation dialog. This is the final button they will press before their data is reset. */
 "DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_CONFIRMATION_CONFIRM" = "Zresetuj";
@@ -2237,7 +2237,7 @@
 "DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_CONFIRMATION_DESCRIPTION" = "Dane konta, profil i wszystkie wiadomości zostaną usunięte. Po zakończeniu tego procesu aplikacja zostanie zamknięta.";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) If they want to delete the app and restart, they will be presented with a confirmation dialog. This is the title of that dialog. */
-"DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_CONFIRMATION_TITLE" = "Zresetuj Signal";
+"DATABASE_RECOVERY_RECOVERY_FAILED_RESET_APP_CONFIRMATION_TITLE" = "Zresetuj B&A";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) They were asked to submit a debug log. This is the button that submits this log. */
 "DATABASE_RECOVERY_RECOVERY_FAILED_SUBMIT_DEBUG_LOG_BUTTON" = "Wyślij dzienniki debugowania";
@@ -2312,7 +2312,7 @@
 "DELETE_ACCOUNT_CONFIRMATION_ACTION_SHEEET_ACTION" = "Usuń konto";
 
 /* Title for the action sheet message of the 'delete account confirmation' view controller. */
-"DELETE_ACCOUNT_CONFIRMATION_ACTION_SHEEET_MESSAGE" = "Spowoduje to usunięcie Twojego konta Signal i zresetowanie aplikacji. Po zakończeniu tego procesu zostanie ona zamknięta.";
+"DELETE_ACCOUNT_CONFIRMATION_ACTION_SHEEET_MESSAGE" = "Spowoduje to usunięcie Twojego konta B&A i zresetowanie aplikacji. Po zakończeniu tego procesu zostanie ona zamknięta.";
 
 /* Title for the action sheet confirmation title of the 'delete account confirmation' view controller. */
 "DELETE_ACCOUNT_CONFIRMATION_ACTION_SHEEET_TITLE" = "Czy na pewno chcesz usunąć konto?";
@@ -2336,7 +2336,7 @@
 "DELETE_ACCOUNT_CONFIRMATION_PHONE_NUMBER_TITLE" = "Numer telefonu";
 
 /* Section header */
-"DELETE_ACCOUNT_CONFIRMATION_SECTION_TITLE" = "Potwierdź swój numer Signal";
+"DELETE_ACCOUNT_CONFIRMATION_SECTION_TITLE" = "Potwierdź swój numer B&A";
 
 /* Title for the 'delete account' confirmation view. */
 "DELETE_ACCOUNT_CONFIRMATION_TITLE" = "Usuń konto";
@@ -2353,7 +2353,7 @@
 /* 'Delete' button label on the delete contact confirmation action sheet */
 "DELETE_CONTACT_ACTION_SHEET_BUTTON" = "Usuń";
 
-/* An explanation of what happens in Signal when you remove a system contact. */
+/* An explanation of what happens in B&A when you remove a system contact. */
 "DELETE_CONTACT_ACTION_SHEET_EXPLANATION" = "Ta osoba zostanie usunięta z kontaktów na Twoim telefonie. Nie wyświetli się już podczas wyszukiwania. Jeśli w przyszłości wyśle Ci wiadomość, otrzymasz prośbę o kontakt.";
 
 /* Title of action sheet confirming the user wants to delete a system contact. */
@@ -2387,18 +2387,18 @@
 "DELETED_USER" = "Konto usunięte";
 
 /* Notification warning the user that they have been de-registered. */
-"DEREGISTRATION_NOTIFICATION" = "Wylogowano z usługi Signal na tym urządzeniu.";
+"DEREGISTRATION_NOTIFICATION" = "Wylogowano z usługi B&A na tym urządzeniu.";
 
 /* Label for button that lets users re-register using the same phone number. */
 "DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "Zarejestruj ten numer ponownie";
 
 /* Label warning the user that they have been de-registered. */
-"DEREGISTRATION_WARNING" = "To urządzenie nie jest już zarejestrowane. Możliwe, że ten sam numer telefonu został przez Ciebie zarejestrowany w aplikacji Signal na innym urządzeniu.";
+"DEREGISTRATION_WARNING" = "To urządzenie nie jest już zarejestrowane. Możliwe, że ten sam numer telefonu został przez Ciebie zarejestrowany w aplikacji B&A na innym urządzeniu.";
 
 /* If the user has been deregistered, they'll see a warning. This is This is the call to action on that warning. */
 "DEREGISTRATION_WARNING_ACTION_TITLE" = "Zarejestruj urządzenie ponownie";
 
-/* {{Short Date}} when device last communicated with Signal Server. */
+/* {{Short Date}} when device last communicated with B&A Server. */
 "DEVICE_LAST_ACTIVE_AT_LABEL" = "Ostatnia aktywność %1$@";
 
 /* {{Short Date}} when device was linked. */
@@ -2462,7 +2462,7 @@
 "DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "Wyświetl jako mniejszy";
 
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
-"DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "Nie udało się przenieść. Upewnij się, że aplikacja Signal jest uruchomiona na obu urządzeniach, i spróbuj ponownie.";
+"DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "Nie udało się przenieść. Upewnij się, że aplikacja B&A jest uruchomiona na obu urządzeniach, i spróbuj ponownie.";
 
 /* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "Nie udało się zweryfikować Twojego nowego urządzenia. Spróbuj ponownie";
@@ -2480,13 +2480,13 @@
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "Na urządzeniu nie ma wystarczająco dużo miejsca, aby dokończyć przenoszenie";
 
 /* An error indicating the user must update their device before trying to transfer. */
-"DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "Zaktualizuj Signal do najnowszej wersji i spróbuj ponownie";
+"DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "Zaktualizuj B&A do najnowszej wersji i spróbuj ponownie";
 
 /* Button shown to expand a QR code and view it fullscreen. */
 "DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "Wyświetl jako większy";
 
 /* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "Przenieś swoje konto Signal na nowe urządzenie z systemem iOS. Upewnij się, że jest ono włączone i znajduje się w pobliżu.";
+"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "Przenieś swoje konto B&A na nowe urządzenie z systemem iOS. Upewnij się, że jest ono włączone i znajduje się w pobliżu.";
 
 /* The title on the acttion sheet prompting the user if they want to transfer their device. */
 "DEVICE_TRANSFER_PROMPT_TITLE" = "Przenieś konto";
@@ -2504,7 +2504,7 @@
 "DEVICE_TRANSFER_QRCODE_TITLE" = "Zeskanuj kod QR";
 
 /* The explanation on the view that shows receiving progress */
-"DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "Urządzenia muszą znajdować się blisko siebie. Nie wyłączaj żadnego z nich ani nie zamykaj aplikacji Signal. Przenoszenie jest szyfrowane metodą end-to-end.";
+"DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "Urządzenia muszą znajdować się blisko siebie. Nie wyłączaj żadnego z nich ani nie zamykaj aplikacji B&A. Przenoszenie jest szyfrowane metodą end-to-end.";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "Odbieranie danych";
@@ -2519,7 +2519,7 @@
 "DEVICE_TRANSFER_SCANNING_TITLE" = "Przytrzymaj nowe urządzenie przed obiektywem";
 
 /* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "Urządzenia muszą znajdować się blisko siebie. Nie wyłączaj żadnego z nich ani nie zamykaj aplikacji Signal.";
+"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "Urządzenia muszą znajdować się blisko siebie. Nie wyłączaj żadnego z nich ani nie zamykaj aplikacji B&A.";
 
 /* The title on the action sheet that shows transfer progress */
 "DEVICE_TRANSFER_TRANSFERRING_TITLE" = "Przenoszenie danych";
@@ -2587,10 +2587,10 @@
 /* Section title for the 'domain fronting country' view. */
 "DOMAIN_FRONTING_COUNTRY_VIEW_SECTION_HEADER" = "Lokalizacja obchodzenia cenzury";
 
-/* Users can donate to Signal with a credit or debit card. This is the heading on that screen, telling them how much they'll donate. Embeds {{formatted amount of money}}, such as \"$20\". */
+/* Users can donate to B&A with a credit or debit card. This is the heading on that screen, telling them how much they'll donate. Embeds {{formatted amount of money}}, such as \"$20\". */
 "DONATE_BUTTON" = "Wpłać %1$@";
 
-/* Users can donate to Signal with a credit or debit card. This is the heading on that screen, telling them how much they'll donate every month. Embeds {{formatted amount of money}}, such as \"$20\". */
+/* Users can donate to B&A with a credit or debit card. This is the heading on that screen, telling them how much they'll donate every month. Embeds {{formatted amount of money}}, such as \"$20\". */
 "DONATE_BUTTON_MONTHLY" = "Wpłacaj %1$@ co miesiąc";
 
 /* When users make donations, they can choose which payment method they want to use. This is the text on the button that lets them choose to pay with bank transfer. */
@@ -2609,13 +2609,13 @@
 "DONATE_CHOOSE_PAYMENT_METHOD_SHEET_SUBTITLE_FOR_ONE_TIME_DONATION" = "Zdobądź odznakę %1$@ na 30 dni";
 
 /* When users make donations on a friend's behalf, they see a sheet that lets them pick a payment method. This is the title on that sheet. Embeds {{amount of money}}, such as \"$5\". */
-"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_DONATION_ON_BEHALF_OF_A_FRIEND" = "%1$@ dla aplikacji Signal";
+"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_DONATION_ON_BEHALF_OF_A_FRIEND" = "%1$@ dla aplikacji B&A";
 
 /* When users make monthly donations, they see a sheet that lets them pick a payment method. This is the title on that sheet. Embeds {{amount of money per month}}, such as \"$5/month\". */
-"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_MONTHLY_DONATION" = "Wpłać %1$@ i wesprzyj Signal";
+"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_MONTHLY_DONATION" = "Wpłać %1$@ i wesprzyj B&A";
 
 /* When users make one-time donations, they see a sheet that lets them pick a payment method. This is the title on that sheet. Embeds {{amount of money}}, such as \"$5\". */
-"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_ONE_TIME_DONATION" = "Wpłać %1$@ i wesprzyj Signal";
+"DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_ONE_TIME_DONATION" = "Wpłać %1$@ i wesprzyj B&A";
 
 /* Users can donate on a friend's behalf and can optionally add a message. This is tells users about that optional message. */
 "DONATE_ON_BEHALF_OF_A_FRIEND_ADDITIONAL_MESSAGE_INFO" = "Osoba ta otrzyma powiadomienie o darowiźnie w wiadomości prywatnej. Poniżej możesz dodać coś od siebie.";
@@ -2647,10 +2647,10 @@
 /* Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently processing via non-bank payment. */
 "DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_UPDATING_YOUR_SUBSCRIPTION" = "Twoja darowizna jest jeszcze przetwarzana. W zależności od połączenia z internetem może to potrwać kilka minut. Zanim zmienisz swoją darowiznę cykliczną, poczekaj, aż ta płatność zostanie zrealizowana.";
 
-/* If the user tries to donate to Signal but no amount is selected, this error message is shown. */
+/* If the user tries to donate to B&A but no amount is selected, this error message is shown. */
 "DONATE_SCREEN_ERROR_NO_AMOUNT_SELECTED" = "Wybierz kwotę darowizny.";
 
-/* If the user tries to donate to Signal but they've entered an amount that's too small, this error message is shown. Embeds {{currency string}}, such as \"$5\". */
+/* If the user tries to donate to B&A but they've entered an amount that's too small, this error message is shown. Embeds {{currency string}}, such as \"$5\". */
 "DONATE_SCREEN_ERROR_SELECT_A_LARGER_AMOUNT_FORMAT" = "Minimalna kwota darowizny to %1$@.";
 
 /* Title for an alert presented when the user tries to make a donation, but already has a donation that is currently awaiting authorization. */
@@ -2726,7 +2726,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_BADGE_REDEEMED" = "Odebrano";
 
 /* Users can donate on behalf of a friend, and the friend will receive a badge. This is a short paragraph on the screen where users choose the badge their friend will receive. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_CHOOSE_BADGE_DESCRIPTION" = "Wesprzyj Signal i wpłać darowiznę w imieniu innej osoby, np. przyjaciółki czy kogoś z rodziny, korzystającej z naszej aplikacji. Osoba ta otrzyma od nas odznakę, którą może wyświetlać w swoim profilu.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_CHOOSE_BADGE_DESCRIPTION" = "Wesprzyj B&A i wpłać darowiznę w imieniu innej osoby, np. przyjaciółki czy kogoś z rodziny, korzystającej z naszej aplikacji. Osoba ta otrzyma od nas odznakę, którą może wyświetlać w swoim profilu.";
 
 /* Users can donate on behalf of a friend, and the friend will receive a badge. This is the title on the screen where users choose the badge their friend will receive. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_CHOOSE_BADGE_TITLE" = "Wpłać darowiznę w imieniu znajomego";
@@ -2762,7 +2762,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_PREVIEW_OUTGOING" = "✨ %1$@ zostaje dzięki Tobie darczyńcą";
 
 /* You received a donation from a friend. This is the title of that message in the chat. Embeds {{short contact name}}. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_RECEIVED_TITLE_FORMAT" = "%1$@ wpłaca w Twoim imieniu darowiznę na rzecz aplikacji Signal";
+"DONATION_ON_BEHALF_OF_A_FRIEND_RECEIVED_TITLE_FORMAT" = "%1$@ wpłaca w Twoim imieniu darowiznę na rzecz aplikacji B&A";
 
 /* Users can donate on a friend's behalf. This is the error message that appears if the try to do this, but the recipient is blocked. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_RECIPIENT_IS_BLOCKED_ERROR_BODY" = "Nie możesz wpłacić darowizny w imieniu tej osoby, ponieważ została ona przez Ciebie zablokowana.";
@@ -2786,7 +2786,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_SENT_TITLE_FORMAT" = "%1$@, wpłacam w Twoim imieniu darowiznę";
 
 /* When you donate on behalf of a friend, a thank-you sheet will appear. This is the text on that sheet. Embeds {{recipient name}}. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_THANKS_BODY_FORMAT" = "Twoja darowizna na rzecz aplikacji Signal została wpłacona w imieniu wybranej osoby. %1$@ może się teraz pochwalić wsparciem w swoim profilu.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_THANKS_BODY_FORMAT" = "Twoja darowizna na rzecz aplikacji B&A została wpłacona w imieniu wybranej osoby. %1$@ może się teraz pochwalić wsparciem w swoim profilu.";
 
 /* When you donate on behalf of a friend, a thank-you sheet will appear. This is the title on that sheet. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_THANKS_TITLE" = "Dziękujemy za Twoje wsparcie!";
@@ -2795,19 +2795,19 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_VIEW" = "Wyświetl";
 
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ wpłaca w Twoim imieniu darowiznę na rzecz aplikacji Signal. Pochwal się okazanym wsparciem w swoim profilu.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ wpłaca w Twoim imieniu darowiznę na rzecz aplikacji B&A. Pochwal się okazanym wsparciem w swoim profilu.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
+/* There is a screen where users can read more about their donation to B&A. This is the 1st paragraph of that screen. */
 "DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "To prywatny komunikator. Bez reklam, bez śledzenia, bez kompromisów.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "Signal istnieje dzięki darowiznom, dlatego Twoja prywatność to nasz priorytet. Tworzymy aplikację Signal dla Ciebie, a nie dla zysku czy w celu pozyskania Twoich danych.";
+/* There is a screen where users can read more about their donation to B&A. This is the 2nd paragraph of that screen. */
+"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "B&A istnieje dzięki darowiznom, dlatego Twoja prywatność to nasz priorytet. Tworzymy aplikację B&A dla Ciebie, a nie dla zysku czy w celu pozyskania Twoich danych.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "Jeśli możesz, wesprzyj Signal darowizną. To dzięki osobom takim jak Ty nasza aplikacja jest przyjazną przestrzenią – godną zaufania i dostępną dla wszystkich.";
+/* There is a screen where users can read more about their donation to B&A. This is the 3rd paragraph of that screen. */
+"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "Jeśli możesz, wesprzyj B&A darowizną. To dzięki osobom takim jak Ty nasza aplikacja jest przyjazną przestrzenią – godną zaufania i dostępną dla wszystkich.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "Signal jest inny";
+/* There is a screen where users can read more about their donation to B&A. This is the title of that screen. */
+"DONATION_READ_MORE_SCREEN_TITLE" = "B&A jest inny";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "Kwota";
@@ -2822,7 +2822,7 @@
 "DONATION_RECEIPT_EXPORT_RECEIPT_BUTTON" = "Udostępnij potwierdzenie";
 
 /* Footer text at the bottom of donation receipts */
-"DONATION_RECEIPT_FOOTER" = "Dziękujemy za wsparcie aplikacji Signal. Twoja darowizna wspomaga rozwój otwartoźródłowej technologii, która zapewnia prywatność, chroni wolność słowa i umożliwia bezpieczną komunikację milionom osób na całym świecie. Jeśli mieszkasz w Stanach Zjednoczonych, zachowaj to potwierdzenie, aby uwzględnić wpłatę w zeznaniu podatkowym. Signal Technology Foundation jest organizacją non profit zwolnioną z podatku w USA na podstawie zapisu 501c3 Internal Revenue Code (Kodeksu Podatkowego). Nasz federalny numer identyfikacji podatkowej to 82-4506840.";
+"DONATION_RECEIPT_FOOTER" = "Dziękujemy za wsparcie aplikacji B&A. Twoja darowizna wspomaga rozwój otwartoźródłowej technologii, która zapewnia prywatność, chroni wolność słowa i umożliwia bezpieczną komunikację milionom osób na całym świecie. Jeśli mieszkasz w Stanach Zjednoczonych, zachowaj to potwierdzenie, aby uwzględnić wpłatę w zeznaniu podatkowym. B&A Technology Foundation jest organizacją non profit zwolnioną z podatku w USA na podstawie zapisu 501c3 Internal Revenue Code (Kodeksu Podatkowego). Nasz federalny numer identyfikacji podatkowej to 82-4506840.";
 
 /* Title for receipts for donations given on a friend's behalf */
 "DONATION_RECEIPT_FOR_DONATION_ON_BEHALF_OF_A_FRIEND" = "Darowizna w imieniu znajomego";
@@ -2843,7 +2843,7 @@
 "DONATION_RECEIPTS" = "Potwierdzenia darowizn";
 
 /* Text at the bottom of the donation receipts list, telling users that receipts might not be available */
-"DONATION_RECEIPTS_MIGHT_BE_MISSING_IF_YOU_REINSTALLED" = "Jeśli aplikacja Signal została zainstalowana ponownie, wcześniejsze potwierdzenia darowizn nie są dostępne.";
+"DONATION_RECEIPTS_MIGHT_BE_MISSING_IF_YOU_REINSTALLED" = "Jeśli aplikacja B&A została zainstalowana ponownie, wcześniejsze potwierdzenia darowizn nie są dostępne.";
 
 /* Error message displayed if something goes wrong with 3DSecure/iDEAL payment authorization.  This will be encountered if the user cancels the webview before authrizing the payment. */
 "DONATION_REDIRECT_ERROR_CANCELLED_MESSAGE" = "Płatność anulowana. Spróbuj ponownie.";
@@ -2858,7 +2858,7 @@
 "DONATION_SCREEN_DONATE_BUTTON" = "Wpłać darowiznę";
 
 /* On donation screens, a small amount of information text is shown. This is the subtitle for that text. */
-"DONATION_SCREENS_HEADER_DESCRIPTION" = "Prywatny komunikator finansowany przez Ciebie. Bez reklam, bez śledzenia, bez kompromisów. Wpłać darowiznę i wesprzyj Signal.";
+"DONATION_SCREENS_HEADER_DESCRIPTION" = "Prywatny komunikator finansowany przez Ciebie. Bez reklam, bez śledzenia, bez kompromisów. Wpłać darowiznę i wesprzyj B&A.";
 
 /* On donation screens, a small amount of information text is shown. Users can click this link to learn more information. */
 "DONATION_SCREENS_HEADER_READ_MORE" = "Czytaj dalej";
@@ -2935,8 +2935,8 @@
 /* Title for the \"donate for a friend\" button on the donation view. */
 "DONATION_VIEW_DONATE_ON_BEHALF_OF_A_FRIEND" = "Wpłać darowiznę w imieniu znajomego";
 
-/* Text describing to the user that they're going to pay a donation to Signal */
-"DONATION_VIEW_DONATION_TO_SIGNAL" = "Darowizna na rzecz aplikacji Signal";
+/* Text describing to the user that they're going to pay a donation to B&A */
+"DONATION_VIEW_DONATION_TO_SIGNAL" = "Darowizna na rzecz aplikacji B&A";
 
 /* Title for the 'Donor FAQ' button on the donation screen */
 "DONATION_VIEW_DONOR_FAQ" = "Częste pytania darczyńców";
@@ -2947,8 +2947,8 @@
 /* Title for the 'Badges' button on the donation screen */
 "DONATION_VIEW_MANAGE_BADGES" = "Odznaki";
 
-/* Text describing to the user that they're going to pay a monthly donation to Signal */
-"DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "Comiesięczna darowizna na rzecz aplikacji Signal";
+/* Text describing to the user that they're going to pay a monthly donation to B&A */
+"DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "Comiesięczna darowizna na rzecz aplikacji B&A";
 
 /* Title for the 'more' section on the donation screen */
 "DONATION_VIEW_MORE_SECTION_TITLE" = "Więcej";
@@ -2959,8 +2959,8 @@
 /* Title for the \"other ways to donate\" section on the donation view. */
 "DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Inne metody przekazywania darowizny";
 
-/* Title on the 'Donate to Signal' screen */
-"DONATION_VIEW_TITLE" = "Wesprzyj Signal darowizną";
+/* Title on the 'Donate to B&A' screen */
+"DONATION_VIEW_TITLE" = "Wesprzyj B&A darowizną";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "Waluta";
@@ -2971,17 +2971,17 @@
 /* Title for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_TITLE" = "Aby edytować, dotknij dwa razy";
 
-/* Alert body for when the user has just tried to edit a contacts after declining to give Signal contacts permissions */
+/* Alert body for when the user has just tried to edit a contacts after declining to give B&A contacts permissions */
 "EDIT_CONTACT_WITHOUT_CONTACTS_PERMISSION_ALERT_BODY" = "Możesz przyznać dostęp w ustawieniach swojego urządzenia z iOS.";
 
-/* Alert title for when the user has just tried to edit a contacts after declining to give Signal contacts permissions */
-"EDIT_CONTACT_WITHOUT_CONTACTS_PERMISSION_ALERT_TITLE" = "Aby edytować informacje o kontakcie, Signal potrzebuje dostępu do kontaktów";
+/* Alert title for when the user has just tried to edit a contacts after declining to give B&A contacts permissions */
+"EDIT_CONTACT_WITHOUT_CONTACTS_PERMISSION_ALERT_TITLE" = "Aby edytować informacje o kontakcie, B&A potrzebuje dostępu do kontaktów";
 
 /* The navbar title for the 'update group' view. */
 "EDIT_GROUP_DEFAULT_TITLE" = "Edytuj grupę";
 
 /* Error message indicating the a user can't be added to a group. */
-"EDIT_GROUP_ERROR_CANNOT_ADD_MEMBER" = "Aby można było dodać do grupy tę osobę, musi ona zaktualizować aplikację Signal.";
+"EDIT_GROUP_ERROR_CANNOT_ADD_MEMBER" = "Aby można było dodać do grupy tę osobę, musi ona zaktualizować aplikację B&A.";
 
 /* Error message indicating that an avatar image is invalid and cannot be used. */
 "EDIT_GROUP_ERROR_INVALID_AVATAR" = "Nieprawidłowe zdjęcie.";
@@ -3007,11 +3007,11 @@
 /* Edit failed for an unexpected reason */
 "EDIT_MESSAGE_SEND_MESSAGE_UNKNOWN_ERROR" = "EDIT_MESSAGE_SEND_MESSAGE_UNKNOWN_ERROR";
 
-/* body of email sent to contacts when inviting to install Signal. Embeds {{link to install Signal}} and {{link to the Signal home page}} */
-"EMAIL_INVITE_BODY" = "Cześć,\n\nzależy mi na prywatności, więc do komunikacji na iPhonie używam aplikacji Signal. Fajnie będzie, jeśli też ją zainstalujesz – wtedy możemy mieć pewność, że nikt postronny nie czyta ani nie słucha naszych rozmów.\n\nSignal jest dostępny na iPhone'a, Androida oraz komputery. Aplikację możesz pobrać tutaj: %1$@\n\nSignal działa tak, jak każdy inny komunikator. Umożliwia wysyłanie zdjęć i filmów, dzwonienie, a także tworzenie czatów grupowych. Najlepsze jest jednak to, że nikt inny nie będzie mieć dostępu do naszych wiadomości, nawet osoby, które zbudowały tę aplikację!\n\nWięcej o komunikatorze Signal przeczytasz tutaj: %2$@";
+/* body of email sent to contacts when inviting to install B&A. Embeds {{link to install B&A}} and {{link to the B&A home page}} */
+"EMAIL_INVITE_BODY" = "Cześć,\n\nzależy mi na prywatności, więc do komunikacji na iPhonie używam aplikacji B&A. Fajnie będzie, jeśli też ją zainstalujesz – wtedy możemy mieć pewność, że nikt postronny nie czyta ani nie słucha naszych rozmów.\n\nB&A jest dostępny na iPhone'a, Androida oraz komputery. Aplikację możesz pobrać tutaj: %1$@\n\nB&A działa tak, jak każdy inny komunikator. Umożliwia wysyłanie zdjęć i filmów, dzwonienie, a także tworzenie czatów grupowych. Najlepsze jest jednak to, że nikt inny nie będzie mieć dostępu do naszych wiadomości, nawet osoby, które zbudowały tę aplikację!\n\nWięcej o komunikatorze B&A przeczytasz tutaj: %2$@";
 
-/* subject of email sent to contacts when inviting to install Signal */
-"EMAIL_INVITE_SUBJECT" = "Zacznij korzystać z aplikacji Signal";
+/* subject of email sent to contacts when inviting to install B&A */
+"EMAIL_INVITE_SUBJECT" = "Zacznij korzystać z aplikacji B&A";
 
 /* Description for the fallback support sheet if user cannot send email */
 "EMAIL_SIGNAL_MESSAGE" = "Na urządzeniu nie zostało skonfigurowane wysyłanie wiadomości e-mail. Aby przekazać zgłoszenie zespołowi pomocy technicznej, skonfiguruj e-mail na swoim urządzeniu lub wyślij wiadomość na adres support@signal.org";
@@ -3050,7 +3050,7 @@
 "EMOJI_CATEGORY_TRAVEL_NAME" = "Podróże i miejsca";
 
 /* Full width label displayed when attempting to compose message */
-"EMPTY_CONTACTS_LABEL_LINE1" = "Nikt spośród Twoich kontaktów nie ma aplikacji Signal.";
+"EMPTY_CONTACTS_LABEL_LINE1" = "Nikt spośród Twoich kontaktów nie ma aplikacji B&A.";
 
 /* Full width label displayed when attempting to compose message */
 "EMPTY_CONTACTS_LABEL_LINE2" = "Może kogoś zaprosisz?";
@@ -3116,7 +3116,7 @@
 "ERROR_DESCRIPTION_UNKNOWN_ERROR" = "Wystąpił nieznany błąd.";
 
 /* Error message when attempting to send message */
-"ERROR_DESCRIPTION_UNREGISTERED_RECIPIENT" = "Nie udało się wysłać wiadomości. Ta osoba nie korzysta już z aplikacji Signal.";
+"ERROR_DESCRIPTION_UNREGISTERED_RECIPIENT" = "Nie udało się wysłać wiadomości. Ta osoba nie korzysta już z aplikacji B&A.";
 
 /* Error message indicating that attachment upload(s) failed. */
 "ERROR_MESSAGE_ATTACHMENT_UPLOAD_FAILED" = "Nie udało się przesłać załącznika.";
@@ -3161,10 +3161,10 @@
 "ERROR_NETWORK_FAILURE" = "Błąd sieci";
 
 /* Format string for an error alert notification message. Embeds {{ error string }} */
-"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "Aby pomóc nam ulepszyć Signal, wyślij zgłoszenie o tym błędzie wraz z dziennikami debugowania z Twojego urządzenia na adres support@signal.org: %1$@";
+"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "Aby pomóc nam ulepszyć B&A, wyślij zgłoszenie o tym błędzie wraz z dziennikami debugowania z Twojego urządzenia na adres support@signal.org: %1$@";
 
 /* Format string for an error alert notification title. */
-"ERROR_NOTIFICATION_TITLE" = "Signal Beta: wystąpił błąd";
+"ERROR_NOTIFICATION_TITLE" = "B&A Beta: wystąpił błąd";
 
 /* Error indicating a send failure due to a delinked application. */
 "ERROR_SENDING_DELINKED" = "Twoje urządzenie nie jest już połączone z aplikacją. Aby wysyłać wiadomości, połącz urządzenie ponownie.";
@@ -3173,7 +3173,7 @@
 "ERROR_SENDING_DEREGISTERED" = "Twoje urządzenie nie jest już zarejestrowane. Aby wysyłać wiadomości, zarejestruj urządzenie ponownie.";
 
 /* Error indicating a send failure due to an expired application. */
-"ERROR_SENDING_EXPIRED" = "Ta wersja aplikacji Signal została wycofana. Aby wysyłać wiadomości, zaktualizuj aplikację.";
+"ERROR_SENDING_EXPIRED" = "Ta wersja aplikacji B&A została wycofana. Aby wysyłać wiadomości, zaktualizuj aplikację.";
 
 /* Format string for 'unregistered user' error. Embeds {{the unregistered user's name or signal id}}. */
 "ERROR_UNREGISTERED_USER_FORMAT" = "Niezarejestrowany użytkownik: %1$@";
@@ -3185,19 +3185,19 @@
 "EXIT_REREGISTRATION" = "Opuść rejestrację";
 
 /* Label notifying the user that the app has expired. */
-"EXPIRATION_ERROR" = "Ta wersja Signal wygasła. Aby wysyłać i otrzymywać wiadomości, zaktualizuj aplikację.";
+"EXPIRATION_ERROR" = "Ta wersja B&A wygasła. Aby wysyłać i otrzymywać wiadomości, zaktualizuj aplikację.";
 
-/* If the user's app is too old, they'll be shown a warning asking them to upgrade. This is the text on the warning, and tapping it will open the App Store page for Signal. */
+/* If the user's app is too old, they'll be shown a warning asking them to upgrade. This is the text on the warning, and tapping it will open the App Store page for B&A. */
 "EXPIRATION_WARNING_ACTION_TITLE" = "Zaktualizuj teraz";
 
 /* Label warning the user that the app will expire soon. Embeds {{date}}. */
-"EXPIRATION_WARNING_SOON" = "Ta wersja Signal wygaśnie %1$@. Aby dalej wysyłać i otrzymywać wiadomości, zaktualizuj aplikację.";
+"EXPIRATION_WARNING_SOON" = "Ta wersja B&A wygaśnie %1$@. Aby dalej wysyłać i otrzymywać wiadomości, zaktualizuj aplikację.";
 
 /* Label warning the user that the app will expire today. */
-"EXPIRATION_WARNING_TODAY" = "Ta wersja Signal wygaśnie dzisiaj. Aby dalej wysyłać i otrzymywać wiadomości, zaktualizuj aplikację.";
+"EXPIRATION_WARNING_TODAY" = "Ta wersja B&A wygaśnie dzisiaj. Aby dalej wysyłać i otrzymywać wiadomości, zaktualizuj aplikację.";
 
 /* action sheet header when re-sending message which failed because of an invalid key signature */
-"FAILED_SENDING_BECAUSE_INVALID_KEY_SIGNATURE" = "Nie udało się wysłać wiadomości. %1$@ musi zaktualizować i otworzyć Signal.";
+"FAILED_SENDING_BECAUSE_INVALID_KEY_SIGNATURE" = "Nie udało się wysłać wiadomości. %1$@ musi zaktualizować i otworzyć B&A.";
 
 /* action sheet header when re-sending message which failed because of too many attempts */
 "FAILED_SENDING_BECAUSE_RATE_LIMIT" = "Zbyt dużo nieudanych prób dla tego kontaktu. Spróbuj ponownie później.";
@@ -3527,10 +3527,10 @@
 "GROUP_CALL_WILL_NOTIFY_TWO_PEOPLE_FORMAT" = "%1$@ i %2$@ otrzymają powiadomienie";
 
 /* Text shown before the user starts a group call if the user has enabled ringing and there is one other person in the group. Embeds {member name} */
-"GROUP_CALL_WILL_RING_ONE_PERSON_FORMAT" = "Signal zadzwoni do tej osoby: %1$@";
+"GROUP_CALL_WILL_RING_ONE_PERSON_FORMAT" = "B&A zadzwoni do tej osoby: %1$@";
 
 /* Text shown before the user starts a group call if the user has enabled ringing and there are two other people in the group. Embeds {{ %1$@ participant1, %2$@ participant2 }} */
-"GROUP_CALL_WILL_RING_TWO_PEOPLE_FORMAT" = "Signal zadzwoni do tych osób: %1$@ i %2$@";
+"GROUP_CALL_WILL_RING_TWO_PEOPLE_FORMAT" = "B&A zadzwoni do tych osób: %1$@ i %2$@";
 
 /* Text explaining that you are in the group call. */
 "GROUP_CALL_YOU_ARE_HERE" = "Uczestniczysz w połączeniu grupowym";
@@ -3739,8 +3739,8 @@
 /* Label for the 'share group link via QR code' button in the 'group link' view. */
 "GROUP_LINK_VIEW_SHARE_LINK_VIA_QR_CODE" = "Kod QR";
 
-/* Label for the 'share group link via Signal' button in the 'group link' view. */
-"GROUP_LINK_VIEW_SHARE_LINK_VIA_SIGNAL" = "Udostępnij przez Signal";
+/* Label for the 'share group link via B&A' button in the 'group link' view. */
+"GROUP_LINK_VIEW_SHARE_LINK_VIA_SIGNAL" = "Udostępnij przez B&A";
 
 /* Message for the 'share group link' action sheet in the 'group link' view. */
 "GROUP_LINK_VIEW_SHARE_SHEET_MESSAGE" = "Każdy, kto otrzyma link, może wyświetlić nazwę grupy i listę osób, które do niej należą, a także poprosić o przyjęcie do grupy. Udostępniaj link tylko zaufanym osobom.";
@@ -4105,7 +4105,7 @@
 /* Help item allowing the user to file a support request */
 "HELP_CONTACT_US" = "Skontaktuj się z nami";
 
-/* Help item that takes the user to the Signal support website */
+/* Help item that takes the user to the B&A support website */
 "HELP_SUPPORT_CENTER" = "Centrum pomocy";
 
 /* A format for the 'remove user' action sheet title. Embeds {{the removed user's name or phone number}}. */
@@ -4147,16 +4147,16 @@
 /* A prefix indicating that a message preview is a draft */
 "HOME_VIEW_DRAFT_PREFIX" = "Wersja robocza: ";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have 1 Signal contact.  Embeds {{The name of 1 of your Signal contacts}}. */
-"HOME_VIEW_FIRST_CONVERSATION_OFFER_1_CONTACT_FORMAT" = "Z aplikacji Signal korzystają już niektóre osoby z Twoich kontaktów, między innymi %1$@.";
+/* Format string for a label offering to start a new conversation with your contacts, if you have 1 B&A contact.  Embeds {{The name of 1 of your B&A contacts}}. */
+"HOME_VIEW_FIRST_CONVERSATION_OFFER_1_CONTACT_FORMAT" = "Z aplikacji B&A korzystają już niektóre osoby z Twoich kontaktów, między innymi %1$@.";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have 2 Signal contacts.  Embeds {{The names of 2 of your Signal contacts}}. */
-"HOME_VIEW_FIRST_CONVERSATION_OFFER_2_CONTACTS_FORMAT" = "Z aplikacji Signal korzystają już niektóre osoby z Twoich kontaktów, między innymi %1$@ i %2$@.";
+/* Format string for a label offering to start a new conversation with your contacts, if you have 2 B&A contacts.  Embeds {{The names of 2 of your B&A contacts}}. */
+"HOME_VIEW_FIRST_CONVERSATION_OFFER_2_CONTACTS_FORMAT" = "Z aplikacji B&A korzystają już niektóre osoby z Twoich kontaktów, między innymi %1$@ i %2$@.";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have at least 3 Signal contacts.  Embeds {{The names of 3 of your Signal contacts}}. */
-"HOME_VIEW_FIRST_CONVERSATION_OFFER_3_CONTACTS_FORMAT" = "Z aplikacji Signal korzystają już niektóre osoby z Twoich kontaktów, między innymi %1$@, %2$@ i %3$@.";
+/* Format string for a label offering to start a new conversation with your contacts, if you have at least 3 B&A contacts.  Embeds {{The names of 3 of your B&A contacts}}. */
+"HOME_VIEW_FIRST_CONVERSATION_OFFER_3_CONTACTS_FORMAT" = "Z aplikacji B&A korzystają już niektóre osoby z Twoich kontaktów, między innymi %1$@, %2$@ i %3$@.";
 
-/* A label offering to start a new conversation with your contacts, if you have no Signal contacts. */
+/* A label offering to start a new conversation with your contacts, if you have no B&A contacts. */
 "HOME_VIEW_FIRST_CONVERSATION_OFFER_NO_CONTACTS" = "Rozpocznij swój pierwszy czat tutaj.";
 
 /* Table cell subtitle label for a group the user has been added to. {Embeds inviter name} */
@@ -4238,7 +4238,7 @@
 "INACTIVE_LINKED_DEVICE_REMINDER_MEGAPHONE_TITLE" = "Nieaktywne połączone urządzenie";
 
 /* Body for an in-app megaphone about a user's inactive primary device. */
-"INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_BODY" = "Aby konto pozostało aktywne, otwórz Signal na swoim głównym urządzeniu.";
+"INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_BODY" = "Aby konto pozostało aktywne, otwórz B&A na swoim głównym urządzeniu.";
 
 /* Title for a button in an in-app megaphone about a user's inactive primary device, temporarily dismissing the megaphone. */
 "INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_GOT_IT_BUTTON" = "Rozumiem";
@@ -4247,7 +4247,7 @@
 "INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_LEARN_MORE_BUTTON" = "Dowiedz się więcej";
 
 /* Title for an in-app megaphone about a user's inactive primary device. */
-"INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_TITLE" = "Otwórz Signal na telefonie";
+"INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_TITLE" = "Otwórz B&A na telefonie";
 
 /* Label reminding the user that they are in archive mode, and that muted chats remain archived when they receive a new message. */
 "INBOX_VIEW_ARCHIVE_MODE_MUTED_CHATS_REMINDER" = "Gdy w wyciszonym zarchiwizowanym czacie pojawi się nowa wiadomość, pozostanie on w archiwum.";
@@ -4283,10 +4283,10 @@
 "INFO_MESSAGE_BLOCKED_OTHER_USER" = "Blokujesz tę osobę.";
 
 /* Indicates that a previously-removed recipient has been added back to the current user's contacts. */
-"INFO_MESSAGE_CONTACT_REINSTATED" = "Osoba została z powrotem dodana do listy Twoich kontaktów Signal.";
+"INFO_MESSAGE_CONTACT_REINSTATED" = "Osoba została z powrotem dodana do listy Twoich kontaktów B&A.";
 
 /* Indicates that the recipient has been removed from the current user's contacts and that messaging them will re-add them. */
-"INFO_MESSAGE_CONTACT_REMOVED" = "Ta osoba została wcześniej usunięta z listy Twoich kontaktów Signal. Jeśli wyślesz do tej osoby wiadomość, trafi ona z powrotem na listę.";
+"INFO_MESSAGE_CONTACT_REMOVED" = "Ta osoba została wcześniej usunięta z listy Twoich kontaktów B&A. Jeśli wyślesz do tej osoby wiadomość, trafi ona z powrotem na listę.";
 
 /* When you start a chat with someone and then later learn their profile name, we insert an in-chat message with this string to record the identifier you originally used to contact them. Embeds {{ the identifier, either a phone number or a username }}. */
 "INFO_MESSAGE_LEARNED_PROFILE_KEY" = "Rozpoczynasz czat, na którym jesteście Ty i %1$@.";
@@ -4307,7 +4307,7 @@
 "INFO_MESSAGE_REPORTED_SPAM" = "Zgłoszono jako spam";
 
 /* Body message of the alert shown when a user taps on 'learn more' via the spam info message. */
-"INFO_MESSAGE_REPORTED_SPAM_LEARN_MORE_MESSAGE" = "Zostaliśmy powiadomieni o tym, że ten użytkownik może wysyłać spam. Signal nie ma dostępu do treści czatów.";
+"INFO_MESSAGE_REPORTED_SPAM_LEARN_MORE_MESSAGE" = "Zostaliśmy powiadomieni o tym, że ten użytkownik może wysyłać spam. B&A nie ma dostępu do treści czatów.";
 
 /* Title of the alert shown when a user taps on 'learn more' via the spam info message. */
 "INFO_MESSAGE_REPORTED_SPAM_LEARN_MORE_TITLE" = "Zgłoszono spam";
@@ -4324,8 +4324,8 @@
 /* Indicates that another user has changed their phone number. Embeds: {{ the user's name}} */
 "INFO_MESSAGE_USER_CHANGED_PHONE_NUMBER_FORMAT" = "%1$@ ma nowy numer telefonu.";
 
-/* Shown in inbox and conversation when a user joins Signal, embeds the new user's {{contact name}} */
-"INFO_MESSAGE_USER_JOINED_SIGNAL_BODY_FORMAT" = "%1$@ korzysta z aplikacji Signal!";
+/* Shown in inbox and conversation when a user joins B&A, embeds the new user's {{contact name}} */
+"INFO_MESSAGE_USER_JOINED_SIGNAL_BODY_FORMAT" = "%1$@ korzysta z aplikacji B&A!";
 
 /* Label at the top of the input text when editing a message */
 "INPUT_TOOLBAR_EDIT_MESSAGE_LABEL" = "Edytuj wiadomość";
@@ -4352,13 +4352,13 @@
 "INVALID_PROXY_HOST_ERROR" = "Podany adres proxy jest nieprawidłowy. Sprawdź adres i spróbuj ponownie.";
 
 /* Alert body when contacts disabled while trying to invite contacts to signal */
-"INVITE_FLOW_REQUIRES_CONTACT_ACCESS_BODY" = "Aby zaprosić znajomych, zezwól aplikacji Signal na dostęp do kontaktów w ustawieniach swojego urządzenia z iOS.";
+"INVITE_FLOW_REQUIRES_CONTACT_ACCESS_BODY" = "Aby zaprosić znajomych, zezwól aplikacji B&A na dostęp do kontaktów w ustawieniach swojego urządzenia z iOS.";
 
 /* Alert title when contacts disabled while trying to invite contacts to signal */
 "INVITE_FLOW_REQUIRES_CONTACT_ACCESS_TITLE" = "Zezwól na dostęp do kontaktów";
 
 /* Label for the cell that presents the 'invite contacts' workflow. */
-"INVITE_FRIENDS_CONTACT_TABLE_BUTTON" = "Zaproś znajomych do aplikacji Signal";
+"INVITE_FRIENDS_CONTACT_TABLE_BUTTON" = "Zaproś znajomych do aplikacji B&A";
 
 /* Header label above a section for more options for adding contacts */
 "INVITE_FRIENDS_CONTACT_TABLE_HEADER" = "Więcej";
@@ -4481,16 +4481,16 @@
 "LINK_DEVICE_SCANNING_INSTRUCTIONS_SHEET_TITLE" = "Zeskanuj kod QR";
 
 /* Body text for a sheet when a user tries to link a device informing them that they will need to authenticate their device */
-"LINK_NEW_DEVICE_AUTHENTICATION_INFO_SHEET_BODY" = "Aby potwierdzić, dotknij opcji „Kontynuuj” i użyj swojej metody odblokowywania telefonu. Nie wpisuj PIN-u do aplikacji Signal.";
+"LINK_NEW_DEVICE_AUTHENTICATION_INFO_SHEET_BODY" = "Aby potwierdzić, dotknij opcji „Kontynuuj” i użyj swojej metody odblokowywania telefonu. Nie wpisuj PIN-u do aplikacji B&A.";
 
 /* Title for a sheet when a user tries to link a device informing them that they will need to authenticate their device */
 "LINK_NEW_DEVICE_AUTHENTICATION_INFO_SHEET_TITLE" = "Potwierdź, że to Ty";
 
-/* Description of how and why Signal iOS uses Touch ID/Face ID/Phone Passcode to unlock device linking. */
+/* Description of how and why B&A iOS uses Touch ID/Face ID/Phone Passcode to unlock device linking. */
 "LINK_NEW_DEVICE_AUTHENTICATION_REASON" = "Uwierzytelnij, aby połączyć urządzenie";
 
 /* Body text for a sheet when a user has started linking a device informing them to finish the process on that other device */
-"LINK_NEW_DEVICE_FINISH_ON_OTHER_DEVICE_SHEET_BODY" = "Dokończ łączenie aplikacji Signal na drugim urządzeniu.";
+"LINK_NEW_DEVICE_FINISH_ON_OTHER_DEVICE_SHEET_BODY" = "Dokończ łączenie aplikacji B&A na drugim urządzeniu.";
 
 /* Title for a sheet when a user has started linking a device informing them to finish the process on that other device */
 "LINK_NEW_DEVICE_FINISH_ON_OTHER_DEVICE_SHEET_TITLE" = "Dokończ łączenie na drugim urządzeniu";
@@ -4532,10 +4532,10 @@
 "LINK_PREVIEW_UNKNOWN_DOMAIN" = "Podgląd linku";
 
 /* Shown in an alert when trying to edit a contact. */
-"LINKED_DEVICE_CONTACTS_NOT_ALLOWED" = "Zarządzanie kontaktami zapisanymi na telefonie nie jest już obsługiwane na iPadzie. Aby dodać kontakty Signal do listy kontaktów telefonu, otwórz aplikację Signal na swoim telefonie.";
+"LINKED_DEVICE_CONTACTS_NOT_ALLOWED" = "Zarządzanie kontaktami zapisanymi na telefonie nie jest już obsługiwane na iPadzie. Aby dodać kontakty B&A do listy kontaktów telefonu, otwórz aplikację B&A na swoim telefonie.";
 
 /* Shown in a banner when you tap the 'New Chat' icon at the top of the list of chats. */
-"LINKED_DEVICE_MANAGE_CONTACTS_BANNER" = "Zarządzanie kontaktami zapisanymi na telefonie nie jest już obsługiwane na iPadzie. Na tym urządzeniu dalej będą synchronizowane wszelkie zmiany wprowadzane do listy kontaktów w aplikacji Signal na telefonie.";
+"LINKED_DEVICE_MANAGE_CONTACTS_BANNER" = "Zarządzanie kontaktami zapisanymi na telefonie nie jest już obsługiwane na iPadzie. Na tym urządzeniu dalej będą synchronizowane wszelkie zmiany wprowadzane do listy kontaktów w aplikacji B&A na telefonie.";
 
 /* A button shown in a banner when you tap the 'New Chat' icon at the top of the list of chats. Tapping it opens a website with more details. */
 "LINKED_DEVICE_MANAGE_CONTACTS_LEARN_MORE" = "Dowiedz się więcej";
@@ -4550,28 +4550,28 @@
 "LINKED_DEVICE_NOTIFICATION_TITLE" = "Połączono nowe urządzenie";
 
 /* Message for an action sheet telling users how to link a device, when trying to open an external device-linking URL. */
-"LINKED_DEVICE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "Aby połączyć konto Signal z komputerem lub iPadem, przejdź do sekcji „Połączone urządzenia”, dotknij opcji „Połącz nowe urządzenie” i zeskanuj kod QR ponownie. Pamiętaj, aby skanować wyłącznie kody QR pochodzące bezpośrednio z aplikacji Signal.";
+"LINKED_DEVICE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "Aby połączyć konto B&A z komputerem lub iPadem, przejdź do sekcji „Połączone urządzenia”, dotknij opcji „Połącz nowe urządzenie” i zeskanuj kod QR ponownie. Pamiętaj, aby skanować wyłącznie kody QR pochodzące bezpośrednio z aplikacji B&A.";
 
 /* Message for an action sheet telling users how to link a device, when trying to open a device-linking URL from the in-app camera. */
-"LINKED_DEVICE_URL_OPENED_ACTION_SHEET_IN_APP_CAMERA_MESSAGE" = "Wygląda na to, że próbujesz połączyć swoje konto Signal z nowym urządzeniem. Aby to zrobić, dotknij opcji „Kontynuuj”, a potem „Połącz nowe urządzenie” i zeskanuj kod QR ponownie.";
+"LINKED_DEVICE_URL_OPENED_ACTION_SHEET_IN_APP_CAMERA_MESSAGE" = "Wygląda na to, że próbujesz połączyć swoje konto B&A z nowym urządzeniem. Aby to zrobić, dotknij opcji „Kontynuuj”, a potem „Połącz nowe urządzenie” i zeskanuj kod QR ponownie.";
 
 /* Bullet point about downloads on the linked devices education sheet. Embeds {{ %1$@ iPad download link, %2$@ desktop download link }} */
 "LINKED_DEVICES_EDUCATION_POINT_DOWNLOADS" = "Zainstaluj odpowiednią wersję aplikacji na drugim urządzeniu: wejdź na %1$@ (na iPadzie) lub %2$@ (na komputerze).";
 
 /* Bullet point about message sync on the linked devices education sheet */
-"LINKED_DEVICES_EDUCATION_POINT_MESSAGES" = "Po połączeniu urządzeń wiadomości będą synchronizowane z aplikacją Signal na Twoim telefonie komórkowym.";
+"LINKED_DEVICES_EDUCATION_POINT_MESSAGES" = "Po połączeniu urządzeń wiadomości będą synchronizowane z aplikacją B&A na Twoim telefonie komórkowym.";
 
 /* Bullet point about privacy on the linked devices education sheet */
 "LINKED_DEVICES_EDUCATION_POINT_PRIVACY" = "Wszystkie wiadomości na połączonych urządzeniach są prywatne.";
 
 /* Title for the linked device education sheet */
-"LINKED_DEVICES_EDUCATION_TITLE" = "Signal na komputery lub iPady";
+"LINKED_DEVICES_EDUCATION_TITLE" = "B&A na komputery lub iPady";
 
 /* Text that appears where the linked device list would be indicating that there are no linked devices. */
 "LINKED_DEVICES_EMPTY_STATE" = "Brak połączonych urządzeń";
 
 /* Description for header of the linked devices list */
-"LINKED_DEVICES_HEADER_DESCRIPTION" = "Korzystaj z aplikacji Signal na komputerze lub iPadzie. Twoje wiadomości zostaną zsynchronizowane z połączonymi urządzeniami.";
+"LINKED_DEVICES_HEADER_DESCRIPTION" = "Korzystaj z aplikacji B&A na komputerze lub iPadzie. Twoje wiadomości zostaną zsynchronizowane z połączonymi urządzeniami.";
 
 /* Footer text below the list of currently-linked devices */
 "LINKED_DEVICES_LIST_FOOTER" = "Wiadomości i informacje o czacie są zabezpieczane szyfrowaniem end-to-end na wszystkich urządzeniach";
@@ -4616,7 +4616,7 @@
 "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "Nie wyłączaj aplikacji.";
 
 /* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "Aby przenieść konto Signal, musisz zezwolić na dostęp do sieci lokalnej na obu urządzeniach.";
+"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "Aby przenieść konto B&A, musisz zezwolić na dostęp do sieci lokalnej na obu urządzeniach.";
 
 /* A button asking the user if they need further help getting their transfer working. */
 "LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "Potrzebujesz pomocy?";
@@ -4628,7 +4628,7 @@
 "LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "Włącz opcję „Sieć lokalna”";
 
 /* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "Przejdź do aplikacji Signal";
+"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "Przejdź do aplikacji B&A";
 
 /* Title for local network permission action sheet */
 "LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "Zezwól na dostęp do sieci lokalnej";
@@ -4643,7 +4643,7 @@
 "LOGGING_SECTION" = "Logowanie";
 
 /* Footer for the 'logging' help section. */
-"LOGGING_SECTION_FOOTER" = "Dzienniki debugowania pomagają zespołowi Signal usuwać błędy i awarie.";
+"LOGGING_SECTION_FOOTER" = "Dzienniki debugowania pomagają zespołowi B&A usuwać błędy i awarie.";
 
 /* Title for the 'long text message' view. */
 "LONG_TEXT_VIEW_TITLE" = "Wiadomość";
@@ -4745,7 +4745,7 @@
 "MESSAGE_ACTION_DELETE_FOR_EVERYONE" = "Usuń u wszystkich";
 
 /* A one-time confirmation that you want to delete for everyone */
-"MESSAGE_ACTION_DELETE_FOR_EVERYONE_CONFIRMATION" = "Wiadomość zostanie usunięta u wszystkich osób uczestniczących w czacie, pod warunkiem że mają najnowszą wersję aplikacji Signal. Wyświetli się u nich informacja, że wiadomość została przez Ciebie usunięta.";
+"MESSAGE_ACTION_DELETE_FOR_EVERYONE_CONFIRMATION" = "Wiadomość zostanie usunięta u wszystkich osób uczestniczących w czacie, pod warunkiem że mają najnowszą wersję aplikacji B&A. Wyświetli się u nich informacja, że wiadomość została przez Ciebie usunięta.";
 
 /* The title for the action sheet asking who the user wants to delete the message for. */
 "MESSAGE_ACTION_DELETE_FOR_TITLE" = "U kogo chcesz usunąć tę wiadomość?";
@@ -4790,7 +4790,7 @@
 "MESSAGE_ACTION_LINK_OPEN_LINK" = "Otwórz link";
 
 /* Label for button to open a signal proxy. */
-"MESSAGE_ACTION_LINK_OPEN_PROXY" = "Otwórz proxy Signal";
+"MESSAGE_ACTION_LINK_OPEN_PROXY" = "Otwórz proxy B&A";
 
 /* Label for button to open a sticker pack. */
 "MESSAGE_ACTION_LINK_OPEN_STICKER_PACK" = "Wyświetl pakiet naklejek";
@@ -4964,7 +4964,7 @@
 "MESSAGE_REQUEST_NAME_COLLISON_UPDATE_CONTACT_ACTION" = "Zmień kontakt";
 
 /* Action sheet message to confirm reporting a conversation as spam via a message request. */
-"MESSAGE_REQUEST_REPORT_CONVERSATION_MESSAGE" = "Zostaniemy powiadomieni o tym, że ten użytkownik może wysyłać spam. Signal nie ma dostępu do treści czatów.";
+"MESSAGE_REQUEST_REPORT_CONVERSATION_MESSAGE" = "Zostaniemy powiadomieni o tym, że ten użytkownik może wysyłać spam. B&A nie ma dostępu do treści czatów.";
 
 /* Action sheet title to confirm reporting a conversation as spam via a message request. */
 "MESSAGE_REQUEST_REPORT_CONVERSATION_TITLE" = "Zgłosić spam?";
@@ -5059,7 +5059,7 @@
 /* status message for read messages */
 "MESSAGE_STATUS_READ" = "Odczytano";
 
-/* message status if message delivery to a recipient is skipped. We skip delivering group messages to users who have left the group or unregistered their Signal account. */
+/* message status if message delivery to a recipient is skipped. We skip delivering group messages to users who have left the group or unregistered their B&A account. */
 "MESSAGE_STATUS_RECIPIENT_SKIPPED" = "Pominięto";
 
 /* Label indicating that a message failed to send. */
@@ -5092,8 +5092,8 @@
 /* info message text in conversation view for when a call was dropped because the contact is blocked in iOS settings */
 "MISSED_CALL_BLOCKED_SYSTEM_CONTACT" = "Nieodebrane połączenie od kontaktu zablokowanego w ustawieniach telefonu";
 
-/* Action to block contact in Signal for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
-"MISSED_CALL_BLOCKED_SYSTEM_SETTINGS_SHEET_BLOCK_ACTION" = "Zablokuj kontakt również w aplikacji Signal";
+/* Action to block contact in B&A for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
+"MISSED_CALL_BLOCKED_SYSTEM_SETTINGS_SHEET_BLOCK_ACTION" = "Zablokuj kontakt również w aplikacji B&A";
 
 /* Message for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
 "MISSED_CALL_BLOCKED_SYSTEM_SETTINGS_SHEET_MESSAGE" = "Nie odebrano połączenia od tej osoby, ponieważ została ona zablokowana w ustawieniach telefonu. Aby to zmienić, przejdź do sekcji Ustawienia > Telefon i dotknij opcji Zablokowane kontakty.";
@@ -5114,19 +5114,19 @@
 "MISSING_CAMERA_PERMISSION_MESSAGE" = "Możesz przyznać dostęp do aparatu w ustawieniach swojego urządzenia z iOS.";
 
 /* Alert title */
-"MISSING_CAMERA_PERMISSION_TITLE" = "Signal potrzebuje dostępu do aparatu";
+"MISSING_CAMERA_PERMISSION_TITLE" = "B&A potrzebuje dostępu do aparatu";
 
 /* Alert body indicating the user has denied location permissions */
 "MISSING_LOCATION_PERMISSION_MESSAGE" = "Możesz włączyć to uprawnienie w ustawieniach swojego urządzenia z iOS.";
 
 /* Alert title indicating the user has denied location permissions */
-"MISSING_LOCATION_PERMISSION_TITLE" = "Aby używać tej funkcji, musisz zezwolić aplikacji Signal na dostęp do Twojej lokalizacji.";
+"MISSING_LOCATION_PERMISSION_TITLE" = "Aby używać tej funkcji, musisz zezwolić aplikacji B&A na dostęp do Twojej lokalizacji.";
 
 /* Alert body when user has previously denied media library access */
 "MISSING_MEDIA_LIBRARY_PERMISSION_MESSAGE" = "Możesz włączyć to uprawnienie w ustawieniach swojego urządzenia z iOS.";
 
 /* Alert title when user has previously denied media library access */
-"MISSING_MEDIA_LIBRARY_PERMISSION_TITLE" = "Aby używać tej funkcji, musisz zezwolić aplikacji Signal na dostęp do Twoich zdjęć.";
+"MISSING_MEDIA_LIBRARY_PERMISSION_TITLE" = "Aby używać tej funkcji, musisz zezwolić aplikacji B&A na dostęp do Twoich zdjęć.";
 
 /* An error shown as the title of an alert when try to link a new device & the user is already at the limit. */
 "MULTIDEVICE_PAIRING_MAX_DESC" = "Nie możesz połączyć więcej urządzeń.";
@@ -5147,7 +5147,7 @@
 "MY_STORIES_SETTINGS_VISIBILITY_ALL_SIGNAL_CONNECTIONS_EXCEPT_TITLE" = "Wszyscy oprócz…";
 
 /* Title for the visibility option */
-"MY_STORIES_SETTINGS_VISIBILITY_ALL_SIGNAL_CONNECTIONS_TITLE" = "Wszystkie kontakty Signal";
+"MY_STORIES_SETTINGS_VISIBILITY_ALL_SIGNAL_CONNECTIONS_TITLE" = "Wszystkie kontakty B&A";
 
 /* Title for the visibility option */
 "MY_STORIES_SETTINGS_VISIBILITY_ONLY_SHARE_WITH_TITLE" = "Udostępniaj tylko…";
@@ -5309,7 +5309,7 @@
 "NICKNAME_EDITOR_DELETE_CONFIRMATION_TITLE" = "Usunąć pseudonim?";
 
 /* The description below the title on the profile nickname editor view. */
-"NICKNAME_EDITOR_DESCRIPTION" = "Pseudonimy i notatki są przechowywane w aplikacji Signal oraz szyfrowane metodą end-to-end. Są widoczne tylko dla Ciebie.";
+"NICKNAME_EDITOR_DESCRIPTION" = "Pseudonimy i notatki są przechowywane w aplikacji B&A oraz szyfrowane metodą end-to-end. Są widoczne tylko dla Ciebie.";
 
 /* Placeholder text it the text field for the family name in the profile nickname editor. */
 "NICKNAME_EDITOR_FAMILY_NAME_PLACEHOLDER" = "Nazwisko";
@@ -5372,7 +5372,7 @@
 "NOTIFICATION_PERMISSION_REMINDER_MEGAPHONE_TITLE" = "Włączyć powiadomienia?";
 
 /* Shown as the body of an alert when notifications can't be shown due to an error. */
-"NOTIFICATIONS_ERROR_MESSAGE" = "Jeśli nie otrzymujesz powiadomień z aplikacji Signal, problem może zniknąć, gdy %1$@ zostanie uruchomiony ponownie.";
+"NOTIFICATIONS_ERROR_MESSAGE" = "Jeśli nie otrzymujesz powiadomień z aplikacji B&A, problem może zniknąć, gdy %1$@ zostanie uruchomiony ponownie.";
 
 /* Shown as the title of an alert when notifications can't be shown due to an error. */
 "NOTIFICATIONS_ERROR_TITLE" = "Nie można wyświetlić powiadomień";
@@ -5383,7 +5383,7 @@
 /* No comment provided by engineer. */
 "NOTIFICATIONS_NONE" = "Bez imienia lub treści";
 
-/* Table cell switch label. When disabled, Signal will not play notification sounds while the app is in the foreground. */
+/* Table cell switch label. When disabled, B&A will not play notification sounds while the app is in the foreground. */
 "NOTIFICATIONS_SECTION_INAPP" = "Powiadamiaj z dźwiękiem, gdy aplikacja jest otwarta";
 
 /* Label for settings UI that allows user to add a new notification sound. */
@@ -5429,12 +5429,12 @@
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "Pominąć wpisywanie PIN-u?";
 
 /* The body for the device transfer 'choice' view 'transfer' option */
-"ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "Przywróć wiadomości i multimedia ze swojej płatnej kopii zapasowej Signal";
+"ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "Przywróć wiadomości i multimedia ze swojej płatnej kopii zapasowej B&A";
 
 /* The title for the device transfer 'choice' view 'transfer' option */
-"ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "Przywróć kopię zapasową Signal";
+"ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "Przywróć kopię zapasową B&A";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
+/* If a user is installing B&A on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "Zdecyduj, w jaki sposób chcesz przywrócić historię wiadomości i dane konta.";
 
 /* The body for the skip restore 'choice' option */
@@ -5446,7 +5446,7 @@
 /* The title for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_TITLE" = "Zarejestruj bez przenoszenia";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. */
+/* If a user is installing B&A on a new phone, they may be asked whether they want to restore their device from a backup. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_TITLE" = "Przywróć lub przenieś konto";
 
 /* The body for the device transfer 'choice' view 'transfer' option */
@@ -5492,7 +5492,7 @@
 "ONBOARDING_MODE_SWITCH_BUTTON_REGISTERING" = "Połącz iPhone'a";
 
 /* explanation to the user they're switching from linking to registering flow */
-"ONBOARDING_MODE_SWITCH_EXPLANATION_PROVISIONING" = "Gdy dotkniesz opcji „Zarejestruj iPada”, będziesz mieć możliwość utworzenia nowego konta Signal lub przeniesienia dotychczasowego konta na tego iPada. Spowoduje to dezaktywację aplikacji Signal na wszystkich innych urządzeniach zarejestrowanych przy użyciu tego samego numeru telefonu.";
+"ONBOARDING_MODE_SWITCH_EXPLANATION_PROVISIONING" = "Gdy dotkniesz opcji „Zarejestruj iPada”, będziesz mieć możliwość utworzenia nowego konta B&A lub przeniesienia dotychczasowego konta na tego iPada. Spowoduje to dezaktywację aplikacji B&A na wszystkich innych urządzeniach zarejestrowanych przy użyciu tego samego numeru telefonu.";
 
 /* explanation to the user they're switching from registering to linking flow */
 "ONBOARDING_MODE_SWITCH_EXPLANATION_REGISTERING" = "Gdy dotkniesz opcji „Połącz iPhone'a”, będziesz mieć możliwość połączenia telefonu z dotychczasowym kontem. Łączenie telefonu nie jest zalecane i ogranicza działanie niektórych funkcjonalności, takich jak wykonywanie połączeń.";
@@ -5504,13 +5504,13 @@
 "ONBOARDING_MODE_SWITCH_TITLE_REGISTERING" = "Połącz tego iPhone'a";
 
 /* warning to the user that registering an ipad is not recommended */
-"ONBOARDING_MODE_SWITCH_WARNING_PROVISIONING" = "Gdy zarejestrujesz tego iPada, aplikacja Signal zdezaktywuje się na wszystkich innych urządzeniach zarejestrowanych przy użyciu tego samego numeru telefonu.";
+"ONBOARDING_MODE_SWITCH_WARNING_PROVISIONING" = "Gdy zarejestrujesz tego iPada, aplikacja B&A zdezaktywuje się na wszystkich innych urządzeniach zarejestrowanych przy użyciu tego samego numeru telefonu.";
 
 /* warning to the user that linking a phone is not recommended */
 "ONBOARDING_MODE_SWITCH_WARNING_REGISTERING" = "Łączenie iPhone'a nie jest zalecane i ogranicza działanie niektórych podstawowych funkcjonalności.";
 
 /* Description of the 'Contacts' permission in the 'onboarding permissions' view. */
-"ONBOARDING_PERMISSIONS_CONTACTS_DESCRIPTION" = "Znajdź osoby, które znasz. Twoje kontakty są szyfrowane i niewidoczne dla usługi Signal.";
+"ONBOARDING_PERMISSIONS_CONTACTS_DESCRIPTION" = "Znajdź osoby, które znasz. Twoje kontakty są szyfrowane i niewidoczne dla usługi B&A.";
 
 /* Title introducing the 'Contacts' permission in the 'onboarding permissions' view. */
 "ONBOARDING_PERMISSIONS_CONTACTS_TITLE" = "Kontakty";
@@ -5522,13 +5522,13 @@
 "ONBOARDING_PERMISSIONS_NOTIFICATIONS_TITLE" = "Powiadomienia";
 
 /* Preamble of the 'onboarding permissions' view. */
-"ONBOARDING_PERMISSIONS_PREAMBLE" = "Signal prosi o te uprawnienia.";
+"ONBOARDING_PERMISSIONS_PREAMBLE" = "B&A prosi o te uprawnienia.";
 
 /* Title of the 'onboarding permissions' view. */
 "ONBOARDING_PERMISSIONS_TITLE" = "Włącz uprawnienia";
 
 /* Explanation of the 'onboarding phone number discoverability' view. Embeds {user phone number} */
-"ONBOARDING_PHONE_NUMBER_DISCOVERABILITY_EXPLANATION_FORMAT" = "Wybierz, kto może Cię znaleźć w aplikacji Signal za pomocą numeru %1$@";
+"ONBOARDING_PHONE_NUMBER_DISCOVERABILITY_EXPLANATION_FORMAT" = "Wybierz, kto może Cię znaleźć w aplikacji B&A za pomocą numeru %1$@";
 
 /* Title of the 'onboarding phone number discoverability' view. */
 "ONBOARDING_PHONE_NUMBER_DISCOVERABILITY_TITLE" = "Kto może Cię znaleźć za pomocą numeru telefonu?";
@@ -5543,7 +5543,7 @@
 "ONBOARDING_PHONE_NUMBER_VALIDATION_WARNING" = "Nieprawidłowy numer telefonu. Aby się zarejestrować, podaj poprawny numer.";
 
 /* Explanation of the 'onboarding pin attempts exhausted' view when reglock is disabled. */
-"ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_EXPLANATION" = "Nie możesz już więcej razy próbować zgadnąć PIN-u, ale wciąż możesz odzyskać dostęp do swojego konta Signal. W tym celu utwórz nowy PIN. W trosce o Twoją prywatność i bezpieczeństwo Twojego konta przywrócimy je bez zapisanych wcześniej informacji w profilu ani ustawień.";
+"ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_EXPLANATION" = "Nie możesz już więcej razy próbować zgadnąć PIN-u, ale wciąż możesz odzyskać dostęp do swojego konta B&A. W tym celu utwórz nowy PIN. W trosce o Twoją prywatność i bezpieczeństwo Twojego konta przywrócimy je bez zapisanych wcześniej informacji w profilu ani ustawień.";
 
 /* Label for the 'learn more' link when reglock is disabled in the 'onboarding pin attempts exhausted' view. */
 "ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_LEARN_MORE" = "Dowiedz się więcej o kodach PIN";
@@ -5552,16 +5552,16 @@
 "ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_TITLE" = "Niepoprawny PIN";
 
 /* Explanation of the 'onboarding pin attempts exhausted' view when it is unknown if reglock is enabled. */
-"ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_WITH_UNKNOWN_REGLOCK_EXPLANATION" = "Nie możesz więcej razy próbować odgadnąć PIN-u. Aby zalogować się na konto Signal, możesz jeszcze spróbować zweryfikować swój numer telefonu. W trosce o Twoją prywatność i bezpieczeństwo Twojego konta przywrócimy je bez zapisanych wcześniej informacji w profilu ani ustawień.";
+"ONBOARDING_PIN_ATTEMPTS_EXHAUSTED_WITH_UNKNOWN_REGLOCK_EXPLANATION" = "Nie możesz więcej razy próbować odgadnąć PIN-u. Aby zalogować się na konto B&A, możesz jeszcze spróbować zweryfikować swój numer telefonu. W trosce o Twoją prywatność i bezpieczeństwo Twojego konta przywrócimy je bez zapisanych wcześniej informacji w profilu ani ustawień.";
 
 /* Explanation of 'do not have old device' flow for the 'Restore or Transfer' prompt */
-"ONBOARDING_SPLASH_DO_NOT_HAVE_OLD_DEVICE_BODY" = "Wybierz tę opcję również wtedy, gdy ponownie instalujesz Signal na tym samym urządzeniu";
+"ONBOARDING_SPLASH_DO_NOT_HAVE_OLD_DEVICE_BODY" = "Wybierz tę opcję również wtedy, gdy ponownie instalujesz B&A na tym samym urządzeniu";
 
 /* Title for the 'do not have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_DO_NOT_HAVE_OLD_DEVICE_TITLE" = "Nie mam swojego starego telefonu";
 
 /* Explanation of 'have old device' flow for the 'Restore or Transfer' prompt */
-"ONBOARDING_SPLASH_HAVE_OLD_DEVICE_BODY" = "Aby szybko zacząć korzystać z aplikacji Signal, zeskanuj kod QR ze swojego obecnego urządzenia";
+"ONBOARDING_SPLASH_HAVE_OLD_DEVICE_BODY" = "Aby szybko zacząć korzystać z aplikacji B&A, zeskanuj kod QR ze swojego obecnego urządzenia";
 
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "Mam swój stary telefon";
@@ -5617,20 +5617,20 @@
 /* Button text which opens the settings app */
 "OPEN_SETTINGS_BUTTON" = "Ustawienia";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're on unsupported version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. */
-"OS_EXPIRED_AND_CAN_UPGRADE_OS" = "Signal nie działa już na tym urządzeniu. Aby dalej korzystać z aplikacji Signal, zaktualizuj system operacyjny do nowszej wersji iOS.";
+/* B&A doesn't support old versions of iOS and shows a warning if you're on unsupported version. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this text. */
+"OS_EXPIRED_AND_CAN_UPGRADE_OS" = "B&A nie działa już na tym urządzeniu. Aby dalej korzystać z aplikacji B&A, zaktualizuj system operacyjny do nowszej wersji iOS.";
 
-/* Signal doesn't support old devices. If that's the case, they'll be shown this action, and tapping it will open information about Signal's minimum supported operating systems. */
-"OS_EXPIRED_AND_DEVICE_IS_STUCK" = "Signal nie działa już na tym urządzeniu. Aby dalej korzystać z aplikacji Signal, wymień urządzenie na nowsze.";
+/* B&A doesn't support old devices. If that's the case, they'll be shown this action, and tapping it will open information about B&A's minimum supported operating systems. */
+"OS_EXPIRED_AND_DEVICE_IS_STUCK" = "B&A nie działa już na tym urządzeniu. Aby dalej korzystać z aplikacji B&A, wymień urządzenie na nowsze.";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're on an old version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this action, and tapping it will open device update instructions. */
+/* B&A doesn't support old versions of iOS and shows a warning if you're on an old version. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this action, and tapping it will open device update instructions. */
 "OS_SOON_TO_EXPIRE_ACTION_TITLE" = "Zaktualizuj teraz";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
-"OS_SOON_TO_EXPIRE_AND_CAN_UPGRADE_OS_FORMAT" = "Aplikacja Signal wkrótce przestanie być zgodna z wersją systemu iOS na tym urządzeniu. Aby dalej korzystać z aplikacji, zainstaluj nowszą wersję iOS do %1$@.";
+/* B&A doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
+"OS_SOON_TO_EXPIRE_AND_CAN_UPGRADE_OS_FORMAT" = "Aplikacja B&A wkrótce przestanie być zgodna z wersją systemu iOS na tym urządzeniu. Aby dalej korzystać z aplikacji, zainstaluj nowszą wersję iOS do %1$@.";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're on an old version that will soon lose support. This is the text on that warning when users can't upgrade iOS without getting a new device. Embeds {{expiration date}}. */
-"OS_SOON_TO_EXPIRE_AND_DEVICE_WILL_BE_STUCK_FORMAT" = "Aplikacja Signal wkrótce przestanie być zgodna z wersją systemu iOS na tym urządzeniu. Aby dalej korzystać z aplikacji, wymień urządzenie na nowsze do %1$@.";
+/* B&A doesn't support old versions of iOS and shows a warning if you're on an old version that will soon lose support. This is the text on that warning when users can't upgrade iOS without getting a new device. Embeds {{expiration date}}. */
+"OS_SOON_TO_EXPIRE_AND_DEVICE_WILL_BE_STUCK_FORMAT" = "Aplikacja B&A wkrótce przestanie być zgodna z wersją systemu iOS na tym urządzeniu. Aby dalej korzystać z aplikacji, wymień urządzenie na nowsze do %1$@.";
 
 /* Info Message when another user disabled disappearing messages. Embeds {{name of other user}}. */
 "OTHER_DISABLED_DISAPPEARING_MESSAGES_CONFIGURATION" = "%1$@ wyłącza znikające wiadomości.";
@@ -5638,23 +5638,23 @@
 /* Info Message when another user enabled disappearing messages. Embeds {{name of other user}} and {{time amount}} before messages disappear. See the *_TIME_AMOUNT strings for context. */
 "OTHER_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "%1$@ ustawia czas, po którym wiadomości znikają, na %2$@.";
 
-/* Label warning the user that the Signal service may be down. */
-"OUTAGE_WARNING" = "Signal ma problemy techniczne. Staramy się jak najszybciej je rozwiązać.";
+/* Label warning the user that the B&A service may be down. */
+"OUTAGE_WARNING" = "B&A ma problemy techniczne. Staramy się jak najszybciej je rozwiązać.";
 
 /* Label for action link when the user has an outdated payment client */
 "OUTDATED_PAYMENT_CLIENT_ACTION_TITLE" = "Zaktualizuj teraz";
 
-/* Label warning the user that they should update Signal to continue using payments. */
-"OUTDATED_PAYMENT_CLIENT_REMINDER_TEXT" = "Aby dalej korzystać z płatności, zaktualizuj Signal. Twoje saldo może być nieaktualne.";
+/* Label warning the user that they should update B&A to continue using payments. */
+"OUTDATED_PAYMENT_CLIENT_REMINDER_TEXT" = "Aby dalej korzystać z płatności, zaktualizuj B&A. Twoje saldo może być nieaktualne.";
 
 /* Body of prompt notifying registration without restore completed on the new device. */
-"OUTGOING_DEVICE_REGISTRATION_COMPLETE_BODY" = "Twoje konto Signal zostało aktywowane na innym urządzeniu. Na tym urządzeniu Signal jest już nieaktywny.";
+"OUTGOING_DEVICE_REGISTRATION_COMPLETE_BODY" = "Twoje konto B&A zostało aktywowane na innym urządzeniu. Na tym urządzeniu B&A jest już nieaktywny.";
 
 /* Title of prompt notifying registration without restore completed on the new device. */
 "OUTGOING_DEVICE_REGISTRATION_COMPLETE_TITLE" = "Rejestracja zakończona";
 
 /* Body of prompt notifying device restore started on the new device. */
-"OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "Rozpoczęto przenoszenie konta Signal oraz wiadomości na inne urządzenie. Na tym urządzeniu Signal jest już nieaktywny.";
+"OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "Rozpoczęto przenoszenie konta B&A oraz wiadomości na inne urządzenie. Na tym urządzeniu B&A jest już nieaktywny.";
 
 /* Title of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_TITLE" = "Przywracanie zakończone";
@@ -5678,7 +5678,7 @@
 "OUTGOING_DEVICE_RESTORE_INITIAL_VIEW_TITLE" = "Przenieś konto";
 
 /* Body of prompt notifying device transfer completed. */
-"OUTGOING_DEVICE_TRANSFER_COMPLETE_BODY" = "Udało się przenieść Twoje konto Signal oraz wiadomości na inne urządzenie. Na tym urządzeniu Signal jest już nieaktywny.";
+"OUTGOING_DEVICE_TRANSFER_COMPLETE_BODY" = "Udało się przenieść Twoje konto B&A oraz wiadomości na inne urządzenie. Na tym urządzeniu B&A jest już nieaktywny.";
 
 /* Title of prompt notifying device transfer completed. */
 "OUTGOING_DEVICE_TRANSFER_COMPLETE_TITLE" = "Przenoszenie zakończone";
@@ -5689,11 +5689,11 @@
 /* info message text in conversation view */
 "OUTGOING_MISSED_VOICE_CALL" = "Nieodebrane połączenie głosowe";
 
-/* Button for action sheet shown when device transfer completes; quits the Signal app immediately (does not automatically relaunch, but the user may choose to relaunch). */
-"OUTGOING_TRANSFER_COMPLETE_EXIT_ACTION" = "Zamknij Signal";
+/* Button for action sheet shown when device transfer completes; quits the B&A app immediately (does not automatically relaunch, but the user may choose to relaunch). */
+"OUTGOING_TRANSFER_COMPLETE_EXIT_ACTION" = "Zamknij B&A";
 
 /* Message for action sheet shown when device transfer completes */
-"OUTGOING_TRANSFER_COMPLETE_MESSAGE" = "Aplikacja Signal na tym urządzeniu zostanie teraz zamknięta";
+"OUTGOING_TRANSFER_COMPLETE_MESSAGE" = "Aplikacja B&A na tym urządzeniu zostanie teraz zamknięta";
 
 /* Title for action sheet shown when device transfer completes */
 "OUTGOING_TRANSFER_COMPLETE_TITLE" = "Przenoszenie zakończone";
@@ -5815,7 +5815,7 @@
 /* Title for action sheet shown when unlocking with biometrics like Face ID or TouchID fails because it is disabled at a system level. */
 "PAYMENTS_LOCK_LOCAL_BIOMETRY_AUTH_DISABLED_TITLE" = "Nie udało się uwierzytelnić za pomocą biometrii";
 
-/* Description of how and why Signal iOS uses Touch ID/Face ID/Phone Passcode to unlock 'payments lock'. */
+/* Description of how and why B&A iOS uses Touch ID/Face ID/Phone Passcode to unlock 'payments lock'. */
 "PAYMENTS_LOCK_REASON_UNLOCK_PAYMENTS_LOCK" = "Uwierzytelnij, aby potwierdzić płatność.";
 
 /* Label for the 'add memo' ui in the 'send payment' UI. */
@@ -5846,7 +5846,7 @@
 "PAYMENTS_NEW_PAYMENT_ERROR_INVALID_TRANSACTION" = "Nieprawidłowa transakcja";
 
 /* Indicates that a payment failed due to an outdated client. */
-"PAYMENTS_NEW_PAYMENT_ERROR_OUTDATED_CLIENT" = "Aby wykonywać płatności, zaktualizuj aplikację Signal.";
+"PAYMENTS_NEW_PAYMENT_ERROR_OUTDATED_CLIENT" = "Aby wykonywać płatności, zaktualizuj aplikację B&A.";
 
 /* Indicates that an outgoing payment could not be verified in a timely way. */
 "PAYMENTS_NEW_PAYMENT_ERROR_OUTGOING_VERIFICATION_TAKING_TOO_LONG" = "Płatność nie została jeszcze zweryfikowana";
@@ -6092,13 +6092,13 @@
 "PHONE_NUMBER_DISCOVERABILITY_EVERYBODY" = "Wszyscy";
 
 /* A user friendly description of the 'everybody' phone number discoverability mode. */
-"PHONE_NUMBER_DISCOVERABILITY_EVERYBODY_DESCRIPTION" = "Każdy, kto ma Twój numer telefonu, może Cię znaleźć w aplikacji Signal i rozpocząć z Tobą czat.";
+"PHONE_NUMBER_DISCOVERABILITY_EVERYBODY_DESCRIPTION" = "Każdy, kto ma Twój numer telefonu, może Cię znaleźć w aplikacji B&A i rozpocząć z Tobą czat.";
 
 /* A user friendly name for the 'nobody' phone number discoverability mode. */
 "PHONE_NUMBER_DISCOVERABILITY_NOBODY" = "Nikt";
 
 /* A user friendly description of the 'nobody' phone number discoverability mode. */
-"PHONE_NUMBER_DISCOVERABILITY_NOBODY_DESCRIPTION" = "O tym, że korzystasz z aplikacji Signal, nie dowie się nikt oprócz osób, którym wyślesz wiadomość lub z którymi masz już czat.";
+"PHONE_NUMBER_DISCOVERABILITY_NOBODY_DESCRIPTION" = "O tym, że korzystasz z aplikacji B&A, nie dowie się nikt oprócz osób, którym wyślesz wiadomość lub z którymi masz już czat.";
 
 /* A format for a label showing an example phone number. Embeds {{the example phone number}}. */
 "PHONE_NUMBER_EXAMPLE_FORMAT" = "Przykład: %1$@";
@@ -6200,22 +6200,22 @@
 "PIN_CREATION_DISABLE_CONFIRMATION_ACTION" = "Wyłącz PIN";
 
 /* Message of the 'pin disable' action sheet. */
-"PIN_CREATION_DISABLE_CONFIRMATION_MESSAGE" = "Jeśli wyłączysz PIN, przy ponownej rejestracji w aplikacji Signal stracisz wszystkie dane (chyba że przeniesiesz je z innego urządzenia z systemem iOS). Gdy PIN jest wyłączony, nie można też korzystać z funkcji blokady rejestracji.";
+"PIN_CREATION_DISABLE_CONFIRMATION_MESSAGE" = "Jeśli wyłączysz PIN, przy ponownej rejestracji w aplikacji B&A stracisz wszystkie dane (chyba że przeniesiesz je z innego urządzenia z systemem iOS). Gdy PIN jest wyłączony, nie można też korzystać z funkcji blokady rejestracji.";
 
 /* Title of the 'pin disable' action sheet. */
 "PIN_CREATION_DISABLE_CONFIRMATION_TITLE" = "Uwaga";
 
 /* The explanation in the 'pin creation' view. */
-"PIN_CREATION_EXPLANATION" = "Dzięki PIN-owi dane przechowywane w aplikacji Signal są szyfrowane i tylko Ty masz do nich dostęp. PIN pozwoli Ci przywrócić profil, ustawienia i kontakty, gdy ponownie zainstalujesz Signal. Nie potrzebujesz PIN-u, aby otwierać aplikację.";
+"PIN_CREATION_EXPLANATION" = "Dzięki PIN-owi dane przechowywane w aplikacji B&A są szyfrowane i tylko Ty masz do nich dostęp. PIN pozwoli Ci przywrócić profil, ustawienia i kontakty, gdy ponownie zainstalujesz B&A. Nie potrzebujesz PIN-u, aby otwierać aplikację.";
 
 /* Learn more action on the pin creation view */
 "PIN_CREATION_LEARN_MORE" = "Więcej informacji o kodzie PIN";
 
 /* Users can create PINs to restore their account data later. They can learn more about this on a sheet. This is the text on that sheet. */
-"PIN_CREATION_LEARN_MORE_TEXT" = "Dzięki PIN-owi dane przechowywane w aplikacji Signal są szyfrowane i tylko Ty masz do nich dostęp. PIN pozwoli Ci przywrócić profil, ustawienia i kontakty, gdy ponownie zainstalujesz aplikację.";
+"PIN_CREATION_LEARN_MORE_TEXT" = "Dzięki PIN-owi dane przechowywane w aplikacji B&A są szyfrowane i tylko Ty masz do nich dostęp. PIN pozwoli Ci przywrócić profil, ustawienia i kontakty, gdy ponownie zainstalujesz aplikację.";
 
 /* Users can create PINs to restore their account data later. They can learn more about this on a sheet. This is the title on that sheet. */
-"PIN_CREATION_LEARN_MORE_TITLE" = "Co to jest PIN Signal";
+"PIN_CREATION_LEARN_MORE_TITLE" = "Co to jest PIN B&A";
 
 /* Label indicating that the attempted PIN does not match the first PIN */
 "PIN_CREATION_MISMATCH_ERROR" = "Kody PIN są różne. Spróbuj ponownie.";
@@ -6263,7 +6263,7 @@
 "PIN_CREATION_WEAK_ERROR" = "Ułóż silniejszy PIN";
 
 /* If your attempted PIN is too weak, you'll see an error message. This is the text on the error dialog. */
-"PIN_CREATION_WEAK_ERROR_MESSAGE" = "Dzięki PIN-owi dane przechowywane w aplikacji Signal są szyfrowane i tylko Ty masz do nich dostęp. Aby chronić swoje konto, ustaw mocniejszy PIN.";
+"PIN_CREATION_WEAK_ERROR_MESSAGE" = "Dzięki PIN-owi dane przechowywane w aplikacji B&A są szyfrowane i tylko Ty masz do nich dostęp. Aby chronić swoje konto, ustaw mocniejszy PIN.";
 
 /* Error body indicating that the attempt to disable a PIN failed. */
 "PIN_DISABLE_ERROR_MESSAGE" = "Nie udało się wyłączyć Twojego PIN-u.";
@@ -6299,7 +6299,7 @@
 "PIN_REMINDER_MEGAPHONE_FEW_DAYS_TOAST" = "Przypomnimy Ci jeszcze raz za kilka dni.";
 
 /* Title for PIN reminder megaphone */
-"PIN_REMINDER_MEGAPHONE_TITLE" = "Zweryfikuj swój PIN Signal";
+"PIN_REMINDER_MEGAPHONE_TITLE" = "Zweryfikuj swój PIN B&A";
 
 /* Toast indicating that we'll ask you for your PIN again tomorrow, after successfully entering it. */
 "PIN_REMINDER_MEGAPHONE_TOMORROW_SUCCESSFUL_TOAST" = "PIN poprawny. Poprosimy Cię o niego ponownie jutro.";
@@ -6323,7 +6323,7 @@
 "PIN_REMINDER_MISMATCH_ERROR" = "Nieprawidłowy PIN. Spróbuj ponownie.";
 
 /* The title for the 'pin reminder' dialog. */
-"PIN_REMINDER_TITLE" = "Wpisz swój PIN Signal";
+"PIN_REMINDER_TITLE" = "Wpisz swój PIN B&A";
 
 /* Label indicating that the attempted PIN is too short */
 "PIN_REMINDER_TOO_SHORT_ERROR" = "PIN musi mieć co najmniej 4 cyfry.";
@@ -6338,7 +6338,7 @@
 "PINS_MEGAPHONE_ACTION" = "Utwórz PIN";
 
 /* Body for PIN megaphone when user doesn't have a PIN */
-"PINS_MEGAPHONE_BODY" = "Utwórz swój PIN Signal.";
+"PINS_MEGAPHONE_BODY" = "Utwórz swój PIN B&A.";
 
 /* Title for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_TITLE" = "Utwórz PIN";
@@ -6365,19 +6365,19 @@
 "PRIVACY_VERIFICATION_FAILED_MISMATCHED_SAFETY_NUMBERS_IN_CLIPBOARD" = "Numer ze schowka nie wygląda na poprawny numer bezpieczeństwa tego czatu.";
 
 /* Alert body for user error */
-"PRIVACY_VERIFICATION_FAILED_NO_SAFETY_NUMBERS_IN_CLIPBOARD" = "Aplikacja Signal nie znalazła w schowku numeru bezpieczeństwa. Upewnij się, że został on poprawnie skopiowany.";
+"PRIVACY_VERIFICATION_FAILED_NO_SAFETY_NUMBERS_IN_CLIPBOARD" = "Aplikacja B&A nie znalazła w schowku numeru bezpieczeństwa. Upewnij się, że został on poprawnie skopiowany.";
 
 /* Alert body when verifying with {{contact name}} */
-"PRIVACY_VERIFICATION_FAILED_THEY_HAVE_WRONG_KEY_FOR_ME" = "Każda para użytkowników Signal ma swój numer bezpieczeństwa. Upewnij się, że %1$@ pokazuje *Wasz* unikalny numer.";
+"PRIVACY_VERIFICATION_FAILED_THEY_HAVE_WRONG_KEY_FOR_ME" = "Każda para użytkowników B&A ma swój numer bezpieczeństwa. Upewnij się, że %1$@ pokazuje *Wasz* unikalny numer.";
 
 /* alert body */
-"PRIVACY_VERIFICATION_FAILED_WITH_OLD_LOCAL_VERSION" = "Korzystasz z nieaktualnej wersji aplikacji. Aby można było dokończyć weryfikację, zaktualizuj Signal.";
+"PRIVACY_VERIFICATION_FAILED_WITH_OLD_LOCAL_VERSION" = "Korzystasz z nieaktualnej wersji aplikacji. Aby można było dokończyć weryfikację, zaktualizuj B&A.";
 
 /* alert body */
-"PRIVACY_VERIFICATION_FAILED_WITH_OLD_REMOTE_VERSION" = "Twój kontakt korzysta z nieaktualnej wersji aplikacji. Aby można było dokończyć weryfikację, ta osoba musi zaktualizować Signal.";
+"PRIVACY_VERIFICATION_FAILED_WITH_OLD_REMOTE_VERSION" = "Twój kontakt korzysta z nieaktualnej wersji aplikacji. Aby można było dokończyć weryfikację, ta osoba musi zaktualizować B&A.";
 
 /* alert body */
-"PRIVACY_VERIFICATION_FAILURE_INVALID_QRCODE" = "Zeskanowany kod nie wygląda na numer bezpieczeństwa. Upewnij się, że Ty i Twój kontakt używacie aktualnej wersji aplikacji Signal.";
+"PRIVACY_VERIFICATION_FAILURE_INVALID_QRCODE" = "Zeskanowany kod nie wygląda na numer bezpieczeństwa. Upewnij się, że Ty i Twój kontakt używacie aktualnej wersji aplikacji B&A.";
 
 /* Navbar title */
 "PRIVACY_VERIFICATION_TITLE" = "Zweryfikuj numer bezpieczeństwa";
@@ -6452,7 +6452,7 @@
 "PROFILE_NAME_EDUCATION_SHEET_BULLET_3" = "Nie udostępniaj danych osobowych użytkownikom, których nie znasz";
 
 /* Header for the explainer sheet for profile names */
-"PROFILE_NAME_EDUCATION_SHEET_HEADER_FORMAT" = "<bold>Imię i nazwisko w profilu</bold> w aplikacji Signal podaje osoba, do której należy dane konto.";
+"PROFILE_NAME_EDUCATION_SHEET_HEADER_FORMAT" = "<bold>Imię i nazwisko w profilu</bold> w aplikacji B&A podaje osoba, do której należy dane konto.";
 
 /* Title for the profile name view. */
 "PROFILE_NAME_VIEW_TITLE" = "Twoje imię";
@@ -6650,19 +6650,19 @@
 "RECIPIENT_PICKER_ERROR_USER_CANNOT_BE_SELECTED" = "Nie można wybrać użytkownika.";
 
 /* Alert text. Shown after selecting a phone number that isn't valid. */
-"RECIPIENT_PICKER_INVALID_NUMBER_MESSAGE" = "%1$@ nie używa aplikacji Signal. Podaj prawidłowy numer telefonu i spróbuj ponownie.";
+"RECIPIENT_PICKER_INVALID_NUMBER_MESSAGE" = "%1$@ nie używa aplikacji B&A. Podaj prawidłowy numer telefonu i spróbuj ponownie.";
 
 /* Alert title. Shown after selecting a phone number that isn't valid. */
 "RECIPIENT_PICKER_INVALID_NUMBER_TITLE" = "Nieprawidłowy numer telefonu";
 
-/* Button. Shown after selecting a phone number that isn't a Signal user. Tapping the button will open a view that allows the user to send an SMS message to specified phone number. */
+/* Button. Shown after selecting a phone number that isn't a B&A user. Tapping the button will open a view that allows the user to send an SMS message to specified phone number. */
 "RECIPIENT_PICKER_INVITE_ACTION" = "Zaproś";
 
-/* Alert text. Shown after selecting a phone number that isn't a Signal user. */
-"RECIPIENT_PICKER_INVITE_MESSAGE" = "%1$@ nie używa aplikacji Signal. Chcesz wysłać na ten numer zaproszenie?";
+/* Alert text. Shown after selecting a phone number that isn't a B&A user. */
+"RECIPIENT_PICKER_INVITE_MESSAGE" = "%1$@ nie używa aplikacji B&A. Chcesz wysłać na ten numer zaproszenie?";
 
-/* Alert title. Shown after selecting a phone number that isn't a Signal user. */
-"RECIPIENT_PICKER_INVITE_TITLE" = "Zaproś do aplikacji Signal";
+/* Alert title. Shown after selecting a phone number that isn't a B&A user. */
+"RECIPIENT_PICKER_INVITE_TITLE" = "Zaproś do aplikacji B&A";
 
 /* Alert title explaining what happens if you forget your 'two-factor auth pin'. */
 "REGISTER_2FA_FORGOT_PIN_ALERT_TITLE" = "Potrzebujesz pomocy?";
@@ -6725,7 +6725,7 @@
 "REGISTRATION_BACKUP_RESTORE_ERROR_GENERIC_TITLE" = "Nie udało się przenieść danych";
 
 /* Body for a sheet warning users about an incorrect backup key. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling Signal backups. Backups can not be recovered without this key.";
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
 /* Title for a sheet warning users about an incorrect backup key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "Niepoprawny kod kopii zapasowej";
@@ -6743,7 +6743,7 @@
 "REGISTRATION_BACKUP_RESTORE_ERROR_TRY_AGAIN_ACTION" = "Spróbuj ponownie";
 
 /* Body for a sheet warning users about an incompatible backup version. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_UNSUPPORTED_BACKUP_VERSION_BODY" = "Aby przywrócić kopię zapasową, sprawdź, czy masz najnowszą wersję aplikacji Signal, i spróbuj ponownie. Jeśli problem będzie się powtarzać, skontaktuj się z pomocą techniczną.";
+"REGISTRATION_BACKUP_RESTORE_ERROR_UNSUPPORTED_BACKUP_VERSION_BODY" = "Aby przywrócić kopię zapasową, sprawdź, czy masz najnowszą wersję aplikacji B&A, i spróbuj ponownie. Jeśli problem będzie się powtarzać, skontaktuj się z pomocą techniczną.";
 
 /* Title for a sheet warning users about an incompatible backup version. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_UNSUPPORTED_BACKUP_VERSION_TITLE" = "Wymagana aktualizacja";
@@ -6755,7 +6755,7 @@
 "REGISTRATION_CANNOT_CONTINUE_WITHOUT_UPDATING_APP_ACTION" = "Zaktualizuj";
 
 /* During (re)registration, users may need to update their app to continue. They'll be presented with an alert if this is the case, prompting them to update. This is the description text on that alert. */
-"REGISTRATION_CANNOT_CONTINUE_WITHOUT_UPDATING_APP_DESCRIPTION" = "Aby kontynuować rejestrację, zaktualizuj aplikację Signal do najnowszej wersji.";
+"REGISTRATION_CANNOT_CONTINUE_WITHOUT_UPDATING_APP_DESCRIPTION" = "Aby kontynuować rejestrację, zaktualizuj aplikację B&A do najnowszej wersji.";
 
 /* During (re)registration, users may need to update their app to continue. They'll be presented with an alert if this is the case, prompting them to update. This is the title on that alert. */
 "REGISTRATION_CANNOT_CONTINUE_WITHOUT_UPDATING_APP_TITLE" = "Wymagana aktualizacja";
@@ -6766,10 +6766,10 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "Kod kraju";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "Jeśli przejdziesz dalej, aplikacja Signal zdezaktywuje się na wszystkich innych urządzeniach zarejestrowanych przy użyciu tego samego numeru telefonu.";
+/* If a user is installing B&A on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
+"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "Jeśli przejdziesz dalej, aplikacja B&A zdezaktywuje się na wszystkich innych urządzeniach zarejestrowanych przy użyciu tego samego numeru telefonu.";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
+/* If a user is installing B&A on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
 "REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "Przenieś konto i wiadomości";
 
 /* Description for the screen that allows users to enter their backup key. */
@@ -6803,7 +6803,7 @@
 "REGISTRATION_NO_BACKUP_KEY_BUTTON_TITLE" = "Nie masz kodu kopii zapasowej?";
 
 /* Body text on a sheet with info for what to do if you don't have a backup key */
-"REGISTRATION_NO_BACKUP_KEY_SHEET_BODY" = "Bez kodu składającego się z 64 znaków nie odzyskasz swojej kopii zapasowej. Jeśli nie pamiętasz kodu kopii zapasowej, nie będziemy w stanie przywrócić kopii zapasowej Twojego konta Signal.\n\nJeśli masz dostęp do swojego starego urządzenia, kod kopii zapasowej znajdziesz w sekcji Ustawienia > Czaty > Kopie zapasowe Signal. Następnie wybierz opcję „Wyświetl kod kopii zapasowej”.";
+"REGISTRATION_NO_BACKUP_KEY_SHEET_BODY" = "Bez kodu składającego się z 64 znaków nie odzyskasz swojej kopii zapasowej. Jeśli nie pamiętasz kodu kopii zapasowej, nie będziemy w stanie przywrócić kopii zapasowej Twojego konta B&A.\n\nJeśli masz dostęp do swojego starego urządzenia, kod kopii zapasowej znajdziesz w sekcji Ustawienia > Czaty > Kopie zapasowe B&A. Następnie wybierz opcję „Wyświetl kod kopii zapasowej”.";
 
 /* Title for sheet with info for what to do if you don't have a backup key */
 "REGISTRATION_NO_BACKUP_KEY_SHEET_TITLE" = "Nie masz kodu kopii zapasowej?";
@@ -6830,13 +6830,13 @@
 "REGISTRATION_PIN_CONFIRM_TITLE" = "Potwierdź PIN";
 
 /* During registration, users are asked to create a PIN code. This is the subtitle on the screen where this happens. A \"learn more\" link will be added to the end of this string. */
-"REGISTRATION_PIN_CREATE_SUBTITLE" = "PIN służy do przywracania konta i szyfrowania danych w aplikacji Signal.";
+"REGISTRATION_PIN_CREATE_SUBTITLE" = "PIN służy do przywracania konta i szyfrowania danych w aplikacji B&A.";
 
 /* During registration, users are asked to create a PIN code. This is the title on the screen where this happens. */
 "REGISTRATION_PIN_CREATE_TITLE" = "Utwórz PIN";
 
 /* During re-registration, users may be asked to re-enter their PIN code. This is the subtitle on the screen where this happens. A \"learn more\" link will be added to the end of this string. */
-"REGISTRATION_PIN_ENTER_EXISTING_SUBTITLE" = "PIN służy do przywracania konta i szyfrowania danych w aplikacji Signal.";
+"REGISTRATION_PIN_ENTER_EXISTING_SUBTITLE" = "PIN służy do przywracania konta i szyfrowania danych w aplikacji B&A.";
 
 /* During re-registration, users may be asked to re-enter their PIN code. This is the title on the screen where this happens. */
 "REGISTRATION_PIN_ENTER_EXISTING_TITLE" = "Wpisz PIN";
@@ -6874,8 +6874,8 @@
 /* Title for screen containing QR code that users scan with their old phone when they want to transfer/restore their message history to a new device. */
 "REGISTRATION_SCAN_QR_CODE_TITLE" = "Zeskanuj ten kod swoim starym telefonem";
 
-/* Tutorial text describing the first step to scanning the restore/transfer QR code with your old phone: opening Signal */
-"REGISTRATION_SCAN_QR_CODE_TUTORIAL_OPEN_SIGNAL" = "Otwórz Signal na swoim starym urządzeniu";
+/* Tutorial text describing the first step to scanning the restore/transfer QR code with your old phone: opening B&A */
+"REGISTRATION_SCAN_QR_CODE_TUTORIAL_OPEN_SIGNAL" = "Otwórz B&A na swoim starym urządzeniu";
 
 /* Tutorial text describing the third step to scanning the restore/transfer QR code with your old phone: scan the code */
 "REGISTRATION_SCAN_QR_CODE_TUTORIAL_SCAN" = "Zeskanuj ten kod aparatem";
@@ -7040,7 +7040,7 @@
 "SAFETY_NUMBER_CONFIRMATION_VIEW_ACTION" = "Wyświetl";
 
 /* Snippet to share {{safety number}} with a friend. sent e.g. via SMS */
-"SAFETY_NUMBER_SHARE_FORMAT" = "Nasz numer bezpieczeństwa Signal:\n%1$@";
+"SAFETY_NUMBER_SHARE_FORMAT" = "Nasz numer bezpieczeństwa B&A:\n%1$@";
 
 /* Title for Safety Tips button in thread details. */
 "SAFETY_TIPS_BUTTON_ACTION_TITLE" = "Wskazówki dotyczące bezpieczeństwa";
@@ -7058,7 +7058,7 @@
 "SAFETY_TIPS_FAKE_BUSINESS_TITLE" = "Fałszywe konta firm i instytucji";
 
 /* Message contents for the fake names safety tip. */
-"SAFETY_TIPS_FAKE_NAMES_BODY" = "Signal nigdy nie zwróci się do Ciebie z prośbą o podanie kodu rejestracyjnego ani PIN-u. Uważaj na tego typu wiadomości – mogą pochodzić od osób podszywających się pod kogoś innego. Imię i nazwisko w profilu podaje osoba posługująca się kontem, a Signal tego nie weryfikuje.";
+"SAFETY_TIPS_FAKE_NAMES_BODY" = "B&A nigdy nie zwróci się do Ciebie z prośbą o podanie kodu rejestracyjnego ani PIN-u. Uważaj na tego typu wiadomości – mogą pochodzić od osób podszywających się pod kogoś innego. Imię i nazwisko w profilu podaje osoba posługująca się kontem, a B&A tego nie weryfikuje.";
 
 /* Message title describing the fake names safety tip. */
 "SAFETY_TIPS_FAKE_NAMES_TITLE" = "Uwaga na oszustów";
@@ -7117,14 +7117,14 @@
 /* Indicates that Touch ID/Face ID/Phone Passcode passcode is not set. */
 "SCREEN_LOCK_ERROR_LOCAL_AUTHENTICATION_PASSCODE_NOT_SET" = "Aby korzystać z blokady ekranu, musisz ustawić kod w ustawieniach iOS.";
 
-/* Description of how and why Signal iOS uses Touch ID/Face ID/Phone Passcode to unlock 'screen lock'. */
-"SCREEN_LOCK_REASON_UNLOCK_SCREEN_LOCK" = "Uwierzytelnij, aby otworzyć Signal.";
+/* Description of how and why B&A iOS uses Touch ID/Face ID/Phone Passcode to unlock 'screen lock'. */
+"SCREEN_LOCK_REASON_UNLOCK_SCREEN_LOCK" = "Uwierzytelnij, aby otworzyć B&A.";
 
 /* Title for alert indicating that screen lock could not be unlocked. */
 "SCREEN_LOCK_UNLOCK_FAILED" = "Nie udało się uwierzytelnić";
 
-/* Label for button on lock screen that lets users unlock Signal. */
-"SCREEN_LOCK_UNLOCK_SIGNAL" = "Odblokuj Signal";
+/* Label for button on lock screen that lets users unlock B&A. */
+"SCREEN_LOCK_UNLOCK_SIGNAL" = "Odblokuj B&A";
 
 /* Placeholder text indicating the user can search for contacts by name, username, or phone number. */
 "SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "Imię, nazwa użytkownika lub numer";
@@ -7157,13 +7157,13 @@
 "SECONDARY_LINKING_ERROR_DIFFERENT_ACCOUNT_TITLE" = "Niezgodne konto";
 
 /* Message for error alert indicating that a linked device must be upgraded before it can be linked. */
-"SECONDARY_LINKING_ERROR_OBSOLETE_LINKED_DEVICE_MESSAGE" = "Aby połączyć Signal z telefonem, zaktualizuj aplikację na tym urządzeniu.";
+"SECONDARY_LINKING_ERROR_OBSOLETE_LINKED_DEVICE_MESSAGE" = "Aby połączyć B&A z telefonem, zaktualizuj aplikację na tym urządzeniu.";
 
 /* Title for error alert indicating that a linked device must be upgraded before it can be linked. */
 "SECONDARY_LINKING_ERROR_OBSOLETE_LINKED_DEVICE_TITLE" = "Nieobsługiwana wersja";
 
 /* alert message for outdated linking device */
-"SECONDARY_LINKING_ERROR_OLD_VERSION_MESSAGE" = "Na drugim urządzeniu masz zainstalowaną starą wersję aplikacji Signal, która nie obsługuje skanowania kodów QR na iPadzie. Zainstaluj najnowszą wersję aplikacji i spróbuj ponownie.";
+"SECONDARY_LINKING_ERROR_OLD_VERSION_MESSAGE" = "Na drugim urządzeniu masz zainstalowaną starą wersję aplikacji B&A, która nie obsługuje skanowania kodów QR na iPadzie. Zainstaluj najnowszą wersję aplikacji i spróbuj ponownie.";
 
 /* alert title for outdated linking device */
 "SECONDARY_LINKING_ERROR_OLD_VERSION_TITLE" = "Zaktualizuj urządzenie skanujące";
@@ -7180,11 +7180,11 @@
 /* Message for action sheet when secondary device fails to sync messages due to an unspecified error. */
 "SECONDARY_LINKING_SYNCING_OTHER_ERROR_MESSAGE" = "Nie udało się przenieść Twoich wiadomości z powodu błędu. Aby spróbować ponownie, połącz to urządzenie jeszcze raz.";
 
-/* Button on an action sheet to open Signal on the App Store. */
+/* Button on an action sheet to open B&A on the App Store. */
 "SECONDARY_LINKING_SYNCING_UPDATE_REQUIRED_CHECK_FOR_UPDATE_BUTTON" = "Sprawdź dostępne aktualizacje";
 
 /* Message for action sheet when the secondary device fails to sync messages due to an app update being required. */
-"SECONDARY_LINKING_SYNCING_UPDATE_REQUIRED_ERROR_MESSAGE" = "Aby dokończyć synchronizację wiadomości, zaktualizuj aplikację Signal.";
+"SECONDARY_LINKING_SYNCING_UPDATE_REQUIRED_ERROR_MESSAGE" = "Aby dokończyć synchronizację wiadomości, zaktualizuj aplikację B&A.";
 
 /* Title for action sheet when the secondary device fails to sync messages due to an app update being required. */
 "SECONDARY_LINKING_SYNCING_UPDATE_REQUIRED_ERROR_TITLE" = "Wymagana aktualizacja";
@@ -7193,19 +7193,19 @@
 "SECONDARY_ONBOARDING_CHOOSE_DEVICE_NAME_PLACEHOLDER" = "Wybierz nazwę";
 
 /* header text before the user can link this device */
-"SECONDARY_ONBOARDING_GET_STARTED_BY_OPENING_PRIMARY" = "Aby połączyć tego iPada ze swoim kontem, uruchom aplikację Signal na telefonie";
+"SECONDARY_ONBOARDING_GET_STARTED_BY_OPENING_PRIMARY" = "Aby połączyć tego iPada ze swoim kontem, uruchom aplikację B&A na telefonie";
 
 /* Link explaining what to do when trying to link a device before having a primary device. */
-"SECONDARY_ONBOARDING_GET_STARTED_DO_NOT_HAVE_PRIMARY" = "Nie mam aplikacji Signal na telefonie…";
+"SECONDARY_ONBOARDING_GET_STARTED_DO_NOT_HAVE_PRIMARY" = "Nie mam aplikacji B&A na telefonie…";
 
 /* alert body */
-"SECONDARY_ONBOARDING_INSTALL_PRIMARY_FIRST_BODY" = "Przejdź do App Store na telefonie, zainstaluj aplikację Signal i zarejestruj się w niej. Wtedy możesz połączyć z tym samym kontem swojego iPada.";
+"SECONDARY_ONBOARDING_INSTALL_PRIMARY_FIRST_BODY" = "Przejdź do App Store na telefonie, zainstaluj aplikację B&A i zarejestruj się w niej. Wtedy możesz połączyć z tym samym kontem swojego iPada.";
 
 /* alert title */
-"SECONDARY_ONBOARDING_INSTALL_PRIMARY_FIRST_TITLE" = "Zainstaluj Signal na telefonie";
+"SECONDARY_ONBOARDING_INSTALL_PRIMARY_FIRST_TITLE" = "Zainstaluj B&A na telefonie";
 
 /* body text while displaying a QR code which, when scanned, will link this device. */
-"SECONDARY_ONBOARDING_SCAN_CODE_BODY" = "Na telefonie dotknij swojego zdjęcia profilowego i otwórz ustawienia aplikacji Signal. Przejdź do sekcji „Połączone urządzenia”, wybierz opcję „Połącz nowe urządzenie” i zeskanuj telefonem ten kod:";
+"SECONDARY_ONBOARDING_SCAN_CODE_BODY" = "Na telefonie dotknij swojego zdjęcia profilowego i otwórz ustawienia aplikacji B&A. Przejdź do sekcji „Połączone urządzenia”, wybierz opcję „Połącz nowe urządzenie” i zeskanuj telefonem ten kod:";
 
 /* Link text for page with troubleshooting info shown on the QR scanning screen */
 "SECONDARY_ONBOARDING_SCAN_CODE_HELP_TEXT" = "Otrzymaj pomoc przy łączeniu iPada";
@@ -7217,7 +7217,7 @@
 "SECONDARY_ONBOARDING_SCAN_CODE_TITLE" = "Zeskanuj kod QR swoim telefonem";
 
 /* header text before the user can transfer to this device */
-"SECONDARY_TRANSFER_GET_STARTED_BY_OPENING_IPAD" = "Aby przenieść konto, uruchom Signal na swoim starym iPadzie";
+"SECONDARY_TRANSFER_GET_STARTED_BY_OPENING_IPAD" = "Aby przenieść konto, uruchom B&A na swoim starym iPadzie";
 
 /* No comment provided by engineer. */
 "SECURE_SESSION_RESET" = "Bezpieczna sesja zresetowana.";
@@ -7261,10 +7261,10 @@
 /* String describing standard quality sent media */
 "SENT_MEDIA_QUALITY_STANDARD" = "Standardowa";
 
-/* Users can donate to Signal with a bank account. This is the label for email field on that screen. */
+/* Users can donate to B&A with a bank account. This is the label for email field on that screen. */
 "SEPA_DONATION_EMAIL_LABEL" = "E-mail";
 
-/* Users can donate to Signal with a bank account. This is placeholder text for the email field before the user starts typing. */
+/* Users can donate to B&A with a bank account. This is placeholder text for the email field before the user starts typing. */
 "SEPA_DONATION_EMAIL_PLACEHOLDER" = "Adres e-mail";
 
 /* SEPA bank account donation error for insufficient funds. */
@@ -7282,32 +7282,32 @@
 /* SEPA bank account donation error for the payment not being authorizing by the account holder. */
 "SEPA_DONATION_ERROR_PAYMENT_NOT_AUTHORIZED" = "Nie udało się zrealizować płatności, ponieważ została oan odrzucona przez właściciela konta. Środki nie zostały pobrane.";
 
-/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) contains characters other than letters and numbers, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) contains characters other than letters and numbers, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_INVALID_CHARACTERS_ERROR" = "IBAN może zawierać wyłącznie znaki A–Z i 0–9";
 
-/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) does not pass validation, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) does not pass validation, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_INVALID_CHECK_ERROR" = "Nieprawidłowy numer IBAN";
 
-/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) has an unsupported country code, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) has an unsupported country code, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_INVALID_COUNTRY_ERROR" = "Nieobsługiwany kod kraju IBAN";
 
-/* Users can donate to Signal with a bank account. This is the label for IBAN (internation bank account number) field on that screen. */
+/* Users can donate to B&A with a bank account. This is the label for IBAN (internation bank account number) field on that screen. */
 "SEPA_DONATION_IBAN_LABEL" = "IBAN";
 
-/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_TOO_LONG_ERROR" = "IBAN jest za długi";
 
-/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_TOO_SHORT_ERROR" = "IBAN jest za krótki";
 
-/* Users can donate to Signal with a bank account. This is the label for name field on that screen. */
+/* Users can donate to B&A with a bank account. This is the label for name field on that screen. */
 "SEPA_DONATION_NAME_LABEL" = "Imię i nazwisko";
 
-/* Users can donate to Signal with a bank account. This is placeholder text for the name field before the user starts typing. */
+/* Users can donate to B&A with a bank account. This is placeholder text for the name field before the user starts typing. */
 "SEPA_DONATION_NAME_PLACEHOLDER" = "Imię i nazwisko na koncie bankowym";
 
 /* Description for the session refresh alert */
-"SESSION_REFRESH_ALERT_MESSAGE" = "Signal stosuje metodę szyfrowania end-to-end. Z tego powodu czasem może być konieczne odświeżenie sesji czatu. Nie wpływa to na jego bezpieczeństwo, ale mogło się zdarzyć, że wiadomość od tego kontaktu do Ciebie nie dotarła. Poproś tę osobę o ponowne przesłanie wiadomości.";
+"SESSION_REFRESH_ALERT_MESSAGE" = "B&A stosuje metodę szyfrowania end-to-end. Z tego powodu czasem może być konieczne odświeżenie sesji czatu. Nie wpływa to na jego bezpieczeństwo, ale mogło się zdarzyć, że wiadomość od tego kontaktu do Ciebie nie dotarła. Poproś tę osobę o ponowne przesłanie wiadomości.";
 
 /* Title for the session refresh alert */
 "SESSION_REFRESH_ALERT_TITLE" = "Sesja czatu odświeżona";
@@ -7340,7 +7340,7 @@
 "SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_COUNTRY" = "Lokalizacja";
 
 /* Table footer for the 'censorship circumvention' section when censorship circumvention can be manually enabled. */
-"SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER" = "Gdy ta opcja jest włączona, Signal w miarę możliwości korzysta z mechanizmów obchodzenia cenzury. Nie włączaj tej opcji, jeśli znajdujesz się w miejscu, w którym aplikacja Signal nie jest blokowana.";
+"SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER" = "Gdy ta opcja jest włączona, B&A w miarę możliwości korzysta z mechanizmów obchodzenia cenzury. Nie włączaj tej opcji, jeśli znajdujesz się w miejscu, w którym aplikacja B&A nie jest blokowana.";
 
 /* Table footer for the 'censorship circumvention' section shown when censorship circumvention has been auto-enabled based on local phone number. */
 "SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_AUTO_ENABLED" = "Obchodzenie cenzury zostało włączone na podstawie numeru telefonu na Twoim koncie.";
@@ -7351,8 +7351,8 @@
 /* Table footer for the 'censorship circumvention' section shown when the app is not connected to the internet. */
 "SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_NO_CONNECTION" = "Aby włączyć obchodzenie cenzury, musisz mieć połączenie z internetem.";
 
-/* Table footer for the 'censorship circumvention' section shown when the app is connected to the Signal service. */
-"SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_WEBSOCKET_CONNECTED" = "Obchodzenie cenzury nie jest konieczne. Masz połączenie z usługą Signal.";
+/* Table footer for the 'censorship circumvention' section shown when the app is connected to the B&A service. */
+"SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_WEBSOCKET_CONNECTED" = "Obchodzenie cenzury nie jest konieczne. Masz połączenie z usługą B&A.";
 
 /* Label for the 'advanced pin settings' button. */
 "SETTINGS_ADVANCED_PIN_SETTINGS" = "Zaawansowane ustawienia PIN-u";
@@ -7373,13 +7373,13 @@
 "SETTINGS_ADVANCED_VIEW_ERROR_LOG" = "Dzienniki błędów";
 
 /* Information on sheet about changing the app icon - first line */
-"SETTINGS_APP_ICON_EDUCATION_APP_NAME" = "Nazwa „Signal” będzie widoczna na ekranie początkowym, w powiadomieniach oraz w bibliotece aplikacji.";
+"SETTINGS_APP_ICON_EDUCATION_APP_NAME" = "Nazwa „B&A” będzie widoczna na ekranie początkowym, w powiadomieniach oraz w bibliotece aplikacji.";
 
 /* Information on sheet about changing the app icon - second line */
-"SETTINGS_APP_ICON_EDUCATION_HOME_SCREEN_DOCK" = "Możesz usunąć nazwę „Signal” z ekranu początkowego. Aby to zrobić, przenieś aplikację na pasek u dołu ekranu początkowego.";
+"SETTINGS_APP_ICON_EDUCATION_HOME_SCREEN_DOCK" = "Możesz usunąć nazwę „B&A” z ekranu początkowego. Aby to zrobić, przenieś aplikację na pasek u dołu ekranu początkowego.";
 
 /* The footer for the app icon selection settings page. */
-"SETTINGS_APP_ICON_FOOTER" = "Nazwa „Signal” będzie widoczna na ekranie początkowym, w powiadomieniach oraz w bibliotece aplikacji.";
+"SETTINGS_APP_ICON_FOOTER" = "Nazwa „B&A” będzie widoczna na ekranie początkowym, w powiadomieniach oraz w bibliotece aplikacji.";
 
 /* The title for the app icon selection settings page. */
 "SETTINGS_APP_ICON_TITLE" = "Ikona aplikacji";
@@ -7408,8 +7408,8 @@
 /* A label for the 'add phone number' button in the block list table. */
 "SETTINGS_BLOCK_LIST_ADD_BUTTON" = "Zablokuj użytkownika";
 
-/* A label that indicates the user has no Signal contacts that they haven't blocked. */
-"SETTINGS_BLOCK_LIST_NO_CONTACTS" = "Nie masz żadnych kontaktów w aplikacji Signal.";
+/* A label that indicates the user has no B&A contacts that they haven't blocked. */
+"SETTINGS_BLOCK_LIST_NO_CONTACTS" = "Nie masz żadnych kontaktów w aplikacji B&A.";
 
 /* A label that indicates the user's search has no matching results. */
 "SETTINGS_BLOCK_LIST_NO_SEARCH_RESULTS" = "Nic nie znaleziono";
@@ -7421,7 +7421,7 @@
 "SETTINGS_CALLING_HIDES_IP_ADDRESS_PREFERENCE_TITLE" = "Zawsze pośrednicz w połączeniach";
 
 /* User settings section footer, a detailed explanation */
-"SETTINGS_CALLING_HIDES_IP_ADDRESS_PREFERENCE_TITLE_DETAIL" = "Aby nie ujawniać swojego adresu IP kontaktom, realizuj wszystkie połączenia za pośrednictwem serwera Signal. Gdy ta opcja jest włączona, połączenia mają gorszą jakość.";
+"SETTINGS_CALLING_HIDES_IP_ADDRESS_PREFERENCE_TITLE_DETAIL" = "Aby nie ujawniać swojego adresu IP kontaktom, realizuj wszystkie połączenia za pośrednictwem serwera B&A. Gdy ta opcja jest włączona, połączenia mają gorszą jakość.";
 
 /* Label for the 'edit phone number' button in the 'change phone number' views. */
 "SETTINGS_CHANGE_PHONE_NUMBER_BACK_TO_EDIT_BUTTON" = "Edytuj numer";
@@ -7466,7 +7466,7 @@
 "SETTINGS_CLEAR_HISTORY" = "Usuń historię czatu";
 
 /* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "Copyright Signal Messenger\nOprogramowanie udostępniane na licencji AGPLv3";
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nOprogramowanie udostępniane na licencji AGPLv3";
 
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "Użycie danych";
@@ -7532,7 +7532,7 @@
 "SETTINGS_DISAPPEARING_MESSAGES_FOOTER" = "Ustaw domyślny czas, po którym wiadomości znikają, we wszystkich nowych czatach rozpoczętych przez Ciebie.";
 
 /* Title for the 'donate to signal' link in settings. */
-"SETTINGS_DONATE" = "Wesprzyj Signal darowizną";
+"SETTINGS_DONATE" = "Wesprzyj B&A darowizną";
 
 /* Title for help button and help pages in app settings. */
 "SETTINGS_HELP" = "Pomoc";
@@ -7601,7 +7601,7 @@
 "SETTINGS_NOTIFICATION_CONTENT_TITLE" = "Treść powiadomień";
 
 /* When the local device discovers a contact has recently installed signal, the app can generates a message encouraging the local user to say hello. Turning this switch off disables that feature. */
-"SETTINGS_NOTIFICATION_EVENTS_CONTACT_JOINED_SIGNAL" = "Kontakt zaczyna korzystać z aplikacji Signal";
+"SETTINGS_NOTIFICATION_EVENTS_CONTACT_JOINED_SIGNAL" = "Kontakt zaczyna korzystać z aplikacji B&A";
 
 /* table section header */
 "SETTINGS_NOTIFICATION_NOTIFY_WHEN_TITLE" = "Powiadamiaj, gdy…";
@@ -7613,7 +7613,7 @@
 "SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_AGREE" = "Aktywuj";
 
 /* Description for the 'activate payments confirmation' UI in the payment settings. */
-"SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION" = "Za pomocą aplikacji Signal możesz wysyłać i otrzymywać płatności w walucie MobileCoin. Wszystkie płatności podlegają warunkom użytkowania waluty MobileCoin oraz usługi MobileCoin Wallet. Mogą wystąpić z nimi problemy, a ewentualna utrata płatności lub środków może być nieodwracalna.";
+"SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION" = "Za pomocą aplikacji B&A możesz wysyłać i otrzymywać płatności w walucie MobileCoin. Wszystkie płatności podlegają warunkom użytkowania waluty MobileCoin oraz usługi MobileCoin Wallet. Mogą wystąpić z nimi problemy, a ewentualna utrata płatności lub środków może być nieodwracalna.";
 
 /* Title for the 'activate payments confirmation' UI in the payment settings. */
 "SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_TITLE" = "Aktywuj";
@@ -7637,7 +7637,7 @@
 "SETTINGS_PAYMENTS_BALANCE_CONVERSION_FORMAT" = "%1$@ %2$@ %3$@";
 
 /* Error message indicating that payments could not be activated because the feature is not currently available. */
-"SETTINGS_PAYMENTS_CANNOT_ACTIVATE_PAYMENTS_KILL_SWITCH" = "Płatności w aplikacji Signal nie są już dostępne. Wciąż możesz przenieść środki do kantoru, ale nie możesz otrzymywać ani wysyłać płatności, jak również dodawać środków.";
+"SETTINGS_PAYMENTS_CANNOT_ACTIVATE_PAYMENTS_KILL_SWITCH" = "Płatności w aplikacji B&A nie są już dostępne. Wciąż możesz przenieść środki do kantoru, ale nie możesz otrzymywać ani wysyłać płatności, jak również dodawać środków.";
 
 /* Error message indicating that payments could not be deactivated because the current balance is unavailable. */
 "SETTINGS_PAYMENTS_CANNOT_DEACTIVATE_PAYMENTS_NO_BALANCE" = "Nie można dezaktywować płatności, ponieważ nie udało się pobrać informacji o dostępnych środkach. Sprawdź połączenie z internetem i spróbuj ponownie.";
@@ -7646,10 +7646,10 @@
 "SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENT_NO_BALANCE" = "Nie można zrealizować płatności, ponieważ nie udało się pobrać informacji o dostępnych środkach. Sprawdź połączenie z internetem i spróbuj ponownie.";
 
 /* Error message indicating that payments cannot be sent because the feature is not currently available. */
-"SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENTS_KILL_SWITCH" = "Płatności w aplikacji Signal nie są już dostępne. Wciąż możesz przenieść środki do kantoru, ale nie możesz otrzymywać ani wysyłać płatności, jak również dodawać środków.";
+"SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENTS_KILL_SWITCH" = "Płatności w aplikacji B&A nie są już dostępne. Wciąż możesz przenieść środki do kantoru, ale nie możesz otrzymywać ani wysyłać płatności, jak również dodawać środków.";
 
 /* Error message indicating that you cannot transfer into your payments wallet because the feature is not currently available. */
-"SETTINGS_PAYMENTS_CANNOT_TRANSFER_IN_KILL_SWITCH" = "Płatności w aplikacji Signal nie są już dostępne. Wciąż możesz przenieść środki do kantoru, ale nie możesz otrzymywać ani wysyłać płatności, jak również dodawać środków.";
+"SETTINGS_PAYMENTS_CANNOT_TRANSFER_IN_KILL_SWITCH" = "Płatności w aplikacji B&A nie są już dostępne. Wciąż możesz przenieść środki do kantoru, ale nie możesz otrzymywać ani wysyłać płatności, jak również dodawać środków.";
 
 /* Message for the 'currency conversions info' alert. */
 "SETTINGS_PAYMENTS_CURRENCY_CONVERSIONS_INFO_ALERT_MESSAGE" = "Kursy wymiany walut mają szacowane wartości, które mogą nie być dokładne.";
@@ -7667,7 +7667,7 @@
 "SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS" = "Zdezaktywuj płatności";
 
 /* Description for the 'deactivate payments confirmation' UI in the payment settings. */
-"SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION" = "Jeśli zdezaktywujesz płatności, nie będziesz już mieć możliwości otrzymywania ani wysyłania MobileCoin w aplikacji Signal.";
+"SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION" = "Jeśli zdezaktywujesz płatności, nie będziesz już mieć możliwości otrzymywania ani wysyłania MobileCoin w aplikacji B&A.";
 
 /* Title for the 'deactivate payments confirmation' UI in the payment settings. */
 "SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS_CONFIRM_TITLE" = "Zdezaktywować płatności?";
@@ -7676,10 +7676,10 @@
 "SETTINGS_PAYMENTS_DEACTIVATE_TITLE" = "Zdezaktywuj płatności";
 
 /* Explanation of the 'deactivate payments with balance' process in the 'deactivate payments' settings. */
-"SETTINGS_PAYMENTS_DEACTIVATE_WITH_BALANCE_EXPLANATION" = "Przed dezaktywacją płatności zalecamy przeniesienie środków do innego portfela. Jeśli ich teraz nie przeniesiesz, pozostaną w Twoim portfelu powiązanym z aplikacją Signal. Możesz ich użyć, jeśli za jakiś czas reaktywujesz znów płatności.";
+"SETTINGS_PAYMENTS_DEACTIVATE_WITH_BALANCE_EXPLANATION" = "Przed dezaktywacją płatności zalecamy przeniesienie środków do innego portfela. Jeśli ich teraz nie przeniesiesz, pozostaną w Twoim portfelu powiązanym z aplikacją B&A. Możesz ich użyć, jeśli za jakiś czas reaktywujesz znów płatności.";
 
 /* Description for the 'deactivate payments confirmation' UI in the payment settings. */
-"SETTINGS_PAYMENTS_DEACTIVATE_WITHOUT_TRANSFER_CONFIRM_DESCRIPTION" = "Środki pozostaną w Twoim portfelu powiązanym z aplikacją Signal. Możesz ich użyć, jeśli za jakiś czas reaktywujesz znów płatności.";
+"SETTINGS_PAYMENTS_DEACTIVATE_WITHOUT_TRANSFER_CONFIRM_DESCRIPTION" = "Środki pozostaną w Twoim portfelu powiązanym z aplikacją B&A. Możesz ich użyć, jeśli za jakiś czas reaktywujesz znów płatności.";
 
 /* Title for the 'deactivate payments confirmation' UI in the payment settings. */
 "SETTINGS_PAYMENTS_DEACTIVATE_WITHOUT_TRANSFER_CONFIRM_TITLE" = "Zdezaktywować bez przenoszenia?";
@@ -7706,7 +7706,7 @@
 "SETTINGS_PAYMENTS_HELP_CARD_ABOUT_MOBILECOIN_TITLE" = "O MobileCoin";
 
 /* Description for the 'Adding to your wallet' help card in the payments settings. */
-"SETTINGS_PAYMENTS_HELP_CARD_ADDING_TO_YOUR_WALLET_DESCRIPTION" = "Aby dodać środki do wykorzystania w aplikacji Signal, wyślij walutę MobileCoin na adres swojego portfela.";
+"SETTINGS_PAYMENTS_HELP_CARD_ADDING_TO_YOUR_WALLET_DESCRIPTION" = "Aby dodać środki do wykorzystania w aplikacji B&A, wyślij walutę MobileCoin na adres swojego portfela.";
 
 /* Title for the 'Adding to your wallet' help card in the payments settings. */
 "SETTINGS_PAYMENTS_HELP_CARD_ADDING_TO_YOUR_WALLET_TITLE" = "Dodawanie środków";
@@ -7781,7 +7781,7 @@
 "SETTINGS_PAYMENTS_PASSPHRASE_DISCARD_CONFIRMATION_TITLE" = "Kontynuować bez zapisywania?";
 
 /* Explanation of the 'payments passphrase' in the 'view payments passphrase' settings. */
-"SETTINGS_PAYMENTS_PASSPHRASE_EXPLANATION" = "Jeśli ponownie zainstalujesz aplikację Signal, środki zostaną automatycznie przywrócone, gdy podasz swój PIN. Możesz też przywrócić środki za pomocą frazy odzyskiwania, która jest Twoim unikalnym hasłem złożonym z 24 wyrazów. Zapisz je i przechowuj w bezpiecznym miejscu.";
+"SETTINGS_PAYMENTS_PASSPHRASE_EXPLANATION" = "Jeśli ponownie zainstalujesz aplikację B&A, środki zostaną automatycznie przywrócone, gdy podasz swój PIN. Możesz też przywrócić środki za pomocą frazy odzyskiwania, która jest Twoim unikalnym hasłem złożonym z 24 wyrazów. Zapisz je i przechowuj w bezpiecznym miejscu.";
 
 /* Explanation of the 'payments passphrase' when there is a balance. */
 "SETTINGS_PAYMENTS_PASSPHRASE_EXPLANATION_FROM_BALANCE" = "W Twoim portfelu są środki. Pora zapisać frazę odzyskiwania, czyli 24-wyrazowy klucz, którego możesz użyć do przywrócenia środków.";
@@ -7886,7 +7886,7 @@
 "SETTINGS_PAYMENTS_PAYMENTS_LOCK_PROMPT_EXPLANATION_TOUCHID" = "Dodatkowo zabezpiecz swoje konto za pomocą Touch ID, co uniemożliwi osobom trzecim używającym Twojego telefonu dostęp do Twoich środków. Możesz wyłączyć tę opcję w ustawieniach.";
 
 /* Button for payments outdated sheet. */
-"SETTINGS_PAYMENTS_PAYMENTS_OUTDATED_BUTTON" = "Zaktualizuj Signal";
+"SETTINGS_PAYMENTS_PAYMENTS_OUTDATED_BUTTON" = "Zaktualizuj B&A";
 
 /* Message for payments outdated sheet. */
 "SETTINGS_PAYMENTS_PAYMENTS_OUTDATED_MESSAGE" = "Aby dalej móc wysyłać i otrzymywać płatności oraz wyświetlać ich saldo, musisz zaktualizować aplikację.";
@@ -8018,7 +8018,7 @@
 "SETTINGS_PAYMENTS_TITLE" = "Płatności";
 
 /* Error indicating that it is not valid to send yourself a payment. */
-"SETTINGS_PAYMENTS_TRANSFER_OUT_CANNOT_SEND_TO_SELF" = "Nie możesz wysłać środków na adres własnego portfela Signal. Podaj adres portfela ze swojego konta w obsługiwanym kantorze.";
+"SETTINGS_PAYMENTS_TRANSFER_OUT_CANNOT_SEND_TO_SELF" = "Nie możesz wysłać środków na adres własnego portfela B&A. Podaj adres portfela ze swojego konta w obsługiwanym kantorze.";
 
 /* Footer of the 'transfer currency out' view in the payment settings. */
 "SETTINGS_PAYMENTS_TRANSFER_OUT_FOOTER" = "Aby przenieść środki w walucie MobileCoin, wyślij je na adres swojego portfela w kantorze. Adres portfela to ciąg cyfr i liter, zwykle znajdujący się pod kodem QR.";
@@ -8102,7 +8102,7 @@
 "SETTINGS_PHONE_NUMBER_DISCOVERABILITY_DISABLED_TOAST" = "Aby zmienić to ustawienie, w sekcji „Kto może wyświetlić mój numer” wybierz opcję „Nikt”.";
 
 /* The description for a sheet asking for confirmation that the user wants to set their phone number discoverability to 'nobody'. */
-"SETTINGS_PHONE_NUMBER_DISCOVERABILITY_NOBODY_CONFIRMATION_DESCRIPTION" = "Wybór opcji „Nikt” w ustawieniu „Kto może mnie wyszukać po numerze telefonu” utrudni innym znalezienie Cię w aplikacji Signal.";
+"SETTINGS_PHONE_NUMBER_DISCOVERABILITY_NOBODY_CONFIRMATION_DESCRIPTION" = "Wybór opcji „Nikt” w ustawieniu „Kto może mnie wyszukać po numerze telefonu” utrudni innym znalezienie Cię w aplikacji B&A.";
 
 /* The title for a sheet asking for confirmation that the user wants to set their phone number discoverability to 'nobody'. */
 "SETTINGS_PHONE_NUMBER_DISCOVERABILITY_NOBODY_CONFIRMATION_TITLE" = "Chcesz kontynuować?";
@@ -8111,7 +8111,7 @@
 "SETTINGS_PHONE_NUMBER_DISCOVERABILITY_TITLE" = "Kto może mnie wyszukać po numerze telefonu";
 
 /* Description label for Phone Number Privacy */
-"SETTINGS_PHONE_NUMBER_PRIVACY_DESCRIPTION_LABEL" = "Zdecyduj, kto może wyświetlić Twój numer telefonu lub użyć go do skontaktowania się z Tobą w aplikacji Signal.";
+"SETTINGS_PHONE_NUMBER_PRIVACY_DESCRIPTION_LABEL" = "Zdecyduj, kto może wyświetlić Twój numer telefonu lub użyć go do skontaktowania się z Tobą w aplikacji B&A.";
 
 /* The title for phone number privacy settings. */
 "SETTINGS_PHONE_NUMBER_PRIVACY_TITLE" = "Numer telefonu";
@@ -8123,16 +8123,16 @@
 "SETTINGS_PIN_REMINDER_DISABLE_CONFIRMATION_ACTION" = "Wyłącz przypomnienia";
 
 /* The explanation for the dialog asking user to confirm their PIN to disable reminders */
-"SETTINGS_PIN_REMINDER_DISABLE_CONFIRMATION_EXPLANATION" = "PIN-u nie można odzyskać, dlatego upewnij się, że go pamiętasz lub przechowujesz w bezpiecznym miejscu. Jeśli zapomnisz swój PIN, przy ponownej rejestracji konta Signal możesz stracić dane.";
+"SETTINGS_PIN_REMINDER_DISABLE_CONFIRMATION_EXPLANATION" = "PIN-u nie można odzyskać, dlatego upewnij się, że go pamiętasz lub przechowujesz w bezpiecznym miejscu. Jeśli zapomnisz swój PIN, przy ponownej rejestracji konta B&A możesz stracić dane.";
 
 /* The title for the dialog asking user to confirm their PIN to disable reminders */
-"SETTINGS_PIN_REMINDER_DISABLE_CONFIRMATION_TITLE" = "Potwierdź swój PIN Signal";
+"SETTINGS_PIN_REMINDER_DISABLE_CONFIRMATION_TITLE" = "Potwierdź swój PIN B&A";
 
 /* Label for the 'pin reminder' switch of the privacy settings. */
 "SETTINGS_PIN_REMINDER_SWITCH_LABEL" = "Przypomnienia PIN-u";
 
 /* Footer for the 'PINs' section of the privacy settings. */
-"SETTINGS_PINS_FOOTER" = "Dzięki PIN-owi dane przechowywane w aplikacji Signal są szyfrowane i tylko Ty masz do nich dostęp. PIN-u nie można odzyskać. Pozwoli Ci on przywrócić profil, ustawienia i kontakty, gdy ponownie zainstalujesz Signal.";
+"SETTINGS_PINS_FOOTER" = "Dzięki PIN-owi dane przechowywane w aplikacji B&A są szyfrowane i tylko Ty masz do nich dostęp. PIN-u nie można odzyskać. Pozwoli Ci on przywrócić profil, ustawienia i kontakty, gdy ponownie zainstalujesz B&A.";
 
 /* Label for the 'pins' item of the privacy settings when the user does have a pin. */
 "SETTINGS_PINS_ITEM" = "Zmień PIN";
@@ -8141,7 +8141,7 @@
 "SETTINGS_PINS_ITEM_CREATE" = "Utwórz PIN";
 
 /* Title for the 'PINs' section of the privacy settings. */
-"SETTINGS_PINS_TITLE" = "PIN Signal";
+"SETTINGS_PINS_TITLE" = "PIN B&A";
 
 /* Footer for table section */
 "SETTINGS_PRIVACY_ADVANCED_FOOTER" = "Ustawienia obchodzenia cenzury, proxy, pośredniczenia w połączeniach i zaszyfrowanego nadawcy.";
@@ -8168,7 +8168,7 @@
 "SETTINGS_REGISTRATION_LOCK_TURN_ON" = "Włącz";
 
 /* Body for the alert confirming that the user wants to turn on registration lock. */
-"SETTINGS_REGISTRATION_LOCK_TURN_ON_MESSAGE" = "Jeśli przy ponownej rejestracji w aplikacji Signal nie będziesz pamiętać PIN-u, stracisz dostęp do konta na 7 dni.";
+"SETTINGS_REGISTRATION_LOCK_TURN_ON_MESSAGE" = "Jeśli przy ponownej rejestracji w aplikacji B&A nie będziesz pamiętać PIN-u, stracisz dostęp do konta na 7 dni.";
 
 /* Title for the alert confirming that the user wants to turn on registration lock. */
 "SETTINGS_REGISTRATION_LOCK_TURN_ON_TITLE" = "Włączyć blokadę rejestracji?";
@@ -8198,19 +8198,19 @@
 "SETTINGS_SECTION_TITLE_CALLING" = "Połączenia";
 
 /* Section footer */
-"SETTINGS_SECURITY_DETAIL" = "Aby odblokować Signal, użyj Touch ID, Face ID lub kodu do swojego urządzenia z systemem iOS.";
+"SETTINGS_SECURITY_DETAIL" = "Aby odblokować B&A, użyj Touch ID, Face ID lub kodu do swojego urządzenia z systemem iOS.";
 
 /* Section footer */
-"SETTINGS_SECURITY_DETAIL_FACEID" = "Aby odblokować Signal, użyj Face ID.";
+"SETTINGS_SECURITY_DETAIL_FACEID" = "Aby odblokować B&A, użyj Face ID.";
 
 /* Section footer */
-"SETTINGS_SECURITY_DETAIL_OPTICID" = "Aby odblokować Signal, użyj Optic ID.";
+"SETTINGS_SECURITY_DETAIL_OPTICID" = "Aby odblokować B&A, użyj Optic ID.";
 
 /* Section footer */
-"SETTINGS_SECURITY_DETAIL_PASSCODE" = "Aby odblokować Signal, użyj kodu do swojego urządzenia.";
+"SETTINGS_SECURITY_DETAIL_PASSCODE" = "Aby odblokować B&A, użyj kodu do swojego urządzenia.";
 
 /* Section footer */
-"SETTINGS_SECURITY_DETAIL_TOUCHID" = "Aby odblokować Signal, użyj Touch ID.";
+"SETTINGS_SECURITY_DETAIL_TOUCHID" = "Aby odblokować B&A, użyj Touch ID.";
 
 /* Section header */
 "SETTINGS_SECURITY_TITLE" = "Bezpieczeństwo aplikacji";
@@ -8225,13 +8225,13 @@
 "SETTINGS_SHARING_SUGGESTIONS" = "Udostępnij kontakty systemowi iOS";
 
 /* Footer for setting for enabling & disabling contact and notification sharing with iOS. */
-"SETTINGS_SHARING_SUGGESTIONS_NOTIFICATIONS_FOOTER" = "Zezwól systemowi iOS na dostęp do kontaktów i czatów Signal, aby korzystać z takich funkcji jak sugestie udostępniania i powiadomienia.";
+"SETTINGS_SHARING_SUGGESTIONS_NOTIFICATIONS_FOOTER" = "Zezwól systemowi iOS na dostęp do kontaktów i czatów B&A, aby korzystać z takich funkcji jak sugestie udostępniania i powiadomienia.";
 
 /* Label for the 'enable registration lock' switch of the privacy settings. */
 "SETTINGS_TWO_FACTOR_AUTH_SWITCH_LABEL" = "Blokada rejestracji";
 
-/* Footer for the 'two factor auth' section of the privacy settings when Signal PINs are available. */
-"SETTINGS_TWO_FACTOR_PINS_AUTH_FOOTER" = "Wymagaj PIN-u Signal, aby ponownie zarejestrować numer telefonu w aplikacji.";
+/* Footer for the 'two factor auth' section of the privacy settings when B&A PINs are available. */
+"SETTINGS_TWO_FACTOR_PINS_AUTH_FOOTER" = "Wymagaj PIN-u B&A, aby ponownie zarejestrować numer telefonu w aplikacji.";
 
 /* Label for the 'typing indicators' setting. */
 "SETTINGS_TYPING_INDICATORS" = "Wskaźniki pisania";
@@ -8264,7 +8264,7 @@
 "SHARE_EXTENSION_LOADING" = "Wczytywanie…";
 
 /* Message indicating that the share extension cannot be used until the user has registered in the main app. */
-"SHARE_EXTENSION_NOT_REGISTERED_MESSAGE" = "Uruchom aplikację Signal, aby się zarejestrować.";
+"SHARE_EXTENSION_NOT_REGISTERED_MESSAGE" = "Uruchom aplikację B&A, aby się zarejestrować.";
 
 /* Title indicating that the share extension cannot be used until the user has registered in the main app. */
 "SHARE_EXTENSION_NOT_REGISTERED_TITLE" = "Wymagana rejestracja";
@@ -8278,11 +8278,11 @@
 /* Alert title */
 "SHARE_EXTENSION_SENDING_IN_PROGRESS_TITLE" = "Wysyłanie…";
 
-/* Shown when trying to share content to a Signal user for the share extension. Followed by failure details. */
+/* Shown when trying to share content to a B&A user for the share extension. Followed by failure details. */
 "SHARE_EXTENSION_UNABLE_TO_BUILD_ATTACHMENT_ALERT_TITLE" = "Nie można załączyć pliku";
 
 /* Title for the 'share extension' view. */
-"SHARE_EXTENSION_VIEW_TITLE" = "Udostępnij w aplikacji Signal";
+"SHARE_EXTENSION_VIEW_TITLE" = "Udostępnij w aplikacji B&A";
 
 /* Title of alert indicating sharing suggestions failed to deactivate */
 "SHARING_SUGGESTIONS_DISABLE_ERROR" = "Nie udało się wyłączyć sugestii udostępniania.";
@@ -8291,10 +8291,10 @@
 "SHOW_THREAD_BUTTON_TITLE" = "Pokaż czat";
 
 /* Shown in the header when the user hasn't provided a custom name for a call. */
-"SIGNAL_CALL" = "Połączenie Signal";
+"SIGNAL_CALL" = "Połączenie B&A";
 
-/* body sent to contacts when inviting to Install Signal */
-"SMS_INVITE_BODY" = "Zapraszam Cię do komunikatora Signal! Link do pobrania aplikacji:";
+/* body sent to contacts when inviting to Install B&A */
+"SMS_INVITE_BODY" = "Zapraszam Cię do komunikatora B&A! Link do pobrania aplikacji:";
 
 /* An error message generically indicating that something went wrong. */
 "SOMETHING_WENT_WRONG_ERROR" = "Coś poszło nie tak.";
@@ -8318,7 +8318,7 @@
 "SPAM_CAPTCHA_DISMISS_CONFIRMATION_TITLE" = "Kontynuować bez weryfikacji?";
 
 /* Body for action sheet explaining captcha requirement. */
-"SPAM_CAPTCHA_SHEET_BODY" = "Aby pomóc zapobiegać spamowi w aplikacji Signal, przejdź weryfikację.\n\nGdy to zrobisz, możesz dalej wysyłać i otrzymywać wiadomości. Wszystkie wstrzymane wiadomości zostaną automatycznie wysłane.";
+"SPAM_CAPTCHA_SHEET_BODY" = "Aby pomóc zapobiegać spamowi w aplikacji B&A, przejdź weryfikację.\n\nGdy to zrobisz, możesz dalej wysyłać i otrzymywać wiadomości. Wszystkie wstrzymane wiadomości zostaną automatycznie wysłane.";
 
 /* Title for action sheet explaining captcha requirement. */
 "SPAM_CAPTCHA_SHEET_TITLE" = "Zweryfikuj, aby dalej wysyłać i otrzymywać wiadomości";
@@ -8357,7 +8357,7 @@
 "STICKERS_INSTALL_BUTTON" = "Zainstaluj";
 
 /* Title for the 'available built-in stickers' section of the 'manage stickers' view. */
-"STICKERS_MANAGE_VIEW_AVAILABLE_BUILT_IN_PACKS_SECTION_TITLE" = "Sztuka w aplikacji Signal";
+"STICKERS_MANAGE_VIEW_AVAILABLE_BUILT_IN_PACKS_SECTION_TITLE" = "Sztuka w aplikacji B&A";
 
 /* Title for the 'available known stickers' section of the 'manage stickers' view. */
 "STICKERS_MANAGE_VIEW_AVAILABLE_KNOWN_PACKS_SECTION_TITLE" = "Otrzymane naklejki";
@@ -8639,19 +8639,19 @@
 "STORY_SETTINGS_LEARN_MORE_SHEET_FOOTER" = "Kontakty mogą wyświetlić Twoje imię, nazwisko i zdjęcie oraz to, co udostępniasz w swoich relacjach – chyba że je przed tymi osobami ukryjesz.";
 
 /* Header for the explainer sheet for signal connections */
-"STORY_SETTINGS_LEARN_MORE_SHEET_HEADER_FORMAT" = "<bold>Kontakty Signal</bold> to osoby, które zostały uznane za zaufane z jednego z tych powodów:";
+"STORY_SETTINGS_LEARN_MORE_SHEET_HEADER_FORMAT" = "<bold>Kontakty B&A</bold> to osoby, które zostały uznane za zaufane z jednego z tych powodów:";
 
 /* Label for the stories section of the settings view */
 "STORY_SETTINGS_TITLE" = "Relacje";
 
 /* Section footer for the 'viewers' section on the 'story settings' view */
-"STORY_SETTINGS_WHO_CAN_VIEW_THIS_FOOTER" = "Zdecyduj, kto spośród kontaktów Signal może wyświetlać Twoje relacje. Zmiany nie wpłyną na już opublikowane relacje.";
+"STORY_SETTINGS_WHO_CAN_VIEW_THIS_FOOTER" = "Zdecyduj, kto spośród kontaktów B&A może wyświetlać Twoje relacje. Zmiany nie wpłyną na już opublikowane relacje.";
 
 /* Section header for the 'viewers' section on the 'story settings' view */
 "STORY_SETTINGS_WHO_CAN_VIEW_THIS_HEADER" = "Kto może wyświetlać te relacje";
 
 /* Header for the 'viewers' section on the 'story settings' bottom sheet */
-"STORY_SETTINGS_WHO_CAN_VIEW_THIS_SHEET_HEADER" = "Zdecyduj, które kontakty Signal mogą wyświetlać Twoje relacje. Zawsze możesz to zmienić w ustawieniach prywatności.";
+"STORY_SETTINGS_WHO_CAN_VIEW_THIS_SHEET_HEADER" = "Zdecyduj, które kontakty B&A mogą wyświetlać Twoje relacje. Zawsze możesz to zmienić w ustawieniach prywatności.";
 
 /* Tooltip text shown when the user selects a story as a destination for a long duration video that will be split into shorter segments. Embeds {{ segment duration in seconds }} */
 "STORY_VIDEO_SEGMENTATION_TOOLTIP_FORMAT" = "Filmy dodane do relacji zostaną przycięte do %1$d-sekundowych klipów i opublikowane jako kilka relacji.";
@@ -8714,12 +8714,12 @@
 "SUPPORT_EMAIL_LOG_URL_LABEL_FORMAT" = "URL dziennika: %1$@";
 
 /* Localized subject for support request emails */
-"SUPPORT_EMAIL_SUBJECT" = "Zgłoszenie do pomocy technicznej Signal iOS";
+"SUPPORT_EMAIL_SUBJECT" = "Zgłoszenie do pomocy technicznej B&A iOS";
 
 /* Header for emoji mood selection */
 "SUPPORT_EMOJI_PROMPT" = "Jak się masz? (opcjonalnie)";
 
-/* Label in support request informing user about Signal FAQ */
+/* Label in support request informing user about B&A FAQ */
 "SUPPORT_FAQ_PROMPT" = "Znasz już nasze odpowiedzi na najczęstsze pytania?";
 
 /* Label describing support switch to attach debug logs */
@@ -8786,7 +8786,7 @@
 "SWITCH_ON" = "Wł.";
 
 /* Name to display for the 'system' sender, e.g. for release notes and the onboarding story */
-"SYSTEM_ADDRESS_NAME" = "Signal";
+"SYSTEM_ADDRESS_NAME" = "B&A";
 
 /* Label for button to verify a user's safety number. */
 "SYSTEM_MESSAGE_ACTION_VERIFY_SAFETY_NUMBER" = "Zweryfikuj";
@@ -8944,17 +8944,17 @@
 /* Label text below navbar button, embeds {{number of weeks}}. Must be very short, like 1 or 2 characters, The space is intentionally omitted between the text and the embedded duration so that we get, e.g. '5w' not '5 w'. See other *_TIME_AMOUNT strings */
 "TIME_AMOUNT_WEEKS_SHORT_FORMAT" = "%1$@t";
 
-/* Button for bottom sheet shown when device transfer completes on the receiving device. Tapping will terminate the Signal app and trigger a notification to relaunch. */
-"TRANSFER_COMPLETE_SHEET_BUTTON" = "Zamknij Signal";
+/* Button for bottom sheet shown when device transfer completes on the receiving device. Tapping will terminate the B&A app and trigger a notification to relaunch. */
+"TRANSFER_COMPLETE_SHEET_BUTTON" = "Zamknij B&A";
 
 /* Subtitle for bottom sheet shown when device transfer completes on the receiving device. */
-"TRANSFER_COMPLETE_SHEET_SUBTITLE" = "Aby zacząć korzystać ze swojego konta na tym urządzeniu, zamknij i uruchom Signal ponownie.";
+"TRANSFER_COMPLETE_SHEET_SUBTITLE" = "Aby zacząć korzystać ze swojego konta na tym urządzeniu, zamknij i uruchom B&A ponownie.";
 
 /* Title for bottom sheet shown when device transfer completes on the receiving device. */
 "TRANSFER_COMPLETE_SHEET_TITLE" = "Przenoszenie zakończone";
 
-/* Notification prompting the user to relaunch Signal after a device transfer completed. */
-"TRANSFER_RELAUNCH_NOTIFICATION" = "Otwórz Signal, aby zacząć wysyłać i otrzymywać wiadomości";
+/* Notification prompting the user to relaunch B&A after a device transfer completed. */
+"TRANSFER_RELAUNCH_NOTIFICATION" = "Otwórz B&A, aby zacząć wysyłać i otrzymywać wiadomości";
 
 /* Label for the cancel button in an alert or action sheet. */
 "TXT_CANCEL_TITLE" = "Anuluj";
@@ -8972,25 +8972,25 @@
 "UNKNOWN_CONTACT_BLOCK_OFFER" = "Nie masz tej osoby w kontaktach. Czy chcesz ją zablokować?";
 
 /* Info message recorded in conversation history when local user receives an unknown message from a linked device and needs to upgrade. */
-"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_FROM_LINKED_DEVICE" = "Z jednego z Twoich urządzeń wysłano wiadomość, która nie może zostać przetworzona lub wyświetlona, ponieważ wykorzystuje nową funkcję Signal.";
+"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_FROM_LINKED_DEVICE" = "Z jednego z Twoich urządzeń wysłano wiadomość, która nie może zostać przetworzona lub wyświetlona, ponieważ wykorzystuje nową funkcję B&A.";
 
 /* Info message recorded in conversation history when local user receives an unknown message and needs to upgrade. Embeds {{user's name or phone number}}. */
-"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_WITH_NAME_FORMAT" = "Nie można przetworzyć lub wyświetlić wiadomości, którą przesyła %1$@, ponieważ wykorzystuje ona nową funkcję Signal.";
+"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_WITH_NAME_FORMAT" = "Nie można przetworzyć lub wyświetlić wiadomości, którą przesyła %1$@, ponieważ wykorzystuje ona nową funkcję B&A.";
 
 /* Info message recorded in conversation history when local user receives an unknown message and needs to upgrade. */
-"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_WITHOUT_NAME" = "Otrzymano wiadomość, która nie może zostać przetworzona lub wyświetlona, ponieważ wykorzystuje nową funkcję Signal.";
+"UNKNOWN_PROTOCOL_VERSION_NEED_TO_UPGRADE_WITHOUT_NAME" = "Otrzymano wiadomość, która nie może zostać przetworzona lub wyświetlona, ponieważ wykorzystuje nową funkcję B&A.";
 
 /* Label for button that lets users upgrade the app. */
-"UNKNOWN_PROTOCOL_VERSION_UPGRADE_BUTTON" = "Zaktualizuj Signal";
+"UNKNOWN_PROTOCOL_VERSION_UPGRADE_BUTTON" = "Zaktualizuj B&A";
 
 /* Info message recorded in conversation history when local user has received an unknown unknown message from a linked device and has upgraded. */
-"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_FROM_LINKED_DEVICE" = "Zaktualizowano do najnowszej wersji aplikacji Signal. Teraz możesz otrzymywać wiadomości tego typu na swoim urządzeniu.";
+"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_FROM_LINKED_DEVICE" = "Zaktualizowano do najnowszej wersji aplikacji B&A. Teraz możesz otrzymywać wiadomości tego typu na swoim urządzeniu.";
 
 /* Info message recorded in conversation history when local user has received an unknown message and has upgraded. Embeds {{user's name or phone number}}. */
-"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_WITH_NAME_FORMAT" = "Używasz już aktualnej wersji Signal. Możesz wyświetlić tę wiadomość, gdy %1$@ ponownie Ci ją wyśle.";
+"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_WITH_NAME_FORMAT" = "Używasz już aktualnej wersji B&A. Możesz wyświetlić tę wiadomość, gdy %1$@ ponownie Ci ją wyśle.";
 
 /* Info message recorded in conversation history when local user has received an unknown message and has upgraded. */
-"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_WITHOUT_NAME" = "Używasz już aktualnej wersji Signal. Możesz wyświetlić tę wiadomość, gdy nadawca ponownie Ci ją wyśle.";
+"UNKNOWN_PROTOCOL_VERSION_UPGRADE_COMPLETE_WITHOUT_NAME" = "Używasz już aktualnej wersji B&A. Możesz wyświetlić tę wiadomość, gdy nadawca ponownie Ci ją wyśle.";
 
 /* Label indicating an unknown user. */
 "UNKNOWN_USER" = "Nieznana osoba";
@@ -9014,7 +9014,7 @@
 "UNLINK_CONFIRMATION_ALERT_TITLE" = "Odłączyć urządzenie %1$@?";
 
 /* Label warning the user that they have been unlinked from their primary device. */
-"UNLINKED_WARNING" = "To urządzenie nie jest już połączone. Aby dalej wysyłać i otrzymywać wiadomości, połącz swój telefon ponownie z aplikacją Signal.";
+"UNLINKED_WARNING" = "To urządzenie nie jest już połączone. Aby dalej wysyłać i otrzymywać wiadomości, połącz swój telefon ponownie z aplikacją B&A.";
 
 /* If this device has become unlinked from their primary device, they'll see a warning. This is the call to action on that warning. */
 "UNLINKED_WARNING_ACTION_TITLE" = "Połącz urządzenie ponownie";
@@ -9037,11 +9037,11 @@
 /* No comment provided by engineer. */
 "UNSUPPORTED_ATTACHMENT" = "Otrzymano załącznik nieobsługiwanego typu.";
 
-/* When inviting contacts to use Signal, this error is shown if the device doesn't support SMS or if there aren't any registered email accounts. */
+/* When inviting contacts to use B&A, this error is shown if the device doesn't support SMS or if there aren't any registered email accounts. */
 "UNSUPPORTED_FEATURE_ERROR" = "Twoje urządzenie nie obsługuje tej funkcji.";
 
 /* Description for the unverified safety number change. Embeds {name of contact with identity change} */
-"UNVERIFIED_SAFETY_NUMBER_CHANGE_DESCRIPTION_FORMAT" = "Ty i %1$@ macie nowy numer bezpieczeństwa, ponieważ ta osoba prawdopodobnie ponownie zainstalowała Signal lub zmieniła urządzenie na inne. Dotknij opcji „Zweryfikuj”, aby potwierdzić nowy numer bezpieczeństwa. Ta czynność jest opcjonalna.";
+"UNVERIFIED_SAFETY_NUMBER_CHANGE_DESCRIPTION_FORMAT" = "Ty i %1$@ macie nowy numer bezpieczeństwa, ponieważ ta osoba prawdopodobnie ponownie zainstalowała B&A lub zmieniła urządzenie na inne. Dotknij opcji „Zweryfikuj”, aby potwierdzić nowy numer bezpieczeństwa. Ta czynność jest opcjonalna.";
 
 /* Action to verify a safety number after it has changed */
 "UNVERIFIED_SAFETY_NUMBER_VERIFY_ACTION" = "Zweryfikuj";
@@ -9059,7 +9059,7 @@
 "USE_PROXY_BUTTON" = "Użyj proxy";
 
 /* Explanation of when you should use a signal proxy */
-"USE_PROXY_EXPLANATION" = "Używaj proxy tylko wtedy, gdy nie możesz połączyć się z usługą Signal przez sieć komórkową ani Wi-Fi.";
+"USE_PROXY_EXPLANATION" = "Używaj proxy tylko wtedy, gdy nie możesz połączyć się z usługą B&A przez sieć komórkową ani Wi-Fi.";
 
 /* Description of username links and QR codes on the username education sheet */
 "USERNAME_EDUCATION_LINK_DESCRIPTION" = "Każda nazwa użytkownika jest powiązana z unikalnym kodem QR i unikalnym linkiem. Udostępnij je znajomym, aby mogli szybko rozpocząć z Tobą czat.";
@@ -9151,14 +9151,14 @@
 /* A message indicating that a username link the user attempted to query is no longer valid. */
 "USERNAME_LOOKUP_LINK_NO_LONGER_VALID_MESSAGE" = "Ten link do nazwy użytkownika wygasł.";
 
-/* A message indicating that the given username is not associated with a registered Signal account. Embeds {{ a username }}. */
-"USERNAME_LOOKUP_NOT_FOUND_MESSAGE_FORMAT" = "%1$@ nie jest nazwą użytkownika aplikacji Signal. Upewnij się, że podajesz pełną nazwę użytkownika.";
+/* A message indicating that the given username is not associated with a registered B&A account. Embeds {{ a username }}. */
+"USERNAME_LOOKUP_NOT_FOUND_MESSAGE_FORMAT" = "%1$@ nie jest nazwą użytkownika aplikacji B&A. Upewnij się, że podajesz pełną nazwę użytkownika.";
 
-/* Title for an action sheet indicating that the given username is not associated with a registered Signal account. */
+/* Title for an action sheet indicating that the given username is not associated with a registered B&A account. */
 "USERNAME_LOOKUP_NOT_FOUND_TITLE" = "Nie znaleziono użytkownika";
 
 /* Instructions that appear below the username QR code on a sharable exported image. */
-"USERNAME_QR_CODE_EXPORT_INSTRUCTIONS" = "Zeskanuj ten kod QR swoim telefonem, aby rozpocząć ze mną czat w aplikacji Signal.";
+"USERNAME_QR_CODE_EXPORT_INSTRUCTIONS" = "Zeskanuj ten kod QR swoim telefonem, aby rozpocząć ze mną czat w aplikacji B&A.";
 
 /* A message in a toast informing the user their username, link, and QR code have successfully been reset. Embeds {{ the user's new username }}. */
 "USERNAME_RESET_SUCCESSFUL_TOAST" = "Kod QR i link zostały zresetowane, a Twoja nazwa użytkownika to %1$@";
@@ -9260,7 +9260,7 @@
 "VOICE_MESSAGE_CANCEL_INSTRUCTIONS" = "Przesuń, aby anulować";
 
 /* Filename for voice messages. */
-"VOICE_MESSAGE_FILE_NAME" = "signal";
+"VOICE_MESSAGE_FILE_NAME" = "B&A";
 
 /* Message for the tooltip indicating the 'voice message' needs to be held to be held down to record. */
 "VOICE_MESSAGE_TOO_SHORT_TOOLTIP" = "Dotknij i przytrzymaj, aby nagrać wiadomość.";
