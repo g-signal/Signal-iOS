@@ -56,51 +56,52 @@ public class OutageDetection {
     // We only show the outage warning when we're certain there's an outage.
     // DNS lookup failures, etc. are not considered an outage.
     private func checkForOutageSync() -> Bool {
-        let host = CFHostCreateWithName(nil, "uptime.signal.org" as CFString).takeRetainedValue()
-        var resolutionError = CFStreamError()
-        guard CFHostStartInfoResolution(host, .addresses, &resolutionError) else {
-            Logger.warn("CFHostStartInfoResolution failed: \(resolutionError)")
-            return false
-        }
-        var success: DarwinBoolean = false
-        guard let addresses = CFHostGetAddressing(host, &success)?.takeUnretainedValue() as NSArray? else {
-            owsFailDebug("CFHostGetAddressing failed: nil addresses")
-            return false
-        }
-        guard success.boolValue else {
-            owsFailDebug("CFHostGetAddressing failed.")
-            return false
-        }
-        owsAssertDebug(addresses.count > 0, "CFHostGetAddressing: empty addresses")
-
-        var isOutageDetected = false
-        for case let address as NSData in addresses {
-            var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-            let result = getnameinfo(
-                address.bytes.assumingMemoryBound(to: sockaddr.self),
-                socklen_t(address.length),
-                &hostname,
-                socklen_t(hostname.count),
-                nil,
-                0,
-                NI_NUMERICHOST
-            )
-            if result == 0 {
-                let addressString = String(cString: hostname)
-                let kHealthyAddress = "127.0.0.1"
-                let kOutageAddress = "127.0.0.2"
-                if addressString == kHealthyAddress {
-                    // Do nothing.
-                } else if addressString == kOutageAddress {
-                    isOutageDetected = true
-                } else if addressString == "0.0.0.0" {
-                    Logger.warn("unexpected address: \(addressString)")
-                } else {
-                    owsFailDebug("unexpected address: \(addressString)")
-                }
-            }
-        }
-        return isOutageDetected
+//        let host = CFHostCreateWithName(nil, "uptime.signal.org" as CFString).takeRetainedValue()
+//        var resolutionError = CFStreamError()
+//        guard CFHostStartInfoResolution(host, .addresses, &resolutionError) else {
+//            Logger.warn("CFHostStartInfoResolution failed: \(resolutionError)")
+//            return false
+//        }
+//        var success: DarwinBoolean = false
+//        guard let addresses = CFHostGetAddressing(host, &success)?.takeUnretainedValue() as NSArray? else {
+//            owsFailDebug("CFHostGetAddressing failed: nil addresses")
+//            return false
+//        }
+//        guard success.boolValue else {
+//            owsFailDebug("CFHostGetAddressing failed.")
+//            return false
+//        }
+//        owsAssertDebug(addresses.count > 0, "CFHostGetAddressing: empty addresses")
+//
+//        var isOutageDetected = false
+//        for case let address as NSData in addresses {
+//            var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+//            let result = getnameinfo(
+//                address.bytes.assumingMemoryBound(to: sockaddr.self),
+//                socklen_t(address.length),
+//                &hostname,
+//                socklen_t(hostname.count),
+//                nil,
+//                0,
+//                NI_NUMERICHOST
+//            )
+//            if result == 0 {
+//                let addressString = String(cString: hostname)
+//                let kHealthyAddress = "127.0.0.1"
+//                let kOutageAddress = "127.0.0.2"
+//                if addressString == kHealthyAddress {
+//                    // Do nothing.
+//                } else if addressString == kOutageAddress {
+//                    isOutageDetected = true
+//                } else if addressString == "0.0.0.0" {
+//                    Logger.warn("unexpected address: \(addressString)")
+//                } else {
+//                    owsFailDebug("unexpected address: \(addressString)")
+//                }
+//            }
+//        }
+//        return isOutageDetected
+        return true
     }
 
     private func checkForOutageAsync() {

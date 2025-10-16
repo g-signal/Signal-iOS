@@ -20167,7 +20167,6 @@
 					"@executable_path/Frameworks",
 				);
 				LLVM_LTO = NO;
-				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX)";
 				PRODUCT_NAME = Signal;
@@ -20425,7 +20424,6 @@
 					"@executable_path/Frameworks",
 				);
 				LLVM_LTO = NO;
-				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX)";
 				PRODUCT_NAME = Signal;
@@ -20788,7 +20786,6 @@
 					"@executable_path/Frameworks",
 				);
 				LLVM_LTO = NO;
-				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX)";
 				PRODUCT_NAME = Signal;
@@ -20831,7 +20828,6 @@
 					"@executable_path/Frameworks",
 				);
 				LLVM_LTO = NO;
-				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX)";
 				PRODUCT_NAME = Signal;

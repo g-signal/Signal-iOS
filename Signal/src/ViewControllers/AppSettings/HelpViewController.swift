@@ -53,17 +53,17 @@ final class HelpViewController: OWSTableViewController2 {
         ))
         contents.add(helpSection)
 
-        let loggingSection = OWSTableSection()
-        loggingSection.headerTitle = OWSLocalizedString("LOGGING_SECTION", comment: "Title for the 'logging' help section.")
-        loggingSection.footerTitle = OWSLocalizedString("LOGGING_SECTION_FOOTER", comment: "Footer for the 'logging' help section.")
-        loggingSection.add(.item(
-            name: OWSLocalizedString("SETTINGS_ADVANCED_SUBMIT_DEBUGLOG", comment: ""),
-            accessibilityIdentifier: UIView.accessibilityIdentifier(in: self, name: "submit_debug_log"),
-            actionBlock: {
-                DebugLogs.submitLogs(dumper: .fromGlobals())
-            }
-        ))
-        contents.add(loggingSection)
+//        let loggingSection = OWSTableSection()
+//        loggingSection.headerTitle = OWSLocalizedString("LOGGING_SECTION", comment: "Title for the 'logging' help section.")
+//        loggingSection.footerTitle = OWSLocalizedString("LOGGING_SECTION_FOOTER", comment: "Footer for the 'logging' help section.")
+//        loggingSection.add(.item(
+//            name: OWSLocalizedString("SETTINGS_ADVANCED_SUBMIT_DEBUGLOG", comment: ""),
+//            accessibilityIdentifier: UIView.accessibilityIdentifier(in: self, name: "submit_debug_log"),
+//            actionBlock: {
+//                DebugLogs.submitLogs(dumper: .fromGlobals())
+//            }
+//        ))
+//        contents.add(loggingSection)
 
         let aboutSection = OWSTableSection()
         aboutSection.headerTitle = OWSLocalizedString("ABOUT_SECTION_TITLE", comment: "Title for the 'about' help section")

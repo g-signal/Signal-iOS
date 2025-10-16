@@ -174,27 +174,27 @@ class AppSettingsViewController: OWSTableViewController2 {
                 }
             ))
         }
-        section1.add(.init(customCellBlock: { [weak self] in
-            guard let self = self else { return UITableViewCell() }
-            let accessoryContentView: UIView?
-            if self.hasExpiredGiftBadge {
-                let imageView = UIImageView(image: UIImage(imageLiteralResourceName: "info-fill"))
-                imageView.tintColor = Theme.accentBlueColor
-                imageView.autoSetDimensions(to: CGSize(square: 24))
-                accessoryContentView = imageView
-            } else {
-                accessoryContentView = nil
-            }
-            return OWSTableItem.buildCell(
-                icon: .settingsDonate,
-                itemName: OWSLocalizedString("SETTINGS_DONATE", comment: "Title for the 'donate to signal' link in settings."),
-                accessoryType: .disclosureIndicator,
-                accessoryContentView: accessoryContentView,
-                accessibilityIdentifier: UIView.accessibilityIdentifier(in: self, name: "donate")
-            )
-        }, actionBlock: { [weak self] in
-            self?.didTapDonate()
-        }))
+//        section1.add(.init(customCellBlock: { [weak self] in
+//            guard let self = self else { return UITableViewCell() }
+//            let accessoryContentView: UIView?
+//            if self.hasExpiredGiftBadge {
+//                let imageView = UIImageView(image: UIImage(imageLiteralResourceName: "info-fill"))
+//                imageView.tintColor = Theme.accentBlueColor
+//                imageView.autoSetDimensions(to: CGSize(square: 24))
+//                accessoryContentView = imageView
+//            } else {
+//                accessoryContentView = nil
+//            }
+//            return OWSTableItem.buildCell(
+//                icon: .settingsDonate,
+//                itemName: OWSLocalizedString("SETTINGS_DONATE", comment: "Title for the 'donate to signal' link in settings."),
+//                accessoryType: .disclosureIndicator,
+//                accessoryContentView: accessoryContentView,
+//                accessibilityIdentifier: UIView.accessibilityIdentifier(in: self, name: "donate")
+//            )
+//        }, actionBlock: { [weak self] in
+//            self?.didTapDonate()
+//        }))
         contents.add(section1)
 
         let section2 = OWSTableSection()
@@ -241,35 +241,35 @@ class AppSettingsViewController: OWSTableViewController2 {
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
         ))
-        if
-            isPrimaryDevice,
-            RemoteConfig.current.allowBackupSettings
-        {
-            section2.add(.disclosureItem(
-                icon: .backup,
-                withText: OWSLocalizedString(
-                    "SETTINGS_BACKUPS",
-                    comment: "Label for the 'backups' section of app settings."
-                ),
-                actionBlock: { [weak self] in
-                    guard let self else { return }
-
-                    let backupSettingsStore = BackupSettingsStore()
-                    let db = DependenciesBridge.shared.db
-
-                    let haveBackupsEverBeenEnabled = db.read { tx in
-                        backupSettingsStore.haveBackupsEverBeenEnabled(tx: tx)
-                    }
-
-                    if haveBackupsEverBeenEnabled {
-                        let vc = BackupSettingsViewController(onLoadAction: .none)
-                        navigationController?.pushViewController(vc, animated: true)
-                    } else {
-                        BackupOnboardingCoordinator().present(fromViewController: self)
-                    }
-                }
-            ))
-        }
+//        if
+//            isPrimaryDevice,
+//            RemoteConfig.current.allowBackupSettings
+//        {
+//            section2.add(.disclosureItem(
+//                icon: .backup,
+//                withText: OWSLocalizedString(
+//                    "SETTINGS_BACKUPS",
+//                    comment: "Label for the 'backups' section of app settings."
+//                ),
+//                actionBlock: { [weak self] in
+//                    guard let self else { return }
+//
+//                    let backupSettingsStore = BackupSettingsStore()
+//                    let db = DependenciesBridge.shared.db
+//
+//                    let haveBackupsEverBeenEnabled = db.read { tx in
+//                        backupSettingsStore.haveBackupsEverBeenEnabled(tx: tx)
+//                    }
+//
+//                    if haveBackupsEverBeenEnabled {
+//                        let vc = BackupSettingsViewController(onLoadAction: .none)
+//                        navigationController?.pushViewController(vc, animated: true)
+//                    } else {
+//                        BackupOnboardingCoordinator().present(fromViewController: self)
+//                    }
+//                }
+//            ))
+//        }
         section2.add(.disclosureItem(
             icon: .settingsDataUsage,
             withText: OWSLocalizedString("SETTINGS_DATA", comment: "Label for the 'data' section of the app settings."),
