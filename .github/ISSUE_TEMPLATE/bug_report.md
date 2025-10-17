@@ -17,7 +17,7 @@ https://community.signalusers.org
 
 If you are looking for support, please visit our support center:
 https://support.signal.org/
-or email support@signal.org
+or email support@baxs.com
 
 Let's begin with a checklist: Replace the empty checkboxes [ ] below with checked ones [x] accordingly. -->
 
@@ -69,7 +69,7 @@ To get a crash log:
 7.b iOS 9&10 users, long press to see the option to highlight text and select the entire text of the log. It will end in EOF.
 8. Once the text is selected, tap Copy.
 9. Paste the copied text into an email.
-10. Send the email to support@signal.org with a subject like:
+10. Send the email to support@baxs.com with a subject like:
   * "iOS Crash Log: (your github issue)"
   * Example subject: iOS Crash Log: Crash on launch #111
   * Example subject: iOS Crash Log: Crash when sending video #222

@@ -220,9 +220,9 @@ class RegistrationPinViewController: OWSViewController {
                             "REGISTRATION_PIN_CREATE_SUBTITLE",
                             comment: "During registration, users are asked to create a PIN code. This is the subtitle on the screen where this happens. A \"learn more\" link will be added to the end of this string."
                         ),
-                        CommonStrings.learnMore.styled(
-                            with: StringStyle.Part.link(learnMoreAboutPinsURL)
-                        )
+//                        CommonStrings.learnMore.styled(
+//                            with: StringStyle.Part.link(learnMoreAboutPinsURL)
+//                        )
                     ]
                 case .confirmingNewPin:
                     return [OWSLocalizedString(
@@ -644,10 +644,10 @@ class RegistrationPinViewController: OWSViewController {
             )
         )
 
-        actionSheet.addAction(.init(title: CommonStrings.learnMore) { [weak self] _ in
-            guard let self else { return }
-            self.present(SFSafariViewController(url: self.learnMoreAboutPinsURL), animated: true)
-        })
+//        actionSheet.addAction(.init(title: CommonStrings.learnMore) { [weak self] _ in
+//            guard let self else { return }
+//            self.present(SFSafariViewController(url: self.learnMoreAboutPinsURL), animated: true)
+//        })
 
         actionSheet.addAction(.init(title: CommonStrings.okayButton))
 
@@ -799,7 +799,7 @@ class RegistrationPinViewController: OWSViewController {
                         "ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE",
                         comment: "Explanation for the skip pin entry action sheet during onboarding."
                     ),
-                    CommonStrings.learnMore.styled(with: .link(learnMoreAboutPinsURL))
+//                    CommonStrings.learnMore.styled(with: .link(learnMoreAboutPinsURL))
                 ],
                 baseStyle: ActionSheetController.messageBaseStyle,
                 separator: " "

@@ -162,17 +162,17 @@ extension ConversationViewController {
                         : OWSLocalizedString("ALERT_UNKNOWN_THREAD_WARNING_CONTACT_MESSAGE",
                                             comment: "Message for UI warning about an unknown contact thread."))
         let actionSheet = ActionSheetController(message: message)
-        actionSheet.addAction(ActionSheetAction(
-            title: OWSLocalizedString("ALERT_UNKNOWN_THREAD_WARNING_LEARN_MORE",
-                                     comment: "Label for button to learn more about message requests."),
-            style: .default,
-            handler: { _ in
-                // TODO: Finalize this behavior.
-                let url = URL(string: "https://support.signal.org/hc/articles/360007459591")!
-                UIApplication.shared.open(url, options: [:])
-
-            }
-        ))
+//        actionSheet.addAction(ActionSheetAction(
+//            title: OWSLocalizedString("ALERT_UNKNOWN_THREAD_WARNING_LEARN_MORE",
+//                                     comment: "Label for button to learn more about message requests."),
+//            style: .default,
+//            handler: { _ in
+//                // TODO: Finalize this behavior.
+//                let url = URL(string: "https://support.signal.org/hc/articles/360007459591")!
+//                UIApplication.shared.open(url, options: [:])
+//
+//            }
+//        ))
         actionSheet.addAction(OWSActionSheets.cancelAction)
         presentActionSheet(actionSheet)
     }
@@ -206,15 +206,15 @@ extension ConversationViewController {
             message: alertMessage)
         actionSheet.customHeader = headerView
         actionSheet.addAction(OWSActionSheets.okayAction)
-        actionSheet.addAction(
-            ActionSheetAction(
-                title: CommonStrings.learnMore,
-                accessibilityIdentifier: "learn_more",
-                style: .default
-            ) { _ in
-                UIApplication.shared.open(URL(string: "https://support.signal.org/hc/articles/4404859745690")!)
-            }
-        )
+//        actionSheet.addAction(
+//            ActionSheetAction(
+//                title: CommonStrings.learnMore,
+//                accessibilityIdentifier: "learn_more",
+//                style: .default
+//            ) { _ in
+//                UIApplication.shared.open(URL(string: "https://support.signal.org/hc/articles/4404859745690")!)
+//            }
+//        )
         presentActionSheet(actionSheet)
     }
 }

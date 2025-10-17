@@ -676,9 +676,9 @@ class LinkedDevicesHostingController: HostingContainer<LinkedDevicesView> {
                 )
             })
         }
-        actionSheet.addAction(.init(title: CommonStrings.learnMore) { _ in
-            UIApplication.shared.open(URL(string: "https://support.signal.org/hc/articles/360007320551")!)
-        })
+        // actionSheet.addAction(.init(title: CommonStrings.learnMore) { _ in
+        //     // UIApplication.shared.open(URL(string: "https://support.signal.org/hc/articles/360007320551")!) // Disabled support URL navigation
+        // }) // Removed learn more button to avoid empty page navigation
         actionSheet.addAction(ActionSheetAction(title: CommonStrings.continueButton, style: .cancel))
 
         actionSheet.onDismiss = { [weak self] in

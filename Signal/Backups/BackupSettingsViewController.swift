@@ -733,15 +733,15 @@ class BackupSettingsViewController:
                         }
                     }
                 ))
-                warningSheet.addAction(ActionSheetAction(
-                    title: CommonStrings.learnMore,
-                    handler: { _ in
-                        CurrentAppContext().open(
-                            URL(string: "https://support.signal.org/hc/articles/360007059752")!,
-                            completion: nil
-                        )
-                    }
-                ))
+//                warningSheet.addAction(ActionSheetAction(
+//                    title: CommonStrings.learnMore,
+//                    handler: { _ in
+//                        CurrentAppContext().open(
+//                            URL(string: "https://support.signal.org/hc/articles/360007059752")!,
+//                            completion: nil
+//                        )
+//                    }
+//                ))
                 warningSheet.addAction(.cancel)
 
                 presentActionSheet(warningSheet)

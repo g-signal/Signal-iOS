@@ -58,9 +58,9 @@ final class AppIconSettingsTableViewController: OWSTableViewController2 {
             OWSLocalizedString(
                 "SETTINGS_APP_ICON_FOOTER",
                 comment: "The footer for the app icon selection settings page."
-            ),
-            "\n",
-            CommonStrings.learnMore.styled(with: .link(Self.learnMoreURL))
+            )
+            // "\n",
+            // CommonStrings.learnMore.styled(with: .link(Self.learnMoreURL)) // Disabled support URL navigation
         ])
         .styled(
             with: .font(.dynamicTypeCaption1Clamped),

@@ -197,13 +197,13 @@
 "APN_Message" = "Anda mungkin mempunyai mesej baru";
 
 /* Default message for the 'app launch failed' alert. */
-"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A tidak boleh dilancarkan. Sila hantar log nyahpepijat ke support@signal.org supaya kami dapat menyelesaikan masalah ini.";
+"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A tidak boleh dilancarkan. Sila hantar log nyahpepijat ke support@baxs.com supaya kami dapat menyelesaikan masalah ini.";
 
 /* Button to try launching the app even though the last launch failed */
 "APP_LAUNCH_FAILURE_CONTINUE" = "Buka B&A Sahaja";
 
 /* Message for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
-"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "Sila hantar log nyahpepijat ke support@signal.org supaya kami boleh menyelesaikan masalah ini.";
+"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "Sila hantar log nyahpepijat ke support@baxs.com supaya kami boleh menyelesaikan masalah ini.";
 
 /* Title for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
 "APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "Tidak Boleh Membuka B&A";
@@ -218,7 +218,7 @@
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "Versi Pangkalan Data Yang Tidak Diketahui";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "B&A mengalami masalah semasa cuba membuka. Sila hantar log nyahpepijat kepada support@signal.org untuk membantu menyelesaikan isu ini.";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "B&A mengalami masalah semasa cuba membuka. Sila hantar log nyahpepijat kepada support@baxs.com untuk membantu menyelesaikan isu ini.";
 
 /* Error indicating that the app crashed during the previous launch. */
 "APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "Tidak Boleh Membuka B&A";
@@ -230,7 +230,7 @@
 "APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_TITLE" = "Kekurangan Ruang Simpanan";
 
 /* Error indicating that the app could not restore transferred data. */
-"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "Data yang dipindahkan daripada peranti lama anda tidak dapat dipulihkan. Sila hantar log nyahpepijat ke support@signal.org supaya kami boleh menyelesaikan masalah ini. Jika anda memasang semula B&A, sejarah mesej anda akan hilang.";
+"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "Data yang dipindahkan daripada peranti lama anda tidak dapat dipulihkan. Sila hantar log nyahpepijat ke support@baxs.com supaya kami boleh menyelesaikan masalah ini. Jika anda memasang semula B&A, sejarah mesej anda akan hilang.";
 
 /* Error indicating that the app could not restore transferred data. */
 "APP_LAUNCH_FAILURE_RESTORE_FAILED_TITLE" = "Tidak Dapat Melengkapkan Pemindahan";
@@ -3014,7 +3014,7 @@
 "EMAIL_INVITE_SUBJECT" = "Mari tukar ke B&A";
 
 /* Description for the fallback support sheet if user cannot send email */
-"EMAIL_SIGNAL_MESSAGE" = "Peranti anda tidak dikonfigurasi untuk menghantar e-mel. Untuk menghantar permintaan sokongan, sediakan e-mel pada peranti anda atau menghantar e-mel ke support@signal.org";
+"EMAIL_SIGNAL_MESSAGE" = "Peranti anda tidak dikonfigurasi untuk menghantar e-mel. Untuk menghantar permintaan sokongan, sediakan e-mel pada peranti anda atau menghantar e-mel ke support@baxs.com";
 
 /* Title for the fallback support sheet if user cannot send email */
 "EMAIL_SIGNAL_TITLE" = "E-mel tidak tersedia";
@@ -3161,7 +3161,7 @@
 "ERROR_NETWORK_FAILURE" = "Ralat Rangkaian";
 
 /* Format string for an error alert notification message. Embeds {{ error string }} */
-"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "Sila bantu kami menambah baik B&A dengan melaporkan ralat ini dan menghantar log nyahpepijat daripada peranti anda kepada support@signal.org; %1$@";
+"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "Sila bantu kami menambah baik B&A dengan melaporkan ralat ini dan menghantar log nyahpepijat daripada peranti anda kepada support@baxs.com; %1$@";
 
 /* Format string for an error alert notification title. */
 "ERROR_NOTIFICATION_TITLE" = "Beta B&A: Ralat telah berlaku";
@@ -8690,7 +8690,7 @@
 "SUPPORT_EMAIL_DEFAULT_DESCRIPTION" = "Beritahu kami mengenai masalah ini: ";
 
 /* Message for alert dialog presented when a support email failed to send */
-"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "Sila hantar e-mel permintaan sokongan anda ke support@signal.org";
+"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "Sila hantar e-mel permintaan sokongan anda ke support@baxs.com";
 
 /* Localized label for support request email filter string. Embeds {{filter text}}. */
 "SUPPORT_EMAIL_FILTER_LABEL_FORMAT" = "Tapis: %1$@";

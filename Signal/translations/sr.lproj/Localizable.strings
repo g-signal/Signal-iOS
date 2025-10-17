@@ -197,13 +197,13 @@
 "APN_Message" = "Можда имате нове поруке";
 
 /* Default message for the 'app launch failed' alert. */
-"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A не може да се покрене. Молимо вас да пошаљете извештај о грешкама на support@signal.org како бисмо отклонили проблем.";
+"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A не може да се покрене. Молимо вас да пошаљете извештај о грешкама на support@baxs.com како бисмо отклонили проблем.";
 
 /* Button to try launching the app even though the last launch failed */
 "APP_LAUNCH_FAILURE_CONTINUE" = "Уместо тога отворите B&A";
 
 /* Message for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
-"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "Молимо вас да пошаљете извештај о грешкама на support@signal.org како бисмо отклонили проблем.";
+"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "Молимо вас да пошаљете извештај о грешкама на support@baxs.com како бисмо отклонили проблем.";
 
 /* Title for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
 "APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "Отварање B&A-а није успело";
@@ -218,7 +218,7 @@
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "Верзија базе података је непозната.";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "B&A је наишао на проблем приликом отварања. Пошаљите извештај о грашкама на support@signal.org да помогнете у решавању овог проблема.";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "B&A је наишао на проблем приликом отварања. Пошаљите извештај о грашкама на support@baxs.com да помогнете у решавању овог проблема.";
 
 /* Error indicating that the app crashed during the previous launch. */
 "APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "Отварање B&A-а није успело";
@@ -230,7 +230,7 @@
 "APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_TITLE" = "Преостало је мало меморијског простора";
 
 /* Error indicating that the app could not restore transferred data. */
-"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "Подаци пренесени са вашег старог уређаја нису опорављени. Пошаљите извештај о грешкама на support@signal.org како бисмо решили тај проблем. Ако поново инсталирате B&A, ваша историја порука може бити изгубљена.";
+"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "Подаци пренесени са вашег старог уређаја нису опорављени. Пошаљите извештај о грешкама на support@baxs.com како бисмо решили тај проблем. Ако поново инсталирате B&A, ваша историја порука може бити изгубљена.";
 
 /* Error indicating that the app could not restore transferred data. */
 "APP_LAUNCH_FAILURE_RESTORE_FAILED_TITLE" = "Пренос података није успео";
@@ -3014,7 +3014,7 @@
 "EMAIL_INVITE_SUBJECT" = "Хајде да пређемо на B&A";
 
 /* Description for the fallback support sheet if user cannot send email */
-"EMAIL_SIGNAL_MESSAGE" = "Уређај није подешен за слање имејла. Да бисте послали захтев за подршку, подесите имејл на уређају или пишите на support@signal.org";
+"EMAIL_SIGNAL_MESSAGE" = "Уређај није подешен за слање имејла. Да бисте послали захтев за подршку, подесите имејл на уређају или пишите на support@baxs.com";
 
 /* Title for the fallback support sheet if user cannot send email */
 "EMAIL_SIGNAL_TITLE" = "Имејл није доступан";
@@ -3161,7 +3161,7 @@
 "ERROR_NETWORK_FAILURE" = "Грешка са мрежом";
 
 /* Format string for an error alert notification message. Embeds {{ error string }} */
-"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "Помозите нам да побољшамо B&A тако што ћете пријавити ову грешку и послати извештаје о грешкама са вашег уређаја на support@signal.org; %1$@";
+"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "Помозите нам да побољшамо B&A тако што ћете пријавити ову грешку и послати извештаје о грешкама са вашег уређаја на support@baxs.com; %1$@";
 
 /* Format string for an error alert notification title. */
 "ERROR_NOTIFICATION_TITLE" = "B&A Beta: Догодила се грешка";
@@ -8690,7 +8690,7 @@
 "SUPPORT_EMAIL_DEFAULT_DESCRIPTION" = "Објасните нам проблем: ";
 
 /* Message for alert dialog presented when a support email failed to send */
-"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "Пошаљите захтев за подршку на support@signal.org";
+"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "Пошаљите захтев за подршку на support@baxs.com";
 
 /* Localized label for support request email filter string. Embeds {{filter text}}. */
 "SUPPORT_EMAIL_FILTER_LABEL_FORMAT" = "Филтер: %1$@";

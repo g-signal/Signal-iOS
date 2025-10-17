@@ -41,8 +41,10 @@ public class RegistrationCoordinatorBackupErrorPresenterImpl:
     SFSafariViewControllerDelegate
 {
     private enum Constants {
-        static let incompatibleVersionFAQURL = URL(string: "https://support.signal.org/hc/articles/360007059752")!
-        static let backupKeyFAQURL = URL(string: "https://support.signal.org/hc/articles/360007059752")!
+        // static let incompatibleVersionFAQURL = URL(string: "https://support.signal.org/hc/articles/360007059752")! // Disabled support URL navigation
+        static let incompatibleVersionFAQURL = URL(string: "about:blank")! // Disabled support URL navigation
+        // static let backupKeyFAQURL = URL(string: "https://support.signal.org/hc/articles/360007059752")! // Disabled support URL navigation
+        static let backupKeyFAQURL = URL(string: "about:blank")! // Disabled support URL navigation
         static let itunesStoreUrl = URL(string: "https://itunes.apple.com/app/id874139669")!
     }
 
@@ -176,19 +178,19 @@ public class RegistrationCoordinatorBackupErrorPresenterImpl:
             actions.append(ActionSheetAction(title: tryAgainString) { _ in
                 continuation.resume(returning: .incorrectBackupKey)
             })
-            actions.append(ActionSheetAction(title: CommonStrings.help) { _ in
-                self.presentSupportArticle(
-                    url: Constants.backupKeyFAQURL,
-                    presenter: presenter
-                ) {
-                    self.presentError(
-                        error: error,
-                        isQuickRestore: isQuickRestore,
-                        from: presenter,
-                        continuation: continuation
-                    )
-                }
-            })
+//            actions.append(ActionSheetAction(title: CommonStrings.help) { _ in
+//                self.presentSupportArticle(
+//                    url: Constants.backupKeyFAQURL,
+//                    presenter: presenter
+//                ) {
+//                    self.presentError(
+//                        error: error,
+//                        isQuickRestore: isQuickRestore,
+//                        from: presenter,
+//                        continuation: continuation
+//                    )
+//                }
+//            })
         case .versionMismatch:
             title = OWSLocalizedString(
                 "REGISTRATION_BACKUP_RESTORE_ERROR_UNSUPPORTED_BACKUP_VERSION_TITLE",
@@ -214,19 +216,19 @@ public class RegistrationCoordinatorBackupErrorPresenterImpl:
                     continuation.resume(returning: .skipRestore)
                 })
             }
-            actions.append(ActionSheetAction(title: CommonStrings.learnMore) { _ in
-                self.presentSupportArticle(
-                    url: Constants.incompatibleVersionFAQURL,
-                    presenter: presenter
-                ) {
-                    self.presentError(
-                        error: error,
-                        isQuickRestore: isQuickRestore,
-                        from: presenter,
-                        continuation: continuation
-                    )
-                }
-            })
+//            actions.append(ActionSheetAction(title: CommonStrings.learnMore) { _ in
+//                self.presentSupportArticle(
+//                    url: Constants.incompatibleVersionFAQURL,
+//                    presenter: presenter
+//                ) {
+//                    self.presentError(
+//                        error: error,
+//                        isQuickRestore: isQuickRestore,
+//                        from: presenter,
+//                        continuation: continuation
+//                    )
+//                }
+//            })
         case .networkError, .timeout:
             title = OWSLocalizedString(
                 "REGISTRATION_BACKUP_RESTORE_ERROR_NETWORK_TITLE",

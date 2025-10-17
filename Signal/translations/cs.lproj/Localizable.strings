@@ -197,13 +197,13 @@
 "APN_Message" = "Možná máte nové zprávy";
 
 /* Default message for the 'app launch failed' alert. */
-"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A nelze spustit. Odešlete prosím debug log na support@signal.org, pokusíme se problém opravit.";
+"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A nelze spustit. Odešlete prosím debug log na support@baxs.com, pokusíme se problém opravit.";
 
 /* Button to try launching the app even though the last launch failed */
 "APP_LAUNCH_FAILURE_CONTINUE" = "Otevřít Signál znovu";
 
 /* Message for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
-"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "Zašlete prosím protokol ladění na adresu support@signal.org, abychom mohli problém opravit.";
+"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "Zašlete prosím protokol ladění na adresu support@baxs.com, abychom mohli problém opravit.";
 
 /* Title for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
 "APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "Aplikaci B&A se nepodařilo otevřít";
@@ -218,7 +218,7 @@
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "Neznámá verze databáze.";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "B&A měl při pokusu o otevření problém. Zašlete prosím protokol o ladění na adresu support@signal.org, abyste nám pomohli problém odstranit.";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "B&A měl při pokusu o otevření problém. Zašlete prosím protokol o ladění na adresu support@baxs.com, abyste nám pomohli problém odstranit.";
 
 /* Error indicating that the app crashed during the previous launch. */
 "APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "B&A se nepodařilo otevřít";
@@ -230,7 +230,7 @@
 "APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_TITLE" = "Málo místa v úložišti";
 
 /* Error indicating that the app could not restore transferred data. */
-"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "Data přenesená ze starého zařízení nebylo možné obnovit. Zašlete prosím protokol ladění na support@signal.org, abychom mohli tento problém vyřešit. Pokud si B&A nainstalujete znova, může dojít ke ztrátě historie vašich zpráv.";
+"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "Data přenesená ze starého zařízení nebylo možné obnovit. Zašlete prosím protokol ladění na support@baxs.com, abychom mohli tento problém vyřešit. Pokud si B&A nainstalujete znova, může dojít ke ztrátě historie vašich zpráv.";
 
 /* Error indicating that the app could not restore transferred data. */
 "APP_LAUNCH_FAILURE_RESTORE_FAILED_TITLE" = "Přenos dat se nepodařilo dokončit";
@@ -3014,7 +3014,7 @@
 "EMAIL_INVITE_SUBJECT" = "Přejděme na B&A";
 
 /* Description for the fallback support sheet if user cannot send email */
-"EMAIL_SIGNAL_MESSAGE" = "Vaše zařízení není nastaveno pro odesílání e-mailů. Pokud chcete kontaktovat podporu, nastavte na svém zařízení e-mail nebo napište na support@signal.org";
+"EMAIL_SIGNAL_MESSAGE" = "Vaše zařízení není nastaveno pro odesílání e-mailů. Pokud chcete kontaktovat podporu, nastavte na svém zařízení e-mail nebo napište na support@baxs.com";
 
 /* Title for the fallback support sheet if user cannot send email */
 "EMAIL_SIGNAL_TITLE" = "E-mail není dostupný";
@@ -3161,7 +3161,7 @@
 "ERROR_NETWORK_FAILURE" = "Chyba sítě";
 
 /* Format string for an error alert notification message. Embeds {{ error string }} */
-"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "Pomozte nám prosím zlepšit B&A odesláním této chyby spolu s ladícím záznamem z vašeho zařízení na adresu support@signal.org; %1$@";
+"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "Pomozte nám prosím zlepšit B&A odesláním této chyby spolu s ladícím záznamem z vašeho zařízení na adresu support@baxs.com; %1$@";
 
 /* Format string for an error alert notification title. */
 "ERROR_NOTIFICATION_TITLE" = "B&A Beta: Objevila se chyba";
@@ -8690,7 +8690,7 @@
 "SUPPORT_EMAIL_DEFAULT_DESCRIPTION" = "Řekněte nám o problému: ";
 
 /* Message for alert dialog presented when a support email failed to send */
-"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "Zašlete prosím e-mail s vaší žádostí o podporu na support@signal.org";
+"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "Zašlete prosím e-mail s vaší žádostí o podporu na support@baxs.com";
 
 /* Localized label for support request email filter string. Embeds {{filter text}}. */
 "SUPPORT_EMAIL_FILTER_LABEL_FORMAT" = "Filtr: %1$@";

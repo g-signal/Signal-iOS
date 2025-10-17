@@ -318,15 +318,15 @@ public class NewGroupConfirmViewController: OWSTableViewController2 {
 
         let actionSheet = ActionSheetController(title: alertTitle, message: alertMessage)
 
-        actionSheet.addAction(ActionSheetAction(title: CommonStrings.learnMore,
-                                                style: .default) { _ in
-                                                    // We present the "learn more" view atop the
-                                                    // new conversation view to avoid users getting
-                                                    // stucks in the "create group" view.
-                                                    navigateToNewGroup {
-                                                        Self.showLearnMoreView()
-                                                    }
-        })
+        // actionSheet.addAction(ActionSheetAction(title: CommonStrings.learnMore,
+        //                                         style: .default) { _ in
+        //                                             // We present the "learn more" view atop the
+        //                                             // new conversation view to avoid users getting
+        //                                             // stucks in the "create group" view.
+        //                                             navigateToNewGroup {
+        //                                                 Self.showLearnMoreView()
+        //                                             }
+        // }) // Removed learn more button to avoid empty page navigation
         actionSheet.addAction(ActionSheetAction(title: CommonStrings.okayButton,
                                                 style: .default) { _ in
                                                     navigateToNewGroup(completion: nil)
@@ -338,16 +338,17 @@ public class NewGroupConfirmViewController: OWSTableViewController2 {
     }
 
     private class func showLearnMoreView() {
-        guard let url = URL(string: "https://support.signal.org/hc/articles/360007319331") else {
-            owsFailDebug("Invalid url.")
-            return
-        }
-        guard let fromViewController = CurrentAppContext().frontmostViewController() else {
-            owsFailDebug("Missing fromViewController.")
-            return
-        }
-        let vc = SFSafariViewController(url: url)
-        fromViewController.present(vc, animated: true, completion: nil)
+        // guard let url = URL(string: "https://support.signal.org/hc/articles/360007319331") else {
+        //     owsFailDebug("Invalid url.")
+        //     return
+        // }
+        // guard let fromViewController = CurrentAppContext().frontmostViewController() else {
+        //     owsFailDebug("Missing fromViewController.")
+        //     return
+        // }
+        // let vc = SFSafariViewController(url: url)
+        // fromViewController.present(vc, animated: true, completion: nil)
+        // Disabled support URL navigation - learn more functionality removed
     }
 }
 

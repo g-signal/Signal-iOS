@@ -16,8 +16,8 @@ final class HelpViewController: OWSTableViewController2 {
 
     private func updateTableContents() {
         let helpTitle = CommonStrings.help
-        let supportCenterLabel = OWSLocalizedString("HELP_SUPPORT_CENTER",
-                                                   comment: "Help item that takes the user to the Signal support website")
+//        let supportCenterLabel = OWSLocalizedString("HELP_SUPPORT_CENTER",
+//                                                   comment: "Help item that takes the user to the Signal support website")
         let contactLabel = OWSLocalizedString("HELP_CONTACT_US",
                                              comment: "Help item allowing the user to file a support request")
         let localizedSheetTitle = OWSLocalizedString("EMAIL_SIGNAL_TITLE",
@@ -28,13 +28,13 @@ final class HelpViewController: OWSTableViewController2 {
         let contents = OWSTableContents(title: helpTitle)
 
         let helpSection = OWSTableSection()
-        helpSection.add(.disclosureItem(
-            withText: supportCenterLabel,
-            actionBlock: { [weak self] in
-                let vc = SFSafariViewController(url: SupportConstants.supportURL)
-                self?.present(vc, animated: true, completion: nil)
-            }
-        ))
+//        helpSection.add(.disclosureItem(
+//            withText: supportCenterLabel,
+//            actionBlock: { [weak self] in
+//                let vc = SFSafariViewController(url: SupportConstants.supportURL)
+//                self?.present(vc, animated: true, completion: nil)
+//            }
+//        ))
         helpSection.add(.disclosureItem(
             withText: contactLabel,
             actionBlock: {
@@ -67,10 +67,10 @@ final class HelpViewController: OWSTableViewController2 {
 
         let aboutSection = OWSTableSection()
         aboutSection.headerTitle = OWSLocalizedString("ABOUT_SECTION_TITLE", comment: "Title for the 'about' help section")
-        aboutSection.footerTitle = OWSLocalizedString(
-            "SETTINGS_COPYRIGHT",
-            comment: "Footer for the 'about' help section"
-        )
+//        aboutSection.footerTitle = OWSLocalizedString(
+//            "SETTINGS_COPYRIGHT",
+//            comment: "Footer for the 'about' help section"
+//        )
         aboutSection.add(.copyableItem(
             label: OWSLocalizedString("SETTINGS_VERSION", comment: ""),
             value: AppVersionImpl.shared.prettyAppVersion

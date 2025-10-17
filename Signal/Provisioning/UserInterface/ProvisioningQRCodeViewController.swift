@@ -107,15 +107,15 @@ private struct ProvisioningQRCodeView: View {
                 Spacer()
                     .frame(height: overallGeometry.size.height * (overallGeometry.size.isLandscape ? 0.05 : 0.1))
 
-                Link(
-                    OWSLocalizedString(
-                        "SECONDARY_ONBOARDING_SCAN_CODE_HELP_TEXT",
-                        comment: "Link text for page with troubleshooting info shown on the QR scanning screen"
-                    ),
-                    destination: URL(string: "https://support.signal.org/hc/articles/360007320451")!
-                )
-                .font(.subheadline)
-                .foregroundStyle(Color.Signal.accent)
+//                Link(
+//                    OWSLocalizedString(
+//                        "SECONDARY_ONBOARDING_SCAN_CODE_HELP_TEXT",
+//                        comment: "Link text for page with troubleshooting info shown on the QR scanning screen"
+//                    ),
+//                    destination: URL(string: "https://support.signal.org/hc/articles/360007320451")!
+//                )
+//                .font(.subheadline)
+//                .foregroundStyle(Color.Signal.accent)
 
 #if TESTABLE_BUILD
                 if

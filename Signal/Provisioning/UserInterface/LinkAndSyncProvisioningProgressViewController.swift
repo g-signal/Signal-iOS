@@ -299,10 +299,10 @@ struct LinkAndSyncProvisioningProgressView: View {
                     "LINKING_SYNCING_FOOTER",
                     comment: "Footer text when loading messages during linking process."
                 ))
-                .appendLink(CommonStrings.learnMore) {
-                    let vc = SFSafariViewController(url: URL(string: "https://support.signal.org/hc/articles/360007320551")!)
-                    CurrentAppContext().frontmostViewController()?.present(vc, animated: true)
-                }
+//                .appendLink(CommonStrings.learnMore) {
+//                    let vc = SFSafariViewController(url: URL(string: "https://support.signal.org/hc/articles/360007320551")!)
+//                    CurrentAppContext().frontmostViewController()?.present(vc, animated: true)
+//                }
                 .font(.footnote)
                 .frame(maxWidth: 412)
             }

@@ -121,9 +121,9 @@ class AdvancedPrivacySettingsViewController: OWSTableViewController2 {
 
         let proxySection = OWSTableSection()
         proxySection.footerAttributedTitle = .composed(of: [
-            OWSLocalizedString("USE_PROXY_EXPLANATION", comment: "Explanation of when you should use a signal proxy"),
-            " ",
-            CommonStrings.learnMore.styled(with: .link(URL(string: "https://support.signal.org/hc/articles/360056052052-Proxy-Support")!))
+            OWSLocalizedString("USE_PROXY_EXPLANATION", comment: "Explanation of when you should use a signal proxy")
+            // " ",
+            // CommonStrings.learnMore.styled(with: .link(URL(string: "https://support.signal.org/hc/articles/360056052052-Proxy-Support")!)) // Disabled support URL navigation
         ]).styled(
             with: .font(.dynamicTypeCaption1Clamped),
             .color(Theme.secondaryTextAndIconColor)

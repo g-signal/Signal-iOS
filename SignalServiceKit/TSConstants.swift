@@ -36,7 +36,9 @@ public class TSConstants {
     // Never instantiate this class.
     private init() {}
 
-    public static let legalTermsUrl = URL(string: "https://signal.org/legal/")!
+    public static var legalTermsUrl: URL {
+        URL(string: "\(textSecureCDN0ServerURL)/legal/index.html")!
+    }
     public static let donateUrl = URL(string: "https://signal.org/donate/")!
     public static let appStoreUrl = URL(string: "https://itunes.apple.com/us/app/signal-private-messenger/id874139669?mt=8")!
 
@@ -158,7 +160,7 @@ public class TSConstantsProduction: TSConstantsProtocol {
     public let mainServiceIdentifiedURL = "https://chat.imba-test.com"
     public let mainServiceUnidentifiedURL = "https://chat.imba-test.com"
     public let textSecureCDN0ServerURL = "http://cdn.imba-test.com"
-    public let textSecureCDN2ServerURL = "https://bachat.storage.googleapis.com"
+    public let textSecureCDN2ServerURL = "https://cdn2.imba-test.com"
     public let textSecureCDN3ServerURL = "https://cdn3.imba-test.com"
     public let storageServiceURL = "https://storage.imba-test.com"
     public let sfuURL = "https://sfu.imba-test.com"

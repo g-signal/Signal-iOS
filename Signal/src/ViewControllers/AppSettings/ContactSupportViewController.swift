@@ -8,13 +8,19 @@ import SignalServiceKit
 import SignalUI
 
 class SupportConstants: NSObject {
-    static let supportURL = URL(string: "https://support.signal.org/")!
-    static let debugLogsInfoURL = URL(string: "https://support.signal.org/hc/articles/360007318591")!
-    static let supportEmail = "support@signal.org"
-    static let subscriptionFAQURL = URL(string: "https://support.signal.org/hc/articles/4408365318426")!
-    static let donorFAQURL = URL(string: "https://support.signal.org/hc/articles/360031949872")!
-    static let badgeExpirationLearnMoreURL = URL(string: "https://support.signal.org/hc/articles/360031949872#fix")!
-    static let donationPendingLearnMoreURL = URL(string: "https://support.signal.org/hc/articles/360031949872#pending")!
+    // static let supportURL = URL(string: "https://support.signal.org/")!
+    static let supportURL = URL(string: "about:blank")! // Disabled support URL navigation
+    // static let debugLogsInfoURL = URL(string: "https://support.signal.org/hc/articles/360007318591")!
+    static let debugLogsInfoURL = URL(string: "about:blank")! // Disabled support URL navigation
+    static let supportEmail = "support@baxs.com"
+    // static let subscriptionFAQURL = URL(string: "https://support.signal.org/hc/articles/4408365318426")!
+    static let subscriptionFAQURL = URL(string: "about:blank")! // Disabled support URL navigation
+    // static let donorFAQURL = URL(string: "https://support.signal.org/hc/articles/360031949872")!
+    static let donorFAQURL = URL(string: "about:blank")! // Disabled support URL navigation
+    // static let badgeExpirationLearnMoreURL = URL(string: "https://support.signal.org/hc/articles/360031949872#fix")!
+    static let badgeExpirationLearnMoreURL = URL(string: "about:blank")! // Disabled support URL navigation
+    // static let donationPendingLearnMoreURL = URL(string: "https://support.signal.org/hc/articles/360031949872#pending")!
+    static let donationPendingLearnMoreURL = URL(string: "about:blank")! // Disabled support URL navigation
 }
 
 private extension ContactSupportViewController.Filter {

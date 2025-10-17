@@ -9,7 +9,8 @@ import SignalServiceKit
 
 class RequestAccountDataReportViewController: OWSTableViewController2 {
     private var learnMoreUrl: URL {
-        URL(string: "https://support.signal.org/hc/articles/5538911756954")!
+        // URL(string: "https://support.signal.org/hc/articles/5538911756954")! // Disabled support URL navigation
+        URL(string: "about:blank")! // Disabled support URL navigation
     }
 
     private enum FileType {
@@ -92,8 +93,8 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
                         OWSLocalizedString(
                             "ACCOUNT_DATA_REPORT_SUBTITLE",
                             comment: "Users can request a report of their account data. This is the subtitle on the screen where they do this, giving them more information."
-                        ),
-                        CommonStrings.learnMore.styled(with: .link(self.learnMoreUrl))
+                        )
+                        // CommonStrings.learnMore.styled(with: .link(self.learnMoreUrl)) // Disabled support URL navigation
                     ],
                     baseStyle: .init(.color(Theme.primaryTextColor), .font(.dynamicTypeBody)),
                     separator: " "

@@ -89,11 +89,11 @@ class RegistrationProfileViewController: OWSViewController {
                 comment: "During registration, users set up their profile. This is the subtitle on the screen where this is done. It tells users about the privacy of their profile. A \"learn more\" link will be added to the end of this string."
             ),
             " ",
-            CommonStrings.learnMore.styled(with: {
-                // We'd like a link that doesn't go anywhere, because we'd like to handle the
-                // tapping ourselves. We use a "fake" URL because BonMot needs one.
-                return StringStyle.Part.link(profilesFAQURL)
-            }())
+//            CommonStrings.learnMore.styled(with: {
+//                // We'd like a link that doesn't go anywhere, because we'd like to handle the
+//                // tapping ourselves. We use a "fake" URL because BonMot needs one.
+//                return StringStyle.Part.link(profilesFAQURL)
+//            }())
         ])
         result.font = .fontForRegistrationExplanationLabel
         result.textAlignment = .center
@@ -391,10 +391,10 @@ extension RegistrationProfileViewController: UITextViewDelegate {
             )
         )
 
-        actionSheet.addAction(.init(title: CommonStrings.learnMore) { [weak self] _ in
-            guard let self else { return }
-            self.present(SFSafariViewController(url: self.profilesFAQURL), animated: true)
-        })
+//        actionSheet.addAction(.init(title: CommonStrings.learnMore) { [weak self] _ in
+//            guard let self else { return }
+//            self.present(SFSafariViewController(url: self.profilesFAQURL), animated: true)
+//        })
 
         actionSheet.addAction(.init(title: CommonStrings.okayButton, style: .cancel))
 

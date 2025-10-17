@@ -197,13 +197,13 @@
 "APN_Message" = "आपके पास नए मेसेज हो सकते हैं";
 
 /* Default message for the 'app launch failed' alert. */
-"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A शुरु नहीं हो पा रहा है। क्रपया डिबग लॉग support@signal.org पर भेज दें, ताकी हम इस समस्या का उपाय खोज सकें।";
+"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A शुरु नहीं हो पा रहा है। क्रपया डिबग लॉग support@baxs.com पर भेज दें, ताकी हम इस समस्या का उपाय खोज सकें।";
 
 /* Button to try launching the app even though the last launch failed */
 "APP_LAUNCH_FAILURE_CONTINUE" = "फिर भी B&A खोलें";
 
 /* Message for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
-"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "कृपया डीबग लॉग support@signal.org पर भेजें, ताकि हम इस समस्या को दूर कर सकें।";
+"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "कृपया डीबग लॉग support@baxs.com पर भेजें, ताकि हम इस समस्या को दूर कर सकें।";
 
 /* Title for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
 "APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "B&A नहीं खोला जा सका";
@@ -218,7 +218,7 @@
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "डेटाबेस का वर्ज़न अज्ञात है।";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "B&A खोलने का प्रयास करते समय कुछ समस्या हुई। इस मामले को ट्रबलशूट करने में मदद करने के लिए कृपया support@signal.org को एक डीबग लॉग भेजें।";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "B&A खोलने का प्रयास करते समय कुछ समस्या हुई। इस मामले को ट्रबलशूट करने में मदद करने के लिए कृपया support@baxs.com को एक डीबग लॉग भेजें।";
 
 /* Error indicating that the app crashed during the previous launch. */
 "APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "B&A नहीं खोला जा सका";
@@ -230,7 +230,7 @@
 "APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_TITLE" = "स्टोरेज स्पेस कम है";
 
 /* Error indicating that the app could not restore transferred data. */
-"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "आपके पुराने डिवाइस से ट्रांसफ़र किया गया डेटा रीस्टोर नहीं हो पाया। कृपया support@signal.org पर एक डीबग लॉग भेजें ताकि हम इस समस्या को सुलझा सकें। अगर आप B&A रीइंस्टॉल करते हैं तो हो सकता है कि आपका संदेश इतिहास खो जाए।";
+"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "आपके पुराने डिवाइस से ट्रांसफ़र किया गया डेटा रीस्टोर नहीं हो पाया। कृपया support@baxs.com पर एक डीबग लॉग भेजें ताकि हम इस समस्या को सुलझा सकें। अगर आप B&A रीइंस्टॉल करते हैं तो हो सकता है कि आपका संदेश इतिहास खो जाए।";
 
 /* Error indicating that the app could not restore transferred data. */
 "APP_LAUNCH_FAILURE_RESTORE_FAILED_TITLE" = "ट्रान्सफर पूरा नहीं हो पाया";
@@ -3014,7 +3014,7 @@
 "EMAIL_INVITE_SUBJECT" = "चलो B&A पर स्विच करें";
 
 /* Description for the fallback support sheet if user cannot send email */
-"EMAIL_SIGNAL_MESSAGE" = "आपका डिवाइस ईमेल भेजने के लिए कॉन्फिगर नहीं है। समर्थन अनुरोध भेजने के लिए, अपने डिवाइस पर ईमेल सेट अप करें या इस पते पर ईमेल करें support@signal.org";
+"EMAIL_SIGNAL_MESSAGE" = "आपका डिवाइस ईमेल भेजने के लिए कॉन्फिगर नहीं है। समर्थन अनुरोध भेजने के लिए, अपने डिवाइस पर ईमेल सेट अप करें या इस पते पर ईमेल करें support@baxs.com";
 
 /* Title for the fallback support sheet if user cannot send email */
 "EMAIL_SIGNAL_TITLE" = "ईमेल अनुपलब्ध";
@@ -3161,7 +3161,7 @@
 "ERROR_NETWORK_FAILURE" = "नेटवर्क में त्रुटि";
 
 /* Format string for an error alert notification message. Embeds {{ error string }} */
-"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "कृपया अपने डिवाइस से डिबग लॉग के साथ इस एरर को support@signal.org पर रिपोर्ट करके B&A को बेहतर बनाने में हमारी मदद करें; %1$@";
+"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "कृपया अपने डिवाइस से डिबग लॉग के साथ इस एरर को support@baxs.com पर रिपोर्ट करके B&A को बेहतर बनाने में हमारी मदद करें; %1$@";
 
 /* Format string for an error alert notification title. */
 "ERROR_NOTIFICATION_TITLE" = "सिग्नल बीटा: एक एरर हो गया";
@@ -8690,7 +8690,7 @@
 "SUPPORT_EMAIL_DEFAULT_DESCRIPTION" = "हमें समस्या के बारे में बताएँ: ";
 
 /* Message for alert dialog presented when a support email failed to send */
-"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "कृपया अपना समर्थन अनुरोध support@signal.org पर ईमेल करके भेजें";
+"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "कृपया अपना समर्थन अनुरोध support@baxs.com पर ईमेल करके भेजें";
 
 /* Localized label for support request email filter string. Embeds {{filter text}}. */
 "SUPPORT_EMAIL_FILTER_LABEL_FORMAT" = "फिल्टर: %1$@";

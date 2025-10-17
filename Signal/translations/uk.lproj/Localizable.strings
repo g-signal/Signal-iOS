@@ -197,13 +197,13 @@
 "APN_Message" = "Можливо, у вас є нові повідомлення";
 
 /* Default message for the 'app launch failed' alert. */
-"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A не запускається. Надішліть журнал налагодження на support@signal.org, щоб ми могли виправити помилку.";
+"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A не запускається. Надішліть журнал налагодження на support@baxs.com, щоб ми могли виправити помилку.";
 
 /* Button to try launching the app even though the last launch failed */
 "APP_LAUNCH_FAILURE_CONTINUE" = "Усе одно відкрити B&A";
 
 /* Message for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
-"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "Надішліть журнал налагодження на support@signal.org, щоб ми могли виправити помилку.";
+"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "Надішліть журнал налагодження на support@baxs.com, щоб ми могли виправити помилку.";
 
 /* Title for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
 "APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "Не вдається відкрити B&A";
@@ -218,7 +218,7 @@
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "Невідома версія бази даних.";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "Під час відкриття B&A виникла проблема. Будь ласка, надішліть журнал налагодження на support@signal.org, щоб допомогти її усунути.";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "Під час відкриття B&A виникла проблема. Будь ласка, надішліть журнал налагодження на support@baxs.com, щоб допомогти її усунути.";
 
 /* Error indicating that the app crashed during the previous launch. */
 "APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "Не вдається відкрити B&A";
@@ -230,7 +230,7 @@
 "APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_TITLE" = "Пам'яті майже не лишилося";
 
 /* Error indicating that the app could not restore transferred data. */
-"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "Не вдалося відновити дані, перенесені з вашого старого пристрою. Будь ласка, надішліть журнал налагодження на support@signal.org, щоб ми могли виправити цю проблему. Якщо ви заново встановите B&A, історію повідомлень може бути втрачено.";
+"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "Не вдалося відновити дані, перенесені з вашого старого пристрою. Будь ласка, надішліть журнал налагодження на support@baxs.com, щоб ми могли виправити цю проблему. Якщо ви заново встановите B&A, історію повідомлень може бути втрачено.";
 
 /* Error indicating that the app could not restore transferred data. */
 "APP_LAUNCH_FAILURE_RESTORE_FAILED_TITLE" = "Не вдається завершити перенесення";
@@ -3014,7 +3014,7 @@
 "EMAIL_INVITE_SUBJECT" = "Пора переходити в B&A";
 
 /* Description for the fallback support sheet if user cannot send email */
-"EMAIL_SIGNAL_MESSAGE" = "Ваш пристрій не налаштовано для надсилання електронних листів. Щоб зв'язатися зі службою підтримки, налаштуйте електронну пошту на своєму пристрої, або надішліть листа на адресу support@signal.org з іншого пристрою";
+"EMAIL_SIGNAL_MESSAGE" = "Ваш пристрій не налаштовано для надсилання електронних листів. Щоб зв'язатися зі службою підтримки, налаштуйте електронну пошту на своєму пристрої, або надішліть листа на адресу support@baxs.com з іншого пристрою";
 
 /* Title for the fallback support sheet if user cannot send email */
 "EMAIL_SIGNAL_TITLE" = "Електронна пошта недоступна";
@@ -3161,7 +3161,7 @@
 "ERROR_NETWORK_FAILURE" = "Мережева помилка";
 
 /* Format string for an error alert notification message. Embeds {{ error string }} */
-"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "Будь ласка, допоможіть нам покращити B&A. Відправте цю помилку разом з журналами налагодження з вашого пристрою на адресу support@signal.org; %1$@";
+"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "Будь ласка, допоможіть нам покращити B&A. Відправте цю помилку разом з журналами налагодження з вашого пристрою на адресу support@baxs.com; %1$@";
 
 /* Format string for an error alert notification title. */
 "ERROR_NOTIFICATION_TITLE" = "B&A Beta: Сталася помилка";
@@ -8690,7 +8690,7 @@
 "SUPPORT_EMAIL_DEFAULT_DESCRIPTION" = "Опишіть вашу проблему: ";
 
 /* Message for alert dialog presented when a support email failed to send */
-"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "Будь ласка, надішліть імейл у службу підтримки на адресу support@signal.org";
+"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "Будь ласка, надішліть імейл у службу підтримки на адресу support@baxs.com";
 
 /* Localized label for support request email filter string. Embeds {{filter text}}. */
 "SUPPORT_EMAIL_FILTER_LABEL_FORMAT" = "Фільтр: %1$@";

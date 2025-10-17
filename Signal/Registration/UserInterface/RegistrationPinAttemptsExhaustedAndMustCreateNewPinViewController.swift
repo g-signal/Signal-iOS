@@ -30,7 +30,8 @@ protocol RegistrationPinAttemptsExhaustedAndMustCreateNewPinPresenter: AnyObject
 // MARK: - RegistrationPinAttemptsExhaustedAndMustCreateNewPinViewController
 
 class RegistrationPinAttemptsExhaustedAndMustCreateNewPinViewController: OWSViewController {
-    private var learnMoreURL: URL { URL(string: "https://support.signal.org/hc/articles/360007059792")! }
+    // private var learnMoreURL: URL { URL(string: "https://support.signal.org/hc/articles/360007059792")! } // Disabled support URL navigation
+    private var learnMoreURL: URL { URL(string: "about:blank")! } // Disabled support URL navigation
 
     private var state: RegistrationPinAttemptsExhaustedViewState
 
@@ -136,7 +137,7 @@ class RegistrationPinAttemptsExhaustedAndMustCreateNewPinViewController: OWSView
         stackView.addArrangedSubview(continueButton)
         stackView.setCustomSpacing(24, after: continueButton)
 
-        stackView.addArrangedSubview(learnMoreButton)
+//        stackView.addArrangedSubview(learnMoreButton)
 
         render()
     }

@@ -47,9 +47,9 @@ class AccountSettingsViewController: OWSTableViewController2 {
                 OWSLocalizedString(
                     "SETTINGS_PINS_FOOTER",
                     comment: "Footer for the 'PINs' section of the privacy settings."
-                ),
-                " ",
-                CommonStrings.learnMore.styled(with: .link(URL(string: "https://support.signal.org/hc/articles/360007059792")!))
+                )
+                // " ",
+                // CommonStrings.learnMore.styled(with: .link(URL(string: "https://support.signal.org/hc/articles/360007059792")!)) // Disabled support URL navigation
             ]).styled(
                 with: .font(.dynamicTypeCaption1Clamped),
                 .color(Theme.secondaryTextAndIconColor)

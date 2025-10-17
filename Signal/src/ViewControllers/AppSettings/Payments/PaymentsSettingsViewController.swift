@@ -994,17 +994,17 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
         let message = OWSLocalizedString("SETTINGS_PAYMENTS_CURRENCY_CONVERSIONS_INFO_ALERT_MESSAGE",
                                         comment: "Message for the 'currency conversions info' alert.")
         let actionSheet = ActionSheetController(title: nil, message: message)
-        actionSheet.addAction(ActionSheetAction(
-            title: CommonStrings.learnMore,
-            style: .default,
-            handler: { _ in
-                UIApplication.shared.open(
-                    URL(string: "https://support.signal.org/hc/articles/360057625692#payments_currency_conversion")!,
-                    options: [:],
-                    completionHandler: nil
-                )
-            }
-        ))
+        // actionSheet.addAction(ActionSheetAction(
+        //     title: CommonStrings.learnMore,
+        //     style: .default,
+        //     handler: { _ in
+        //         // UIApplication.shared.open(
+        //         //     URL(string: "https://support.signal.org/hc/articles/360057625692#payments_currency_conversion")!,
+        //         //     options: [:],
+        //         //     completionHandler: nil
+        //         // ) // Disabled support URL navigation
+        //     }
+        // )) // Removed learn more button to avoid empty page navigation
         actionSheet.addAction(OWSActionSheets.okayAction)
         fromViewController.presentActionSheet(actionSheet)
     }
@@ -1224,29 +1224,29 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
 
     @objc
     private func didTapAboutMobileCoinCard() {
-        UIApplication.shared.open(
-            URL(string: "https://support.signal.org/hc/articles/360057625692#payments_which_ones")!,
-            options: [:],
-            completionHandler: nil
-        )
+        // UIApplication.shared.open(
+        //     URL(string: "https://support.signal.org/hc/articles/360057625692#payments_which_ones")!,
+        //     options: [:],
+        //     completionHandler: nil
+        // ) // Disabled support URL navigation
     }
 
     @objc
     private func didTapAddingToYourWalletCard() {
-        UIApplication.shared.open(
-            URL(string: "https://support.signal.org/hc/articles/360057625692#payments_transfer_from_exchange")!,
-            options: [:],
-            completionHandler: nil
-        )
+        // UIApplication.shared.open(
+        //     URL(string: "https://support.signal.org/hc/articles/360057625692#payments_transfer_from_exchange")!,
+        //     options: [:],
+        //     completionHandler: nil
+        // ) // Disabled support URL navigation
     }
 
     @objc
     private func didTapCashingOutCoinCard() {
-        UIApplication.shared.open(
-            URL(string: "https://support.signal.org/hc/articles/360057625692#payments_transfer_to_exchange")!,
-            options: [:],
-            completionHandler: nil
-        )
+        // UIApplication.shared.open(
+        //     URL(string: "https://support.signal.org/hc/articles/360057625692#payments_transfer_to_exchange")!,
+        //     options: [:],
+        //     completionHandler: nil
+        // ) // Disabled support URL navigation
     }
 
     @objc

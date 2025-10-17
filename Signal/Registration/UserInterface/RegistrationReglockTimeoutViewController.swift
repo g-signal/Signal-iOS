@@ -32,7 +32,8 @@ protocol RegistrationReglockTimeoutPresenter: AnyObject {
 // MARK: - RegistrationReglockTimeoutViewController
 
 class RegistrationReglockTimeoutViewController: OWSViewController {
-    private var learnMoreURL: URL { URL(string: "https://support.signal.org/hc/articles/360007059792")! }
+    // private var learnMoreURL: URL { URL(string: "https://support.signal.org/hc/articles/360007059792")! } // Disabled support URL navigation
+    private var learnMoreURL: URL { URL(string: "about:blank")! } // Disabled support URL navigation
 
     private let oneMinute: TimeInterval = 60
 
@@ -182,7 +183,7 @@ class RegistrationReglockTimeoutViewController: OWSViewController {
             stackView.setCustomSpacing(24, after: okayButton)
         }
 
-        stackView.addArrangedSubview(learnMoreButton)
+//        stackView.addArrangedSubview(learnMoreButton)
 
         renderExplanationLabelText()
         renderColors()
