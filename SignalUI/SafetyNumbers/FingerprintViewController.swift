@@ -150,7 +150,8 @@ public class FingerprintViewController: OWSViewController, OWSNavigationChildCon
             comment: "Instructions for verifying your safety number. Embeds {{contact's name}}"
         )
         // Link doesn't matter, we will override tap behavior.
-        let learnMoreString = CommonStrings.learnMore.styled(with: .link(URL(string: Constants.learnMoreUrl)!))
+//        let learnMoreString = CommonStrings.learnMore.styled(with: .link(URL(string: Constants.learnMoreUrl)!))
+        let learnMoreString = ""
         instructionsTextView.attributedText = NSAttributedString.composed(of: [
             String(format: instructionsFormat, fingerprint.theirName),
             " ",
@@ -165,6 +166,7 @@ public class FingerprintViewController: OWSViewController, OWSNavigationChildCon
             .underlineColor: UIColor.clear,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]
+        instructionsTextView.text = instructionsFormat
     }
 
     private lazy var verifyUnverifyButtonLabel = UILabel()

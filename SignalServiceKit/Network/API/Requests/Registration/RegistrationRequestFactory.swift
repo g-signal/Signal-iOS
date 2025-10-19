@@ -207,13 +207,16 @@ public enum RegistrationRequestFactory {
 
     public struct ApnRegistrationId: Codable {
         public let apnsToken: String
+        public let voipToken: String?
 
-        public init(apnsToken: String) {
+        public init(apnsToken: String, voipToken: String? = nil) {
             self.apnsToken = apnsToken
+            self.voipToken = voipToken
         }
 
         public enum CodingKeys: String, CodingKey {
             case apnsToken = "apnRegistrationId"
+            case voipToken = "voipApnRegistrationId"
         }
     }
 

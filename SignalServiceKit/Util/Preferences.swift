@@ -47,6 +47,7 @@ public class Preferences {
         case notificationPreviewType = "Notification Preview Type Key"
         case playSoundInForeground = "NotificationSoundInForeground"
         case lastRecordedPushToken = "LastRecordedPushToken"
+        case lastRecordedVoipToken = "LastRecordedVoipToken"
         case callsHideIPAddress = "CallsHideIPAddress"
         case hasDeclinedNoContactsView = "hasDeclinedNoContactsView"
         case shouldShowUnidentifiedDeliveryIndicators = "OWSPreferencesKeyShouldShowUnidentifiedDeliveryIndicators"
@@ -349,8 +350,27 @@ public class Preferences {
         setString(value, for: .lastRecordedPushToken, tx: tx)
     }
 
+    // MARK: VoIP Tokens
+
+    public var voipToken: String? {
+        string(forKey: .lastRecordedVoipToken)
+    }
+
+    public func getVoipToken(tx: DBReadTransaction) -> String? {
+        return getString(for: .lastRecordedVoipToken, tx: tx)
+    }
+
+    public func setVoipToken(_ value: String?, tx: DBWriteTransaction) {
+        if let value = value {
+            setString(value, for: .lastRecordedVoipToken, tx: tx)
+        } else {
+            keyValueStore.removeValue(forKey: Key.lastRecordedVoipToken.rawValue, transaction: tx)
+        }
+    }
+
     public func unsetRecordedAPNSTokens() {
         Logger.warn("Forgetting recorded APNS tokens")
         removeValue(forKey: .lastRecordedPushToken)
+        removeValue(forKey: .lastRecordedVoipToken)
     }
 }

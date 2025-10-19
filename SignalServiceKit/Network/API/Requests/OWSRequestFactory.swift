@@ -207,6 +207,21 @@ public enum OWSRequestFactory {
         return TSRequest(url: URL(string: path)!, method: "PUT", parameters: ["apnRegistrationId": apnsToken])
     }
 
+    public static func registerForVoipPushRequest(voipToken: String) -> TSRequest {
+        owsAssertDebug(!voipToken.isEmpty)
+
+        let path = "\(self.textSecureAccountsAPI)/apn/voip"
+        
+        return TSRequest(url: URL(string: path)!, method: "PUT", parameters: ["voipApnRegistrationId": voipToken])
+    }
+
+    public static func unregisterFromVoipPushRequest() -> TSRequest {
+        let path = "\(self.textSecureAccountsAPI)/apn/voip"
+        return TSRequest(url: URL(string: path)!,
+                         method: HTTPMethod.delete.methodName,
+                         parameters: [:])
+    }
+
     static func unregisterAccountRequest() -> TSRequest {
         let path = "\(self.textSecureAccountsAPI)/me"
         return TSRequest(url: URL(string: path)!, method: "DELETE", parameters: [:])

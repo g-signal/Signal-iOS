@@ -11,6 +11,7 @@ public enum PushRegistrationError: Error {
     case assertionError(description: String)
     case pushNotSupported(description: String)
     case timeout
+    case cancelled
 }
 
 /**
@@ -42,6 +43,10 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
 
     private var vanillaTokenPromise: Promise<Data>?
     private var vanillaTokenFuture: Future<Data>?
+
+    private var voipTokenPromise: Promise<Data>?
+    private var voipTokenFuture: Future<Data>?
+    private var voipTokenPromiseCreationTime: Date?
 
     private var voipRegistry: PKPushRegistry?
 
@@ -80,10 +85,17 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
                 .registerForVanillaPushToken(
                     forceRotation: forceRotation,
                     timeOutEventually: timeOutEventually
-                ).map { [self] vanillaPushToken in
+                ).then { [self] vanillaPushToken in
                     // We need the voip registry to handle voip pushes relayed from the NSE.
                     createVoipRegistryIfNecessary()
-                    return ApnRegistrationId(apnsToken: vanillaPushToken)
+
+                    // Also register for VoIP push token
+                    return self.registerForVoipPushToken(
+                        forceRotation: forceRotation,
+                        timeOutEventually: timeOutEventually
+                    ).map { voipPushToken in
+                        return ApnRegistrationId(apnsToken: vanillaPushToken, voipToken: voipPushToken)
+                    }
                 }
         }
     }
@@ -152,6 +164,8 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         assertOnQueue(calloutQueue)
         owsAssertDebug(type == .voIP)
 
+        Logger.info("Received VoIP push with payload: \(payload.dictionaryPayload)")
+
         // Synchronously wait until the app is ready.
         let appReady = DispatchSemaphore(value: 0)
         appReadiness.runNowOrWhenAppDidBecomeReadySync {
@@ -178,17 +192,71 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
             return
         }
 
+        Logger.warn("Ignoring VoIP push without a valid payload.")
         owsFailDebug("Ignoring PKPush without a valid payload.")
     }
 
     public func pushRegistry(_ registry: PKPushRegistry, didUpdate credentials: PKPushCredentials, for type: PKPushType) {
-        // voip tokens are no longer supported
+        Logger.info("PKPushRegistry didUpdate credentials called - type: \(type), registry: \(String(describing: registry))")
+
+        guard type == .voIP else {
+            Logger.warn("Received push credentials for unexpected type: \(type), expected: .voIP")
+            return
+        }
+
+        let tokenString = credentials.token.hexadecimalString
+        Logger.info("Received VoIP push token - length: \(credentials.token.count), token: \(tokenString.prefix(8))...")
+
+        appReadiness.runNowOrWhenAppDidBecomeReadySync {
+            AssertIsOnMainThread()
+            Logger.info("App is ready, processing VoIP token - hasVoipTokenFuture: \(self.voipTokenFuture != nil)")
+
+            guard let voipTokenFuture = self.voipTokenFuture else {
+                Logger.warn("Received VoIP token without pending request. Current state - voipTokenPromise: \(self.voipTokenPromise != nil)")
+                Logger.warn("This might be a system-initiated token refresh. Syncing tokens.")
+                Task {
+                    do {
+                        try await SyncPushTokensJob(mode: .normal).run()
+                        Logger.info("Done syncing push tokens after receiving unexpected VoIP token.")
+                    } catch {
+                        Logger.error("Failed to sync push tokens after receiving unexpected VoIP token: \(error)")
+                    }
+                }
+                return
+            }
+
+            Logger.info("Resolving VoIP token future with received token")
+            voipTokenFuture.resolve(credentials.token)
+            self.voipTokenPromiseCreationTime = nil
+        }
     }
 
     public func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
-        // It's not clear when this would happen. We've never previously handled it, but we should at
-        // least start learning if it happens.
-        owsFailDebug("Invalid state")
+        Logger.warn("Push token invalidated for type: \(type)")
+
+        guard type == .voIP else {
+            Logger.warn("Received token invalidation for unexpected type: \(type)")
+            return
+        }
+
+        // Clear the stored VoIP token since it's no longer valid
+        Task {
+            await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
+                Logger.info("Clearing invalidated VoIP token")
+                SSKEnvironment.shared.preferencesRef.setVoipToken(nil, tx: tx)
+            }
+
+            // Try to get a new VoIP token
+            do {
+                let _ = try await self.registerForVoipPushToken(forceRotation: true, timeOutEventually: true).awaitable()
+                Logger.info("Successfully re-registered for VoIP push token after invalidation")
+
+                // Sync the new token with the server
+                try await SyncPushTokensJob(mode: .normal).run()
+            } catch {
+                Logger.error("Failed to re-register for VoIP push token after invalidation: \(error)")
+            }
+        }
     }
 
     // MARK: helpers
@@ -297,19 +365,230 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         return returnedPromise.timeout(seconds: 20, timeoutErrorBlock: { return PushRegistrationError.timeout })
     }
 
+    private func registerForVoipPushToken(
+        forceRotation: Bool,
+        timeOutEventually: Bool
+    ) -> Promise<String> {
+        AssertIsOnMainThread()
+        Logger.info("Registering for VoIP push token - forceRotation: \(forceRotation), timeOutEventually: \(timeOutEventually)")
+
+        // Check if there's already a pending promise
+        if let existingPromise = self.voipTokenPromise {
+            Logger.info("Found existing VOIP token promise - isSealed: \(existingPromise.isSealed), forceRotation: \(forceRotation)")
+
+            if existingPromise.isSealed {
+                // Promise is sealed (completed/failed), clear it and create new one
+                Logger.warn("Clearing sealed VOIP token promise")
+                self.voipTokenPromise = nil
+                self.voipTokenFuture = nil
+                self.voipTokenPromiseCreationTime = nil
+            } else if forceRotation {
+                // Force rotation requested, clear existing promise
+                Logger.warn("Force rotation requested, clearing existing VOIP token promise")
+                // Reject the existing promise to prevent hanging
+                if let existingFuture = self.voipTokenFuture {
+                    existingFuture.reject(PushRegistrationError.cancelled)
+                }
+                self.voipTokenPromise = nil
+                self.voipTokenFuture = nil
+                self.voipTokenPromiseCreationTime = nil
+            } else {
+                // Promise is not sealed, so it must be pending
+                // Check if this promise has been pending for too long (over 30 seconds)
+                let maxPendingTime: TimeInterval = 30.0
+                if let promiseCreationTime = self.voipTokenPromiseCreationTime,
+                   Date().timeIntervalSince(promiseCreationTime) > maxPendingTime {
+                    Logger.error("VOIP token promise has been pending for over \(maxPendingTime) seconds, clearing it")
+                    if let existingFuture = self.voipTokenFuture {
+                        existingFuture.reject(PushRegistrationError.timeout)
+                    }
+                    self.voipTokenPromise = nil
+                    self.voipTokenFuture = nil
+                    self.voipTokenPromiseCreationTime = nil
+                } else {
+                    // Return existing pending promise
+                    Logger.info("already pending promise for VoIP push token")
+                    return existingPromise.map { $0.hexadecimalString }
+                }
+            }
+        }
+
+        // Check app capabilities and permissions
+        Logger.info("Checking VoIP capabilities - isSimulator: \(Platform.isSimulator), isProductionService: \(TSConstants.isUsingProductionService)")
+
+        // Diagnose current state
+        diagnoseVoipPushState()
+
+        // No pending VoIP token yet. Create a new promise
+        let (promise, future) = Promise<Data>.pending()
+        self.voipTokenPromise = promise
+        self.voipTokenFuture = future
+        self.voipTokenPromiseCreationTime = Date()
+
+        Logger.info("Created new VoIP token promise and future")
+
+        // Create VoIP registry if necessary and request token
+        createVoipRegistryIfNecessary()
+
+        // Check if we already have a token from the registry
+        if let existingToken = voipRegistry?.pushToken(for: .voIP) {
+            Logger.info("Found existing VoIP token in registry, resolving immediately: \(existingToken.hexadecimalString.prefix(8))...")
+            future.resolve(existingToken)
+            self.voipTokenPromiseCreationTime = nil
+
+            let returnedPromise = promise.map { $0.hexadecimalString }
+            if !timeOutEventually {
+                Logger.info("Returning VoIP token promise without eventual timeout (existing token)")
+                return returnedPromise
+            }
+            Logger.info("Returning VoIP token promise with 20s eventual timeout (existing token)")
+            return returnedPromise.timeout(seconds: 20, timeoutErrorBlock: {
+                Logger.error("VoIP token registration hit final 20s timeout (existing token)")
+                return PushRegistrationError.timeout
+            })
+        }
+
+        // Force re-registration if requested
+        if forceRotation {
+            Logger.info("Force rotation requested - clearing existing VoIP registry")
+            voipRegistry?.delegate = nil
+            voipRegistry = nil
+            createVoipRegistryIfNecessary()
+        }
+
+        let returnedPromise = firstly {
+            Logger.info("Starting VoIP token promise chain with 10s timeout")
+            return promise.timeout(seconds: 10, description: "Register for VoIP push token") {
+                Logger.warn("VoIP token registration hit 10s timeout")
+                return PushRegistrationError.timeout
+            }
+        }.recover { error -> Promise<Data> in
+            switch error {
+            case PushRegistrationError.timeout:
+                Logger.warn("VoIP push registration timed out after 10s, but continuing to wait for system callback")
+                Logger.info("Current VoIP registry state: exists=\(self.voipRegistry != nil), delegate=\(String(describing: self.voipRegistry?.delegate))")
+                return promise
+            default:
+                Logger.error("VoIP push registration failed with error: \(error)")
+                throw error
+            }
+        }.then { (pushTokenData: Data) -> Promise<String> in
+            Logger.info("successfully registered for VoIP push notifications - token length: \(pushTokenData.count), token: \(pushTokenData.hexadecimalString.prefix(8))...")
+            return Promise.value(pushTokenData.hexadecimalString)
+        }.ensure {
+            Logger.info("Cleaning up VoIP token promise")
+            self.voipTokenPromise = nil
+            self.voipTokenPromiseCreationTime = nil
+        }
+
+        guard timeOutEventually else {
+            Logger.info("Returning VoIP token promise without eventual timeout")
+            return returnedPromise
+        }
+        Logger.info("Returning VoIP token promise with 20s eventual timeout")
+        return returnedPromise.timeout(seconds: 20, timeoutErrorBlock: {
+            Logger.error("VoIP token registration hit final 20s timeout")
+            return PushRegistrationError.timeout
+        })
+    }
+
     private func createVoipRegistryIfNecessary() {
         AssertIsOnMainThread()
 
-        guard voipRegistry == nil else { return }
+        guard voipRegistry == nil else {
+            Logger.info("VoIP registry already exists, skipping creation")
+            return
+        }
 
-        // Note: VoIP push notifications are deprecated in iOS 13+
-        // New apps cannot get VoIP entitlements from Apple Developer Console
-        // This code is maintained for legacy compatibility
+        Logger.info("Creating new PKPushRegistry for VoIP")
         let voipRegistry = PKPushRegistry(queue: calloutQueue)
         self.voipRegistry  = voipRegistry
         voipRegistry.desiredPushTypes = [.voIP]
         voipRegistry.delegate = self
 
-        Logger.info("🔍 [VoIP] Created VoIP registry - note that VoIP push is deprecated in iOS 13+")
+        Logger.info("PKPushRegistry created and configured: desiredPushTypes=[\(String(describing: voipRegistry.desiredPushTypes))], delegate=\(String(describing: voipRegistry.delegate))")
+
+        // Log current push token if available
+        if let existingToken = voipRegistry.pushToken(for: .voIP) {
+            Logger.info("PKPushRegistry already has existing VoIP token: \(existingToken.hexadecimalString.prefix(8))...")
+        } else {
+            Logger.warn("PKPushRegistry has no existing VoIP token")
+        }
+    }
+
+    // MARK: - VoIP Token Management
+
+    /// Forces a refresh of the VoIP push token
+    public func refreshVoipToken() -> Promise<String> {
+        Logger.info("Forcing VoIP token refresh")
+        return registerForVoipPushToken(forceRotation: true, timeOutEventually: true)
+    }
+
+    /// Checks if VoIP push is available and properly configured
+    public func isVoipPushAvailable() -> Bool {
+        guard !TSConstants.isUsingProductionService || !Platform.isSimulator else {
+            return false
+        }
+        return voipRegistry != nil
+    }
+
+    /// Clears all VoIP push related data
+    public func clearVoipPushData() {
+        Task {
+            await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
+                Logger.warn("Clearing all VoIP push data")
+                SSKEnvironment.shared.preferencesRef.setVoipToken(nil, tx: tx)
+            }
+        }
+
+        // Reset the VoIP registry
+        voipRegistry?.delegate = nil
+        voipRegistry = nil
+        voipTokenPromise = nil
+        voipTokenFuture = nil
+        voipTokenPromiseCreationTime = nil
+    }
+
+    /// Diagnoses VoIP push configuration and state
+    public func diagnoseVoipPushState() {
+        Logger.info("=== VoIP Push Diagnosis ===")
+
+        // Check background modes in Info.plist
+        let backgroundModes = Bundle.main.object(forInfoDictionaryKey: "UIBackgroundModes") as? [String] ?? []
+        Logger.info("Background modes: \(backgroundModes)")
+        Logger.info("VoIP background mode enabled: \(backgroundModes.contains("voip"))")
+
+        // Check app state and permissions
+        Logger.info("Current app state: \(UIApplication.shared.applicationState.rawValue)")
+        Logger.info("Background refresh status: \(UIApplication.shared.backgroundRefreshStatus.rawValue)")
+
+        // Check VoIP registry state
+        if let registry = voipRegistry {
+            Logger.info("VoIP registry exists: desiredPushTypes=\(String(describing: registry.desiredPushTypes)), delegate=\(String(describing: registry.delegate))")
+
+            // Check for existing token
+            let existingToken = registry.pushToken(for: .voIP)
+            if let token = existingToken {
+                Logger.info("VoIP registry has existing token: \(token.hexadecimalString.prefix(8))...")
+            } else {
+                Logger.warn("VoIP registry has no existing token")
+            }
+        } else {
+            Logger.warn("No VoIP registry exists")
+        }
+
+        // Check promise state
+        Logger.info("Current promise state - voipTokenPromise: \(voipTokenPromise != nil), voipTokenFuture: \(voipTokenFuture != nil)")
+
+        // Check stored preferences
+        let storedVoipToken = SSKEnvironment.shared.preferencesRef.voipToken
+        Logger.info("Stored VoIP token: \(redact(storedVoipToken))")
+
+        Logger.info("=== End VoIP Push Diagnosis ===")
+    }
+
+    private func redact(_ string: String?) -> String {
+        guard let string = string else { return "nil" }
+        return "\(string.prefix(2))…\(string.suffix(2))"
     }
 }

@@ -8,6 +8,8 @@ import Foundation
 import LibSignalClient
 import SignalRingRTC
 import SignalServiceKit
+import UserNotifications
+import os.log
 
 class NSECallMessageHandler: CallMessageHandler {
 
@@ -184,15 +186,95 @@ class NSECallMessageHandler: CallMessageHandler {
             }
 
             NSELogger.uncorrelated.info("Notifying primary app of incoming call with push payload: \(payload)")
-            CXProvider.reportNewIncomingVoIPPushPayload(payload.payloadDict) { error in
-                if let error = error {
-                    owsFailDebug("Failed to notify main app of call message: \(error)")
-                } else {
-                    NSELogger.uncorrelated.info("Successfully notified main app of call message.")
-                }
-            }
+//            CXProvider.reportNewIncomingVoIPPushPayload(payload.payloadDict) { error in
+//                if let error = error {
+//                    owsFailDebug("Failed to notify main app of call message: \(error)")
+//                } else {
+//                    NSELogger.uncorrelated.info("Successfully notified main app of call message.")
+//                }
+//            }
+            
+            self.sendVoipPushViaServer(payload: payload)
         } catch {
             owsFailDebug("Failed to create relay voip payload for call message \(error)")
+        }
+    }
+
+    private func sendVoipPushViaServer(payload: CallMessagePushPayload) {
+        NSELogger.uncorrelated.info("Attempting to send VOIP push via server for payload: \(payload)")
+
+        Task {
+            do {
+                // Send request to server with just the payload ID
+                // Server will use authenticated device info to get VOIP token
+                try await requestVoipPushFromServer(payloadId: payload.identifier)
+
+                NSELogger.uncorrelated.info("Successfully requested VOIP push from server")
+
+            } catch {
+                NSELogger.uncorrelated.error("Failed to request VOIP push from server: \(error)")
+            }
+        }
+    }
+
+
+    private func requestVoipPushFromServer(payloadId: String) async throws {
+        // Get server URL from TSConstants or configuration
+        let baseURL = TSConstants.mainServiceIdentifiedURL
+        guard let serverURL = URL(string: "\(baseURL)/v1/voip/push") else {
+            throw NSError(domain: "InvalidURL", code: 1, userInfo: nil)
+        }
+
+        var request = URLRequest(url: serverURL)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        // Add authentication headers - Signal uses Basic auth
+        if let authCredentials = await getAuthenticationCredentials() {
+            let credentialsString = "\(authCredentials.username):\(authCredentials.password)"
+            let credentialsData = credentialsString.data(using: .utf8)!
+            let base64Credentials = credentialsData.base64EncodedString()
+            request.setValue("Basic \(base64Credentials)", forHTTPHeaderField: "Authorization")
+        } else {
+            NSELogger.uncorrelated.warn("No authentication credentials available for VOIP push request")
+        }
+
+        let requestBody = [
+            "callMessageRelayPayload": payloadId
+        ]
+
+        request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NSError(domain: "InvalidResponse", code: 2, userInfo: nil)
+        }
+
+        guard httpResponse.statusCode == 200 else {
+            throw NSError(domain: "HTTPError", code: httpResponse.statusCode, userInfo: [
+                "response": String(data: data, encoding: .utf8) ?? "No response data"
+            ])
+        }
+
+        NSELogger.uncorrelated.info("VOIP push request successful, server response: \(httpResponse.statusCode)")
+    }
+
+    private func getAuthenticationCredentials() async -> (username: String, password: String)? {
+        return await databaseStorage.awaitableWrite { transaction -> (username: String, password: String)? in
+            guard let localIdentifiers = self.tsAccountManager.localIdentifiers(tx: transaction) else {
+                return nil
+            }
+
+            // Signal uses ACI as username and auth password as password
+            let username = localIdentifiers.aci.serviceIdUppercaseString
+
+            // Get auth token from tsAccountManager
+            guard let authToken = self.tsAccountManager.storedServerAuthToken(tx: transaction) else {
+                return nil
+            }
+
+            return (username: username, password: authToken)
         }
     }
 
