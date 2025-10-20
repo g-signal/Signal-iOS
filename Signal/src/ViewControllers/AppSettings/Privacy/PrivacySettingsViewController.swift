@@ -227,22 +227,22 @@ class PrivacySettingsViewController: OWSTableViewController2 {
         ))
         contents.add(callsSection)
 
-        let advancedSection = OWSTableSection()
-        advancedSection.footerTitle = OWSLocalizedString(
-            "SETTINGS_PRIVACY_ADVANCED_FOOTER",
-            comment: "Footer for table section"
-        )
-        advancedSection.add(.disclosureItem(
-            withText: OWSLocalizedString(
-                "SETTINGS_PRIVACY_ADVANCED_TITLE",
-                comment: "Title for the advanced privacy settings"
-            ),
-            actionBlock: { [weak self] in
-                let vc = AdvancedPrivacySettingsViewController()
-                self?.navigationController?.pushViewController(vc, animated: true)
-            }
-        ))
-        contents.add(advancedSection)
+//        let advancedSection = OWSTableSection()
+//        advancedSection.footerTitle = OWSLocalizedString(
+//            "SETTINGS_PRIVACY_ADVANCED_FOOTER",
+//            comment: "Footer for table section"
+//        )
+//        advancedSection.add(.disclosureItem(
+//            withText: OWSLocalizedString(
+//                "SETTINGS_PRIVACY_ADVANCED_TITLE",
+//                comment: "Title for the advanced privacy settings"
+//            ),
+//            actionBlock: { [weak self] in
+//                let vc = AdvancedPrivacySettingsViewController()
+//                self?.navigationController?.pushViewController(vc, animated: true)
+//            }
+//        ))
+//        contents.add(advancedSection)
 
         self.contents = contents
     }

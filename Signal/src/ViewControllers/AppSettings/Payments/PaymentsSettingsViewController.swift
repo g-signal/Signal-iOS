@@ -1169,7 +1169,7 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
 
     private func didTapHelpButton() {
         let view = ContactSupportViewController()
-        view.selectedFilter = .payments
+//        view.selectedFilter = .payments
         let navigationVC = OWSNavigationController(rootViewController: view)
         present(navigationVC, animated: true)
      }

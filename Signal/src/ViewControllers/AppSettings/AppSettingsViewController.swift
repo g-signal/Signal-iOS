@@ -127,11 +127,11 @@ class AppSettingsViewController: OWSTableViewController2 {
     }
 
     func updateTableContents() {
-        let isPrimaryDevice = DependenciesBridge.shared.db.read { tx in
-            return DependenciesBridge.shared.tsAccountManager
-                .registrationState(tx: tx)
-                .isPrimaryDevice == true
-        }
+//        let isPrimaryDevice = DependenciesBridge.shared.db.read { tx in
+//            return DependenciesBridge.shared.tsAccountManager
+//                .registrationState(tx: tx)
+//                .isPrimaryDevice == true
+//        }
 
         let contents = OWSTableContents()
 
@@ -162,18 +162,18 @@ class AppSettingsViewController: OWSTableViewController2 {
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
         ))
-        if isPrimaryDevice {
-            section1.add(.disclosureItem(
-                icon: .settingsLinkedDevices,
-                withText: OWSLocalizedString("LINKED_DEVICES_TITLE", comment: "Menu item and navbar title for the device manager"),
-                actionBlock: { [weak self] in
-                    self?.navigationController?.pushViewController(
-                        LinkedDevicesHostingController(),
-                        animated: true
-                    )
-                }
-            ))
-        }
+//        if isPrimaryDevice {
+//            section1.add(.disclosureItem(
+//                icon: .settingsLinkedDevices,
+//                withText: OWSLocalizedString("LINKED_DEVICES_TITLE", comment: "Menu item and navbar title for the device manager"),
+//                actionBlock: { [weak self] in
+//                    self?.navigationController?.pushViewController(
+//                        LinkedDevicesHostingController(),
+//                        animated: true
+//                    )
+//                }
+//            ))
+//        }
 //        section1.add(.init(customCellBlock: { [weak self] in
 //            guard let self = self else { return UITableViewCell() }
 //            let accessoryContentView: UIView?
@@ -362,13 +362,13 @@ class AppSettingsViewController: OWSTableViewController2 {
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
         ))
-        section3.add(.item(
-            icon: .settingsInvite,
-            name: OWSLocalizedString("SETTINGS_INVITE_TITLE", comment: "Settings table view cell label"),
-            actionBlock: { [weak self] in
-                self?.showInviteFlow()
-            }
-        ))
+//        section3.add(.item(
+//            icon: .settingsInvite,
+//            name: OWSLocalizedString("SETTINGS_INVITE_TITLE", comment: "Settings table view cell label"),
+//            actionBlock: { [weak self] in
+//                self?.showInviteFlow()
+//            }
+//        ))
         contents.add(section3)
 
         if DebugFlags.internalSettings {
@@ -411,11 +411,11 @@ class AppSettingsViewController: OWSTableViewController2 {
         infoStack.autoVCenterInSuperview()
         infoStack.autoPinTrailingToSuperviewMargin()
 
-        if let usernameLinkButton = profileCellUsernameLinkButton() {
-            cell.accessoryView = usernameLinkButton
-        } else {
+//        if let usernameLinkButton = profileCellUsernameLinkButton() {
+//            cell.accessoryView = usernameLinkButton
+//        } else {
             cell.accessoryType = .disclosureIndicator
-        }
+//        }
 
         return cell
     }

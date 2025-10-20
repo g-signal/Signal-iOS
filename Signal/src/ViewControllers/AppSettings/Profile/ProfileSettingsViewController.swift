@@ -212,62 +212,62 @@ class ProfileSettingsViewController: OWSTableViewController2 {
                 self.presentFormSheet(OWSNavigationController(rootViewController: vc), animated: true)
             }
         ))
-        if !allBadges.isEmpty {
-            mainSection.add(.disclosureItem(
-                icon: .profileBadges,
-                withText: OWSLocalizedString(
-                    "BADGE_CONFIGURATION_TITLE",
-                    comment: "The title for the badge configuration page"
-                ),
-                actionBlock: { [weak self] in
-                    guard let self = self else { return }
-
-                    let avatarImage = SSKEnvironment.shared.databaseStorageRef.read { self.avatarImage(transaction: $0) }
-
-                    let vc = BadgeConfigurationViewController(
-                        availableBadges: self.allBadges,
-                        shouldDisplayOnProfile: self.displayBadgesOnProfile,
-                        avatarImage: avatarImage,
-                        delegate: self)
-                    self.presentFormSheet(OWSNavigationController(rootViewController: vc), animated: true)
-                }
-            ))
-        }
+//        if !allBadges.isEmpty {
+//            mainSection.add(.disclosureItem(
+//                icon: .profileBadges,
+//                withText: OWSLocalizedString(
+//                    "BADGE_CONFIGURATION_TITLE",
+//                    comment: "The title for the badge configuration page"
+//                ),
+//                actionBlock: { [weak self] in
+//                    guard let self = self else { return }
+//
+//                    let avatarImage = SSKEnvironment.shared.databaseStorageRef.read { self.avatarImage(transaction: $0) }
+//
+//                    let vc = BadgeConfigurationViewController(
+//                        availableBadges: self.allBadges,
+//                        shouldDisplayOnProfile: self.displayBadgesOnProfile,
+//                        avatarImage: avatarImage,
+//                        delegate: self)
+//                    self.presentFormSheet(OWSNavigationController(rootViewController: vc), animated: true)
+//                }
+//            ))
+//        }
         contents.add(mainSection)
 
-        if let localUsernameState {
-            let usernameSection = OWSTableSection()
-
-            switch localUsernameState {
-            case .unset:
-                usernameSection.footerTitle = OWSLocalizedString(
-                    "PROFILE_VIEW_USERNAME_UNSET_DESCRIPTION",
-                    comment: "Footer below the usernames section of the profile settings when a username has not been set."
-                )
-            case .available, .linkCorrupted, .usernameAndLinkCorrupted:
-                usernameSection.footerTitle = OWSLocalizedString(
-                    "PROFILE_VIEW_USERNAME_DESCRIPTION",
-                    comment: "Footer below the usernames section of the profile settings explaining username visibility."
-                )
-            }
-
-            switch localUsernameState {
-            case .unset:
-                usernameSection.add(usernameUnsetTableItem())
-            case let .available(username, usernameLink):
-                usernameSection.add(usernameAvailableTableItem(username: username))
-                usernameSection.add(usernameLinkAvailableTableItem(
-                    username: username,
-                    usernameLink: usernameLink
-                ))
-            case let .linkCorrupted(username):
-                usernameSection.add(usernameAvailableTableItem(username: username))
-                usernameSection.add(usernameLinkCorruptedTableItem())
-            case .usernameAndLinkCorrupted:
-                usernameSection.add(usernameCorruptedTableItem())
-            }
-            contents.add(usernameSection)
-        }
+//        if let localUsernameState {
+//            let usernameSection = OWSTableSection()
+//
+//            switch localUsernameState {
+//            case .unset:
+//                usernameSection.footerTitle = OWSLocalizedString(
+//                    "PROFILE_VIEW_USERNAME_UNSET_DESCRIPTION",
+//                    comment: "Footer below the usernames section of the profile settings when a username has not been set."
+//                )
+//            case .available, .linkCorrupted, .usernameAndLinkCorrupted:
+//                usernameSection.footerTitle = OWSLocalizedString(
+//                    "PROFILE_VIEW_USERNAME_DESCRIPTION",
+//                    comment: "Footer below the usernames section of the profile settings explaining username visibility."
+//                )
+//            }
+//
+//            switch localUsernameState {
+//            case .unset:
+//                usernameSection.add(usernameUnsetTableItem())
+//            case let .available(username, usernameLink):
+//                usernameSection.add(usernameAvailableTableItem(username: username))
+//                usernameSection.add(usernameLinkAvailableTableItem(
+//                    username: username,
+//                    usernameLink: usernameLink
+//                ))
+//            case let .linkCorrupted(username):
+//                usernameSection.add(usernameAvailableTableItem(username: username))
+//                usernameSection.add(usernameLinkCorruptedTableItem())
+//            case .usernameAndLinkCorrupted:
+//                usernameSection.add(usernameCorruptedTableItem())
+//            }
+//            contents.add(usernameSection)
+//        }
 
         self.contents = contents
     }

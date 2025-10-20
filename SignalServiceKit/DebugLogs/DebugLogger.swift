@@ -109,6 +109,12 @@ public final class DebugLogger {
         let fileManager = FileManager.default
         var logPathSet = Set<String>()
         for logDirPath in DebugLogger.allLogsDirPaths {
+            // Ensure directory exists before trying to read it
+            guard OWSFileSystem.ensureDirectoryExists(logDirPath) else {
+                Logger.warn("Failed to create log directory: \(logDirPath)")
+                continue
+            }
+
             do {
                 for filename in try fileManager.contentsOfDirectory(atPath: logDirPath) {
                     let logPath = logDirPath.appendingPathComponent(filename)

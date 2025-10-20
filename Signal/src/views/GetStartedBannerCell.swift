@@ -9,7 +9,7 @@ import SignalUI
 enum GetStartedBannerEntry: String, CaseIterable {
     case newGroup
     case avatarBuilder
-    case inviteFriends
+//    case inviteFriends
     case appearance
 
     var identifier: String { rawValue }
@@ -137,8 +137,8 @@ private extension GetStartedBannerEntry {
         switch self {
         case .newGroup:
             return UIImage(named: "new-group-card")!
-        case .inviteFriends:
-            return UIImage(named: "invite-friends-card")!
+//        case .inviteFriends:
+//            return UIImage(named: "invite-friends-card")!
         case .appearance:
             return UIImage(named: "appearance-card")!
         case .avatarBuilder:
@@ -150,8 +150,8 @@ private extension GetStartedBannerEntry {
         switch self {
         case .newGroup:
             return OWSLocalizedString("GET_STARTED_CARD_NEW_GROUP", comment: "'Get Started' button directing users to create a group")
-        case .inviteFriends:
-            return OWSLocalizedString("GET_STARTED_CARD_INVITE_FRIENDS", comment: "'Get Started' button directing users to invite friends")
+//        case .inviteFriends:
+//            return OWSLocalizedString("GET_STARTED_CARD_INVITE_FRIENDS", comment: "'Get Started' button directing users to invite friends")
         case .appearance:
             return OWSLocalizedString("GET_STARTED_CARD_APPEARANCE", comment: "'Get Started' button directing users to appearance")
         case .avatarBuilder:

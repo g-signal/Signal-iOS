@@ -611,7 +611,7 @@ public final class DonationViewsUtil {
                     return
                 }
                 let supportVC = ContactSupportViewController()
-                supportVC.selectedFilter = .donationsAndBadges
+//                supportVC.selectedFilter = .donationsAndBadges
                 let navVC = OWSNavigationController(rootViewController: supportVC)
                 viewController.presentFormSheet(navVC, animated: true)
             }

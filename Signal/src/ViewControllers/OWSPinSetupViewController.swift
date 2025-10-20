@@ -57,15 +57,15 @@ public class PinSetupViewController: OWSViewController, OWSNavigationChildContro
         )
 
         if addLearnMoreLink {
-            explanationLabel.isUserInteractionEnabled = true
-            attributedString.append("  ")
-            attributedString.append(
-                CommonStrings.learnMore,
-                attributes: [
-                    .link: URL(string: "https://support.signal.org/hc/articles/360007059792")!,
-                    .font: explanationLabelFont
-                ]
-            )
+//            explanationLabel.isUserInteractionEnabled = true
+//            attributedString.append("  ")
+//            attributedString.append(
+//                CommonStrings.learnMore,
+//                attributes: [
+//                    .link: URL(string: "https://support.signal.org/hc/articles/360007059792")!,
+//                    .font: explanationLabelFont
+//                ]
+//            )
         }
         explanationLabel.attributedText = attributedString
         explanationLabel.textAlignment = .center

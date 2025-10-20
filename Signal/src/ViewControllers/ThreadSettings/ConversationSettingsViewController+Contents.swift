@@ -57,7 +57,7 @@ extension ConversationSettingsViewController {
         // Middle sections
         addSystemContactSectionIfNecessary(to: contents)
         addAllMediaSectionIfNecessary(to: contents)
-        addBadgesItemIfNecessary(to: contents)
+//        addBadgesItemIfNecessary(to: contents)
 
         // Group sections
         if let groupModel = currentGroupModel, !groupModel.isPlaceholder {
@@ -813,31 +813,31 @@ extension ConversationSettingsViewController {
     ) {
         let section = OWSTableSection()
 
-        let groupLinkStatus = (groupModelV2.isGroupInviteLinkEnabled
-                               ? CommonStrings.switchOn
-                               : CommonStrings.switchOff)
-        section.add(OWSTableItem.disclosureItem(
-            icon: .groupInfoGroupLink,
-            withText: OWSLocalizedString(
-                "CONVERSATION_SETTINGS_GROUP_LINK",
-                comment: "Label for 'group link' action in conversation settings view."
-            ),
-            accessoryText: groupLinkStatus,
-            actionBlock: { [weak self] in
-                self?.showGroupLinkView()
-            })
-        )
-
-        let itemTitle = OWSLocalizedString("CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES",
-                                          comment: "Label for 'member requests & invites' action in conversation settings view.")
-        section.add(OWSTableItem.disclosureItem(
-            icon: .groupInfoRequestAndInvites,
-            withText: itemTitle,
-            accessoryText: OWSFormat.formatInt(groupModelV2.groupMembership.invitedOrRequestMembers.count),
-            actionBlock: { [weak self] in
-                self?.showMemberRequestsAndInvitesView()
-            })
-        )
+//        let groupLinkStatus = (groupModelV2.isGroupInviteLinkEnabled
+//                               ? CommonStrings.switchOn
+//                               : CommonStrings.switchOff)
+//        section.add(OWSTableItem.disclosureItem(
+//            icon: .groupInfoGroupLink,
+//            withText: OWSLocalizedString(
+//                "CONVERSATION_SETTINGS_GROUP_LINK",
+//                comment: "Label for 'group link' action in conversation settings view."
+//            ),
+//            accessoryText: groupLinkStatus,
+//            actionBlock: { [weak self] in
+//                self?.showGroupLinkView()
+//            })
+//        )
+//
+//        let itemTitle = OWSLocalizedString("CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES",
+//                                          comment: "Label for 'member requests & invites' action in conversation settings view.")
+//        section.add(OWSTableItem.disclosureItem(
+//            icon: .groupInfoRequestAndInvites,
+//            withText: itemTitle,
+//            accessoryText: OWSFormat.formatInt(groupModelV2.groupMembership.invitedOrRequestMembers.count),
+//            actionBlock: { [weak self] in
+//                self?.showMemberRequestsAndInvitesView()
+//            })
+//        )
 
         if canEditPermissions {
             let itemTitle = OWSLocalizedString(

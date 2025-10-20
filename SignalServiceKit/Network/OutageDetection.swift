@@ -101,7 +101,7 @@ public class OutageDetection {
 //            }
 //        }
 //        return isOutageDetected
-        return true
+        return false
     }
 
     private func checkForOutageAsync() {

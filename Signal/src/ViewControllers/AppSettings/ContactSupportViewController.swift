@@ -31,8 +31,8 @@ private extension ContactSupportViewController.Filter {
         case .feedback: "Feedback"
         case .somethingNotWorking: "Something Not Working"
         case .other: "Other"
-        case .payments: "Payments"
-        case .donationsAndBadges: "Donations & Badges"
+//        case .payments: "Payments"
+//        case .donationsAndBadges: "Donations & Badges"
         }
     }
 
@@ -63,16 +63,16 @@ private extension ContactSupportViewController.Filter {
                 "CONTACT_SUPPORT_FILTER_OTHER",
                 comment: "The localized representation of the 'other' support filter."
             )
-        case .payments:
-            return OWSLocalizedString(
-                "CONTACT_SUPPORT_FILTER_PAYMENTS",
-                comment: "The localized representation of the 'payments' support filter."
-            )
-        case .donationsAndBadges:
-            return OWSLocalizedString(
-                "CONTACT_SUPPORT_FILTER_DONATIONS_AND_BADGES",
-                comment: "The localized representation of the 'Donations & Badges' support filter."
-            )
+//        case .payments:
+//            return OWSLocalizedString(
+//                "CONTACT_SUPPORT_FILTER_PAYMENTS",
+//                comment: "The localized representation of the 'payments' support filter."
+//            )
+//        case .donationsAndBadges:
+//            return OWSLocalizedString(
+//                "CONTACT_SUPPORT_FILTER_DONATIONS_AND_BADGES",
+//                comment: "The localized representation of the 'Donations & Badges' support filter."
+//            )
         }
     }
 
@@ -103,16 +103,16 @@ private extension ContactSupportViewController.Filter {
                 "CONTACT_SUPPORT_FILTER_OTHER_SHORT",
                 comment: "A brief localized representation of the 'other' support filter."
             )
-        case .payments:
-            return OWSLocalizedString(
-                "CONTACT_SUPPORT_FILTER_PAYMENTS_SHORT",
-                comment: "A brief localized representation of the 'payments' support filter."
-            )
-        case .donationsAndBadges:
-            return OWSLocalizedString(
-                "CONTACT_SUPPORT_FILTER_DONATIONS_AND_BADGES_SHORT",
-                comment: "A brief localized representation of the 'Donations & Badges' support filter."
-            )
+//        case .payments:
+//            return OWSLocalizedString(
+//                "CONTACT_SUPPORT_FILTER_PAYMENTS_SHORT",
+//                comment: "A brief localized representation of the 'payments' support filter."
+//            )
+//        case .donationsAndBadges:
+//            return OWSLocalizedString(
+//                "CONTACT_SUPPORT_FILTER_DONATIONS_AND_BADGES_SHORT",
+//                comment: "A brief localized representation of the 'Donations & Badges' support filter."
+//            )
         }
     }
 }
@@ -124,8 +124,8 @@ final class ContactSupportViewController: OWSTableViewController2 {
         case feedback
         case somethingNotWorking
         case other
-        case payments
-        case donationsAndBadges
+//        case payments
+//        case donationsAndBadges
     }
 
     var selectedFilter: Filter?
@@ -260,7 +260,8 @@ final class ContactSupportViewController: OWSTableViewController2 {
         var emailRequest = SupportEmailModel()
         emailRequest.userDescription = descriptionField.text
         emailRequest.emojiMood = emojiPicker.selectedMood
-        emailRequest.debugLogPolicy = debugSwitch.isOn ? .attemptUpload(.fromGlobals()) : .none
+//        emailRequest.debugLogPolicy = debugSwitch.isOn ? .attemptUpload(.fromGlobals()) : .none
+        emailRequest.debugLogPolicy = .none
         if let selectedFilter = selectedFilter {
             emailRequest.supportFilter = "iOS \(selectedFilter.emailFilterString)"
         }
@@ -313,8 +314,8 @@ extension ContactSupportViewController {
                                                   comment: "Header of support description field")
         let emojiHeaderText = OWSLocalizedString("SUPPORT_EMOJI_PROMPT",
                                                 comment: "Header for emoji mood selection")
-        let faqPromptText = OWSLocalizedString("SUPPORT_FAQ_PROMPT",
-                                              comment: "Label in support request informing user about Signal FAQ")
+//        let faqPromptText = OWSLocalizedString("SUPPORT_FAQ_PROMPT",
+//                                              comment: "Label in support request informing user about Signal FAQ")
 
         return OWSTableContents(title: titleText, sections: [
 
@@ -343,25 +344,25 @@ extension ContactSupportViewController {
                 self.textViewItem(self.descriptionField, minimumHeight: 125),
 
                 // Debug log switch
-                OWSTableItem(customCellBlock: { [weak self] in
-                    guard let self = self else { return UITableViewCell() }
-                    return self.createDebugLogCell()
-                }),
+//                OWSTableItem(customCellBlock: { [weak self] in
+//                    guard let self = self else { return UITableViewCell() }
+//                    return self.createDebugLogCell()
+//                }),
 
                 // FAQ prompt
-                OWSTableItem(customCellBlock: {
-                    let cell = OWSTableItem.newCell()
-                    cell.textLabel?.font = UIFont.dynamicTypeBody
-                    cell.textLabel?.adjustsFontForContentSizeCategory = true
-                    cell.textLabel?.numberOfLines = 0
-                    cell.textLabel?.text = faqPromptText
-                    cell.textLabel?.textColor = Theme.accentBlueColor
-                    return cell
-                },
-                   actionBlock: { [weak self] in
-                    let vc = SFSafariViewController(url: SupportConstants.supportURL)
-                    self?.present(vc, animated: true)
-                })
+//                OWSTableItem(customCellBlock: {
+//                    let cell = OWSTableItem.newCell()
+//                    cell.textLabel?.font = UIFont.dynamicTypeBody
+//                    cell.textLabel?.adjustsFontForContentSizeCategory = true
+//                    cell.textLabel?.numberOfLines = 0
+//                    cell.textLabel?.text = faqPromptText
+//                    cell.textLabel?.textColor = Theme.accentBlueColor
+//                    return cell
+//                },
+//                   actionBlock: { [weak self] in
+//                    let vc = SFSafariViewController(url: SupportConstants.supportURL)
+//                    self?.present(vc, animated: true)
+//                })
             ]),
 
             // The emoji picker is placed in the section footer to avoid tableview separators

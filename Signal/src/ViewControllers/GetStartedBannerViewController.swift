@@ -257,8 +257,8 @@ extension GetStartedBannerViewController: GetStartedBannerCellDelegate {
         guard let model = cell.model else { return }
 
         switch model {
-        case .inviteFriends:
-            delegate?.getStartedBannerDidTapInviteFriends(self)
+//        case .inviteFriends:
+//            delegate?.getStartedBannerDidTapInviteFriends(self)
         case .newGroup:
             delegate?.getStartedBannerDidTapCreateGroup(self)
         case .appearance:

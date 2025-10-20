@@ -460,23 +460,23 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
         }
 
         // Invite Contacts
-        if shouldShowInvites && !isSearching && SSKEnvironment.shared.contactManagerImplRef.sharingAuthorization != .denied {
-            let bottomSection = OWSTableSection(title: OWSLocalizedString(
-                "INVITE_FRIENDS_CONTACT_TABLE_HEADER",
-                comment: "Header label above a section for more options for adding contacts"
-            ))
-            bottomSection.add(OWSTableItem.disclosureItem(
-                icon: .settingsInvite,
-                withText: OWSLocalizedString(
-                    "INVITE_FRIENDS_CONTACT_TABLE_BUTTON",
-                    comment: "Label for the cell that presents the 'invite contacts' workflow."
-                ),
-                actionBlock: { [weak self] in
-                    self?.presentInviteFlow()
-                }
-            ))
-            tableContents.add(bottomSection)
-        }
+//        if shouldShowInvites && !isSearching && SSKEnvironment.shared.contactManagerImplRef.sharingAuthorization != .denied {
+//            let bottomSection = OWSTableSection(title: OWSLocalizedString(
+//                "INVITE_FRIENDS_CONTACT_TABLE_HEADER",
+//                comment: "Header label above a section for more options for adding contacts"
+//            ))
+//            bottomSection.add(OWSTableItem.disclosureItem(
+//                icon: .settingsInvite,
+//                withText: OWSLocalizedString(
+//                    "INVITE_FRIENDS_CONTACT_TABLE_BUTTON",
+//                    comment: "Label for the cell that presents the 'invite contacts' workflow."
+//                ),
+//                actionBlock: { [weak self] in
+//                    self?.presentInviteFlow()
+//                }
+//            ))
+//            tableContents.add(bottomSection)
+//        }
 
         tableViewController.contents = tableContents
     }

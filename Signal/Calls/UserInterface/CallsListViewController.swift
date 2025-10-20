@@ -866,9 +866,12 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
                     tx: SDSDB.shimOnlyBridge(tx)
                 ).unwrapped
             },
-            shouldFetchUpcomingCallLinks: !onlyLoadMissedCalls && onlyMatchThreadRowIds == nil
+            // Hide createCallLink section by disabling call links fetching
+            // shouldFetchUpcomingCallLinks: !onlyLoadMissedCalls && onlyMatchThreadRowIds == nil
+            shouldFetchUpcomingCallLinks: false
         )
 
+        // This will now clear call links since shouldFetchUpcomingCallLinks is false
         self.reloadUpcomingCallLinks()
 
         // Load the initial page of records. We've thrown away all our
@@ -1315,8 +1318,9 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
     // MARK: - Table view
 
     fileprivate enum Section: Int, Hashable {
-        case createCallLink
-        case existingCalls
+        // Hide createCallLink by commenting it out
+        // case createCallLink = 0
+        case existingCalls = 0  // Make existingCalls the first (and only) section
     }
 
     fileprivate enum RowIdentifier: Hashable {
@@ -1426,14 +1430,15 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
 
     private func buildTableViewCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell? {
         switch Section(rawValue: indexPath.section) {
-        case .createCallLink:
-            if let createCallLinkCell = tableView.dequeueReusableCell(
-                withIdentifier: Self.createCallLinkReuseIdentifier,
-                for: indexPath
-            ) as? CreateCallLinkCell {
-                return createCallLinkCell
-            }
-            return nil
+        // case .createCallLink:  // Removed - no longer exists
+        //     Logger.warn("DEBUG: buildTableViewCell called for createCallLink section")
+        //     if let createCallLinkCell = tableView.dequeueReusableCell(
+        //         withIdentifier: Self.createCallLinkReuseIdentifier,
+        //         for: indexPath
+        //     ) as? CreateCallLinkCell {
+        //         return createCallLinkCell
+        //     }
+        //     return nil
         case .existingCalls:
             guard
                 let callCell = tableView.dequeueReusableCell(
@@ -1464,10 +1469,19 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
 
     private func getSnapshot() -> Snapshot {
         var snapshot = Snapshot()
-        snapshot.appendSections([.createCallLink])
-        snapshot.appendItems([.createCallLink])
+        // Only add existingCalls section (createCallLink section removed from enum)
         snapshot.appendSections([.existingCalls])
-        snapshot.appendItems(viewModelLoader.viewModelReferences().map { .callViewModelReference($0) })
+
+        // Filter out call link references to completely hide them
+        let filteredReferences = viewModelLoader.viewModelReferences().filter { reference in
+            switch reference {
+            case .callLink:
+                return false  // Hide call links
+            case .callRecords:
+                return true   // Keep call records
+            }
+        }
+        snapshot.appendItems(filteredReferences.map { .callViewModelReference($0) })
         return snapshot
     }
 
@@ -1518,7 +1532,9 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
 
     private func reloadAllRows() {
         var snapshot = getSnapshot()
-        snapshot.reloadSections([.createCallLink, .existingCalls])
+        // Only reload existing calls section since createCallLink is hidden
+        // snapshot.reloadSections([.createCallLink, .existingCalls])
+        snapshot.reloadSections([.existingCalls])
         dataSource.apply(snapshot)
     }
 
@@ -1605,8 +1621,8 @@ extension CallsListViewController {
     fileprivate class DiffableDataSource: UITableViewDiffableDataSource<Section, RowIdentifier> {
         override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
             switch Section(rawValue: indexPath.section) {
-            case .createCallLink:
-                return false
+            // case .createCallLink:  // Removed
+            //     return false
             case .existingCalls, .none:
                 return true
             }
@@ -1634,10 +1650,10 @@ extension CallsListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         switch Section(rawValue: indexPath.section) {
-        case .createCallLink:
-            if tableView.isEditing {
-                return nil
-            }
+        // case .createCallLink:  // Removed
+        //     if tableView.isEditing {
+        //         return nil
+        //     }
         case .existingCalls, .none:
             break
         }
@@ -1653,8 +1669,8 @@ extension CallsListViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
 
         switch Section(rawValue: indexPath.section) {
-        case .createCallLink:
-            createCallLink()
+        // case .createCallLink:  // Removed
+        //     createCallLink()
         case .existingCalls, .none:
             guard let viewModel = viewModelWithSneakyTransaction(at: indexPath) else {
                 return
@@ -1671,8 +1687,8 @@ extension CallsListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
         switch Section(rawValue: indexPath.section) {
-        case .createCallLink:
-            return false
+        // case .createCallLink:  // Removed
+        //     return false
         case .existingCalls, .none:
             return true
         }
@@ -1685,8 +1701,8 @@ extension CallsListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         switch Section(rawValue: indexPath.section) {
-        case .createCallLink:
-            return nil
+        // case .createCallLink:  // Removed
+        //     return nil
         case .existingCalls, .none:
             break
         }
@@ -1700,8 +1716,8 @@ extension CallsListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         switch Section(rawValue: indexPath.section) {
-        case .createCallLink:
-            return nil
+        // case .createCallLink:  // Removed
+        //     return nil
         case .existingCalls, .none:
             break
         }
@@ -1728,8 +1744,8 @@ extension CallsListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         switch Section(rawValue: indexPath.section) {
-        case .createCallLink:
-            return nil
+        // case .createCallLink:  // Removed
+        //     return nil
         case .existingCalls, .none:
             break
         }
@@ -2185,12 +2201,13 @@ extension CallsListViewController: DatabaseChangeDelegate {
     }
 
     func databaseChangesDidUpdate(databaseChanges: DatabaseChanges) {
-        guard let rowIds = databaseChanges.tableRowIds[CallLinkRecord.databaseTableName] else {
-            return
-        }
-        reloadUpcomingCallLinks()
-        let updatedReferences = viewModelLoader.invalidate(callLinkRowIds: rowIds, callRecordIds: [])
-        updateSnapshot(updatedReferences: updatedReferences, animated: true)
+//        guard let rowIds = databaseChanges.tableRowIds[CallLinkRecord.databaseTableName] else {
+//            return
+//        }
+        // Disabled since we're hiding call links
+        // reloadUpcomingCallLinks()
+        // let updatedReferences = viewModelLoader.invalidate(callLinkRowIds: rowIds, callRecordIds: [])
+        // updateSnapshot(updatedReferences: updatedReferences, animated: true)
     }
 
     func databaseChangesDidReset() {}

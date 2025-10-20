@@ -231,6 +231,8 @@ extension CallsListViewController {
 
         mutating func reloadUpcomingCallLinkReferences(tx: DBReadTransaction) {
             guard shouldFetchUpcomingCallLinks else {
+                // Clear any existing call link references when disabled
+                self.upcomingCallLinkReferences = []
                 return
             }
             let upcomingCallLinks: [CallLinkRecord]

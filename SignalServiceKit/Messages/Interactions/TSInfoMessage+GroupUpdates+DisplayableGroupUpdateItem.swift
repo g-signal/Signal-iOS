@@ -450,10 +450,11 @@ extension DisplayableGroupUpdateItem {
                 comment: "Message indicating that 'announcement-only' mode was disabled."
             ).attributed
         case .inviteFriendsToNewlyCreatedGroup:
-            return OWSLocalizedString(
-                "GROUP_LINK_PROMOTION_UPDATE",
-                comment: "Suggestion to invite more group members via the group invite link."
-            ).attributed
+//            return OWSLocalizedString(
+//                "GROUP_LINK_PROMOTION_UPDATE",
+//                comment: "Suggestion to invite more group members via the group invite link."
+//            ).attributed
+            return NSAttributedString()
         case .wasMigrated:
             return OWSLocalizedString(
                 "GROUP_WAS_MIGRATED",
