@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "signal-logo-ultramarine.pdf",
+      "filename" : "icon_64x64@2x.png",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "signal-logo-white.pdf",
+      "filename" : "icon_64x64@2x 1.png",
       "idiom" : "universal"
     }
   ],

@@ -43,7 +43,7 @@
 			<string>$(SIGNAL_BUNDLEID_PREFIX)</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>sgnl</string>
+				<string>baxs</string>
 			</array>
 		</dict>
 	</array>

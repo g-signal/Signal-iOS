@@ -25,7 +25,7 @@ public class DeviceProvisioningURL {
     public let capabilities: [Capability]
 
     public enum Constants {
-        static let sgnlPrefix = "sgnl"
+        static let sgnlPrefix = "baxs"
         static let uuidParamName = "uuid"
         static let publicKeyParamName = "pub_key"
         static let capabilitiesParamName = "capabilities"

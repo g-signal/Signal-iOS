@@ -13,7 +13,7 @@ extension Stripe {
     }
 
     // These values are somewhat arbitrary.
-    public static let SCHEME_FOR_3DS = "sgnlpay"
+    public static let SCHEME_FOR_3DS = "baxspay"
     static let RETURN_URL_FOR_3DS = "\(SCHEME_FOR_3DS)://3ds"
 
     static let RETURN_URL_FOR_IDEAL = "https://signaldonations.org/ideal"

@@ -37,7 +37,7 @@ class UrlOpener {
     // MARK: - Constants
 
     enum Constants {
-        static let sgnlPrefix = "sgnl"
+        static let sgnlPrefix = "baxs"
     }
 
     // MARK: - Parsing URLs
@@ -114,7 +114,7 @@ class UrlOpener {
         return StickerPackInfo.parse(packIdHex: packIdHex, packKeyHex: packKeyHex)
     }
 
-    /// Returns whether the given URL is an `sgnl://` link-new-device URL.
+    /// Returns whether the given URL is an `baxs://` link-new-device URL.
     private static func isSgnlLinkDeviceUrl(_ url: URL) -> DeviceProvisioningURL? {
         return DeviceProvisioningURL(urlString: url.absoluteString)
     }

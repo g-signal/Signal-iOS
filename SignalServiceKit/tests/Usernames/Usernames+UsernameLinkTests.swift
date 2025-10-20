@@ -16,10 +16,10 @@ class UsernameLinkTests: XCTestCase {
 
         let testCases: [(URL, Bool)] = [
             (url(scheme: "https", host: "signal.me", path: "/", fragment: goodFragment), true),
-            (url(scheme: "sgnl", host: "signal.me", path: "/", fragment: goodFragment), true),
+            (url(scheme: "baxs", host: "signal.me", path: "/", fragment: goodFragment), true),
             (url(scheme: "https", host: "signal.me", path: "", fragment: goodFragment), true),
-            (url(scheme: "sgnl", host: "signal.me", path: "", fragment: goodFragment), true),
-            (url(scheme: "sgnl", host: "signal.me", path: "/", fragment: "eu/???"), false),
+            (url(scheme: "baxs", host: "signal.me", path: "", fragment: goodFragment), true),
+            (url(scheme: "baxs", host: "signal.me", path: "/", fragment: "eu/???"), false),
             (url(scheme: "https", host: "signal.me", path: "/", fragment: "eu/???"), false),
             (url(scheme: "https", host: "signal.me", path: "/", fragment: goodDataString), false),
             (url(scheme: "http", host: "signal.me", path: "/", fragment: goodFragment), false),

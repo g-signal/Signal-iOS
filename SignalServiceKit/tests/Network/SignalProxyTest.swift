@@ -10,8 +10,8 @@ class SignalProxyTest: XCTestCase {
     func testIsValidProxyLink() throws {
         let validHrefs: [String] = [
             "https://signal.tube/#example.com",
-            "sgnl://signal.tube/#example.com",
-            "sgnl://signal.tube/extrapath?extra=query#example.com",
+            "baxs://signal.tube/#example.com",
+            "baxs://signal.tube/extrapath?extra=query#example.com",
             "HTTPS://SIGNAL.TUBE/#EXAMPLE.COM"
         ]
         for href in validHrefs {

@@ -79,7 +79,7 @@ class StickerPackInfoTest: XCTestCase {
             // Invalid protocols
             "http://signal.art/addstickers#pack_id=abc&pack_key=def",
             "signal://signal.art/addstickers#pack_id=abc&pack_key=def",
-            "sgnl://signal.art/addstickers#pack_id=abc&pack_key=def",
+            "baxs://signal.art/addstickers#pack_id=abc&pack_key=def",
             // Extra auth
             "https://user:pass@signal.art/addstickers#pack_id=abc&pack_key=def",
             // Invalid host

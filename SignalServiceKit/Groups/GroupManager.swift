@@ -530,7 +530,7 @@ public class GroupManager: NSObject {
         let possibleHosts: [String]
         if url.scheme == "https" {
             possibleHosts = ["signal.group"]
-        } else if url.scheme == "sgnl" {
+        } else if url.scheme == "baxs" {
             possibleHosts = ["signal.group", "joingroup"]
         } else {
             return false

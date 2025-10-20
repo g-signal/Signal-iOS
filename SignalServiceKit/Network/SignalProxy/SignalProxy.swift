@@ -80,7 +80,7 @@ public class SignalProxy: NSObject {
         }
         let isValidScheme = (
             scheme.caseInsensitiveCompare("https") == .orderedSame ||
-            scheme.caseInsensitiveCompare("sgnl") == .orderedSame
+            scheme.caseInsensitiveCompare("baxs") == .orderedSame
         )
         guard isValidScheme else {
             return false

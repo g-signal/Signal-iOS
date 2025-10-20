@@ -150,7 +150,7 @@ class RegistrationChooseRestoreMethodViewController: OWSViewController {
         switch self.restorePath {
         case .quickRestore:
             stackView.addArrangedSubviews([
-                restoreFromBackupButton,
+//                restoreFromBackupButton,
                 transferButton,
             ])
 
@@ -159,7 +159,7 @@ class RegistrationChooseRestoreMethodViewController: OWSViewController {
             smallSkipRestoreButton.autoPinBottomToSuperviewMargin(withInset: 14)
         case .manualRestore:
             stackView.addArrangedSubviews([
-                restoreFromBackupButton,
+//                restoreFromBackupButton,
                 prominentSkipRestoreButton,
             ])
             view.addSubview(cancelButton)
@@ -168,7 +168,7 @@ class RegistrationChooseRestoreMethodViewController: OWSViewController {
         case .unspecified:
             stackView.addArrangedSubviews([
                 transferButton,
-                restoreFromBackupButton,
+//                restoreFromBackupButton,
                 prominentSkipRestoreButton,
             ])
         }

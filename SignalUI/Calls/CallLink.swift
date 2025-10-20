@@ -31,7 +31,7 @@ public struct CallLink: Equatable {
     public init?(url: URL) {
         guard
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-            components.scheme == Constants.scheme || components.scheme == "sgnl",
+            components.scheme == Constants.scheme || components.scheme == "baxs",
             components.user == nil,
             components.password == nil,
             components.host == Constants.host,

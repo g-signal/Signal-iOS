@@ -486,7 +486,7 @@ public extension Stripe {
         }
 
         if
-            url.scheme == "sgnl" &&
+            url.scheme == "baxs" &&
             url.host == "ideal" &&
             url.path.isEmpty &&
             url.user == nil &&
