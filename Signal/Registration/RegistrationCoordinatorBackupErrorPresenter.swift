@@ -45,7 +45,7 @@ public class RegistrationCoordinatorBackupErrorPresenterImpl:
         static let incompatibleVersionFAQURL = URL(string: "about:blank")! // Disabled support URL navigation
         // static let backupKeyFAQURL = URL(string: "https://support.signal.org/hc/articles/360007059752")! // Disabled support URL navigation
         static let backupKeyFAQURL = URL(string: "about:blank")! // Disabled support URL navigation
-        static let itunesStoreUrl = URL(string: "https://itunes.apple.com/app/id874139669")!
+        static let itunesStoreUrl = URL(string: "https://itunes.apple.com/app/id6754267880")!
     }
 
     public func mapToRegistrationError(error: Error) -> RegistrationBackupRestoreError {

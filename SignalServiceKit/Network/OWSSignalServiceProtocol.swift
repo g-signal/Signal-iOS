@@ -124,7 +124,7 @@ extension SignalServiceType {
                 baseUrl: URL(string: TSConstants.mainServiceIdentifiedURL)!,
                 censorshipCircumventionSupported: true,
                 censorshipCircumventionPathPrefix: TSConstants.serviceCensorshipPrefix,
-                shouldUseSignalCertificate: true,
+                shouldUseSignalCertificate: false,
                 shouldHandleRemoteDeprecation: true,
                 type: self
             )
@@ -133,7 +133,7 @@ extension SignalServiceType {
                 baseUrl: URL(string: TSConstants.mainServiceUnidentifiedURL)!,
                 censorshipCircumventionSupported: true,
                 censorshipCircumventionPathPrefix: TSConstants.serviceCensorshipPrefix,
-                shouldUseSignalCertificate: true,
+                shouldUseSignalCertificate: false,
                 shouldHandleRemoteDeprecation: true,
                 type: self
             )
@@ -142,7 +142,7 @@ extension SignalServiceType {
                 baseUrl: URL(string: TSConstants.storageServiceURL)!,
                 censorshipCircumventionSupported: true,
                 censorshipCircumventionPathPrefix: TSConstants.storageServiceCensorshipPrefix,
-                shouldUseSignalCertificate: true,
+                shouldUseSignalCertificate: false,
                 shouldHandleRemoteDeprecation: true,
                 type: self
             )
@@ -169,7 +169,7 @@ extension SignalServiceType {
                 baseUrl: URL(string: TSConstants.textSecureCDN3ServerURL)!,
                 censorshipCircumventionSupported: true,
                 censorshipCircumventionPathPrefix: TSConstants.cdn3CensorshipPrefix,
-                shouldUseSignalCertificate: true,
+                shouldUseSignalCertificate: false,
                 shouldHandleRemoteDeprecation: false,
                 type: self
             )
@@ -196,7 +196,7 @@ extension SignalServiceType {
                 baseUrl: URL(string: TSConstants.svr2URL)!,
                 censorshipCircumventionSupported: true,
                 censorshipCircumventionPathPrefix: TSConstants.svr2CensorshipPrefix,
-                shouldUseSignalCertificate: true,
+                shouldUseSignalCertificate: false,
                 shouldHandleRemoteDeprecation: false,
                 type: self
             )

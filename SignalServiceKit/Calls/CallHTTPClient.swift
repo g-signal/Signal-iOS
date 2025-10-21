@@ -27,7 +27,7 @@ extension CallHTTPClient: HTTPDelegate {
         AssertIsOnMainThread()
 
         let session = OWSURLSession(
-            securityPolicy: OWSURLSession.signalServiceSecurityPolicy,
+            securityPolicy: OWSURLSession.defaultSecurityPolicy, // 如果用本地配置的cer OWSURLSession.signalServiceSecurityPolicy
             configuration: OWSURLSession.defaultConfigurationWithoutCaching,
             canUseSignalProxy: true
         )

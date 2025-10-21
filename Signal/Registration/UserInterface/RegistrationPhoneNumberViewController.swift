@@ -252,17 +252,17 @@ class RegistrationPhoneNumberViewController: OWSViewController {
 
     private func render() {
         var actions: [UIAction] = [
-            UIAction(
-                title: OWSLocalizedString(
-                    "USE_PROXY_BUTTON",
-                    comment: "Button to activate the signal proxy"
-                ),
-                handler: { [weak self] _ in
-                    guard let self else { return }
-                    let vc = ProxySettingsViewController(validationMethod: .restGetRegistrationSession)
-                    self.presentFormSheet(OWSNavigationController(rootViewController: vc), animated: true)
-                }
-            )
+//            UIAction(
+//                title: OWSLocalizedString(
+//                    "USE_PROXY_BUTTON",
+//                    comment: "Button to activate the signal proxy"
+//                ),
+//                handler: { [weak self] _ in
+//                    guard let self else { return }
+//                    let vc = ProxySettingsViewController(validationMethod: .restGetRegistrationSession)
+//                    self.presentFormSheet(OWSNavigationController(rootViewController: vc), animated: true)
+//                }
+//            )
         ]
         let canCancelChosenRegistrationMethod: Bool
         let canExitRegistration: Bool
