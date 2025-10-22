@@ -30,7 +30,7 @@ public class SUIEnvironment: NSObject {
     public var paymentsRef: Payments!
     /// This should be deprecated.
     public var paymentsSwiftRef: PaymentsSwift { paymentsRef as! PaymentsSwift }
-    public var paymentsImplRef: PaymentsImpl { paymentsRef as! PaymentsImpl }
+    // public var paymentsImplRef: PaymentsImpl { paymentsRef as! PaymentsImpl } // Commented out due to MobileCoin removal
 
     private(set) public var linkPreviewFetcher: (any LinkPreviewFetcher)!
 
@@ -56,7 +56,8 @@ public class SUIEnvironment: NSObject {
             linkPreviewSettingStore: DependenciesBridge.shared.linkPreviewSettingStore,
             tsAccountManager: DependenciesBridge.shared.tsAccountManager
         )
-        self.paymentsRef = PaymentsImpl(appReadiness: appReadiness)
+        // self.paymentsRef = PaymentsImpl(appReadiness: appReadiness) // Commented out due to MobileCoin removal
+        self.paymentsRef = MockPayments() // Use mock implementation instead
 
         contactsViewHelperRef.performInitialSetup(appReadiness: appReadiness)
         audioSessionRef.performInitialSetup(appReadiness: appReadiness)

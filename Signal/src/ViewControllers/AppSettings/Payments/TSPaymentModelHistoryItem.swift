@@ -51,11 +51,12 @@ public struct PaymentsHistoryModelItem: PaymentsHistoryItem {
 
     public var formattedFeeAmount: String? {
         guard let fee = paymentModel.mobileCoin?.feeAmount else { return nil }
-        return PaymentsFormat.format(
-            paymentAmount: fee,
-            isShortForm: false,
-            withCurrencyCode: true,
-            withSpace: true)
+        // return PaymentsFormat.format(
+        //     paymentAmount: fee,
+        //     isShortForm: false,
+        //     withCurrencyCode: true,
+        //     withSpace: true) // Commented out due to MobileCoin removal
+        return "Fee: \(fee.picoMob)"
     }
 
     public var paymentType: TSPaymentType {
@@ -87,20 +88,21 @@ public struct PaymentsHistoryModelItem: PaymentsHistoryItem {
     }
 
     public var attributedPaymentAmount: NSAttributedString? {
-        let amount: TSPaymentAmount
-        if let paymentAmount = paymentModel.paymentAmount {
-            amount = paymentAmount
-        } else if let unwrappedAmount = SUIEnvironment.shared.paymentsImplRef.unmaskReceiptAmount(data: receiptData)?.tsPaymentAmount {
-            amount = unwrappedAmount
-        } else {
+//        let amount: TSPaymentAmount
+//        if let paymentAmount = paymentModel.paymentAmount {
+//            amount = paymentAmount
+//        } else if let unwrappedAmount = SUIEnvironment.shared.paymentsImplRef.unmaskReceiptAmount(data: receiptData)?.tsPaymentAmount {
+//            amount = unwrappedAmount
+//        } else {
             return nil
-        }
+//        }
 
-        return PaymentsFormat.attributedFormat(
-            paymentAmount: amount,
-            isShortForm: false,
-            paymentType: paymentType
-        )
+        // return PaymentsFormat.attributedFormat(
+        //     paymentAmount: amount,
+        //     isShortForm: false,
+        //     paymentType: paymentType
+        // ) // Commented out due to MobileCoin removal
+//        return NSAttributedString(string: "\(amount.picoMob)")
     }
 
     public var formattedPaymentAmount: String? {
@@ -114,21 +116,23 @@ public struct PaymentsHistoryModelItem: PaymentsHistoryItem {
         if let feeAmount = paymentModel.mobileCoin?.feeAmount {
             totalAmount = totalAmount.plus(feeAmount)
         }
-        return PaymentsFormat.format(
-            paymentAmount: totalAmount,
-            isShortForm: true,
-            withCurrencyCode: true,
-            withSpace: false,
-            withPaymentType: paymentModel.paymentType
-        )
+        // return PaymentsFormat.format(
+        //     paymentAmount: totalAmount,
+        //     isShortForm: true,
+        //     withCurrencyCode: true,
+        //     withSpace: false,
+        //     withPaymentType: paymentModel.paymentType
+        // ) // Commented out due to MobileCoin removal
+        return "\(totalAmount.picoMob) MOB"
     }
 
     public func statusDescription(isLongForm: Bool) -> String? {
-        paymentModel.statusDescription(isLongForm: isLongForm)
+//        paymentModel.statusDescription(isLongForm: isLongForm)
+        return ""
     }
 
     public func markAsRead(tx: DBWriteTransaction) {
-        PaymentsViewUtils.markPaymentAsRead(paymentModel, transaction: tx)
+//        PaymentsViewUtils.markPaymentAsRead(paymentModel, transaction: tx)
     }
 
     public func reload(tx: DBReadTransaction) -> Self? {

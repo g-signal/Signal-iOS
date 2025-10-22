@@ -1,4 +1,4 @@
-//
+/*//
 // Copyright 2021 Signal Messenger, LLC
 // SPDX-License-Identifier: AGPL-3.0-only
 //
@@ -205,3 +205,4 @@ class PaymentsTransferInViewController: OWSTableViewController2 {
         AttachmentSharing.showShareUI(for: walletAddressBase58, sender: self)
     }
 }
+*/

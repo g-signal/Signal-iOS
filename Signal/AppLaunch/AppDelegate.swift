@@ -175,7 +175,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         debugLogger.enableFileLogging(appContext: mainAppContext, canLaunchInBackground: true)
-        DebugLogger.configureSwiftLogging()
+        // DebugLogger.configureSwiftLogging() // Commented out due to MobileCoin removal
         if DebugFlags.audibleErrorLogging {
             debugLogger.enableErrorReporting()
         }
@@ -435,8 +435,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             databaseStorage: launchContext.databaseStorage,
             deviceBatteryLevelManager: launchContext.deviceBatteryLevelManager,
             deviceSleepManager: launchContext.deviceSleepManager,
-            paymentsEvents: PaymentsEventsMainApp(),
-            mobileCoinHelper: MobileCoinHelperSDK(),
+            paymentsEvents: PaymentsEventsNoop(), // Changed due to MobileCoin removal
+            mobileCoinHelper: MobileCoinHelperMinimal(), // Changed due to MobileCoin removal
             callMessageHandler: WebRTCCallMessageHandler(),
             currentCallProvider: currentCall,
             notificationPresenter: NotificationPresenterImpl(),

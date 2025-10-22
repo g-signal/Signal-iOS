@@ -1,3 +1,4 @@
+/*
 //
 // Copyright 2021 Signal Messenger, LLC
 // SPDX-License-Identifier: AGPL-3.0-only
@@ -160,7 +161,7 @@ class SendPaymentHelper {
                 self?.maximumPaymentAmount = TSPaymentAmount(currency: .mobileCoin, picoMob: 0)
                 self?.delegate?.balanceDidChange()
             } catch {
-                owsFailDebugUnlessMCNetworkFailure(error)
+                owsFailDebug(error)
             }
         }
 
@@ -229,3 +230,4 @@ extension SendPaymentHelperDelegate {
         SendPaymentHelper.formatMobileCoinAmount(paymentAmount)
     }
 }
+*/

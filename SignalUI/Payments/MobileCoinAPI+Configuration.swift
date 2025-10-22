@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+/*
+// Commented out due to MobileCoin removal
 import Foundation
 import MobileCoin
 import LibMobileCoin
@@ -734,3 +736,4 @@ extension LibMobileCoin.HTTPMethod {
         }
     }
 }
+*/

@@ -5,7 +5,7 @@
 
 import XCTest
 
-@testable import MobileCoin
+@testable // // import MobileCoin // Commented out due to MobileCoin removal // Commented out due to MobileCoin removal
 @testable import Signal
 @testable import SignalServiceKit
 @testable import SignalUI

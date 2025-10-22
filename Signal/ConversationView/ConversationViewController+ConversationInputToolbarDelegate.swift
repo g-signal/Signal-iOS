@@ -492,33 +492,33 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
     }
 
     public func paymentButtonPressed() {
-        AssertIsOnMainThread()
+//        AssertIsOnMainThread()
+//
+//        guard let contactThread = thread as? TSContactThread else {
+//            owsFailDebug("Not a contact thread.")
+//            return
+//        }
+//
+//        dismissKeyBoard()
+//
+//        if SUIEnvironment.shared.paymentsRef.isKillSwitchActive {
+//            OWSActionSheets.showErrorAlert(message: OWSLocalizedString("SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENTS_KILL_SWITCH",
+//                                                                      comment: "Error message indicating that payments cannot be sent because the feature is not currently available."))
+//            return
+//        }
 
-        guard let contactThread = thread as? TSContactThread else {
-            owsFailDebug("Not a contact thread.")
-            return
-        }
-
-        dismissKeyBoard()
-
-        if SUIEnvironment.shared.paymentsRef.isKillSwitchActive {
-            OWSActionSheets.showErrorAlert(message: OWSLocalizedString("SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENTS_KILL_SWITCH",
-                                                                      comment: "Error message indicating that payments cannot be sent because the feature is not currently available."))
-            return
-        }
-
-        if SSKEnvironment.shared.paymentsHelperRef.isPaymentsVersionOutdated {
-            OWSActionSheets.showPaymentsOutdatedClientSheet(title: .cantSendPayment)
-            return
-        }
-
-        SendPaymentViewController.presentFromConversationView(
-            self,
-            delegate: self,
-            recipientAddress: contactThread.contactAddress,
-            initialPaymentAmount: nil,
-            isOutgoingTransfer: false
-        )
+//        if SSKEnvironment.shared.paymentsHelperRef.isPaymentsVersionOutdated {
+//            OWSActionSheets.showPaymentsOutdatedClientSheet(title: .cantSendPayment)
+//            return
+//        }
+//
+//        SendPaymentViewController.presentFromConversationView(
+//            self,
+//            delegate: self,
+//            recipientAddress: contactThread.contactAddress,
+//            initialPaymentAmount: nil,
+//            isOutgoingTransfer: false
+//        )
     }
 
     public func didSelectRecentPhoto(asset: PHAsset, attachment: SignalAttachment) {

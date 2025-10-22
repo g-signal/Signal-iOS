@@ -7,7 +7,7 @@ import XCTest
 @testable import SignalServiceKit
 @testable import SignalUI
 @testable import Signal
-@testable import MobileCoin
+@testable // // import MobileCoin // Commented out due to MobileCoin removal // Commented out due to MobileCoin removal
 
 private struct MockTransactionHistoryItem: MCTransactionHistoryItem {
     let amountPicoMob: UInt64

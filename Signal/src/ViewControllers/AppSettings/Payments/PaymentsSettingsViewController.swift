@@ -1,4 +1,4 @@
-//
+/*//
 // Copyright 2021 Signal Messenger, LLC
 // SPDX-License-Identifier: AGPL-3.0-only
 //
@@ -1345,3 +1345,4 @@ extension PaymentsSettingsViewController: PaymentsRestoreWalletDelegate {
                                              comment: "Message indicating that 'restore payments wallet' is complete."))
     }
 }
+*/

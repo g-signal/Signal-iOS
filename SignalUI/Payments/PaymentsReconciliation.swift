@@ -3,10 +3,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+/*
+// Commented out due to MobileCoin removal
 import Foundation
-public import MobileCoin
+// public import MobileCoin // Commented out due to MobileCoin removal
 public import SignalServiceKit
+*/
 
+/*
+// Commented out due to MobileCoin removal
 public class PaymentsReconciliation {
 
     private let appReadiness: AppReadiness
@@ -1172,3 +1177,4 @@ fileprivate extension Array {
         isEmpty ? nil : self
     }
 }
+*/

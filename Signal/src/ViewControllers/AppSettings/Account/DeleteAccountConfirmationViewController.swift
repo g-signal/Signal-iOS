@@ -253,21 +253,21 @@ class DeleteAccountConfirmationViewController: OWSTableViewController2 {
     }
 
     private func transferPaymentsButton() {
-        dismiss(animated: true) { [appReadiness] in
-            guard let frontmostViewController = UIApplication.shared.frontmostViewController else {
-                owsFailDebug("Could not identify frontmostViewController")
-                return
-            }
-            guard let navigationController = frontmostViewController.navigationController else {
-                owsFailDebug("Missing navigationController.")
-                return
-            }
-            var viewControllers = navigationController.viewControllers
-            _ = viewControllers.removeLast()
-            viewControllers.append(PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness))
-            viewControllers.append(PaymentsTransferOutViewController(transferAmount: nil))
-            navigationController.setViewControllers(viewControllers, animated: true)
-        }
+//        dismiss(animated: true) { in
+//            guard let frontmostViewController = UIApplication.shared.frontmostViewController else {
+//                owsFailDebug("Could not identify frontmostViewController")
+//                return
+//            }
+//            guard let navigationController = frontmostViewController.navigationController else {
+//                owsFailDebug("Missing navigationController.")
+//                return
+//            }
+//            var viewControllers = navigationController.viewControllers
+//            _ = viewControllers.removeLast()
+            // viewControllers.append(PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness)) // Commented out due to MobileCoin removal
+            // viewControllers.append(PaymentsTransferOutViewController(transferAmount: nil)) // Commented out due to MobileCoin removal
+//            navigationController.setViewControllers(viewControllers, animated: true)
+//        }
     }
 
     private func showDeletionConfirmUI() {

@@ -148,9 +148,11 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
 
         switch status {
         case .failed:
-            return PaymentsFormat.inChatFailureAmountBuilder(amount)
+            // return PaymentsFormat.inChatFailureAmountBuilder(amount) // Commented out due to MobileCoin removal
+            return NSAttributedString(string: amount)
         default:
-            return PaymentsFormat.inChatSuccessAmountBuilder(amount)
+            // return PaymentsFormat.inChatSuccessAmountBuilder(amount) // Commented out due to MobileCoin removal
+            return NSAttributedString(string: amount)
         }
     }
 

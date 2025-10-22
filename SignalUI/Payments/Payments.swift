@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-public import MobileCoin
+// public import MobileCoin // Commented out due to MobileCoin removal
 public import SignalServiceKit
 
 @objc
@@ -43,6 +43,8 @@ public protocol PaymentsSwift: Payments {
 
     func getEstimatedFee(forPaymentAmount paymentAmount: TSPaymentAmount) async throws -> TSPaymentAmount
 
+    /*
+    // Commented out due to MobileCoin removal
     func prepareOutgoingPayment(
         recipient: SendPaymentRecipient,
         paymentAmount: TSPaymentAmount,
@@ -52,6 +54,7 @@ public protocol PaymentsSwift: Payments {
     ) async throws -> PreparedPayment
 
     func initiateOutgoingPayment(preparedPayment: PreparedPayment) async throws -> TSPaymentModel
+    */
 
     func maximumPaymentAmount() async throws -> TSPaymentAmount
 
@@ -98,11 +101,14 @@ public protocol SendPaymentRecipient {
 
 // MARK: -
 
+/*
+// Commented out due to MobileCoin removal
 public protocol PreparedPayment {
     var transaction: MobileCoin.Transaction { get }
     var receipt: MobileCoin.Receipt { get }
     var feeAmount: TSPaymentAmount { get }
 }
+*/
 
 // MARK: -
 
@@ -163,6 +169,8 @@ extension MockPayments: PaymentsSwift {
         owsFail("Not implemented.")
     }
 
+    /*
+    // Commented out due to MobileCoin removal
     public func prepareOutgoingPayment(
         recipient: SendPaymentRecipient,
         paymentAmount: TSPaymentAmount,
@@ -176,6 +184,7 @@ extension MockPayments: PaymentsSwift {
     public func initiateOutgoingPayment(preparedPayment: PreparedPayment) async throws -> TSPaymentModel {
         owsFail("Not implemented.")
     }
+    */
 
     public func isValidMobileCoinPublicAddress(_ publicAddressData: Data) -> Bool {
         owsFail("Not implemented.")

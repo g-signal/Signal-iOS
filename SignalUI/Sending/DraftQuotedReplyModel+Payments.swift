@@ -65,11 +65,13 @@ extension DraftQuotedReplyModel {
         interactionType: OWSInteractionType,
         tx: DBReadTransaction
     ) -> String {
-        return PaymentsFormat.paymentPreviewText(
-            paymentMessage: paymentMessage,
-            type: interactionType,
-            transaction: tx
-        ) ?? OWSLocalizedString(
+        // Commented out due to MobileCoin removal
+        // return PaymentsFormat.paymentPreviewText(
+        //     paymentMessage: paymentMessage,
+        //     type: interactionType,
+        //     transaction: tx
+        // ) ??
+        return OWSLocalizedString(
             "PAYMENTS_PREVIEW_TEXT_UNKNOWN",
             comment: "Payments Preview Text shown in quoted replies, for unknown payments."
         )

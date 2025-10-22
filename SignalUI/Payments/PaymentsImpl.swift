@@ -3,11 +3,16 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+/*
+// Commented out due to MobileCoin removal
 import Foundation
 public import LibSignalClient
-public import MobileCoin
+// public import MobileCoin // Commented out due to MobileCoin removal
 public import SignalServiceKit
+*/
 
+/*
+// Commented out due to MobileCoin removal
 public class PaymentsImpl: NSObject, PaymentsSwift {
 
     private let appReadiness: AppReadiness
@@ -35,7 +40,7 @@ public class PaymentsImpl: NSObject, PaymentsSwift {
             self?.updateCurrentPaymentBalanceIfNecessary()
         }
 
-        MobileCoinAPI.configureSDKLogging()
+        // MobileCoinAPI.configureSDKLogging() // Commented out due to MobileCoin removal
 
         appReadiness.runNowOrWhenAppDidBecomeReadyAsync {
             DispatchQueue.global().async {
@@ -1185,3 +1190,4 @@ extension Amount {
         )
     }
 }
+*/

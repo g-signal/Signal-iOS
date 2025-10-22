@@ -345,9 +345,9 @@ class AppSettingsViewController: OWSTableViewController2 {
 
                     return cell
                 },
-                actionBlock: { [weak self, appReadiness] in
-                    let vc = PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness)
-                    self?.navigationController?.pushViewController(vc, animated: true)
+                actionBlock: { [] in
+//                    let vc = PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness)
+//                    self?.navigationController?.pushViewController(vc, animated: true)
                 }
             ))
             contents.add(paymentsSection)

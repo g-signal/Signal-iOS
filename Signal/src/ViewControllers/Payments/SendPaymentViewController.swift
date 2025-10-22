@@ -1,3 +1,4 @@
+/*
 //
 // Copyright 2021 Signal Messenger, LLC
 // SPDX-License-Identifier: AGPL-3.0-only
@@ -981,7 +982,7 @@ public class SendPaymentViewController: OWSViewController {
                 if case PaymentsError.insufficientFunds = error {
                     Logger.warn("Error: \(error)")
                 } else {
-                    owsFailDebugUnlessMCNetworkFailure(error)
+                    owsFailDebug(error)
                 }
 
                 modalActivityIndicator.dismiss {
@@ -1692,3 +1693,4 @@ class SpacerFactory {
         UIView.matchHeightsOfViews(vSpacers)
     }
 }
+*/

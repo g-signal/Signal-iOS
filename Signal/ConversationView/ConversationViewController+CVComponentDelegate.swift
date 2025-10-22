@@ -575,12 +575,12 @@ extension ConversationViewController: CVComponentDelegate {
     }
 
     public func didTapPayment(_ payment: PaymentsHistoryItem) {
-        AssertIsOnMainThread()
+//        AssertIsOnMainThread()
 
-        let paymentsDetailViewController = PaymentsDetailViewController(
-            paymentItem: payment
-        )
-        navigationController?.pushViewController(paymentsDetailViewController, animated: true)
+//        let paymentsDetailViewController = PaymentsDetailViewController(
+//            paymentItem: payment
+//        )
+//        navigationController?.pushViewController(paymentsDetailViewController, animated: true)
     }
 
     public func didTapGroupInviteLink(url: URL) {

@@ -48,7 +48,7 @@ extension HomeTabViewController {
             let wrapper = UIView.container()
             wrapper.addSubview(contextButton)
             contextButton.autoPinEdgesToSuperviewEdges()
-            PaymentsViewUtils.addUnreadBadge(toView: wrapper)
+            // PaymentsViewUtils.addUnreadBadge(toView: wrapper) // Commented out due to MobileCoin removal
             barButtonView = wrapper
         } else {
             barButtonView = contextButton

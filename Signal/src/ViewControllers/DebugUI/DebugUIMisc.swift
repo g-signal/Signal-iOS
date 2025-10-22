@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-import MobileCoin
+// import MobileCoin // Commented out due to MobileCoin removal
 import SignalServiceKit
 import SignalUI
 

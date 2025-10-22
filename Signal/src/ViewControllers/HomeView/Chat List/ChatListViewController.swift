@@ -1201,16 +1201,19 @@ extension ChatListViewController {
         case .none:
             break
         case .payments:
-            let paymentsSettings = PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness)
-            viewControllers += [ paymentsSettings ]
-        case .payment(let paymentsHistoryItem):
-            let paymentsSettings = PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness)
-            let paymentsDetail = PaymentsDetailViewController(paymentItem: paymentsHistoryItem)
-            viewControllers += [ paymentsSettings, paymentsDetail ]
+            // let paymentsSettings = PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness)
+            // viewControllers += [ paymentsSettings ] // Commented out due to MobileCoin removal
+            break
+        case .payment:
+//             let paymentsSettings = PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness)
+//             let paymentsDetail = PaymentsDetailViewController(paymentItem: paymentsHistoryItem)
+//             viewControllers += [ paymentsSettings, paymentsDetail ] // Commented out due to MobileCoin removal
+            break
         case .paymentsTransferIn:
-            let paymentsSettings = PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness)
-            let paymentsTransferIn = PaymentsTransferInViewController()
-            viewControllers += [ paymentsSettings, paymentsTransferIn ]
+            // let paymentsSettings = PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness)
+            // let paymentsTransferIn = PaymentsTransferInViewController()
+            // viewControllers += [ paymentsSettings, paymentsTransferIn ] // Commented out due to MobileCoin removal
+            break
         case .appearance:
             let appearance = AppearanceSettingsTableViewController()
             viewControllers += [ appearance ]

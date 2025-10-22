@@ -1,3 +1,4 @@
+/*
 //
 // Copyright 2021 Signal Messenger, LLC
 // SPDX-License-Identifier: AGPL-3.0-only
@@ -589,7 +590,7 @@ public class SendPaymentCompletionActionSheet: ActionSheetController {
                 if case PaymentsError.defragmentationRequired = error {
                     Logger.warn("Error: \(error)")
                 } else {
-                    owsFailDebugUnlessMCNetworkFailure(error)
+                    owsFailDebug(error)
                 }
             }
         }
@@ -651,7 +652,7 @@ public class SendPaymentCompletionActionSheet: ActionSheetController {
                 self.didSucceedPayment(paymentInfo: paymentInfo)
                 modalActivityIndicator.dismiss()
             } catch {
-                owsFailDebugUnlessMCNetworkFailure(error)
+                owsFailDebug(error)
                 modalActivityIndicator.dismiss()
                 self.didFailPayment(paymentInfo: paymentInfo, error: error)
             }
@@ -746,3 +747,4 @@ fileprivate extension UIStackView {
         return group
     }
 }
+*/

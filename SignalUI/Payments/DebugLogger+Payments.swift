@@ -3,12 +3,17 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+/*
+// Commented out due to MobileCoin removal
 import Foundation
-import Logging
+// import Logging // Commented out due to MobileCoin removal
 public import SignalServiceKit
+*/
 
 // NOTE: There are two separate classes with the name Logger
 //       being used in this file.
+/*
+// Commented out due to MobileCoin removal - depends on Logging module
 public extension DebugLogger {
     static func configureSwiftLogging() {
         LoggingSystem.bootstrap { _ in
@@ -83,3 +88,4 @@ public extension DebugLogger {
         }
     }
 }
+*/

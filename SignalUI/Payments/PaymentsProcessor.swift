@@ -3,9 +3,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-import MobileCoin
+/*
+// Commented out due to MobileCoin removal
+// import MobileCoin // Commented out due to MobileCoin removal
 public import SignalServiceKit
+*/
 
+/*
+// Commented out due to MobileCoin removal
 public class PaymentsProcessor: NSObject {
 
     private let appReadiness: AppReadiness
@@ -809,3 +814,4 @@ private class PaymentProcessingOperation {
         }
     }
 }
+*/

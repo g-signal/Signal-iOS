@@ -1,10 +1,10 @@
-//
+/*//
 // Copyright 2021 Signal Messenger, LLC
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
 import Lottie
-import MobileCoin
+// import MobileCoin // Commented out due to MobileCoin removal
 public import SignalServiceKit
 public import SignalUI
 
@@ -224,3 +224,4 @@ extension PaymentsTransferOutViewController: PaymentsQRScanDelegate {
         updateNavbar()
     }
 }
+*/

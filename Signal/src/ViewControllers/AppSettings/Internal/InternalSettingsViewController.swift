@@ -264,7 +264,7 @@ class InternalSettingsViewController: OWSTableViewController2 {
 
         if mode != .registration {
             let paymentsSection = OWSTableSection(title: "Payments")
-            paymentsSection.add(.copyableItem(label: "MobileCoin Environment", value: MobileCoinAPI.Environment.current.description))
+//            paymentsSection.add(.copyableItem(label: "MobileCoin Environment", value: MobileCoinAPI.Environment.current.description))
             paymentsSection.add(.copyableItem(label: "Enabled?", value: SSKEnvironment.shared.paymentsHelperRef.arePaymentsEnabled ? "Yes" : "No"))
             if SSKEnvironment.shared.paymentsHelperRef.arePaymentsEnabled, let paymentsEntropy = SUIEnvironment.shared.paymentsSwiftRef.paymentsEntropy {
                 paymentsSection.add(.copyableItem(label: "Entropy", value: paymentsEntropy.hexadecimalString))

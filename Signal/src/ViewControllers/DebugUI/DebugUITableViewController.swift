@@ -22,7 +22,7 @@ class DebugUITableViewController: OWSTableViewController2 {
             itemForSubsection(DebugUISessionState(), viewController: viewController),
             itemForSubsection(DebugUISyncMessages(), viewController: viewController),
             itemForSubsection(DebugUIGroupsV2(), viewController: viewController),
-            itemForSubsection(DebugUIPayments(), viewController: viewController),
+            // itemForSubsection(DebugUIPayments(), viewController: viewController), // Commented out due to MobileCoin removal
             itemForSubsection(DebugUIMisc(appReadiness: appReadiness), viewController: viewController)
         ]
         viewController.setContents(OWSTableContents(
@@ -67,7 +67,7 @@ class DebugUITableViewController: OWSTableViewController2 {
             ),
 
             itemForSubsection(DebugUIGroupsV2(), viewController: viewController, thread: thread),
-            itemForSubsection(DebugUIPayments(), viewController: viewController, thread: thread),
+            // itemForSubsection(DebugUIPayments(), viewController: viewController, thread: thread), // Commented out due to MobileCoin removal
             itemForSubsection(DebugUIMisc(appReadiness: nil), viewController: viewController, thread: thread)
         ]
 

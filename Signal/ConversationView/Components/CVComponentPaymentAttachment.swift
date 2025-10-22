@@ -151,21 +151,23 @@ public class CVComponentPaymentAttachment: CVComponentBase, CVComponent {
     }
 
     private func formatPaymentAmount(status: MessageReceiptStatus) -> NSAttributedString {
-        guard let mob = paymentAmount else {
-            let text = OWSLocalizedString(
-                "PAYMENTS_INFO_UNAVAILABLE_MESSAGE",
-                comment: "Status indicator for invalid payments which could not be processed."
-            )
-            return NSAttributedString(string: text)
-        }
+//        guard let mob = paymentAmount else {
+//            let text = OWSLocalizedString(
+//                "PAYMENTS_INFO_UNAVAILABLE_MESSAGE",
+//                comment: "Status indicator for invalid payments which could not be processed."
+//            )
+//            return NSAttributedString(string: text)
+//        }
 
-        let amount = TSPaymentAmount(currency: .mobileCoin, picoMob: mob)
-        switch status {
-        case .failed:
-            return PaymentsFormat.formatInChatFailure(paymentAmount: amount)
-        default:
-            return PaymentsFormat.formatInChatSuccess(paymentAmount: amount)
-        }
+//        let amount = TSPaymentAmount(currency: .mobileCoin, picoMob: mob)
+//        switch status {
+//        case .failed:
+            // return PaymentsFormat.formatInChatFailure(paymentAmount: amount) // Commented out due to MobileCoin removal
+            return NSAttributedString()
+//        default:
+            // return PaymentsFormat.formatInChatSuccess(paymentAmount: amount) // Commented out due to MobileCoin removal
+//            return NSAttributedString()
+//        }
     }
 
     private var hStackConfig: CVStackViewConfig {

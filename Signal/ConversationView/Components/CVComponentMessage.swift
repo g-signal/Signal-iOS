@@ -263,50 +263,52 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
                                                      bottomButtonsState: bottomButtonsState)
         }
 
-        if let paymentAttachment = componentState.paymentAttachment {
-            let paymentAmount: UInt64? = {
-                let receipt = paymentAttachment.notification.mcReceiptData
-                guard let decryptedAmount = SUIEnvironment.shared.paymentsImplRef.unmaskReceiptAmount(data: receipt) else {
-                    // Valid path for sender
-                    return paymentAttachment.model?.paymentAmount?.picoMob
-                }
+//        if let paymentAttachment = componentState.paymentAttachment {
+//            let paymentAmount: UInt64? = {
+//                let receipt = paymentAttachment.notification.mcReceiptData
+//                // guard let decryptedAmount = SUIEnvironment.shared.paymentsImplRef.unmaskReceiptAmount(data: receipt) else { // Commented out due to MobileCoin removal
+//                let decryptedAmount: TSPaymentAmount? = nil // Stub implementation
+//                guard let decryptedAmount = decryptedAmount else {
+//                    // Valid path for sender
+//                    return paymentAttachment.model?.paymentAmount?.picoMob
+//                }
+//
+//                // Valid path for recipient
+//                return decryptedAmount.value
+//            }()
+//
+//            let messageStatus: MessageReceiptStatus? = {
+//                guard
+//                    let outgoingMessage = itemModel.interaction as? OWSOutgoingPaymentMessage,
+//                    let model = paymentAttachment.model
+//                else {
+//                    return nil
+//                }
+//                return MessageRecipientStatusUtils.recipientStatus(
+//                    outgoingMessage: outgoingMessage,
+//                    paymentModel: model
+//                )
+//            }()
+//
+//            if let footerState = itemViewState.footerState {
+//                self.standaloneFooter = CVComponentFooter(
+//                    itemModel: itemModel,
+//                    footerState: footerState,
+//                    isOverlayingMedia: false,
+//                    isOutsideBubble: false
+//                )
+//            }
+//
+//            self.paymentAttachment = CVComponentPaymentAttachment(
+//                itemModel: itemModel,
+//                paymentAttachment: paymentAttachment,
+//                paymentModel: paymentAttachment.model,
+//                contactName: paymentAttachment.otherUserShortName,
+//                paymentAmount: paymentAmount,
+//                messageStatus: messageStatus
+//            )
 
-                // Valid path for recipient
-                return decryptedAmount.value
-            }()
-
-            let messageStatus: MessageReceiptStatus? = {
-                guard
-                    let outgoingMessage = itemModel.interaction as? OWSOutgoingPaymentMessage,
-                    let model = paymentAttachment.model
-                else {
-                    return nil
-                }
-                return MessageRecipientStatusUtils.recipientStatus(
-                    outgoingMessage: outgoingMessage,
-                    paymentModel: model
-                )
-            }()
-
-            if let footerState = itemViewState.footerState {
-                self.standaloneFooter = CVComponentFooter(
-                    itemModel: itemModel,
-                    footerState: footerState,
-                    isOverlayingMedia: false,
-                    isOutsideBubble: false
-                )
-            }
-
-            self.paymentAttachment = CVComponentPaymentAttachment(
-                itemModel: itemModel,
-                paymentAttachment: paymentAttachment,
-                paymentModel: paymentAttachment.model,
-                contactName: paymentAttachment.otherUserShortName,
-                paymentAmount: paymentAmount,
-                messageStatus: messageStatus
-            )
-
-        }
+//        }
 
         if let archivedPaymentAttachment = componentState.archivedPaymentAttachment {
             let messageStatus: MessageReceiptStatus? = {

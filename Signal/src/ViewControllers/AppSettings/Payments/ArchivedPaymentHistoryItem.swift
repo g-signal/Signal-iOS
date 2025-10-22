@@ -60,9 +60,10 @@ public struct ArchivedPaymentHistoryItem: PaymentsHistoryItem {
     }
 
     public var paymentAmount: TSPaymentAmount? {
-        return SUIEnvironment.shared.paymentsImplRef.unmaskReceiptAmount(
-            data: archivedPayment.receipt
-        )?.tsPaymentAmount
+        // return SUIEnvironment.shared.paymentsImplRef.unmaskReceiptAmount(
+        //     data: archivedPayment.receipt
+        // )?.tsPaymentAmount // Commented out due to MobileCoin removal
+        return nil
     }
 
     public var formattedFeeAmount: String? {
@@ -110,7 +111,8 @@ public struct ArchivedPaymentHistoryItem: PaymentsHistoryItem {
             withSpace: false,
             isIncoming: isIncoming
         )
-        return PaymentsFormat.attributedFormat(mobileCoinString: formattedAmount, withSpace: false)
+        // return PaymentsFormat.attributedFormat(mobileCoinString: formattedAmount, withSpace: false) // Commented out due to MobileCoin removal
+        return NSAttributedString(string: formattedAmount)
     }
 
     public var formattedPaymentAmount: String? {
@@ -123,7 +125,8 @@ public struct ArchivedPaymentHistoryItem: PaymentsHistoryItem {
     }
 
     public func statusDescription(isLongForm: Bool) -> String? {
-        return archivedPayment.statusDescription(isOutgoing: isOutgoing)
+        // return archivedPayment.statusDescription(isOutgoing: isOutgoing) // Commented out due to MobileCoin removal
+        return "Archived Payment"
     }
 
     /// Read status is only tracked on TSPaymentModels, so there's not really anything to do here.

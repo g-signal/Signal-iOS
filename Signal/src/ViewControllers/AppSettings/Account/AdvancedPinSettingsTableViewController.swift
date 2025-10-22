@@ -62,12 +62,12 @@ class AdvancedPinSettingsTableViewController: OWSTableViewController2 {
         if hasMasterKey && !hasBackedUpMasterKey {
             enablePin()
         } else {
-            if SSKEnvironment.shared.paymentsHelperRef.arePaymentsEnabled,
-               !PaymentsSettingsViewController.hasReviewedPassphraseWithSneakyTransaction() {
-                showReviewPassphraseAlertUI()
-            } else {
+//            if SSKEnvironment.shared.paymentsHelperRef.arePaymentsEnabled,
+//               !PaymentsSettingsViewController.hasReviewedPassphraseWithSneakyTransaction() {
+//                showReviewPassphraseAlertUI()
+//            } else {
                 disablePin()
-            }
+//            }
         }
     }
 
@@ -115,29 +115,29 @@ class AdvancedPinSettingsTableViewController: OWSTableViewController2 {
     }
 
     private func showRecordPaymentsPassphraseUI() {
-        guard let passphrase = SUIEnvironment.shared.paymentsSwiftRef.passphrase else {
-            owsFailDebug("Missing passphrase.")
-            return
-        }
-        let view = PaymentsViewPassphraseSplashViewController(passphrase: passphrase,
-                                                              style: .reviewed,
-                                                              viewPassphraseDelegate: self)
-        let navigationVC = OWSNavigationController(rootViewController: view)
-        present(navigationVC, animated: true)
+//        guard let passphrase = SUIEnvironment.shared.paymentsSwiftRef.passphrase else {
+//            owsFailDebug("Missing passphrase.")
+//            return
+//        }
+//        let view = PaymentsViewPassphraseSplashViewController(passphrase: passphrase,
+//                                                              style: .reviewed,
+//                                                              viewPassphraseDelegate: self)
+//        let navigationVC = OWSNavigationController(rootViewController: view)
+//        present(navigationVC, animated: true)
     }
 }
 
 // MARK: -
 
-extension AdvancedPinSettingsTableViewController: PaymentsViewPassphraseDelegate {
-    public func viewPassphraseDidComplete() {
-        PaymentsSettingsViewController.setHasReviewedPassphraseWithSneakyTransaction()
-
-        presentToast(text: OWSLocalizedString("SETTINGS_PAYMENTS_VIEW_PASSPHRASE_COMPLETE_TOAST",
-                                             comment: "Message indicating that 'payments passphrase review' is complete."))
-    }
-
-    public func viewPassphraseDidCancel(viewController: PaymentsViewPassphraseSplashViewController) {
-        viewController.dismiss(animated: true)
-    }
-}
+//extension AdvancedPinSettingsTableViewController: PaymentsViewPassphraseDelegate {
+//    public func viewPassphraseDidComplete() {
+//        PaymentsSettingsViewController.setHasReviewedPassphraseWithSneakyTransaction()
+//
+//        presentToast(text: OWSLocalizedString("SETTINGS_PAYMENTS_VIEW_PASSPHRASE_COMPLETE_TOAST",
+//                                             comment: "Message indicating that 'payments passphrase review' is complete."))
+//    }
+//
+//    public func viewPassphraseDidCancel(viewController: PaymentsViewPassphraseSplashViewController) {
+//        viewController.dismiss(animated: true)
+//    }
+//}
