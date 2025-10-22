@@ -11,16 +11,7 @@
 		<string>LazyDatabaseMigratorTask</string>
 	</array>
 	<key>BuildDetails</key>
-	<dict>
-		<key>DateTime</key>
-		<string>Tue Oct 21 06:03:41 UTC 2025</string>
-		<key>SignalCommit</key>
-		<string>26975f405ee737dff57fc3bac743036cf0e86069 fix some issue</string>
-		<key>Timestamp</key>
-		<integer>1761026621</integer>
-		<key>XCodeVersion</key>
-		<string>1600.1640</string>
-	</dict>
+	<dict/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -57,7 +48,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LOGS_EMAIL</key>
@@ -122,7 +113,6 @@
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>audio</string>
 		<string>fetch</string>
 		<string>processing</string>
 		<string>remote-notification</string>

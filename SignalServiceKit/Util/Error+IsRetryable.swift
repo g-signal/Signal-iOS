@@ -112,3 +112,9 @@ public enum SSKUnretryableError: Error, IsRetryableProvider {
 
     public var isRetryableProvider: Bool { false }
 }
+
+// MARK: -
+
+extension CancellationError: IsRetryableProvider {
+    public var isRetryableProvider: Bool { false }
+}

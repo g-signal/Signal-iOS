@@ -130,7 +130,21 @@ public class ChatConnectionManagerImpl: ChatConnectionManager {
     public func makeRequest(_ request: TSRequest) async throws -> HTTPResponse {
         let connectionType = try request.auth.connectionType
 
-        return try await connection(ofType: connectionType).makeRequest(request)
+        // Log the request (WebSocket path)
+        NetworkRequestLogger.shared.logRequest(request)
+
+        do {
+            let response = try await connection(ofType: connectionType).makeRequest(request)
+
+            // Log the successful response
+            NetworkRequestLogger.shared.logResponse(response, for: request)
+
+            return response
+        } catch {
+            // Log the error
+            NetworkRequestLogger.shared.logError(error, for: request)
+            throw error
+        }
     }
 
     public var identifiedConnectionState: OWSChatConnectionState {

@@ -153,6 +153,11 @@ public class OWSURLSession: OWSURLSessionProtocol {
         requestData: Data,
         progress: OWSProgressSource?
     ) async throws -> any HTTPResponse {
+        // Log the request with data
+        var logRequest = request
+        logRequest.httpBody = requestData
+        NetworkRequestLogger.shared.logRequest(logRequest)
+
         return try await performUpload(
             request: request,
             ignoreAppExpiry: false,
@@ -182,18 +187,33 @@ public class OWSURLSession: OWSURLSessionProtocol {
 
         let request = prepareRequest(request: request)
         let requestConfig = self.requestConfig(requestUrl: request.url!)
+
+        // Log the request
+        NetworkRequestLogger.shared.logRequest(request)
+
         let task = session.dataTask(with: request)
 
-        let (urlResponse, responseData) = try await runTask(task, taskState: {
-            return DataTaskState(progressSource: nil, completion: $0)
-        })
+        do {
+            let (urlResponse, responseData) = try await runTask(task, taskState: {
+                return DataTaskState(progressSource: nil, completion: $0)
+            })
 
-        return try await handleDataResult(
-            urlResponse: urlResponse,
-            responseData: responseData,
-            originalRequest: task.originalRequest,
-            requestConfig: requestConfig
-        )
+            let result = try await handleDataResult(
+                urlResponse: urlResponse,
+                responseData: responseData,
+                originalRequest: task.originalRequest,
+                requestConfig: requestConfig
+            )
+
+            // Log the successful response
+            NetworkRequestLogger.shared.logResponse(urlResponse, data: responseData, for: request)
+
+            return result
+        } catch {
+            // Log the error
+            NetworkRequestLogger.shared.logError(error, for: request)
+            throw error
+        }
     }
 
     public func performDownload(
@@ -204,9 +224,28 @@ public class OWSURLSession: OWSURLSessionProtocol {
         guard let requestUrl = request.url else {
             throw OWSAssertionError("Request missing url.")
         }
-        return try await performDownload(requestUrl: requestUrl, progress: progress) {
-            // Don't use a completion block or the delegate will be ignored for download tasks.
-            return self.session.downloadTask(with: request)
+
+        // Log the request
+        NetworkRequestLogger.shared.logRequest(request)
+
+        do {
+            let result = try await performDownload(requestUrl: requestUrl, progress: progress) {
+                // Don't use a completion block or the delegate will be ignored for download tasks.
+                return self.session.downloadTask(with: request)
+            }
+
+            // Log successful download (note: we don't log file contents for downloads)
+            var logMessage = "⬇️ Download Complete:\n"
+            logMessage += "   URL: \(requestUrl.absoluteString)\n"
+            logMessage += "   Status: \(result.httpUrlResponse.statusCode)\n"
+            logMessage += "   Downloaded to: \(result.downloadUrl.path)\n"
+            Logger.info(logMessage)
+
+            return result
+        } catch {
+            // Log the error
+            NetworkRequestLogger.shared.logError(error, for: request)
+            throw error
         }
     }
 
@@ -215,9 +254,33 @@ public class OWSURLSession: OWSURLSessionProtocol {
         resumeData: Data,
         progress: OWSProgressSource?
     ) async throws -> OWSUrlDownloadResponse {
-        return try await performDownload(requestUrl: requestUrl, progress: progress) {
-            // Don't use a completion block or the delegate will be ignored for download tasks.
-            return self.session.downloadTask(withResumeData: resumeData)
+        // Log the resume download request
+        var logMessage = "⬇️ Resume Download:\n"
+        logMessage += "   URL: \(requestUrl.absoluteString)\n"
+        logMessage += "   Resume Data Size: \(resumeData.count) bytes\n"
+        Logger.info(logMessage)
+
+        do {
+            let result = try await performDownload(requestUrl: requestUrl, progress: progress) {
+                // Don't use a completion block or the delegate will be ignored for download tasks.
+                return self.session.downloadTask(withResumeData: resumeData)
+            }
+
+            // Log successful download completion
+            var successMessage = "⬇️ Resume Download Complete:\n"
+            successMessage += "   URL: \(requestUrl.absoluteString)\n"
+            successMessage += "   Status: \(result.httpUrlResponse.statusCode)\n"
+            successMessage += "   Downloaded to: \(result.downloadUrl.path)\n"
+            Logger.info(successMessage)
+
+            return result
+        } catch {
+            // Log the error
+            var errorMessage = "❌ Resume Download Error:\n"
+            errorMessage += "   URL: \(requestUrl.absoluteString)\n"
+            errorMessage += "   Error: \(error)\n"
+            Logger.error(errorMessage)
+            throw error
         }
     }
 
@@ -457,16 +520,31 @@ public class OWSURLSession: OWSURLSessionProtocol {
 
         request.timeoutInterval = rawRequest.timeoutInterval
 
+        // Log the request
+        NetworkRequestLogger.shared.logRequest(rawRequest)
+
         do {
             Logger.info("Sending… -> \(rawRequest)")
             let response = try await performUpload(request: request, requestData: requestBody, progress: nil)
             Logger.info("HTTP \(response.responseStatusCode) <- \(rawRequest)")
+
+            // Log the successful response
+            NetworkRequestLogger.shared.logResponse(response, for: rawRequest)
+
             return response
         } catch where error.httpStatusCode != nil {
             Logger.warn("HTTP \(error.httpStatusCode!) <- \(rawRequest)")
+
+            // Log the error
+            NetworkRequestLogger.shared.logError(error, for: rawRequest)
+
             throw error
         } catch {
             Logger.warn("Failure. <- \(rawRequest): \(error)")
+
+            // Log the error
+            NetworkRequestLogger.shared.logError(error, for: rawRequest)
+
             throw error
         }
     }
@@ -490,15 +568,26 @@ public class OWSURLSession: OWSURLSessionProtocol {
             (urlResponse, responseData) = try await runTask(task, taskState: {
                 return DataTaskState(progressSource: progress, completion: $0)
             })
+
+            let result = try await handleDataResult(
+                urlResponse: urlResponse,
+                responseData: responseData,
+                originalRequest: task.originalRequest,
+                requestConfig: requestConfig
+            )
+
+            // Log the successful response
+            NetworkRequestLogger.shared.logResponse(urlResponse, data: responseData, for: request)
+
+            return result
         } catch {
-            throw handleError(error, originalRequest: task.originalRequest, requestConfig: requestConfig)
+            let handledError = handleError(error, originalRequest: task.originalRequest, requestConfig: requestConfig)
+
+            // Log the error
+            NetworkRequestLogger.shared.logError(handledError, for: request)
+
+            throw handledError
         }
-        return try await handleDataResult(
-            urlResponse: urlResponse,
-            responseData: responseData,
-            originalRequest: task.originalRequest,
-            requestConfig: requestConfig
-        )
     }
 
     private func performDownload(

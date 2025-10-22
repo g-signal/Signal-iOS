@@ -43,12 +43,12 @@ public class FingerprintViewController: OWSViewController, OWSNavigationChildCon
                 comment: "Alert shown when the user needs to exchange messages to see the safety number."
             ))
 
-            actionSheet.addAction(.init(title: CommonStrings.learnMore, style: .default, handler: { _ in
-                guard let vc = CurrentAppContext().frontmostViewController() else {
-                    return
-                }
-                Self.showLearnMoreUrl(from: vc)
-            }))
+//            actionSheet.addAction(.init(title: CommonStrings.learnMore, style: .default, handler: { _ in
+//                guard let vc = CurrentAppContext().frontmostViewController() else {
+//                    return
+//                }
+//                Self.showLearnMoreUrl(from: vc)
+//            }))
             actionSheet.addAction(OWSActionSheets.cancelAction)
 
             viewController.presentActionSheet(actionSheet)
