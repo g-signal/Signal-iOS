@@ -36,6 +36,9 @@ class NotificationService: UNNotificationServiceExtension {
     private let contentHandler = AtomicOptional<ContentHandler>(nil, lock: .init())
     private let fetchQueue = SerialTaskQueue()
 
+    
+    var bestAttemptContent: UNMutableNotificationContent?
+    
     // MARK: -
 
     private static let unfairLock = UnfairLock()
@@ -96,6 +99,9 @@ class NotificationService: UNNotificationServiceExtension {
 
     @MainActor
     private func _didReceive(_ request: UNNotificationRequest, logger: NSELogger) async -> UNNotificationContent {
+        bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
+        bestAttemptContent?.badge = 1
+        
         globalEnvironment.setUp(logger: logger)
         let finalContinuation: AppSetup.FinalContinuation
         do {
@@ -105,19 +111,23 @@ class NotificationService: UNNotificationServiceExtension {
             if !hasShownFirstUnlockError {
                 hasShownFirstUnlockError = true
                 logger.error("DB Keys not accessible; showing error.", flushImmediately: true)
-                let content = UNMutableNotificationContent()
+//                let content = UNMutableNotificationContent()
                 let notificationFormat = OWSLocalizedString(
                     "NOTIFICATION_BODY_PHONE_LOCKED_FORMAT",
                     comment: "Lock screen notification text presented after user powers on their device without unlocking. Embeds {{device model}} (either 'iPad' or 'iPhone')"
                 )
-                content.body = String(format: notificationFormat, UIDevice.current.localizedModel)
-                return content
+//                content.body = String(format: notificationFormat, UIDevice.current.localizedModel)
+                if let bestAttemptContent = bestAttemptContent {
+                    bestAttemptContent.body = String(format: notificationFormat, UIDevice.current.localizedModel)
+                }
+                return bestAttemptContent!
             } else {
                 // Only show a single error if we receive multiple pushes
                 // before first device unlock.
                 logger.error("DB Keys not accessible; completing silently.", flushImmediately: true)
-                let emptyContent = UNMutableNotificationContent()
-                return emptyContent
+//                let emptyContent = UNMutableNotificationContent()
+//                return emptyContent
+                return bestAttemptContent!
             }
         } catch {
             owsFail("Couldn't load database: \(error.grdbErrorForLogging)")
@@ -132,7 +142,8 @@ class NotificationService: UNNotificationServiceExtension {
         ) {
         case .corruptRegistrationState:
             Logger.warn("Ignoring request to process notifications when the user isn't registered.")
-            return UNNotificationContent()
+//            return UNNotificationContent()
+            return bestAttemptContent!
         case nil:
             globalEnvironment.setAppIsReady()
         }
@@ -152,7 +163,8 @@ class NotificationService: UNNotificationServiceExtension {
         if !useWebSocket {
             if await globalEnvironment.askMainAppToHandleReceipt(logger: logger) {
                 logger.info("Received notification handled by main application, memoryUsage: \(LocalDevice.memoryUsageString).")
-                return UNMutableNotificationContent()
+//                return UNMutableNotificationContent()
+                return bestAttemptContent!
             }
         }
 
@@ -190,7 +202,8 @@ class NotificationService: UNNotificationServiceExtension {
     private func fetchAndProcessMessages(useWebSocket: Bool, logger: NSELogger) async -> UNNotificationContent {
         if DependenciesBridge.shared.appExpiry.isExpired(now: Date()) {
             Logger.warn("Not processing notifications for expired application.")
-            return UNMutableNotificationContent()
+//            return UNMutableNotificationContent()
+            return bestAttemptContent!
         }
 
         do {
@@ -227,7 +240,8 @@ class NotificationService: UNNotificationServiceExtension {
             try fetchResult.get()
         } catch is CancellationError {
             Logger.warn("Message fetching & processing canceled.")
-            return UNMutableNotificationContent()
+//            return UNMutableNotificationContent()
+            return bestAttemptContent!
         } catch {
             Logger.warn("\(error)")
         }
@@ -239,8 +253,10 @@ class NotificationService: UNNotificationServiceExtension {
             return DependenciesBridge.shared.badgeCountFetcher
                 .fetchBadgeCount(tx: tx)
         }
-        let content = UNMutableNotificationContent()
-        content.badge = NSNumber(value: badgeCount.unreadTotalCount)
-        return content
+//        let content = UNMutableNotificationContent()
+//        content.badge = NSNumber(value: badgeCount.unreadTotalCount)
+//        return content
+        bestAttemptContent?.badge = NSNumber(value: badgeCount.unreadTotalCount)
+        return bestAttemptContent!
     }
 }

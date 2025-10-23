@@ -13,11 +13,11 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Thu Oct 23 01:59:52 UTC 2025</string>
+		<string>Thu Oct 23 13:04:47 UTC 2025</string>
 		<key>SignalCommit</key>
-		<string>8119b6efc02304cd4a9fe52fff5dae93fb2c413e v1.0.0 1</string>
+		<string>4141574e4ec34364528c4784474d9caefd131ce9 v1.0.0 2</string>
 		<key>Timestamp</key>
-		<integer>1761184792</integer>
+		<integer>1761224687</integer>
 		<key>XCodeVersion</key>
 		<string>1600.1640</string>
 	</dict>
@@ -57,7 +57,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>3</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LOGS_EMAIL</key>
