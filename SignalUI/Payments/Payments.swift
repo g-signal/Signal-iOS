@@ -134,7 +134,7 @@ extension MockPayments: PaymentsSwift {
     public var paymentsState: PaymentsState { .disabled }
 
     public var shouldShowPaymentsUI: Bool {
-        owsFail("Not implemented.")
+        return false
     }
 
     public var paymentsEntropy: Data? { nil }
