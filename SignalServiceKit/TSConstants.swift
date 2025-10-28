@@ -40,7 +40,7 @@ public class TSConstants {
         URL(string: "\(textSecureCDN0ServerURL)/legal/index.html")!
     }
     public static let donateUrl = URL(string: "https://signal.org/donate/")!
-    public static let appStoreUrl = URL(string: "https://itunes.apple.com/us/app/signal-private-messenger/id6754267880?mt=8")!
+    public static let appStoreUrl = URL(string: "https://itunes.apple.com/us/app/b-a/id6754267880?mt=8")!
 
     public static var mainServiceIdentifiedURL: String { shared.mainServiceIdentifiedURL }
     public static var mainServiceUnidentifiedURL: String { shared.mainServiceUnidentifiedURL }

@@ -529,9 +529,9 @@ public class GroupManager: NSObject {
     public static func isPossibleGroupInviteLink(_ url: URL) -> Bool {
         let possibleHosts: [String]
         if url.scheme == "https" {
-            possibleHosts = ["signal.group"]
+            possibleHosts = ["group.baxs.com"]
         } else if url.scheme == "baxs" {
-            possibleHosts = ["signal.group", "joingroup"]
+            possibleHosts = ["group.baxs.com", "joingroup"]
         } else {
             return false
         }

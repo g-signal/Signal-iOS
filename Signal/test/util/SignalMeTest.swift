@@ -28,7 +28,7 @@ class SignalMeTest: XCTestCase {
             // Invalid host
             "https://example.me/#p/+14085550123",
             "https://signal.org/#p/+14085550123",
-            "https://signal.group/#p/+14085550123",
+            "https://group.baxs.com/#p/+14085550123",
             "https://signal.art/#p/+14085550123",
             "https://signal.me:80/#p/+14085550123",
             "https://signal.me:443/#p/+14085550123",

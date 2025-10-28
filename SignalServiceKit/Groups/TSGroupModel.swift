@@ -121,7 +121,7 @@ public class TSGroupModelV2: TSGroupModel {
 
         let protoBase64Url = protoData.asBase64Url
 
-        let urlString = "https://signal.group/#\(protoBase64Url)"
+        let urlString = "https://group.baxs.com/#\(protoBase64Url)"
         guard let url = URL(string: urlString) else {
             throw OWSAssertionError("Could not construct url.")
         }

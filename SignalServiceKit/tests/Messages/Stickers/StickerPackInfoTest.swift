@@ -84,7 +84,7 @@ class StickerPackInfoTest: XCTestCase {
             "https://user:pass@signal.art/addstickers#pack_id=abc&pack_key=def",
             // Invalid host
             "https://example.org/addstickers#pack_id=abc&pack_key=def",
-            "https://signal.group/addstickers#pack_id=abc&pack_key=def",
+            "https://group.baxs.com/addstickers#pack_id=abc&pack_key=def",
             "https://signal.me/addstickers#pack_id=abc&pack_key=def",
             "https://signal.art:80/addstickers#pack_id=abc&pack_key=def",
             "https://signal.art:443/addstickers#pack_id=abc&pack_key=def",

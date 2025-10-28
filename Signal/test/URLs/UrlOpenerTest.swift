@@ -17,7 +17,7 @@ class UrlOpenerTest: XCTestCase {
             "https://signal.me/#p/+16505550100",
             "https://signal.art/addstickers/#pack_id=00000000000000000000000000000000&pack_key=0000000000000000000000000000000000000000000000000000000000000000",
             "baxs://addstickers/?pack_id=00000000000000000000000000000000&pack_key=0000000000000000000000000000000000000000000000000000000000000000",
-            "https://signal.group",
+            "https://group.baxs.com",
             "https://signal.tube/#example.com",
             "baxs://linkdevice/?uuid=00000000-0000-4000-8000-000000000000&pub_key=BQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         ]

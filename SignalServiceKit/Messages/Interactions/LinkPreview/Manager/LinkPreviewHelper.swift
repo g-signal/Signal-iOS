@@ -12,7 +12,7 @@ public enum LinkPreviewHelper {
             return Self.stickerPackShareDomain(forUrl: url)
         }
         if GroupManager.isPossibleGroupInviteLink(url) {
-            return "signal.org"
+            return "baxs.com"
         }
         return url.host
     }
