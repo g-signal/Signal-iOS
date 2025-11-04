@@ -104,7 +104,7 @@ class QRCodeView: UIView {
 
     func setQRCode(
         url: URL,
-        stylingMode: QRCodeGenerator.StylingMode = .brandedWithLogo
+        stylingMode: QRCodeGenerator.StylingMode = .brandedWithoutLogo
     ) {
         let qrCodeImage = QRCodeGenerator().generateQRCode(
             url: url,

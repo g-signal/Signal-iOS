@@ -15,7 +15,7 @@ class UrlOpenerTest: XCTestCase {
         // can all return a result before we've created any global state.
         let urlsToTest: [String] = [
             "https://signal.me/#p/+16505550100",
-            "https://signal.art/addstickers/#pack_id=00000000000000000000000000000000&pack_key=0000000000000000000000000000000000000000000000000000000000000000",
+            "https://sticker.baxs.com/addstickers/#pack_id=00000000000000000000000000000000&pack_key=0000000000000000000000000000000000000000000000000000000000000000",
             "baxs://addstickers/?pack_id=00000000000000000000000000000000&pack_key=0000000000000000000000000000000000000000000000000000000000000000",
             "https://group.baxs.com",
             "https://signal.tube/#example.com",

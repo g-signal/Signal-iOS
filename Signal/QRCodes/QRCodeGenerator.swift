@@ -19,7 +19,7 @@ struct QRCodeGenerator {
     // MARK: -
 
     /// Generates a styled, Signal-branded QR code image encoding the given URL.
-    func generateQRCode(url: URL, stylingMode: StylingMode = .brandedWithLogo) -> UIImage? {
+    func generateQRCode(url: URL, stylingMode: StylingMode = .brandedWithoutLogo) -> UIImage? {
         let urlData = Data(url.absoluteString.utf8)
 
         guard let unstyledQRCode = generateUnstyledQRCode(data: urlData) else {

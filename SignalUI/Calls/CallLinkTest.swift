@@ -15,7 +15,7 @@ final class CallLinkTest: XCTestCase {
     func testUrlString() {
         XCTAssertNil(parse("https://signal.link/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stx"))
         XCTAssertNil(parse("http://signal.link/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz"))
-        XCTAssertNil(parse("https://signal.art/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz"))
+        XCTAssertNil(parse("https://sticker.baxs.com/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz"))
         XCTAssertNil(parse("https://signal.link/c/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz"))
     }
 

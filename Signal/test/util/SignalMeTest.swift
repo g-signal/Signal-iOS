@@ -29,7 +29,7 @@ class SignalMeTest: XCTestCase {
             "https://example.me/#p/+14085550123",
             "https://signal.org/#p/+14085550123",
             "https://group.baxs.com/#p/+14085550123",
-            "https://signal.art/#p/+14085550123",
+            "https://sticker.baxs.com/#p/+14085550123",
             "https://signal.me:80/#p/+14085550123",
             "https://signal.me:443/#p/+14085550123",
             // Wrong path or hash

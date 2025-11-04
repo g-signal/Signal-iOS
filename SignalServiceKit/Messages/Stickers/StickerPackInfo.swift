@@ -53,15 +53,15 @@ public class StickerPackInfo: MTLModel {
     public func shareUrl() -> String {
         let packIdHex = packId.hexadecimalString
         let packKeyHex = packKey.hexadecimalString
-        return "https://signal.art/addstickers/#pack_id=\(packIdHex)&pack_key=\(packKeyHex)"
+        return "https://sticker.baxs.com/addstickers/#pack_id=\(packIdHex)&pack_key=\(packKeyHex)"
     }
 
     @objc(isStickerPackShareUrl:)
     public class func isStickerPackShare(_ url: URL) -> Bool {
-        url.scheme == "https" &&
+        (url.scheme == "https" || url.scheme == "baxs") &&
         url.user == nil &&
         url.password == nil &&
-        url.host == "signal.art" &&
+        url.host == "sticker.baxs.com" &&
         url.port == nil &&
         url.path == "/addstickers"
     }
