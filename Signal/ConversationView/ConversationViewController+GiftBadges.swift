@@ -143,37 +143,37 @@ extension ConversationViewController: BadgeIssueSheetDelegate {
         switch action {
         case .dismiss:
             break
-        case .openDonationView:
-            let appSettings = AppSettingsViewController.inModalNavigationController(appReadiness: appReadiness)
-            let donateViewController = DonateViewController(preferredDonateMode: .oneTime) { [weak self] finishResult in
-                switch finishResult {
-                case let .completedDonation(donateSheet, receiptCredentialSuccessMode):
-                    donateSheet.dismiss(animated: true) { [weak self] in
-                        guard
-                            let self,
-                            let badgeThanksSheetPresenter = BadgeThanksSheetPresenter.fromGlobalsWithSneakyTransaction(
-                                successMode: receiptCredentialSuccessMode
-                            )
-                        else { return }
-
-                        Task {
-                            await badgeThanksSheetPresenter.presentAndRecordBadgeThanks(
-                                fromViewController: self
-                            )
-                        }
-                    }
-                case let .monthlySubscriptionCancelled(donateSheet, toastText):
-                    donateSheet.dismiss(animated: true) { [weak self] in
-                        guard let self = self else { return }
-                        self.view.presentToast(text: toastText, fromViewController: self)
-                    }
-                }
-            }
-            appSettings.viewControllers += [
-                DonationSettingsViewController(),
-                donateViewController
-            ]
-            self.presentFormSheet(appSettings, animated: true, completion: nil)
+        case .openDonationView: break
+//            let appSettings = AppSettingsViewController.inModalNavigationController(appReadiness: appReadiness)
+//            let donateViewController = DonateViewController(preferredDonateMode: .oneTime) { [weak self] finishResult in
+//                switch finishResult {
+//                case let .completedDonation(donateSheet, receiptCredentialSuccessMode):
+//                    donateSheet.dismiss(animated: true) { [weak self] in
+//                        guard
+//                            let self,
+//                            let badgeThanksSheetPresenter = BadgeThanksSheetPresenter.fromGlobalsWithSneakyTransaction(
+//                                successMode: receiptCredentialSuccessMode
+//                            )
+//                        else { return }
+//
+//                        Task {
+//                            await badgeThanksSheetPresenter.presentAndRecordBadgeThanks(
+//                                fromViewController: self
+//                            )
+//                        }
+//                    }
+//                case let .monthlySubscriptionCancelled(donateSheet, toastText):
+//                    donateSheet.dismiss(animated: true) { [weak self] in
+//                        guard let self = self else { return }
+//                        self.view.presentToast(text: toastText, fromViewController: self)
+//                    }
+//                }
+//            }
+//            appSettings.viewControllers += [
+//                DonationSettingsViewController(),
+//                donateViewController
+//            ]
+//            self.presentFormSheet(appSettings, animated: true, completion: nil)
         }
     }
 }

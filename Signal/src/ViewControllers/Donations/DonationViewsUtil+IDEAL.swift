@@ -34,31 +34,31 @@ extension DonationViewsUtil {
             await rootViewController.awaitableDismiss(animated: false)
         }
 
-        guard let frontVc = CurrentAppContext().frontmostViewController() else {
-            return
-        }
+//        guard let frontVc = CurrentAppContext().frontmostViewController() else {
+//            return
+//        }
 
         // Build up the Donation UI
-        let appSettings = AppSettingsViewController.inModalNavigationController(appReadiness: appReadiness)
-        let donationsVC = DonationSettingsViewController()
-        donationsVC.showExpirationSheet = false
-        appSettings.viewControllers += [ donationsVC ]
-
-        await frontVc.awaitablePresentFormSheet(appSettings, animated: false)
+//        let appSettings = AppSettingsViewController.inModalNavigationController(appReadiness: appReadiness)
+//        let donationsVC = DonationSettingsViewController()
+//        donationsVC.showExpirationSheet = false
+//        appSettings.viewControllers += [ donationsVC ]
+//
+//        await frontVc.awaitablePresentFormSheet(appSettings, animated: false)
 
         if success, let localIntent, intent == localIntent {
-            try await Self.completeDonation(
-                type: donationType,
-                from: donationsVC,
-                databaseStorage: databaseStorage
-            )
+//            try await Self.completeDonation(
+//                type: donationType,
+//                from: donationsVC,
+//                databaseStorage: databaseStorage
+//            )
         } else {
-            Self.handleIDEALDonationIssue(
-                success: success,
-                donationType: donationType,
-                from: donationsVC,
-                databaseStorage: databaseStorage
-            )
+//            Self.handleIDEALDonationIssue(
+//                success: success,
+//                donationType: donationType,
+//                from: donationsVC,
+//                databaseStorage: databaseStorage
+//            )
         }
     }
 
@@ -200,11 +200,11 @@ extension DonationViewsUtil {
                 comment: "Title for a button asking the user to try their donation again, because something went wrong."
             ),
             style: .default,
-            handler: { _ in
-                clearPendingDonation()
-                donationsVC.showDonateViewController(preferredDonateMode: donationType.asDonationMode)
-            })
-        )
+//            handler: { _ in
+//                clearPendingDonation()
+//                donationsVC.showDonateViewController(preferredDonateMode: donationType.asDonationMode)
+//            })
+        ))
 
         if let frontVc = CurrentAppContext().frontmostViewController() {
             frontVc.presentActionSheet(actionSheet, animated: true)

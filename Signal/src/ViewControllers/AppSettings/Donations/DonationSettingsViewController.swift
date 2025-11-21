@@ -297,24 +297,24 @@ class DonationSettingsViewController: OWSTableViewController2 {
 
             let heroStack = DonationHeroView(avatarView: self.avatarView)
             heroStack.delegate = self
-            let buttonTitle = OWSLocalizedString(
-                "DONATION_SCREEN_DONATE_BUTTON",
-                comment: "On the donation settings screen, tapping this button will take the user to a screen where they can donate."
-            )
-            let button = OWSButton(title: buttonTitle) { [weak self] in
-                if Self.canDonateInAnyWay {
-                    self?.showDonateViewController(preferredDonateMode: .oneTime)
-                } else {
-                    DonationViewsUtil.openDonateWebsite()
-                }
-            }
-            button.dimsWhenHighlighted = true
-            button.layer.cornerRadius = 8
-            button.backgroundColor = .ows_accentBlue
-            button.titleLabel?.font = UIFont.dynamicTypeBody.semibold()
-            heroStack.addArrangedSubview(button)
-            button.autoSetDimension(.height, toSize: 48)
-            button.autoPinWidthToSuperviewMargins()
+//            let buttonTitle = OWSLocalizedString(
+//                "DONATION_SCREEN_DONATE_BUTTON",
+//                comment: "On the donation settings screen, tapping this button will take the user to a screen where they can donate."
+//            )
+//            let button = OWSButton(title: buttonTitle) { [weak self] in
+//                if Self.canDonateInAnyWay {
+//                    self?.showDonateViewController(preferredDonateMode: .oneTime)
+//                } else {
+//                    DonationViewsUtil.openDonateWebsite()
+//                }
+//            }
+//            button.dimsWhenHighlighted = true
+//            button.layer.cornerRadius = 8
+//            button.backgroundColor = .ows_accentBlue
+//            button.titleLabel?.font = UIFont.dynamicTypeBody.semibold()
+//            heroStack.addArrangedSubview(button)
+//            button.autoSetDimension(.height, toSize: 48)
+//            button.autoPinWidthToSuperviewMargins()
 
             cell.contentView.addSubview(heroStack)
             heroStack.autoPinEdgesToSuperviewMargins(with: UIEdgeInsets(hMargin: 0, vMargin: 6))
@@ -364,28 +364,28 @@ class DonationSettingsViewController: OWSTableViewController2 {
         )
         let section = OWSTableSection(title: title)
 
-        section.add(.disclosureItem(
-            icon: .donateGift,
-            withText: OWSLocalizedString(
-                "DONATION_VIEW_DONATE_ON_BEHALF_OF_A_FRIEND",
-                comment: "Title for the \"donate for a friend\" button on the donation view."
-            ),
-            actionBlock: { [weak self] in
-                guard let self = self else { return }
-
-                // It's possible (but unlikely) to lose the ability to send gifts while this button is
-                // visible. For example, Apple Pay could be disabled in parental controls after this
-                // screen is opened.
-                guard Self.canSendGiftBadges else {
-                    // We might want to show a better UI here, but making the button a no-op is
-                    // preferable to launching the view controller.
-                    return
-                }
-
-                let vc = BadgeGiftingChooseBadgeViewController()
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
-        ))
+//        section.add(.disclosureItem(
+//            icon: .donateGift,
+//            withText: OWSLocalizedString(
+//                "DONATION_VIEW_DONATE_ON_BEHALF_OF_A_FRIEND",
+//                comment: "Title for the \"donate for a friend\" button on the donation view."
+//            ),
+//            actionBlock: { [weak self] in
+//                guard let self = self else { return }
+//
+//                // It's possible (but unlikely) to lose the ability to send gifts while this button is
+//                // visible. For example, Apple Pay could be disabled in parental controls after this
+//                // screen is opened.
+//                guard Self.canSendGiftBadges else {
+//                    // We might want to show a better UI here, but making the button a no-op is
+//                    // preferable to launching the view controller.
+//                    return
+//                }
+//
+//                let vc = BadgeGiftingChooseBadgeViewController()
+//                self.navigationController?.pushViewController(vc, animated: true)
+//            }
+//        ))
 
         return section
     }
@@ -403,9 +403,9 @@ class DonationSettingsViewController: OWSTableViewController2 {
         // It should be unusual to hit this case—having a subscription but no receipts—
         // but it is possible. For example, it can happen if someone started a subscription
         // before a receipt was saved.
-        if hasAnyDonationReceipts {
-            section.add(donationReceiptsItem(profileBadgeLookup: profileBadgeLookup))
-        }
+//        if hasAnyDonationReceipts {
+//            section.add(donationReceiptsItem(profileBadgeLookup: profileBadgeLookup))
+//        }
 
         let shouldShowSubscriptionFaqLink: Bool = {
             if hasAnyDonationReceipts { return true }
@@ -435,16 +435,16 @@ class DonationSettingsViewController: OWSTableViewController2 {
         return section
     }
 
-    private func donationReceiptsItem(profileBadgeLookup: ProfileBadgeLookup) -> OWSTableItem {
-        .disclosureItem(
-            icon: .donateReceipts,
-            withText: OWSLocalizedString("DONATION_RECEIPTS", comment: "Title of view where you can see all of your donation receipts, or button to take you there"),
-            actionBlock: { [weak self] in
-                let vc = DonationReceiptsViewController(profileBadgeLookup: profileBadgeLookup)
-                self?.navigationController?.pushViewController(vc, animated: true)
-            }
-        )
-    }
+//    private func donationReceiptsItem(profileBadgeLookup: ProfileBadgeLookup) -> OWSTableItem {
+//        .disclosureItem(
+//            icon: .donateReceipts,
+//            withText: OWSLocalizedString("DONATION_RECEIPTS", comment: "Title of view where you can see all of your donation receipts, or button to take you there"),
+//            actionBlock: { [weak self] in
+//                let vc = DonationReceiptsViewController(profileBadgeLookup: profileBadgeLookup)
+//                self?.navigationController?.pushViewController(vc, animated: true)
+//            }
+//        )
+//    }
 
     // MARK: - Showing subscription view controller
 

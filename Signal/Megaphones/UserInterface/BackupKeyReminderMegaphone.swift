@@ -32,19 +32,20 @@ class BackupKeyReminderMegaphone: MegaphoneView {
         )
 
         let primaryButton = MegaphoneView.Button(title: primaryButtonTitle) {
-            let backupsReminderCoordinator = BackupsReminderCoordinator(
-                fromViewController: fromViewController,
-                dismissHandler: { success in
-                    self.dismiss()
-                    if success {
-                        self.presentToastForNewRepetitionInterval(fromViewController: fromViewController)
-                    }
-                    DependenciesBridge.shared.db.write { tx in
-                        BackupSettingsStore().setLastBackupKeyReminderDate(Date(), tx: tx)
-                    }
-                })
-
-            backupsReminderCoordinator.presentVerifyFlow()
+//            let backupsReminderCoordinator = BackupsReminderCoordinator(
+//                fromViewController: fromViewController,
+//                dismissHandler: { success in
+//                    self.dismiss()
+//                    if success {
+//                        self.presentToastForNewRepetitionInterval(fromViewController: fromViewController)
+//                    }
+//                    DependenciesBridge.shared.db.write { tx in
+//                        BackupSettingsStore().setLastBackupKeyReminderDate(Date(), tx: tx)
+//                    }
+//                })
+//
+//            backupsReminderCoordinator.presentVerifyFlow()
+            self.dismiss()
         }
 
         let secondaryButton = snoozeButton(

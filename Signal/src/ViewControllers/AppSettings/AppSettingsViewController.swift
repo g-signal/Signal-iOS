@@ -127,11 +127,11 @@ class AppSettingsViewController: OWSTableViewController2 {
     }
 
     func updateTableContents() {
-//        let isPrimaryDevice = DependenciesBridge.shared.db.read { tx in
-//            return DependenciesBridge.shared.tsAccountManager
-//                .registrationState(tx: tx)
-//                .isPrimaryDevice == true
-//        }
+        let isPrimaryDevice = DependenciesBridge.shared.db.read { tx in
+            return DependenciesBridge.shared.tsAccountManager
+                .registrationState(tx: tx)
+                .isPrimaryDevice == true
+        }
 
         let contents = OWSTableContents()
 
@@ -162,18 +162,18 @@ class AppSettingsViewController: OWSTableViewController2 {
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
         ))
-//        if isPrimaryDevice {
-//            section1.add(.disclosureItem(
-//                icon: .settingsLinkedDevices,
-//                withText: OWSLocalizedString("LINKED_DEVICES_TITLE", comment: "Menu item and navbar title for the device manager"),
-//                actionBlock: { [weak self] in
-//                    self?.navigationController?.pushViewController(
-//                        LinkedDevicesHostingController(),
-//                        animated: true
-//                    )
-//                }
-//            ))
-//        }
+        if isPrimaryDevice {
+            section1.add(.disclosureItem(
+                icon: .settingsLinkedDevices,
+                withText: OWSLocalizedString("LINKED_DEVICES_TITLE", comment: "Menu item and navbar title for the device manager"),
+                actionBlock: { [weak self] in
+                    self?.navigationController?.pushViewController(
+                        LinkedDevicesHostingController(),
+                        animated: true
+                    )
+                }
+            ))
+        }
 //        section1.add(.init(customCellBlock: { [weak self] in
 //            guard let self = self else { return UITableViewCell() }
 //            let accessoryContentView: UIView?
@@ -557,12 +557,12 @@ class AppSettingsViewController: OWSTableViewController2 {
         return usernameLinkButton
     }
 
-    private func didTapDonate() {
-        navigationController?.pushViewController(
-            DonationSettingsViewController(),
-            animated: true
-        )
-    }
+//    private func didTapDonate() {
+//        navigationController?.pushViewController(
+//            DonationSettingsViewController(),
+//            animated: true
+//        )
+//    }
 }
 
 extension AppSettingsViewController: UsernameChangeDelegate {

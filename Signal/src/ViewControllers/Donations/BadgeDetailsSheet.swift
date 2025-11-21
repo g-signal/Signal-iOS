@@ -125,72 +125,72 @@ class BadgeDetailsSheet: OWSTableSheetViewController {
             return cell
         }, actionBlock: nil))
 
-        if shouldShowDonateButton() {
-            let buttonSection = OWSTableSection(items: [.init(customCellBlock: { [weak self] in
-                let cell = OWSTableItem.newCell()
-                cell.selectionStyle = .none
-
-                guard let self = self else { return cell }
-                let button = OWSFlatButton.button(
-                    title: OWSLocalizedString(
-                        "BADGE_DETAILS_DONATE_TO_SIGNAL",
-                        comment: "When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to Signal\" button will be shown. This is the text in that button."
-                    ),
-                    font: UIFont.dynamicTypeBody.semibold(),
-                    titleColor: .white,
-                    backgroundColor: .ows_accentBlue,
-                    target: self,
-                    selector: #selector(self.didTapDonate)
-                )
-                button.autoSetHeightUsingFont()
-                button.cornerRadius = 8
-                cell.contentView.addSubview(button)
-                button.autoPinEdgesToSuperviewMargins()
-
-                return cell
-            })])
-            buttonSection.hasBackground = false
-            contents.add(buttonSection)
-        }
+//        if shouldShowDonateButton() {
+//            let buttonSection = OWSTableSection(items: [.init(customCellBlock: { [weak self] in
+//                let cell = OWSTableItem.newCell()
+//                cell.selectionStyle = .none
+//
+//                guard let self = self else { return cell }
+//                let button = OWSFlatButton.button(
+//                    title: OWSLocalizedString(
+//                        "BADGE_DETAILS_DONATE_TO_SIGNAL",
+//                        comment: "When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to Signal\" button will be shown. This is the text in that button."
+//                    ),
+//                    font: UIFont.dynamicTypeBody.semibold(),
+//                    titleColor: .white,
+//                    backgroundColor: .ows_accentBlue,
+//                    target: self,
+//                    selector: #selector(self.didTapDonate)
+//                )
+//                button.autoSetHeightUsingFont()
+//                button.cornerRadius = 8
+//                cell.contentView.addSubview(button)
+//                button.autoPinEdgesToSuperviewMargins()
+//
+//                return cell
+//            })])
+//            buttonSection.hasBackground = false
+//            contents.add(buttonSection)
+//        }
 
     }
 
     @objc
     private func didTapDonate() {
         dismiss(animated: true) {
-            if DonationUtilities.canDonateInAnyWay(
-                localNumber: DependenciesBridge.shared.tsAccountManager.localIdentifiersWithMaybeSneakyTransaction?.phoneNumber
-            ) {
-                let frontVc = { CurrentAppContext().frontmostViewController() }
-
-                let donateVc = DonateViewController(preferredDonateMode: .oneTime) { finishResult in
-                    switch finishResult {
-                    case let .completedDonation(donateSheet, receiptCredentialSuccessMode):
-                        donateSheet.dismiss(animated: true) {
-                            guard
-                                let frontVc = frontVc(),
-                                let badgeThanksSheetPresenter = BadgeThanksSheetPresenter.fromGlobalsWithSneakyTransaction(
-                                    successMode: receiptCredentialSuccessMode
-                                )
-                            else { return }
-
-                            Task {
-                                await badgeThanksSheetPresenter.presentAndRecordBadgeThanks(
-                                    fromViewController: frontVc
-                                )
-                            }
-                        }
-                    case let .monthlySubscriptionCancelled(donateSheet, toastText):
-                        donateSheet.dismiss(animated: true) {
-                            frontVc()?.presentToast(text: toastText)
-                        }
-                    }
-                }
-                let navigationVc = OWSNavigationController(rootViewController: donateVc)
-                frontVc()?.present(navigationVc, animated: true)
-            } else {
-                DonationViewsUtil.openDonateWebsite()
-            }
+//            if DonationUtilities.canDonateInAnyWay(
+//                localNumber: DependenciesBridge.shared.tsAccountManager.localIdentifiersWithMaybeSneakyTransaction?.phoneNumber
+//            ) {
+//                let frontVc = { CurrentAppContext().frontmostViewController() }
+//
+//                let donateVc = DonateViewController(preferredDonateMode: .oneTime) { finishResult in
+//                    switch finishResult {
+//                    case let .completedDonation(donateSheet, receiptCredentialSuccessMode):
+//                        donateSheet.dismiss(animated: true) {
+//                            guard
+//                                let frontVc = frontVc(),
+//                                let badgeThanksSheetPresenter = BadgeThanksSheetPresenter.fromGlobalsWithSneakyTransaction(
+//                                    successMode: receiptCredentialSuccessMode
+//                                )
+//                            else { return }
+//
+//                            Task {
+//                                await badgeThanksSheetPresenter.presentAndRecordBadgeThanks(
+//                                    fromViewController: frontVc
+//                                )
+//                            }
+//                        }
+//                    case let .monthlySubscriptionCancelled(donateSheet, toastText):
+//                        donateSheet.dismiss(animated: true) {
+//                            frontVc()?.presentToast(text: toastText)
+//                        }
+//                    }
+//                }
+//                let navigationVc = OWSNavigationController(rootViewController: donateVc)
+//                frontVc()?.present(navigationVc, animated: true)
+//            } else {
+//                DonationViewsUtil.openDonateWebsite()
+//            }
         }
     }
 }

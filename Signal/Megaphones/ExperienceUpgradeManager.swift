@@ -323,12 +323,14 @@ class ExperienceUpgradeManager {
                 fromViewController: fromViewController
             )
         case .backupKeyReminder:
-            return BackupKeyReminderMegaphone(experienceUpgrade: experienceUpgrade, fromViewController: fromViewController)
+            return nil
+//            return BackupKeyReminderMegaphone(experienceUpgrade: experienceUpgrade, fromViewController: fromViewController)
         case .enableBackupsReminder:
-            return BackupEnablementMegaphone(
-                experienceUpgrade: experienceUpgrade,
-                fromViewController: fromViewController
-            )
+            return nil
+//            return BackupEnablementMegaphone(
+//                experienceUpgrade: experienceUpgrade,
+//                fromViewController: fromViewController
+//            )
         case .unrecognized:
             return nil
         }

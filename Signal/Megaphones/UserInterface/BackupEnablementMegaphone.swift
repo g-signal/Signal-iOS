@@ -33,7 +33,7 @@ class BackupEnablementMegaphone: MegaphoneView {
         )
 
         let primaryButton = MegaphoneView.Button(title: primaryButtonTitle) { [weak self] in
-            BackupOnboardingCoordinator().present(fromViewController: fromViewController)
+//            BackupOnboardingCoordinator().present(fromViewController: fromViewController)
             self?.markAsSnoozedWithSneakyTransaction()
             self?.dismiss(animated: true)
         }
