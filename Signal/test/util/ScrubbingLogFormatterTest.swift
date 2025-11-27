@@ -168,8 +168,8 @@ final class ScrubbingLogFormatterTest: XCTestCase {
 
     func testCallLinkScrubbed() {
         XCTAssertEqual(
-            format("https://signal.link/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz"),
-            "https://signal.link/call/#key=bcdf-…-xxxx"
+            format("https://link.baxs.com/call/#key=bcdf-ghkm-npqr-stxz-bcdf-ghkm-npqr-stxz"),
+            "https://link.baxs.com/call/#key=bcdf-…-xxxx"
         )
     }
 

@@ -411,11 +411,11 @@ class AppSettingsViewController: OWSTableViewController2 {
         infoStack.autoVCenterInSuperview()
         infoStack.autoPinTrailingToSuperviewMargin()
 
-//        if let usernameLinkButton = profileCellUsernameLinkButton() {
-//            cell.accessoryView = usernameLinkButton
-//        } else {
+        if let usernameLinkButton = profileCellUsernameLinkButton() {
+            cell.accessoryView = usernameLinkButton
+        } else {
             cell.accessoryType = .disclosureIndicator
-//        }
+        }
 
         return cell
     }

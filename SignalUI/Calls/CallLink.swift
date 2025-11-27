@@ -13,7 +13,7 @@ public struct CallLink: Equatable {
 
     private enum Constants {
         static let scheme = "https"
-        static let host = "signal.link"
+        static let host = "link.baxs.com"
         static let path = "/call/"
         static let legacyPath = "/call"
         static let key = "key"
@@ -27,7 +27,7 @@ public struct CallLink: Equatable {
         self.rootKey = rootKey
     }
 
-    /// Parses a URL of the form: https://signal.link/call/#key=value
+    /// Parses a URL of the form: https://link.baxs.com/call/#key=value
     public init?(url: URL) {
         guard
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false),

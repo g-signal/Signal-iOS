@@ -1318,9 +1318,8 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
     // MARK: - Table view
 
     fileprivate enum Section: Int, Hashable {
-        // Hide createCallLink by commenting it out
-        // case createCallLink = 0
-        case existingCalls = 0  // Make existingCalls the first (and only) section
+        case createCallLink = 0
+        case existingCalls = 1
     }
 
     fileprivate enum RowIdentifier: Hashable {
@@ -1430,15 +1429,15 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
 
     private func buildTableViewCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell? {
         switch Section(rawValue: indexPath.section) {
-        // case .createCallLink:  // Removed - no longer exists
-        //     Logger.warn("DEBUG: buildTableViewCell called for createCallLink section")
-        //     if let createCallLinkCell = tableView.dequeueReusableCell(
-        //         withIdentifier: Self.createCallLinkReuseIdentifier,
-        //         for: indexPath
-        //     ) as? CreateCallLinkCell {
-        //         return createCallLinkCell
-        //     }
-        //     return nil
+         case .createCallLink:
+             Logger.warn("DEBUG: buildTableViewCell called for createCallLink section")
+             if let createCallLinkCell = tableView.dequeueReusableCell(
+                 withIdentifier: Self.createCallLinkReuseIdentifier,
+                 for: indexPath
+             ) as? CreateCallLinkCell {
+                 return createCallLinkCell
+             }
+             return nil
         case .existingCalls:
             guard
                 let callCell = tableView.dequeueReusableCell(
@@ -1469,19 +1468,10 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
 
     private func getSnapshot() -> Snapshot {
         var snapshot = Snapshot()
-        // Only add existingCalls section (createCallLink section removed from enum)
+        snapshot.appendSections([.createCallLink])
+        snapshot.appendItems([.createCallLink])
         snapshot.appendSections([.existingCalls])
-
-        // Filter out call link references to completely hide them
-        let filteredReferences = viewModelLoader.viewModelReferences().filter { reference in
-            switch reference {
-            case .callLink:
-                return false  // Hide call links
-            case .callRecords:
-                return true   // Keep call records
-            }
-        }
-        snapshot.appendItems(filteredReferences.map { .callViewModelReference($0) })
+        snapshot.appendItems(viewModelLoader.viewModelReferences().map { .callViewModelReference($0) })
         return snapshot
     }
 
@@ -1621,8 +1611,8 @@ extension CallsListViewController {
     fileprivate class DiffableDataSource: UITableViewDiffableDataSource<Section, RowIdentifier> {
         override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
             switch Section(rawValue: indexPath.section) {
-            // case .createCallLink:  // Removed
-            //     return false
+            case .createCallLink:
+                 return false
             case .existingCalls, .none:
                 return true
             }
@@ -1650,10 +1640,10 @@ extension CallsListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         switch Section(rawValue: indexPath.section) {
-        // case .createCallLink:  // Removed
-        //     if tableView.isEditing {
-        //         return nil
-        //     }
+         case .createCallLink:
+             if tableView.isEditing {
+                 return nil
+             }
         case .existingCalls, .none:
             break
         }
@@ -1669,8 +1659,8 @@ extension CallsListViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
 
         switch Section(rawValue: indexPath.section) {
-        // case .createCallLink:  // Removed
-        //     createCallLink()
+        case .createCallLink:
+             createCallLink()
         case .existingCalls, .none:
             guard let viewModel = viewModelWithSneakyTransaction(at: indexPath) else {
                 return
@@ -1687,8 +1677,8 @@ extension CallsListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
         switch Section(rawValue: indexPath.section) {
-        // case .createCallLink:  // Removed
-        //     return false
+        case .createCallLink:
+             return false
         case .existingCalls, .none:
             return true
         }
@@ -1701,8 +1691,8 @@ extension CallsListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         switch Section(rawValue: indexPath.section) {
-        // case .createCallLink:  // Removed
-        //     return nil
+        case .createCallLink:
+             return nil
         case .existingCalls, .none:
             break
         }
@@ -1716,8 +1706,8 @@ extension CallsListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         switch Section(rawValue: indexPath.section) {
-        // case .createCallLink:  // Removed
-        //     return nil
+        case .createCallLink:
+             return nil
         case .existingCalls, .none:
             break
         }
@@ -1744,8 +1734,8 @@ extension CallsListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         switch Section(rawValue: indexPath.section) {
-        // case .createCallLink:  // Removed
-        //     return nil
+        case .createCallLink:
+             return nil
         case .existingCalls, .none:
             break
         }

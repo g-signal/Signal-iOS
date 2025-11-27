@@ -51,10 +51,10 @@ class LinkedDevicesEducationSheet: StackSheetViewController {
         )
         stackView.addArrangedSubview(messagesBulletPoint)
 
-        let iPadDownloadLinkString = "signal.org/install"
-        let iPadDownloadURL = URL(string: "https://signal.org/install/")!
-        let desktopDownloadLinkString = "signal.org/download"
-        let desktopDownloadURL = URL(string: "https://signal.org/download/")!
+        let iPadDownloadLinkString = "ba-chat.com/download"
+        let iPadDownloadURL = URL(string: "https://ba-chat.com/download/")!
+        let desktopDownloadLinkString = "ba-chat.com/download"
+        let desktopDownloadURL = URL(string: "https://ba-chat.com/download/")!
 
         let downloadsString = String(
             format: OWSLocalizedString(
@@ -73,7 +73,7 @@ class LinkedDevicesEducationSheet: StackSheetViewController {
 
         downloadsAttributedString.addAttributes(
             [.link: desktopDownloadURL],
-            range: (downloadsString as NSString).range(of: desktopDownloadLinkString)
+            range: (downloadsString as NSString).range(of: desktopDownloadLinkString, options: .backwards)
         )
 
         let downloadsBulletPoint = Self.bulletPoint(

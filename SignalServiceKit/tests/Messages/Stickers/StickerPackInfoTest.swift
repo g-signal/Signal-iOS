@@ -85,7 +85,7 @@ class StickerPackInfoTest: XCTestCase {
             // Invalid host
             "https://example.org/addstickers#pack_id=abc&pack_key=def",
             "https://group.baxs.com/addstickers#pack_id=abc&pack_key=def",
-            "https://signal.me/addstickers#pack_id=abc&pack_key=def",
+            "https://me.baxs.com/addstickers#pack_id=abc&pack_key=def",
             "https://sticker.baxs.com:80/addstickers#pack_id=abc&pack_key=def",
             "https://sticker.baxs.com:443/addstickers#pack_id=abc&pack_key=def",
             // Wrong path

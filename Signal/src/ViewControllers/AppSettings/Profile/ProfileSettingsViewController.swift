@@ -235,39 +235,39 @@ class ProfileSettingsViewController: OWSTableViewController2 {
 //        }
         contents.add(mainSection)
 
-//        if let localUsernameState {
-//            let usernameSection = OWSTableSection()
-//
-//            switch localUsernameState {
-//            case .unset:
-//                usernameSection.footerTitle = OWSLocalizedString(
-//                    "PROFILE_VIEW_USERNAME_UNSET_DESCRIPTION",
-//                    comment: "Footer below the usernames section of the profile settings when a username has not been set."
-//                )
-//            case .available, .linkCorrupted, .usernameAndLinkCorrupted:
-//                usernameSection.footerTitle = OWSLocalizedString(
-//                    "PROFILE_VIEW_USERNAME_DESCRIPTION",
-//                    comment: "Footer below the usernames section of the profile settings explaining username visibility."
-//                )
-//            }
-//
-//            switch localUsernameState {
-//            case .unset:
-//                usernameSection.add(usernameUnsetTableItem())
-//            case let .available(username, usernameLink):
-//                usernameSection.add(usernameAvailableTableItem(username: username))
-//                usernameSection.add(usernameLinkAvailableTableItem(
-//                    username: username,
-//                    usernameLink: usernameLink
-//                ))
-//            case let .linkCorrupted(username):
-//                usernameSection.add(usernameAvailableTableItem(username: username))
-//                usernameSection.add(usernameLinkCorruptedTableItem())
-//            case .usernameAndLinkCorrupted:
-//                usernameSection.add(usernameCorruptedTableItem())
-//            }
-//            contents.add(usernameSection)
-//        }
+        if let localUsernameState {
+            let usernameSection = OWSTableSection()
+
+            switch localUsernameState {
+            case .unset:
+                usernameSection.footerTitle = OWSLocalizedString(
+                    "PROFILE_VIEW_USERNAME_UNSET_DESCRIPTION",
+                    comment: "Footer below the usernames section of the profile settings when a username has not been set."
+                )
+            case .available, .linkCorrupted, .usernameAndLinkCorrupted:
+                usernameSection.footerTitle = OWSLocalizedString(
+                    "PROFILE_VIEW_USERNAME_DESCRIPTION",
+                    comment: "Footer below the usernames section of the profile settings explaining username visibility."
+                )
+            }
+
+            switch localUsernameState {
+            case .unset:
+                usernameSection.add(usernameUnsetTableItem())
+            case let .available(username, usernameLink):
+                usernameSection.add(usernameAvailableTableItem(username: username))
+                usernameSection.add(usernameLinkAvailableTableItem(
+                    username: username,
+                    usernameLink: usernameLink
+                ))
+            case let .linkCorrupted(username):
+                usernameSection.add(usernameAvailableTableItem(username: username))
+                usernameSection.add(usernameLinkCorruptedTableItem())
+            case .usernameAndLinkCorrupted:
+                usernameSection.add(usernameCorruptedTableItem())
+            }
+            contents.add(usernameSection)
+        }
 
         self.contents = contents
     }

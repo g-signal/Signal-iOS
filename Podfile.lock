@@ -46,8 +46,8 @@ DEPENDENCIES:
   - CocoaLumberjack
   - GRDB.swift/SQLCipher
   - libPhoneNumber-iOS (from `https://github.com/signalapp/libPhoneNumber-iOS`, branch `signal-master`)
-  - LibSignalClient (from `../libsignal`)
-  - LibSignalClient/Tests (from `../libsignal`)
+  - LibSignalClient (from `/Volumes/STAR/Document/glx/signal/libsignal`)
+  - LibSignalClient/Tests (from `/Volumes/STAR/Document/glx/signal/libsignal`)
   - libwebp (from `./ThirdParty/libwebp.podspec.json`)
   - lottie-ios
   - Mantle (from `https://github.com/signalapp/Mantle`, branch `signal-master`)
@@ -76,7 +76,7 @@ EXTERNAL SOURCES:
     :branch: signal-master
     :git: https://github.com/signalapp/libPhoneNumber-iOS
   LibSignalClient:
-    :path: "../libsignal"
+    :path: "/Volumes/STAR/Document/glx/signal/libsignal"
   libwebp:
     :podspec: "./ThirdParty/libwebp.podspec.json"
   Mantle:
@@ -128,6 +128,6 @@ SPEC CHECKSUMS:
   SwiftProtobuf: 3697407f0d5b23bedeba9c2eaaf3ec6fdff69349
   YYImage: f1ddd15ac032a58b78bbed1e012b50302d318331
 
-PODFILE CHECKSUM: 538ea4663a5371658ffd1dcfd85f7741849e9b0c
+PODFILE CHECKSUM: b9dff7ae7d682f0cd6b444f81bcbe09648428968
 
 COCOAPODS: 1.16.2
