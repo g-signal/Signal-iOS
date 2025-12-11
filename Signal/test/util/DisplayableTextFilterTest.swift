@@ -118,7 +118,7 @@ class DisplayableTextTest: XCTestCase {
             ("❤️ 💜", 2),
             ("❤️ ", 1),
             ("❤️\n💜", 2),
-            ("Signal", 0),
+            ("B&A", 0),
             ("Signal Messenger", 0),
             ("Noise", 0)
         ]

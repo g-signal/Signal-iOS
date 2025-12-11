@@ -204,7 +204,7 @@ class LinkPreviewFetchStateTest: XCTestCase {
         let linkPreviewFetchState = self.linkPreviewFetchState()
 
         mockLinkPreviewFetcher.fetchLinkPreviewBlock = { fetchedURL in
-            return OWSLinkPreviewDraft(url: fetchedURL, title: "Signal", isForwarded: false)
+            return OWSLinkPreviewDraft(url: fetchedURL, title: "B&A", isForwarded: false)
         }
         await linkPreviewFetchState.update(.init(text: "signal.org", ranges: .empty), prependSchemeIfNeeded: false)?.value
         XCTAssert(linkPreviewFetchState.currentState.isNone)
@@ -227,7 +227,7 @@ class LinkPreviewFetchStateTest: XCTestCase {
         let linkPreviewFetchState = self.linkPreviewFetchState()
 
         mockLinkPreviewFetcher.fetchLinkPreviewBlock = { fetchedURL in
-            return OWSLinkPreviewDraft(url: fetchedURL, title: "Signal", isForwarded: false)
+            return OWSLinkPreviewDraft(url: fetchedURL, title: "B&A", isForwarded: false)
         }
 
         var onStateChangeCount = 0
@@ -264,7 +264,7 @@ class LinkPreviewFetchStateTest: XCTestCase {
         let linkPreviewFetchState = self.linkPreviewFetchState()
 
         mockLinkPreviewFetcher.fetchLinkPreviewBlock = { fetchedURL in
-            return OWSLinkPreviewDraft(url: fetchedURL, title: "Signal", isForwarded: false)
+            return OWSLinkPreviewDraft(url: fetchedURL, title: "B&A", isForwarded: false)
         }
 
         // Fetch the original preview.
@@ -339,7 +339,7 @@ class LinkPreviewFetchStateTest: XCTestCase {
 
     func testDontParseInSpoilers() async throws {
         mockLinkPreviewFetcher.fetchLinkPreviewBlock = { fetchedURL in
-            return OWSLinkPreviewDraft(url: fetchedURL, title: "Signal", isForwarded: false)
+            return OWSLinkPreviewDraft(url: fetchedURL, title: "B&A", isForwarded: false)
         }
 
         let linkPreviewFetchState = self.linkPreviewFetchState(

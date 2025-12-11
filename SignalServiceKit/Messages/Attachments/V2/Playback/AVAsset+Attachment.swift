@@ -102,7 +102,7 @@ extension AVAsset {
     /// In order to get AVAsset to use the custom resource loader, we have to give it a URL scheme it doesn't
     /// understand how to load by itself. To do that, we prefix the url scheme with this string before handing
     /// it to AVAsset, and then strip the prefix in our own code.
-    private static let customScheme = "signal"
+    private static let customScheme = "ba"
 
     private class EncryptedFileResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
 
