@@ -13,11 +13,11 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Sun Dec  7 12:22:57 UTC 2025</string>
+		<string>Fri Dec 12 05:33:01 UTC 2025</string>
 		<key>SignalCommit</key>
-		<string>de4638ce952647d9ba7ce167adb453a8c866f4ad link device &amp; voice chat link &amp; me qr</string>
+		<string>5d01e4d7496375c1e47f0fb7005239fab8f208b4 bug fix</string>
 		<key>Timestamp</key>
-		<integer>1765110177</integer>
+		<integer>1765517581</integer>
 		<key>XCodeVersion</key>
 		<string>1600.1640</string>
 	</dict>
