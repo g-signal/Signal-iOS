@@ -155,9 +155,7 @@ class RegistrationVerificationCodeView: UIView {
     }
 
     public func updateColors() {
-        textfield.textColor = Theme.primaryTextColor
-        digitLabels.forEach { $0.textColor = Theme.primaryTextColor }
-        let strokeColor = (hasError ? UIColor.ows_accentRed : Theme.secondaryTextAndIconColor)
+        let strokeColor = (hasError ? UIColor.Signal.red : UIColor.Signal.secondaryLabel)
         for digitStroke in digitStrokes {
             digitStroke.backgroundColor = strokeColor
         }
@@ -255,6 +253,15 @@ extension RegistrationVerificationCodeView: UITextFieldDelegate {
         let unfiltered = left + newString + right
         let characterSet = CharacterSet(charactersIn: "0123456789")
         let filtered = unfiltered.components(separatedBy: characterSet.inverted).joined()
+
+        // Handle auto-fill of complete verification code
+        if filtered.count >= digitCount {
+            digitText = String(filtered.prefix(digitCount))
+            updateViewState()
+            self.delegate?.codeViewDidChange()
+            return false
+        }
+
         let filteredAndTrimmed = String(filtered.prefix(1))
         textField.text = filteredAndTrimmed
 

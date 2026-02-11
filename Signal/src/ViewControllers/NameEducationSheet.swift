@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import BonMot
 import SignalUI
 import SignalServiceKit
 
@@ -66,10 +67,27 @@ class NameEducationSheet: StackSheetViewController {
                 comment: "Header for the explainer sheet for group names"
             )
         }
-        label.attributedText = text.styled(
-            with: .font(.dynamicTypeBody),
-            .xmlRules([.style("bold", .init(.font(UIFont.dynamicTypeBody.semibold())))])
+
+        let cleanText = text.replacingOccurrences(of: "<bold>", with: "").replacingOccurrences(of: "</bold>", with: "")
+        let attributedString = NSMutableAttributedString(
+            string: cleanText,
+            attributes: [
+                .font: UIFont.dynamicTypeBody,
+                .foregroundColor: UIColor.label
+            ]
         )
+
+        if let boldRange = text.range(of: "<bold>"),
+           let endBoldRange = text.range(of: "</bold>") {
+            let startIndex = text.distance(from: text.startIndex, to: boldRange.upperBound)
+            let endIndex = text.distance(from: text.startIndex, to: endBoldRange.lowerBound)
+            let adjustedStart = startIndex - "<bold>".count
+            let adjustedLength = endIndex - startIndex
+            let boldNSRange = NSRange(location: adjustedStart, length: adjustedLength)
+            attributedString.addAttribute(.font, value: UIFont.dynamicTypeBody.semibold(), range: boldNSRange)
+        }
+
+        label.attributedText = attributedString
         label.textColor = .label
         label.numberOfLines = 0
         label.setCompressionResistanceHigh()
