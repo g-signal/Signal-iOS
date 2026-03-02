@@ -20,9 +20,9 @@ class DefaultStickerPack {
     }
 
     private class func parseAll() -> [Data: DefaultStickerPack] {
-        guard TSConstants.isUsingProductionService else {
-            return [:]
-        }
+//        guard TSConstants.isUsingProductionService else {
+//            return [:]
+//        }
         let packs = [
             // Bandit the Cat
             DefaultStickerPack(packIdHex: "9acc9e8aba563d26a4994e69263e3b25",
