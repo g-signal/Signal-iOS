@@ -13,7 +13,7 @@ pod 'SwiftProtobuf', "1.30.0"
 
 #ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = 'ebaf33d71937087c5a5d6eb3ce52d67152fb25eb677b5bb6d29897a040f270f7'
 #pod 'LibSignalClient', git: 'https://github.com/signalapp/libsignal.git', tag: 'v0.76.7', testspecs: ["Tests"]
-ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = 'aeb3e74459c5dce072ba2741661d5fd59773246e1bd73311413f6f85f688943d'
+ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '72391b69443226d122c501696f165a33cc5256c4a461f51ecdf4b04f8ae8ea26'
 pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.76.7-BA', testspecs: ["Tests"]
 #pod 'LibSignalClient', path: '/Volumes/STAR/Document/glx/signal/libsignal', testspecs: ["Tests"]
 
