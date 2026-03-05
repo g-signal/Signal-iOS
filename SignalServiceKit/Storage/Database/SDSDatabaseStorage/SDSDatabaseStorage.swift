@@ -95,10 +95,10 @@ public class SDSDatabaseStorage: NSObject, DB {
         // (e.g. SQLite connection) in the GRDB pool ends up "stale" after
         // a schema migration and does not reflect the migrations.
         grdbStorage.pool.releaseMemory()
-        weak var weakPool = grdbStorage.pool
-        weak var weakGrdbStorage = grdbStorage
-        owsAssertDebug(weakPool != nil)
-        owsAssertDebug(weakGrdbStorage != nil)
+        let weakPool = Weak(value: grdbStorage.pool)
+        let weakGrdbStorage = Weak(value: grdbStorage)
+        owsAssertDebug(weakPool.value != nil)
+        owsAssertDebug(weakGrdbStorage.value != nil)
         grdbStorage = try GRDBDatabaseStorageAdapter(
             databaseChangeObserver: _databaseChangeObserver,
             databaseFileUrl: databaseFileUrl,
@@ -109,8 +109,8 @@ public class SDSDatabaseStorage: NSObject, DB {
         //
         // We only reach this point by a predictable code path; the autoreleasepool
         // should be drained by this point.
-        owsAssertDebug(weakPool == nil)
-        owsAssertDebug(weakGrdbStorage == nil)
+        owsAssertDebug(weakPool.value == nil)
+        owsAssertDebug(weakGrdbStorage.value == nil)
     }
 
     // MARK: - Id Mapping

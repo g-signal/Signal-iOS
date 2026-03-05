@@ -204,8 +204,11 @@ public class ScreenLock: NSObject {
             case .biometryLockout:
                 Logger.error("local authentication error: biometryLockout.")
                 return .failure(error: DeviceAuthenticationErrorMessage.lockout)
-            default:
-                // Fall through to second switch
+            case .authenticationFailed, .userCancel, .userFallback, .systemCancel, .appCancel,
+                 .passcodeNotSet, .touchIDNotAvailable, .touchIDNotEnrolled, .touchIDLockout,
+                 .invalidContext, .notInteractive, .companionNotAvailable:
+                break
+            @unknown default:
                 break
             }
 
@@ -234,6 +237,9 @@ public class ScreenLock: NSObject {
             case .notInteractive:
                 owsFailDebug("context not interactive.")
                 return .unexpectedFailure(error: defaultErrorDescription)
+            case .companionNotAvailable:
+                Logger.error("local authentication error: companionNotAvailable.")
+                return .failure(error: defaultErrorDescription)
             @unknown default:
                 owsFailDebug("Unexpected enum value.")
                 return .unexpectedFailure(error: defaultErrorDescription)

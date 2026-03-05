@@ -249,6 +249,9 @@ fileprivate extension OWSPaymentsLock.LocalAuthOutcome {
         case .notInteractive:
             owsFailDebug("context not interactive.")
             return .unexpectedFailure(error: defaultErrorDescription)
+        case .companionNotAvailable:
+            Logger.error("local authentication error: companionNotAvailable.")
+            return .failure(error: defaultErrorDescription)
         @unknown default:
             owsFailDebug("Unexpected enum value.")
             return .unexpectedFailure(error: defaultErrorDescription)
