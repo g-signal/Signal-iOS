@@ -11,7 +11,16 @@
 		<string>LazyDatabaseMigratorTask</string>
 	</array>
 	<key>BuildDetails</key>
-	<dict/>
+	<dict>
+		<key>DateTime</key>
+		<string>Mon Mar  9 07:08:04 UTC 2026</string>
+		<key>SignalCommit</key>
+		<string>ab8301df322c16e008060f20f765972031146e12 upgrade svr2 enclave id</string>
+		<key>Timestamp</key>
+		<integer>1773040084</integer>
+		<key>XCodeVersion</key>
+		<string>2600.2630</string>
+	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
