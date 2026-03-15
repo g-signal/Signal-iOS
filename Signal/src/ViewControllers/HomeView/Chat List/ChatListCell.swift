@@ -17,6 +17,7 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
     private let typingIndicatorView = TypingIndicatorView()
     private let badgeView = CVImageView()
     private let muteIconView = CVImageView()
+    private let extTagsStackView = ExtTagsStackView()
 
     private let unreadBadge = NeverClearView(name: "unreadBadge")
     private let unreadLabel = CVLabel()
@@ -56,6 +57,7 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         let hasMuteIndicator: Bool
         let hasMessageStatusToken: Bool
         let hasUnreadBadge: Bool
+        let hasExtTags: Bool
     }
 
     private var reuseToken: ReuseToken?
@@ -232,6 +234,12 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         topRowStackSubviewInfos.append(
             nameLabelSize.asManualSubviewInfo(horizontalFlowBehavior: .canCompress, verticalFlowBehavior: .fixed)
         )
+
+        // Add measurement space for ExtTags (approximate)
+        let extTagsSize = CGSize(width: 60, height: 18) // 预留标签空间
+        topRowStackSubviewInfos.append(
+            extTagsSize.asManualSubviewInfo(horizontalFlowBehavior: .fixed, verticalFlowBehavior: .fixed)
+        )
         if shouldShowVerifiedBadge {
             topRowStackSubviewInfos.append(CGSize(square: muteIconSize).asManualSubviewInfo(hasFixedSize: true))
         }
@@ -392,6 +400,22 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         nameLabelConfig.applyForRendering(label: nameLabel)
         topRowStackSubviews.append(nameLabel)
 
+        // Configure ExtTags based on thread type
+        if let thread = configuration.threadViewModel.threadRecord {
+            databaseStorage.read { transaction in
+                if let groupThread = thread as? TSGroupThread {
+                    extTagsStackView.configureForGroup(groupThread, transaction: transaction)
+                } else if let contactThread = thread as? TSContactThread {
+                    extTagsStackView.configureForUser(contactThread.contactAddress, transaction: transaction)
+                }
+            }
+
+            // Add ExtTags to layout if not empty
+            if !extTagsStackView.isEmpty {
+                topRowStackSubviews.append(extTagsStackView)
+            }
+        }
+
         if configuration.shouldShowVerifiedBadge {
             badgeView.image = Theme.iconImage(.official)
             badgeView.tintColor = .ows_signalBlue
@@ -473,7 +497,8 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
             hasVerifiedBadge: configuration.shouldShowVerifiedBadge,
             hasMuteIndicator: configuration.shouldShowMuteIndicator,
             hasMessageStatusToken: configuration.messageStatusToken != nil,
-            hasUnreadBadge: measurements.unreadBadgeMeasurements != nil
+            hasUnreadBadge: measurements.unreadBadgeMeasurements != nil,
+            hasExtTags: !extTagsStackView.isEmpty
         )
 
         avatarStack.configure(
@@ -486,7 +511,8 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         // its subview list hasn't changed.
         if let oldReuseToken = self.reuseToken,
            oldReuseToken.hasMuteIndicator == newReuseToken.hasMuteIndicator,
-           oldReuseToken.hasVerifiedBadge == newReuseToken.hasVerifiedBadge {
+           oldReuseToken.hasVerifiedBadge == newReuseToken.hasVerifiedBadge,
+           oldReuseToken.hasExtTags == newReuseToken.hasExtTags {
             topRowStack.configureForReuse(config: topRowStackConfig,
                                           measurement: topRowStackMeasurement)
         } else {

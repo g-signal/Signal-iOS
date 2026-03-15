@@ -839,6 +839,19 @@ extension ConversationSettingsViewController {
             })
         )
 
+        // Add Group ID display item
+        let groupIdHex = groupModelV2.groupId.hexadecimalString
+        section.add(OWSTableItem.copyableItem(
+            icon: .info,
+            withText: OWSLocalizedString(
+                "CONVERSATION_SETTINGS_GROUP_ID",
+                comment: "Label for 'group ID' item in conversation settings view."
+            ),
+            copyableText: groupIdHex,
+            accessoryText: String(groupIdHex.prefix(8)) + "...", // Show first 8 characters
+            accessibilityIdentifier: "group_id_item"
+        ))
+
         if canEditPermissions {
             let itemTitle = OWSLocalizedString(
                 "CONVERSATION_SETTINGS_PERMISSIONS",

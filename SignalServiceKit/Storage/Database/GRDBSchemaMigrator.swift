@@ -335,6 +335,7 @@ public class GRDBSchemaMigrator {
         case lastDraftInteractionRowID
         case addBackupOversizeText
         case addBackupOversizeTextRedux
+        case createGExtTagTables
 
         // NOTE: Every time we add a migration id, consider
         // incrementing grdbSchemaVersionLatest.
@@ -4181,6 +4182,43 @@ public class GRDBSchemaMigrator {
                     // enforce at SQL level to prevent ambiguity.
                     .check({ length($0) <= (128 * 1024) })
             }
+
+            return .success(())
+        }
+
+        migrator.registerMigration(.createGExtTagTables) { tx in
+            // 创建用户扩展标签表
+            try tx.database.execute(sql: """
+                CREATE TABLE g_user_ext_tag (
+                    _id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    recipient_id INTEGER DEFAULT NULL,
+                    ext_tags BLOB NOT NULL,
+                    last_updated INTEGER NOT NULL,
+                    UNIQUE(recipient_id)
+                )
+            """)
+
+            // 创建群组扩展标签表
+            try tx.database.execute(sql: """
+                CREATE TABLE g_group_ext_tag (
+                    _id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    group_id INTEGER DEFAULT NULL,
+                    ext_tags BLOB NOT NULL,
+                    last_updated INTEGER NOT NULL,
+                    UNIQUE(group_id)
+                )
+            """)
+
+            // 创建索引以提升查询性能
+            try tx.database.execute(sql: """
+                CREATE INDEX idx_g_user_ext_tag_recipient_id
+                ON g_user_ext_tag(recipient_id)
+            """)
+
+            try tx.database.execute(sql: """
+                CREATE INDEX idx_g_group_ext_tag_group_id
+                ON g_group_ext_tag(group_id)
+            """)
 
             return .success(())
         }

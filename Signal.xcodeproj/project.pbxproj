@@ -47,6 +47,11 @@
 		0CE014267EDFBD2538E940A0 /* Pods_Signal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FF88FB580BC19B240EEB86A /* Pods_Signal.framework */; };
 		0DB1B9DF2E9A4D4300F4E4B8 /* signal-messenger.cer in Resources */ = {isa = PBXBuildFile; fileRef = 0DB1B9DE2E9A4D4300F4E4B8 /* signal-messenger.cer */; };
 		0DC8F6E42EA8ED5E009573F8 /* NetworkRequestLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DC8F6E32EA8ED5E009573F8 /* NetworkRequestLogger.swift */; };
+		0DF917D72F63FDE3007C0A54 /* ExtTagStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF917D52F63FDE3007C0A54 /* ExtTagStore.swift */; };
+		0DF917D82F63FDE4007C0A54 /* ExtTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF917D32F63FDE3007C0A54 /* ExtTag.swift */; };
+		0DF917D92F63FDE4007C0A54 /* ExtTagRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF917D42F63FDE3007C0A54 /* ExtTagRecord.swift */; };
+		0DF917DD2F640312007C0A54 /* ExtTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF917DB2F640312007C0A54 /* ExtTagView.swift */; };
+		0DF917DE2F640312007C0A54 /* ExtTagsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF917DA2F640312007C0A54 /* ExtTagsStackView.swift */; };
 		1404D8B3276A353B0068E2F6 /* ChatListViewController+Multiselect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1404D8B2276A353A0068E2F6 /* ChatListViewController+Multiselect.swift */; };
 		1466AB282817F7E7003B3D9F /* PluralAware.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 1466AB262817F7E7003B3D9F /* PluralAware.stringsdict */; };
 		1477630B275E20D700D1067E /* ThreadSwipeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1477630A275E20D700D1067E /* ThreadSwipeHandler.swift */; };
@@ -3881,6 +3886,11 @@
 		0BADD293DAFC82BF3274F0F6 /* Pods_SignalTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DB1B9DE2E9A4D4300F4E4B8 /* signal-messenger.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "signal-messenger.cer"; sourceTree = "<group>"; };
 		0DC8F6E32EA8ED5E009573F8 /* NetworkRequestLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequestLogger.swift; sourceTree = "<group>"; };
+		0DF917D32F63FDE3007C0A54 /* ExtTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtTag.swift; sourceTree = "<group>"; };
+		0DF917D42F63FDE3007C0A54 /* ExtTagRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtTagRecord.swift; sourceTree = "<group>"; };
+		0DF917D52F63FDE3007C0A54 /* ExtTagStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtTagStore.swift; sourceTree = "<group>"; };
+		0DF917DA2F640312007C0A54 /* ExtTagsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtTagsStackView.swift; sourceTree = "<group>"; };
+		0DF917DB2F640312007C0A54 /* ExtTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtTagView.swift; sourceTree = "<group>"; };
 		1404D8B2276A353A0068E2F6 /* ChatListViewController+Multiselect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatListViewController+Multiselect.swift"; sourceTree = "<group>"; };
 		1466AB272817F7E7003B3D9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = translations/en.lproj/PluralAware.stringsdict; sourceTree = "<group>"; };
 		1466AB292817F7F2003B3D9F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = translations/de.lproj/PluralAware.stringsdict; sourceTree = "<group>"; };
@@ -7870,6 +7880,25 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		0DF917D62F63FDE3007C0A54 /* GExt */ = {
+			isa = PBXGroup;
+			children = (
+				0DF917D32F63FDE3007C0A54 /* ExtTag.swift */,
+				0DF917D42F63FDE3007C0A54 /* ExtTagRecord.swift */,
+				0DF917D52F63FDE3007C0A54 /* ExtTagStore.swift */,
+			);
+			path = GExt;
+			sourceTree = "<group>";
+		};
+		0DF917DC2F640312007C0A54 /* ExtTag */ = {
+			isa = PBXGroup;
+			children = (
+				0DF917DA2F640312007C0A54 /* ExtTagsStackView.swift */,
+				0DF917DB2F640312007C0A54 /* ExtTagView.swift */,
+			);
+			path = ExtTag;
+			sourceTree = "<group>";
+		};
 		1704690725D4C2DA000793D8 /* attachments */ = {
 			isa = PBXGroup;
 			children = (
@@ -8379,6 +8408,7 @@
 		34A95508271B510400B05242 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0DF917DC2F640312007C0A54 /* ExtTag */,
 				34A9552A271B510400B05242 /* BodyRanges */,
 				34A9554A271B510400B05242 /* Tooltips */,
 				34A9558E271B510500B05242 /* ApprovalFooterView.swift */,
@@ -13536,6 +13566,7 @@
 		F9C5C898289451B900548EEE /* SignalServiceKit */ = {
 			isa = PBXGroup;
 			children = (
+				0DF917D62F63FDE3007C0A54 /* GExt */,
 				F9C5C9BA289453B100548EEE /* Account */,
 				7255A4C32B98D5A800E95368 /* Attachments */,
 				665C0D5A2ADF537000539A37 /* Backups */,
@@ -16466,6 +16497,8 @@
 				3402AA42271D9DCD0084CBAE /* AttachmentTextToolbar.swift in Sources */,
 				3402AA55271D9DCD0084CBAE /* AttachmentTextView.swift in Sources */,
 				7609818C2936EF22008F8300 /* AudioPlayer.swift in Sources */,
+				0DF917DD2F640312007C0A54 /* ExtTagView.swift in Sources */,
+				0DF917DE2F640312007C0A54 /* ExtTagsStackView.swift in Sources */,
 				342FFE59271DAA25000AC89F /* AudioSession.swift in Sources */,
 				3402AAA7271D9E180084CBAE /* AvatarImageView.swift in Sources */,
 				88B98700288088B800F8C74D /* BaseMemberViewController.swift in Sources */,
@@ -18042,6 +18075,9 @@
 				D979CC262AD3933B006AAC49 /* IndividualCallRecordManager.swift in Sources */,
 				D9B95A9B29E8923B00D7CB95 /* InMemoryDB.swift in Sources */,
 				C1DD78AB2BB1CEF80020F064 /* InputStreamable.swift in Sources */,
+				0DF917D72F63FDE3007C0A54 /* ExtTagStore.swift in Sources */,
+				0DF917D82F63FDE4007C0A54 /* ExtTag.swift in Sources */,
+				0DF917D92F63FDE4007C0A54 /* ExtTagRecord.swift in Sources */,
 				F9C5CC12289453B300548EEE /* InstalledSticker+SDS.swift in Sources */,
 				F9C5CC15289453B300548EEE /* InstalledSticker.m in Sources */,
 				F9C5CE0F289453B400548EEE /* Int+SSK.swift in Sources */,

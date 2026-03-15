@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import SignalServiceKit
 public import SignalUI
 import UIKit
 
@@ -62,6 +63,7 @@ public class ConversationHeaderView: UIView {
     private let titleIconView: UIImageView
     private let titleIconConstraints: [NSLayoutConstraint]
     private let subtitleLabel: UILabel
+    private let extTagsStackView = ExtTagsStackView()
 
     private var avatarSizeClass: ConversationAvatarView.Configuration.SizeClass {
         traitCollection.verticalSizeClass == .compact ? .twentyFour : .thirtySix
@@ -82,7 +84,7 @@ public class ConversationHeaderView: UIView {
         titleIconView.setCompressionResistanceHigh()
         titleIconConstraints = titleIconView.autoSetDimensions(to: .square(20))
 
-        let titleColumns = UIStackView(arrangedSubviews: [titleLabel, titleIconView])
+        let titleColumns = UIStackView(arrangedSubviews: [titleLabel, extTagsStackView, titleIconView])
         titleColumns.spacing = 5
         // There is a strange bug where an initial height of 0
         // breaks the layout, so set an initial height.
@@ -140,6 +142,16 @@ public class ConversationHeaderView: UIView {
             config.dataSource = .thread(threadViewModel.threadRecord)
             config.storyConfiguration = .autoUpdate()
             config.applyConfigurationSynchronously()
+        }
+
+        // Configure ExtTags based on thread type
+        databaseStorage.read { transaction in
+            let thread = threadViewModel.threadRecord
+            if let groupThread = thread as? TSGroupThread {
+                extTagsStackView.configureForGroup(groupThread, transaction: transaction)
+            } else if let contactThread = thread as? TSContactThread {
+                extTagsStackView.configureForUser(contactThread.contactAddress, transaction: transaction)
+            }
         }
     }
 
