@@ -63,7 +63,7 @@ public class ConversationHeaderView: UIView {
     private let titleIconView: UIImageView
     private let titleIconConstraints: [NSLayoutConstraint]
     private let subtitleLabel: UILabel
-    private let extTagsStackView = ExtTagsStackView()
+    private let extTagsStackView = GExtTagsStackView()
 
     private var avatarSizeClass: ConversationAvatarView.Configuration.SizeClass {
         traitCollection.verticalSizeClass == .compact ? .twentyFour : .thirtySix
@@ -144,13 +144,14 @@ public class ConversationHeaderView: UIView {
             config.applyConfigurationSynchronously()
         }
 
-        // Configure ExtTags based on thread type
-        databaseStorage.read { transaction in
+        // Configure ExtTags for contact threads only
+        SSKEnvironment.shared.databaseStorageRef.read { transaction in
             let thread = threadViewModel.threadRecord
-            if let groupThread = thread as? TSGroupThread {
-                extTagsStackView.configureForGroup(groupThread, transaction: transaction)
-            } else if let contactThread = thread as? TSContactThread {
+            if let contactThread = thread as? TSContactThread {
                 extTagsStackView.configureForUser(contactThread.contactAddress, transaction: transaction)
+            } else {
+                // No ExtTags for group threads
+                extTagsStackView.configure(with: [])
             }
         }
     }

@@ -6,14 +6,14 @@
 import UIKit
 public import SignalServiceKit
 
-public class ExtTagView: UIView {
+public class GExtTagView: UIView {
 
-    private let extTag: ExtTag
+    private let extTag: GExtTag
     private let imageView = UIImageView()
     private let textLabel = UILabel()
     private let borderLayer = CAShapeLayer()
 
-    public init(extTag: ExtTag) {
+    public init(extTag: GExtTag) {
         self.extTag = extTag
         super.init(frame: .zero)
         setupView()
@@ -154,9 +154,9 @@ public class ExtTagView: UIView {
         if let borderStyle = extTag.cssBorderStyle {
             switch borderStyle.lowercased() {
             case "dashed":
-                borderLayer.lineDashPattern = [CGFloat(borderWidth * 2), CGFloat(borderWidth)]
+                borderLayer.lineDashPattern = [NSNumber(value: borderWidth * 2), NSNumber(value: borderWidth)]
             case "dotted":
-                borderLayer.lineDashPattern = [CGFloat(borderWidth), CGFloat(borderWidth)]
+                borderLayer.lineDashPattern = [NSNumber(value: borderWidth), NSNumber(value: borderWidth)]
             default:
                 borderLayer.lineDashPattern = nil
             }

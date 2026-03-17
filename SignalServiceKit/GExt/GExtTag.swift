@@ -5,8 +5,8 @@
 
 import Foundation
 
-/// 单个 ExtTag 的数据模型，与服务器字段一一对应
-public struct ExtTag: Codable, Equatable, Hashable {
+/// 单个 GExtTag 的数据模型，与服务器字段一一对应
+public struct GExtTag: Codable, Equatable, Hashable {
     /// 标签唯一标识
     public let tagId: String
 
@@ -80,12 +80,7 @@ public struct ExtTag: Codable, Equatable, Hashable {
     }
 }
 
-/// 服务器返回的群组 ExtTag Profile
-public struct GroupExtTagProfile: Codable {
-    public let extTags: [ExtTag]
-}
-
-/// 个人 ExtTag Profile（预留）
-public struct UserExtTagProfile: Codable {
-    public let extTags: [ExtTag]
+/// 个人 GExtTag Profile（预留）
+public struct UserGExtTagProfile: Codable {
+    public let extTags: [GExtTag]
 }

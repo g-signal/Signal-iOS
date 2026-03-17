@@ -2392,3 +2392,20 @@ CREATE
                 )
 )
 ;
+
+CREATE
+    TABLE
+        IF NOT EXISTS "gext_recipient" (
+            "_id" INTEGER PRIMARY KEY
+            ,"aci" VARCHAR(32) NOT NULL
+            ,"tags" BLOB NOT NULL
+            ,"last_updated" INTEGER NOT NULL
+            ,UNIQUE("aci")
+        )
+;
+
+CREATE
+    INDEX "idx_gext_recipient_aci"
+        ON "gext_recipient"("aci"
+)
+;

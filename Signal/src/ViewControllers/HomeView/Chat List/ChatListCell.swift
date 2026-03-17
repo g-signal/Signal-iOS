@@ -17,7 +17,7 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
     private let typingIndicatorView = TypingIndicatorView()
     private let badgeView = CVImageView()
     private let muteIconView = CVImageView()
-    private let extTagsStackView = ExtTagsStackView()
+    private let extTagsStackView = GExtTagsStackView()
 
     private let unreadBadge = NeverClearView(name: "unreadBadge")
     private let unreadLabel = CVLabel()
@@ -400,20 +400,20 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         nameLabelConfig.applyForRendering(label: nameLabel)
         topRowStackSubviews.append(nameLabel)
 
-        // Configure ExtTags based on thread type
-        if let thread = configuration.threadViewModel.threadRecord {
-            databaseStorage.read { transaction in
-                if let groupThread = thread as? TSGroupThread {
-                    extTagsStackView.configureForGroup(groupThread, transaction: transaction)
-                } else if let contactThread = thread as? TSContactThread {
-                    extTagsStackView.configureForUser(contactThread.contactAddress, transaction: transaction)
-                }
+        // Configure ExtTags for contact threads only
+        let thread = configuration.thread
+        SSKEnvironment.shared.databaseStorageRef.read { transaction in
+            if let contactThread = thread as? TSContactThread {
+                extTagsStackView.configureForUser(contactThread.contactAddress, transaction: transaction)
+            } else {
+                // No ExtTags for group threads
+                extTagsStackView.configure(with: [])
             }
+        }
 
-            // Add ExtTags to layout if not empty
-            if !extTagsStackView.isEmpty {
-                topRowStackSubviews.append(extTagsStackView)
-            }
+        // Add ExtTags to layout if not empty
+        if !extTagsStackView.isEmpty {
+            topRowStackSubviews.append(extTagsStackView)
         }
 
         if configuration.shouldShowVerifiedBadge {

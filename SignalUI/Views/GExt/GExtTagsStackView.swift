@@ -6,9 +6,9 @@
 import UIKit
 public import SignalServiceKit
 
-public class ExtTagsStackView: UIStackView {
+public class GExtTagsStackView: UIStackView {
 
-    private var extTags: [ExtTag] = []
+    private var extTags: [GExtTag] = []
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,7 +33,7 @@ public class ExtTagsStackView: UIStackView {
         setContentHuggingPriority(.required, for: .vertical)
     }
 
-    public func configure(with extTags: [ExtTag]) {
+    public func configure(with extTags: [GExtTag]) {
         self.extTags = extTags
         updateTagViews()
     }
@@ -44,7 +44,7 @@ public class ExtTagsStackView: UIStackView {
 
         // 添加新的标签视图
         for extTag in extTags {
-            let tagView = ExtTagView(extTag: extTag)
+            let tagView = GExtTagView(extTag: extTag)
             addArrangedSubview(tagView)
 
             // 确保标签视图不被压缩
@@ -62,15 +62,9 @@ public class ExtTagsStackView: UIStackView {
 
     // MARK: - 便利方法
 
-    /// 从群组线程获取并配置标签
-    public func configureForGroup(_ thread: TSGroupThread, transaction: SDSAnyReadTransaction) {
-        let tags = ExtTagStore.shared.getGroupExtTags(for: thread, transaction: transaction)
-        configure(with: tags)
-    }
-
     /// 从用户地址获取并配置标签
-    public func configureForUser(_ address: SignalServiceAddress, transaction: SDSAnyReadTransaction) {
-        let tags = ExtTagStore.shared.getUserExtTags(for: address, transaction: transaction)
+    public func configureForUser(_ address: SignalServiceAddress, transaction: DBReadTransaction) {
+        let tags = GExtTagStore.shared.getUserExtTags(for: address, transaction: transaction)
         configure(with: tags)
     }
 
@@ -95,7 +89,7 @@ public class ExtTagsStackView: UIStackView {
         return CGSize(width: totalWidth, height: maxHeight)
     }
 
-    private func calculateTagSize(for extTag: ExtTag) -> CGSize {
+    private func calculateTagSize(for extTag: GExtTag) -> CGSize {
         switch extTag.tagType {
         case 1: // 纯文本
             if let text = extTag.text {

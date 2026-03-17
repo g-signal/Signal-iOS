@@ -147,6 +147,8 @@ public class ProfileFetcherJob {
                     responseObject: response.responseBodyJson
                 )
 
+                Logger.info("Fetched versioned profile for \(serviceId)")
+
                 await versionedProfiles.didFetchProfile(profile: profile, profileRequest: versionedProfileRequest)
 
                 return FetchedProfile(profile: profile, profileKey: versionedProfileRequest.profileKey)
@@ -195,6 +197,8 @@ public class ProfileFetcherJob {
             serviceId: serviceId,
             responseObject: result.responseJson
         )
+
+        Logger.info("Fetched unversioned profile for \(serviceId)")
 
         return FetchedProfile(profile: profile, profileKey: nil)
     }
@@ -477,6 +481,24 @@ public class ProfileFetcherJob {
                 userProfileWriter: .profileFetch,
                 tx: SDSDB.shimOnlyBridge(transaction)
             )
+
+            // 获取更新后的 profile 以获得 profile ID
+            let profileAddress = SignalServiceAddress(serviceId)
+            if let userProfile = self.profileManager.userProfile(for: profileAddress, tx: SDSDB.shimOnlyBridge(transaction)),
+               let profileId = userProfile.id {
+
+                // 处理 ExtTag 数据，使用 profile ID
+                if let gextTags = fetchedProfile.profile.gextTags {
+                    // 无论是否为空，都更新到数据库（包括空数组）
+                    Logger.info("Processing \(gextTags.count) ExtTags for profile ID \(profileId)")
+                    GExtTagStore.shared.setUserExtTags(gextTags, for: profileAddress, profileId: profileId, transaction: transaction)
+                } else {
+                    // 没有 gextTags 字段，保持原有数据不变
+                    Logger.info("No gextTags field in profile response for profile ID \(profileId), keeping existing data")
+                }
+            } else {
+                Logger.warn("Could not get profile ID after update for \(serviceId)")
+            }
 
             self.updateCapabilitiesIfNeeded(
                 serviceId: serviceId,

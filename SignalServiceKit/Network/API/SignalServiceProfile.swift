@@ -31,6 +31,7 @@ public class SignalServiceProfile {
     public let credential: Data?
     public let badges: [(OWSUserProfileBadgeInfo, ProfileBadge)]
     public let phoneNumberSharingEncrypted: Data?
+    public let gextTags: [GExtTag]?
 
     public let capabilities: Capabilities
 
@@ -47,6 +48,7 @@ public class SignalServiceProfile {
         credential: Data?,
         badges: [(OWSUserProfileBadgeInfo, ProfileBadge)],
         phoneNumberSharingEncrypted: Data?,
+        gextTags: [GExtTag]?,
         capabilities: Capabilities
     ) {
         self.serviceId = serviceId
@@ -61,6 +63,7 @@ public class SignalServiceProfile {
         self.credential = credential
         self.badges = badges
         self.phoneNumberSharingEncrypted = phoneNumberSharingEncrypted
+        self.gextTags = gextTags
         self.capabilities = capabilities
     }
 
@@ -68,6 +71,9 @@ public class SignalServiceProfile {
         guard let params = ParamParser(responseObject: responseObject) else {
             throw ValidationError(description: "Invalid response JSON!")
         }
+
+        // Log the response to check for gext fields
+        Logger.info("Profile response for \(serviceId): \(String(describing: responseObject))")
 
         do {
             let identityKey = try IdentityKey(bytes: try params.requiredBase64EncodedData(key: "identityKey"))
@@ -81,6 +87,7 @@ public class SignalServiceProfile {
             let credential = try params.optionalBase64EncodedData(key: "credential")
             let badges: [(OWSUserProfileBadgeInfo, ProfileBadge)] = try parseBadges(params: params)
             let phoneNumberSharingEncrypted = try params.optionalBase64EncodedData(key: "phoneNumberSharing")
+            let gextTags: [GExtTag] = try parseGExtTags(params: params)
             let capabilities: Capabilities = try parseCapabilities(params: params)
 
             return SignalServiceProfile(
@@ -96,6 +103,7 @@ public class SignalServiceProfile {
                 credential: credential,
                 badges: badges,
                 phoneNumberSharingEncrypted: phoneNumberSharingEncrypted,
+                gextTags: gextTags,
                 capabilities: capabilities
             )
         } catch let error {
@@ -139,6 +147,53 @@ public class SignalServiceProfile {
                 capabilityKey: AccountAttributes.Capabilities.CodingKeys.storageServiceRecordIkm.rawValue
             )
         )
+    }
+
+    private static func parseGExtTags(params: ParamParser) throws -> [GExtTag] {
+        guard let gextTagsArray: [[String: Any]] = try params.optional(key: "gextTags") else {
+            return []
+        }
+
+        var result: [GExtTag] = []
+        for tagDict in gextTagsArray {
+            let tagParams = ParamParser(dictionary: tagDict)
+
+            do {
+                guard let tagIdString: String = try tagParams.required(key: "tagId"),
+                      let tagType: Int = try tagParams.required(key: "tagType") else {
+                    continue
+                }
+
+                let text: String? = try tagParams.optional(key: "text")
+                let imgBase64: String? = try tagParams.optional(key: "imgBase64")
+                let cssBackgroundColor: String? = try tagParams.optional(key: "cssBackgroundColor")
+                let cssColor: String? = try tagParams.optional(key: "cssColor")
+                let cssBorderColor: String? = try tagParams.optional(key: "cssBorderColor")
+                let cssBorderStyle: String? = try tagParams.optional(key: "cssBorderStyle")
+                let cssOpacity: Double? = try tagParams.optional(key: "cssOpacity")
+                let cssBorderRadius: Double? = try tagParams.optional(key: "cssBorderRadius")
+                let cssBorderWidth: Double? = try tagParams.optional(key: "cssBorderWidth")
+
+                let gextTag = GExtTag(
+                    tagId: tagIdString,
+                    tagType: tagType,
+                    text: text,
+                    imgBase64: imgBase64,
+                    cssBackgroundColor: cssBackgroundColor,
+                    cssColor: cssColor,
+                    cssOpacity: cssOpacity,
+                    cssBorderWidth: cssBorderWidth,
+                    cssBorderRadius: cssBorderRadius,
+                    cssBorderColor: cssBorderColor,
+                    cssBorderStyle: cssBorderStyle
+                )
+                result.append(gextTag)
+            } catch {
+                // Skip invalid entries and continue
+                continue
+            }
+        }
+        return result
     }
 
     /// Parse a boolean capability with the given key from the given parser.
