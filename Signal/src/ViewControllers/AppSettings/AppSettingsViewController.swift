@@ -476,6 +476,25 @@ class AppSettingsViewController: OWSTableViewController2 {
             return containerView
         }
 
+        // Ext tags row (between name and phone number)
+        if let localAddress = DependenciesBridge.shared.tsAccountManager.localIdentifiersWithMaybeSneakyTransaction?.aciAddress {
+            let extTags = SSKEnvironment.shared.databaseStorageRef.read { tx in
+                GExtTagStore.shared.getUserExtTags(for: localAddress, transaction: tx)
+            }
+            if !extTags.isEmpty {
+                let tagsView = GExtTagsStackView()
+                tagsView.configure(with: extTags)
+                let containerView = UIView()
+                containerView.layoutMargins = UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0)
+                containerView.addSubview(tagsView)
+                tagsView.autoPinEdge(toSuperviewMargin: .leading)
+                tagsView.autoPinEdge(toSuperviewMargin: .top)
+                tagsView.autoPinEdge(toSuperviewMargin: .bottom)
+                tagsView.autoPinEdge(toSuperviewMargin: .trailing, relation: .greaterThanOrEqual)
+                profileInfoStack.addArrangedSubview(containerView)
+            }
+        }
+
         if let phoneNumber = DependenciesBridge.shared.tsAccountManager.localIdentifiersWithMaybeSneakyTransaction?.phoneNumber {
             addSubtitleLabel(
                 text: PhoneNumber.bestEffortFormatPartialUserSpecifiedTextToLookLikeAPhoneNumber(phoneNumber),

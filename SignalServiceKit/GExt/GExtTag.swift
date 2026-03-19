@@ -10,13 +10,13 @@ public struct GExtTag: Codable, Equatable, Hashable {
     /// 标签唯一标识
     public let tagId: String
 
-    /// 标签类型：1=文本标签，2=图片标签，3=混合标签
+    /// 标签类型：0=文本标签，1=图片标签，2=混合标签
     public let tagType: Int
 
-    /// 文本内容（tagType=1 或 3 时有效）
+    /// 文本内容（tagType=0 或 2 时有效）
     public let text: String?
 
-    /// Base64 编码的图片数据（tagType=2 或 3 时有效）
+    /// Base64 编码的图片数据（tagType=1 或 2 时有效）
     public let imgBase64: String?
 
     // MARK: - CSS 样式字段
@@ -66,17 +66,6 @@ public struct GExtTag: Codable, Equatable, Hashable {
         self.cssBorderRadius = cssBorderRadius
         self.cssBorderColor = cssBorderColor
         self.cssBorderStyle = cssBorderStyle
-    }
-
-    // MARK: - 便利属性
-
-    /// 将 imgBase64 解码为 UIImage（耗时操作，调用方自行缓存）
-    public var image: UIImage? {
-        guard let base64 = imgBase64,
-              let data = Data(base64Encoded: base64, options: .ignoreUnknownCharacters) else {
-            return nil
-        }
-        return UIImage(data: data)
     }
 }
 

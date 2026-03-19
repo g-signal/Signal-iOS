@@ -57,7 +57,6 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         let hasMuteIndicator: Bool
         let hasMessageStatusToken: Bool
         let hasUnreadBadge: Bool
-        let hasExtTags: Bool
     }
 
     private var reuseToken: ReuseToken?
@@ -195,6 +194,13 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
     }
 
     private static func buildContentConfiguration(for configuration: Configuration) -> CLVCellContentConfiguration {
+        var extTags: [GExtTag] = []
+        if let contactThread = configuration.threadViewModel.threadRecord as? TSContactThread,
+           !contactThread.contactAddress.isLocalAddress {
+            SSKEnvironment.shared.databaseStorageRef.read { tx in
+                extTags = GExtTagStore.shared.getUserExtTags(for: contactThread.contactAddress, transaction: tx)
+            }
+        }
         return CLVCellContentConfiguration(
             thread: configuration.threadViewModel.threadRecord,
             lastReloadDate: configuration.lastReloadDate,
@@ -204,6 +210,7 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
             shouldShowMuteIndicator: Self.shouldShowMuteIndicator(configuration: configuration),
             hasOverrideSnippet: configuration.hasOverrideSnippet,
             messageStatusToken: Self.buildMessageStatusToken(configuration: configuration),
+            extTags: extTags,
             unreadIndicatorLabelConfig: Self.buildUnreadIndicatorLabelConfig(configuration: configuration),
             topRowStackConfig: Self.topRowStackConfig,
             bottomRowStackConfig: Self.bottomRowStackConfig,
@@ -235,11 +242,13 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
             nameLabelSize.asManualSubviewInfo(horizontalFlowBehavior: .canCompress, verticalFlowBehavior: .fixed)
         )
 
-        // Add measurement space for ExtTags (approximate)
-        let extTagsSize = CGSize(width: 60, height: 18) // 预留标签空间
-        topRowStackSubviewInfos.append(
-            extTagsSize.asManualSubviewInfo(horizontalFlowBehavior: .fixed, verticalFlowBehavior: .fixed)
-        )
+        // Include ext tags slot only when tags are actually present (matches isHidden logic in render phase)
+        if !configuration.extTags.isEmpty {
+            let extTagsSize = GExtTagsStackView.preferredSize(for: configuration.extTags)
+            topRowStackSubviewInfos.append(
+                extTagsSize.asManualSubviewInfo(horizontalFlowBehavior: .fixed, verticalFlowBehavior: .fixed)
+            )
+        }
         if shouldShowVerifiedBadge {
             topRowStackSubviewInfos.append(CGSize(square: muteIconSize).asManualSubviewInfo(hasFixedSize: true))
         }
@@ -400,21 +409,11 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         nameLabelConfig.applyForRendering(label: nameLabel)
         topRowStackSubviews.append(nameLabel)
 
-        // Configure ExtTags for contact threads only
-        let thread = configuration.thread
-        SSKEnvironment.shared.databaseStorageRef.read { transaction in
-            if let contactThread = thread as? TSContactThread {
-                extTagsStackView.configureForUser(contactThread.contactAddress, transaction: transaction)
-            } else {
-                // No ExtTags for group threads
-                extTagsStackView.configure(with: [])
-            }
-        }
-
-        // Add ExtTags to layout if not empty
-        if !extTagsStackView.isEmpty {
-            topRowStackSubviews.append(extTagsStackView)
-        }
+        // Configure ExtTags from pre-loaded configuration data (avoids redundant DB read)
+        extTagsStackView.configure(with: configuration.extTags)
+        // extTagsStackView.isHidden is set by configure() — ManualStackView skips hidden views,
+        // so this must match the measurement phase (slot included only when extTags non-empty)
+        topRowStackSubviews.append(extTagsStackView)
 
         if configuration.shouldShowVerifiedBadge {
             badgeView.image = Theme.iconImage(.official)
@@ -497,8 +496,7 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
             hasVerifiedBadge: configuration.shouldShowVerifiedBadge,
             hasMuteIndicator: configuration.shouldShowMuteIndicator,
             hasMessageStatusToken: configuration.messageStatusToken != nil,
-            hasUnreadBadge: measurements.unreadBadgeMeasurements != nil,
-            hasExtTags: !extTagsStackView.isEmpty
+            hasUnreadBadge: measurements.unreadBadgeMeasurements != nil
         )
 
         avatarStack.configure(
@@ -511,8 +509,7 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         // its subview list hasn't changed.
         if let oldReuseToken = self.reuseToken,
            oldReuseToken.hasMuteIndicator == newReuseToken.hasMuteIndicator,
-           oldReuseToken.hasVerifiedBadge == newReuseToken.hasVerifiedBadge,
-           oldReuseToken.hasExtTags == newReuseToken.hasExtTags {
+           oldReuseToken.hasVerifiedBadge == newReuseToken.hasVerifiedBadge {
             topRowStack.configureForReuse(config: topRowStackConfig,
                                           measurement: topRowStackMeasurement)
         } else {
@@ -1029,6 +1026,7 @@ private struct CLVCellContentConfiguration {
     let shouldShowMuteIndicator: Bool
     let hasOverrideSnippet: Bool
     let messageStatusToken: CLVMessageStatusToken?
+    let extTags: [GExtTag]
 
     let unreadIndicatorLabelConfig: CVLabelConfig?
     let topRowStackConfig: ManualStackView.Config

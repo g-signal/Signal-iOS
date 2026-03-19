@@ -26,10 +26,10 @@ public class GExtTagsStackView: UIStackView {
         distribution = .fill
         spacing = 4
 
-        // 确保标签不被压缩
+        // 设置较低的 hugging priority，允许在需要时扩展
         setContentCompressionResistancePriority(.required, for: .horizontal)
         setContentCompressionResistancePriority(.required, for: .vertical)
-        setContentHuggingPriority(.required, for: .horizontal)
+        setContentHuggingPriority(.defaultLow, for: .horizontal)
         setContentHuggingPriority(.required, for: .vertical)
     }
 
@@ -52,7 +52,7 @@ public class GExtTagsStackView: UIStackView {
             tagView.setContentCompressionResistancePriority(.required, for: .vertical)
         }
 
-        // 如果没有标签，隐藏整个容器
+        // ManualStackView 通过 isHidden 过滤子视图，所以空时需要隐藏
         isHidden = extTags.isEmpty
     }
 
@@ -68,30 +68,30 @@ public class GExtTagsStackView: UIStackView {
         configure(with: tags)
     }
 
-    /// 计算标签容器的理想大小
-    public func calculatePreferredSize() -> CGSize {
+    /// 计算标签容器的理想大小（静态版本，用于 ManualStackView 测量阶段）
+    public static func preferredSize(for extTags: [GExtTag]) -> CGSize {
         guard !extTags.isEmpty else { return .zero }
-
         var totalWidth: CGFloat = 0
-        var maxHeight: CGFloat = 18 // 默认标签高度
-
+        var maxHeight: CGFloat = 18
         for (index, extTag) in extTags.enumerated() {
-            let tagSize = calculateTagSize(for: extTag)
+            let tagSize = tagSize(for: extTag)
             totalWidth += tagSize.width
             maxHeight = max(maxHeight, tagSize.height)
-
-            // 添加标签间距
             if index < extTags.count - 1 {
-                totalWidth += spacing
+                totalWidth += 4 // spacing
             }
         }
-
         return CGSize(width: totalWidth, height: maxHeight)
     }
 
-    private func calculateTagSize(for extTag: GExtTag) -> CGSize {
+    /// 计算标签容器的理想大小
+    public func calculatePreferredSize() -> CGSize {
+        return Self.preferredSize(for: extTags)
+    }
+
+    private static func tagSize(for extTag: GExtTag) -> CGSize {
         switch extTag.tagType {
-        case 1: // 纯文本
+        case 0: // 纯文本
             if let text = extTag.text {
                 let font = UIFont.systemFont(ofSize: 12, weight: .medium)
                 let textSize = text.size(withAttributes: [.font: font])
@@ -99,10 +99,10 @@ public class GExtTagsStackView: UIStackView {
             }
             return CGSize(width: 20, height: 18)
 
-        case 2: // 纯图片
+        case 1: // 纯图片
             return CGSize(width: 18, height: 18)
 
-        case 3: // 文本+图片
+        case 2: // 文本+图片
             if let text = extTag.text {
                 let font = UIFont.systemFont(ofSize: 12, weight: .medium)
                 let textSize = text.size(withAttributes: [.font: font])
@@ -113,5 +113,13 @@ public class GExtTagsStackView: UIStackView {
         default:
             return .zero
         }
+    }
+
+    public override var intrinsicContentSize: CGSize {
+        // 如果没有标签，返回零宽度（但保持高度以避免布局问题）
+        guard !extTags.isEmpty else {
+            return CGSize(width: 0, height: 18)
+        }
+        return calculatePreferredSize()
     }
 }

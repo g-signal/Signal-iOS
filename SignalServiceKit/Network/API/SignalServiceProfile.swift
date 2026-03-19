@@ -72,9 +72,6 @@ public class SignalServiceProfile {
             throw ValidationError(description: "Invalid response JSON!")
         }
 
-        // Log the response to check for gext fields
-        Logger.info("Profile response for \(serviceId): \(String(describing: responseObject))")
-
         do {
             let identityKey = try IdentityKey(bytes: try params.requiredBase64EncodedData(key: "identityKey"))
             let profileNameEncrypted = try params.optionalBase64EncodedData(key: "name")
@@ -87,7 +84,7 @@ public class SignalServiceProfile {
             let credential = try params.optionalBase64EncodedData(key: "credential")
             let badges: [(OWSUserProfileBadgeInfo, ProfileBadge)] = try parseBadges(params: params)
             let phoneNumberSharingEncrypted = try params.optionalBase64EncodedData(key: "phoneNumberSharing")
-            let gextTags: [GExtTag] = try parseGExtTags(params: params)
+            let gextTags: [GExtTag]? = try parseGExtTags(params: params)
             let capabilities: Capabilities = try parseCapabilities(params: params)
 
             return SignalServiceProfile(
@@ -149,9 +146,9 @@ public class SignalServiceProfile {
         )
     }
 
-    private static func parseGExtTags(params: ParamParser) throws -> [GExtTag] {
+    private static func parseGExtTags(params: ParamParser) throws -> [GExtTag]? {
         guard let gextTagsArray: [[String: Any]] = try params.optional(key: "gextTags") else {
-            return []
+            return nil
         }
 
         var result: [GExtTag] = []

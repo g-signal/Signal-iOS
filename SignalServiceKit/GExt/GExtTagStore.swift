@@ -36,7 +36,8 @@ public class GExtTagStore: NSObject {
                 return []
             }
 
-            return try record.getExtTags()
+            let tags = try record.getExtTags()
+            return tags
         } catch {
             owsFailDebug("Failed to fetch user ext tags: \(error)")
             return []
@@ -69,17 +70,17 @@ public class GExtTagStore: NSObject {
         do {
             let aciString = try getAciString(for: address)
 
-            // 首先删除现有记录（按 aci 删除，因为这是业务主键）
-            try GRecipientGExtTagRecord
-                .filter(GRecipientGExtTagRecord.Columns.aci == aciString)
-                .deleteAll(transaction.database)
+            // 删除同 aci 但不同 _id 的旧记录，避免 aci 唯一约束冲突
+            try transaction.database.execute(sql: """
+                DELETE FROM gext_recipient WHERE aci = ? AND _id != ?
+            """, arguments: [aciString, profileId])
 
-            // 插入新记录，使用 profile ID 作为主键
+            // 使用 INSERT OR REPLACE 处理 _id 冲突（upsert）
             let tagsData = try JSONEncoder().encode(extTags)
             let now = Date().ows_millisecondsSince1970
 
             try transaction.database.execute(sql: """
-                INSERT INTO gext_recipient (_id, aci, tags, last_updated)
+                INSERT OR REPLACE INTO gext_recipient (_id, aci, tags, last_updated)
                 VALUES (?, ?, ?, ?)
             """, arguments: [profileId, aciString, tagsData, Int64(now)])
 

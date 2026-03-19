@@ -204,6 +204,20 @@ struct ConversationHeaderBuilder {
         subviews.append(avatarWrapper)
         subviews.append(UIView.spacer(withHeight: 8))
         subviews.append(buildThreadNameLabel())
+
+        // ExtTags: 显示在名字下方（仅联系人线程）
+        if let contactThread = delegate.thread as? TSContactThread,
+           !contactThread.contactAddress.isLocalAddress {
+            let extTagsView = GExtTagsStackView()
+            extTagsView.configureForUser(contactThread.contactAddress, transaction: transaction)
+            if !extTagsView.isEmpty {
+                subviews.append(UIView.spacer(withHeight: 4))
+                let tagContainer = UIView.container()
+                tagContainer.addSubview(extTagsView)
+                extTagsView.autoPinEdgesToSuperviewEdges()
+                subviews.append(tagContainer)
+            }
+        }
     }
 
     mutating func addButtons() {
