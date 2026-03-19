@@ -21,17 +21,11 @@ public class GExtTagService: NSObject {
         for address: SignalServiceAddress,
         completion: @escaping (Result<[GExtTag], Error>) -> Void
     ) {
-        do {
-            let extTags = databaseStorage.read { transaction in
-                return GExtTagStore.shared.getUserExtTags(for: address, transaction: transaction)
-            }
-            DispatchQueue.main.async {
-                completion(.success(extTags))
-            }
-        } catch {
-            DispatchQueue.main.async {
-                completion(.failure(GExtTagError.parseError(error)))
-            }
+        let extTags = databaseStorage.read { transaction in
+            return GExtTagStore.shared.getUserExtTags(for: address, transaction: transaction)
+        }
+        DispatchQueue.main.async {
+            completion(.success(extTags))
         }
     }
 
