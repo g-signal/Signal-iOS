@@ -89,6 +89,7 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         let lastReloadDate: Date?
         let overrideSnippet: OverrideSnippet?
         let overrideDate: Date?
+        let extTags: [GExtTag]
 
         fileprivate var hasOverrideSnippet: Bool {
             overrideSnippet != nil
@@ -114,12 +115,14 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
             threadViewModel: ThreadViewModel,
             lastReloadDate: Date?,
             overrideSnippet: OverrideSnippet? = nil,
-            overrideDate: Date? = nil
+            overrideDate: Date? = nil,
+            extTags: [GExtTag] = []
         ) {
             self.threadViewModel = threadViewModel
             self.lastReloadDate = lastReloadDate
             self.overrideSnippet = overrideSnippet
             self.overrideDate = overrideDate
+            self.extTags = extTags
         }
     }
 
@@ -194,13 +197,6 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
     }
 
     private static func buildContentConfiguration(for configuration: Configuration) -> CLVCellContentConfiguration {
-        var extTags: [GExtTag] = []
-        if let contactThread = configuration.threadViewModel.threadRecord as? TSContactThread,
-           !contactThread.contactAddress.isLocalAddress {
-            SSKEnvironment.shared.databaseStorageRef.read { tx in
-                extTags = GExtTagStore.shared.getUserExtTags(for: contactThread.contactAddress, transaction: tx)
-            }
-        }
         return CLVCellContentConfiguration(
             thread: configuration.threadViewModel.threadRecord,
             lastReloadDate: configuration.lastReloadDate,
@@ -210,7 +206,7 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
             shouldShowMuteIndicator: Self.shouldShowMuteIndicator(configuration: configuration),
             hasOverrideSnippet: configuration.hasOverrideSnippet,
             messageStatusToken: Self.buildMessageStatusToken(configuration: configuration),
-            extTags: extTags,
+            extTags: configuration.extTags,
             unreadIndicatorLabelConfig: Self.buildUnreadIndicatorLabelConfig(configuration: configuration),
             topRowStackConfig: Self.topRowStackConfig,
             bottomRowStackConfig: Self.bottomRowStackConfig,

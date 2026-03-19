@@ -746,11 +746,18 @@ extension CLVTableDataSource {
         lastReloadDate: Date?
     ) -> ChatListCell.Configuration {
         owsAssertDebug(threadViewModel.chatListInfo != nil)
-        let configuration = ChatListCell.Configuration(
+        var extTags: [GExtTag] = []
+        if let contactThread = threadViewModel.threadRecord as? TSContactThread,
+           !contactThread.contactAddress.isLocalAddress {
+            SSKEnvironment.shared.databaseStorageRef.read { tx in
+                extTags = GExtTagStore.shared.getUserExtTags(for: contactThread.contactAddress, transaction: tx)
+            }
+        }
+        return ChatListCell.Configuration(
             threadViewModel: threadViewModel,
-            lastReloadDate: lastReloadDate
+            lastReloadDate: lastReloadDate,
+            extTags: extTags
         )
-        return configuration
     }
 
     private func buildCellContentToken(for indexPath: IndexPath) -> CLVCellContentToken? {

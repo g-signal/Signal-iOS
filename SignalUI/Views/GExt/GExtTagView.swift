@@ -192,9 +192,11 @@ private class SVGImageLoader: NSObject, WKNavigationDelegate {
     // 以 svgBase64 为 key 缓存渲染结果，避免重复渲染和首次显示闪烁
     private static let cache = NSCache<NSString, UIImage>()
 
+    // 去重：同一 key 的并发请求共享同一个 loader，回调统一派发
+    private static var pending: [NSString: [(UIImage?) -> Void]] = [:]
+
     private let cacheKey: NSString
     private let webView: WKWebView
-    private let completion: (UIImage?) -> Void
 
     static func load(svgBase64: String, size: CGSize, completion: @escaping (UIImage?) -> Void) {
         let key = svgBase64 as NSString
@@ -202,13 +204,18 @@ private class SVGImageLoader: NSObject, WKNavigationDelegate {
             completion(cached)
             return
         }
-        let loader = SVGImageLoader(svgBase64: svgBase64, size: size, completion: completion)
+        // 已有进行中的请求，追加回调即可，不再创建新 WKWebView
+        if pending[key] != nil {
+            pending[key]!.append(completion)
+            return
+        }
+        pending[key] = [completion]
+        let loader = SVGImageLoader(svgBase64: svgBase64, size: size)
         active.append(loader)
     }
 
-    private init(svgBase64: String, size: CGSize, completion: @escaping (UIImage?) -> Void) {
+    private init(svgBase64: String, size: CGSize) {
         self.cacheKey = svgBase64 as NSString
-        self.completion = completion
         // frame 用 point，takeSnapshot 会自动按屏幕 scale 输出 Retina 分辨率
         self.webView = WKWebView(frame: CGRect(origin: .zero, size: size))
         super.init()
@@ -232,18 +239,30 @@ private class SVGImageLoader: NSObject, WKNavigationDelegate {
         webView.loadHTMLString(html, baseURL: nil)
     }
 
+    // 统一清理入口：缓存结果、派发所有回调、从 active 移除
+    private func finish(with image: UIImage?) {
+        if let image {
+            SVGImageLoader.cache.setObject(image, forKey: cacheKey)
+        }
+        let callbacks = SVGImageLoader.pending.removeValue(forKey: cacheKey) ?? []
+        callbacks.forEach { $0(image) }
+        SVGImageLoader.active.removeAll { $0 === self }
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let config = WKSnapshotConfiguration()
         config.rect = webView.bounds
         webView.takeSnapshot(with: config) { [weak self] image, _ in
-            DispatchQueue.main.async {
-                if let self, let image {
-                    SVGImageLoader.cache.setObject(image, forKey: self.cacheKey)
-                }
-                self?.completion(image)
-                SVGImageLoader.active.removeAll { $0 === self }
-            }
+            DispatchQueue.main.async { self?.finish(with: image) }
         }
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        finish(with: nil)
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        finish(with: nil)
     }
 }
 

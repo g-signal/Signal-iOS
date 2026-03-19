@@ -144,16 +144,18 @@ public class ConversationHeaderView: UIView {
             config.applyConfigurationSynchronously()
         }
 
-        // Configure ExtTags for contact threads only
-        SSKEnvironment.shared.databaseStorageRef.read { transaction in
-            let thread = threadViewModel.threadRecord
-            if let contactThread = thread as? TSContactThread {
-                extTagsStackView.configureForUser(contactThread.contactAddress, transaction: transaction)
-            } else {
-                // No ExtTags for group threads
-                extTagsStackView.configure(with: [])
-            }
+        // Configure ExtTags for contact threads only (async to avoid blocking main thread)
+        guard let contactThread = threadViewModel.threadRecord as? TSContactThread else {
+            extTagsStackView.configure(with: [])
+            return
         }
+        let address = contactThread.contactAddress
+        SSKEnvironment.shared.databaseStorageRef.asyncRead(
+            file: #file, function: #function, line: #line,
+            block: { GExtTagStore.shared.getUserExtTags(for: address, transaction: $0) },
+            completionQueue: .main,
+            completion: { [weak self] tags in self?.extTagsStackView.configure(with: tags) }
+        )
     }
 
     public override var intrinsicContentSize: CGSize {
