@@ -10,13 +10,13 @@ public struct GExtTag: Codable, Equatable, Hashable {
     /// 标签唯一标识
     public let tagId: String
 
-    /// 标签类型：0=文本标签，1=图片标签，2=混合标签
+    /// 标签类型：0=文本标签，1=图片标签
     public let tagType: Int
 
-    /// 文本内容（tagType=0 或 2 时有效）
+    /// 文本内容（tagType=0 时有效）
     public let text: String?
 
-    /// Base64 编码的图片数据（tagType=1 或 2 时有效）
+    /// Base64 编码的图片数据（tagType=1 时有效）
     public let imgBase64: String?
 
     // MARK: - CSS 样式字段

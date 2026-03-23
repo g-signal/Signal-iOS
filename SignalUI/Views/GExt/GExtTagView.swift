@@ -79,11 +79,14 @@ public class GExtTagView: UIView {
         switch extTag.tagType {
         case 0: // 纯文本
             imageView.isHidden = true
+            let font = UIFont.systemFont(ofSize: 12, weight: .medium)
+            let textWidth = (extTag.text ?? "").size(withAttributes: [.font: font]).width
             NSLayoutConstraint.activate([
                 textLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 6),
                 textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
                 textLabel.topAnchor.constraint(equalTo: topAnchor, constant: 2),
                 textLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
+                widthAnchor.constraint(equalToConstant: textWidth + 12),
                 heightAnchor.constraint(equalToConstant: 18)
             ])
 
@@ -95,22 +98,6 @@ public class GExtTagView: UIView {
                 imageView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
                 imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
                 widthAnchor.constraint(equalToConstant: 18),
-                heightAnchor.constraint(equalToConstant: 18)
-            ])
-
-        case 2: // 文本+图片
-            NSLayoutConstraint.activate([
-                imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
-                imageView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-                imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
-                imageView.widthAnchor.constraint(equalToConstant: 14),
-                imageView.heightAnchor.constraint(equalToConstant: 14),
-
-                textLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 2),
-                textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
-                textLabel.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-                textLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
-
                 heightAnchor.constraint(equalToConstant: 18)
             ])
 

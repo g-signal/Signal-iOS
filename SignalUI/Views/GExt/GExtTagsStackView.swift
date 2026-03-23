@@ -26,10 +26,9 @@ public class GExtTagsStackView: UIStackView {
         distribution = .fill
         spacing = 4
 
-        // 设置较低的 hugging priority，允许在需要时扩展
         setContentCompressionResistancePriority(.required, for: .horizontal)
         setContentCompressionResistancePriority(.required, for: .vertical)
-        setContentHuggingPriority(.defaultLow, for: .horizontal)
+        setContentHuggingPriority(.required, for: .horizontal)
         setContentHuggingPriority(.required, for: .vertical)
     }
 
@@ -101,14 +100,6 @@ public class GExtTagsStackView: UIStackView {
 
         case 1: // 纯图片
             return CGSize(width: 18, height: 18)
-
-        case 2: // 文本+图片
-            if let text = extTag.text {
-                let font = UIFont.systemFont(ofSize: 12, weight: .medium)
-                let textSize = text.size(withAttributes: [.font: font])
-                return CGSize(width: 14 + 2 + textSize.width + 6 + 2, height: 18)
-            }
-            return CGSize(width: 22, height: 18)
 
         default:
             return .zero
