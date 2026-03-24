@@ -13,11 +13,11 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Mon Mar 23 09:01:46 UTC 2026</string>
+		<string>Tue Mar 24 02:40:33 UTC 2026</string>
 		<key>SignalCommit</key>
-		<string>3227bc8e793851bba6c0bd0e8c1a9ce936454443 rm group conversation id</string>
+		<string>2ba21cc93cf87d6ecd1f182e93374e56a2209fcc v7.70.7</string>
 		<key>Timestamp</key>
-		<integer>1774256506</integer>
+		<integer>1774320033</integer>
 		<key>XCodeVersion</key>
 		<string>2600.2630</string>
 	</dict>
@@ -40,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.70.7</string>
+	<string>7.70.8</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>

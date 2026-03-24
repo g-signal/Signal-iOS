@@ -235,6 +235,8 @@ class HomeTabBarController: UITabBarController {
 
     // FIXME: Can this conditionally override UITabBarController.isTabBarHidden on iOS 18?
     private var _isTabBarHidden: Bool = false
+    /// Saved frame of the tab bar before it was hidden, used to restore it precisely.
+    private var _savedTabBarFrame: CGRect?
 
     /// Hides or displays the tab bar, resizing the selected view controller to
     /// fill the space remaining.
@@ -257,40 +259,74 @@ class HomeTabBarController: UITabBarController {
 
         let oldFrame = self.tabBar.frame
         let containerHeight = tabBar.superview?.bounds.height ?? 0
-        let newMinY = hidden ? containerHeight : containerHeight - oldFrame.height
-        let additionalSafeArea = hidden
-            ? (-oldFrame.height + view.safeAreaInsets.bottom)
-            : (oldFrame.height - view.safeAreaInsets.bottom)
 
-        let animations = {
-            self.tabBar.frame = self.tabBar.frame.offsetBy(dx: 0, dy: newMinY - oldFrame.y)
-            if let vc = self.selectedViewController {
-                var additionalSafeAreaInsets = vc.additionalSafeAreaInsets
-                additionalSafeAreaInsets.bottom += additionalSafeArea
-                vc.additionalSafeAreaInsets = additionalSafeAreaInsets
+        // Save the current frame before hiding so we can restore it exactly.
+        // This avoids frame drift on iOS 26's floating tab bar where the original
+        // position may not be (containerHeight - tabBar.height).
+        if !hidden {
+            // Restoring: use saved frame if available, else calculate.
+            let restoredFrame = _savedTabBarFrame ?? oldFrame.offsetBy(dx: 0, dy: (containerHeight - oldFrame.height) - oldFrame.y)
+            _savedTabBarFrame = nil
+            let additionalSafeArea = oldFrame.height - view.safeAreaInsets.bottom
+
+            let animations = {
+                self.tabBar.frame = restoredFrame
+                if let vc = self.selectedViewController {
+                    var insets = vc.additionalSafeAreaInsets
+                    insets.bottom += additionalSafeArea
+                    vc.additionalSafeAreaInsets = insets
+                }
+                self.view.setNeedsDisplay()
+                self.view.layoutIfNeeded()
             }
 
-            self.view.setNeedsDisplay()
-            self.view.layoutIfNeeded()
-        }
-
-        if animated {
-            // Unhide for animations.
-            self.tabBar.isHidden = false
-            let animator = UIViewPropertyAnimator(duration: duration, curve: .easeOut) {
+            if animated {
+                self.tabBar.isHidden = false
+                let animator = UIViewPropertyAnimator(duration: duration, curve: .easeOut) { animations() }
+                animator.addCompletion({
+                    self.tabBar.isHidden = false
+                    self.owsTabBar?.applyTheme()
+                    completion?($0 == .end)
+                })
+                animator.startAnimation()
+            } else {
                 animations()
+                self.tabBar.isHidden = false
+                owsTabBar?.applyTheme()
+                completion?(true)
             }
-            animator.addCompletion({
-                self.tabBar.isHidden = hidden
-                self.owsTabBar?.applyTheme()
-                completion?($0 == .end)
-            })
-            animator.startAnimation()
         } else {
-            animations()
-            self.tabBar.isHidden = hidden
-            owsTabBar?.applyTheme()
-            completion?(true)
+            // Hiding: save current frame then move off-screen.
+            _savedTabBarFrame = oldFrame
+            let newMinY = containerHeight
+            let additionalSafeArea = -oldFrame.height + view.safeAreaInsets.bottom
+
+            let animations = {
+                self.tabBar.frame = self.tabBar.frame.offsetBy(dx: 0, dy: newMinY - oldFrame.y)
+                if let vc = self.selectedViewController {
+                    var insets = vc.additionalSafeAreaInsets
+                    insets.bottom += additionalSafeArea
+                    vc.additionalSafeAreaInsets = insets
+                }
+                self.view.setNeedsDisplay()
+                self.view.layoutIfNeeded()
+            }
+
+            if animated {
+                self.tabBar.isHidden = false
+                let animator = UIViewPropertyAnimator(duration: duration, curve: .easeOut) { animations() }
+                animator.addCompletion({
+                    self.tabBar.isHidden = true
+                    self.owsTabBar?.applyTheme()
+                    completion?($0 == .end)
+                })
+                animator.startAnimation()
+            } else {
+                animations()
+                self.tabBar.isHidden = true
+                owsTabBar?.applyTheme()
+                completion?(true)
+            }
         }
     }
 }

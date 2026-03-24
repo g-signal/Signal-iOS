@@ -116,6 +116,8 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         if shouldHideTabBar {
             tabBarController?.tabBar.isHidden = true
             extendedLayoutIncludesOpaqueBars = true
+        } else if #available(iOS 26, *), !UIDevice.current.isIPad {
+            (tabBarController as? HomeTabBarController)?.setTabBarHidden(false, animated: false)
         }
 
         if isSearching {
