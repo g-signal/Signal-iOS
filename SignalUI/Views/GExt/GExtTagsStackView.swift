@@ -106,12 +106,11 @@ public class GExtTagsStackView: UIStackView {
 
         case 1: // 纯图片
             let h: CGFloat = 18
-            let innerH: CGFloat = h - 4  // 2pt top inset + 2pt bottom inset
             if let imgBase64 = extTag.imgBase64,
                let naturalSize = GExtTagView.imageSizeFromBase64(imgBase64),
                naturalSize.height > 0 {
                 let aspectRatio = naturalSize.width / naturalSize.height
-                return CGSize(width: innerH * aspectRatio + 4, height: h)
+                return CGSize(width: h * aspectRatio, height: h)
             }
             return CGSize(width: h, height: h)
 

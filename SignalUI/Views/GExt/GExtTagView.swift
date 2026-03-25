@@ -93,15 +93,14 @@ public class GExtTagView: UIView {
         case 1: // 纯图片
             textLabel.isHidden = true
             let h: CGFloat = 18
-            let innerH: CGFloat = h - 4  // 2pt top inset + 2pt bottom inset
             let aspectRatio = imageNaturalSize.height > 0 ? imageNaturalSize.width / imageNaturalSize.height : 1
-            let imageW = innerH * aspectRatio
+            let imageW = h * aspectRatio
             NSLayoutConstraint.activate([
-                imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
-                imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
-                imageView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-                imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
-                widthAnchor.constraint(equalToConstant: imageW + 4),
+                imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                imageView.topAnchor.constraint(equalTo: topAnchor),
+                imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                widthAnchor.constraint(equalToConstant: imageW),
                 heightAnchor.constraint(equalToConstant: h)
             ])
 
