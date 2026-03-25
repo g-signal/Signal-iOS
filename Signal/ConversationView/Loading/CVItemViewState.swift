@@ -378,9 +378,38 @@ struct CVItemModelBuilder: CVItemBuilding {
                     shouldShowSenderName = incomingSenderAddress != previousIncomingSenderAddress
                 }
                 if shouldShowSenderName {
-                    let senderName = NSAttributedString(string: authorName)
+                    let mutableName = NSMutableAttributedString(string: authorName)
+
+                    let extTags = GExtTagStore.shared.getUserExtTags(for: incomingSenderAddress, transaction: transaction)
+                    for tag in extTags {
+                        switch tag.tagType {
+                        case 0:
+                            guard let image = tag.renderedAsImage() else { continue }
+                            let attachment = NSTextAttachment()
+                            attachment.image = image
+                            attachment.bounds = CGRect(x: 0, y: -3, width: image.size.width, height: image.size.height)
+                            mutableName.append(NSAttributedString(string: " "))
+                            mutableName.append(NSAttributedString(attachment: attachment))
+                        case 1:
+                            guard let dataURI = tag.imgBase64 else { continue }
+                            var base64 = dataURI
+                            if let r = base64.range(of: "base64,") { base64 = String(base64[r.upperBound...]) }
+                            guard let data = Data(base64Encoded: base64, options: .ignoreUnknownCharacters),
+                                  let image = UIImage(data: data) else { continue }
+                            let attachment = NSTextAttachment()
+                            attachment.image = image
+                            let tagH: CGFloat = 18
+                            let tagW = image.size.height > 0 ? image.size.width / image.size.height * tagH : tagH
+                            attachment.bounds = CGRect(x: 0, y: -3, width: tagW, height: tagH)
+                            mutableName.append(NSAttributedString(string: " "))
+                            mutableName.append(NSAttributedString(attachment: attachment))
+                        default:
+                            continue
+                        }
+                    }
+
                     let senderNameColor = groupNameColors.color(for: incomingSenderAddress)
-                    itemViewState.senderNameState = CVComponentState.SenderName(senderName: senderName,
+                    itemViewState.senderNameState = CVComponentState.SenderName(senderName: mutableName,
                                                                                 senderNameColor: senderNameColor)
                 }
 

@@ -336,6 +336,7 @@ public class GRDBSchemaMigrator {
         case addBackupOversizeText
         case addBackupOversizeTextRedux
         case createGExtTagTables
+        case createGExtGroupTagTables
 
         // NOTE: Every time we add a migration id, consider
         // incrementing grdbSchemaVersionLatest.
@@ -399,7 +400,7 @@ public class GRDBSchemaMigrator {
     }
 
     public static let grdbSchemaVersionDefault: UInt = 0
-    public static let grdbSchemaVersionLatest: UInt = 121
+    public static let grdbSchemaVersionLatest: UInt = 122
 
     // An optimization for new users, we have the first migration import the latest schema
     // and mark any other migrations as "already run".
@@ -4187,7 +4188,7 @@ public class GRDBSchemaMigrator {
         }
 
         migrator.registerMigration(.createGExtTagTables) { tx in
-            // 创建用户扩展标签表
+            // 创建用户扩展标签表，UNIQUE 约束已隐式创建索引
             try tx.database.execute(sql: """
                 CREATE TABLE gext_recipient (
                     _id INTEGER PRIMARY KEY,
@@ -4198,10 +4199,20 @@ public class GRDBSchemaMigrator {
                 )
             """)
 
-            // 创建索引以提升查询性能
+            return .success(())
+        }
+
+        migrator.registerMigration(.createGExtGroupTagTables) { tx in
+            // 创建群组扩展标签表
+            // group_id 为 GroupIdentifier(32字节) hex 编码，固定 64 字符，UNIQUE 约束已隐式创建索引
             try tx.database.execute(sql: """
-                CREATE INDEX idx_gext_recipient_aci
-                ON gext_recipient(aci)
+                CREATE TABLE gext_groups (
+                    _id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    group_id VARCHAR(64) NOT NULL,
+                    tags BLOB NOT NULL,
+                    last_updated INTEGER NOT NULL,
+                    UNIQUE(group_id)
+                )
             """)
 
             return .success(())

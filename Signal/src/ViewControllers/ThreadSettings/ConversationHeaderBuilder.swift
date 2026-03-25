@@ -118,6 +118,7 @@ struct ConversationHeaderBuilder {
         }
 
         builder.addButtons()
+        builder.addGroupIdRow(groupId: groupThread.groupId.hexadecimalString)
 
         return builder.build()
     }
@@ -205,11 +206,21 @@ struct ConversationHeaderBuilder {
         subviews.append(UIView.spacer(withHeight: 8))
         subviews.append(buildThreadNameLabel())
 
-        // ExtTags: 显示在名字下方（仅联系人线程）
+        // ExtTags: 显示在名字下方（联系人线程 或 群组线程）
         if let contactThread = delegate.thread as? TSContactThread,
            !contactThread.contactAddress.isLocalAddress {
             let extTagsView = GExtTagsStackView()
             extTagsView.configureForUser(contactThread.contactAddress, transaction: transaction)
+            if !extTagsView.isEmpty {
+                subviews.append(UIView.spacer(withHeight: 4))
+                let tagContainer = UIView.container()
+                tagContainer.addSubview(extTagsView)
+                extTagsView.autoPinEdgesToSuperviewEdges()
+                subviews.append(tagContainer)
+            }
+        } else if let groupThread = delegate.thread as? TSGroupThread {
+            let extTagsView = GExtTagsStackView()
+            extTagsView.configureForGroup(groupThread.groupId.hexadecimalString, transaction: transaction)
             if !extTagsView.isEmpty {
                 subviews.append(UIView.spacer(withHeight: 4))
                 let tagContainer = UIView.container()
@@ -499,6 +510,49 @@ struct ConversationHeaderBuilder {
         subviews.append(label)
         hasSubtitleLabel = true
         return label
+    }
+
+    mutating func addGroupIdRow(groupId: String) {
+        subviews.append(UIView.spacer(withHeight: 10))
+
+        let idLabel = UILabel()
+        idLabel.lineBreakMode = .byTruncatingMiddle
+        idLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        let labelText = NSMutableAttributedString(
+            string: "Group ID",
+            attributes: [
+                .foregroundColor: Theme.secondaryTextAndIconColor,
+                .font: UIFont.dynamicTypeFont(ofStandardSize: 12, weight: .semibold)
+            ]
+        )
+        labelText.append(NSAttributedString(
+            string: ": \(groupId)",
+            attributes: [
+                .foregroundColor: Theme.secondaryTextAndIconColor,
+                .font: UIFont.dynamicTypeFootnoteClamped
+            ]
+        ))
+        idLabel.attributedText = labelText
+
+        let copyButton = OWSButton { [groupId, weak delegate] in
+            UIPasteboard.general.string = groupId
+            delegate?.presentToast(text: OWSLocalizedString("COPIED_TO_CLIPBOARD", comment: "Indicator that text has been copied to the clipboard"))
+        }
+        copyButton.setTitle(OWSLocalizedString("EDIT_ITEM_COPY_ACTION", comment: "Button to copy text"), for: .normal)
+        copyButton.setTitleColor(UIColor.Signal.accent, for: .normal)
+        copyButton.titleLabel?.font = .dynamicTypeFootnoteClamped
+        copyButton.setContentHuggingHigh()
+
+        let row = UIStackView(arrangedSubviews: [idLabel, copyButton])
+        row.axis = .horizontal
+        row.spacing = 6
+        row.alignment = .center
+
+        let availableWidth = delegate.tableViewController.view.width
+            - delegate.tableViewController.cellOuterInsets.totalWidth - 48
+        row.autoSetDimension(.width, toSize: availableWidth)
+
+        subviews.append(row)
     }
 
     mutating func addLegacyGroupView() {

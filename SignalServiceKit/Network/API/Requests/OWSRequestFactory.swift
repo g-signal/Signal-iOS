@@ -636,6 +636,13 @@ public enum OWSRequestFactory {
         request.auth = .identified(auth)
         return request
     }
+
+    // MARK: - GExt Group Profile
+
+    static func getGroupExtTagsRequest(groupId: String) -> TSRequest {
+        let path = "v1/gext/group/profile/\(groupId)"
+        return TSRequest(url: URL(string: path)!, method: "GET", parameters: [:])
+    }
 }
 
 // MARK: -

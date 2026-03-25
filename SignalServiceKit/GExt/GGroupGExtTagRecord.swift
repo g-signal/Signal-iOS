@@ -6,19 +6,19 @@
 import Foundation
 import GRDB
 
-/// 用户 GExtTag 数据库记录，对应 gext_recipient 表
-struct GRecipientGExtTagRecord: Codable, FetchableRecord, PersistableRecord {
-    static let databaseTableName = "gext_recipient"
+/// 群组 GExtTag 数据库记录，对应 gext_groups 表
+struct GGroupGExtTagRecord: Codable, FetchableRecord, PersistableRecord {
+    static let databaseTableName = "gext_groups"
 
     enum Columns: String, ColumnExpression {
         case _id = "_id"
-        case aci = "aci"
+        case group_id = "group_id"
         case tags = "tags"
         case last_updated = "last_updated"
     }
 
     var _id: Int64?
-    var aci: String
+    var group_id: String
     var tags: Data  // JSON编码的[GExtTag]数组
     var last_updated: Int64  // Unix时间戳(毫秒)
 

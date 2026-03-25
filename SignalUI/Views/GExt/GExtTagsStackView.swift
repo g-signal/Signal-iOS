@@ -67,6 +67,12 @@ public class GExtTagsStackView: UIStackView {
         configure(with: tags)
     }
 
+    /// 从群组 ID 获取并配置标签
+    public func configureForGroup(_ groupId: String, transaction: DBReadTransaction) {
+        let tags = GExtTagStore.shared.getGroupExtTags(for: groupId, transaction: transaction)
+        configure(with: tags)
+    }
+
     /// 计算标签容器的理想大小（静态版本，用于 ManualStackView 测量阶段）
     public static func preferredSize(for extTags: [GExtTag]) -> CGSize {
         guard !extTags.isEmpty else { return .zero }
@@ -99,7 +105,15 @@ public class GExtTagsStackView: UIStackView {
             return CGSize(width: 20, height: 18)
 
         case 1: // 纯图片
-            return CGSize(width: 18, height: 18)
+            let h: CGFloat = 18
+            let innerH: CGFloat = h - 4  // 2pt top inset + 2pt bottom inset
+            if let imgBase64 = extTag.imgBase64,
+               let naturalSize = GExtTagView.imageSizeFromBase64(imgBase64),
+               naturalSize.height > 0 {
+                let aspectRatio = naturalSize.width / naturalSize.height
+                return CGSize(width: innerH * aspectRatio + 4, height: h)
+            }
+            return CGSize(width: h, height: h)
 
         default:
             return .zero
@@ -112,5 +126,66 @@ public class GExtTagsStackView: UIStackView {
             return CGSize(width: 0, height: 18)
         }
         return calculatePreferredSize()
+    }
+}
+
+// MARK: -
+
+public extension GExtTag {
+    /// Renders the tag into a UIImage for use as an NSTextAttachment.
+    /// Safe to call off the main thread.
+    func renderedAsImage() -> UIImage? {
+        guard tagType == 0, let text = text, !text.isEmpty else { return nil }
+
+        let font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        let textColor = cssColor.flatMap { UIColor(gextTagHex: $0) } ?? .white
+        let bgColor = cssBackgroundColor.flatMap { UIColor(gextTagHex: $0) } ?? .clear
+        let cornerRadius = CGFloat(cssBorderRadius ?? 9)
+        let padding: CGFloat = 6
+        let textSize = text.size(withAttributes: [.font: font])
+        let size = CGSize(width: textSize.width + padding * 2, height: 18)
+
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { ctx in
+            let opacity = max(0, min(1, CGFloat(cssOpacity ?? 1.0)))
+            ctx.cgContext.setAlpha(opacity)
+
+            let rect = CGRect(origin: .zero, size: size)
+            let path = UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius)
+
+            bgColor.setFill()
+            path.fill()
+
+            if let hex = cssBorderColor, let borderColor = UIColor(gextTagHex: hex),
+               let borderWidth = cssBorderWidth, borderWidth > 0 {
+                borderColor.setStroke()
+                path.lineWidth = CGFloat(borderWidth)
+                path.stroke()
+            }
+
+            let attrs: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: textColor]
+            let textOrigin = CGPoint(x: padding, y: (size.height - textSize.height) / 2)
+            text.draw(at: textOrigin, withAttributes: attrs)
+        }
+    }
+}
+
+private extension UIColor {
+    convenience init?(gextTagHex hex: String) {
+        var s = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        if s.hasPrefix("#") { s.removeFirst() }
+        guard s.count == 6 || s.count == 8 else { return nil }
+        var v: UInt64 = 0
+        Scanner(string: s).scanHexInt64(&v)
+        if s.count == 6 {
+            self.init(red: CGFloat((v & 0xFF0000) >> 16) / 255,
+                      green: CGFloat((v & 0x00FF00) >> 8) / 255,
+                      blue: CGFloat(v & 0x0000FF) / 255, alpha: 1)
+        } else {
+            self.init(red: CGFloat((v & 0xFF000000) >> 24) / 255,
+                      green: CGFloat((v & 0x00FF0000) >> 16) / 255,
+                      blue: CGFloat((v & 0x0000FF00) >> 8) / 255,
+                      alpha: CGFloat(v & 0x000000FF) / 255)
+        }
     }
 }

@@ -2405,7 +2405,12 @@ CREATE
 ;
 
 CREATE
-    INDEX "idx_gext_recipient_aci"
-        ON "gext_recipient"("aci"
-)
+    TABLE
+        IF NOT EXISTS "gext_groups" (
+            "_id" INTEGER PRIMARY KEY AUTOINCREMENT
+            ,"group_id" VARCHAR(64) NOT NULL
+            ,"tags" BLOB NOT NULL
+            ,"last_updated" INTEGER NOT NULL
+            ,UNIQUE("group_id")
+        )
 ;

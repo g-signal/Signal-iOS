@@ -44,11 +44,12 @@
 		05A180362CD1840F00579FA4 /* UIViewPropertyAnimator+SignalUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A180352CD1840F00579FA4 /* UIViewPropertyAnimator+SignalUI.swift */; };
 		05B411252C62845000A1EDBC /* ChatListInboxFilterSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B411242C62845000A1EDBC /* ChatListInboxFilterSection.swift */; };
 		05FDBC292CD91B31000C87BC /* ChatListContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FDBC282CD91B31000C87BC /* ChatListContainerView.swift */; };
+		06FCB04D2F72838000426F8C /* GExtGroupProfileFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FCB04B2F72838000426F8C /* GExtGroupProfileFetcher.swift */; };
+		06FCB04E2F72838000426F8C /* GGroupGExtTagRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FCB04C2F72838000426F8C /* GGroupGExtTagRecord.swift */; };
 		0CE014267EDFBD2538E940A0 /* Pods_Signal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FF88FB580BC19B240EEB86A /* Pods_Signal.framework */; };
 		0DB1B9DF2E9A4D4300F4E4B8 /* signal-messenger.cer in Resources */ = {isa = PBXBuildFile; fileRef = 0DB1B9DE2E9A4D4300F4E4B8 /* signal-messenger.cer */; };
 		0DB93E042F67AB2800CB9799 /* GExtTagStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB93E032F67AB2800CB9799 /* GExtTagStore.swift */; };
 		0DB93E052F67AB2800CB9799 /* GExtTagRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB93E012F67AB2800CB9799 /* GExtTagRecord.swift */; };
-		0DB93E062F67AB2800CB9799 /* GExtTagService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB93E022F67AB2800CB9799 /* GExtTagService.swift */; };
 		0DB93E072F67AB2800CB9799 /* GExtTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB93E002F67AB2800CB9799 /* GExtTag.swift */; };
 		0DB93E0B2F67AB5400CB9799 /* GExtTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB93E092F67AB5400CB9799 /* GExtTagView.swift */; };
 		0DB93E0C2F67AB5400CB9799 /* GExtTagsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB93E082F67AB5400CB9799 /* GExtTagsStackView.swift */; };
@@ -3884,11 +3885,12 @@
 		05EA61432CC943D200B16D4E /* Project-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
 		05EA61442CC943DD00B16D4E /* Project.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		05FDBC282CD91B31000C87BC /* ChatListContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListContainerView.swift; sourceTree = "<group>"; };
+		06FCB04B2F72838000426F8C /* GExtGroupProfileFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtGroupProfileFetcher.swift; sourceTree = "<group>"; };
+		06FCB04C2F72838000426F8C /* GGroupGExtTagRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGroupGExtTagRecord.swift; sourceTree = "<group>"; };
 		0BADD293DAFC82BF3274F0F6 /* Pods_SignalTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DB1B9DE2E9A4D4300F4E4B8 /* signal-messenger.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "signal-messenger.cer"; sourceTree = "<group>"; };
 		0DB93E002F67AB2800CB9799 /* GExtTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtTag.swift; sourceTree = "<group>"; };
 		0DB93E012F67AB2800CB9799 /* GExtTagRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtTagRecord.swift; sourceTree = "<group>"; };
-		0DB93E022F67AB2800CB9799 /* GExtTagService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtTagService.swift; sourceTree = "<group>"; };
 		0DB93E032F67AB2800CB9799 /* GExtTagStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtTagStore.swift; sourceTree = "<group>"; };
 		0DB93E082F67AB5400CB9799 /* GExtTagsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtTagsStackView.swift; sourceTree = "<group>"; };
 		0DB93E092F67AB5400CB9799 /* GExtTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtTagView.swift; sourceTree = "<group>"; };
@@ -7894,9 +7896,10 @@
 		0DF917D62F63FDE3007C0A54 /* GExt */ = {
 			isa = PBXGroup;
 			children = (
+				06FCB04B2F72838000426F8C /* GExtGroupProfileFetcher.swift */,
+				06FCB04C2F72838000426F8C /* GGroupGExtTagRecord.swift */,
 				0DB93E002F67AB2800CB9799 /* GExtTag.swift */,
 				0DB93E012F67AB2800CB9799 /* GExtTagRecord.swift */,
-				0DB93E022F67AB2800CB9799 /* GExtTagService.swift */,
 				0DB93E032F67AB2800CB9799 /* GExtTagStore.swift */,
 			);
 			path = GExt;
@@ -18667,6 +18670,8 @@
 				C1CF83D42B9A207800CDC9C4 /* TransformingOutputStream.swift in Sources */,
 				661170C42ABA4D9900A1B16D /* TSAccountManager.swift in Sources */,
 				661170C82ABA4F3A00A1B16D /* TSAccountManagerImpl.swift in Sources */,
+				06FCB04D2F72838000426F8C /* GExtGroupProfileFetcher.swift in Sources */,
+				06FCB04E2F72838000426F8C /* GGroupGExtTagRecord.swift in Sources */,
 				664657472ACB66630099DE1C /* TSAccountManagerObjcBridge.swift in Sources */,
 				669379F72C3C847000EED7A0 /* TSAttachmentMigration+AttachmentValidator.swift in Sources */,
 				669379EF2C3C5E5800EED7A0 /* TSAttachmentMigration+AudioWaveformManager.swift in Sources */,
@@ -18751,7 +18756,6 @@
 				6691E7EF2996E8FB0032A68A /* TSRequestOWSURLSessionMock.swift in Sources */,
 				0DB93E042F67AB2800CB9799 /* GExtTagStore.swift in Sources */,
 				0DB93E052F67AB2800CB9799 /* GExtTagRecord.swift in Sources */,
-				0DB93E062F67AB2800CB9799 /* GExtTagService.swift in Sources */,
 				0DB93E072F67AB2800CB9799 /* GExtTag.swift in Sources */,
 				F9C5CCCF289453B300548EEE /* TSThread+OWS.swift in Sources */,
 				F9C5CCDF289453B300548EEE /* TSThread+SDS.swift in Sources */,

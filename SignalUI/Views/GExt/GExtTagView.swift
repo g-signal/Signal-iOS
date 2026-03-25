@@ -4,7 +4,6 @@
 //
 
 import UIKit
-import WebKit
 public import SignalServiceKit
 
 public class GExtTagView: UIView {
@@ -13,6 +12,7 @@ public class GExtTagView: UIView {
     private let imageView = UIImageView()
     private let textLabel = UILabel()
     private let borderLayer = CAShapeLayer()
+    private var imageNaturalSize: CGSize = CGSize(width: 1, height: 1)
 
     public init(extTag: GExtTag) {
         self.extTag = extTag
@@ -53,26 +53,26 @@ public class GExtTagView: UIView {
 
         guard let dataURI = extTag.imgBase64 else { return }
 
-        // 判断是否为 SVG，UIImage 不支持 SVG，需要 WKWebView 渲染
-        if dataURI.contains("image/svg") {
-            if let commaIndex = dataURI.range(of: "base64,") {
-                let base64 = String(dataURI[commaIndex.upperBound...])
-                SVGImageLoader.load(svgBase64: base64, size: CGSize(width: 18, height: 18)) { [weak self] image in
-                    self?.imageView.image = image
-                }
-            }
-        } else {
-            var base64 = dataURI
-            if let commaIndex = base64.range(of: "base64,") {
-                base64 = String(base64[commaIndex.upperBound...])
-            }
-            if let data = Data(base64Encoded: base64, options: .ignoreUnknownCharacters) {
-                imageView.image = UIImage(data: data)
-            }
+        var base64 = dataURI
+        if let commaIndex = base64.range(of: "base64,") {
+            base64 = String(base64[commaIndex.upperBound...])
+        }
+        if let data = Data(base64Encoded: base64, options: .ignoreUnknownCharacters),
+           let image = UIImage(data: data) {
+            imageView.image = image
+            imageNaturalSize = image.size
         }
 
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    // 从 base64 数据 URI 解析图片自然尺寸
+    static func imageSizeFromBase64(_ dataURI: String) -> CGSize? {
+        var base64 = dataURI
+        if let range = base64.range(of: "base64,") { base64 = String(base64[range.upperBound...]) }
+        guard let data = Data(base64Encoded: base64, options: .ignoreUnknownCharacters) else { return nil }
+        return UIImage(data: data)?.size
     }
 
     private func setupLayout() {
@@ -92,13 +92,17 @@ public class GExtTagView: UIView {
 
         case 1: // 纯图片
             textLabel.isHidden = true
+            let h: CGFloat = 18
+            let innerH: CGFloat = h - 4  // 2pt top inset + 2pt bottom inset
+            let aspectRatio = imageNaturalSize.height > 0 ? imageNaturalSize.width / imageNaturalSize.height : 1
+            let imageW = innerH * aspectRatio
             NSLayoutConstraint.activate([
                 imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
                 imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
                 imageView.topAnchor.constraint(equalTo: topAnchor, constant: 2),
                 imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
-                widthAnchor.constraint(equalToConstant: 18),
-                heightAnchor.constraint(equalToConstant: 18)
+                widthAnchor.constraint(equalToConstant: imageW + 4),
+                heightAnchor.constraint(equalToConstant: h)
             ])
 
         default:
@@ -108,7 +112,9 @@ public class GExtTagView: UIView {
     }
 
     private func setupStyling() {
-        if extTag.tagType != 1, let backgroundColor = extTag.cssBackgroundColor {
+        guard extTag.tagType != 1 else { return }
+
+        if let backgroundColor = extTag.cssBackgroundColor {
             self.backgroundColor = UIColor(hex: backgroundColor)
         }
 
@@ -119,11 +125,11 @@ public class GExtTagView: UIView {
         }
 
         if let opacity = extTag.cssOpacity {
-            self.alpha = CGFloat(opacity)
+            self.alpha = CGFloat(max(0, min(1, opacity)))
         }
 
         if let radius = extTag.cssBorderRadius {
-            layer.cornerRadius = CGFloat(radius)
+            layer.cornerRadius = CGFloat(max(0, min(radius, 20)))
             clipsToBounds = true
         } else {
             layer.cornerRadius = 9
@@ -137,6 +143,11 @@ public class GExtTagView: UIView {
     }
 
     private func updateBorderLayer() {
+        guard extTag.tagType != 1 else {
+            borderLayer.isHidden = true
+            return
+        }
+
         guard let borderWidth = extTag.cssBorderWidth,
               borderWidth > 0 else {
             borderLayer.isHidden = true
@@ -146,7 +157,7 @@ public class GExtTagView: UIView {
         borderLayer.isHidden = false
         borderLayer.path = UIBezierPath(roundedRect: bounds,
                                        cornerRadius: layer.cornerRadius).cgPath
-        borderLayer.lineWidth = CGFloat(borderWidth)
+        borderLayer.lineWidth = CGFloat(max(0, min(borderWidth, 10)))
         borderLayer.fillColor = UIColor.clear.cgColor
 
         if let borderColor = extTag.cssBorderColor {
@@ -165,91 +176,6 @@ public class GExtTagView: UIView {
                 borderLayer.lineDashPattern = nil
             }
         }
-    }
-}
-
-// MARK: - SVG 渲染
-
-/// 用 WKWebView 将 SVG base64 异步渲染为 UIImage
-private class SVGImageLoader: NSObject, WKNavigationDelegate {
-
-    // 持有进行中的 loader，防止截图完成前被释放
-    private static var active: [SVGImageLoader] = []
-
-    // 以 svgBase64 为 key 缓存渲染结果，避免重复渲染和首次显示闪烁
-    private static let cache = NSCache<NSString, UIImage>()
-
-    // 去重：同一 key 的并发请求共享同一个 loader，回调统一派发
-    private static var pending: [NSString: [(UIImage?) -> Void]] = [:]
-
-    private let cacheKey: NSString
-    private let webView: WKWebView
-
-    static func load(svgBase64: String, size: CGSize, completion: @escaping (UIImage?) -> Void) {
-        let key = svgBase64 as NSString
-        if let cached = cache.object(forKey: key) {
-            completion(cached)
-            return
-        }
-        // 已有进行中的请求，追加回调即可，不再创建新 WKWebView
-        if pending[key] != nil {
-            pending[key]!.append(completion)
-            return
-        }
-        pending[key] = [completion]
-        let loader = SVGImageLoader(svgBase64: svgBase64, size: size)
-        active.append(loader)
-    }
-
-    private init(svgBase64: String, size: CGSize) {
-        self.cacheKey = svgBase64 as NSString
-        // frame 用 point，takeSnapshot 会自动按屏幕 scale 输出 Retina 分辨率
-        self.webView = WKWebView(frame: CGRect(origin: .zero, size: size))
-        super.init()
-
-        webView.isOpaque = false
-        webView.backgroundColor = .clear
-        webView.scrollView.backgroundColor = .clear
-        webView.navigationDelegate = self
-
-        let w = size.width
-        let h = size.height
-        let html = """
-        <html><head>
-        <meta name="viewport" content="width=\(w), initial-scale=1">
-        <style>*{margin:0;padding:0;}html,body{width:\(w)px;height:\(h)px;overflow:hidden;background:transparent;}
-        img{width:\(w)px;height:\(h)px;display:block;}</style>
-        </head><body>
-        <img src="data:image/svg+xml;base64,\(svgBase64)">
-        </body></html>
-        """
-        webView.loadHTMLString(html, baseURL: nil)
-    }
-
-    // 统一清理入口：缓存结果、派发所有回调、从 active 移除
-    private func finish(with image: UIImage?) {
-        if let image {
-            SVGImageLoader.cache.setObject(image, forKey: cacheKey)
-        }
-        let callbacks = SVGImageLoader.pending.removeValue(forKey: cacheKey) ?? []
-        callbacks.forEach { $0(image) }
-        SVGImageLoader.active.removeAll { $0 === self }
-    }
-
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        let config = WKSnapshotConfiguration()
-        config.rect = webView.bounds
-        webView.takeSnapshot(with: config) { [weak self] image, _ in
-            DispatchQueue.main.async { self?.finish(with: image) }
-        }
-    }
-
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        finish(with: nil)
-    }
-
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        finish(with: nil)
     }
 }
 

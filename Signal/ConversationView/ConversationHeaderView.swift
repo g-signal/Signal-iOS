@@ -146,7 +146,18 @@ public class ConversationHeaderView: UIView {
 
         // Configure ExtTags for contact threads only (async to avoid blocking main thread)
         guard let contactThread = threadViewModel.threadRecord as? TSContactThread else {
-            extTagsStackView.configure(with: [])
+            // 群组 thread：读取群组 ExtTag
+            if let groupThread = threadViewModel.threadRecord as? TSGroupThread {
+                let groupId = groupThread.groupId.hexadecimalString
+                SSKEnvironment.shared.databaseStorageRef.asyncRead(
+                    file: #file, function: #function, line: #line,
+                    block: { GExtTagStore.shared.getGroupExtTags(for: groupId, transaction: $0) },
+                    completionQueue: .main,
+                    completion: { [weak self] tags in self?.extTagsStackView.configure(with: tags) }
+                )
+            } else {
+                extTagsStackView.configure(with: [])
+            }
             return
         }
         let address = contactThread.contactAddress

@@ -752,6 +752,11 @@ extension CLVTableDataSource {
             SSKEnvironment.shared.databaseStorageRef.read { tx in
                 extTags = GExtTagStore.shared.getUserExtTags(for: contactThread.contactAddress, transaction: tx)
             }
+        } else if let groupThread = threadViewModel.threadRecord as? TSGroupThread {
+            let groupId = groupThread.groupId.hexadecimalString
+            SSKEnvironment.shared.databaseStorageRef.read { tx in
+                extTags = GExtTagStore.shared.getGroupExtTags(for: groupId, transaction: tx)
+            }
         }
         return ChatListCell.Configuration(
             threadViewModel: threadViewModel,

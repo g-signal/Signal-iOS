@@ -377,6 +377,30 @@ private extension GroupV2UpdatesImpl {
                 options: options
             )
         }
+
+        // 群组信息刷新完成后，获取最新的 ExtTag
+        await fetchGroupExtTagsIfNeeded(secretParams: secretParams)
+    }
+
+    private func fetchGroupExtTagsIfNeeded(secretParams: GroupSecretParams) async {
+        do {
+            let groupId = try secretParams.getPublicParams().getGroupIdentifier()
+            let groupIdData = groupId.serialize()
+            let groupIdHex = groupIdData.hexadecimalString
+
+            // 仅当本地存在群组时才发起网络请求
+            let threadExists = SSKEnvironment.shared.databaseStorageRef.read { tx in
+                TSGroupThread.fetch(groupId: groupIdData, transaction: tx) != nil
+            }
+            guard threadExists else { return }
+
+            await GExtGroupProfileFetcher.shared.fetchAndStoreGroupExtTags(
+                groupId: groupIdHex,
+                groupIdData: groupIdData
+            )
+        } catch {
+            Logger.warn("Failed to get groupId for ExtTag fetch: \(error)")
+        }
     }
 
     private func fetchAndApplyChangeActionsFromService(
