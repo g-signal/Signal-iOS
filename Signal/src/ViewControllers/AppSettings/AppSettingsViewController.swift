@@ -483,7 +483,7 @@ class AppSettingsViewController: OWSTableViewController2 {
             }
             if !extTags.isEmpty {
                 let tagsView = GExtTagsStackView()
-                tagsView.configure(with: extTags)
+                tagsView.configure(with: extTags, tagHeight: UIFont.dynamicTypeTitle2Clamped.medium().pointSize)
                 let containerView = UIView()
                 containerView.layoutMargins = UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0)
                 containerView.addSubview(tagsView)

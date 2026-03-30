@@ -13,11 +13,11 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Wed Mar 25 07:45:34 UTC 2026</string>
+		<string>Mon Mar 30 07:06:34 UTC 2026</string>
 		<key>SignalCommit</key>
-		<string>0c9d6c64100e172a7f3dfbabb0bc796a248bf58f group ext tag</string>
+		<string>9d9f50e85d4f3cc7af5d978862422c6b9bdbe706 group ext tag</string>
 		<key>Timestamp</key>
-		<integer>1774424734</integer>
+		<integer>1774854394</integer>
 		<key>XCodeVersion</key>
 		<string>2600.2630</string>
 	</dict>
@@ -40,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.70.9</string>
+	<string>7.70.10</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>

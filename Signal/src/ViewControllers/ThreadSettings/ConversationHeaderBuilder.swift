@@ -210,7 +210,8 @@ struct ConversationHeaderBuilder {
         if let contactThread = delegate.thread as? TSContactThread,
            !contactThread.contactAddress.isLocalAddress {
             let extTagsView = GExtTagsStackView()
-            extTagsView.configureForUser(contactThread.contactAddress, transaction: transaction)
+            let nameFont = UIFont.dynamicTypeFont(ofStandardSize: 26, weight: .semibold)
+            extTagsView.configureForUser(contactThread.contactAddress, tagHeight: nameFont.pointSize, transaction: transaction)
             if !extTagsView.isEmpty {
                 subviews.append(UIView.spacer(withHeight: 4))
                 let tagContainer = UIView.container()
@@ -220,7 +221,8 @@ struct ConversationHeaderBuilder {
             }
         } else if let groupThread = delegate.thread as? TSGroupThread {
             let extTagsView = GExtTagsStackView()
-            extTagsView.configureForGroup(groupThread.groupId.hexadecimalString, transaction: transaction)
+            let nameFont = UIFont.dynamicTypeFont(ofStandardSize: 26, weight: .semibold)
+            extTagsView.configureForGroup(groupThread.groupId.hexadecimalString, tagHeight: nameFont.pointSize, transaction: transaction)
             if !extTagsView.isEmpty {
                 subviews.append(UIView.spacer(withHeight: 4))
                 let tagContainer = UIView.container()

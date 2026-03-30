@@ -13,9 +13,11 @@ public class GExtTagView: UIView {
     private let textLabel = UILabel()
     private let borderLayer = CAShapeLayer()
     private var imageNaturalSize: CGSize = CGSize(width: 1, height: 1)
+    private let customHeight: CGFloat
 
-    public init(extTag: GExtTag) {
+    public init(extTag: GExtTag, height: CGFloat = 18) {
         self.extTag = extTag
+        self.customHeight = height
         super.init(frame: .zero)
         setupView()
     }
@@ -36,7 +38,8 @@ public class GExtTagView: UIView {
     }
 
     private func setupTextLabel() {
-        textLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        let fontSize = max(8, customHeight * 0.65)
+        textLabel.font = UIFont.systemFont(ofSize: fontSize, weight: .medium)
         textLabel.textAlignment = .center
         textLabel.numberOfLines = 1
         textLabel.adjustsFontSizeToFitWidth = true
@@ -76,23 +79,24 @@ public class GExtTagView: UIView {
     }
 
     private func setupLayout() {
+        let h = customHeight
+        let hPad: CGFloat = h * 0.33
         switch extTag.tagType {
         case 0: // 纯文本
             imageView.isHidden = true
-            let font = UIFont.systemFont(ofSize: 12, weight: .medium)
+            let font = UIFont.systemFont(ofSize: max(8, h * 0.65), weight: .medium)
             let textWidth = (extTag.text ?? "").size(withAttributes: [.font: font]).width
             NSLayoutConstraint.activate([
-                textLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 6),
-                textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -6),
-                textLabel.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-                textLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
-                widthAnchor.constraint(equalToConstant: textWidth + 12),
-                heightAnchor.constraint(equalToConstant: 18)
+                textLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: hPad),
+                textLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -hPad),
+                textLabel.topAnchor.constraint(equalTo: topAnchor),
+                textLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+                widthAnchor.constraint(equalToConstant: textWidth + hPad * 2),
+                heightAnchor.constraint(equalToConstant: h)
             ])
 
         case 1: // 纯图片
             textLabel.isHidden = true
-            let h: CGFloat = 18
             let aspectRatio = imageNaturalSize.height > 0 ? imageNaturalSize.width / imageNaturalSize.height : 1
             let imageW = h * aspectRatio
             NSLayoutConstraint.activate([
@@ -128,10 +132,10 @@ public class GExtTagView: UIView {
         }
 
         if let radius = extTag.cssBorderRadius {
-            layer.cornerRadius = CGFloat(max(0, min(radius, 20)))
+            layer.cornerRadius = CGFloat(max(0, min(CGFloat(radius), customHeight / 2)))
             clipsToBounds = true
         } else {
-            layer.cornerRadius = 9
+            layer.cornerRadius = customHeight / 2
             clipsToBounds = true
         }
     }

@@ -240,7 +240,7 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
 
         // Include ext tags slot only when tags are actually present (matches isHidden logic in render phase)
         if !configuration.extTags.isEmpty {
-            let extTagsSize = GExtTagsStackView.preferredSize(for: configuration.extTags)
+            let extTagsSize = GExtTagsStackView.preferredSize(for: configuration.extTags, tagHeight: Self.nameFont.pointSize)
             topRowStackSubviewInfos.append(
                 extTagsSize.asManualSubviewInfo(horizontalFlowBehavior: .fixed, verticalFlowBehavior: .fixed)
             )
@@ -406,7 +406,7 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         topRowStackSubviews.append(nameLabel)
 
         // Configure ExtTags from pre-loaded configuration data (avoids redundant DB read)
-        extTagsStackView.configure(with: configuration.extTags)
+        extTagsStackView.configure(with: configuration.extTags, tagHeight: Self.nameFont.pointSize)
         // extTagsStackView.isHidden is set by configure() — ManualStackView skips hidden views,
         // so this must match the measurement phase (slot included only when extTags non-empty)
         topRowStackSubviews.append(extTagsStackView)

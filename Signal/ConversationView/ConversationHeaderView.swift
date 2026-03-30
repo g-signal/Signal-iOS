@@ -153,7 +153,10 @@ public class ConversationHeaderView: UIView {
                     file: #file, function: #function, line: #line,
                     block: { GExtTagStore.shared.getGroupExtTags(for: groupId, transaction: $0) },
                     completionQueue: .main,
-                    completion: { [weak self] tags in self?.extTagsStackView.configure(with: tags) }
+                    completion: { [weak self] tags in
+                        guard let self else { return }
+                        self.extTagsStackView.configure(with: tags, tagHeight: self.titlePrimaryFont.pointSize)
+                    }
                 )
             } else {
                 extTagsStackView.configure(with: [])
@@ -165,7 +168,10 @@ public class ConversationHeaderView: UIView {
             file: #file, function: #function, line: #line,
             block: { GExtTagStore.shared.getUserExtTags(for: address, transaction: $0) },
             completionQueue: .main,
-            completion: { [weak self] tags in self?.extTagsStackView.configure(with: tags) }
+            completion: { [weak self] tags in
+                guard let self else { return }
+                self.extTagsStackView.configure(with: tags, tagHeight: self.titlePrimaryFont.pointSize)
+            }
         )
     }
 

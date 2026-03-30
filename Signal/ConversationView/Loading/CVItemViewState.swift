@@ -379,15 +379,18 @@ struct CVItemModelBuilder: CVItemBuilding {
                 }
                 if shouldShowSenderName {
                     let mutableName = NSMutableAttributedString(string: authorName)
+                    let senderNameFont = UIFont.dynamicTypeFootnote.semibold()
+                    let tagH = senderNameFont.pointSize
 
                     let extTags = GExtTagStore.shared.getUserExtTags(for: incomingSenderAddress, transaction: transaction)
                     for tag in extTags {
                         switch tag.tagType {
                         case 0:
-                            guard let image = tag.renderedAsImage() else { continue }
+                            guard let image = tag.renderedAsImage(height: tagH) else { continue }
                             let attachment = NSTextAttachment()
                             attachment.image = image
-                            attachment.bounds = CGRect(x: 0, y: -3, width: image.size.width, height: image.size.height)
+                            let tagY = floor((senderNameFont.ascender - tagH) / 2)
+                            attachment.bounds = CGRect(x: 0, y: tagY, width: image.size.width, height: image.size.height)
                             mutableName.append(NSAttributedString(string: " "))
                             mutableName.append(NSAttributedString(attachment: attachment))
                         case 1:
@@ -398,9 +401,9 @@ struct CVItemModelBuilder: CVItemBuilding {
                                   let image = UIImage(data: data) else { continue }
                             let attachment = NSTextAttachment()
                             attachment.image = image
-                            let tagH: CGFloat = 18
                             let tagW = image.size.height > 0 ? image.size.width / image.size.height * tagH : tagH
-                            attachment.bounds = CGRect(x: 0, y: -3, width: tagW, height: tagH)
+                            let tagY = floor((senderNameFont.ascender - tagH) / 2)
+                            attachment.bounds = CGRect(x: 0, y: tagY, width: tagW, height: tagH)
                             mutableName.append(NSAttributedString(string: " "))
                             mutableName.append(NSAttributedString(attachment: attachment))
                         default:

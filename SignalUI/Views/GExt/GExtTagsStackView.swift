@@ -9,6 +9,7 @@ public import SignalServiceKit
 public class GExtTagsStackView: UIStackView {
 
     private var extTags: [GExtTag] = []
+    private var tagHeight: CGFloat = 18
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,8 +33,9 @@ public class GExtTagsStackView: UIStackView {
         setContentHuggingPriority(.required, for: .vertical)
     }
 
-    public func configure(with extTags: [GExtTag]) {
+    public func configure(with extTags: [GExtTag], tagHeight: CGFloat = 18) {
         self.extTags = extTags
+        self.tagHeight = tagHeight
         updateTagViews()
     }
 
@@ -43,7 +45,7 @@ public class GExtTagsStackView: UIStackView {
 
         // 添加新的标签视图
         for extTag in extTags {
-            let tagView = GExtTagView(extTag: extTag)
+            let tagView = GExtTagView(extTag: extTag, height: tagHeight)
             addArrangedSubview(tagView)
 
             // 确保标签视图不被压缩
@@ -62,50 +64,49 @@ public class GExtTagsStackView: UIStackView {
     // MARK: - 便利方法
 
     /// 从用户地址获取并配置标签
-    public func configureForUser(_ address: SignalServiceAddress, transaction: DBReadTransaction) {
+    public func configureForUser(_ address: SignalServiceAddress, tagHeight: CGFloat = 18, transaction: DBReadTransaction) {
         let tags = GExtTagStore.shared.getUserExtTags(for: address, transaction: transaction)
-        configure(with: tags)
+        configure(with: tags, tagHeight: tagHeight)
     }
 
     /// 从群组 ID 获取并配置标签
-    public func configureForGroup(_ groupId: String, transaction: DBReadTransaction) {
+    public func configureForGroup(_ groupId: String, tagHeight: CGFloat = 18, transaction: DBReadTransaction) {
         let tags = GExtTagStore.shared.getGroupExtTags(for: groupId, transaction: transaction)
-        configure(with: tags)
+        configure(with: tags, tagHeight: tagHeight)
     }
 
     /// 计算标签容器的理想大小（静态版本，用于 ManualStackView 测量阶段）
-    public static func preferredSize(for extTags: [GExtTag]) -> CGSize {
+    public static func preferredSize(for extTags: [GExtTag], tagHeight: CGFloat = 18) -> CGSize {
         guard !extTags.isEmpty else { return .zero }
         var totalWidth: CGFloat = 0
-        var maxHeight: CGFloat = 18
         for (index, extTag) in extTags.enumerated() {
-            let tagSize = tagSize(for: extTag)
+            let tagSize = tagSize(for: extTag, height: tagHeight)
             totalWidth += tagSize.width
-            maxHeight = max(maxHeight, tagSize.height)
             if index < extTags.count - 1 {
                 totalWidth += 4 // spacing
             }
         }
-        return CGSize(width: totalWidth, height: maxHeight)
+        return CGSize(width: totalWidth, height: tagHeight)
     }
 
     /// 计算标签容器的理想大小
     public func calculatePreferredSize() -> CGSize {
-        return Self.preferredSize(for: extTags)
+        return Self.preferredSize(for: extTags, tagHeight: tagHeight)
     }
 
-    private static func tagSize(for extTag: GExtTag) -> CGSize {
+    private static func tagSize(for extTag: GExtTag, height: CGFloat = 18) -> CGSize {
+        let h = height
+        let hPad = h * 0.33
         switch extTag.tagType {
         case 0: // 纯文本
             if let text = extTag.text {
-                let font = UIFont.systemFont(ofSize: 12, weight: .medium)
+                let font = UIFont.systemFont(ofSize: max(8, h * 0.65), weight: .medium)
                 let textSize = text.size(withAttributes: [.font: font])
-                return CGSize(width: textSize.width + 12, height: 18)
+                return CGSize(width: textSize.width + hPad * 2, height: h)
             }
-            return CGSize(width: 20, height: 18)
+            return CGSize(width: h, height: h)
 
         case 1: // 纯图片
-            let h: CGFloat = 18
             if let imgBase64 = extTag.imgBase64,
                let naturalSize = GExtTagView.imageSizeFromBase64(imgBase64),
                naturalSize.height > 0 {
@@ -120,9 +121,8 @@ public class GExtTagsStackView: UIStackView {
     }
 
     public override var intrinsicContentSize: CGSize {
-        // 如果没有标签，返回零宽度（但保持高度以避免布局问题）
         guard !extTags.isEmpty else {
-            return CGSize(width: 0, height: 18)
+            return CGSize(width: 0, height: tagHeight)
         }
         return calculatePreferredSize()
     }
@@ -133,16 +133,18 @@ public class GExtTagsStackView: UIStackView {
 public extension GExtTag {
     /// Renders the tag into a UIImage for use as an NSTextAttachment.
     /// Safe to call off the main thread.
-    func renderedAsImage() -> UIImage? {
+    func renderedAsImage(height: CGFloat = 18) -> UIImage? {
         guard tagType == 0, let text = text, !text.isEmpty else { return nil }
 
-        let font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        let h = height
+        let fontSize = max(8, h * 0.65)
+        let padding = h * 0.33
+        let font = UIFont.systemFont(ofSize: fontSize, weight: .medium)
         let textColor = cssColor.flatMap { UIColor(gextTagHex: $0) } ?? .white
         let bgColor = cssBackgroundColor.flatMap { UIColor(gextTagHex: $0) } ?? .clear
-        let cornerRadius = CGFloat(cssBorderRadius ?? 9)
-        let padding: CGFloat = 6
+        let cornerRadius = CGFloat(cssBorderRadius.map { max(0, min(CGFloat($0), h / 2)) } ?? h / 2)
         let textSize = text.size(withAttributes: [.font: font])
-        let size = CGSize(width: textSize.width + padding * 2, height: 18)
+        let size = CGSize(width: textSize.width + padding * 2, height: h)
 
         let renderer = UIGraphicsImageRenderer(size: size)
         return renderer.image { ctx in
