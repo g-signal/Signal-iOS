@@ -12,7 +12,7 @@ pod 'blurhash', podspec: './ThirdParty/blurhash.podspec'
 pod 'SwiftProtobuf', "1.30.0"
 
 ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '528c16f401346d5acb160012ca6f6c789351867cc468c7aa95cee49ce100211c'
-pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.76.7-BA', testspecs: ["Tests"]
+pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.77.1-BA', testspecs: ["Tests"]
 # pod 'LibSignalClient', path: '../libsignal', testspecs: ["Tests"]
 
 pod 'SignalRingRTC', git: 'https://github.com/signalapp/ringrtc', tag: 'v2.56.0', inhibit_warnings: true

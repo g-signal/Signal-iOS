@@ -81,10 +81,13 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
 
         let vanillaPushToken = try await registerForVanillaPushToken(forceRotation: forceRotation, timeOutEventually: timeOutEventually)
 
-        // We need the voip registry to handle voip pushes relayed from the NSE.
-        createVoipRegistryIfNecessary()
+        // Also register for VoIP push token
+        let voipPushToken = try await registerForVoipPushToken(
+            forceRotation: forceRotation,
+            timeOutEventually: timeOutEventually
+        ).awaitable()
 
-        return ApnRegistrationId(apnsToken: vanillaPushToken)
+        return ApnRegistrationId(apnsToken: vanillaPushToken, voipToken: voipPushToken)
     }
 
     public func didFinishReportingIncomingCall() {
