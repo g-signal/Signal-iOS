@@ -1,1 +1,1 @@
-• Bedre tilkoblingsmuligheter i områder med dårlig Wi-Fi- og mobildekning.
+• Vi har rettet opp i en feil som oppsto ved sending av klistremerker fra emoji-tastaturet på iOS-enheter.

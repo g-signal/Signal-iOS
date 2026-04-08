@@ -1,1 +1,1 @@
-• Anche Signal ha bisogno di un segnale di ricezione forte per funzionare. Ma grazie al nuovo aggiornamento, abbiamo migliorato la logica di ripetizione a livello di connessione, cosa che ti tornerà molto utile quando ti troverai in una zona con scarsa ricezione o un Wi-Fi pessimo.
+• La costanza è fondamentale nella vita, ma è sempre bello quando le cose riescono al primo tentativo! Abbiamo risolto un bug che a volte richiedeva più tentativi per inviare un adesivo dalla tastiera delle emoji di iOS. Lo stesso bug è stato risolto anche per le Genmoji.

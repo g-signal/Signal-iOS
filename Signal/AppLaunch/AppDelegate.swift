@@ -1334,7 +1334,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let oldActiveConnectionTokens = self.activeConnectionTokens
         if isAppActive {
             // If we're active, open a connection.
-            self.activeConnectionTokens = chatConnectionManager.requestConnections(shouldReconnectIfConnectedElsewhere: true)
+            self.activeConnectionTokens = chatConnectionManager.requestConnections()
             oldActiveConnectionTokens.forEach { $0.releaseConnection() }
 
             // We're back in the foreground. We've passed off connection management to
@@ -1474,7 +1474,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 // If the main app gets woken to process messages in the background, check
                 // for any pending NSE requests to fulfill.
                 let result = await Result(catching: {
-                    try await SSKEnvironment.shared.syncManagerRef.syncAllContactsIfFullSyncRequested().awaitable()
+                    try await SSKEnvironment.shared.syncManagerRef.syncAllContactsIfFullSyncRequested()
                 })
                 syncContacts.resume(with: result)
             }

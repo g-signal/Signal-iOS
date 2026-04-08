@@ -1,1 +1,1 @@
-• Dalam pembaruan kali ini kami menyempurnakan logika coba ulang koneksi di Signal agar lebih praktis ketika Anda berada di tempat yang Wi-Fi atau jaringan datanya jelek.
+• Kami memperbaiki bug yang kadang membuat Anda harus mengetuk beberapa kali agar dapat mengirim stiker dari keyboard emoji iOS. Perbaikan ini juga berlaku untuk Genmoji. Semoga pembaruan kali ini membuat chat pakai emoji jadi makin asyik.

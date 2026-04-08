@@ -202,10 +202,6 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if #available(iOS 26, *), !UIDevice.current.isIPad {
-            (tabBarController as? HomeTabBarController)?.setTabBarHidden(false, animated: false)
-        }
-
         appReadiness.setUIIsReady()
 
         if getStartedBanner == nil && !hasEverPresentedExperienceUpgrade && ExperienceUpgradeManager.presentNext(fromViewController: self) {
@@ -685,6 +681,8 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
 
     private func applyDefaultBackButton() {
         AssertIsOnMainThread()
+
+        guard #unavailable(iOS 26) else { return }
 
         // We don't show any text for the back button, so there's no need to localize it. But because we left align the
         // conversation title view, we add a little tappable padding after the back button, by having a title of spaces.

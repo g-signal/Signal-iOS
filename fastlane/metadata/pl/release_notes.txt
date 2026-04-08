@@ -1,1 +1,1 @@
-• Aby Signal działał poprawnie, konieczny jest… sygnał. Dlatego też w ramach tej aktualizacji ulepszyliśmy mechanizm ponawiania połączenia z siecią. Od teraz słaby zasięg sieci komórkowej lub Wi-Fi nie będzie Ci już straszny.
+• Mówi się, że wytrwałość popłaca… My wolimy, gdy wszystko udaje się za pierwszym razem. Naprawiliśmy więc błąd, przez który wysłanie naklejki z klawiatury iOS wymagało czasem nawet kilku podejść. Poprawka dotyczy również Genmoji. Nie ma za co.

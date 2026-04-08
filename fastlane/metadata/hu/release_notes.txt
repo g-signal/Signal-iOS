@@ -1,1 +1,1 @@
-• Továbbfejlesztett újrapróbálkozási logika a gyenge wifi- vagy mobilhálózati kapcsolattal rendelkező területeken.
+• Kijavítottunk egy hibát, amely az iOS emoji billentyűzetről küldött matricákkal járt.

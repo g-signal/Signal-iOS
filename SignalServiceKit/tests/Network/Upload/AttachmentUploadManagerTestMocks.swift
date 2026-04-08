@@ -16,7 +16,6 @@ extension AttachmentUploadManagerImpl {
         typealias AttachmentEncrypter = _Upload_AttachmentEncrypterMock
         typealias FileSystem = _Upload_FileSystemMock
 
-        typealias BackupKeyMaterial = _AttachmentUploadManager_BackupKeyMaterialMock
         typealias BackupRequestManager = _AttachmentUploadManager_BackupRequestManagerMock
 
         typealias SleepTimer = _Upload_SleepTimerMock
@@ -59,12 +58,8 @@ class _AttachmentUploadManager_NetworkManagerMock: NetworkManager {
 
     var performRequestBlock: ((TSRequest, Bool) -> Promise<HTTPResponse>)?
 
-    override func asyncRequest(_ request: TSRequest, canUseWebSocket: Bool = true, retryPolicy: RetryPolicy = .dont) async throws -> any HTTPResponse {
+    override func asyncRequestImpl(_ request: TSRequest, canUseWebSocket: Bool, retryPolicy: RetryPolicy) async throws -> any HTTPResponse {
         return try await performRequestBlock!(request, canUseWebSocket).awaitable()
-    }
-
-    override func makePromise(request: TSRequest, canUseWebSocket: Bool = true) -> Promise<HTTPResponse> {
-        return performRequestBlock!(request, canUseWebSocket)
     }
 }
 
@@ -94,32 +89,15 @@ class _AttachmentUploadManager_ChatConnectionManagerMock: ChatConnectionManager 
     func waitUntilIdentifiedConnectionShouldBeClosed() async throws(CancellationError) { fatalError() }
     func shouldWaitForSocketToMakeRequest(connectionType: OWSChatConnectionType) -> Bool { true }
     func shouldSocketBeOpen_restOnly(connectionType: OWSChatConnectionType) -> Bool { fatalError() }
-    func requestIdentifiedConnection(shouldReconnectIfConnectedElsewhere: Bool) -> OWSChatConnection.ConnectionToken { fatalError() }
-    func requestUnidentifiedConnection(shouldReconnectIfConnectedElsewhere: Bool) -> OWSChatConnection.ConnectionToken { fatalError() }
+    func requestIdentifiedConnection() -> OWSChatConnection.ConnectionToken { fatalError() }
+    func requestUnidentifiedConnection() -> OWSChatConnection.ConnectionToken { fatalError() }
     func makeRequest(_ request: TSRequest) async throws -> HTTPResponse { fatalError() }
     func waitForDisconnectIfClosed() async {}
 }
 
-class _AttachmentUploadManager_BackupKeyMaterialMock: BackupKeyMaterial {
-    func backupKey(
-        type: BackupAuthCredentialType,
-        tx: DBReadTransaction
-    ) throws(BackupKeyMaterialError) -> BackupKey {
-        fatalError("Unimplemented for tests")
-    }
-
-    func mediaEncryptionMetadata(
-        mediaName: String,
-        type: MediaTierEncryptionType,
-        tx: DBReadTransaction
-    ) throws(BackupKeyMaterialError) -> MediaTierEncryptionMetadata {
-        return .init(type: type, mediaId: Data(), hmacKey: Data(), aesKey: Data())
-    }
-}
-
 class _AttachmentUploadManager_BackupRequestManagerMock: BackupRequestManager {
     func fetchBackupServiceAuth(
-        for type: BackupAuthCredentialType,
+        for key: BackupKeyMaterial,
         localAci: Aci,
         auth: ChatServiceAuth,
         forceRefreshUnlessCachedPaidCredential: Bool

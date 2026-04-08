@@ -6,8 +6,26 @@
 import Foundation
 public import LibSignalClient
 
+public protocol NetworkManagerProtocol {
+    func asyncRequestImpl(
+        _ request: TSRequest,
+        canUseWebSocket: Bool,
+        retryPolicy: NetworkManager.RetryPolicy,
+    ) async throws -> HTTPResponse
+}
+
+extension NetworkManagerProtocol {
+    public func asyncRequest(
+        _ request: TSRequest,
+        canUseWebSocket: Bool = true,
+        retryPolicy: NetworkManager.RetryPolicy = .dont,
+    ) async throws -> HTTPResponse {
+        return try await asyncRequestImpl(request, canUseWebSocket: canUseWebSocket, retryPolicy: retryPolicy)
+    }
+}
+
 // A class used for making HTTP requests against the main service.
-public class NetworkManager {
+public class NetworkManager: NetworkManagerProtocol {
     private let restNetworkManager = RESTNetworkManager()
     private let appReadiness: AppReadiness
     private let reachabilityDidChangeObserver: Task<Void, Never>?
@@ -116,11 +134,11 @@ public class NetworkManager {
         )
     }
 
-    public func asyncRequest(
+    public func asyncRequestImpl(
         _ request: TSRequest,
-        canUseWebSocket: Bool = true,
-        retryPolicy: RetryPolicy = .dont
-    ) async throws -> HTTPResponse {
+        canUseWebSocket: Bool,
+        retryPolicy: RetryPolicy,
+    ) async throws -> any HTTPResponse {
         return try await Retry.performWithBackoff(
             maxAttempts: retryPolicy.maxAttempts,
             isRetryable: { error -> Bool in
@@ -153,26 +171,10 @@ public class NetworkManager {
                 return try await restNetworkManager.asyncRequest(request)
             }
         } catch {
-            if
-                let owsHttpError = error as? OWSHTTPError,
-                case let .wrappedFailure(error) = owsHttpError,
-                (error as NSError).code == NSURLErrorCancelled
-            {
+            if case OWSHTTPError.wrappedFailure(URLError.cancelled) = error {
                 try Task.checkCancellation()
             }
-
             throw error
-        }
-    }
-
-    /// Deprecated. Please use ``asyncRequest`` instead.
-    public func makePromise(request: TSRequest, canUseWebSocket: Bool = true) -> Promise<HTTPResponse> {
-        if canUseWebSocket && OWSChatConnection.canAppUseSocketsToMakeRequests {
-            return Promise.wrapAsync { [chatConnectionManager] in
-                try await chatConnectionManager.makeRequest(request)
-            }
-        } else {
-            return restNetworkManager.makePromise(request: request)
         }
     }
 }
@@ -253,7 +255,7 @@ private struct ProxyConfig {
 
 public class OWSFakeNetworkManager: NetworkManager {
 
-    public override func asyncRequest(
+    public override func asyncRequestImpl(
         _ request: TSRequest,
         canUseWebSocket: Bool,
         retryPolicy: RetryPolicy,
@@ -262,12 +264,16 @@ public class OWSFakeNetworkManager: NetworkManager {
         // Never resolve.
         return try await withUnsafeThrowingContinuation { (_ continuation: UnsafeContinuation<any HTTPResponse, any Error>) -> Void in }
     }
+}
 
-    public override func makePromise(request: TSRequest, canUseWebSocket: Bool) -> Promise<HTTPResponse> {
-        Logger.info("Ignoring request: \(request)")
-        // Never resolve.
-        let (promise, _) = Promise<HTTPResponse>.pending()
-        return promise
+class MockNetworkManager: NetworkManagerProtocol {
+    var asyncRequestHandlers = [(TSRequest, Bool, NetworkManager.RetryPolicy) async throws -> HTTPResponse]()
+    func asyncRequestImpl(
+        _ request: TSRequest,
+        canUseWebSocket: Bool,
+        retryPolicy: NetworkManager.RetryPolicy,
+    ) async throws -> HTTPResponse {
+        return try await asyncRequestHandlers.removeFirst()(request, canUseWebSocket, retryPolicy)
     }
 }
 

@@ -1,1 +1,1 @@
-• Lógica de nova tentativa melhorada para ajudar em áreas com ligações Wi-Fi ou de rede móvel fracas.
+• Corrigimos um erro nos autocolantes enviados do teclado de emojis do iOS. A mesma correção também funciona para Genmoji.

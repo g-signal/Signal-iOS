@@ -16,6 +16,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
     private let linkAndSyncManager: LinkAndSyncManager
     private let accountKeyStore: AccountKeyStore
     private let messageFactory: Shims.MessageFactory
+    private let networkManager: any NetworkManagerProtocol
     private let preKeyManager: PreKeyManager
     private let profileManager: Shims.ProfileManager
     private let pushRegistrationManager: Shims.PushRegistrationManager
@@ -38,6 +39,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         linkAndSyncManager: LinkAndSyncManager,
         accountKeyStore: AccountKeyStore,
         messageFactory: Shims.MessageFactory,
+        networkManager: any NetworkManagerProtocol,
         preKeyManager: PreKeyManager,
         profileManager: Shims.ProfileManager,
         pushRegistrationManager: Shims.PushRegistrationManager,
@@ -59,6 +61,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         self.linkAndSyncManager = linkAndSyncManager
         self.accountKeyStore = accountKeyStore
         self.messageFactory = messageFactory
+        self.networkManager = networkManager
         self.preKeyManager = preKeyManager
         self.profileManager = profileManager
         self.pushRegistrationManager = pushRegistrationManager
@@ -123,7 +126,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
 
     private class LinkAndSyncError: ProvisioningLinkAndSyncError {
         let error: SecondaryLinkNSyncError
-        let ephemeralBackupKey: BackupKey
+        let ephemeralBackupKey: MessageRootBackupKey
         let authedDevice: AuthedDevice.Explicit
         let progressViewModel: LinkAndSyncSecondaryProgressViewModel
         let undoAllPreviousSteps: () async throws -> Void
@@ -131,7 +134,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
 
         init(
             error: SecondaryLinkNSyncError,
-            ephemeralBackupKey: BackupKey,
+            ephemeralBackupKey: MessageRootBackupKey,
             authedDevice: AuthedDevice.Explicit,
             progressViewModel: LinkAndSyncSecondaryProgressViewModel,
             undoAllPreviousSteps: @escaping () async throws -> Void,
@@ -175,7 +178,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
 
     private func continueFromLinkNSync(
         authedDevice: AuthedDevice.Explicit,
-        ephemeralBackupKey: BackupKey?,
+        ephemeralBackupKey: MessageRootBackupKey?,
         progressViewModel: LinkAndSyncSecondaryProgressViewModel,
         undoAllPreviousSteps: @escaping () async throws -> Void
     ) async throws(CompleteProvisioningError) {
@@ -456,7 +459,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
     // MARK: -
 
     private func completeProvisioning_linkAndSync(
-        ephemeralBackupKey: BackupKey,
+        ephemeralBackupKey: MessageRootBackupKey,
         authedDevice: AuthedDevice.Explicit,
         progressViewModel: LinkAndSyncSecondaryProgressViewModel,
         undoAllPreviousSteps: @escaping () async throws -> Void
@@ -512,7 +515,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             try await Service.makeUpdateSecondaryDeviceCapabilitiesRequest(
                 capabilities: capabilities,
                 auth: authedDevice.authedAccount.chatServiceAuth,
-                signalService: self.signalService,
+                networkManager: self.networkManager,
                 tsAccountManager: self.tsAccountManager
             )
         } catch {

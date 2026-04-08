@@ -1,1 +1,1 @@
-• Signal-appen kræver et signal, men den forbedrede gentagne forsøgslogik i denne opdatering burde være nyttig næste gang du befinder dig i et område med dårlig Wi-Fi- eller mobildækning.
+• Vedholdenhed betaler sig, men det er sjovere, når det virker i første forsøg! Vi har rettet en fejl, hvor det nogle gange krævede flere forsøg at sende en sticker fra iOS emoji-tastaturet. Den samme løsning virker også for Genmoji, så vi håber, du vil synes, det er Genialt.

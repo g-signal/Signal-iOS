@@ -65,6 +65,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
     private let localStorage: AccountKeyStore
     private let localRecipientArchiver: BackupArchiveLocalRecipientArchiver
     private let messagePipelineSupervisor: MessagePipelineSupervisor
+    private let oversizeTextArchiver: BackupArchiveInlinedOversizeTextArchiver
     private let plaintextStreamProvider: BackupArchivePlaintextProtoStreamProvider
     private let postFrameRestoreActionManager: BackupArchivePostFrameRestoreActionManager
     private let releaseNotesRecipientArchiver: BackupArchiveReleaseNotesRecipientArchiver
@@ -72,7 +73,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
     private let stickerPackArchiver: BackupArchiveStickerPackArchiver
     private let tsAccountManager: TSAccountManager
 
-    public init(
+    init(
         accountDataArchiver: BackupArchiveAccountDataArchiver,
         adHocCallArchiver: BackupArchiveAdHocCallArchiver,
         appVersion: AppVersion,
@@ -103,6 +104,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
         localStorage: AccountKeyStore,
         localRecipientArchiver: BackupArchiveLocalRecipientArchiver,
         messagePipelineSupervisor: MessagePipelineSupervisor,
+        oversizeTextArchiver: BackupArchiveInlinedOversizeTextArchiver,
         plaintextStreamProvider: BackupArchivePlaintextProtoStreamProvider,
         postFrameRestoreActionManager: BackupArchivePostFrameRestoreActionManager,
         releaseNotesRecipientArchiver: BackupArchiveReleaseNotesRecipientArchiver,
@@ -140,6 +142,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
         self.localStorage = localStorage
         self.localRecipientArchiver = localRecipientArchiver
         self.messagePipelineSupervisor = messagePipelineSupervisor
+        self.oversizeTextArchiver = oversizeTextArchiver
         self.plaintextStreamProvider = plaintextStreamProvider
         self.postFrameRestoreActionManager = postFrameRestoreActionManager
         self.releaseNotesRecipientArchiver = releaseNotesRecipientArchiver
@@ -151,14 +154,21 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
 
     // MARK: - Remote backups
 
-    public func downloadEncryptedBackup(localIdentifiers: LocalIdentifiers, auth: ChatServiceAuth) async throws -> URL {
+    public func downloadEncryptedBackup(
+        backupKey: MessageRootBackupKey,
+        auth: ChatServiceAuth,
+        progress: OWSProgressSink?
+    ) async throws -> URL {
         let backupAuth = try await backupRequestManager.fetchBackupServiceAuth(
-            for: .messages,
-            localAci: localIdentifiers.aci,
+            for: backupKey,
+            localAci: backupKey.aci,
             auth: auth
         )
         let metadata = try await backupRequestManager.fetchBackupRequestMetadata(auth: backupAuth)
-        let tmpFileUrl = try await attachmentDownloadManager.downloadBackup(metadata: metadata).awaitable()
+        let tmpFileUrl = try await attachmentDownloadManager.downloadBackup(
+            metadata: metadata,
+            progress: progress
+        ).awaitable()
 
         // Once protos calm down, this can be enabled to warn/error on failed validation
         // try await validateBackup(localIdentifiers: localIdentifiers, fileUrl: tmpFileUrl)
@@ -167,12 +177,12 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
     }
 
     public func backupCdnInfo(
-        localIdentifiers: LocalIdentifiers,
+        backupKey: MessageRootBackupKey,
         auth: ChatServiceAuth
     ) async throws -> AttachmentDownloads.CdnInfo {
         let backupAuth = try await backupRequestManager.fetchBackupServiceAuth(
-            for: .messages,
-            localAci: localIdentifiers.aci,
+            for: backupKey,
+            localAci: backupKey.aci,
             auth: auth
         )
         let metadata = try await backupRequestManager.fetchBackupRequestMetadata(auth: backupAuth)
@@ -180,24 +190,19 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
     }
 
     public func uploadEncryptedBackup(
+        backupKey: MessageRootBackupKey,
         metadata: Upload.EncryptedBackupUploadMetadata,
         registeredBackupIDToken: RegisteredBackupIDToken,
         auth: ChatServiceAuth,
         progress: OWSProgressSink?
     ) async throws -> Upload.Result<Upload.EncryptedBackupUploadMetadata> {
-        let (localIdentifiers, isPrimaryDevice) = db.read { tx in
-            return (
-                tsAccountManager.localIdentifiers(tx: tx),
-                tsAccountManager.registrationState(tx: tx).isPrimaryDevice
-            )
-        }
-        guard let localIdentifiers, isPrimaryDevice == true else {
+        guard db.read(block: { tsAccountManager.registrationState(tx: $0).isPrimaryDevice }) == true else {
             throw OWSAssertionError("Backing up not on a registered primary!")
         }
 
         let backupAuth = try await backupRequestManager.fetchBackupServiceAuth(
-            for: .messages,
-            localAci: localIdentifiers.aci,
+            for: backupKey,
+            localAci: backupKey.aci,
             auth: auth
         )
         let form: Upload.Form
@@ -248,7 +253,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
 
     public func exportEncryptedBackup(
         localIdentifiers: LocalIdentifiers,
-        backupKey: BackupKey,
+        backupKey: MessageRootBackupKey,
         backupPurpose: MessageBackupPurpose,
         progress progressSink: OWSProgressSink?
     ) async throws -> Upload.EncryptedBackupUploadMetadata {
@@ -267,8 +272,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
             benchTitle: "Export encrypted Backup",
             openOutputStreamBlock: { exportProgress, tx in
                 return encryptedStreamProvider.openEncryptedOutputFileStream(
-                    localAci: localIdentifiers.aci,
-                    backupKey: backupKey,
+                    messageBackupKey: backupKey,
                     exportProgress: exportProgress,
                     attachmentByteCounter: attachmentByteCounter,
                     tx: tx
@@ -325,21 +329,27 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
         ) -> BackupArchive.ProtoStream.OpenOutputStreamResult<OutputStreamMetadata>
     ) async throws -> OutputStreamMetadata {
         let migrateAttachmentsProgressSink: OWSProgressSink?
+        let prepareOversizeTextAttachmentsProgressSink: OWSProgressSink?
         let exportProgress: BackupArchiveExportProgress?
         if let progressSink {
             migrateAttachmentsProgressSink = await progressSink.addChild(
                 withLabel: "Export Backup: Migrate Attachments",
                 unitCount: 5
             )
+            prepareOversizeTextAttachmentsProgressSink = await progressSink.addChild(
+                withLabel: "Export Backup: Oversize Text Attachments",
+                unitCount: 5
+            )
             exportProgress = try await .prepare(
                 sink: await progressSink.addChild(
                     withLabel: "Export Backup: Export Frames",
-                    unitCount: 95
+                    unitCount: 90
                 ),
                 db: db
             )
         } else {
             migrateAttachmentsProgressSink = nil
+            prepareOversizeTextAttachmentsProgressSink = nil
             exportProgress = nil
         }
 
@@ -349,6 +359,8 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
         }
 
         await migrateAttachmentsBeforeBackup(progress: migrateAttachmentsProgressSink)
+
+        try await oversizeTextArchiver.populateTableIncrementally(progress: prepareOversizeTextAttachmentsProgressSink)
 
         let mediaRootBackupKey = await db.awaitableWrite { tx in
             localStorage.getOrGenerateMediaRootBackupKey(tx: tx)
@@ -396,7 +408,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
     private func _exportBackup(
         outputStream stream: BackupArchiveProtoOutputStream,
         localIdentifiers: LocalIdentifiers,
-        mediaRootBackupKey mediaRootBackupKeyParam: BackupKey,
+        mediaRootBackupKey mediaRootBackupKeyParam: MediaRootBackupKey,
         backupPurpose: MessageBackupPurpose,
         attachmentByteCounter: BackupArchiveAttachmentByteCounter,
         includedContentFilter: BackupArchive.IncludedContentFilter,
@@ -650,7 +662,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
         backupTimeMs: UInt64,
         currentAppVersion: String,
         firstAppVersion: String,
-        mediaRootBackupKey: BackupKey,
+        mediaRootBackupKey: MediaRootBackupKey,
         tx: DBReadTransaction
     ) throws {
         var backupInfo = BackupProto_BackupInfo()
@@ -688,7 +700,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
         fileUrl: URL,
         localIdentifiers: LocalIdentifiers,
         isPrimaryDevice: Bool,
-        backupKey: BackupKey,
+        backupKey: MessageRootBackupKey,
         backupPurpose: MessageBackupPurpose,
         progress progressSink: OWSProgressSink?
     ) async throws {
@@ -702,8 +714,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
             openInputStreamBlock: { fileUrl, frameRestoreProgress, tx in
                 return encryptedStreamProvider.openEncryptedInputFileStream(
                     fileUrl: fileUrl,
-                    localAci: localIdentifiers.aci,
-                    backupKey: backupKey,
+                    messageBackupKey: backupKey,
                     frameRestoreProgress: frameRestoreProgress,
                     tx: tx
                 )
@@ -742,9 +753,20 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
     /// Everything in this method MUST be idempotent, as partial progress can be made
     /// before app termination, which will result in this getting called again.
     public func finalizeBackupImport(progress: OWSProgressSink?) async throws {
-        // TODO: add more steps here, like restoring oversize text
-        let source = await progress?.addSource(withLabel: "", unitCount: 1)
-        source?.incrementCompletedUnitCount(by: 1)
+        let oversizedTextProgress: OWSProgressSink?
+        if let progress {
+            oversizedTextProgress = await progress.addChild(
+                withLabel: "Import Backup: Process Oversized Text Attachments",
+                unitCount: 5
+            )
+        } else {
+            oversizedTextProgress = nil
+        }
+
+        try await oversizeTextArchiver.finishRestoringOversizedTextAttachments(
+            progress: oversizedTextProgress
+        )
+
         await db.awaitableWrite { tx in
             kvStore.setInt(
                 BackupRestoreState.finalized.rawValue,
@@ -932,7 +954,7 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
                 throw BackupImportError.unsupportedVersion
             }
             do {
-                localStorage.setMediaRootBackupKey(try BackupKey(contents: backupInfo.mediaRootBackupKey), tx: tx)
+                localStorage.setMediaRootBackupKey(try MediaRootBackupKey(data: backupInfo.mediaRootBackupKey), tx: tx)
             } catch {
                 frameErrors.append(LoggableErrorAndProto(
                     error: BackupArchive.RestoreFrameError.restoreFrameError(
@@ -1403,15 +1425,13 @@ public class BackupArchiveManagerImpl: BackupArchiveManager {
 
     public func validateEncryptedBackup(
         fileUrl: URL,
-        localIdentifiers: LocalIdentifiers,
-        backupKey: BackupKey,
+        backupKey: MessageRootBackupKey,
         backupPurpose: MessageBackupPurpose
     ) async throws {
-        let key = try backupKey.asMessageBackupKey(for: localIdentifiers.aci)
         let fileSize = OWSFileSystem.fileSize(ofPath: fileUrl.path)?.uint64Value ?? 0
 
         do {
-            let result = try validateMessageBackup(key: key, purpose: backupPurpose, length: fileSize) {
+            let result = try validateMessageBackup(key: backupKey.messageBackupKey, purpose: backupPurpose, length: fileSize) {
                 return try FileHandle(forReadingFrom: fileUrl)
             }
             if result.fields.count > 0 {

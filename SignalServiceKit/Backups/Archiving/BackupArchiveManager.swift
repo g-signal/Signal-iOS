@@ -21,19 +21,21 @@ public protocol BackupArchiveManager {
 
     /// Fetch the CDN info for the current backup
     func backupCdnInfo(
-        localIdentifiers: LocalIdentifiers,
+        backupKey: MessageRootBackupKey,
         auth: ChatServiceAuth
     ) async throws -> AttachmentDownloads.CdnInfo
 
     /// Download the encrypted backup for the current user to a local file.
     func downloadEncryptedBackup(
-        localIdentifiers: LocalIdentifiers,
-        auth: ChatServiceAuth
+        backupKey: MessageRootBackupKey,
+        auth: ChatServiceAuth,
+        progress: OWSProgressSink?
     ) async throws -> URL
 
     /// Upload the local encrypted backup identified by the given metadata for
     /// the current user.
     func uploadEncryptedBackup(
+        backupKey: MessageRootBackupKey,
         metadata: Upload.EncryptedBackupUploadMetadata,
         registeredBackupIDToken: RegisteredBackupIDToken,
         auth: ChatServiceAuth,
@@ -46,7 +48,7 @@ public protocol BackupArchiveManager {
     /// - SeeAlso `uploadEncryptedBackup`
     func exportEncryptedBackup(
         localIdentifiers: LocalIdentifiers,
-        backupKey: BackupKey,
+        backupKey: MessageRootBackupKey,
         backupPurpose: MessageBackupPurpose,
         progress: OWSProgressSink?
     ) async throws -> Upload.EncryptedBackupUploadMetadata
@@ -72,7 +74,7 @@ public protocol BackupArchiveManager {
         fileUrl: URL,
         localIdentifiers: LocalIdentifiers,
         isPrimaryDevice: Bool,
-        backupKey: BackupKey,
+        backupKey: MessageRootBackupKey,
         backupPurpose: MessageBackupPurpose,
         progress: OWSProgressSink?
     ) async throws
@@ -98,8 +100,7 @@ public protocol BackupArchiveManager {
     /// Validate the encrypted backup file located at the given local URL.
     func validateEncryptedBackup(
         fileUrl: URL,
-        localIdentifiers: LocalIdentifiers,
-        backupKey: BackupKey,
+        backupKey: MessageRootBackupKey,
         backupPurpose: MessageBackupPurpose
     ) async throws
 }

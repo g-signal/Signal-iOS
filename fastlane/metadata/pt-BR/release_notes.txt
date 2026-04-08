@@ -1,1 +1,1 @@
-• Esta atualização melhora as tentativas de reconexão quando o Wi-Fi ou o sinal do celular estiverem ruins. 
+• Corrigimos um erro que às vezes exigia várias tentativas para enviar figurinhas pelo teclado de emojis do iOS. A mesma correção também se aplica ao Genmoji.  Esperamos que você aproveite!

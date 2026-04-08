@@ -1,1 +1,1 @@
-• Uudelleenyrityksen logiikkaa on parannettu alueilla, joissa on heikko Wi-Fi- tai matkapuhelinverkkoyhteys.
+• Korjasimme virheen iOS:n emoji-näppäimistöltä lähetetyissä tarroissa.

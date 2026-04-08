@@ -10,20 +10,22 @@ public import LibSignalClient
 
 open class BackupArchiveManagerMock: BackupArchiveManager {
     public func backupCdnInfo(
-        localIdentifiers: LocalIdentifiers,
+        backupKey: MessageRootBackupKey,
         auth: ChatServiceAuth
     ) async throws -> AttachmentDownloads.CdnInfo {
         return AttachmentDownloads.CdnInfo(contentLength: 0, lastModified: Date())
     }
 
     public func downloadEncryptedBackup(
-        localIdentifiers: LocalIdentifiers,
-        auth: ChatServiceAuth
+        backupKey: MessageRootBackupKey,
+        auth: ChatServiceAuth,
+        progress: OWSProgressSink?
     ) async throws -> URL {
         return URL(string: "file://")!
     }
 
     public func uploadEncryptedBackup(
+        backupKey: MessageRootBackupKey,
         metadata: Upload.EncryptedBackupUploadMetadata,
         registeredBackupIDToken: RegisteredBackupIDToken,
         auth: ChatServiceAuth,
@@ -46,7 +48,7 @@ open class BackupArchiveManagerMock: BackupArchiveManager {
 
     public func exportEncryptedBackup(
         localIdentifiers: LocalIdentifiers,
-        backupKey: BackupKey,
+        backupKey: MessageRootBackupKey,
         backupPurpose: MessageBackupPurpose,
         progress: OWSProgressSink?
     ) async throws -> Upload.EncryptedBackupUploadMetadata {
@@ -78,7 +80,7 @@ open class BackupArchiveManagerMock: BackupArchiveManager {
         fileUrl: URL,
         localIdentifiers: LocalIdentifiers,
         isPrimaryDevice: Bool,
-        backupKey: BackupKey,
+        backupKey: MessageRootBackupKey,
         backupPurpose: MessageBackupPurpose,
         progress: OWSProgressSink?
     ) async throws {
@@ -104,8 +106,7 @@ open class BackupArchiveManagerMock: BackupArchiveManager {
 
     public func validateEncryptedBackup(
         fileUrl: URL,
-        localIdentifiers: LocalIdentifiers,
-        backupKey: BackupKey,
+        backupKey: MessageRootBackupKey,
         backupPurpose: MessageBackupPurpose
     ) async throws {}
 }

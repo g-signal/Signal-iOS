@@ -1,1 +1,1 @@
-• Cải thiện logic thử lại, hữu ích cho các khu vực có kết nối WiFi hoặc mạng di động kém.
+• Chúng tôi đã sửa lỗi liên quan đến nhãn dán được gửi từ bàn phím emoji trên iOS.

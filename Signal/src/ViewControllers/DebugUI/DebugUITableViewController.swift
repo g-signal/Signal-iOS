@@ -12,12 +12,16 @@ class DebugUITableViewController: OWSTableViewController2 {
 
     // MARK: Public
 
-    static func presentDebugUI(from fromViewController: UIViewController, appReadiness: AppReadinessSetter) {
+    static func presentDebugUI(
+        fromViewController: UIViewController,
+        thread: TSThread?
+    ) {
         let viewController = DebugUITableViewController()
 
         let subsectionItems: [OWSTableItem] = [
-            itemForSubsection(DebugUICallsTab(), viewController: viewController),
-            itemForSubsection(DebugUIContacts(), viewController: viewController),
+            itemForSubsection(DebugUIMisc(), viewController: viewController),
+            itemForSubsection(DebugUIPrompts(), viewController: viewController),
+            itemForSubsection(DebugUISessionState(), viewController: viewController),
             itemForSubsection(DebugUIDiskUsage(), viewController: viewController),
             itemForSubsection(DebugUISessionState(), viewController: viewController),
             itemForSubsection(DebugUISyncMessages(), viewController: viewController),

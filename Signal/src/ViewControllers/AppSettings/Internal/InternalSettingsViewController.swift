@@ -17,14 +17,10 @@ class InternalSettingsViewController: OWSTableViewController2 {
 
     private let mode: Mode
 
-    private let appReadiness: AppReadinessSetter
-
     init(
         mode: Mode = .standard,
-        appReadiness: AppReadinessSetter
     ) {
         self.mode = mode
-        self.appReadiness = appReadiness
         super.init()
     }
 
@@ -44,9 +40,12 @@ class InternalSettingsViewController: OWSTableViewController2 {
         #if USE_DEBUG_UI
         debugSection.add(.disclosureItem(
             withText: "Debug UI",
-            actionBlock: { [weak self, appReadiness] in
+            actionBlock: { [weak self] in
                 guard let self = self else { return }
-                DebugUITableViewController.presentDebugUI(from: self, appReadiness: appReadiness)
+                DebugUITableViewController.presentDebugUI(
+                    fromViewController: self,
+                    thread: nil
+                )
             }
         ))
         #endif
@@ -171,6 +170,36 @@ class InternalSettingsViewController: OWSTableViewController2 {
 //        if backupsSection.items.isEmpty.negated {
 //            contents.add(backupsSection)
 //        }
+
+        do {
+            func makeFileBrowsingActionItem(_ title: String, _ fileUrl: URL) -> OWSTableItem {
+                return .actionItem(
+                    withText: title,
+                    actionBlock: { [weak self] in
+                        guard let self else { return }
+                        navigationController?.pushViewController(
+                            InternalFileBrowserViewController(fileURL: fileUrl),
+                            animated: true
+                        )
+                    }
+                )
+            }
+
+            let fileBrowsingSection = OWSTableSection(title: "Browse App Files")
+            fileBrowsingSection.add(makeFileBrowsingActionItem(
+                "App Container: Library",
+                URL(string: OWSFileSystem.appLibraryDirectoryPath())!.deletingLastPathComponent()
+            ))
+            fileBrowsingSection.add(makeFileBrowsingActionItem(
+                "App Container: Documents",
+                URL(string: OWSFileSystem.appDocumentDirectoryPath())!.deletingLastPathComponent()
+            ))
+            fileBrowsingSection.add(makeFileBrowsingActionItem(
+                "Shared App Container",
+                URL(string: OWSFileSystem.appSharedDataDirectoryPath())!.deletingLastPathComponent()
+            ))
+            contents.add(fileBrowsingSection)
+        }
 
         let (
             contactThreadCount,
@@ -309,8 +338,8 @@ private extension InternalSettingsViewController {
     }
 
     func validateMessageBackupProto() {
+        let accountKeyStore = DependenciesBridge.shared.accountKeyStore
         let backupArchiveManager = DependenciesBridge.shared.backupArchiveManager
-        let backupKeyMaterial = DependenciesBridge.shared.backupKeyMaterial
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
 
         guard let localIdentifiers = SSKEnvironment.shared.databaseStorageRef.read(block: {tx in
@@ -320,8 +349,10 @@ private extension InternalSettingsViewController {
         }
         Task {
             do {
-                let backupKey = try SSKEnvironment.shared.databaseStorageRef.read { tx in
-                    try backupKeyMaterial.backupKey(type: .messages, tx: tx)
+                guard let backupKey = try SSKEnvironment.shared.databaseStorageRef.read(block: { tx in
+                    try accountKeyStore.getMessageRootBackupKey(aci: localIdentifiers.aci, tx: tx)
+                }) else {
+                    return
                 }
                 let metadata = try await backupArchiveManager.exportEncryptedBackup(
                     localIdentifiers: localIdentifiers,
@@ -331,7 +362,6 @@ private extension InternalSettingsViewController {
                 )
                 try await backupArchiveManager.validateEncryptedBackup(
                     fileUrl: metadata.fileUrl,
-                    localIdentifiers: localIdentifiers,
                     backupKey: backupKey,
                     backupPurpose: .remoteBackup
                 )
@@ -414,29 +444,29 @@ private extension InternalSettingsViewController {
     func exportMessageBackupProtoFile(
         presentingFrom vc: UIViewController
     ) async throws {
+        let accountKeyStore = DependenciesBridge.shared.accountKeyStore
         let backupArchiveManager = DependenciesBridge.shared.backupArchiveManager
-        let backupKeyMaterial = DependenciesBridge.shared.backupKeyMaterial
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
 
-        let (backupKey, localIdentifiers) = try SSKEnvironment.shared.databaseStorageRef.read { tx in
-            (
-                try backupKeyMaterial.backupKey(type: .messages, tx: tx),
-                tsAccountManager.localIdentifiers(tx: tx)
+        let (messageBackupKey, localIdentifiers) = try SSKEnvironment.shared.databaseStorageRef.read { tx in
+            let localIdentifiers = tsAccountManager.localIdentifiers(tx: tx)!
+            return (
+                try accountKeyStore.getMessageRootBackupKey(aci: localIdentifiers.aci, tx: tx),
+                localIdentifiers
             )
         }
 
-        guard let localIdentifiers else {
+        guard let messageBackupKey else {
             return
         }
 
         let metadata = try await backupArchiveManager.exportEncryptedBackup(
             localIdentifiers: localIdentifiers,
-            backupKey: backupKey,
+            backupKey: messageBackupKey,
             backupPurpose: .remoteBackup,
             progress: nil
         )
 
-        let messageBackupKey = try backupKey.asMessageBackupKey(for: localIdentifiers.aci)
         let keyString = "AES key: \(messageBackupKey.aesKey.base64EncodedString())"
             + "\nHMAC key: \(messageBackupKey.hmacKey.base64EncodedString())"
 
@@ -457,25 +487,26 @@ private extension InternalSettingsViewController {
     }
 
     func exportMessageBackupProtoRemotely() async throws {
+        let accountKeyStore = DependenciesBridge.shared.accountKeyStore
         let backupArchiveManager = DependenciesBridge.shared.backupArchiveManager
         let backupIdManager = DependenciesBridge.shared.backupIdManager
-        let backupKeyMaterial = DependenciesBridge.shared.backupKeyMaterial
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
 
-        let (backupKey, localIdentifiers) = try SSKEnvironment.shared.databaseStorageRef.read { tx in
-            (
-                try backupKeyMaterial.backupKey(type: .messages, tx: tx),
-                tsAccountManager.localIdentifiers(tx: tx)
+        let (messageBackupKey, localIdentifiers) = try SSKEnvironment.shared.databaseStorageRef.read { tx in
+            let localIdentifiers = tsAccountManager.localIdentifiers(tx: tx)!
+            return (
+                try accountKeyStore.getMessageRootBackupKey(aci: localIdentifiers.aci, tx: tx),
+                localIdentifiers
             )
         }
 
-        guard let localIdentifiers else {
+        guard let messageBackupKey else {
             return
         }
 
         let metadata = try await backupArchiveManager.exportEncryptedBackup(
             localIdentifiers: localIdentifiers,
-            backupKey: backupKey,
+            backupKey: messageBackupKey,
             backupPurpose: .remoteBackup,
             progress: nil
         )
@@ -486,6 +517,7 @@ private extension InternalSettingsViewController {
         )
 
         _ = try await backupArchiveManager.uploadEncryptedBackup(
+            backupKey: messageBackupKey,
             metadata: metadata,
             registeredBackupIDToken: registeredBackupIDToken,
             auth: .implicit(),

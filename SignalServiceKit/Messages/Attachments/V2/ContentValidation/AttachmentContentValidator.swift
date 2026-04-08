@@ -71,7 +71,7 @@ public protocol AttachmentContentValidator {
         mimeType: String,
         renderingFlag: AttachmentReference.RenderingFlag,
         sourceFilename: String?
-    ) throws -> PendingAttachment
+    ) async throws -> PendingAttachment
 
     /// Validate and prepare a Data's contents, based on the provided mimetype.
     /// Returns a PendingAttachment with validated contents, ready to be inserted.
@@ -82,7 +82,7 @@ public protocol AttachmentContentValidator {
         mimeType: String,
         renderingFlag: AttachmentReference.RenderingFlag,
         sourceFilename: String?
-    ) throws -> PendingAttachment
+    ) async throws -> PendingAttachment
 
     /// Validate and prepare an encrypted attachment file's contents, based on the provided mimetype.
     /// Returns a PendingAttachment with validated contents, ready to be inserted.
@@ -100,7 +100,7 @@ public protocol AttachmentContentValidator {
         mimeType: String,
         renderingFlag: AttachmentReference.RenderingFlag,
         sourceFilename: String?
-    ) throws -> PendingAttachment
+    ) async throws -> PendingAttachment
 
     /// Just validate an encrypted attachment file's contents, based on the provided mimetype.
     /// Returns the validated content type;  does no integrityCheck validation or primary file copy preparation.
@@ -110,7 +110,7 @@ public protocol AttachmentContentValidator {
         encryptionKey: Data,
         plaintextLength: UInt32,
         mimeType: String
-    ) throws -> RevalidatedAttachment
+    ) async throws -> RevalidatedAttachment
 
     /// Validate and prepare a backup media file's contents, based on the provided mimetype.
     /// Returns a PendingAttachment with validated contents, ready to be inserted.
@@ -139,27 +139,32 @@ public protocol AttachmentContentValidator {
         mimeType: String,
         renderingFlag: AttachmentReference.RenderingFlag,
         sourceFilename: String?
-    ) throws -> PendingAttachment
+    ) async throws -> PendingAttachment
 
     /// If the provided message body is large enough to require an oversize text
     /// attachment, creates a pending one, alongside the truncated message body.
     /// If not, just returns the message body as is.
+    ///
+    /// - parameter encryptionKeys: The encryption key to use for the pending attachment
+    /// file to create for oversize text, if any. If there is no provided encryption key for a given MessageBody
+    /// input, a random key will be used.
     func prepareOversizeTextsIfNeeded<Key: Hashable>(
-        from texts: [Key: MessageBody]
-    ) throws -> [Key: ValidatedMessageBody]
+        from texts: [Key: MessageBody],
+        encryptionKeys: [Key: Data],
+    ) async throws -> [Key: ValidatedMessageBody]
 
     /// Build a `QuotedReplyAttachmentDataSource` for a reply to a message with the provided attachment.
     /// Throws an error if the provided attachment is non-visual, or if data reading/writing fails.
     func prepareQuotedReplyThumbnail(
         fromOriginalAttachment: AttachmentStream,
         originalReference: AttachmentReference
-    ) throws -> QuotedReplyAttachmentDataSource
+    ) async throws -> QuotedReplyAttachmentDataSource
 
     /// Build a `PendingAttachment` for a reply to a message with the provided attachment stream.
     /// Throws an error if the provided attachment is non-visual, or if data reading/writing fails.
     func prepareQuotedReplyThumbnail(
         fromOriginalAttachmentStream: AttachmentStream
-    ) throws -> PendingAttachment
+    ) async throws -> PendingAttachment
 }
 
 extension AttachmentContentValidator {
@@ -170,8 +175,8 @@ extension AttachmentContentValidator {
         mimeType: String,
         renderingFlag: AttachmentReference.RenderingFlag,
         sourceFilename: String?
-    ) throws -> AttachmentDataSource {
-        return .from(pendingAttachment: try self.validateContents(
+    ) async throws -> AttachmentDataSource {
+        return await .from(pendingAttachment: try self.validateContents(
             dataSource: dataSource,
             shouldConsume: shouldConsume,
             mimeType: mimeType,
@@ -185,12 +190,21 @@ extension AttachmentContentValidator {
         mimeType: String,
         renderingFlag: AttachmentReference.RenderingFlag,
         sourceFilename: String?
-    ) throws -> AttachmentDataSource {
-        return .from(pendingAttachment: try self.validateContents(
+    ) async throws -> AttachmentDataSource {
+        return await .from(pendingAttachment: try self.validateContents(
             data: data,
             mimeType: mimeType,
             renderingFlag: renderingFlag,
             sourceFilename: sourceFilename
         ))
+    }
+
+    public func prepareOversizeTextIfNeeded(
+        _ body: MessageBody,
+    ) async throws -> ValidatedMessageBody {
+        return try await prepareOversizeTextsIfNeeded(
+            from: ["": body],
+            encryptionKeys: [:]
+        ).values.first!
     }
 }

@@ -1,1 +1,1 @@
-• Hasta Signal pierde la señal a veces, pero esta actualización incluye una lógica de reintento mejorada que te salvará en lugares con mala cobertura Wi-Fi o de datos móviles.
+• La constancia siempre da sus frutos, pero a veces es mejor cuando todo funciona a la primera. Por eso, hemos corregido un error que a veces hacía que enviar un sticker desde el teclado emoji de iOS llevase varios intentos.

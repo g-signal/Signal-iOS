@@ -235,7 +235,11 @@ public extension TSOutgoingMessage {
                 }
 
                 if recipientState.canHaveErrorCode {
-                    recipientState.errorCode = (error as NSError).code
+                    if error is UntrustedIdentityError {
+                        recipientState.errorCode = OWSErrorCode.untrustedIdentity.rawValue
+                    } else {
+                        recipientState.errorCode = OWSErrorCode.genericFailure.rawValue
+                    }
                 }
             }
         }
@@ -250,7 +254,28 @@ public extension TSOutgoingMessage {
         transaction tx: DBWriteTransaction
     ) {
         anyUpdateOutgoingMessage(transaction: tx) { outgoingMessage in
-            if let error {
+            if error is AppExpiredError {
+                // TODO: Don't store rasterized strings in the database.
+                outgoingMessage.mostRecentFailureText = OWSLocalizedString(
+                    "ERROR_SENDING_EXPIRED",
+                    comment: "Error indicating a send failure due to an expired application."
+                )
+            } else if error is NotRegisteredError {
+                // TODO: Don't store rasterized strings in the database.
+                let tsAccountManager = DependenciesBridge.shared.tsAccountManager
+                switch tsAccountManager.registrationState(tx: tx).isPrimaryDevice {
+                case .some(true), .none:
+                    outgoingMessage.mostRecentFailureText = OWSLocalizedString(
+                        "ERROR_SENDING_DEREGISTERED",
+                        comment: "Error indicating a send failure due to a deregistered application.",
+                    )
+                case .some(false):
+                    outgoingMessage.mostRecentFailureText = OWSLocalizedString(
+                        "ERROR_SENDING_DELINKED",
+                        comment: "Error indicating a send failure due to a delinked application.",
+                    )
+                }
+            } else if let error {
                 outgoingMessage.mostRecentFailureText = error.userErrorDescription
             }
 

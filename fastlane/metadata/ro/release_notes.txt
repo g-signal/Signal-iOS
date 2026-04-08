@@ -1,1 +1,1 @@
-• Signal are nevoie de semnal, dar mecanismul îmbunătățit de reîncercare din această actualizare va fi util data viitoare, când te afli într-o zonă cu recepție slabă de Wi-Fi sau de mobil.
+• Perseverența dă roade, dar e și mai bine când lucrurile funcționează din prima încercare. Am remediat o eroare care uneori necesita mai multe încercări pentru a trimite un sticker de pe tastatura emoji iOS. Aceeași soluție funcționează și pentru Genmoji, așa că sperăm să-ți placă.

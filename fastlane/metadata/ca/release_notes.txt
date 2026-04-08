@@ -1,1 +1,1 @@
-• Actualitzacions a la lògica de reintent per ajudar-te a connectar-te en zones amb mala cobertura o recepció WiFi.
+• Hem corregit un error que hi havia amb els stickers enviats des del teclat emoji d'iOS.

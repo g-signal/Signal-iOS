@@ -1,1 +1,1 @@
-• Poboljšana logika ponovnog pokušaja za bolju funkcionalnost u područjima sa slabim signalom za Wi-Fi ili mobilnu mrežu.
+• Ispravili smo programsku pogrešku pri slanju naljepnica s iOS emoji tipkovnice.

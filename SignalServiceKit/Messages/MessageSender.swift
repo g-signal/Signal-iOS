@@ -577,8 +577,9 @@ public class MessageSender {
         if DependenciesBridge.shared.appExpiry.isExpired(now: Date()) {
             throw AppExpiredError()
         }
-        if DependenciesBridge.shared.tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegistered.negated {
-            throw AppDeregisteredError()
+        let tsAccountManager = DependenciesBridge.shared.tsAccountManager
+        if !tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegistered {
+            throw NotRegisteredError()
         }
         if message.shouldBeSaved {
             let latestCopy = SSKEnvironment.shared.databaseStorageRef.read { tx in
@@ -931,9 +932,6 @@ public class MessageSender {
         localIdentifiers: LocalIdentifiers,
         tx: DBReadTransaction
     ) -> [ServiceId: OWSUDAccess] {
-        if DebugFlags.disableUD.get() {
-            return [:]
-        }
         var result = [ServiceId: OWSUDAccess]()
         for serviceId in serviceIds {
             if localIdentifiers.contains(serviceId: serviceId) {
@@ -1537,9 +1535,8 @@ public class MessageSender {
         Logger.warn("\(type(of: message)) to \(messageSend.serviceId), timestamp: \(message.timestamp), error: \(responseError)")
 
         switch responseError.httpStatusCode {
-        case 401:
-            // TODO: [WebSocket] Remove this case when REST is removed.
-            throw AppDeregisteredError()
+        case 401 where !OWSChatConnection.mustAppUseSocketsToMakeRequests:
+            throw NotRegisteredError()
         case 404:
             try await failSendForUnregisteredRecipient(messageSend)
         case 409:

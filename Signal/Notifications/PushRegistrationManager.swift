@@ -55,31 +55,22 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
 
     // MARK: Public interface
 
-    public func needsNotificationAuthorization() -> Guarantee<Bool> {
-        return Guarantee<Bool> { resolve in
-            UNUserNotificationCenter.current().getNotificationSettings { settings in
-                resolve(settings.authorizationStatus == .notDetermined)
-            }
-        }
+    public func needsNotificationAuthorization() async -> Bool {
+        let notificationSettings = await UNUserNotificationCenter.current().notificationSettings()
+        return notificationSettings.authorizationStatus == .notDetermined
     }
 
     public typealias ApnRegistrationId = RegistrationRequestFactory.ApnRegistrationId
 
     /// - parameter timeOutEventually: If the OS fails to get back to us with the apns token after
     /// we have requested it and significant time has passed, do we time out or keep waiting? Default to keep waiting.
+    @MainActor
     public func requestPushTokens(
         forceRotation: Bool,
         timeOutEventually: Bool = false
-    ) -> Promise<ApnRegistrationId> {
+    ) async throws -> ApnRegistrationId {
         Logger.info("")
-        return Promise.wrapAsync {
-            await self.registerUserNotificationSettings()
-        }.then { (_) -> Promise<ApnRegistrationId> in
-            #if targetEnvironment(simulator)
-            if TSConstants.isUsingProductionService {
-                throw PushRegistrationError.pushNotSupported(description: "Production APNs isn't supported on simulators.")
-            }
-            #endif
+        await self.registerUserNotificationSettings()
 
             return self
                 .registerForVanillaPushToken(
@@ -98,6 +89,14 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
                     }
                 }
         }
+        #endif
+
+        let vanillaPushToken = try await registerForVanillaPushToken(forceRotation: forceRotation, timeOutEventually: timeOutEventually)
+
+        // We need the voip registry to handle voip pushes relayed from the NSE.
+        createVoipRegistryIfNecessary()
+
+        return ApnRegistrationId(apnsToken: vanillaPushToken)
     }
 
     public func didFinishReportingIncomingCall() {
@@ -110,7 +109,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
     ///
     /// Notably, this method is not responsible for requesting these tokens—that must be
     /// managed elsewhere. Before you request one, you should call this method.
-    public func receivePreAuthChallengeToken() -> Guarantee<String> { preauthChallengeGuarantee }
+    public func receivePreAuthChallengeToken() async -> String { await preauthChallengeGuarantee.awaitable() }
 
     /// Clears any existing pre-auth challenge token. If none exists, this method does nothing.
     public func clearPreAuthChallengeToken() {
@@ -295,23 +294,22 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         return true
     }
 
+    @MainActor
     private func registerForVanillaPushToken(
         forceRotation: Bool,
         timeOutEventually: Bool
-    ) -> Promise<String> {
-        AssertIsOnMainThread()
+    ) async throws -> String {
         Logger.info("")
 
-        guard self.vanillaTokenPromise == nil else {
-            let promise = vanillaTokenPromise!
-            owsAssertDebug(!promise.isSealed)
+        if let vanillaTokenPromise {
             Logger.info("already pending promise for vanilla push token")
-            return promise.map { $0.toHex() }
+            return try await vanillaTokenPromise.awaitable().toHex()
         }
 
         // No pending vanilla token yet. Create a new promise
         let (promise, future) = Promise<Data>.pending()
         self.vanillaTokenPromise = promise
+        defer { self.vanillaTokenPromise = nil }
         self.vanillaTokenFuture = future
 
         if forceRotation {
@@ -492,6 +490,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         })
     }
 
+    @MainActor
     private func createVoipRegistryIfNecessary() {
         AssertIsOnMainThread()
 

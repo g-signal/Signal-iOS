@@ -1,1 +1,1 @@
-• Förbättrad omförsökslogik för att hjälpa till i områden med dålig wifi- eller mobiluppkoppling.
+• Ihärdighet lönar sig, men det är ännu bättre när saker fungerar på första försöket. Vi har åtgärdat ett fel som ibland krävde flera försök för att skicka ett klistermärke från iOS-emojitangentbordet. Samma fix fungerar även för Genmoji, så vi hoppas att du gillar den.

@@ -25,13 +25,13 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
     private let tsAccountManager: TSAccountManager
 
     public init(
+        accountKeyStore: AccountKeyStore,
         appReadiness: AppReadiness,
         attachmentDownloadStore: AttachmentDownloadStore,
         attachmentStore: AttachmentStore,
         attachmentValidator: AttachmentContentValidator,
         backupAttachmentUploadQueueRunner: BackupAttachmentUploadQueueRunner,
         backupAttachmentUploadScheduler: BackupAttachmentUploadScheduler,
-        backupKeyMaterial: BackupKeyMaterial,
         backupRequestManager: BackupRequestManager,
         currentCallProvider: CurrentCallProvider,
         dateProvider: @escaping DateProvider,
@@ -84,10 +84,10 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
             threadStore: threadStore
         )
         let taskRunner = DownloadTaskRunner(
+            accountKeyStore: accountKeyStore,
             attachmentDownloadStore: attachmentDownloadStore,
             attachmentStore: attachmentStore,
             attachmentUpdater: attachmentUpdater,
-            backupKeyMaterial: backupKeyMaterial,
             backupRequestManager: backupRequestManager,
             dateProvider: dateProvider,
             db: db,
@@ -329,6 +329,9 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
             return
         }
 
+        let downloadKey = DownloadQueue.DownloadKey(id: id, source: source)
+        await downloadQueue.clearOldDownloadsAndIncrementProgressID(key: downloadKey)
+
         let downloadWaitingTask = Task {
             try await self.downloadQueue.waitForDownloadOfAttachment(
                 id: id,
@@ -337,18 +340,25 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
             )
         }
 
-        try await db.awaitableWrite { tx in
-            try self.attachmentDownloadStore.enqueueDownloadOfAttachment(
-                withId: id,
-                source: source,
-                priority: priority,
-                tx: tx
-            )
+        do {
+            try await db.awaitableWrite { tx in
+                try self.attachmentDownloadStore.enqueueDownloadOfAttachment(
+                    withId: id,
+                    source: source,
+                    priority: priority,
+                    tx: tx
+                )
+            }
+
+            self.beginDownloadingIfNecessary()
+            try await downloadWaitingTask.value
+        } catch {
+            Logger.error("Error downloading attachment id \(id): \(error)")
+            await downloadQueue.clearDownloadProgressAndMarkFinished(key: downloadKey)
+            throw error
         }
 
-        self.beginDownloadingIfNecessary()
-
-        try await downloadWaitingTask.value
+        await downloadQueue.clearDownloadProgressAndMarkFinished(key: downloadKey)
     }
 
     public func beginDownloadingIfNecessary() {
@@ -377,10 +387,6 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
             attachmentId: attachmentId,
             tx: tx
         )
-    }
-
-    public func downloadProgress(for attachmentId: Attachment.IDType, tx: DBReadTransaction) -> CGFloat? {
-        return progressStates.fractionCompleted(for: attachmentId).map { CGFloat($0) }
     }
 
     // MARK: - Persisted Queue
@@ -417,10 +423,10 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
     private final class DownloadTaskRunner: TaskRecordRunner {
         typealias Store = DownloadTaskRecordStore
 
+        private let accountKeyStore: AccountKeyStore
         private let attachmentDownloadStore: AttachmentDownloadStore
         private let attachmentStore: AttachmentStore
         private let attachmentUpdater: AttachmentUpdater
-        private let backupKeyMaterial: BackupKeyMaterial
         private let backupRequestManager: BackupRequestManager
         private let dateProvider: DateProvider
         private let db: any DB
@@ -433,10 +439,10 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
         private let tsAccountManager: TSAccountManager
 
         init(
+            accountKeyStore: AccountKeyStore,
             attachmentDownloadStore: AttachmentDownloadStore,
             attachmentStore: AttachmentStore,
             attachmentUpdater: AttachmentUpdater,
-            backupKeyMaterial: BackupKeyMaterial,
             backupRequestManager: BackupRequestManager,
             dateProvider: @escaping DateProvider,
             db: any DB,
@@ -447,10 +453,10 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
             stickerManager: Shims.StickerManager,
             tsAccountManager: TSAccountManager
         ) {
+            self.accountKeyStore = accountKeyStore
             self.attachmentDownloadStore = attachmentDownloadStore
             self.attachmentStore = attachmentStore
             self.attachmentUpdater = attachmentUpdater
-            self.backupKeyMaterial = backupKeyMaterial
             self.backupRequestManager = backupRequestManager
             self.dateProvider = dateProvider
             self.db = db
@@ -714,8 +720,9 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
                 guard
                     let mediaTierInfo = attachment.mediaTierInfo,
                     let mediaName = attachment.mediaName,
-                    let encryptionMetadata = buildCdnEncryptionMetadata(mediaName: mediaName, type: .outerLayerFullsizeOrThumbnail),
-                    let cdnCredential = await fetchBackupCdnReadCredential(for: cdnNumber)
+                    let backupKey = db.read(block: { accountKeyStore.getMediaRootBackupKey(tx: $0) }),
+                    let encryptionMetadata = buildCdnEncryptionMetadata(mediaName: mediaName, backupKey: backupKey, type: .outerLayerFullsizeOrThumbnail),
+                    let cdnCredential = await fetchBackupCdnReadCredential(for: cdnNumber, backupKey: backupKey)
                 else {
                     downloadMetadata = nil
                     break
@@ -737,17 +744,20 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
                 guard
                     attachment.thumbnailMediaTierInfo != nil || MimeTypeUtil.isSupportedVisualMediaMimeType(attachment.mimeType),
                     let mediaName = attachment.mediaName,
+                    let backupKey = db.read(block: { accountKeyStore.getMediaRootBackupKey(tx: $0) }),
                     // This is the outer encryption
                     let outerEncryptionMetadata = buildCdnEncryptionMetadata(
                         mediaName: AttachmentBackupThumbnail.thumbnailMediaName(fullsizeMediaName: mediaName),
+                        backupKey: backupKey,
                         type: .outerLayerFullsizeOrThumbnail
                     ),
                     // inner encryption
                     let innerEncryptionMetadata = buildCdnEncryptionMetadata(
                         mediaName: AttachmentBackupThumbnail.thumbnailMediaName(fullsizeMediaName: mediaName),
+                        backupKey: backupKey,
                         type: .transitTierThumbnail
                     ),
-                    let cdnReadCredential = await fetchBackupCdnReadCredential(for: cdnNumber)
+                    let cdnReadCredential = await fetchBackupCdnReadCredential(for: cdnNumber, backupKey: backupKey)
                 else {
                     downloadMetadata = nil
                     break
@@ -911,22 +921,24 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
 
         private func buildCdnEncryptionMetadata(
             mediaName: String,
+            backupKey: MediaRootBackupKey,
             type: MediaTierEncryptionType
         ) -> MediaTierEncryptionMetadata? {
-            guard let mediaEncryptionMetadata = try? db.read(block: { tx in
-                try backupKeyMaterial.mediaEncryptionMetadata(
+            do {
+                return try backupKey.mediaEncryptionMetadata(
                     mediaName: mediaName,
                     type: type,
-                    tx: tx
                 )
-            }) else {
+            } catch {
                 owsFailDebug("Failed to build backup media metadata")
                 return nil
             }
-            return mediaEncryptionMetadata
         }
 
-        private func fetchBackupCdnReadCredential(for cdn: UInt32) async -> MediaTierReadCredential? {
+        private func fetchBackupCdnReadCredential(
+            for cdn: UInt32,
+            backupKey: MediaRootBackupKey
+        ) async -> MediaTierReadCredential? {
             guard let localAci = db.read(block: { tx in
                 self.tsAccountManager.localIdentifiers(tx: tx)?.aci
             }) else {
@@ -935,7 +947,7 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
             }
 
             guard let auth = try? await backupRequestManager.fetchBackupServiceAuth(
-                for: .media,
+                for: backupKey,
                 localAci: localAci,
                 auth: .implicit()
             ) else {
@@ -1304,14 +1316,6 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
 
         private let states = TSMutex(initialState: States())
 
-        func fractionCompleted(for attachmentId: Attachment.IDType) -> Double? {
-            states.withLock { $0.states[attachmentId] }
-        }
-
-        func setFractionCompleted(_ fractionComplete: Double, for attachmentId: Attachment.IDType) {
-            states.withLock { $0.states[attachmentId] = fractionComplete }
-        }
-
         func markDownloadCancelled(for attachmentId: Attachment.IDType) {
             states.withLock {
                 $0.states[attachmentId] = nil
@@ -1350,6 +1354,27 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
         }
         private var downloadObservers = [DownloadKey: [CheckedContinuation<Void, Error>]]()
         private var downloadProgresses = [DownloadKey: [OWSProgressSink]]()
+        private var finishedOrFailedDownloads = Set<DownloadKey>()
+        private var progressIDs = [DownloadKey: UInt64]()
+
+        func latestProgressID(downloadKey: DownloadKey?) -> UInt64 {
+            guard let downloadKey else {
+                return 0
+            }
+            return progressIDs[downloadKey] ?? 0
+        }
+
+        func clearOldDownloadsAndIncrementProgressID(key: DownloadKey) {
+            finishedOrFailedDownloads.remove(key)
+
+            let oldProgressID = progressIDs[key] ?? 0
+            progressIDs[key] = oldProgressID + 1
+        }
+
+        func clearDownloadProgressAndMarkFinished(key: DownloadKey) {
+            downloadProgresses.removeValue(forKey: key)
+            finishedOrFailedDownloads.insert(key)
+        }
 
         func waitForDownloadOfAttachment(
             id: Attachment.IDType,
@@ -1530,13 +1555,35 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
                     }
                 }
 
-                let wrappedProgress = OWSProgress.createSink { progressValue in
+                let wrappedProgressID = await latestProgressID(downloadKey: DownloadQueue.downloadKey(state: downloadState))
+                let wrappedProgress = OWSProgress.createSink { [weak self] progressValue in
+                    if let k = DownloadQueue.downloadKey(state: downloadState) {
+                        if await self?.latestProgressID(downloadKey: k) != wrappedProgressID {
+                            // A new download has started, don't send progress updates or notifications.
+                            return
+                        }
+
+                        if let self = self, await finishedOrFailedDownloads.contains(k) {
+                            // If we've already finished the download, send the notification so
+                            // handlers can get 100% updates but don't update the progress sources,
+                            // which may be double counting.
+                            handleDownloadProgress(
+                                downloadState: downloadState,
+                                task: downloadTask,
+                                progress: progressValue,
+                                expectedDownloadSizeBytes: expectedDownloadSizeBytes,
+                                attachmentId: attachmentId
+                            )
+                            return
+                        }
+                    }
+
                     for progressSource in progressSources {
                         if progressSource.completedUnitCount < progressValue.completedUnitCount {
                             progressSource.incrementCompletedUnitCount(by: progressValue.completedUnitCount - progressSource.completedUnitCount)
                         }
                     }
-                    self.handleDownloadProgress(
+                    self?.handleDownloadProgress(
                         downloadState: downloadState,
                         task: downloadTask,
                         progress: progressValue,
@@ -1650,8 +1697,6 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
             case .backup, .transientAttachment:
                 break
             case .attachment(_, let attachmentId):
-                progressStates.setFractionCompleted(fractionCompleted, for: attachmentId)
-
                 NotificationCenter.default.postOnMainThread(
                     name: AttachmentDownloads.attachmentDownloadProgressNotification,
                     object: nil,
@@ -1718,44 +1763,32 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
             let attachmentValidator = self.attachmentValidator
             let stickerManager = self.stickerManager
             return try await decryptionQueue.run {
-                // AttachmentValidator runs synchronously _and_ opens write transactions
-                // internally. We can't block on the write lock in the cooperative thread
-                // pool, so bridge out of structured concurrency to run the validation.
-                return try await withCheckedThrowingContinuation { continuation in
-                    DispatchQueue.global().async {
-                        do {
-                            guard let stickerDataUrl = stickerManager.stickerDataUrl(
-                                forInstalledSticker: sticker,
-                                verifyExists: true
-                            ) else {
-                                throw OWSAssertionError("Missing sticker")
-                            }
-
-                            let mimeType: String
-                            let imageMetadata = Data.imageMetadata(withPath: stickerDataUrl.path, mimeType: nil)
-                            if imageMetadata.imageFormat != .unknown,
-                               let mimeTypeFromMetadata = imageMetadata.mimeType {
-                                mimeType = mimeTypeFromMetadata
-                            } else {
-                                mimeType = MimeType.imageWebp.rawValue
-                            }
-
-                            let pendingAttachment = try attachmentValidator.validateContents(
-                                dataSource: DataSourcePath(
-                                    fileUrl: stickerDataUrl,
-                                    shouldDeleteOnDeallocation: false
-                                ),
-                                shouldConsume: false,
-                                mimeType: mimeType,
-                                renderingFlag: .borderless,
-                                sourceFilename: nil
-                            )
-                            continuation.resume(with: .success(pendingAttachment))
-                        } catch let error {
-                            continuation.resume(throwing: error)
-                        }
-                    }
+                guard let stickerDataUrl = stickerManager.stickerDataUrl(
+                    forInstalledSticker: sticker,
+                    verifyExists: true
+                ) else {
+                    throw OWSAssertionError("Missing sticker")
                 }
+
+                let mimeType: String
+                let imageMetadata = Data.imageMetadata(withPath: stickerDataUrl.path, mimeType: nil)
+                if imageMetadata.imageFormat != .unknown,
+                   let mimeTypeFromMetadata = imageMetadata.mimeType {
+                    mimeType = mimeTypeFromMetadata
+                } else {
+                    mimeType = MimeType.imageWebp.rawValue
+                }
+
+                return try await attachmentValidator.validateContents(
+                    dataSource: DataSourcePath(
+                        fileUrl: stickerDataUrl,
+                        shouldDeleteOnDeallocation: false
+                    ),
+                    shouldConsume: false,
+                    mimeType: mimeType,
+                    renderingFlag: .borderless,
+                    sourceFilename: nil
+                )
             }
         }
 
@@ -1765,61 +1798,48 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
         ) async throws -> PendingAttachment {
             let attachmentValidator = self.attachmentValidator
             return try await decryptionQueue.run {
-                // AttachmentValidator runs synchronously _and_ opens write transactions
-                // internally. We can't block on the write lock in the cooperative thread
-                // pool, so bridge out of structured concurrency to run the validation.
-                return try await withCheckedThrowingContinuation { continuation in
-                    DispatchQueue.global().async {
-                        do {
-                            let pendingAttachment: PendingAttachment
-                            switch metadata.source {
-                            case .transitTier(_, let integrityCheck, let plaintextLength):
-                                pendingAttachment = try attachmentValidator.validateDownloadedContents(
-                                    ofEncryptedFileAt: encryptedFileUrl,
-                                    encryptionKey: metadata.encryptionKey,
-                                    plaintextLength: plaintextLength,
-                                    integrityCheck: integrityCheck,
-                                    mimeType: metadata.mimeType,
-                                    renderingFlag: .default,
-                                    sourceFilename: nil
-                                )
-                            case .mediaTierFullsize(_, let outerEncryptionMetadata, let integrityCheck, let plaintextLength):
-                                let innerPlaintextLength: Int? = {
-                                    guard let plaintextLength else { return nil }
-                                    return Int(plaintextLength)
-                                }()
+                switch metadata.source {
+                case .transitTier(_, let integrityCheck, let plaintextLength):
+                    return try await attachmentValidator.validateDownloadedContents(
+                        ofEncryptedFileAt: encryptedFileUrl,
+                        encryptionKey: metadata.encryptionKey,
+                        plaintextLength: plaintextLength,
+                        integrityCheck: integrityCheck,
+                        mimeType: metadata.mimeType,
+                        renderingFlag: .default,
+                        sourceFilename: nil
+                    )
+                case .mediaTierFullsize(_, let outerEncryptionMetadata, let integrityCheck, let plaintextLength):
+                    let innerPlaintextLength: Int? = {
+                        guard let plaintextLength else { return nil }
+                        return Int(plaintextLength)
+                    }()
 
-                                pendingAttachment = try attachmentValidator.validateContents(
-                                    ofBackupMediaFileAt: encryptedFileUrl,
-                                    outerDecryptionData: DecryptionMetadata(key: outerEncryptionMetadata.encryptionKey),
-                                    innerDecryptionData: DecryptionMetadata(
-                                        key: metadata.encryptionKey,
-                                        integrityCheck: integrityCheck,
-                                        plaintextLength: innerPlaintextLength
-                                    ),
-                                    finalEncryptionKey: metadata.encryptionKey,
-                                    mimeType: metadata.mimeType,
-                                    renderingFlag: .default,
-                                    sourceFilename: nil
-                                )
-                            case .mediaTierThumbnail(_, let outerEncryptionMetadata, let innerEncryptionData):
-                                pendingAttachment = try attachmentValidator.validateContents(
-                                    ofBackupMediaFileAt: encryptedFileUrl,
-                                    outerDecryptionData: DecryptionMetadata(key: outerEncryptionMetadata.encryptionKey),
-                                    innerDecryptionData: DecryptionMetadata(key: innerEncryptionData.encryptionKey),
-                                    finalEncryptionKey: metadata.encryptionKey,
-                                    mimeType: metadata.mimeType,
-                                    renderingFlag: .default,
-                                    sourceFilename: nil
-                                )
-                            case .linkNSyncBackup:
-                                throw OWSAssertionError("Should not be validating link'n'sync backups")
-                            }
-                            continuation.resume(with: .success(pendingAttachment))
-                        } catch let error {
-                            continuation.resume(throwing: error)
-                        }
-                    }
+                    return try await attachmentValidator.validateContents(
+                        ofBackupMediaFileAt: encryptedFileUrl,
+                        outerDecryptionData: DecryptionMetadata(key: outerEncryptionMetadata.encryptionKey),
+                        innerDecryptionData: DecryptionMetadata(
+                            key: metadata.encryptionKey,
+                            integrityCheck: integrityCheck,
+                            plaintextLength: innerPlaintextLength
+                        ),
+                        finalEncryptionKey: metadata.encryptionKey,
+                        mimeType: metadata.mimeType,
+                        renderingFlag: .default,
+                        sourceFilename: nil
+                    )
+                case .mediaTierThumbnail(_, let outerEncryptionMetadata, let innerEncryptionData):
+                    return try await attachmentValidator.validateContents(
+                        ofBackupMediaFileAt: encryptedFileUrl,
+                        outerDecryptionData: DecryptionMetadata(key: outerEncryptionMetadata.encryptionKey),
+                        innerDecryptionData: DecryptionMetadata(key: innerEncryptionData.encryptionKey),
+                        finalEncryptionKey: metadata.encryptionKey,
+                        mimeType: metadata.mimeType,
+                        renderingFlag: .default,
+                        sourceFilename: nil
+                    )
+                case .linkNSyncBackup:
+                    throw OWSAssertionError("Should not be validating link'n'sync backups")
                 }
             }
         }
@@ -1827,21 +1847,9 @@ public class AttachmentDownloadManagerImpl: AttachmentDownloadManager {
         func prepareQuotedReplyThumbnail(originalAttachmentStream: AttachmentStream) async throws -> PendingAttachment {
             let attachmentValidator = self.attachmentValidator
             return try await decryptionQueue.run {
-                // AttachmentValidator runs synchronously _and_ opens write transactions
-                // internally. We can't block on the write lock in the cooperative thread
-                // pool, so bridge out of structured concurrency to run the validation.
-                return try await withCheckedThrowingContinuation { continuation in
-                    DispatchQueue.global().async {
-                        do {
-                            let pendingAttachment = try attachmentValidator.prepareQuotedReplyThumbnail(
-                                fromOriginalAttachmentStream: originalAttachmentStream
-                            )
-                            continuation.resume(with: .success(pendingAttachment))
-                        } catch let error {
-                            continuation.resume(throwing: error)
-                        }
-                    }
-                }
+                return try await attachmentValidator.prepareQuotedReplyThumbnail(
+                    fromOriginalAttachmentStream: originalAttachmentStream
+                )
             }
         }
     }

@@ -337,6 +337,7 @@ public class GRDBSchemaMigrator {
         case addBackupOversizeTextRedux
         case createGExtTagTables
         case createGExtGroupTagTables
+        case addRetriesToBackupAttachmentUploadQueue
 
         // NOTE: Every time we add a migration id, consider
         // incrementing grdbSchemaVersionLatest.
@@ -4214,6 +4215,15 @@ public class GRDBSchemaMigrator {
                     UNIQUE(group_id)
                 )
             """)
+
+            return .success(())
+        }
+
+        migrator.registerMigration(.addRetriesToBackupAttachmentUploadQueue) { tx in
+            try tx.database.alter(table: "BackupAttachmentUploadQueue") { table in
+                table.add(column: "numRetries", .integer).notNull().defaults(to: 0)
+                table.add(column: "minRetryTimestamp", .integer).notNull().defaults(to: 0)
+            }
 
             return .success(())
         }

@@ -27,6 +27,7 @@ public class RegistrationCoordinatorTest {
     private var mockMessagePipelineSupervisor: RegistrationCoordinatorImpl.TestMocks.MessagePipelineSupervisor!
     private var mockMessageProcessor: RegistrationCoordinatorImpl.TestMocks.MessageProcessor!
     private var mockURLSession: TSRequestOWSURLSessionMock!
+    private var networkManagerMock: MockNetworkManager!
     private var ows2FAManagerMock: RegistrationCoordinatorImpl.TestMocks.OWS2FAManager!
     private var phoneNumberDiscoverabilityManagerMock: MockPhoneNumberDiscoverabilityManager!
     private var preKeyManagerMock: RegistrationCoordinatorImpl.TestMocks.PreKeyManager!
@@ -87,6 +88,7 @@ public class RegistrationCoordinatorTest {
         svrAuthCredentialStore = SVRAuthCredentialStorageMock()
         mockMessagePipelineSupervisor = RegistrationCoordinatorImpl.TestMocks.MessagePipelineSupervisor()
         mockMessageProcessor = RegistrationCoordinatorImpl.TestMocks.MessageProcessor()
+        networkManagerMock = MockNetworkManager()
         ows2FAManagerMock = RegistrationCoordinatorImpl.TestMocks.OWS2FAManager()
         phoneNumberDiscoverabilityManagerMock = MockPhoneNumberDiscoverabilityManager()
         preKeyManagerMock = RegistrationCoordinatorImpl.TestMocks.PreKeyManager(run: testRun)
@@ -112,7 +114,6 @@ public class RegistrationCoordinatorTest {
         let dependencies = RegistrationCoordinatorDependencies(
             appExpiry: appExpiry,
             backupArchiveManager: BackupArchiveManagerMock(),
-            backupKeyMaterial: BackupKeyMaterialMock(),
             changeNumberPniManager: changeNumberPniManager,
             contactsManager: RegistrationCoordinatorImpl.TestMocks.ContactsManager(),
             contactsStore: contactsStore,
@@ -126,6 +127,7 @@ public class RegistrationCoordinatorTest {
             localUsernameManager: localUsernameManagerMock,
             messagePipelineSupervisor: mockMessagePipelineSupervisor,
             messageProcessor: mockMessageProcessor,
+            networkManager: networkManagerMock,
             ows2FAManager: ows2FAManagerMock,
             phoneNumberDiscoverabilityManager: phoneNumberDiscoverabilityManagerMock,
             preKeyManager: preKeyManagerMock,
@@ -321,7 +323,7 @@ public class RegistrationCoordinatorTest {
         // Give it the pin code, which should make it try and register.
 
         // It needs an apns token to register.
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
         // It needs prekeys as well.
         preKeyManagerMock.addCreatePreKeysMock({ return .value(Stubs.prekeyBundles()) })
         // And will finalize prekeys after success.
@@ -373,14 +375,13 @@ public class RegistrationCoordinatorTest {
         if wasReglockEnabled {
             // If we had reglock before registration, it should be re-enabled.
             let expectedReglockRequest = OWSRequestFactory.enableRegistrationLockV2Request(token: finalMasterKey.reglockToken)
-            mockURLSession.addResponse(TSRequestOWSURLSessionMock.Response(
-                matcher: { request in
+            networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+                if request.url == expectedReglockRequest.url {
                     #expect(finalMasterKey.reglockToken == request.parameters["registrationLock"] as! String)
-                    return request.url == expectedReglockRequest.url
-                },
-                statusCode: 200,
-                bodyData: nil
-            ))
+                    return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
+                }
+                throw OWSAssertionError("")
+            })
         }
 
         // We haven't done a SVR backup; that should happen now.
@@ -426,12 +427,12 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(finalMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        mockURLSession.addResponse(
-            matcher: { request in
-                return request.url == expectedAttributesRequest.url
-            },
-            statusCode: 200
-        )
+        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+            if request.url == expectedAttributesRequest.url {
+                return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
+            }
+            throw OWSAssertionError("")
+        })
 
         // NOTE: We expect to skip opening path steps because
         // if we have a SVR master key locally, this _must_ be
@@ -476,7 +477,7 @@ public class RegistrationCoordinatorTest {
         // Give it the right pin code, which should make it try and register.
 
         // It needs an apns token to register.
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
         // Every time we register we also ask for prekeys.
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
         // And we finalize them after.
@@ -554,13 +555,13 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(finalMasterKey),
             auth: .implicit() // // doesn't matter for url matching
         )
-        mockURLSession.addResponse(
-            matcher: { request in
+        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+            if request.url == expectedAttributesRequest.url {
                 #expect(finalMasterKey.regRecoveryPw == (request.parameters["recoveryPassword"] as? String) ?? "")
-                return request.url == expectedAttributesRequest.url
-            },
-            statusCode: 200
-         )
+                return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
+            }
+            throw OWSAssertionError("")
+        })
 
         // We haven't set a phone number so it should ask for that.
         #expect(
@@ -615,8 +616,8 @@ public class RegistrationCoordinatorTest {
         // Before registering, it should ask for push tokens to give the registration.
         // It will also ask again later when account creation fails and it needs
         // to create a new session.
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Every time we register we also ask for prekeys.
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
@@ -650,7 +651,7 @@ public class RegistrationCoordinatorTest {
         // Then when it gets back the session, it should immediately ask for a verification code to be sent.
 
         // We'll ask for a push challenge, though we don't need to resolve it in this test.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ .value("PUSH TOKEN") })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({ "PUSH TOKEN" })
 
         // Resolve with an updated session.
         sessionManager.addRequestCodeResponseMock(.success(stubs.session(nextVerificationAttempt: 0)))
@@ -719,10 +720,10 @@ public class RegistrationCoordinatorTest {
         // When that fails, we try and create a session.
         // No prekey stuff this time, just apns token and session requests.
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({.value(.success(Stubs.apnsRegistrationId)) })
-        pushRegistrationManagerMock.addRequestPushTokenMock({.value(.success(Stubs.apnsRegistrationId)) })
-        pushRegistrationManagerMock.addRequestPushTokenMock({.value(.success(Stubs.apnsRegistrationId)) })
-        pushRegistrationManagerMock.addRequestPushTokenMock({.value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
@@ -755,8 +756,11 @@ public class RegistrationCoordinatorTest {
 
         // Once the second request fails, it should try an start a session.
 
-            // We'll ask for a push challenge, though we don't need to resolve it in this test.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ Guarantee<String>.pending().0 })
+        // We'll ask for a push challenge, though we don't need to resolve it in this test.
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
+        })
 
         // Resolve with a session.
         sessionManager.addBeginSessionResponseMock(.success(stubs.session()))
@@ -805,7 +809,7 @@ public class RegistrationCoordinatorTest {
         setupDefaultAccountAttributes()
 
         // Set a PIN on disk.
-    ows2FAManagerMock.pinCodeMock = { Stubs.pinCode }
+        ows2FAManagerMock.pinCodeMock = { Stubs.pinCode }
 
         let (initialMasterKey, finalMasterKey) = buildKeyDataMocks(testCase)
         svr.hasMasterKey = true
@@ -816,8 +820,8 @@ public class RegistrationCoordinatorTest {
 
         // Before registering, it should ask for push tokens to give the registration.
         // When it retries, it will ask again.
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Every time we register we also ask for prekeys.
         preKeyManagerMock.addCreatePreKeysMock({ return .value(Stubs.prekeyBundles()) })
@@ -938,19 +942,13 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(finalMasterKey),
             auth: .implicit() // // doesn't matter for url matching
         )
-        mockURLSession.addResponse(
-            TSRequestOWSURLSessionMock.Response(
-                matcher: { request in
-                    if request.url == expectedAttributesRequest.url {
-                        self.testRun.addObservedStep(.updateAccountAttribute)
-                        return true
-                    }
-                    return false
-                },
-                statusCode: 200,
-                bodyData: nil
-            )
-        )
+        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+            if request.url == expectedAttributesRequest.url {
+                self.testRun.addObservedStep(.updateAccountAttribute)
+                return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
+            }
+            throw OWSAssertionError("")
+        })
 
         // We haven't set a phone number so it should ask for that.
         #expect(
@@ -1036,10 +1034,10 @@ public class RegistrationCoordinatorTest {
         // When that fails, we try and create a session.
         // No prekey stuff this time, just apns token and session requests.
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
@@ -1060,7 +1058,10 @@ public class RegistrationCoordinatorTest {
 
         // Once the first request fails, it should try an start a session.
         // We'll ask for a push challenge, though we don't need to resolve it in this test.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ Guarantee<String>.pending().0 })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
+        })
 
         // Resolve with a session.
         sessionManager.addBeginSessionResponseMock(.success(stubs.session()))
@@ -1117,7 +1118,9 @@ public class RegistrationCoordinatorTest {
                 RegistrationReglockTimeoutState(
                     reglockExpirationDate: dateProvider().addingTimeInterval(TimeInterval(10)),
                     acknowledgeAction: acknowledgeAction
-        )))
+                )
+            )
+        )
 
         // We want to have wiped our master key; we failed reglock, which means the key itself is wrong.
         #expect(svr.hasMasterKey)
@@ -1184,9 +1187,9 @@ public class RegistrationCoordinatorTest {
         // Once we fail, attempt to fetch the remote SVR credential and attempt RRP again
         // Same sequence as the first request.
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
@@ -1246,14 +1249,13 @@ public class RegistrationCoordinatorTest {
 
         // If we had reglock before registration, it should be re-enabled.
         let expectedReglockRequest = OWSRequestFactory.enableRegistrationLockV2Request(token: finalMasterKey.reglockToken)
-        mockURLSession.addResponse(TSRequestOWSURLSessionMock.Response(
-            matcher: { request in
+        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+            if request.url == expectedReglockRequest.url {
                 #expect(finalMasterKey.reglockToken == request.parameters["registrationLock"] as! String)
-                return request.url == expectedReglockRequest.url
-            },
-            statusCode: 200,
-            bodyData: nil
-        ))
+                return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
+            }
+            throw OWSAssertionError("")
+        })
 
         // We haven't done a SVR backup; that should happen now.
         svr.backupMasterKeyMock = { pin, masterKey, authMethod in
@@ -1301,12 +1303,12 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(finalMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        mockURLSession.addResponse(
-            matcher: { request in
-                return request.url == expectedAttributesRequest.url
-            },
-            statusCode: 200
-        )
+        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+            if request.url == expectedAttributesRequest.url {
+                return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
+            }
+            throw OWSAssertionError("")
+        })
 
         // We haven't set a phone number so it should ask for that.
         #expect(
@@ -1394,10 +1396,10 @@ public class RegistrationCoordinatorTest {
         // First we get apns tokens, then prekeys, then register
         // then finalize prekeys (with failure) after.
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId))})
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
@@ -1420,7 +1422,10 @@ public class RegistrationCoordinatorTest {
         mockURLSession.addResponse(failResponse)
         mockURLSession.addResponse(failResponse)
 
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ Guarantee<String>.pending().0 })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
+        })
 
         // Resolve with an updated session.
         sessionManager.addRequestCodeResponseMock(.success(stubs.session(nextVerificationAttempt: 0)))
@@ -1481,7 +1486,9 @@ public class RegistrationCoordinatorTest {
                 RegistrationReglockTimeoutState(
                     reglockExpirationDate: dateProvider().addingTimeInterval(TimeInterval(10)),
                     acknowledgeAction: acknowledgeAction
-        )))
+                )
+            )
+        )
 
         // We want to have wiped our master key; we failed reglock, which means the key itself is wrong.
         #expect(svr.hasMasterKey)
@@ -1520,7 +1527,7 @@ public class RegistrationCoordinatorTest {
         }
 
         // Before registering, it should ask for push tokens to give the registration.
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Every time we register we also ask for prekeys.
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
@@ -1617,20 +1624,20 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(finalMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        mockURLSession.addResponse(
-            matcher: { request in
+        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+            if request.url == expectedAttributesRequest.url {
                 self.testRun.addObservedStep(.updateAccountAttribute)
-                return request.url == expectedAttributesRequest.url
-            },
-            statusCode: 200
-        )
+                return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
+            }
+            throw OWSAssertionError("")
+        })
 
         // At this point, we should be asking for PIN entry so we can use the credential
         // to recover the SVR master key.
         #expect(
             await coordinator.submitE164(Stubs.e164).awaitable() ==
                 .pinEntry(Stubs.pinEntryStateForSVRAuthCredentialPath(mode: mode))
-            )
+        )
 
         // We should have wiped the invalid and unknown credentials.
         let remainingCredentials = svrAuthCredentialStore.svr2Dict
@@ -1692,8 +1699,9 @@ public class RegistrationCoordinatorTest {
 
         // Once the first request fails, it should try an start a session.
         // We'll ask for a push challenge, though we don't need to resolve it in this test.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({
-            return Guarantee<String>.pending().0
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
         })
 
         // Resolve with a session.
@@ -1704,14 +1712,14 @@ public class RegistrationCoordinatorTest {
         // Resolve with an updated session.
         sessionManager.addRequestCodeResponseMock(.success(stubs.session(nextVerificationAttempt: 0)))
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Give it a phone number, which should cause it to check the auth credentials.
         // Now we should expect to be at verification code entry since we already set the phone number.
         #expect(
             await coordinator.submitE164(Stubs.e164).awaitable() ==
-            .verificationCodeEntry(stubs.verificationCodeEntryState(mode: mode))
-       )
+                .verificationCodeEntry(stubs.verificationCodeEntryState(mode: mode))
+        )
 
         // We should have wipted the invalid and unknown credentials.
         let remainingCredentials = svrAuthCredentialStore.svr2Dict
@@ -1760,8 +1768,9 @@ public class RegistrationCoordinatorTest {
 
         // Once the first request fails, it should try an start a session.
         // We'll ask for a push challenge, though we don't need to resolve it in this test.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({
-            return Guarantee<String>.pending().0
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
         })
 
         // Resolve with a session.
@@ -1771,9 +1780,9 @@ public class RegistrationCoordinatorTest {
         // Resolve with an updated session.
         sessionManager.addRequestCodeResponseMock(.success(stubs.session(nextVerificationAttempt: 0)))
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
-         // Give a match, so it registers via SVR auth credential.
+        // Give a match, so it registers via SVR auth credential.
         expectedSVRCheckRequest = RegistrationRequestFactory.svr2AuthCredentialCheckRequest(
             e164: changedE164,
             credentials: credentialCandidates
@@ -1835,7 +1844,7 @@ public class RegistrationCoordinatorTest {
 
         // That means it should try and register with the verified session;
         // Before registering, it should ask for push tokens to give the registration.
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // It should also fetch the prekeys for account creation
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
@@ -1915,10 +1924,12 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(newMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        mockURLSession.addResponse(
-            matcher: { $0.url == expectedAttributesRequest.url },
-            statusCode: 200
-        )
+        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+            if request.url == expectedAttributesRequest.url {
+                return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
+            }
+            throw OWSAssertionError("")
+        })
 
         storageServiceManagerMock.addRotateManifestMock({ _, _ in return .value(()) })
 
@@ -2114,7 +2125,7 @@ public class RegistrationCoordinatorTest {
         #expect(
             await coordinator.submitVerificationCode(Stubs.verificationCode).awaitable() ==
                 .showErrorSheet(.submittingVerificationCodeBeforeAnyCodeSent)
-       )
+        )
 
         #expect(
             await coordinator.nextStep().awaitable() ==
@@ -2134,8 +2145,9 @@ public class RegistrationCoordinatorTest {
         await setUpSessionPath(coordinator: coordinator, mode: mode)
 
         // We'll ask for a push challenge, though we won't resolve it in this test.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({
-            return Guarantee<String>.pending().0
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
         })
 
         // Give back a session that's ready to go.
@@ -2178,8 +2190,9 @@ public class RegistrationCoordinatorTest {
         let changedE164 = E164("+17875550101")!
 
         // We'll ask for a push challenge, though we won't resolve it in this test.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({
-            return Guarantee<String>.pending().0
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
         })
 
         // Give back a session that's ready to go.
@@ -2195,10 +2208,13 @@ public class RegistrationCoordinatorTest {
         )))
 
         // These mocks are removed after each use, so set up another
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // We'll ask for a push challenge, though we won't resolve it in this test.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ Guarantee<String>.pending().0 })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
+        })
 
         // Give back a session that's ready to go.
         // TODO: allow mocking multiple responses
@@ -2312,13 +2328,9 @@ public class RegistrationCoordinatorTest {
 
         await setUpSessionPath(coordinator: coordinator, mode: mode)
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
-        // Prepare to provide the challenge token.
-        let (challengeTokenPromise, challengeTokenFuture) = Guarantee<String>.pending()
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({
-            return challengeTokenPromise
-        })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({ "a pre-auth challenge token" })
 
         // Give back a session with a push challenge.
         sessionManager.addBeginSessionResponseMock(.success(stubs.session(
@@ -2338,14 +2350,6 @@ public class RegistrationCoordinatorTest {
 
         // Give the push challenge token. Also prepare to handle its usage, and the
         // resulting request for another SMS code.
-
-        Task {
-            // TODO: Need coordnator to be able to run async/disconnected whilw
-            // setting up and fulfilling the challenge
-            // Not sure a Task is the best way to get this, but works for now while we
-            // have promises doing timeouts internal to RegCoordinator
-            challengeTokenFuture.resolve("a pre-auth challenge token")
-        }
 
         // Give it a phone number, which should cause it to start a session.
         _ = await coordinator.submitE164(Stubs.e164).awaitable()
@@ -2376,23 +2380,15 @@ public class RegistrationCoordinatorTest {
             expectedNextStep: .phoneNumberEntry(stubs.phoneNumberEntryState(mode: mode))
         )
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Prepare to provide the challenge token.
         let (challengeTokenPromise, _) = Guarantee<String>.pending()
-        var receivePreAuthChallengeTokenCount = 0
+        let receivePreAuthChallengeTokenCount = AtomicUInt(lock: .init())
 
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock {
-            receivePreAuthChallengeTokenCount += 1
-            return challengeTokenPromise
-        }
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock {
-            receivePreAuthChallengeTokenCount += 1
-            return challengeTokenPromise
-        }
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock {
-            receivePreAuthChallengeTokenCount += 1
-            return challengeTokenPromise
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock {
+            receivePreAuthChallengeTokenCount.increment()
+            return await challengeTokenPromise.awaitable()
         }
 
         // Give back a session with a push challenge.
@@ -2411,7 +2407,7 @@ public class RegistrationCoordinatorTest {
 
         // One time to set up, one time for the min wait time, one time
         // for the full timeout.
-        #expect(receivePreAuthChallengeTokenCount == 3)
+        #expect(receivePreAuthChallengeTokenCount.get() == 3)
     }
 
     @MainActor @Test(arguments: Self.testCases())
@@ -2429,22 +2425,14 @@ public class RegistrationCoordinatorTest {
             expectedNextStep: .phoneNumberEntry(stubs.phoneNumberEntryState(mode: mode))
         )
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // We'll never provide a challenge token and will just leave it around forever.
         let (challengeTokenPromise, _) = Guarantee<String>.pending()
-        var receivePreAuthChallengeTokenCount = 0
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({
-            receivePreAuthChallengeTokenCount += 1
-            return challengeTokenPromise
-        })
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({
-            receivePreAuthChallengeTokenCount += 1
-            return challengeTokenPromise
-        })
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({
-            receivePreAuthChallengeTokenCount += 1
-            return challengeTokenPromise
+        let receivePreAuthChallengeTokenCount = AtomicUInt(lock: .init())
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            receivePreAuthChallengeTokenCount.increment()
+            return await challengeTokenPromise.awaitable()
         })
 
         // Give back a session with a push challenge.
@@ -2462,7 +2450,7 @@ public class RegistrationCoordinatorTest {
 
         // One time to set up, one time for the min wait time, one time
         // for the full timeout.
-        #expect(receivePreAuthChallengeTokenCount == 3)
+        #expect(receivePreAuthChallengeTokenCount.get() == 3)
     }
 
     @MainActor @Test(arguments: Self.testCases())
@@ -2472,8 +2460,11 @@ public class RegistrationCoordinatorTest {
 
         // Set profile info so we skip those steps.
         setupDefaultAccountAttributes()
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.pushUnsupported(description: "")) })
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ .pending().0 })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .pushUnsupported(description: "") })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
+        })
 
         // Get past the opening.
         await goThroughOpeningHappyPath(
@@ -2506,10 +2497,10 @@ public class RegistrationCoordinatorTest {
 
         await setUpSessionPath(coordinator: coordinator, mode: mode)
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Be ready to provide the push challenge token as soon as it's needed.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ .value("a pre-auth challenge token") })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({ "a pre-auth challenge token" })
 
         // Give back a session with multiple challenges.
         sessionManager.addBeginSessionResponseMock(.success(stubs.session(
@@ -2527,14 +2518,10 @@ public class RegistrationCoordinatorTest {
         )))
 
         // Give it a phone number, which should cause it to start a session.
-        #expect(
-            await coordinator.submitE164(Stubs.e164).awaitable() ==
-                .verificationCodeEntry(stubs.verificationCodeEntryState(mode: mode))
-        )
-        #expect(
-            sessionManager.latestChallengeFulfillment ==
-                .pushChallenge("a pre-auth challenge token")
-        )
+        let step = await coordinator.submitE164(Stubs.e164).awaitable()
+        #expect(step == .verificationCodeEntry(stubs.verificationCodeEntryState(mode: mode)))
+        let fulfillment = sessionManager.latestChallengeFulfillment
+        #expect(fulfillment == .pushChallenge("a pre-auth challenge token"))
     }
 
     @MainActor @Test(arguments: Self.testCases())
@@ -2544,11 +2531,13 @@ public class RegistrationCoordinatorTest {
 
         await setUpSessionPath(coordinator: coordinator, mode: mode)
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Prepare to provide the challenge token.
-        let (challengeTokenPromise, _) = Guarantee<String>.pending()
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ challengeTokenPromise })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
+        })
 
         // Give back a session with multiple challenges.
         sessionManager.addBeginSessionResponseMock(.success(stubs.session(
@@ -2574,12 +2563,11 @@ public class RegistrationCoordinatorTest {
 
         await setUpSessionPath(coordinator: coordinator, mode: mode)
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Prepare to provide the challenge token.
         let (challengeTokenPromise, challengeTokenFuture) = Guarantee<String>.pending()
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ challengeTokenPromise })
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ challengeTokenPromise })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({ await challengeTokenPromise.awaitable() })
 
         // Give back a session with multiple challenges.
         sessionManager.addBeginSessionResponseMock(.success(stubs.session(
@@ -2608,10 +2596,8 @@ public class RegistrationCoordinatorTest {
         // Give it a phone number, which should cause it to start a session.
         // Once we get that session, we should wait a short time for the
         // push challenge token and fulfill it.
-        #expect(
-            await coordinator.submitE164(Stubs.e164).awaitable() ==
-                .verificationCodeEntry(stubs.verificationCodeEntryState(mode: mode))
-        )
+        let step = await coordinator.submitE164(Stubs.e164).awaitable()
+        #expect(step == .verificationCodeEntry(stubs.verificationCodeEntryState(mode: mode)))
     }
 
     @MainActor @Test(arguments: Self.testCases())
@@ -2622,8 +2608,11 @@ public class RegistrationCoordinatorTest {
         // Set profile info so we skip those steps.
         setupDefaultAccountAttributes()
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.pushUnsupported(description: "")) })
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ .pending().0 })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .pushUnsupported(description: "") })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
+        })
 
         // No other setup; no auth credentials, SVR keys, etc in storage
         // so that we immediately go to the session flow.
@@ -2735,11 +2724,11 @@ public class RegistrationCoordinatorTest {
 
         #expect(
             await coordinator.submitVerificationCode(Stubs.verificationCode).awaitable() ==
-            .verificationCodeEntry(stubs.verificationCodeEntryState(
-                mode: mode,
-                nextVerificationAttempt: 10,
-                validationError: .submitCodeTimeout
-            ))
+                .verificationCodeEntry(stubs.verificationCodeEntryState(
+                    mode: mode,
+                    nextVerificationAttempt: 10,
+                    validationError: .submitCodeTimeout
+                ))
         )
 
         #expect(
@@ -2814,10 +2803,10 @@ public class RegistrationCoordinatorTest {
 
         #expect(
             await coordinator.nextStep().awaitable() ==
-            .verificationCodeEntry(stubs.verificationCodeEntryState(
-                mode: mode,
-                nextVerificationAttempt: nil
-            ))
+                .verificationCodeEntry(stubs.verificationCodeEntryState(
+                    mode: mode,
+                    nextVerificationAttempt: nil
+                ))
         )
     }
 
@@ -2833,8 +2822,6 @@ public class RegistrationCoordinatorTest {
 
         // Once we get that session, we should try and send a verification code.
         // Have that ready to go.
-        // We'll ask for a push challenge, though we won't resolve it.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ .pending().0 })
 
         // Resolve with a session
         sessionManager.addRequestCodeResponseMock(.success(stubs.session(
@@ -2862,7 +2849,7 @@ public class RegistrationCoordinatorTest {
                     mode: mode,
                     previouslyEnteredE164: Stubs.e164
                 ))
-       )
+        )
     }
 
     @MainActor @Test(arguments: Self.testCases())
@@ -2893,9 +2880,7 @@ public class RegistrationCoordinatorTest {
         // session; be ready for that.
 
         // Before registering, it should ask for push tokens to give the registration.
-        pushRegistrationManagerMock.addRequestPushTokenMock({
-            .value(.success(Stubs.apnsRegistrationId))
-        })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // It should also fetch the prekeys for account creation
         preKeyManagerMock.addCreatePreKeysMock({
@@ -2957,12 +2942,12 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(newMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        mockURLSession.addResponse(
-            matcher: { request in
-                return request.url == expectedAttributesRequest.url
-            },
-            statusCode: 200
-        )
+        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+            if request.url == expectedAttributesRequest.url {
+                return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
+            }
+            throw OWSAssertionError("")
+        })
 
         var didSetLocalAccountEntropyPool = false
         svr.useDeviceLocalAccountEntropyPoolMock = { _ in
@@ -3054,7 +3039,7 @@ public class RegistrationCoordinatorTest {
 
         // Try and register with the verified session
         // Before registering, it should ask for push tokens to give the registration.
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // It should also fetch the prekeys for account creation
         preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles())})
@@ -3120,12 +3105,12 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(newMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        mockURLSession.addResponse(
-            matcher: { request in
-                return request.url == expectedAttributesRequest.url
-            },
-            statusCode: 200
-        )
+        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+            if request.url == expectedAttributesRequest.url {
+                return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
+            }
+            throw OWSAssertionError("")
+        })
 
         var didSetLocalAccountEntropyPool = false
         svr.useDeviceLocalAccountEntropyPoolMock = { _ in
@@ -3142,18 +3127,18 @@ public class RegistrationCoordinatorTest {
         // Now we should ask to restore the PIN.
         #expect(
             await coordinator.submitVerificationCode(Stubs.pinCode).awaitable() ==
-            .pinEntry(
-                Stubs.pinEntryStateForPostRegRestore(mode: mode)
-            )
+                .pinEntry(
+                    Stubs.pinEntryStateForPostRegRestore(mode: mode)
+                )
         )
 
         // Skip the PIN code and create a new one instead.
         // When we skip, we should be asked to _create_ the PIN.
         #expect(
             await coordinator.skipAndCreateNewPINCode().awaitable() ==
-            .pinEntry(
-                Stubs.pinEntryStateForPostRegCreate(mode: mode, exitConfigOverride: .noExitAllowed)
-            )
+                .pinEntry(
+                    Stubs.pinEntryStateForPostRegCreate(mode: mode, exitConfigOverride: .noExitAllowed)
+                )
         )
 
         // At this point we should have no master key.
@@ -3282,9 +3267,12 @@ public class RegistrationCoordinatorTest {
         // Set profile info so we skip those steps.
         setupDefaultAccountAttributes()
 
-        pushRegistrationManagerMock.addRequestPushTokenMock({ .value(.success(Stubs.apnsRegistrationId)) })
+        pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ .pending().0 })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
+        })
 
         // No other setup; no auth credentials, SVR keys, etc in storage
         // so that we immediately go to the session flow.
@@ -3304,7 +3292,10 @@ public class RegistrationCoordinatorTest {
         // Give it a phone number, which should cause it to start a session.
 
         // We'll ask for a push challenge, though we won't resolve it.
-        pushRegistrationManagerMock.addReceivePreAuthChallengeTokenMock({ Guarantee<String>.pending().0 })
+        pushRegistrationManagerMock.setReceivePreAuthChallengeTokenMock({
+            try! await Task.sleep(nanoseconds: TimeInterval.infinity.clampedNanoseconds)
+            fatalError()
+        })
 
         // Give back a session that's ready to go.
         sessionManager.addBeginSessionResponseMock(.success(stubs.session()))

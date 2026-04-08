@@ -1,1 +1,1 @@
-• WiFi veya hücresel bağlantının zayıf olduğu alanlarda daha iyi çalışması için, yeniden deneme mantığı iyileştirilmiştir.
+• Tekrar tekrar denemene gerek kalmadan, emojini ilk denemede gönder. Emojinin pratikliği de burada, değil mi! iOS emoji klavyesinden gönderilen çıkartmalarla ilgili bir hatayı düzelttik. Aynı düzeltme Genmoji için de geçerlidir, umarız bunu beğenirsin.

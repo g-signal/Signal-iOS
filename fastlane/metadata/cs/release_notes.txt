@@ -1,1 +1,1 @@
-• Vylepšená logika opakovaných pokusů, která pomáhá v oblastech se špatným Wi-Fi nebo mobilním připojením.
+• Opravili jsme chybu, která se vyskytovala při odesílání nálepek z klávesnice emoji v systému iOS.

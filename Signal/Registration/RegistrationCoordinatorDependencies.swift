@@ -9,7 +9,6 @@ public import SignalServiceKit
 public struct RegistrationCoordinatorDependencies {
     public let appExpiry: AppExpiry
     public let backupArchiveManager: BackupArchiveManager
-    public let backupKeyMaterial: BackupKeyMaterial
     public let changeNumberPniManager: ChangePhoneNumberPniManager
     public let contactsManager: RegistrationCoordinatorImpl.Shims.ContactsManager
     public let contactsStore: RegistrationCoordinatorImpl.Shims.ContactsStore
@@ -23,6 +22,7 @@ public struct RegistrationCoordinatorDependencies {
     public let localUsernameManager: LocalUsernameManager
     public let messagePipelineSupervisor: RegistrationCoordinatorImpl.Shims.MessagePipelineSupervisor
     public let messageProcessor: RegistrationCoordinatorImpl.Shims.MessageProcessor
+    let networkManager: any NetworkManagerProtocol
     public let ows2FAManager: RegistrationCoordinatorImpl.Shims.OWS2FAManager
     public let phoneNumberDiscoverabilityManager: PhoneNumberDiscoverabilityManager
     public let preKeyManager: RegistrationCoordinatorImpl.Shims.PreKeyManager
@@ -48,7 +48,6 @@ public struct RegistrationCoordinatorDependencies {
         return RegistrationCoordinatorDependencies(
             appExpiry: DependenciesBridge.shared.appExpiry,
             backupArchiveManager: DependenciesBridge.shared.backupArchiveManager,
-            backupKeyMaterial: DependenciesBridge.shared.backupKeyMaterial,
             changeNumberPniManager: DependenciesBridge.shared.changePhoneNumberPniManager,
             contactsManager: RegistrationCoordinatorImpl.Wrappers.ContactsManager(SSKEnvironment.shared.contactManagerImplRef),
             contactsStore: RegistrationCoordinatorImpl.Wrappers.ContactsStore(),
@@ -62,6 +61,7 @@ public struct RegistrationCoordinatorDependencies {
             localUsernameManager: DependenciesBridge.shared.localUsernameManager,
             messagePipelineSupervisor: RegistrationCoordinatorImpl.Wrappers.MessagePipelineSupervisor(SSKEnvironment.shared.messagePipelineSupervisorRef),
             messageProcessor: RegistrationCoordinatorImpl.Wrappers.MessageProcessor(SSKEnvironment.shared.messageProcessorRef),
+            networkManager: SSKEnvironment.shared.networkManagerRef,
             ows2FAManager: RegistrationCoordinatorImpl.Wrappers.OWS2FAManager(SSKEnvironment.shared.ows2FAManagerRef),
             phoneNumberDiscoverabilityManager: DependenciesBridge.shared.phoneNumberDiscoverabilityManager,
             preKeyManager: RegistrationCoordinatorImpl.Wrappers.PreKeyManager(

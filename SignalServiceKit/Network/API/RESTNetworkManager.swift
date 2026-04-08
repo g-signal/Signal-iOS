@@ -30,19 +30,9 @@ class RESTNetworkManager {
 
         let result = try await sessionManager.performRequest(request)
 
-#if TESTABLE_BUILD
-        if DebugFlags.logCurlOnSuccess {
-            HTTPUtils.logCurl(for: request)
-        }
-#endif
-
         OutageDetection.shared.reportConnectionSuccess()
 
         return result
-    }
-
-    func makePromise(request: TSRequest) -> Promise<HTTPResponse> {
-        return Promise.wrapAsync { return try await self.asyncRequest(request) }
     }
 
     func asyncRequest(_ request: TSRequest) async throws -> HTTPResponse {
@@ -76,6 +66,8 @@ private class RESTSessionManager {
                 try await makeIsDeregisteredRequest()
             }
             throw httpError
+        } catch let error as AppExpiredError {
+            throw error
         } catch let error as CancellationError {
             throw error
         } catch {

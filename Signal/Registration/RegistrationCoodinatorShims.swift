@@ -73,32 +73,32 @@ public class _RegistrationCoordinator_ContactsManagerWrapper: _RegistrationCoord
 
 public protocol _RegistrationCoordinator_CNContactsStoreShim {
 
-    func needsContactsAuthorization() -> Guarantee<Bool>
+    func needsContactsAuthorization() -> Bool
 
-    func requestContactsAuthorization() -> Guarantee<Void>
+    func requestContactsAuthorization() async
 }
 
 public class _RegistrationCoordinator_CNContactsStoreWrapper: _RegistrationCoordinator_CNContactsStoreShim {
 
     public init() {}
 
-    public func needsContactsAuthorization() -> Guarantee<Bool> {
-        return .value(CNContactStore.authorizationStatus(for: .contacts) == .notDetermined)
+    public func needsContactsAuthorization() -> Bool {
+        return CNContactStore.authorizationStatus(for: .contacts) == .notDetermined
     }
 
-    public func requestContactsAuthorization() -> Guarantee<Void> {
-        let (guarantee, future) = Guarantee<Void>.pending()
-        CNContactStore().requestAccess(for: CNEntityType.contacts) { (granted, error) -> Void in
-            if granted {
-                Logger.info("User granted contacts permission")
-            } else {
-                // Unfortunately, we can't easily disambiguate "not granted" and
-                // "other error".
-                Logger.warn("User denied contacts permission or there was an error. Error: \(String(describing: error))")
+    public func requestContactsAuthorization() async {
+        await withCheckedContinuation { continuation in
+            CNContactStore().requestAccess(for: CNEntityType.contacts) { (granted, error) -> Void in
+                if granted {
+                    Logger.info("User granted contacts permission")
+                } else {
+                    // Unfortunately, we can't easily disambiguate "not granted" and
+                    // "other error".
+                    Logger.warn("User denied contacts permission or there was an error. Error: \(String(describing: error))")
+                }
+                continuation.resume()
             }
-            future.resolve()
         }
-        return guarantee
     }
 }
 
@@ -282,14 +282,14 @@ public class _RegistrationCoordinator_OWS2FAManagerWrapper: _RegistrationCoordin
 // TODO: Remove this layer of abstraction; it's no longer necessary.
 public protocol _RegistrationCoordinator_PreKeyManagerShim {
 
-    func createPreKeysForRegistration() -> Promise<RegistrationPreKeyUploadBundles>
+    func createPreKeysForRegistration() async throws -> RegistrationPreKeyUploadBundles
 
     func finalizeRegistrationPreKeys(
         _ prekeyBundles: RegistrationPreKeyUploadBundles,
         uploadDidSucceed: Bool
-    ) -> Promise<Void>
+    ) async throws
 
-    func rotateOneTimePreKeysForRegistration(auth: ChatServiceAuth) -> Promise<Void>
+    func rotateOneTimePreKeysForRegistration(auth: ChatServiceAuth) async throws
 }
 
 public class _RegistrationCoordinator_PreKeyManagerWrapper: _RegistrationCoordinator_PreKeyManagerShim {
@@ -300,31 +300,22 @@ public class _RegistrationCoordinator_PreKeyManagerWrapper: _RegistrationCoordin
         self.preKeyManager = preKeyManager
     }
 
-    public func createPreKeysForRegistration() -> Promise<RegistrationPreKeyUploadBundles> {
-        let preKeyManager = self.preKeyManager
-        return Promise.wrapAsync {
-            return try await preKeyManager.createPreKeysForRegistration().value
-        }
+    public func createPreKeysForRegistration() async throws -> RegistrationPreKeyUploadBundles {
+        return try await preKeyManager.createPreKeysForRegistration().value
     }
 
     public func finalizeRegistrationPreKeys(
         _ prekeyBundles: RegistrationPreKeyUploadBundles,
         uploadDidSucceed: Bool
-    ) -> Promise<Void> {
-        let preKeyManager = self.preKeyManager
-        return Promise.wrapAsync {
-            return try await preKeyManager.finalizeRegistrationPreKeys(
-                prekeyBundles,
-                uploadDidSucceed: uploadDidSucceed
-            ).value
-        }
+    ) async throws {
+        return try await preKeyManager.finalizeRegistrationPreKeys(
+            prekeyBundles,
+            uploadDidSucceed: uploadDidSucceed
+        ).value
     }
 
-    public func rotateOneTimePreKeysForRegistration(auth: ChatServiceAuth) -> Promise<Void> {
-        let preKeyManager = self.preKeyManager
-        return Promise.wrapAsync {
-            return try await preKeyManager.rotateOneTimePreKeysForRegistration(auth: auth).value
-        }
+    public func rotateOneTimePreKeysForRegistration(auth: ChatServiceAuth) async throws {
+        return try await preKeyManager.rotateOneTimePreKeysForRegistration(auth: auth).value
     }
 }
 
@@ -412,13 +403,13 @@ extension Registration {
 
 public protocol _RegistrationCoordinator_PushRegistrationManagerShim {
 
-    func needsNotificationAuthorization() -> Guarantee<Bool>
+    func needsNotificationAuthorization() async -> Bool
 
-    func registerUserNotificationSettings() -> Guarantee<Void>
+    func registerUserNotificationSettings() async
 
-    func requestPushToken() -> Guarantee<Registration.RequestPushTokensResult>
+    func requestPushToken() async -> Registration.RequestPushTokensResult
 
-    func receivePreAuthChallengeToken() -> Guarantee<String>
+    func receivePreAuthChallengeToken() async -> String
 
     func clearPreAuthChallengeToken()
 }
@@ -428,33 +419,29 @@ public class _RegistrationCoordinator_PushRegistrationManagerWrapper: _Registrat
     private let manager: PushRegistrationManager
     public init(_ manager: PushRegistrationManager) { self.manager = manager }
 
-    public func needsNotificationAuthorization() -> Guarantee<Bool> {
-        return manager.needsNotificationAuthorization()
+    public func needsNotificationAuthorization() async -> Bool {
+        return await manager.needsNotificationAuthorization()
     }
 
-    public func registerUserNotificationSettings() -> Guarantee<Void> {
-        return Guarantee.wrapAsync { [manager] in
-            await manager.registerUserNotificationSettings()
+    public func registerUserNotificationSettings() async {
+        await manager.registerUserNotificationSettings()
+    }
+
+    public func requestPushToken() async -> Registration.RequestPushTokensResult {
+        do {
+            let result = try await manager.requestPushTokens(forceRotation: false, timeOutEventually: true)
+            return .success(result)
+        } catch PushRegistrationError.pushNotSupported(let description) {
+            return .pushUnsupported(description: description)
+        } catch PushRegistrationError.timeout {
+            return .timeout
+        } catch {
+            return .genericError(error)
         }
     }
 
-    public func requestPushToken() -> Guarantee<Registration.RequestPushTokensResult> {
-        return manager.requestPushTokens(forceRotation: false, timeOutEventually: true)
-            .map(on: SyncScheduler()) { .success($0) }
-            .recover(on: SyncScheduler()) { error in
-                switch error {
-                case PushRegistrationError.pushNotSupported(let description):
-                    return .value(.pushUnsupported(description: description))
-                case PushRegistrationError.timeout:
-                    return .value(.timeout)
-                default:
-                    return .value(.genericError(error))
-                }
-            }
-    }
-
-    public func receivePreAuthChallengeToken() -> Guarantee<String> {
-        return manager.receivePreAuthChallengeToken()
+    public func receivePreAuthChallengeToken() async -> String {
+        return await manager.receivePreAuthChallengeToken()
     }
 
     public func clearPreAuthChallengeToken() {
@@ -509,7 +496,7 @@ class _RegistrationCoordinator_QuickRestoreManagerWrapper: _RegistrationCoordina
 
 // MARK: - StorageService
 public protocol _RegistrationCoordinator_StorageServiceManagerShim {
-    func rotateManifest(mode: StorageServiceManagerManifestRotationMode, authedDevice: AuthedDevice) -> Promise<Void>
+    func rotateManifest(mode: StorageServiceManagerManifestRotationMode, authedDevice: AuthedDevice) async throws
     func restoreOrCreateManifestIfNecessary(authedDevice: AuthedDevice, masterKeySource: StorageService.MasterKeySource) -> Promise<Void>
     func backupPendingChanges(authedDevice: AuthedDevice)
     func recordPendingLocalAccountUpdates()
@@ -522,10 +509,8 @@ public class _RegistrationCoordinator_StorageServiceManagerWrapper: _Registratio
     public func rotateManifest(
         mode: StorageServiceManagerManifestRotationMode,
         authedDevice: AuthedDevice
-    ) -> Promise<Void> {
-        Promise.wrapAsync {
-            try await self.manager.rotateManifest(mode: mode, authedDevice: authedDevice)
-        }
+    ) async throws {
+        try await self.manager.rotateManifest(mode: mode, authedDevice: authedDevice)
     }
 
     public func restoreOrCreateManifestIfNecessary(

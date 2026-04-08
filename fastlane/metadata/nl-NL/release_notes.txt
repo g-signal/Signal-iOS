@@ -1,1 +1,1 @@
-• Signal heeft een signaal nodig, dus de verbeterde logica voor opnieuw proberen zou van pas moeten komen de volgende keer dat je in een gebied met slechte wifi of mobiele ontvangst bent.
+• Doorzettingsvermogen loont, maar het is nog beter als dingen bij de eerste poging werken. We hebben een fout opgelost waardoor je soms meerdere pogingen moest doen om een sticker te verzenden vanaf het iOS-emoji-toetsenbord. Dezelfde oplossing werkt ook voor Genmoji, dus we hopen dat je ervan Gen-iet.

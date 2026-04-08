@@ -1,1 +1,1 @@
-• Vylepšili sme systém opakovaného pripájania, ktorý pomôže na miestach so slabým Wi-Fi alebo mobilným signálom.
+• Opravili sme chybu týkajúcu sa nálepiek odoslaných z klávesnice emoji v systéme iOS.

@@ -55,13 +55,12 @@ public class _RegistrationCoordinator_CNContactsStoreMock: _RegistrationCoordina
 
     public var doesNeedContactsAuthorization = false
 
-    public func needsContactsAuthorization() -> Guarantee<Bool> {
-        return .value(doesNeedContactsAuthorization)
+    public func needsContactsAuthorization() -> Bool {
+        return doesNeedContactsAuthorization
     }
 
-    public func requestContactsAuthorization() -> Guarantee<Void> {
+    public func requestContactsAuthorization() async {
         doesNeedContactsAuthorization = false
-        return .value(())
     }
 }
 
@@ -193,25 +192,25 @@ public class _RegistrationCoordinator_PreKeyManagerMock: _RegistrationCoordinato
     public typealias CreatePreKeysMock = (() -> Promise<RegistrationPreKeyUploadBundles>)
     private var createPreKeysMocks = [CreatePreKeysMock]()
     public func addCreatePreKeysMock(_ mock: @escaping CreatePreKeysMock) { createPreKeysMocks.append(mock) }
-    public func createPreKeysForRegistration() -> Promise<RegistrationPreKeyUploadBundles> {
+    public func createPreKeysForRegistration() async throws -> RegistrationPreKeyUploadBundles {
         run.addObservedStep(.createPreKeys)
-        return createPreKeysMocks.removeFirst()()
+        return try await createPreKeysMocks.removeFirst()().awaitable()
     }
 
     public typealias FinalizePreKeysMock = ((Bool) -> Promise<Void>)
     private var finalizePreKeysMocks = [FinalizePreKeysMock]()
     public func addFinalizePreKeyMock(_ mock: @escaping FinalizePreKeysMock) { finalizePreKeysMocks.append(mock) }
-    public func finalizeRegistrationPreKeys(_ bundles: RegistrationPreKeyUploadBundles, uploadDidSucceed: Bool) -> Promise<Void> {
+    public func finalizeRegistrationPreKeys(_ bundles: RegistrationPreKeyUploadBundles, uploadDidSucceed: Bool) async throws {
         run.addObservedStep(.finalizePreKeys)
-        return finalizePreKeysMocks.removeFirst()(uploadDidSucceed)
+        return try await finalizePreKeysMocks.removeFirst()(uploadDidSucceed).awaitable()
     }
 
     public typealias RotateOneTimePreKeysMock = ((ChatServiceAuth) -> Promise<Void>)
     private var rotateOneTimePreKeysMocks = [RotateOneTimePreKeysMock]()
     public func addRotateOneTimePreKeyMock(_ mock: @escaping RotateOneTimePreKeysMock) { rotateOneTimePreKeysMocks.append(mock) }
-    public func rotateOneTimePreKeysForRegistration(auth: ChatServiceAuth) -> Promise<Void> {
+    public func rotateOneTimePreKeysForRegistration(auth: ChatServiceAuth) async throws {
         run.addObservedStep(.rotateOneTimePreKeys)
-        return rotateOneTimePreKeysMocks.removeFirst()(auth)
+        return try await rotateOneTimePreKeysMocks.removeFirst()(auth).awaitable()
     }
 }
 
@@ -263,32 +262,31 @@ public class _RegistrationCoordinator_PushRegistrationManagerMock: _Registration
 
     public var doesNeedNotificationAuthorization = false
 
-    public func needsNotificationAuthorization() -> Guarantee<Bool> {
-        return .value(doesNeedNotificationAuthorization)
+    public func needsNotificationAuthorization() async -> Bool {
+        return doesNeedNotificationAuthorization
     }
 
-    public func registerUserNotificationSettings() -> Guarantee<Void> {
+    public func registerUserNotificationSettings() async {
         doesNeedNotificationAuthorization = true
-        return .value(())
     }
 
-    public typealias RequestPushTokenMock = (() -> Guarantee<Registration.RequestPushTokensResult>)
+    public typealias RequestPushTokenMock = (() async -> Registration.RequestPushTokensResult)
     private var requestPushTokenMocks = [RequestPushTokenMock]()
     public func addRequestPushTokenMock(_ mock: @escaping RequestPushTokenMock) {
         requestPushTokenMocks.append(mock)
     }
-    public func requestPushToken() -> Guarantee<Registration.RequestPushTokensResult> {
+    public func requestPushToken() async -> Registration.RequestPushTokensResult {
         run.addObservedStep(.requestPushToken)
-        return requestPushTokenMocks.removeFirst()()
+        return await requestPushTokenMocks.removeFirst()()
     }
 
-    public typealias RecevePreAuthChallengeTokenMock = (() -> Guarantee<String>)
-    private var receivePreAuthChallengeTokenMocks = [RecevePreAuthChallengeTokenMock]()
-    public func addReceivePreAuthChallengeTokenMock(_ mock: @escaping RecevePreAuthChallengeTokenMock) {
-        receivePreAuthChallengeTokenMocks.append(mock)
+    public typealias ReceivePreAuthChallengeTokenMock = (() async -> String)
+    private var receivePreAuthChallengeTokenMock: ReceivePreAuthChallengeTokenMock!
+    public func setReceivePreAuthChallengeTokenMock(_ mock: @escaping ReceivePreAuthChallengeTokenMock) {
+        receivePreAuthChallengeTokenMock = mock
     }
-    public func receivePreAuthChallengeToken() -> Guarantee<String> {
-        return receivePreAuthChallengeTokenMocks.removeFirst()()
+    public func receivePreAuthChallengeToken() async -> String {
+        return await receivePreAuthChallengeTokenMock()
     }
 
     public var didClearPreAuthChallengeToken = false
@@ -340,9 +338,9 @@ public class _RegistrationCoordinator_StorageServiceManagerMock: _RegistrationCo
     public typealias RotateManifestMock = (StorageServiceManagerManifestRotationMode, AuthedDevice) -> Promise<Void>
     private var rotateManifestMocks = [RotateManifestMock]()
     public func addRotateManifestMock(_ mock: @escaping RotateManifestMock) { rotateManifestMocks.append(mock) }
-    public func rotateManifest(mode: StorageServiceManagerManifestRotationMode, authedDevice: AuthedDevice) -> Promise<Void> {
+    public func rotateManifest(mode: StorageServiceManagerManifestRotationMode, authedDevice: AuthedDevice) async throws {
         run.addObservedStep(.rotateManifest)
-        return rotateManifestMocks.removeFirst()(mode, authedDevice)
+        return try await rotateManifestMocks.removeFirst()(mode, authedDevice).awaitable()
     }
 
     public typealias RestoreOrCreateManifestIfNecessaryMock = (AuthedDevice, StorageService.MasterKeySource) -> Promise<Void>

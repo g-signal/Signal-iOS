@@ -1,1 +1,1 @@
-• Signal benötigt ein Signal, aber die Verbesserungen dieses Updates sollten nützlich sein, wenn du das nächste Mal in einer Gegend mit schlechtem WLAN- oder Mobilfunkempfang bist.
+• Ausdauer lohnt sich, aber noch besser ist es, wenn alles gleich beim ersten Mal klappt. Wir haben einen Fehler behoben, der dazu führte, dass teilweise mehrere Versuche notwendig waren, um einen Sticker über die iOS-Emoji-Tastatur zu versenden. Der gleiche Fehler wurde übrigens auch für Genmoji behoben – also viel Spaß damit.
