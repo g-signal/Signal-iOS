@@ -48,6 +48,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
     private var voipTokenFuture: Future<Data>?
     private var voipTokenPromiseCreationTime: Date?
 
+    @MainActor
     private var voipRegistry: PKPushRegistry?
 
     private var preauthChallengeGuarantee: Guarantee<String>
@@ -72,22 +73,9 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         Logger.info("")
         await self.registerUserNotificationSettings()
 
-            return self
-                .registerForVanillaPushToken(
-                    forceRotation: forceRotation,
-                    timeOutEventually: timeOutEventually
-                ).then { [self] vanillaPushToken in
-                    // We need the voip registry to handle voip pushes relayed from the NSE.
-                    createVoipRegistryIfNecessary()
-
-                    // Also register for VoIP push token
-                    return self.registerForVoipPushToken(
-                        forceRotation: forceRotation,
-                        timeOutEventually: timeOutEventually
-                    ).map { voipPushToken in
-                        return ApnRegistrationId(apnsToken: vanillaPushToken, voipToken: voipPushToken)
-                    }
-                }
+        #if targetEnvironment(simulator)
+        if TSConstants.isUsingProductionService {
+            throw PushRegistrationError.pushNotSupported(description: "Production APNs isn't supported on simulators.")
         }
         #endif
 
@@ -146,7 +134,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         vanillaTokenFuture.resolve(tokenData)
     }
 
-    // Vanilla push token is obtained from the system via AppDelegate    
+    // Vanilla push token is obtained from the system via AppDelegate
     @objc
     public func didFailToReceiveVanillaPushToken(error: Error) {
         guard let vanillaTokenFuture = self.vanillaTokenFuture else {
@@ -162,8 +150,6 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
     public func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
         assertOnQueue(calloutQueue)
         owsAssertDebug(type == .voIP)
-
-        Logger.info("Received VoIP push with payload: \(payload.dictionaryPayload)")
 
         // Synchronously wait until the app is ready.
         let appReady = DispatchSemaphore(value: 0)
@@ -191,7 +177,6 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
             return
         }
 
-        Logger.warn("Ignoring VoIP push without a valid payload.")
         owsFailDebug("Ignoring PKPush without a valid payload.")
     }
 
@@ -317,52 +302,48 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         }
         UIApplication.shared.registerForRemoteNotifications()
 
-        let returnedPromise = firstly {
-            promise.timeout(seconds: 10, description: "Register for vanilla push token") {
-                PushRegistrationError.timeout
+        if timeOutEventually {
+            do {
+                return try await withUncooperativeTimeout(seconds: 20, operation: {
+                    return try await self._registerForVanillaPushToken(promise)
+                })
+            } catch is UncooperativeTimeoutError {
+                throw PushRegistrationError.timeout
             }
-        }.recover { error -> Promise<Data> in
-            switch error {
-            case PushRegistrationError.timeout:
-                Promise.wrapAsync {
-                    await self.isSusceptibleToFailedPushRegistration()
-                }.then { isSusceptibleToFailedPushRegistration in
-                    if isSusceptibleToFailedPushRegistration {
-                        // If we've timed out on a device known to be susceptible to failures, quit trying
-                        // so the user doesn't remain indefinitely hung for no good reason.
-                        throw PushRegistrationError.pushNotSupported(description: "Device configuration disallows push notifications")
-                    } else {
-                        Logger.warn("Push registration is taking a while. Continuing to wait since this configuration is not known to fail push registration.")
-                        // Sometimes registration can just take a while.
-                        // If we're not on a device known to be susceptible to push registration failure,
-                        // just return the original promise.
-                        return promise
-                    }
-                }
-            default:
-                throw error
-            }
-        }.then { (pushTokenData: Data) -> Promise<String> in
-            Promise.wrapAsync {
-                await self.isSusceptibleToFailedPushRegistration()
-            }.map { isSusceptibleToFailedPushRegistration in
-                if isSusceptibleToFailedPushRegistration {
-                    // Sentinel in case this bug is fixed.
-                    owsFailDebug("Device was unexpectedly able to complete push registration even though it was susceptible to failure.")
-                }
-
-                Logger.info("successfully registered for vanilla push notifications")
-                return pushTokenData.toHex()
-            }
-        }.ensure {
-            self.vanillaTokenPromise = nil
+        } else {
+            return try await _registerForVanillaPushToken(promise)
         }
-        guard timeOutEventually else {
-            return returnedPromise
-        }
-        return returnedPromise.timeout(seconds: 20, timeoutErrorBlock: { return PushRegistrationError.timeout })
     }
 
+    @MainActor
+    private func _registerForVanillaPushToken(_ promise: Promise<Data>) async throws -> String {
+        let pushTokenData: Data
+        do {
+            pushTokenData = try await withUncooperativeTimeout(seconds: 10, operation: {
+                return try await promise.awaitable()
+            })
+        } catch is UncooperativeTimeoutError {
+            if await self.isSusceptibleToFailedPushRegistration() {
+                // If we've timed out on a device known to be susceptible to failures, quit trying
+                // so the user doesn't remain indefinitely hung for no good reason.
+                throw PushRegistrationError.pushNotSupported(description: "Device configuration disallows push notifications")
+            } else {
+                Logger.warn("Push registration is taking a while. Continuing to wait since this configuration is not known to fail push registration.")
+                // Sometimes registration can just take a while.
+                // If we're not on a device known to be susceptible to push registration failure,
+                // just return the original promise.
+                pushTokenData = try await promise.awaitable()
+            }
+        }
+        if await self.isSusceptibleToFailedPushRegistration() {
+            // Sentinel in case this bug is fixed.
+            owsFailDebug("Device was unexpectedly able to complete push registration even though it was susceptible to failure.")
+        }
+        Logger.info("successfully registered for vanilla push notifications")
+        return pushTokenData.toHex()
+    }
+
+    @MainActor
     private func registerForVoipPushToken(
         forceRotation: Bool,
         timeOutEventually: Bool
@@ -490,40 +471,17 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         })
     }
 
-    @MainActor
-    private func createVoipRegistryIfNecessary() {
-        AssertIsOnMainThread()
-
-        guard voipRegistry == nil else {
-            Logger.info("VoIP registry already exists, skipping creation")
-            return
-        }
-
-        Logger.info("Creating new PKPushRegistry for VoIP")
-        let voipRegistry = PKPushRegistry(queue: calloutQueue)
-        self.voipRegistry  = voipRegistry
-        voipRegistry.desiredPushTypes = [.voIP]
-        voipRegistry.delegate = self
-
-        Logger.info("PKPushRegistry created and configured: desiredPushTypes=[\(String(describing: voipRegistry.desiredPushTypes))], delegate=\(String(describing: voipRegistry.delegate))")
-
-        // Log current push token if available
-        if let existingToken = voipRegistry.pushToken(for: .voIP) {
-            Logger.info("PKPushRegistry already has existing VoIP token: \(existingToken.hexadecimalString.prefix(8))...")
-        } else {
-            Logger.warn("PKPushRegistry has no existing VoIP token")
-        }
-    }
-
     // MARK: - VoIP Token Management
 
     /// Forces a refresh of the VoIP push token
+    @MainActor
     public func refreshVoipToken() -> Promise<String> {
         Logger.info("Forcing VoIP token refresh")
         return registerForVoipPushToken(forceRotation: true, timeOutEventually: true)
     }
 
     /// Checks if VoIP push is available and properly configured
+    @MainActor
     public func isVoipPushAvailable() -> Bool {
         guard !TSConstants.isUsingProductionService || !Platform.isSimulator else {
             return false
@@ -532,6 +490,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
     }
 
     /// Clears all VoIP push related data
+    @MainActor
     public func clearVoipPushData() {
         Task {
             await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
@@ -549,6 +508,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
     }
 
     /// Diagnoses VoIP push configuration and state
+    @MainActor
     public func diagnoseVoipPushState() {
         Logger.info("=== VoIP Push Diagnosis ===")
 
@@ -584,6 +544,31 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         Logger.info("Stored VoIP token: \(redact(storedVoipToken))")
 
         Logger.info("=== End VoIP Push Diagnosis ===")
+    }
+
+    @MainActor
+    private func createVoipRegistryIfNecessary() {
+        AssertIsOnMainThread()
+
+        guard voipRegistry == nil else {
+            Logger.info("VoIP registry already exists, skipping creation")
+            return
+        }
+
+        Logger.info("Creating new PKPushRegistry for VoIP")
+        let voipRegistry = PKPushRegistry(queue: calloutQueue)
+        self.voipRegistry = voipRegistry
+        voipRegistry.desiredPushTypes = [.voIP]
+        voipRegistry.delegate = self
+
+        Logger.info("PKPushRegistry created and configured: desiredPushTypes=[\(String(describing: voipRegistry.desiredPushTypes))], delegate=\(String(describing: voipRegistry.delegate))")
+
+        // Log current push token if available
+        if let existingToken = voipRegistry.pushToken(for: .voIP) {
+            Logger.info("PKPushRegistry already has existing VoIP token: \(existingToken.hexadecimalString.prefix(8))...")
+        } else {
+            Logger.warn("PKPushRegistry has no existing VoIP token")
+        }
     }
 
     private func redact(_ string: String?) -> String {
