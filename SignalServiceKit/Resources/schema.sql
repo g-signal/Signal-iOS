@@ -2402,6 +2402,7 @@ CREATE
             ,"aci" VARCHAR(32) NOT NULL
             ,"tags" BLOB NOT NULL
             ,"last_updated" INTEGER NOT NULL
+            ,"robot" BLOB DEFAULT NULL
             ,UNIQUE("aci")
         )
 ;

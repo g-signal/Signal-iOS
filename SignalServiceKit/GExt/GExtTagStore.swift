@@ -47,7 +47,30 @@ public class GExtTagStore: NSObject {
         }
     }
 
-    /// 设置用户的 GExtTag（使用 profile ID）
+    /// 获取用户的机器人配置
+    public func getUserRobot(
+        for address: SignalServiceAddress,
+        transaction: DBReadTransaction
+    ) -> GExtRobot? {
+        do {
+            let aciString = try getAciString(for: address)
+
+            guard let robotData = transaction.database.strictRead({ database in
+                try GRecipientGExtTagRecord
+                    .filter(GRecipientGExtTagRecord.Columns.aci == aciString)
+                    .fetchOne(database)
+            })?.robot else {
+                return nil
+            }
+
+            return try JSONDecoder().decode(GExtRobot.self, from: robotData)
+        } catch {
+            owsFailDebug("Failed to fetch user robot: \(error)")
+            return nil
+        }
+    }
+
+    /// 设置用户的 GExtTag（使用 profile ID），只更新 tags 列，不影响 robot 列
     public func setUserExtTags(
         _ extTags: [GExtTag],
         for address: SignalServiceAddress,
@@ -81,14 +104,51 @@ public class GExtTagStore: NSObject {
             let tagsData = try JSONEncoder().encode(sanitized)
             let now = Date().ows_millisecondsSince1970
 
+            // 行不存在时插入（robot 为 NULL），行存在时只更新 tags 和 last_updated
             try transaction.database.execute(sql: """
-                INSERT OR REPLACE INTO gext_recipient (_id, aci, tags, last_updated)
+                INSERT INTO gext_recipient (_id, aci, tags, last_updated)
                 VALUES (?, ?, ?, ?)
+                ON CONFLICT(_id) DO UPDATE SET
+                    tags = excluded.tags,
+                    last_updated = excluded.last_updated
             """, arguments: [profileId, aciString, tagsData, Int64(now)])
 
             Logger.info("Successfully set \(sanitized.count) ExtTags for profile ID \(profileId), aci: \(aciString)")
         } catch {
             owsFailDebug("Failed to set user ext tags with profile ID: \(error)")
+        }
+    }
+
+    /// 设置用户的机器人配置（使用 profile ID），只更新 robot 列，不影响 tags 列
+    public func setUserRobot(
+        _ robot: GExtRobot,
+        for address: SignalServiceAddress,
+        profileId: Int64,
+        transaction: DBWriteTransaction
+    ) {
+        do {
+            let aciString = try getAciString(for: address)
+            let robotData = try JSONEncoder().encode(robot)
+            let now = Date().ows_millisecondsSince1970
+
+            // 删除同 aci 但不同 _id 的旧记录，避免 aci 唯一约束冲突
+            try transaction.database.execute(sql: """
+                DELETE FROM gext_recipient WHERE aci = ? AND _id != ?
+            """, arguments: [aciString, profileId])
+
+            // 行不存在时插入（tags 为空数组），行存在时只更新 robot 和 last_updated
+            let emptyTagsData = try JSONEncoder().encode([GExtTag]())
+            try transaction.database.execute(sql: """
+                INSERT INTO gext_recipient (_id, aci, tags, last_updated, robot)
+                VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(_id) DO UPDATE SET
+                    robot = excluded.robot,
+                    last_updated = excluded.last_updated
+            """, arguments: [profileId, aciString, emptyTagsData, Int64(now), robotData])
+
+            Logger.info("Successfully set robot for profile ID \(profileId), aci: \(aciString)")
+        } catch {
+            owsFailDebug("Failed to set user robot with profile ID: \(error)")
         }
     }
 

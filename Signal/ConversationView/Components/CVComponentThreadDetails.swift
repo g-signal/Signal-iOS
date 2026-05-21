@@ -26,7 +26,7 @@ public class CVComponentThreadDetails: CVComponentBase, CVRootComponent {
     private var groupDescriptionText: String? { threadDetails.groupDescriptionText }
 
     private var canTapTitle: Bool {
-        thread is TSContactThread && !thread.isNoteToSelf
+        thread is TSContactThread && !thread.isNoteToSelf && !threadDetails.isRobotThread
     }
 
     init(itemModel: CVItemModel, threadDetails: CVComponentState.ThreadDetails) {
@@ -553,7 +553,8 @@ public class CVComponentThreadDetails: CVComponentBase, CVRootComponent {
                 shouldShowVerifiedBadge: false,
                 bioText: nil,
                 safetySection: nil,
-                groupDescriptionText: nil
+                groupDescriptionText: nil,
+                isRobotThread: false
             )
         }
     }
@@ -608,6 +609,14 @@ public class CVComponentThreadDetails: CVComponentBase, CVRootComponent {
             tx: transaction
         )
 
+        let isRobotThread: Bool = {
+            guard !contactThread.isNoteToSelf else { return false }
+            return GExtTagStore.shared.getUserRobot(
+                for: contactThread.contactAddress,
+                transaction: transaction
+            )?.robot == true
+        }()
+
         return CVComponentState.ThreadDetails(
             avatarDataSource: avatarDataSource,
             isAvatarBlurred: isAvatarBlurred,
@@ -616,7 +625,8 @@ public class CVComponentThreadDetails: CVComponentBase, CVRootComponent {
             shouldShowVerifiedBadge: shouldShowVerifiedBadge,
             bioText: bioText,
             safetySection: safetySection,
-            groupDescriptionText: nil
+            groupDescriptionText: nil,
+            isRobotThread: isRobotThread
         )
     }
 
@@ -658,7 +668,8 @@ public class CVComponentThreadDetails: CVComponentBase, CVRootComponent {
             shouldShowVerifiedBadge: false,
             bioText: nil,
             safetySection: safetySection,
-            groupDescriptionText: descriptionText
+            groupDescriptionText: descriptionText,
+            isRobotThread: false
         )
     }
 

@@ -31,6 +31,7 @@ extension ConversationSettingsViewController {
         let contents = OWSTableContents()
 
         let isNoteToSelf = thread.isNoteToSelf
+        let isRobotThread = self.isRobotThread
 
         let callDetailsSection = createCallSection()
         if let callDetailsSection {
@@ -47,15 +48,15 @@ extension ConversationSettingsViewController {
 
         // Main section.
         addDisappearingMessagesItem(to: mainSection)
-        addNicknameItemIfNecessary(to: mainSection)
+        if !isRobotThread { addNicknameItemIfNecessary(to: mainSection) }
         addColorAndWallpaperSettingsItem(to: mainSection)
-        if !isNoteToSelf { addSoundAndNotificationSettingsItem(to: mainSection) }
-        addSafetyNumberItemIfNecessary(to: mainSection)
+        if !isNoteToSelf, !isRobotThread { addSoundAndNotificationSettingsItem(to: mainSection) }
+        if !isRobotThread { addSafetyNumberItemIfNecessary(to: mainSection) }
 
         contents.add(mainSection)
 
         // Middle sections
-        addSystemContactSectionIfNecessary(to: contents)
+        if !isRobotThread { addSystemContactSectionIfNecessary(to: contents) }
         addAllMediaSectionIfNecessary(to: contents)
 //        addBadgesItemIfNecessary(to: contents)
 
@@ -66,13 +67,14 @@ extension ConversationSettingsViewController {
             if let groupModelV2 = groupModel as? TSGroupModelV2 {
                 buildGroupSettingsSection(groupModelV2: groupModelV2, contents: contents)
             }
-        } else if isContactThread, hasGroupThreads, !isNoteToSelf {
+        } else if isContactThread, hasGroupThreads, !isNoteToSelf, !isRobotThread {
             contents.add(buildMutualGroupsSection(sectionIndex: contents.sections.count))
         }
 
         // Bottom sections
         if
             !isNoteToSelf,
+            !isRobotThread,
             !thread.isGroupV1Thread
         {
             contents.add(buildBlockAndLeaveSection())

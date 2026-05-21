@@ -161,6 +161,10 @@ public class ConversationHeaderView: UIView {
             return
         }
         let address = contactThread.contactAddress
+        guard !address.isLocalAddress else {
+            extTagsStackView.configure(with: [])
+            return
+        }
         SSKEnvironment.shared.databaseStorageRef.asyncRead(
             file: #file, function: #function, line: #line,
             block: { GExtTagStore.shared.getUserExtTags(for: address, transaction: $0) },

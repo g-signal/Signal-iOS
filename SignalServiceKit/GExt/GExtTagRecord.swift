@@ -15,12 +15,14 @@ struct GRecipientGExtTagRecord: Codable, FetchableRecord, PersistableRecord {
         case aci = "aci"
         case tags = "tags"
         case last_updated = "last_updated"
+        case robot = "robot"
     }
 
     var _id: Int64?
     var aci: String
     var tags: Data  // JSON编码的[GExtTag]数组
     var last_updated: Int64  // Unix时间戳(毫秒)
+    var robot: Data?  // 预留字段，BLOB，可为空
 
     mutating func didInsert(with rowID: Int64, for column: String?) {
         _id = rowID

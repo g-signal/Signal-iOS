@@ -44,6 +44,7 @@
 		05A180362CD1840F00579FA4 /* UIViewPropertyAnimator+SignalUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A180352CD1840F00579FA4 /* UIViewPropertyAnimator+SignalUI.swift */; };
 		05B411252C62845000A1EDBC /* ChatListInboxFilterSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B411242C62845000A1EDBC /* ChatListInboxFilterSection.swift */; };
 		05FDBC292CD91B31000C87BC /* ChatListContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FDBC282CD91B31000C87BC /* ChatListContainerView.swift */; };
+		060C7D052FBD95F5003DCEF9 /* GExtRobot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060C7D042FBD95F5003DCEF9 /* GExtRobot.swift */; };
 		06FCB04D2F72838000426F8C /* GExtGroupProfileFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FCB04B2F72838000426F8C /* GExtGroupProfileFetcher.swift */; };
 		06FCB04E2F72838000426F8C /* GGroupGExtTagRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FCB04C2F72838000426F8C /* GGroupGExtTagRecord.swift */; };
 		0CE014267EDFBD2538E940A0 /* Pods_Signal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FF88FB580BC19B240EEB86A /* Pods_Signal.framework */; };
@@ -3873,6 +3874,7 @@
 		05EA61432CC943D200B16D4E /* Project-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Project-Release.xcconfig"; sourceTree = "<group>"; };
 		05EA61442CC943DD00B16D4E /* Project.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		05FDBC282CD91B31000C87BC /* ChatListContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListContainerView.swift; sourceTree = "<group>"; };
+		060C7D042FBD95F5003DCEF9 /* GExtRobot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtRobot.swift; sourceTree = "<group>"; };
 		06FCB04B2F72838000426F8C /* GExtGroupProfileFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtGroupProfileFetcher.swift; sourceTree = "<group>"; };
 		06FCB04C2F72838000426F8C /* GGroupGExtTagRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGroupGExtTagRecord.swift; sourceTree = "<group>"; };
 		0BADD293DAFC82BF3274F0F6 /* Pods_SignalTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -7872,6 +7874,7 @@
 		0DF917D62F63FDE3007C0A54 /* GExt */ = {
 			isa = PBXGroup;
 			children = (
+				060C7D042FBD95F5003DCEF9 /* GExtRobot.swift */,
 				06FCB04B2F72838000426F8C /* GExtGroupProfileFetcher.swift */,
 				06FCB04C2F72838000426F8C /* GGroupGExtTagRecord.swift */,
 				0DB93E002F67AB2800CB9799 /* GExtTag.swift */,
@@ -18518,6 +18521,7 @@
 				F9C5CCE2289453B300548EEE /* SignalServiceAddress.swift in Sources */,
 				F9C5CDBB289453B400548EEE /* SignalServiceProfile.swift in Sources */,
 				C1CD0E3A2A6B0D2700307F1A /* SignalSessionStore.swift in Sources */,
+				060C7D052FBD95F5003DCEF9 /* GExtRobot.swift in Sources */,
 				72B0C2422C9EED0E00B57DAD /* SignedPreKeyRecord.swift in Sources */,
 				F9C5CD33289453B300548EEE /* SignedPreKeyStoreImpl.swift in Sources */,
 				F9C5CC51289453B300548EEE /* SMKError.swift in Sources */,

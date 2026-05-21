@@ -338,6 +338,7 @@ public class GRDBSchemaMigrator {
         case createGExtTagTables
         case createGExtGroupTagTables
         case addRetriesToBackupAttachmentUploadQueue
+        case addGExtRecipientRobotColumn
 
         // NOTE: Every time we add a migration id, consider
         // incrementing grdbSchemaVersionLatest.
@@ -4224,6 +4225,15 @@ public class GRDBSchemaMigrator {
                 table.add(column: "numRetries", .integer).notNull().defaults(to: 0)
                 table.add(column: "minRetryTimestamp", .integer).notNull().defaults(to: 0)
             }
+
+            return .success(())
+        }
+
+        migrator.registerMigration(.addGExtRecipientRobotColumn) { tx in
+            try tx.database.execute(sql: """
+                ALTER TABLE gext_recipient
+                ADD COLUMN robot BLOB DEFAULT NULL
+            """)
 
             return .success(())
         }

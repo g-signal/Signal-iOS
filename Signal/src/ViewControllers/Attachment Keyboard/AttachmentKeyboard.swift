@@ -28,7 +28,7 @@ class AttachmentKeyboard: CustomKeyboard {
         return collectionView
     }()
     private lazy var attachmentFormatPickerView: AttachmentFormatPickerView = {
-        let pickerView = AttachmentFormatPickerView(isGroup: delegate?.isGroup ?? false)
+        let pickerView = AttachmentFormatPickerView(isGroup: delegate?.isGroup ?? false, msgButtonVisible: msgButtonVisible)
         pickerView.attachmentFormatPickerDelegate = self
         pickerView.setContentHuggingVerticalHigh()
         pickerView.setCompressionResistanceVerticalHigh()
@@ -37,10 +37,13 @@ class AttachmentKeyboard: CustomKeyboard {
 
     private lazy var limitedPhotoPermissionsView = LimitedPhotoPermissionsView()
 
+    private let msgButtonVisible: GExtRobot.MsgButtonVisible?
+
     // MARK: -
 
-    init(delegate: AttachmentKeyboardDelegate?) {
+    init(delegate: AttachmentKeyboardDelegate?, msgButtonVisible: GExtRobot.MsgButtonVisible? = nil) {
         self.delegate = delegate
+        self.msgButtonVisible = msgButtonVisible
 
         super.init()
 
@@ -53,6 +56,7 @@ class AttachmentKeyboard: CustomKeyboard {
         ])
         stackView.axis = .vertical
         stackView.setCustomSpacing(12, after: limitedPhotoPermissionsView)
+        recentPhotosCollectionView.isHiddenInStackView = msgButtonVisible?.photos == false
         contentView.addSubview(stackView)
         stackView.autoPinWidthToSuperview()
         stackView.autoPinEdge(toSuperviewEdge: .top, withInset: 12)

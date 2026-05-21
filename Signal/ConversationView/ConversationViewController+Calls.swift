@@ -27,7 +27,17 @@ public extension ConversationViewController {
     }
 
     var canCall: Bool {
-        ConversationViewController.canCall(threadViewModel: threadViewModel)
+        guard ConversationViewController.canCall(threadViewModel: threadViewModel) else {
+            return false
+        }
+        // robot 账号不支持通话
+        if let contactThread = thread as? TSContactThread {
+            let isRobot = SSKEnvironment.shared.databaseStorageRef.read { tx in
+                GExtTagStore.shared.getUserRobot(for: contactThread.contactAddress, transaction: tx)?.robot == true
+            }
+            if isRobot { return false }
+        }
+        return true
     }
 
     private var callStarterContext: CallStarter.Context {

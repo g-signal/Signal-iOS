@@ -65,6 +65,8 @@ public class ConversationInputToolbar: UIView, LinkPreviewViewDraftDelegate, Quo
 
     private weak var inputToolbarDelegate: ConversationInputToolbarDelegate?
 
+    private let msgButtonVisible: GExtRobot.MsgButtonVisible?
+
     init(
         conversationStyle: ConversationStyle,
         spoilerState: SpoilerRenderState,
@@ -74,13 +76,15 @@ public class ConversationInputToolbar: UIView, LinkPreviewViewDraftDelegate, Quo
         editTarget: TSOutgoingMessage?,
         inputToolbarDelegate: ConversationInputToolbarDelegate,
         inputTextViewDelegate: ConversationInputTextViewDelegate,
-        bodyRangesTextViewDelegate: BodyRangesTextViewDelegate
+        bodyRangesTextViewDelegate: BodyRangesTextViewDelegate,
+        msgButtonVisible: GExtRobot.MsgButtonVisible? = nil
     ) {
         self.conversationStyle = conversationStyle
         self.spoilerState = spoilerState
         self.mediaCache = mediaCache
         self.editTarget = editTarget
         self.inputToolbarDelegate = inputToolbarDelegate
+        self.msgButtonVisible = msgButtonVisible
         self.linkPreviewFetchState = LinkPreviewFetchState(
             db: DependenciesBridge.shared.db,
             linkPreviewFetcher: SUIEnvironment.shared.linkPreviewFetcher,
@@ -299,6 +303,8 @@ public class ConversationInputToolbar: UIView, LinkPreviewViewDraftDelegate, Quo
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleVoiceMemoLongPress(gesture:)))
         longPressGestureRecognizer.minimumPressDuration = 0
         view.voiceMemoButton.addGestureRecognizer(longPressGestureRecognizer)
+        view.isCameraHidden = msgButtonVisible?.camera == false
+        view.isMicrophoneHidden = msgButtonVisible?.microphone == false
         return view
     }()
 
@@ -547,7 +553,8 @@ public class ConversationInputToolbar: UIView, LinkPreviewViewDraftDelegate, Quo
         // Show / hide Sticker or Keyboard buttons inside of the text input field.
         // Either buttons are only visible if there's no any text input, including whitespace-only.
         let hideStickerOrKeyboardButton = shouldShowEditUI || !inputTextView.untrimmedText.isEmpty || isShowingVoiceMemoUI || quotedReplyDraft != nil
-        let hideStickerButton = hideStickerOrKeyboardButton || desiredKeyboardType == .sticker
+        let stickerDisabledByRobot = msgButtonVisible?.sticker == false
+        let hideStickerButton = hideStickerOrKeyboardButton || desiredKeyboardType == .sticker || stickerDisabledByRobot
         let hideKeyboardButton = hideStickerOrKeyboardButton || !hideStickerButton
         ConversationInputToolbar.setView(stickerButton, hidden: hideStickerButton, usingAnimator: animator)
         ConversationInputToolbar.setView(keyboardButton, hidden: hideKeyboardButton, usingAnimator: animator)
@@ -668,6 +675,13 @@ public class ConversationInputToolbar: UIView, LinkPreviewViewDraftDelegate, Quo
         static let sendButtonHMargin: CGFloat = 4
         static let cameraButtonHMargin: CGFloat = 8
 
+        var isCameraHidden: Bool = false {
+            didSet { configureViewsForState(state) }
+        }
+        var isMicrophoneHidden: Bool = false {
+            didSet { configureViewsForState(state) }
+        }
+
         lazy var sendButton: UIButton = {
             let button = UIButton(type: .system)
             button.accessibilityLabel = MessageStrings.sendButton
@@ -756,10 +770,12 @@ public class ConversationInputToolbar: UIView, LinkPreviewViewDraftDelegate, Quo
             switch state {
             case .default:
                 cameraButton.transform = .identity
-                cameraButton.alpha = 1
+                cameraButton.alpha = isCameraHidden ? 0 : 1
+                cameraButton.isUserInteractionEnabled = !isCameraHidden
 
                 voiceMemoButton.transform = .identity
-                voiceMemoButton.alpha = 1
+                voiceMemoButton.alpha = isMicrophoneHidden ? 0 : 1
+                voiceMemoButton.isUserInteractionEnabled = !isMicrophoneHidden
 
                 sendButton.transform = .scale(0.1)
                 sendButton.alpha = 0
@@ -779,7 +795,11 @@ public class ConversationInputToolbar: UIView, LinkPreviewViewDraftDelegate, Quo
         override var intrinsicContentSize: CGSize {
             let width: CGFloat = {
                 switch state {
-                case .default: return cameraButton.width + voiceMemoButton.width + 2 * Self.cameraButtonHMargin
+                case .default:
+                    let cameraWidth = isCameraHidden ? 0 : cameraButton.width
+                    let micWidth = isMicrophoneHidden ? 0 : voiceMemoButton.width
+                    let hasAny = !isCameraHidden || !isMicrophoneHidden
+                    return cameraWidth + micWidth + (hasAny ? 2 * Self.cameraButtonHMargin : 0)
                 case .sendButton, .hiddenSendButton: return sendButton.width + 2 * Self.sendButtonHMargin
                 }
             }()
@@ -1921,7 +1941,7 @@ public class ConversationInputToolbar: UIView, LinkPreviewViewDraftDelegate, Quo
         if let attachmentKeyboard = _attachmentKeyboard {
             return attachmentKeyboard
         }
-        let keyboard = AttachmentKeyboard(delegate: self)
+        let keyboard = AttachmentKeyboard(delegate: self, msgButtonVisible: msgButtonVisible)
         keyboard.registerWithView(self)
         _attachmentKeyboard = keyboard
         return keyboard

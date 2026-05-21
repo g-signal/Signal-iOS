@@ -37,6 +37,14 @@ class ConversationSettingsViewController: OWSTableViewController2, BadgeCollecti
         threadViewModel.threadRecord
     }
 
+    var isRobotThread: Bool {
+        guard let contactThread = thread as? TSContactThread,
+              !contactThread.isNoteToSelf else { return false }
+        return SSKEnvironment.shared.databaseStorageRef.read { tx in
+            GExtTagStore.shared.getUserRobot(for: contactThread.contactAddress, transaction: tx)?.robot == true
+        }
+    }
+
     // Group model reflecting the last known group state.
     // This is updated as we change group membership, etc.
     var currentGroupModel: TSGroupModel? {

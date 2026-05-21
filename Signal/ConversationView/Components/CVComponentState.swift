@@ -427,6 +427,7 @@ public class CVComponentState: Equatable {
         let bioText: String?
         let safetySection: SafetySection?
         let groupDescriptionText: String?
+        let isRobotThread: Bool
     }
     let threadDetails: ThreadDetails?
 

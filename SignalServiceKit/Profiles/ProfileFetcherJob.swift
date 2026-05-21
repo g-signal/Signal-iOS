@@ -496,6 +496,13 @@ public class ProfileFetcherJob {
                     // 没有 gextTags 字段，保持原有数据不变
                     Logger.info("No gextTags field in profile response for profile ID \(profileId), keeping existing data")
                 }
+
+                if let gextRobot = fetchedProfile.profile.gextRobot {
+                    Logger.info("Processing gextRobot for profile ID \(profileId)")
+                    GExtTagStore.shared.setUserRobot(gextRobot, for: profileAddress, profileId: profileId, transaction: transaction)
+                } else {
+                    Logger.info("No gextRobot field in profile response for profile ID \(profileId), keeping existing data")
+                }
             } else {
                 Logger.warn("Could not get profile ID after update for \(serviceId)")
             }

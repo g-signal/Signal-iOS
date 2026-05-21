@@ -278,6 +278,14 @@ extension ConversationViewController {
             quotedReply = nil
         }
 
+        let msgButtonVisible: GExtRobot.MsgButtonVisible? = {
+            guard let contactThread = thread as? TSContactThread,
+                  !contactThread.isNoteToSelf else { return nil }
+            return SSKEnvironment.shared.databaseStorageRef.read { tx in
+                GExtTagStore.shared.getUserRobot(for: contactThread.contactAddress, transaction: tx)?.msgButtonVisible
+            }
+        }()
+
         let inputToolbar = ConversationInputToolbar(
             conversationStyle: conversationStyle,
             spoilerState: viewState.spoilerState,
@@ -287,7 +295,8 @@ extension ConversationViewController {
             editTarget: editTarget,
             inputToolbarDelegate: self,
             inputTextViewDelegate: self,
-            bodyRangesTextViewDelegate: self
+            bodyRangesTextViewDelegate: self,
+            msgButtonVisible: msgButtonVisible
         )
         inputToolbar.accessibilityIdentifier = "inputToolbar"
         if let voiceMemoDraft = voiceMemoDraft {

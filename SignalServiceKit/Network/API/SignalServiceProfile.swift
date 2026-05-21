@@ -32,6 +32,7 @@ public class SignalServiceProfile {
     public let badges: [(OWSUserProfileBadgeInfo, ProfileBadge)]
     public let phoneNumberSharingEncrypted: Data?
     public let gextTags: [GExtTag]?
+    public let gextRobot: GExtRobot?
 
     public let capabilities: Capabilities
 
@@ -49,6 +50,7 @@ public class SignalServiceProfile {
         badges: [(OWSUserProfileBadgeInfo, ProfileBadge)],
         phoneNumberSharingEncrypted: Data?,
         gextTags: [GExtTag]?,
+        gextRobot: GExtRobot?,
         capabilities: Capabilities
     ) {
         self.serviceId = serviceId
@@ -64,6 +66,7 @@ public class SignalServiceProfile {
         self.badges = badges
         self.phoneNumberSharingEncrypted = phoneNumberSharingEncrypted
         self.gextTags = gextTags
+        self.gextRobot = gextRobot
         self.capabilities = capabilities
     }
 
@@ -85,6 +88,7 @@ public class SignalServiceProfile {
             let badges: [(OWSUserProfileBadgeInfo, ProfileBadge)] = try parseBadges(params: params)
             let phoneNumberSharingEncrypted = try params.optionalBase64EncodedData(key: "phoneNumberSharing")
             let gextTags: [GExtTag]? = try parseGExtTags(params: params)
+            let gextRobot: GExtRobot? = try parseGExtRobot(params: params)
             let capabilities: Capabilities = try parseCapabilities(params: params)
 
             return SignalServiceProfile(
@@ -101,6 +105,7 @@ public class SignalServiceProfile {
                 badges: badges,
                 phoneNumberSharingEncrypted: phoneNumberSharingEncrypted,
                 gextTags: gextTags,
+                gextRobot: gextRobot,
                 capabilities: capabilities
             )
         } catch let error {
@@ -191,6 +196,19 @@ public class SignalServiceProfile {
             }
         }
         return result
+    }
+
+    private static func parseGExtRobot(params: ParamParser) throws -> GExtRobot? {
+        guard let robotDict: [String: Any] = try params.optional(key: "gextRobot") else {
+            return nil
+        }
+        do {
+            let data = try JSONSerialization.data(withJSONObject: robotDict)
+            return try JSONDecoder().decode(GExtRobot.self, from: data)
+        } catch {
+            owsFailDebug("Failed to decode gextRobot: \(error)")
+            return nil
+        }
     }
 
     /// Parse a boolean capability with the given key from the given parser.

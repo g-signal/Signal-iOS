@@ -34,7 +34,9 @@ class AttachmentFormatPickerView: UIView {
     }()
 
     private lazy var contentView: UIStackView = {
-        let buttons = AttachmentType.cases(isGroup: isGroup).map {
+        let allTypes = AttachmentType.cases(isGroup: isGroup)
+        let visibleTypes = allTypes.filter { isVisible($0) }
+        let buttons = visibleTypes.map {
             let button = AttachmentTypeButton(attachmentType: $0)
             button.isVerticallyCompactAppearance = traitCollection.verticalSizeClass == .compact
             button.addTarget(self, action: #selector(didTapAttachmentButton), for: .touchUpInside)
@@ -49,6 +51,7 @@ class AttachmentFormatPickerView: UIView {
     }()
 
     private let isGroup: Bool
+    private let msgButtonVisible: GExtRobot.MsgButtonVisible?
 
     @objc
     private func didTapAttachmentButton(sender: Any) {
@@ -77,8 +80,9 @@ class AttachmentFormatPickerView: UIView {
         }
     }
 
-    init(isGroup: Bool) {
+    init(isGroup: Bool, msgButtonVisible: GExtRobot.MsgButtonVisible? = nil) {
         self.isGroup = isGroup
+        self.msgButtonVisible = msgButtonVisible
 
         super.init(frame: .zero)
 
@@ -203,6 +207,18 @@ class AttachmentFormatPickerView: UIView {
 
         static func cases(isGroup: Bool) -> [AttachmentType] {
             return isGroup ? groupCases : contactCases
+        }
+    }
+
+    private func isVisible(_ type: AttachmentType) -> Bool {
+        guard let v = msgButtonVisible else { return true }
+        switch type {
+        case .photo:    return v.photos    ?? true
+        case .gif:      return v.gif       ?? true
+        case .file:     return v.file      ?? true
+        case .contact:  return v.contact   ?? true
+        case .location: return v.location  ?? true
+        case .payment:  return true
         }
     }
 

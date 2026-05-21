@@ -194,6 +194,14 @@ extension ConversationViewController: ConversationHeaderViewDelegate {
     public func didTapConversationHeaderView(_ conversationHeaderView: ConversationHeaderView) {
         AssertIsOnMainThread()
 
+        // robot 账号不跳转会话详情
+        if let contactThread = thread as? TSContactThread {
+            let isRobot = SSKEnvironment.shared.databaseStorageRef.read { tx in
+                GExtTagStore.shared.getUserRobot(for: contactThread.contactAddress, transaction: tx)?.robot == true
+            }
+            if isRobot { return }
+        }
+
         showConversationSettings()
     }
 

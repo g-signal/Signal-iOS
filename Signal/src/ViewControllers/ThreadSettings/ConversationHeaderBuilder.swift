@@ -14,6 +14,7 @@ struct ConversationHeaderBuilder {
     let transaction: DBReadTransaction
     let sizeClass: ConversationAvatarView.Configuration.SizeClass
     let options: Options
+    let isRobotThread: Bool
 
     var subviews = [UIView]()
 
@@ -192,6 +193,16 @@ struct ConversationHeaderBuilder {
         self.options = options
         self.transaction = transaction
 
+        if let contactThread = delegate.thread as? TSContactThread,
+           !contactThread.contactAddress.isLocalAddress {
+            self.isRobotThread = GExtTagStore.shared.getUserRobot(
+                for: contactThread.contactAddress,
+                transaction: transaction
+            )?.robot == true
+        } else {
+            self.isRobotThread = false
+        }
+
         addFirstSubviews(transaction: transaction)
     }
 
@@ -254,7 +265,8 @@ struct ConversationHeaderBuilder {
             ))
         }
 
-        if ConversationViewController.canCall(threadViewModel: delegate.threadViewModel) {
+        if ConversationViewController.canCall(threadViewModel: delegate.threadViewModel),
+           !isRobotThread {
             let callService = AppEnvironment.shared.callService!
             let currentCall = callService.callServiceState.currentCall
             let hasCurrentCall = currentCall != nil
@@ -441,7 +453,7 @@ struct ConversationHeaderBuilder {
         button.titleLabel?.lineBreakMode = .byWordWrapping
         button.titleLabel?.setContentHuggingHigh()
         button.titleLabel?.autoMatch(.height, to: .height, of: button)
-        if delegate.canTapThreadName {
+        if delegate.canTapThreadName && !isRobotThread {
             button.block = { [weak delegate] in
                 delegate?.didTapThreadName()
             }
@@ -660,11 +672,20 @@ extension ConversationHeaderDelegate {
             false
         }
 
+        let isRobotThread: Bool = {
+            guard let contactThread = self.thread as? TSContactThread,
+                  !contactThread.isNoteToSelf else { return false }
+            return GExtTagStore.shared.getUserRobot(
+                for: contactThread.contactAddress,
+                transaction: tx
+            )?.robot == true
+        }()
+
         return ConversationHeaderBuilder.threadAttributedString(
             threadName: threadName,
             isNoteToSelf: thread.isNoteToSelf,
             isSystemContact: isSystemContact,
-            canTap: self.canTapThreadName,
+            canTap: self.canTapThreadName && !isRobotThread,
             tx: tx
         )
     }

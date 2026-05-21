@@ -13,11 +13,11 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Thu May  7 01:44:39 UTC 2026</string>
+		<string>Thu May 21 02:30:50 UTC 2026</string>
 		<key>SignalCommit</key>
-		<string>b55fe11ced21efea2bb38fe2163b987a82748c27 merge 7.71</string>
+		<string>afa64efe913b77d5edd1bcad4d4ca7a4a7c2d8b4 merge 7.71</string>
 		<key>Timestamp</key>
-		<integer>1778118279</integer>
+		<integer>1779330650</integer>
 		<key>XCodeVersion</key>
 		<string>2600.2630</string>
 	</dict>
@@ -40,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.71.0</string>
+	<string>7.71.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
