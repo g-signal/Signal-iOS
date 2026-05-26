@@ -4606,6 +4606,73 @@
 /* Menu item and navbar title for the device manager */
 "LINKED_DEVICES_TITLE" = "Gekoppelte Geräte";
 
+
+/* Menu item for linking BAXS account */
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BA-Plattformkonto verknüpfen";
+
+/* Section header when BAXS account is linked */
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Verknüpftes BAXS-Konto";
+
+/* Section header when BAXS account is not linked */
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA-Plattformkonto";
+
+/* Footer text explaining how to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Scanne den auf der BA-Zahlungsplattform angezeigten QR-Code, um dein Konto zu verknüpfen.";
+
+/* Button to scan QR code to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR-Code scannen";
+
+/* Label for BA operator name */
+"LINK_BA_PLATFORM_OPERATOR_NAME" = "Betreiber";
+
+/* Label for BA merchant ID */
+"LINK_BA_PLATFORM_MERCHANT_ID" = "Händler-ID";
+
+/* Label for BA operator mobile */
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
+
+/* Label for BA account link date */
+"LINK_BA_PLATFORM_LINKED_DATE" = "Verknüpfungsdatum";
+
+/* Title for BAXS binding confirmation dialog */
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA-Plattformkonto verknüpfen";
+
+/* Message for BAXS binding confirmation dialog. Placeholder is merchant/operator name. */
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Dein Konto mit \"%@\" verknüpfen?";
+
+/* Toast shown when BAXS account is successfully linked */
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA-Plattformkonto erfolgreich verknüpft.";
+
+/* Invalid QR code alert title */
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Ungültiger QR-Code";
+
+/* Invalid QR code alert message */
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Dieser QR-Code ist kein gültiger BA-Plattform-Verknüpfungscode.";
+
+/* Button to scan QR code again */
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Erneut scannen";
+
+/* Cannot link alert title */
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Verknüpfung nicht möglich";
+
+/* Default message when BAXS linking is not allowed */
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Dieser QR-Code kann nicht zur Verknüpfung verwendet werden.";
+
+/* Linking failed alert title */
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Verknüpfung fehlgeschlagen";
+
+/* Default message when BAXS linking fails */
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Die BA-Plattform hat die Verknüpfungsanfrage abgelehnt.";
+
+/* Linking timeout alert title */
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Verknüpfung abgelaufen";
+
+/* Linking timeout alert message */
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Die BA-Plattform hat nicht rechtzeitig geantwortet. Bitte versuche es erneut.";
+
+/* Generic error alert title */
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Fehler";
+
 /* Alert Title */
 "LINKING_DEVICE_FAILED_TITLE" = "Gerät konnte nicht gekoppelt werden";
 

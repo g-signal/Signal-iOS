@@ -45,6 +45,9 @@
 		05B411252C62845000A1EDBC /* ChatListInboxFilterSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B411242C62845000A1EDBC /* ChatListInboxFilterSection.swift */; };
 		05FDBC292CD91B31000C87BC /* ChatListContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FDBC282CD91B31000C87BC /* ChatListContainerView.swift */; };
 		060C7D052FBD95F5003DCEF9 /* GExtRobot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060C7D042FBD95F5003DCEF9 /* GExtRobot.swift */; };
+		0629CE1F2FBFFEB500508D49 /* LinkBaPayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0629CE1E2FBFFEB500508D49 /* LinkBaPayService.swift */; };
+		06D3AA2B2FC4701B002640B5 /* ScanBaQRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D3AA2A2FC4701B002640B5 /* ScanBaQRCodeViewController.swift */; };
+		06D3AA2C2FC4701B002640B5 /* LinkBAPlatformViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D3AA292FC4701B002640B5 /* LinkBAPlatformViewController.swift */; };
 		06FCB04D2F72838000426F8C /* GExtGroupProfileFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FCB04B2F72838000426F8C /* GExtGroupProfileFetcher.swift */; };
 		06FCB04E2F72838000426F8C /* GGroupGExtTagRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FCB04C2F72838000426F8C /* GGroupGExtTagRecord.swift */; };
 		0CE014267EDFBD2538E940A0 /* Pods_Signal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FF88FB580BC19B240EEB86A /* Pods_Signal.framework */; };
@@ -3875,6 +3878,9 @@
 		05EA61442CC943DD00B16D4E /* Project.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		05FDBC282CD91B31000C87BC /* ChatListContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListContainerView.swift; sourceTree = "<group>"; };
 		060C7D042FBD95F5003DCEF9 /* GExtRobot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtRobot.swift; sourceTree = "<group>"; };
+		0629CE1E2FBFFEB500508D49 /* LinkBaPayService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkBaPayService.swift; sourceTree = "<group>"; };
+		06D3AA292FC4701B002640B5 /* LinkBAPlatformViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkBAPlatformViewController.swift; sourceTree = "<group>"; };
+		06D3AA2A2FC4701B002640B5 /* ScanBaQRCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanBaQRCodeViewController.swift; sourceTree = "<group>"; };
 		06FCB04B2F72838000426F8C /* GExtGroupProfileFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtGroupProfileFetcher.swift; sourceTree = "<group>"; };
 		06FCB04C2F72838000426F8C /* GGroupGExtTagRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGroupGExtTagRecord.swift; sourceTree = "<group>"; };
 		0BADD293DAFC82BF3274F0F6 /* Pods_SignalTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -7874,6 +7880,7 @@
 		0DF917D62F63FDE3007C0A54 /* GExt */ = {
 			isa = PBXGroup;
 			children = (
+				0629CE1E2FBFFEB500508D49 /* LinkBaPayService.swift */,
 				060C7D042FBD95F5003DCEF9 /* GExtRobot.swift */,
 				06FCB04B2F72838000426F8C /* GExtGroupProfileFetcher.swift */,
 				06FCB04C2F72838000426F8C /* GGroupGExtTagRecord.swift */,
@@ -10814,6 +10821,8 @@
 		887B6DCD25F6C44800E677D4 /* Linked Devices */ = {
 			isa = PBXGroup;
 			children = (
+				06D3AA292FC4701B002640B5 /* LinkBAPlatformViewController.swift */,
+				06D3AA2A2FC4701B002640B5 /* ScanBaQRCodeViewController.swift */,
 				B9A53B902CF507FB0000578B /* BackupProgressModal.swift */,
 				505C2ED32997015800C23FB2 /* LinkDeviceViewController.swift */,
 				B99287FA2CF0FE8D000D62C4 /* LinkedDevicesEducationSheet.swift */,
@@ -17216,6 +17225,8 @@
 				45F32C232057297A00A300D5 /* MediaPageViewController.swift in Sources */,
 				4CD675C722E7D393008010D2 /* MediaPresentationContext.swift in Sources */,
 				45069FCA29D4FFBB00D0DD14 /* MediaTileDateFormatter.swift in Sources */,
+				06D3AA2B2FC4701B002640B5 /* ScanBaQRCodeViewController.swift in Sources */,
+				06D3AA2C2FC4701B002640B5 /* LinkBAPlatformViewController.swift in Sources */,
 				45D9784229F0B50000BBB3C0 /* MediaTileListModeCell.swift in Sources */,
 				45CADA8B298DD2B4009EBDF5 /* MediaTileScrollFlag.swift in Sources */,
 				454A84042059C787008B8C75 /* MediaTileViewController.swift in Sources */,
@@ -18066,6 +18077,7 @@
 				6600BB1A2BA3A0930005A035 /* LinkPreviewManagerImpl.swift in Sources */,
 				5073EAC92C4F323F001FBB3E /* LinkPreviewSettingManager.swift in Sources */,
 				5073EAC72C4F0F7A001FBB3E /* LinkPreviewSettingStore.swift in Sources */,
+				0629CE1F2FBFFEB500508D49 /* LinkBaPayService.swift in Sources */,
 				50D5E2412980AD6F00899660 /* LinkValidator.swift in Sources */,
 				F9C5CE33289453B400548EEE /* LocalDevice.swift in Sources */,
 				D98CA2B12DF238EA0060370E /* LocalDeviceAuthentication.swift in Sources */,

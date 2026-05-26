@@ -4606,6 +4606,73 @@
 /* Menu item and navbar title for the device manager */
 "LINKED_DEVICES_TITLE" = "الأجهزة المُرتبِطة";
 
+
+/* Menu item for linking BAXS account */
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "ربط حساب منصة BA";
+
+/* Section header when BAXS account is linked */
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "حساب BAXS المرتبط";
+
+/* Section header when BAXS account is not linked */
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "حساب منصة BA";
+
+/* Footer text explaining how to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "امسح رمز QR المعروض على منصة الدفع BA لربط حسابك.";
+
+/* Button to scan QR code to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "مسح رمز QR";
+
+/* Label for BA operator name */
+"LINK_BA_PLATFORM_OPERATOR_NAME" = "المشغّل";
+
+/* Label for BA merchant ID */
+"LINK_BA_PLATFORM_MERCHANT_ID" = "معرّف التاجر";
+
+/* Label for BA operator mobile */
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "الجوال";
+
+/* Label for BA account link date */
+"LINK_BA_PLATFORM_LINKED_DATE" = "تاريخ الربط";
+
+/* Title for BAXS binding confirmation dialog */
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "ربط حساب منصة BA";
+
+/* Message for BAXS binding confirmation dialog. Placeholder is merchant/operator name. */
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "ربط حسابك بـ \"%@\"؟";
+
+/* Toast shown when BAXS account is successfully linked */
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "تم ربط حساب منصة BA بنجاح.";
+
+/* Invalid QR code alert title */
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "رمز QR غير صالح";
+
+/* Invalid QR code alert message */
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "رمز QR هذا ليس رمز ربط صالحاً لمنصة BA.";
+
+/* Button to scan QR code again */
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "مسح مجدداً";
+
+/* Cannot link alert title */
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "تعذّر الربط";
+
+/* Default message when BAXS linking is not allowed */
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "لا يمكن استخدام رمز QR هذا للربط.";
+
+/* Linking failed alert title */
+"LINK_BA_PLATFORM_FAILED_TITLE" = "فشل الربط";
+
+/* Default message when BAXS linking fails */
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "رفضت منصة BA طلب الربط.";
+
+/* Linking timeout alert title */
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "انتهت مهلة الربط";
+
+/* Linking timeout alert message */
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "لم تستجب منصة BA في الوقت المحدد. يرجى المحاولة مجدداً.";
+
+/* Generic error alert title */
+"LINK_BA_PLATFORM_ERROR_TITLE" = "خطأ";
+
 /* Alert Title */
 "LINKING_DEVICE_FAILED_TITLE" = "فشل ربط الجهاز";
 

@@ -4606,6 +4606,73 @@
 /* Menu item and navbar title for the device manager */
 "LINKED_DEVICES_TITLE" = "連結咗嘅裝置";
 
+
+/* Menu item for linking BAXS account */
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "連結 BA 平台帳戶";
+
+/* Section header when BAXS account is linked */
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "已連結嘅 BAXS 帳戶";
+
+/* Section header when BAXS account is not linked */
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA 平台帳戶";
+
+/* Footer text explaining how to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "掃描 BA 支付平台上顯示嘅 QR 碼嚟連結你嘅帳戶。";
+
+/* Button to scan QR code to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "掃描 QR 碼";
+
+/* Label for BA operator name */
+"LINK_BA_PLATFORM_OPERATOR_NAME" = "營運商";
+
+/* Label for BA merchant ID */
+"LINK_BA_PLATFORM_MERCHANT_ID" = "商戶 ID";
+
+/* Label for BA operator mobile */
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "手機";
+
+/* Label for BA account link date */
+"LINK_BA_PLATFORM_LINKED_DATE" = "連結日期";
+
+/* Title for BAXS binding confirmation dialog */
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "連結 BA 平台帳戶";
+
+/* Message for BAXS binding confirmation dialog. Placeholder is merchant/operator name. */
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "將你嘅帳戶連結到 \"%@\"？";
+
+/* Toast shown when BAXS account is successfully linked */
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA 平台帳戶連結成功。";
+
+/* Invalid QR code alert title */
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "無效嘅 QR 碼";
+
+/* Invalid QR code alert message */
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "呢個 QR 碼唔係有效嘅 BA 平台連結碼。";
+
+/* Button to scan QR code again */
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "再次掃描";
+
+/* Cannot link alert title */
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "無法連結";
+
+/* Default message when BAXS linking is not allowed */
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "呢個 QR 碼唔可以用嚟連結。";
+
+/* Linking failed alert title */
+"LINK_BA_PLATFORM_FAILED_TITLE" = "連結失敗";
+
+/* Default message when BAXS linking fails */
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA 平台拒絕咗連結請求。";
+
+/* Linking timeout alert title */
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "連結逾時";
+
+/* Linking timeout alert message */
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA 平台未能及時回應。請再試一次。";
+
+/* Generic error alert title */
+"LINK_BA_PLATFORM_ERROR_TITLE" = "錯誤";
+
 /* Alert Title */
 "LINKING_DEVICE_FAILED_TITLE" = "連結裝置失敗";
 

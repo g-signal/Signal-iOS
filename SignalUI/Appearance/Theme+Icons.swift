@@ -8,6 +8,7 @@ import SignalServiceKit
 public enum ThemeIcon: UInt {
     case settingsAccount
     case settingsLinkedDevices
+    case settingsLinkBAPlatform
     case settingsDonate
     case settingsAppearance
     case settingsChats
@@ -210,6 +211,8 @@ public extension Theme {
             return "person-circle"
         case .settingsLinkedDevices:
             return "devices"
+        case .settingsLinkBAPlatform:
+            return "link_ba"
         case .settingsDonate:
             return "heart"
         case .settingsAppearance:

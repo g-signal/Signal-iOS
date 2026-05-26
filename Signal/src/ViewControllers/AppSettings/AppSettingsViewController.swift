@@ -173,6 +173,19 @@ class AppSettingsViewController: OWSTableViewController2 {
                     )
                 }
             ))
+            section1.add(.disclosureItem(
+                icon: .settingsLinkBAPlatform,
+                withText: OWSLocalizedString(
+                    "LINK_BA_PLATFORM_ACCOUNT_TITLE",
+                    comment: "Menu item for linking BAXS account"
+                ),
+                actionBlock: { [weak self] in
+                    self?.navigationController?.pushViewController(
+                        LinkBAPlatformViewController(),
+                        animated: true
+                    )
+                }
+            ))
         }
 //        section1.add(.init(customCellBlock: { [weak self] in
 //            guard let self = self else { return UITableViewCell() }

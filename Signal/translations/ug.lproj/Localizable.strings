@@ -4606,6 +4606,73 @@
 /* Menu item and navbar title for the device manager */
 "LINKED_DEVICES_TITLE" = "باغلانغان ئۈسكۈنىلەر";
 
+
+/* Menu item for linking BAXS account */
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BA سۇپا ھېساباتىنى باغلاش";
+
+/* Section header when BAXS account is linked */
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "باغلانغان BAXS ھېسابات";
+
+/* Section header when BAXS account is not linked */
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA سۇپا ھېسابات";
+
+/* Footer text explaining how to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "ھېساباتىڭىزنى باغلاش ئۈچۈن BA تۆلەم سۇپىسىدا كۆرسىتىلگەن QR كودنى سايىلاڭ.";
+
+/* Button to scan QR code to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR كودنى سايىلاش";
+
+/* Label for BA operator name */
+"LINK_BA_PLATFORM_OPERATOR_NAME" = "مەشغۇلاتچى";
+
+/* Label for BA merchant ID */
+"LINK_BA_PLATFORM_MERCHANT_ID" = "سودىگەر كىملىكى";
+
+/* Label for BA operator mobile */
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "موبىل";
+
+/* Label for BA account link date */
+"LINK_BA_PLATFORM_LINKED_DATE" = "باغلانغان چېسلا";
+
+/* Title for BAXS binding confirmation dialog */
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA سۇپا ھېساباتىنى باغلاش";
+
+/* Message for BAXS binding confirmation dialog. Placeholder is merchant/operator name. */
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "ھېساباتىڭىزنى \"%@\" غا باغلامسىز؟";
+
+/* Toast shown when BAXS account is successfully linked */
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA سۇپا ھېسابات مۇۋەپپەقىيەتلىك باغلاندى.";
+
+/* Invalid QR code alert title */
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "ئىناۋەتسىز QR كود";
+
+/* Invalid QR code alert message */
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "بۇ QR كود ئىناۋەتلىك BA سۇپا باغلاش كودى ئەمەس.";
+
+/* Button to scan QR code again */
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "قايتا سايىلاش";
+
+/* Cannot link alert title */
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "باغلىيالمايدۇ";
+
+/* Default message when BAXS linking is not allowed */
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "بۇ QR كودنى باغلاش ئۈچۈن ئىشلەتكىلى بولمايدۇ.";
+
+/* Linking failed alert title */
+"LINK_BA_PLATFORM_FAILED_TITLE" = "باغلاش مەغلۇب بولدى";
+
+/* Default message when BAXS linking fails */
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA سۇپىسى باغلاش تەلىپىنى رەت قىلدى.";
+
+/* Linking timeout alert title */
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "باغلاش ۋاقتى ئۆتتى";
+
+/* Linking timeout alert message */
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA سۇپىسى ۋاقتىدا جاۋاب بەرمىدى. قايتا سىناپ بېقىڭ.";
+
+/* Generic error alert title */
+"LINK_BA_PLATFORM_ERROR_TITLE" = "خاتالىق";
+
 /* Alert Title */
 "LINKING_DEVICE_FAILED_TITLE" = "ئۈسكۈنە باغلاش مەغلۇب بولدى";
 

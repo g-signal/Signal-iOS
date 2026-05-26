@@ -26,7 +26,8 @@ public class TSConstants {
         // If you do want to make a build that will always connect to staging,
         // change this value. (Scheme environment variables are only set when
         // launching via Xcode, so this approach is still quite useful.)
-        return .production
+//        return .production
+        return .staging
     }()
 
     public static var isUsingProductionService: Bool {

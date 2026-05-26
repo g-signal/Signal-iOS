@@ -17,6 +17,7 @@ private enum OpenableUrl {
     case completeIDEALDonation(Stripe.IDEALCallbackType)
     case callLink(CallLink)
     case quickRestore(URL)
+    case linkBaPay(linkId: String)
 }
 
 class UrlOpener {
@@ -84,6 +85,9 @@ class UrlOpener {
         if let callLink = CallLink(url: url) {
             return .callLink(callLink)
         }
+        if let linkId = parseLinkBaPayUrl(url) {
+            return .linkBaPay(linkId: linkId)
+        }
         owsFailDebug("Couldn't parse URL")
         return nil
     }
@@ -119,6 +123,20 @@ class UrlOpener {
         return DeviceProvisioningURL(urlString: url.absoluteString)
     }
 
+    /// Returns the linkId if the URL is a BA pay linking URL (`baxs://linkba?linkId=xxx`).
+    private static func parseLinkBaPayUrl(_ url: URL) -> String? {
+        guard
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+            components.scheme == Constants.sgnlPrefix,
+            components.host == "linkba",
+            let linkId = components.queryItems?.first(where: { $0.name == "linkId" })?.value,
+            !linkId.isEmpty
+        else {
+            return nil
+        }
+        return linkId
+    }
+
     // MARK: - Opening URLs
 
     @MainActor
@@ -141,7 +159,7 @@ class UrlOpener {
     private func shouldDismiss(for url: OpenableUrl) -> Bool {
         switch url {
         case .completeIDEALDonation: return false
-        case .groupInvite, .linkDevice, .phoneNumberLink, .signalProxy, .stickerPack, .usernameLink, .callLink, .quickRestore: return true
+        case .groupInvite, .linkDevice, .phoneNumberLink, .signalProxy, .stickerPack, .usernameLink, .callLink, .quickRestore, .linkBaPay: return true
         }
     }
 
@@ -245,6 +263,15 @@ class UrlOpener {
 
         case .callLink(let callLink):
             GroupCallViewController.presentLobby(for: callLink)
+
+        case .linkBaPay(let linkId):
+            guard tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegisteredPrimaryDevice else {
+                owsFailDebug("Ignoring URL; not primary device.")
+                return
+            }
+            let scanVC = ScanBaQRCodeViewController(preScannedURLString: "baxs://linkba?linkId=\(linkId)")
+            let navigationController = OWSNavigationController(rootViewController: scanVC)
+            rootViewController.present(navigationController, animated: true)
         }
     }
 }

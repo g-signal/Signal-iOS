@@ -4606,6 +4606,73 @@
 /* Menu item and navbar title for the device manager */
 "LINKED_DEVICES_TITLE" = "อุปกรณ์ที่เชื่อมโยง";
 
+
+/* Menu item for linking BAXS account */
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA";
+
+/* Section header when BAXS account is linked */
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "บัญชี BAXS ที่เชื่อมต่อแล้ว";
+
+/* Section header when BAXS account is not linked */
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "บัญชีแพลตฟอร์ม BA";
+
+/* Footer text explaining how to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "สแกน QR โค้ดที่แสดงบนแพลตฟอร์มการชำระเงิน BA เพื่อเชื่อมต่อบัญชีของคุณ";
+
+/* Button to scan QR code to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "สแกน QR โค้ด";
+
+/* Label for BA operator name */
+"LINK_BA_PLATFORM_OPERATOR_NAME" = "ผู้ให้บริการ";
+
+/* Label for BA merchant ID */
+"LINK_BA_PLATFORM_MERCHANT_ID" = "รหัสร้านค้า";
+
+/* Label for BA operator mobile */
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "มือถือ";
+
+/* Label for BA account link date */
+"LINK_BA_PLATFORM_LINKED_DATE" = "วันที่เชื่อมต่อ";
+
+/* Title for BAXS binding confirmation dialog */
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA";
+
+/* Message for BAXS binding confirmation dialog. Placeholder is merchant/operator name. */
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "เชื่อมต่อบัญชีของคุณกับ \"%@\"?";
+
+/* Toast shown when BAXS account is successfully linked */
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA สำเร็จแล้ว";
+
+/* Invalid QR code alert title */
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "QR โค้ดไม่ถูกต้อง";
+
+/* Invalid QR code alert message */
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "QR โค้ดนี้ไม่ใช่รหัสเชื่อมต่อแพลตฟอร์ม BA ที่ถูกต้อง";
+
+/* Button to scan QR code again */
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "สแกนอีกครั้ง";
+
+/* Cannot link alert title */
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "ไม่สามารถเชื่อมต่อได้";
+
+/* Default message when BAXS linking is not allowed */
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "ไม่สามารถใช้ QR โค้ดนี้สำหรับการเชื่อมต่อได้";
+
+/* Linking failed alert title */
+"LINK_BA_PLATFORM_FAILED_TITLE" = "การเชื่อมต่อล้มเหลว";
+
+/* Default message when BAXS linking fails */
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "แพลตฟอร์ม BA ปฏิเสธคำขอเชื่อมต่อ";
+
+/* Linking timeout alert title */
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "การเชื่อมต่อหมดเวลา";
+
+/* Linking timeout alert message */
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "แพลตฟอร์ม BA ไม่ตอบสนองทันเวลา กรุณาลองอีกครั้ง";
+
+/* Generic error alert title */
+"LINK_BA_PLATFORM_ERROR_TITLE" = "ข้อผิดพลาด";
+
 /* Alert Title */
 "LINKING_DEVICE_FAILED_TITLE" = "การเชื่อมโยงอุปกรณ์ไม่สำเร็จ";
 

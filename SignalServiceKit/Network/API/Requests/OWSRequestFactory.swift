@@ -643,6 +643,28 @@ public enum OWSRequestFactory {
         let path = "v1/gext/group/profile/\(groupId)"
         return TSRequest(url: URL(string: path)!, method: "GET", parameters: [:])
     }
+
+    // MARK: - LinkBaPay
+
+    static func linkBaPayGetBaUserInfoRequest(linkId: String) -> TSRequest {
+        let path = "v1/gext/linkbapay/link/getBaUserInfo"
+        return TSRequest(url: URL(string: path)!, method: "POST", parameters: ["linkId": linkId])
+    }
+
+    static func linkBaPayRequestLinkRequest(linkId: String, userName: String, confirmResult: Bool) -> TSRequest {
+        let path = "v1/gext/linkbapay/link/requestLink"
+        return TSRequest(url: URL(string: path)!, method: "POST", parameters: ["linkId": linkId, "userName": userName, "confirmResult": confirmResult])
+    }
+
+    static func linkBaPayGetLinkResultRequest(linkId: String) -> TSRequest {
+        let path = "v1/gext/linkbapay/link/getLinkResult"
+        return TSRequest(url: URL(string: path)!, method: "POST", parameters: ["linkId": linkId])
+    }
+
+    static func linkBaPayGetLinkedBaUserInfoRequest() -> TSRequest {
+        let path = "v1/gext/linkbapay/link/getLinkedBaUserInfo"
+        return TSRequest(url: URL(string: path)!, method: "POST", parameters: [:])
+    }
 }
 
 // MARK: -

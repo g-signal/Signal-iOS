@@ -487,7 +487,7 @@ public class QRCodePayload {
         self.bytes = bytes
     }
 
-    // There are even more modes, but it'll improve logging a bit 
+    // There are even more modes, but it'll improve logging a bit
     // to identify these modes even though we don't support them.
     //
     // TODO: We currently only support .byte mode.
@@ -495,6 +495,7 @@ public class QRCodePayload {
         case numeric = 1
         case alphaNumeric = 2
         case bytes = 4
+        case eci = 7
         case kanji = 8
     }
 
@@ -507,7 +508,30 @@ public class QRCodePayload {
             let bitstream = QRCodeBitStream(codewords: codewords)
 
             let modeLength: UInt = 4
-            let modeBits = try bitstream.readUInt8(bitCount: modeLength)
+            var modeBits = try bitstream.readUInt8(bitCount: modeLength)
+            Logger.info("QR parse: version=\(version) modeBits=\(modeBits) codewords=\(codewords.map { String(format: "%02X", $0) }.joined(separator: " "))")
+
+            // ECI mode (7): skip the ECI designator, then read the real mode.
+            // ISO/IEC 18004 §7.4.1: designator is 1–3 bytes depending on leading bits.
+            if modeBits == Mode.eci.rawValue {
+                let firstDesignatorBit = try bitstream.readUInt8(bitCount: 1)
+                if firstDesignatorBit == 0 {
+                    // 0xxxxxxx — 1-byte designator, 7 bits remain
+                    _ = try bitstream.readUInt8(bitCount: 7)
+                } else {
+                    let secondDesignatorBit = try bitstream.readUInt8(bitCount: 1)
+                    if secondDesignatorBit == 0 {
+                        // 10xxxxxx xxxxxxxx — 2-byte designator, 14 bits remain
+                        _ = try bitstream.readUInt32(bitCount: 14)
+                    } else {
+                        // 110xxxxx xxxxxxxx xxxxxxxx — 3-byte designator, 21 bits remain
+                        _ = try bitstream.readUInt32(bitCount: 21)
+                    }
+                }
+                modeBits = try bitstream.readUInt8(bitCount: modeLength)
+                Logger.info("QR parse: ECI prefix skipped, next modeBits=\(modeBits)")
+            }
+
             guard let mode = Mode(rawValue: UInt(modeBits)) else {
                 let ignoreUnknownMode = CurrentAppContext().isRunningTests
                 if ignoreUnknownMode {
@@ -556,6 +580,8 @@ public class QRCodePayload {
                 return 8
             case .kanji:
                 return 8
+            case .eci:
+                throw QRCodeError.unsupportedConfiguration
             }
         } else if version >= 10, version <= 26 {
             switch mode {
@@ -567,6 +593,8 @@ public class QRCodePayload {
                 return 16
             case .kanji:
                 return 10
+            case .eci:
+                throw QRCodeError.unsupportedConfiguration
             }
         } else if version >= 27, version <= 40 {
             switch mode {
@@ -578,6 +606,8 @@ public class QRCodePayload {
                 return 16
             case .kanji:
                 return 12
+            case .eci:
+                throw QRCodeError.unsupportedConfiguration
             }
         }
         throw QRCodeError.unsupportedConfiguration

@@ -1306,6 +1306,21 @@ extension PhotoCaptureViewController: QRCodeSampleBufferScannerDelegate {
                 )
             }
         } else if
+            let url = URL(string: qrCodeString),
+            url.scheme == "baxs",
+            url.host == "linkba",
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+            components.queryItems?.first(where: { $0.name == "linkId" })?.value != nil,
+            DependenciesBridge.shared.tsAccountManager
+                .registrationStateWithMaybeSneakyTransaction.isRegisteredPrimaryDevice
+        {
+            qrCodeScanned = true
+            self.dismiss(animated: true) {
+                guard let frontmost = CurrentAppContext().frontmostViewController() else { return }
+                let scanVC = ScanBaQRCodeViewController(preScannedURLString: qrCodeString)
+                frontmost.navigationController?.pushViewController(scanVC, animated: true)
+            }
+        } else if
             let provisioningURL = DeviceProvisioningURL(urlString: qrCodeString),
             DependenciesBridge.shared.tsAccountManager
                 .registrationStateWithMaybeSneakyTransaction.isRegisteredPrimaryDevice

@@ -4606,6 +4606,73 @@
 /* Menu item and navbar title for the device manager */
 "LINKED_DEVICES_TITLE" = "Συνδεμένες συσκευές";
 
+
+/* Menu item for linking BAXS account */
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Σύνδεση λογαριασμού πλατφόρμας BA";
+
+/* Section header when BAXS account is linked */
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Συνδεδεμένος λογαριασμός BAXS";
+
+/* Section header when BAXS account is not linked */
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Λογαριασμός πλατφόρμας BA";
+
+/* Footer text explaining how to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Σαρώστε τον κωδικό QR που εμφανίζεται στην πλατφόρμα πληρωμών BA για να συνδέσετε τον λογαριασμό σας.";
+
+/* Button to scan QR code to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Σάρωση κωδικού QR";
+
+/* Label for BA operator name */
+"LINK_BA_PLATFORM_OPERATOR_NAME" = "Χειριστής";
+
+/* Label for BA merchant ID */
+"LINK_BA_PLATFORM_MERCHANT_ID" = "ID εμπόρου";
+
+/* Label for BA operator mobile */
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Κινητό";
+
+/* Label for BA account link date */
+"LINK_BA_PLATFORM_LINKED_DATE" = "Ημερομηνία σύνδεσης";
+
+/* Title for BAXS binding confirmation dialog */
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Σύνδεση λογαριασμού πλατφόρμας BA";
+
+/* Message for BAXS binding confirmation dialog. Placeholder is merchant/operator name. */
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Σύνδεση του λογαριασμού σας με \"%@\";";
+
+/* Toast shown when BAXS account is successfully linked */
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Ο λογαριασμός πλατφόρμας BA συνδέθηκε επιτυχώς.";
+
+/* Invalid QR code alert title */
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Μη έγκυρος κωδικός QR";
+
+/* Invalid QR code alert message */
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Αυτός ο κωδικός QR δεν είναι έγκυρος κωδικός σύνδεσης πλατφόρμας BA.";
+
+/* Button to scan QR code again */
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Σάρωση ξανά";
+
+/* Cannot link alert title */
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Αδύνατη η σύνδεση";
+
+/* Default message when BAXS linking is not allowed */
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Αυτός ο κωδικός QR δεν μπορεί να χρησιμοποιηθεί για σύνδεση.";
+
+/* Linking failed alert title */
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Αποτυχία σύνδεσης";
+
+/* Default message when BAXS linking fails */
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Η πλατφόρμα BA απέρριψε το αίτημα σύνδεσης.";
+
+/* Linking timeout alert title */
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Λήξη χρόνου σύνδεσης";
+
+/* Linking timeout alert message */
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Η πλατφόρμα BA δεν απάντησε εγκαίρως. Παρακαλώ δοκιμάστε ξανά.";
+
+/* Generic error alert title */
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Σφάλμα";
+
 /* Alert Title */
 "LINKING_DEVICE_FAILED_TITLE" = "Αποτυχία σύνδεσης συσκευής";
 

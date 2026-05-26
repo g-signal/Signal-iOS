@@ -4606,6 +4606,73 @@
 /* Menu item and navbar title for the device manager */
 "LINKED_DEVICES_TITLE" = "लिंक की गईं डिवाइसें";
 
+
+/* Menu item for linking BAXS account */
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BA प्लेटफ़ॉर्म खाता लिंक करें";
+
+/* Section header when BAXS account is linked */
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "लिंक किया गया BAXS खाता";
+
+/* Section header when BAXS account is not linked */
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA प्लेटफ़ॉर्म खाता";
+
+/* Footer text explaining how to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "अपना खाता लिंक करने के लिए BA भुगतान प्लेटफ़ॉर्म पर दिखाया गया QR कोड स्कैन करें।";
+
+/* Button to scan QR code to link BAXS account */
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR कोड स्कैन करें";
+
+/* Label for BA operator name */
+"LINK_BA_PLATFORM_OPERATOR_NAME" = "ऑपरेटर";
+
+/* Label for BA merchant ID */
+"LINK_BA_PLATFORM_MERCHANT_ID" = "मर्चेंट ID";
+
+/* Label for BA operator mobile */
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "मोबाइल";
+
+/* Label for BA account link date */
+"LINK_BA_PLATFORM_LINKED_DATE" = "लिंक तिथि";
+
+/* Title for BAXS binding confirmation dialog */
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA प्लेटफ़ॉर्म खाता लिंक करें";
+
+/* Message for BAXS binding confirmation dialog. Placeholder is merchant/operator name. */
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "\"%@\" से अपना खाता लिंक करें?";
+
+/* Toast shown when BAXS account is successfully linked */
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA प्लेटफ़ॉर्म खाता सफलतापूर्वक लिंक हो गया।";
+
+/* Invalid QR code alert title */
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "अमान्य QR कोड";
+
+/* Invalid QR code alert message */
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "यह QR कोड BA प्लेटफ़ॉर्म का वैध लिंकिंग कोड नहीं है।";
+
+/* Button to scan QR code again */
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "फिर से स्कैन करें";
+
+/* Cannot link alert title */
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "लिंक नहीं किया जा सकता";
+
+/* Default message when BAXS linking is not allowed */
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "इस QR कोड का उपयोग लिंकिंग के लिए नहीं किया जा सकता।";
+
+/* Linking failed alert title */
+"LINK_BA_PLATFORM_FAILED_TITLE" = "लिंकिंग विफल";
+
+/* Default message when BAXS linking fails */
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA प्लेटफ़ॉर्म ने लिंकिंग अनुरोध अस्वीकार कर दिया।";
+
+/* Linking timeout alert title */
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "लिंकिंग का समय समाप्त";
+
+/* Linking timeout alert message */
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA प्लेटफ़ॉर्म ने समय पर प्रतिक्रिया नहीं दी। कृपया पुनः प्रयास करें।";
+
+/* Generic error alert title */
+"LINK_BA_PLATFORM_ERROR_TITLE" = "त्रुटि";
+
 /* Alert Title */
 "LINKING_DEVICE_FAILED_TITLE" = "डिवाइस लिंक करना असफल रहा";
 
