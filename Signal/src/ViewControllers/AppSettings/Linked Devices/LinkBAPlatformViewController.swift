@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import LocalAuthentication
 import SignalServiceKit
 import SignalUI
 import UIKit
@@ -160,6 +161,70 @@ class LinkBAPlatformViewController: OWSTableViewController2 {
     // MARK: - Scan Flow
 
     private func startScanFlow() {
+        let localDeviceAuth = LocalDeviceAuthentication()
+        let localDeviceAuthAttemptToken: LocalDeviceAuthentication.AttemptToken
+
+        switch localDeviceAuth.checkCanAttempt() {
+        case .success(let attemptToken):
+            localDeviceAuthAttemptToken = attemptToken
+        case .failure(.notRequired):
+            presentScanAfterCameraPermission()
+            return
+        case .failure(.canceled):
+            return
+        case .failure(.genericError(let localizedErrorMessage)):
+            OWSActionSheets.showActionSheet(
+                title: DeviceAuthenticationErrorMessage.errorSheetTitle,
+                message: localizedErrorMessage,
+                fromViewController: self
+            )
+            return
+        }
+
+        let sheet = HeroSheetViewController(
+            hero: .image(UIImage(named: "phone-lock")!),
+            title: OWSLocalizedString(
+                "LINK_NEW_DEVICE_AUTHENTICATION_INFO_SHEET_TITLE",
+                comment: "Title for a sheet when a user tries to link a device informing them that they will need to authenticate their device"
+            ),
+            body: OWSLocalizedString(
+                "LINK_NEW_DEVICE_AUTHENTICATION_INFO_SHEET_BODY",
+                comment: "Body text for a sheet when a user tries to link a device informing them that they will need to authenticate their device"
+            ),
+            primaryButton: .init(title: CommonStrings.continueButton) { [weak self] _ in
+                self?.dismiss(animated: true)
+                Task {
+                    await self?.authenticateThenScan(
+                        localDeviceAuth: localDeviceAuth,
+                        localDeviceAuthAttemptToken: localDeviceAuthAttemptToken
+                    )
+                }
+            }
+        )
+        present(sheet, animated: true)
+    }
+
+    private func authenticateThenScan(
+        localDeviceAuth: LocalDeviceAuthentication,
+        localDeviceAuthAttemptToken: LocalDeviceAuthentication.AttemptToken
+    ) async {
+        switch await localDeviceAuth.attempt(token: localDeviceAuthAttemptToken) {
+        case .success, .failure(.notRequired):
+            await MainActor.run { presentScanAfterCameraPermission() }
+        case .failure(.canceled):
+            break
+        case .failure(.genericError(let localizedErrorMessage)):
+            await MainActor.run {
+                OWSActionSheets.showActionSheet(
+                    title: DeviceAuthenticationErrorMessage.errorSheetTitle,
+                    message: localizedErrorMessage,
+                    fromViewController: self
+                )
+            }
+        }
+    }
+
+    private func presentScanAfterCameraPermission() {
         ows_askForCameraPermissions { [weak self] granted in
             guard granted else { return }
             let scanVC = ScanBaQRCodeViewController()

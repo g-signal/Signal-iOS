@@ -4567,6 +4567,9 @@
 /* Message for an action sheet telling users how to link a device, when trying to open a device-linking URL from the in-app camera. */
 "LINKED_DEVICE_URL_OPENED_ACTION_SHEET_IN_APP_CAMERA_MESSAGE" = "Zdá se, že se snažíte propojit zařízení B&A. Klepněte na pokračovat a poté klepněte na Propojit nové zařízení a znovu naskenujte QR kód.";
 
+/* Message for an action sheet telling users how to link a BAXS account, when trying to open a BAXS linking URL from the in-app camera. */
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Zdá se, že se snažíte propojit účet BAXS. Klepněte na pokračovat a poté klepněte na Naskenovat QR kód a znovu naskenujte QR kód.";
+
 /* Bullet point about downloads on the linked devices education sheet. Embeds {{ %1$@ iPad download link, %2$@ desktop download link }} */
 "LINKED_DEVICES_EDUCATION_POINT_DOWNLOADS" = "Ve druhém zařízení navštivte %1$@ a nainstalujte aplikaci pro iPad, nebo %2$@ a nainstalujte aplikaci pro stolní počítače.";
 

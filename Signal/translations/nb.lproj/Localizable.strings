@@ -4567,6 +4567,9 @@
 /* Message for an action sheet telling users how to link a device, when trying to open a device-linking URL from the in-app camera. */
 "LINKED_DEVICE_URL_OPENED_ACTION_SHEET_IN_APP_CAMERA_MESSAGE" = "Det ser ut til at du prøver å koble til en enhet med B&A. Trykk på «Fortsett» og så «Koble til ny enhet», og skann deretter QR-koden på nytt.";
 
+/* Message for an action sheet telling users how to link a BAXS account, when trying to open a BAXS linking URL from the in-app camera. */
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Det ser ut til at du prøver å koble til en BAXS-konto. Trykk på «Fortsett» og så «Skann QR-kode», og skann deretter QR-koden på nytt.";
+
 /* Bullet point about downloads on the linked devices education sheet. Embeds {{ %1$@ iPad download link, %2$@ desktop download link }} */
 "LINKED_DEVICES_EDUCATION_POINT_DOWNLOADS" = "Gå til %1$@ på den andre enheten for å installere B&A-appen for iPad eller %2$@ for å laste ned B&A Desktop.";
 

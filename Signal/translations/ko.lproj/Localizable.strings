@@ -4567,6 +4567,9 @@
 /* Message for an action sheet telling users how to link a device, when trying to open a device-linking URL from the in-app camera. */
 "LINKED_DEVICE_URL_OPENED_ACTION_SHEET_IN_APP_CAMERA_MESSAGE" = "B&A 기기를 연결하려는 것 같네요. 계속을 탭한 다음 '새 기기 연결'을 탭하고 QR 코드를 다시 스캔하세요.";
 
+/* Message for an action sheet telling users how to link a BAXS account, when trying to open a BAXS linking URL from the in-app camera. */
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "BAXS 계정을 연결하려는 것 같네요. 계속을 탭한 다음 'QR 코드 스캔'을 탭하고 QR 코드를 다시 스캔하세요.";
+
 /* Bullet point about downloads on the linked devices education sheet. Embeds {{ %1$@ iPad download link, %2$@ desktop download link }} */
 "LINKED_DEVICES_EDUCATION_POINT_DOWNLOADS" = "다른 장치에서 %1$@을(를) 방문하여 iPad 앱을 설치하거나, %2$@을(를) 방문하여 데스크톱 앱을 설치하세요.";
 

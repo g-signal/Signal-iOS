@@ -1169,6 +1169,7 @@ extension ChatListViewController {
         case donate(donateMode: DonateViewController.DonateMode)
         case linkedDevices
         case proxy
+        case linkBaPlatform
     }
 
     func showAppSettings() {
@@ -1279,6 +1280,8 @@ extension ChatListViewController {
             viewControllers += [ LinkedDevicesHostingController() ]
         case .proxy:
             viewControllers += [ PrivacySettingsViewController(), AdvancedPrivacySettingsViewController(), ProxySettingsViewController() ]
+        case .linkBaPlatform:
+            viewControllers += [ LinkBAPlatformViewController() ]
         }
 
         let navigationController = OWSNavigationController()

@@ -4567,6 +4567,9 @@
 /* Message for an action sheet telling users how to link a device, when trying to open a device-linking URL from the in-app camera. */
 "LINKED_DEVICE_URL_OPENED_ACTION_SHEET_IN_APP_CAMERA_MESSAGE" = "Похоже, вы пытаетесь привязать устройство B&A. Нажмите «Продолжить», затем «Привязать новое устройство» и снова просканируйте QR-код.";
 
+/* Message for an action sheet telling users how to link a BAXS account, when trying to open a BAXS linking URL from the in-app camera. */
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Похоже, вы пытаетесь привязать учётную запись BAXS. Нажмите «Продолжить», затем «Сканировать QR-код» и снова просканируйте QR-код.";
+
 /* Bullet point about downloads on the linked devices education sheet. Embeds {{ %1$@ iPad download link, %2$@ desktop download link }} */
 "LINKED_DEVICES_EDUCATION_POINT_DOWNLOADS" = "На другом устройстве зайдите на %1$@, чтобы установить приложение для iPad, или на %2$@, чтобы установить приложение для ПК.";
 

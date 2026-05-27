@@ -264,14 +264,24 @@ class UrlOpener {
         case .callLink(let callLink):
             GroupCallViewController.presentLobby(for: callLink)
 
-        case .linkBaPay(let linkId):
+        case .linkBaPay:
             guard tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegisteredPrimaryDevice else {
                 owsFailDebug("Ignoring URL; not primary device.")
                 return
             }
-            let scanVC = ScanBaQRCodeViewController(preScannedURLString: "baxs://linkba?linkId=\(linkId)")
-            let navigationController = OWSNavigationController(rootViewController: scanVC)
-            rootViewController.present(navigationController, animated: true)
+
+            let actionSheet = ActionSheetController(
+                message: OWSLocalizedString(
+                    "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE",
+                    comment: "Message for an action sheet telling users how to link a BAXS account, when trying to open a BAXS linking URL from the in-app camera."
+                )
+            )
+            let continueAction = ActionSheetAction(title: CommonStrings.continueButton) { _ in
+                SignalApp.shared.showAppSettings(mode: .linkBaPlatform)
+            }
+            actionSheet.addAction(continueAction)
+            actionSheet.addAction(.cancel)
+            rootViewController.presentActionSheet(actionSheet)
         }
     }
 }

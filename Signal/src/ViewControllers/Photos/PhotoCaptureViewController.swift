@@ -1315,11 +1315,25 @@ extension PhotoCaptureViewController: QRCodeSampleBufferScannerDelegate {
                 .registrationStateWithMaybeSneakyTransaction.isRegisteredPrimaryDevice
         {
             qrCodeScanned = true
-            self.dismiss(animated: true) {
-                guard let frontmost = CurrentAppContext().frontmostViewController() else { return }
-                let scanVC = ScanBaQRCodeViewController(preScannedURLString: qrCodeString)
-                frontmost.navigationController?.pushViewController(scanVC, animated: true)
+
+            let actionSheet = ActionSheetController(
+                message: OWSLocalizedString(
+                    "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE",
+                    comment: "Message for an action sheet telling users how to link a BAXS account, when trying to open a BAXS linking URL from the in-app camera."
+                )
+            )
+            let continueAction = ActionSheetAction(title: CommonStrings.continueButton) { [weak self] _ in
+                guard let self else { return }
+                self.dismiss(animated: true) {
+                    SignalApp.shared.showAppSettings(mode: .linkBaPlatform)
+                }
             }
+            let cancelAction = ActionSheetAction(title: CommonStrings.cancelButton) { [weak self] _ in
+                self?.qrCodeScanned = false
+            }
+            actionSheet.addAction(continueAction)
+            actionSheet.addAction(cancelAction)
+            presentActionSheet(actionSheet)
         } else if
             let provisioningURL = DeviceProvisioningURL(urlString: qrCodeString),
             DependenciesBridge.shared.tsAccountManager
