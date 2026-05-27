@@ -4622,17 +4622,17 @@
 /* Button to scan QR code to link BAXS account */
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "สแกน QR โค้ด";
 
-/* Label for BA operator name */
-"LINK_BA_PLATFORM_OPERATOR_NAME" = "ผู้ให้บริการ";
-
-/* Label for BA merchant ID */
-"LINK_BA_PLATFORM_MERCHANT_ID" = "รหัสร้านค้า";
-
 /* Label for BA operator mobile */
 "LINK_BA_PLATFORM_OPERATOR_MOBILE" = "มือถือ";
 
-/* Label for BA account link date */
-"LINK_BA_PLATFORM_LINKED_DATE" = "วันที่เชื่อมต่อ";
+/* Label for BA operator email */
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "อีเมล";
+
+/* Label for BAXS user ID */
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+/* Label for BAXS user name */
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
 
 /* Title for BAXS binding confirmation dialog */
 "LINK_BA_PLATFORM_CONFIRM_TITLE" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA";

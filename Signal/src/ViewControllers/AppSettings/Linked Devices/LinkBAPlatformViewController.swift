@@ -85,23 +85,36 @@ class LinkBAPlatformViewController: OWSTableViewController2 {
             comment: "Section header when BAXS account is linked"
         )
 
-        if let name = info.linkbaxsOptName {
+        if !info.baxsAppUserId.isEmpty {
             section.add(.label(
                 withText: OWSLocalizedString(
-                    "LINK_BA_PLATFORM_OPERATOR_NAME",
-                    comment: "Label for BA operator name"
+                    "LINK_BA_PLATFORM_USER_ID",
+                    comment: "Label for BAXS user ID"
                 ),
-                accessoryText: name
+                accessoryText: info.baxsAppUserId,
+                accessoryType: .none
             ))
         }
 
-        if let memberId = info.linkbaxsMemberId {
+        if let name = info.linkbaxsOptName {
             section.add(.label(
                 withText: OWSLocalizedString(
-                    "LINK_BA_PLATFORM_MERCHANT_ID",
-                    comment: "Label for BA merchant ID"
+                    "LINK_BA_PLATFORM_USER_NAME",
+                    comment: "Label for BAXS user name"
                 ),
-                accessoryText: memberId
+                accessoryText: name,
+                accessoryType: .none
+            ))
+        }
+
+        if let email = info.linkbaxsOptEmail {
+            section.add(.label(
+                withText: OWSLocalizedString(
+                    "LINK_BA_PLATFORM_OPERATOR_EMAIL",
+                    comment: "Label for BA operator email"
+                ),
+                accessoryText: email,
+                accessoryType: .none
             ))
         }
 
@@ -111,17 +124,8 @@ class LinkBAPlatformViewController: OWSTableViewController2 {
                     "LINK_BA_PLATFORM_OPERATOR_MOBILE",
                     comment: "Label for BA operator mobile"
                 ),
-                accessoryText: mobile
-            ))
-        }
-
-        if let date = info.linkbaxsDate {
-            section.add(.label(
-                withText: OWSLocalizedString(
-                    "LINK_BA_PLATFORM_LINKED_DATE",
-                    comment: "Label for BA account link date"
-                ),
-                accessoryText: date
+                accessoryText: mobile,
+                accessoryType: .none
             ))
         }
 

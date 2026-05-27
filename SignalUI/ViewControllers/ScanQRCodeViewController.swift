@@ -307,6 +307,13 @@ public class QRCodeScanViewController: OWSViewController {
     }
 
     @objc
+    public func resetAndStartScanning() {
+        AssertIsOnMainThread()
+        delegateHasAcceptedScanResults.set(false)
+        tryToStartScanning()
+    }
+
+    @objc
     public func tryToStartScanning() {
         AssertIsOnMainThread()
 

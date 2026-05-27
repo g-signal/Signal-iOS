@@ -4622,17 +4622,17 @@
 /* Button to scan QR code to link BAXS account */
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "اسکن کد QR";
 
-/* Label for BA operator name */
-"LINK_BA_PLATFORM_OPERATOR_NAME" = "اپراتور";
-
-/* Label for BA merchant ID */
-"LINK_BA_PLATFORM_MERCHANT_ID" = "شناسه فروشنده";
-
 /* Label for BA operator mobile */
 "LINK_BA_PLATFORM_OPERATOR_MOBILE" = "موبایل";
 
-/* Label for BA account link date */
-"LINK_BA_PLATFORM_LINKED_DATE" = "تاریخ پیوند";
+/* Label for BA operator email */
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "ایمیل";
+
+/* Label for BAXS user ID */
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+/* Label for BAXS user name */
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
 
 /* Title for BAXS binding confirmation dialog */
 "LINK_BA_PLATFORM_CONFIRM_TITLE" = "پیوند حساب پلتفرم BA";

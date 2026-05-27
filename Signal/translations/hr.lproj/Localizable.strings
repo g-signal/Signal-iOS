@@ -4622,17 +4622,17 @@
 /* Button to scan QR code to link BAXS account */
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "Skeniraj QR kod";
 
-/* Label for BA operator name */
-"LINK_BA_PLATFORM_OPERATOR_NAME" = "Operater";
-
-/* Label for BA merchant ID */
-"LINK_BA_PLATFORM_MERCHANT_ID" = "ID trgovca";
-
 /* Label for BA operator mobile */
 "LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobitel";
 
-/* Label for BA account link date */
-"LINK_BA_PLATFORM_LINKED_DATE" = "Datum povezivanja";
+/* Label for BA operator email */
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "E-pošta";
+
+/* Label for BAXS user ID */
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+/* Label for BAXS user name */
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
 
 /* Title for BAXS binding confirmation dialog */
 "LINK_BA_PLATFORM_CONFIRM_TITLE" = "Poveži račun BAXSe";

@@ -4622,17 +4622,17 @@
 /* Button to scan QR code to link BAXS account */
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "Skannaa QR-koodi";
 
-/* Label for BA operator name */
-"LINK_BA_PLATFORM_OPERATOR_NAME" = "Operaattori";
-
-/* Label for BA merchant ID */
-"LINK_BA_PLATFORM_MERCHANT_ID" = "Kauppiaan tunnus";
-
 /* Label for BA operator mobile */
 "LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Matkapuhelin";
 
-/* Label for BA account link date */
-"LINK_BA_PLATFORM_LINKED_DATE" = "Yhdistämispäivä";
+/* Label for BA operator email */
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Sähköposti";
+
+/* Label for BAXS user ID */
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+/* Label for BAXS user name */
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
 
 /* Title for BAXS binding confirmation dialog */
 "LINK_BA_PLATFORM_CONFIRM_TITLE" = "Yhdistä BA-alustatili";

@@ -147,8 +147,6 @@ class ScanBaQRCodeViewController: OWSViewController {
             }
             if confirmResult {
                 startPolling(linkId: linkId)
-            } else {
-                navigationController?.popViewController(animated: true)
             }
         } catch {
             showErrorAlert(error: error)
@@ -206,8 +204,7 @@ class ScanBaQRCodeViewController: OWSViewController {
                     try? await Task.sleep(nanoseconds: intervalNs)
                 }
 
-                // User cancelled
-                await MainActor.run { self.qrCodeScanViewController.tryToStartScanning() }
+                // User cancelled - do nothing
             }
         )
     }
@@ -232,7 +229,7 @@ class ScanBaQRCodeViewController: OWSViewController {
         actionSheet.addAction(ActionSheetAction(
             title: OWSLocalizedString("LINK_BA_PLATFORM_SCAN_AGAIN", comment: "Button to scan QR code again"),
             style: .default,
-            handler: { [weak self] _ in self?.qrCodeScanViewController.tryToStartScanning() }
+            handler: { [weak self] _ in self?.qrCodeScanViewController.resetAndStartScanning() }
         ))
         actionSheet.addAction(ActionSheetAction(title: CommonStrings.cancelButton, style: .cancel))
         present(actionSheet, animated: true)
@@ -263,9 +260,9 @@ class ScanBaQRCodeViewController: OWSViewController {
         actionSheet.addAction(ActionSheetAction(
             title: OWSLocalizedString("LINK_BA_PLATFORM_SCAN_AGAIN", comment: "Button to scan QR code again"),
             style: .default,
-            handler: { [weak self] _ in self?.qrCodeScanViewController.tryToStartScanning() }
+            handler: { [weak self] _ in self?.qrCodeScanViewController.resetAndStartScanning() }
         ))
-        actionSheet.addAction(ActionSheetAction(title: CommonStrings.cancelButton, style: .cancel))
+        actionSheet.addAction(ActionSheetAction(title: CommonStrings.cancelButton, style: .cancel, handler: nil))
         present(actionSheet, animated: true)
     }
 
@@ -277,9 +274,9 @@ class ScanBaQRCodeViewController: OWSViewController {
         actionSheet.addAction(ActionSheetAction(
             title: OWSLocalizedString("LINK_BA_PLATFORM_SCAN_AGAIN", comment: "Button to scan QR code again"),
             style: .default,
-            handler: { [weak self] _ in self?.qrCodeScanViewController.tryToStartScanning() }
+            handler: { [weak self] _ in self?.qrCodeScanViewController.resetAndStartScanning() }
         ))
-        actionSheet.addAction(ActionSheetAction(title: CommonStrings.cancelButton, style: .cancel))
+        actionSheet.addAction(ActionSheetAction(title: CommonStrings.cancelButton, style: .cancel, handler: nil))
         present(actionSheet, animated: true)
     }
 
@@ -291,7 +288,7 @@ class ScanBaQRCodeViewController: OWSViewController {
         actionSheet.addAction(ActionSheetAction(
             title: CommonStrings.retryButton,
             style: .default,
-            handler: { [weak self] _ in self?.qrCodeScanViewController.tryToStartScanning() }
+            handler: { [weak self] _ in self?.qrCodeScanViewController.resetAndStartScanning() }
         ))
         actionSheet.addAction(ActionSheetAction(title: CommonStrings.cancelButton, style: .cancel))
         present(actionSheet, animated: true)

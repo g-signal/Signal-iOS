@@ -4621,17 +4621,17 @@
 /* Button to scan QR code to link BAXS account */
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "扫描二维码";
 
-/* Label for BA operator name */
-"LINK_BA_PLATFORM_OPERATOR_NAME" = "操作员";
-
-/* Label for BA merchant ID */
-"LINK_BA_PLATFORM_MERCHANT_ID" = "商户ID";
-
 /* Label for BA operator mobile */
 "LINK_BA_PLATFORM_OPERATOR_MOBILE" = "手机号";
 
-/* Label for BA account link date */
-"LINK_BA_PLATFORM_LINKED_DATE" = "绑定时间";
+/* Label for BA operator email */
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "邮箱";
+
+/* Label for BAXS user ID */
+"LINK_BA_PLATFORM_USER_ID" = "用户ID";
+
+/* Label for BAXS user name */
+"LINK_BA_PLATFORM_USER_NAME" = "用户名";
 
 /* Title for BAXS binding confirmation dialog */
 "LINK_BA_PLATFORM_CONFIRM_TITLE" = "绑定BAXS账号";
