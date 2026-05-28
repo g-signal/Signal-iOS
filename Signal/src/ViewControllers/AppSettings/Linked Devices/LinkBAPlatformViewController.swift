@@ -86,13 +86,13 @@ class LinkBAPlatformViewController: OWSTableViewController2 {
             comment: "Section header when BAXS account is linked"
         )
 
-        if !info.baxsAppUserId.isEmpty {
+        if let optId = info.linkbaxsOptId {
             section.add(.label(
                 withText: OWSLocalizedString(
                     "LINK_BA_PLATFORM_USER_ID",
                     comment: "Label for BAXS user ID"
                 ),
-                accessoryText: info.baxsAppUserId,
+                accessoryText: optId,
                 accessoryType: .none
             ))
         }
@@ -238,8 +238,15 @@ class LinkBAPlatformViewController: OWSTableViewController2 {
 
 extension LinkBAPlatformViewController: ScanBaQRCodeViewControllerDelegate {
     func didCompleteLinking() {
-        // 绑定成功后刷新页面
-        Task { await loadLinkedInfo() }
+        CATransaction.begin()
+        CATransaction.setCompletionBlock { [weak self] in
+            self?.presentToast(text: OWSLocalizedString(
+                "LINK_BA_PLATFORM_SUCCESS_TOAST",
+                comment: "Toast shown when BAXS account is successfully linked"
+            ))
+        }
         navigationController?.popViewController(animated: true)
+        CATransaction.commit()
+        Task { await loadLinkedInfo() }
     }
 }

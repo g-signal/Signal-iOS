@@ -167,23 +167,23 @@ class ScanBaQRCodeViewController: OWSViewController {
             asyncBlock: { [weak self] modal in
                 guard let self else { return }
 
-                while !Task.isCancelled && !modal.wasCancelled {
-                    if Date() > deadline {
-                        modal.dismiss()
-                        await MainActor.run { self.showTimeoutAlert() }
-                        return
-                    }
-
-                    do {
-                        let result = try await LinkBaPayService.shared.getLinkResult(linkId: linkId)
-                        guard let status = LinkStatus(rawValue: result.linkStatus) else {
-                            try? await Task.sleep(nanoseconds: intervalNs)
-                            continue
+                self.pollingTask = Task {
+                    while !Task.isCancelled && !modal.wasCancelled {
+                        if Date() > deadline {
+                            modal.dismiss()
+                            self.showTimeoutAlert()
+                            return
                         }
 
-                        if status.isTerminal {
-                            modal.dismiss()
-                            await MainActor.run {
+                        do {
+                            let result = try await LinkBaPayService.shared.getLinkResult(linkId: linkId)
+                            guard let status = LinkStatus(rawValue: result.linkStatus) else {
+                                try? await Task.sleep(nanoseconds: intervalNs)
+                                continue
+                            }
+
+                            if status.isTerminal {
+                                modal.dismiss()
                                 switch status {
                                 case .linked:
                                     self.handleLinkSuccess()
@@ -194,17 +194,17 @@ class ScanBaQRCodeViewController: OWSViewController {
                                 default:
                                     break
                                 }
+                                return
                             }
-                            return
+                        } catch {
+                            Logger.warn("Polling getLinkResult error: \(error)")
                         }
-                    } catch {
-                        Logger.warn("Polling getLinkResult error: \(error)")
-                    }
 
-                    try? await Task.sleep(nanoseconds: intervalNs)
+                        try? await Task.sleep(nanoseconds: intervalNs)
+                    }
                 }
 
-                // User cancelled - do nothing
+                await pollingTask?.value
             }
         )
     }
@@ -212,10 +212,6 @@ class ScanBaQRCodeViewController: OWSViewController {
     // MARK: - Success
 
     private func handleLinkSuccess() {
-        presentToast(text: OWSLocalizedString(
-            "LINK_BA_PLATFORM_SUCCESS_TOAST",
-            comment: "Toast shown when BAXS account is successfully linked"
-        ))
         delegate?.didCompleteLinking()
     }
 
