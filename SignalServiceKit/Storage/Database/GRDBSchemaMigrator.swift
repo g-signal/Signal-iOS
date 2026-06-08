@@ -4242,6 +4242,9 @@ public class GRDBSchemaMigrator {
                 ALTER TABLE gext_recipient
                 ADD COLUMN robot BLOB DEFAULT NULL
             """)
+            return .success(())
+        }
+
         migrator.registerMigration(.replaceOWSDeviceTable) { tx in
             try tx.database.drop(table: "model_OWSDevice")
 
