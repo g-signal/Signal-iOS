@@ -6,10 +6,82 @@
 import GRDB
 import LibSignalClient
 
+public struct ListMediaIntegrityCheckResult: Codable {
+    public struct Result: Codable {
+        /// Count of attachments we expected to see on CDN and did see on CDN.
+        /// This count is "good".
+        public private(set) var uploadedCount: Int
+        /// Count of attachments we did not expect to see on CDN (because they are ineligible
+        /// for backups, e.g. have a DM timer) and did not see on CDN.
+        /// This count is "good".
+        public private(set) var ineligibleCount: Int
+        /// Count of attachments we expected to see on CDN but did not.
+        /// This count is "bad".
+        public private(set) var missingFromCdnCount: Int
+        /// Count of attachments we did not expect to see on CDN but did see.
+        /// This count can be "bad" because it could indicate a bug with local state management,
+        /// but it could happen in normal edge cases if we just didn't know about a completed upload.
+        public private(set) var discoveredOnCdnCount: Int
+
+        static var empty: Result {
+            return Result(uploadedCount: 0, ineligibleCount: 0, missingFromCdnCount: 0, discoveredOnCdnCount: 0)
+        }
+
+        var hasFailures: Bool {
+            return missingFromCdnCount > 0 || discoveredOnCdnCount > 0
+        }
+
+        fileprivate mutating func updateWith(_ attachmentResult: BackupListMediaManagerImpl.AttachmentMatchResult) {
+            switch attachmentResult {
+            case .uploaded:
+                uploadedCount += 1
+            case .notUploaded:
+                ineligibleCount += 1
+            case .missingFromCdn:
+                missingFromCdnCount += 1
+            case .discoveredOnCdn:
+                discoveredOnCdnCount += 1
+            }
+        }
+    }
+
+    public let listMediaStartTimestamp: UInt64
+    public fileprivate(set) var fullsize: Result
+    public fileprivate(set) var thumbnail: Result
+    /// Objects we discovered on CDN that don't match any local attachment;
+    /// we can't know if these were thumbnails or fullsize.
+    public fileprivate(set) var orphanedObjectCount: Int
+
+    static func empty(listMediaStartTimestamp: UInt64) -> ListMediaIntegrityCheckResult {
+        return ListMediaIntegrityCheckResult(
+            listMediaStartTimestamp: listMediaStartTimestamp,
+            fullsize: .empty,
+            thumbnail: .empty,
+            orphanedObjectCount: 0
+        )
+    }
+
+    var hasFailures: Bool {
+        if fullsize.uploadedCount == 0 {
+            // The first time we run list media, we have no
+            // uploads, so don't count as a failure.
+            return false
+        }
+
+        // Don't count thumbnail failures
+        // Don't count orphans; we maybe just haven't deleted yet.
+        return fullsize.hasFailures
+    }
+}
+
 public protocol BackupListMediaManager {
     func queryListMediaIfNeeded() async throws
 
-    func setNeedsQueryListMedia(tx: DBWriteTransaction)
+    func getLastFailingIntegrityCheckResult(tx: DBReadTransaction) throws -> ListMediaIntegrityCheckResult?
+
+    func getMostRecentIntegrityCheckResult(tx: DBReadTransaction) throws -> ListMediaIntegrityCheckResult?
+
+    func setManualNeedsListMedia(tx: DBWriteTransaction)
 }
 
 public class BackupListMediaManagerImpl: BackupListMediaManager {
@@ -68,48 +140,89 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         self.orphanedBackupAttachmentStore = orphanedBackupAttachmentStore
         self.remoteConfigManager = remoteConfigManager
         self.tsAccountManager = tsAccountManager
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(backupPlanDidChange),
+            name: .backupPlanChanged,
+            object: nil
+        )
+    }
+
+    public func getLastFailingIntegrityCheckResult(tx: DBReadTransaction) throws -> ListMediaIntegrityCheckResult? {
+        try kvStore.getCodableValue(forKey: Constants.lastNonEmptyIntegrityCheckResultKey, transaction: tx)
+    }
+
+    public func getMostRecentIntegrityCheckResult(tx: DBReadTransaction) throws -> ListMediaIntegrityCheckResult? {
+        try kvStore.getCodableValue(forKey: Constants.lastIntegrityCheckResultKey, transaction: tx)
     }
 
     private let taskQueue = ConcurrentTaskQueue(concurrentLimit: 1)
 
+    /// Nil if we have not run list media this app launch (only held in memory).
+    /// Set to the upload era where we ran list media this app launch.
+    /// Should only be accessed from the taskQueue for locking purposes.
+    private var lastListMediaUploadEraThisAppSession: String?
+
     public func queryListMediaIfNeeded() async throws {
-        // Enqueue in a concurrent(1) task queue; we only want to run one of these at a time.
-        try await taskQueue.run { [weak self] in
-            try await self?._queryListMediaIfNeeded()
+        let task = Task {
+            // Enqueue in a concurrent(1) task queue; we only want to run one of these at a time.
+            try await taskQueue.run { [weak self] in
+                try await self?._queryListMediaIfNeeded()
+            }
         }
+        let backgroundTask = OWSBackgroundTask(label: #function) { [task] status in
+            switch status {
+            case .expired:
+                task.cancel()
+            case .couldNotStart, .success:
+                break
+            }
+        }
+        defer { backgroundTask.end() }
+        try await withTaskCancellationHandler(
+            operation: { _ = try await task.value },
+            onCancel: { task.cancel() }
+        )
     }
 
-    private func _queryListMediaIfNeeded() async throws {
+    private func _queryListMediaIfNeeded() async throws -> ListMediaIntegrityCheckResult {
         guard FeatureFlags.Backups.supported else {
-            return
+            return .empty(listMediaStartTimestamp: 0)
         }
         let (
             isPrimaryDevice,
             localAci,
             currentUploadEra,
             inProgressUploadEra,
+            inProgressStartTimestamp,
             needsToQuery,
             hasEverRunListMedia,
-            backupKey
+            backupKey,
+            inProgressIntegrityCheckResult,
         ) = try db.read { tx in
             let currentUploadEra = self.backupAttachmentUploadEraStore.currentUploadEra(tx: tx)
             let currentBackupPlan = backupSettingsStore.backupPlan(tx: tx)
+            let integrityCheckResult: ListMediaIntegrityCheckResult? =
+                try self.kvStore.getCodableValue(forKey: Constants.inProgressIntegrityCheckResultKey, transaction: tx)
             return (
                 self.tsAccountManager.registrationState(tx: tx).isPrimaryDevice,
                 self.tsAccountManager.localIdentifiers(tx: tx)?.aci,
                 currentUploadEra,
                 kvStore.getString(Constants.inProgressUploadEraKey, transaction: tx),
+                kvStore.getUInt64(Constants.inProgressListMediaStartTimestampKey, transaction: tx),
                 try self.needsToQueryListMedia(
                     currentUploadEra: currentUploadEra,
                     currentBackupPlan: currentBackupPlan,
                     tx: tx
                 ),
                 self.kvStore.getBool(Constants.hasEverRunListMediaKey, defaultValue: false, transaction: tx),
-                self.accountKeyStore.getMediaRootBackupKey(tx: tx)
+                self.accountKeyStore.getMediaRootBackupKey(tx: tx),
+                integrityCheckResult
             )
         }
         guard needsToQuery else {
-            return
+            return .empty(listMediaStartTimestamp: 0)
         }
 
         guard let localAci, let isPrimaryDevice else {
@@ -121,10 +234,12 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         }
 
         let uploadEraAtStartOfListMedia: String
-        if let inProgressUploadEra {
+        let startTimestamp: UInt64
+        if let inProgressUploadEra, let inProgressStartTimestamp {
             uploadEraAtStartOfListMedia = inProgressUploadEra
+            startTimestamp = inProgressStartTimestamp
         } else {
-            try await db.awaitableWrite { tx in
+            startTimestamp = try await db.awaitableWrite { tx in
                 try self.willBeginQueryListMedia(
                     currentUploadEra: self.backupAttachmentUploadEraStore.currentUploadEra(tx: tx),
                     tx: tx
@@ -182,6 +297,8 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
             )
         }
 
+        var integrityCheckResult = inProgressIntegrityCheckResult ?? .empty(listMediaStartTimestamp: startTimestamp)
+
         if !hasCompletedEnumeratingAttchments {
             let remoteConfig = remoteConfigManager.currentConfig()
             _ = try await TimeGatedBatch.processAllAsync(db: db, errorTxCompletion: .rollback) { tx in
@@ -210,21 +327,39 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
                     }
 
                     // Check for matches for both the fullsize and the
-                    // thumbnail mediaId.
-                    for isThumbnail in [false, true] {
-                        try self.updateAttachmentIfNeeded(
-                            attachment: attachment,
-                            fullsizeMediaName: fullsizeMediaName,
-                            isThumbnail: isThumbnail,
-                            backupKey: backupKey,
-                            uploadEraAtStartOfListMedia: uploadEraAtStartOfListMedia,
-                            currentBackupPlan: currentBackupPlan,
-                            remoteConfig: remoteConfig,
-                            isPrimaryDevice: isPrimaryDevice,
-                            hasEverRunListMedia: hasEverRunListMedia,
-                            tx: tx
-                        )
+                    // thumbnail mediaId. Fullsize first.
+                    let fullsizeResult = try self.updateAttachmentIfNeeded(
+                        attachment: attachment,
+                        fullsizeMediaName: fullsizeMediaName,
+                        isThumbnail: false,
+                        backupKey: backupKey,
+                        uploadEraAtStartOfListMedia: uploadEraAtStartOfListMedia,
+                        currentBackupPlan: currentBackupPlan,
+                        remoteConfig: remoteConfig,
+                        isPrimaryDevice: isPrimaryDevice,
+                        hasEverRunListMedia: hasEverRunListMedia,
+                        tx: tx
+                    )
+                    integrityCheckResult.fullsize.updateWith(fullsizeResult)
+
+                    // Refetch the attachment to reload any mutations applied
+                    // by the fullsize matching.
+                    guard let attachment = attachmentStore.fetch(id: attachment.id, tx: tx) else {
+                        continue
                     }
+                    let thumbnailResult = try self.updateAttachmentIfNeeded(
+                        attachment: attachment,
+                        fullsizeMediaName: fullsizeMediaName,
+                        isThumbnail: true,
+                        backupKey: backupKey,
+                        uploadEraAtStartOfListMedia: uploadEraAtStartOfListMedia,
+                        currentBackupPlan: currentBackupPlan,
+                        remoteConfig: remoteConfig,
+                        isPrimaryDevice: isPrimaryDevice,
+                        hasEverRunListMedia: hasEverRunListMedia,
+                        tx: tx
+                    )
+                    integrityCheckResult.thumbnail.updateWith(thumbnailResult)
                 }
                 let lastAttachmentId = attachments.last?.sqliteId
                 if let lastAttachmentId {
@@ -234,6 +369,9 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
                     kvStore.removeValue(forKey: Constants.lastEnumeratedAttachmentIdKey, transaction: tx)
                     kvStore.setBool(true, key: Constants.hasCompletedEnumeratingAttachmentsKey, transaction: tx)
                 }
+
+                try kvStore.setCodable(integrityCheckResult, key: Constants.inProgressIntegrityCheckResultKey, transaction: tx)
+
                 return attachments.count
             }
         }
@@ -254,11 +392,13 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
                 }
                 try listedMediaObject.delete(tx.database)
             }
+            integrityCheckResult.orphanedObjectCount += listedMediaObjects.count
+            try kvStore.setCodable(integrityCheckResult, key: Constants.inProgressIntegrityCheckResultKey, transaction: tx)
             return listedMediaObjects.count
         }
 
         let needsToRunAgain = try await db.awaitableWrite { tx in
-            self.didFinishListMedia(tx: tx)
+            try self.didFinishListMedia(startTimestamp: startTimestamp, integrityCheckResult: integrityCheckResult, tx: tx)
             let currentUploadEra = backupAttachmentUploadEraStore.currentUploadEra(tx: tx)
             let currentBackupPlan = backupSettingsStore.backupPlan(tx: tx)
             return try self.needsToQueryListMedia(
@@ -268,8 +408,12 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
             )
         }
         if needsToRunAgain {
-            try await _queryListMediaIfNeeded()
+            // Return the first integrity check result, not the second, because
+            // usually earlier results are more interesting. Once we run list
+            // media once, we've already synced local and remote state.
+            _ = try await _queryListMediaIfNeeded()
         }
+        return integrityCheckResult
     }
 
     // MARK: Remote attachment mapping
@@ -384,6 +528,22 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
 
     // MARK: Per-Attachment handling
 
+    fileprivate enum AttachmentMatchResult {
+        /// Our local state and the remote state matched up; we expected
+        /// an attachment to exist on media tier cdn and it did exist.
+        /// We may optionally have updated our local knowledge of the cdn number.
+        case uploaded(updatedCdnNumber: Bool)
+        /// Our local state and the remote state matched up; we expected
+        /// an attachment not to exist on media tier cdn and it did not exist.
+        case notUploaded
+        /// Locally we thought an attachment was on CDN but it was not listed;
+        /// we have marked it as not uploaded.
+        case missingFromCdn
+        /// Locally we did not think an attachment was on CDN but it was there;
+        /// we have marked it as uploaded.
+        case discoveredOnCdn
+    }
+
     /// Given an attachment, match it against any listed media in the
     /// ListedBackupMediaObject table, and update it as needed.
     ///
@@ -408,17 +568,20 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         isPrimaryDevice: Bool,
         hasEverRunListMedia: Bool,
         tx: DBWriteTransaction
-    ) throws {
+    ) throws -> AttachmentMatchResult {
         // Either the fullsize or the thumbnail media name
         let mediaName: String
         // Either the fullsize of the thumbnail cdn number if we have it
         let localCdnNumber: UInt32?
+        let attachmentWasAssumedUploaded: Bool
         if isThumbnail {
             mediaName = AttachmentBackupThumbnail.thumbnailMediaName(fullsizeMediaName: fullsizeMediaName)
             localCdnNumber = attachment.thumbnailMediaTierInfo?.cdnNumber
+            attachmentWasAssumedUploaded = attachment.thumbnailMediaTierInfo?.cdnNumber != nil
         } else {
             mediaName = fullsizeMediaName
             localCdnNumber = attachment.mediaTierInfo?.cdnNumber
+            attachmentWasAssumedUploaded = attachment.mediaTierInfo?.cdnNumber != nil
         }
 
         let mediaId = try backupKey.deriveMediaId(mediaName)
@@ -447,7 +610,11 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
                 hasEverRunListMedia: hasEverRunListMedia,
                 tx: tx
             )
-            return
+            if attachmentWasAssumedUploaded {
+                return .missingFromCdn
+            } else {
+                return .notUploaded
+            }
         }
 
         if matchedListedMedia.cdnNumber == localCdnNumber {
@@ -455,7 +622,7 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
             // Clear out the matched listed media row so we don't
             // mark the upload for deletion later.
             try matchedListedMedia.delete(tx.database)
-            return
+            return .uploaded(updatedCdnNumber: false)
         }
 
         // Otherwise we either don't have a local cdn number,
@@ -475,6 +642,12 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         // Clear out the matched listed media row so we don't
         // mark the upload for deletion later.
         try matchedListedMedia.delete(tx.database)
+
+        if !attachmentWasAssumedUploaded {
+            return .discoveredOnCdn
+        } else {
+            return .uploaded(updatedCdnNumber: true)
+        }
     }
 
     /// It is possible (though unusual) to end up with the same object (same mediaId)
@@ -568,12 +741,14 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
             return
         }
         if isThumbnail, attachment.thumbnailMediaTierInfo != nil {
+            Logger.warn("Unexpectedly missing thumbnail we thought was on media tier cdn \(attachment.id)")
             try self.attachmentUploadStore.markThumbnailMediaTierUploadExpired(
                 attachment: attachment,
                 tx: tx
             )
         }
         if !isThumbnail, attachment.mediaTierInfo != nil {
+            Logger.warn("Unexpectedly missing fullsize we thought was on media tier cdn \(attachment.id)")
             try self.attachmentUploadStore.markMediaTierUploadExpired(
                 attachment: attachment,
                 tx: tx
@@ -655,17 +830,18 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         }
         if shouldMarkDownloadProgressFinished {
             tx.addSyncCompletion {
-                Task {
-                    await self.backupAttachmentDownloadProgress.didFinishDownloadOfAttachment(
-                        withId: attachment.id,
-                        isThumbnail: isThumbnail,
-                        byteCount: UInt64(QueuedBackupAttachmentDownload.estimatedByteCount(
-                            attachment: attachment,
-                            reference: nil,
-                            isThumbnail: isThumbnail,
-                            canDownloadFromMediaTier: true
-                        ))
-                    )
+                if !isThumbnail {
+                    Task {
+                        await self.backupAttachmentDownloadProgress.didFinishDownloadOfFullsizeAttachment(
+                            withId: attachment.id,
+                            byteCount: UInt64(QueuedBackupAttachmentDownload.estimatedByteCount(
+                                attachment: attachment,
+                                reference: nil,
+                                isThumbnail: isThumbnail,
+                                canDownloadFromMediaTier: true
+                            ))
+                        )
+                    }
                 }
             }
         }
@@ -708,16 +884,18 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         // Since we now know this is uploaded, we can go ahead and remove
         // from the upload queue if present.
         if
-            let removedRecord = try backupAttachmentUploadStore.removeQueuedUpload(
+            let finishedRecord = try backupAttachmentUploadStore.markUploadDone(
                 for: attachment.id,
                 fullsize: isThumbnail.negated,
                 tx: tx
             )
         {
-            Task {
-                await backupAttachmentUploadProgress.didFinishUploadOfAttachment(
-                    uploadRecord: removedRecord
-                )
+            if finishedRecord.isFullsize {
+                Task {
+                    await backupAttachmentUploadProgress.didFinishUploadOfFullsizeAttachment(
+                        uploadRecord: finishedRecord
+                    )
+                }
             }
         }
 
@@ -773,10 +951,12 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
             // We have a matching local attachment but we don't have
             // sufficient metadata from either a backup or local stream
             // to be able to download, anyway. Schedule the upload for
-            // deletion, its unuseable. This should never happen, because
+            // deletion, its unuseable. This should never happen*, because
             // how would we have a media id to match against but lack the
             // other info?
-            owsFailDebug("Missing media tier metadata but matched by media id somehow")
+            // * never, unless we trigger a manual list media before
+            // OrphanedBackupAttachmentManager finishes.
+            Logger.error("Missing media tier metadata but matched by media id somehow")
             if isPrimaryDevice {
                 try enqueueListedMediaForDeletion(listedMedia, tx: tx)
             }
@@ -827,9 +1007,18 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         // so that we don't overwrite existing transit tier state incorrectly.
         let combinedDownloadState: QueuedBackupAttachmentDownload.State?
         if isThumbnail {
-            mediaTierDownloadState = BackupAttachmentDownloadEligibility.mediaTierThumbnailState(
+            mediaTierDownloadState = try BackupAttachmentDownloadEligibility.mediaTierThumbnailState(
                 attachment: attachment,
-                backupPlan: currentBackupPlan
+                backupPlan: currentBackupPlan,
+                attachmentTimestamp: try {
+                    switch try fetchMostRecentReference().owner {
+                    case .message(let messageSource):
+                        return messageSource.receivedAtTimestamp
+                    case .thread, .storyMessage:
+                        return nil
+                    }
+                }(),
+                currentTimestamp: currentTimestamp,
             )
             combinedDownloadState = mediaTierDownloadState
         } else {
@@ -931,6 +1120,16 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         case .free:
             return false
         case .paid, .paidExpiringSoon, .paidAsTester:
+            // Only query once per app session per upload era; this overrides the manual
+            // toggle and the date-based checks.
+            if lastListMediaUploadEraThisAppSession == currentUploadEra {
+                return false
+            }
+
+            if kvStore.getBool(Constants.manuallySetNeedsListMediaKey, defaultValue: false, transaction: tx) {
+                return true
+            }
+
             // If paid tier, query periodically as a catch-all to ensure local state
             // stays in sync with the server.
             let nowMs = dateProvider().ows_millisecondsSince1970
@@ -942,37 +1141,51 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         }
     }
 
+    /// Returns start timestamp for this run
     private func willBeginQueryListMedia(
         currentUploadEra: String,
         tx: DBWriteTransaction
-    ) throws {
+    ) throws -> UInt64 {
+        let startTimestamp = dateProvider().ows_millisecondsSince1970
         if kvStore.getString(Constants.inProgressUploadEraKey, transaction: tx) != nil {
-            return
+            guard let startTimestamp = kvStore.getUInt64(Constants.inProgressListMediaStartTimestampKey, transaction: tx) else {
+                owsFailDebug("Missing start timestamp!")
+                return startTimestamp
+            }
+            return startTimestamp
         }
         try ListedBackupMediaObject.deleteAll(tx.database)
-        self.kvStore.removeValue(forKey: Constants.needsToRunAgainKey, transaction: tx)
         self.kvStore.setString(currentUploadEra, key: Constants.inProgressUploadEraKey, transaction: tx)
         self.kvStore.setUInt64(
-            dateProvider().ows_millisecondsSince1970,
+            startTimestamp,
             key: Constants.inProgressListMediaStartTimestampKey,
             transaction: tx
         )
+        return startTimestamp
     }
 
-    private func didFinishListMedia(tx: DBWriteTransaction) {
+    private func didFinishListMedia(
+        startTimestamp: UInt64,
+        integrityCheckResult: ListMediaIntegrityCheckResult,
+        tx: DBWriteTransaction
+    ) throws {
         self.kvStore.setBool(true, key: Constants.hasEverRunListMediaKey, transaction: tx)
         if let uploadEra = kvStore.getString(Constants.inProgressUploadEraKey, transaction: tx) {
             self.kvStore.setString(uploadEra, key: Constants.lastListMediaUploadEraKey, transaction: tx)
+            self.lastListMediaUploadEraThisAppSession = uploadEra
             self.kvStore.removeValue(forKey: Constants.inProgressUploadEraKey, transaction: tx)
         } else {
             owsFailDebug("Missing in progress upload era?")
         }
-        if let timestamp = kvStore.getUInt64(Constants.inProgressListMediaStartTimestampKey, transaction: tx) {
-            self.kvStore.setUInt64(timestamp, key: Constants.lastListMediaStartTimestampKey, transaction: tx)
-            kvStore.removeValue(forKey: Constants.inProgressListMediaStartTimestampKey, transaction: tx)
-        } else {
-            owsFailDebug("Missing in progress start timestamp?")
+        self.kvStore.setUInt64(startTimestamp, key: Constants.lastListMediaStartTimestampKey, transaction: tx)
+        self.kvStore.setBool(false, key: Constants.manuallySetNeedsListMediaKey, transaction: tx)
+        kvStore.removeValue(forKey: Constants.inProgressListMediaStartTimestampKey, transaction: tx)
+
+        if integrityCheckResult.hasFailures {
+            try kvStore.setCodable(integrityCheckResult, key: Constants.lastNonEmptyIntegrityCheckResultKey, transaction: tx)
         }
+        try kvStore.setCodable(integrityCheckResult, key: Constants.lastIntegrityCheckResultKey, transaction: tx)
+        kvStore.removeValue(forKey: Constants.inProgressIntegrityCheckResultKey, transaction: tx)
 
         self.kvStore.setBool(false, key: Constants.hasCompletedListingMediaKey, transaction: tx)
         kvStore.removeValue(forKey: Constants.paginationCursorKey, transaction: tx)
@@ -980,8 +1193,22 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         self.kvStore.removeValue(forKey: Constants.lastEnumeratedAttachmentIdKey, transaction: tx)
     }
 
-    public func setNeedsQueryListMedia(tx: DBWriteTransaction) {
-        self.kvStore.setBool(true, key: Constants.needsToRunAgainKey, transaction: tx)
+    @objc
+    private func backupPlanDidChange() {
+        switch db.read(block: backupSettingsStore.backupPlan(tx:)) {
+        case .free, .paid, .paidAsTester, .paidExpiringSoon, .disabling:
+            return
+        case .disabled:
+            // Rotate the last integrity check failure when disabled
+            db.write { tx in
+                kvStore.removeValue(forKey: Constants.lastNonEmptyIntegrityCheckResultKey, transaction: tx)
+                kvStore.removeValue(forKey: Constants.lastIntegrityCheckResultKey, transaction: tx)
+            }
+        }
+    }
+
+    public func setManualNeedsListMedia(tx: DBWriteTransaction) {
+        kvStore.setBool(true, key: Constants.manuallySetNeedsListMediaKey, transaction: tx)
     }
 
     private enum Constants {
@@ -989,11 +1216,11 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         /// endpoint, or nil if its never been queried.
         static let lastListMediaUploadEraKey = "lastListMediaUploadEra"
 
-        static let needsToRunAgainKey = "needsToRunAgainKey"
-
         /// Maps to the timestamp we last completed a list media request.
         static let lastListMediaStartTimestampKey = "lastListMediaTimestamp"
         static let inProgressListMediaStartTimestampKey = "inProgressListMediaTimestamp"
+
+        static let manuallySetNeedsListMediaKey = "manuallySetNeedsListMediaKey"
 
         /// True if we've ever run list media in the lifetime of this app.
         static let hasEverRunListMediaKey = "hasEverRunListMedia"
@@ -1017,6 +1244,10 @@ public class BackupListMediaManagerImpl: BackupListMediaManager {
         /// or nil if no attachments have been enumerated yet.
         static let lastEnumeratedAttachmentIdKey = "lastEnumeratedAttachmentIdKey"
         static let hasCompletedEnumeratingAttachmentsKey = "hasCompletedEnumeratingAttachmentsKey"
+
+        static let lastNonEmptyIntegrityCheckResultKey = "lastNonEmptyIntegrityCheckResultKey"
+        static let lastIntegrityCheckResultKey = "lastIntegrityCheckResultKey"
+        static let inProgressIntegrityCheckResultKey = "inProgressIntegrityCheckResultKey"
     }
 }
 
@@ -1029,7 +1260,15 @@ class MockBackupListMediaManager: BackupListMediaManager {
         // Nothing
     }
 
-    func setNeedsQueryListMedia(tx: DBWriteTransaction) {
+    func getLastFailingIntegrityCheckResult(tx: DBReadTransaction) throws -> ListMediaIntegrityCheckResult? {
+        nil
+    }
+
+    func getMostRecentIntegrityCheckResult(tx: DBReadTransaction) throws -> ListMediaIntegrityCheckResult? {
+        nil
+    }
+
+    func setManualNeedsListMedia(tx: DBWriteTransaction) {
         // Nothing
     }
 }

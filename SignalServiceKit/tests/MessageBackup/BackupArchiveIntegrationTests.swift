@@ -332,16 +332,13 @@ class BackupArchiveIntegrationTests: XCTestCase {
         /// backup file.
         let localIdentifiers: LocalIdentifiers = .forUnitTests
 
-        try await deps.backupArchiveManager.importPlaintextBackup(
+        try await deps.backupArchiveManager.importPlaintextBackupForTests(
             fileUrl: testCaseFileUrl,
-            localIdentifiers: localIdentifiers,
-            isPrimaryDevice: true,
-            backupPurpose: .remoteBackup,
-            progress: nil
+            localIdentifiers: localIdentifiers
         )
 
         let exportedBackupUrl = try await deps.backupArchiveManager
-            .exportPlaintextBackupForTests(localIdentifiers: localIdentifiers, progress: nil)
+            .exportPlaintextBackupForTests(localIdentifiers: localIdentifiers)
 
         try compareViaLibsignal(
             sharedTestCaseBackupUrl: testCaseFileUrl,
@@ -464,6 +461,7 @@ class BackupArchiveIntegrationTests: XCTestCase {
                 backupAttachmentDownloadManager: BackupAttachmentDownloadManagerMock(),
                 dateProvider: dateProvider,
                 networkManager: CrashyMocks.MockNetworkManager(appReadiness: appReadiness, libsignalNet: nil),
+                storageServiceManager: FakeStorageServiceManager(),
                 webSocketFactory: CrashyMocks.MockWebSocketFactory()
             )
         )
@@ -515,7 +513,7 @@ private func failTest<T>(
 /// should never be invoked during Backup import or export.
 private enum CrashyMocks {
     final class MockNetworkManager: NetworkManager {
-        override func asyncRequestImpl(_ request: TSRequest, canUseWebSocket: Bool, retryPolicy: RetryPolicy) async throws -> any HTTPResponse { failTest(Self.self) }
+        override func asyncRequestImpl(_ request: TSRequest, retryPolicy: RetryPolicy) async throws -> any HTTPResponse { failTest(Self.self) }
     }
 
     final class MockWebSocketFactory: WebSocketFactory {
@@ -548,12 +546,13 @@ private enum CrashyMocks {
         func notifyUserOfMissedCallBecauseOfNewIdentity(notificationInfo: CallNotificationInfo, tx: DBWriteTransaction) { failTest(Self.self) }
         func notifyUserOfMissedCallBecauseOfNoLongerVerifiedIdentity(notificationInfo: CallNotificationInfo, tx: DBWriteTransaction) { failTest(Self.self) }
         func notifyForGroupCallSafetyNumberChange(callTitle: String, threadUniqueId: String?, roomId: Data?, presentAtJoin: Bool) { failTest(Self.self) }
+        func notifyUserOfPollEnd(forMessage message: TSIncomingMessage, thread: TSThread, transaction: DBWriteTransaction) { failTest(Self.self) }
         func scheduleNotifyForNewLinkedDevice(deviceLinkTimestamp: Date) { failTest(Self.self) }
+        func scheduleNotifyForBackupsEnabled(backupsTimestamp: Date) { failTest(Self.self) }
         func notifyUserToRelaunchAfterTransfer(completion: @escaping () -> Void) { failTest(Self.self) }
         func notifyUserOfDeregistration(tx: DBWriteTransaction) { failTest(Self.self) }
         func clearAllNotifications() { failTest(Self.self) }
-        func clearAllNotificationsExceptNewLinkedDevices() { failTest(Self.self) }
-        static func clearAllNotificationsExceptNewLinkedDevices() { failTest(Self.self) }
+        func clearAllNonScheduledNotifications() { failTest(Self.self) }
         func clearDeliveredNewLinkedDevicesNotifications() { failTest(Self.self) }
         func cancelNotifications(threadId: String) { failTest(Self.self) }
         func cancelNotifications(messageIds: [String]) { failTest(Self.self) }

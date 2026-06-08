@@ -78,7 +78,7 @@ class DatabaseRecoveryViewController<SetupResult>: OWSViewController {
 
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = .dynamicTypeBody2
+        label.font = .dynamicTypeSubheadline
         label.textColor = Theme.secondaryTextAndIconColor
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -117,7 +117,7 @@ class DatabaseRecoveryViewController<SetupResult>: OWSViewController {
 
     private lazy var progressLabel: UILabel = {
         let label = UILabel()
-        label.font = .dynamicTypeBody2
+        label.font = .dynamicTypeSubheadline
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -200,7 +200,9 @@ class DatabaseRecoveryViewController<SetupResult>: OWSViewController {
             ),
             proceedStyle: .destructive
         ) { [keychainStorage] _ in
-            SignalApp.resetAppDataWithUI(keyFetcher: GRDBKeyFetcher(keychainStorage: keychainStorage))
+            ModalActivityIndicatorViewController.present(fromViewController: self) { _ in
+                SignalApp.resetAppDataAndExit(keyFetcher: GRDBKeyFetcher(keychainStorage: keychainStorage))
+            }
         }
     }
 

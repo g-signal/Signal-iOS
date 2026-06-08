@@ -52,8 +52,6 @@ public class GroupViewUtils {
     public class func showUpdateErrorUI(error: Error) {
         AssertIsOnMainThread()
 
-        owsFailDebug(error.localizedDescription)
-
         if error.isNetworkFailureOrTimeout {
             OWSActionSheets.showActionSheet(title: OWSLocalizedString("ERROR_NETWORK_FAILURE",
                                                                      comment: "Error indicating network connectivity problems."),
@@ -79,11 +77,7 @@ public class GroupViewUtils {
     }
 
     private static func showCantAddMemberView(fromViewController: UIViewController) {
-        guard let url = URL(string: "https://support.signal.org/hc/articles/360007319331") else {
-            owsFailDebug("Invalid url.")
-            return
-        }
-        let vc = SFSafariViewController(url: url)
+        let vc = SFSafariViewController(url: URL.Support.groups)
         fromViewController.present(vc, animated: true, completion: nil)
     }
 }

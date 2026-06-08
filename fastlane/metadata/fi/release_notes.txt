@@ -1,1 +1,1 @@
-• Korjasimme virheen iOS:n emoji-näppäimistöltä lähetetyissä tarroissa.
+• Korjasimme virheen, jonka ansiosta kamera näytti tyhjältä yritettäessä yhdistää uutta laitetta.

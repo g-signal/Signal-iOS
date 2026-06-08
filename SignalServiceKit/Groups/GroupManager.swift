@@ -33,8 +33,7 @@ public class GroupManager: NSObject {
     // Epoch 5: Promote pending PNI members
     public static let changeProtoEpoch: UInt32 = 5
 
-    // This matches kOversizeTextMessageSizeThreshold.
-    public static let maxEmbeddedChangeProtoLength: UInt = 2 * 1024
+    public static let maxEmbeddedChangeProtoLength: UInt = UInt(OWSMediaUtils.kOversizeTextMessageSizeThresholdBytes)
 
     // MARK: - Group IDs
 
@@ -784,7 +783,7 @@ public class GroupManager: NSObject {
     }
 
     // If disappearingMessageToken is nil, don't update the disappearing messages configuration.
-    public static func insertGroupThreadInDatabaseAndCreateInfoMessage(
+    private static func insertGroupThreadInDatabaseAndCreateInfoMessage(
         groupModel: TSGroupModelV2,
         disappearingMessageToken: DisappearingMessageToken?,
         groupUpdateSource: GroupUpdateSource,
@@ -896,6 +895,12 @@ public class GroupManager: NSObject {
                 Logger.info("Inserting thread for \(groupId as Optional); shouldAttributeAuthor? \(shouldAttributeAuthor)")
             }
 
+            insertRecipients(
+                addedMembers: newGroupModel.groupMembership.allMembersOfAnyKindServiceIds,
+                localIdentifiers: localIdentifiers,
+                tx: transaction,
+            )
+
             return insertGroupThreadInDatabaseAndCreateInfoMessage(
                 groupModel: newGroupModel,
                 disappearingMessageToken: newDisappearingMessageToken,
@@ -950,6 +955,17 @@ public class GroupManager: NSObject {
             updateDMResult = (
                 oldConfiguration: dmConfiguration,
                 newConfiguration: dmConfiguration
+            )
+        }
+
+        do {
+            let oldMembers = oldGroupModel.membership.allMembersOfAnyKindServiceIds
+            let newMembers = newGroupModel.membership.allMembersOfAnyKindServiceIds
+
+            insertRecipients(
+                addedMembers: newMembers.subtracting(oldMembers),
+                localIdentifiers: localIdentifiers,
+                tx: transaction,
             )
         }
 
@@ -1105,6 +1121,20 @@ public class GroupManager: NSObject {
             tx: tx
         )
         return !mutualGroupThreads.isEmpty
+    }
+
+    private static func insertRecipients(addedMembers: Set<ServiceId>, localIdentifiers: LocalIdentifiers, tx: DBWriteTransaction) {
+        let recipientFetcher = DependenciesBridge.shared.recipientFetcher
+        let recipientManager = DependenciesBridge.shared.recipientManager
+        for addedMember in addedMembers {
+            if localIdentifiers.contains(serviceId: addedMember) {
+                continue
+            }
+            let (inserted, recipient) = recipientFetcher.fetchOrCreateImpl(serviceId: addedMember, tx: tx)
+            if inserted {
+                recipientManager.markAsRegisteredAndSave(recipient, shouldUpdateStorageService: true, tx: tx)
+            }
+        }
     }
 
     // MARK: - Storage Service

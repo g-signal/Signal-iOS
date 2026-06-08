@@ -11,15 +11,17 @@ import LibSignalClient
 public enum RegistrationBackupRestoreError {
     case generic
     case backupNotFound
-    case incorrectBackupKey
+    case incorrectRecoveryKey
     case versionMismatch
+    case retryableSVR🐝Error
+    case unretryableSVR🐝Error
     case networkError
     case timeout
 }
 
 public enum RegistrationBackupErrorNextStep {
     case skipRestore
-    case incorrectBackupKey
+    case incorrectRecoveryKey
     case tryAgain
     case restartQuickRestore
 }
@@ -48,21 +50,22 @@ public class RegistrationCoordinatorBackupErrorPresenterImpl:
         static let itunesStoreUrl = URL(string: "https://itunes.apple.com/app/id6754267880")!
     }
 
+
     public func mapToRegistrationError(error: Error) -> RegistrationBackupRestoreError {
         switch error {
         case _ where error.isNetworkFailureOrTimeout:
             return .networkError
         case _ where error is BackupKeyMaterialError:
-            // Missing backup key
-            return .incorrectBackupKey
+            // Missing recovery key
+            return .incorrectRecoveryKey
         case BackupAuthCredentialFetchError.noExistingBackupId:
             // Usually because backups haven't been set up yet.
             return .backupNotFound
         case SignalError.verificationFailed:
-            return .incorrectBackupKey
+            return .incorrectRecoveryKey
         case _ where error is SignalError:
             // LibSignalError (e.g. - creating credentials)
-            return .incorrectBackupKey
+            return .incorrectRecoveryKey
         case let httpError as OWSHTTPError where httpError.responseStatusCode == 404:
             // No backup found in the CDN
             return .backupNotFound
@@ -75,6 +78,15 @@ public class RegistrationCoordinatorBackupErrorPresenterImpl:
             return .timeout
         case BackupImportError.unsupportedVersion:
             return .versionMismatch
+        case let error as SVR🐝Error:
+            switch error {
+            case .retryableAutomatically, .retryableByUser:
+                return .retryableSVR🐝Error
+            case .unrecoverable:
+                return .unretryableSVR🐝Error
+            case .incorrectRecoveryKey:
+                return .incorrectRecoveryKey
+            }
         default:
             return .generic
         }
@@ -166,17 +178,17 @@ public class RegistrationCoordinatorBackupErrorPresenterImpl:
             actions.append(ActionSheetAction(title: tryAgainString) { _ in
                 continuation.resume(returning: .tryAgain)
             })
-        case .incorrectBackupKey:
+        case .incorrectRecoveryKey:
             title = OWSLocalizedString(
                 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE",
-                comment: "Title for a sheet warning users about an incorrect backup key."
+                comment: "Title for a sheet warning users about an incorrect recovery key."
             )
             message = OWSLocalizedString(
                 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY",
-                comment: "Body for a sheet warning users about an incorrect backup key."
+                comment: "Body for a sheet warning users about an incorrect recovery key."
             )
             actions.append(ActionSheetAction(title: tryAgainString) { _ in
-                continuation.resume(returning: .incorrectBackupKey)
+                continuation.resume(returning: .incorrectRecoveryKey)
             })
 //            actions.append(ActionSheetAction(title: CommonStrings.help) { _ in
 //                self.presentSupportArticle(
@@ -229,6 +241,42 @@ public class RegistrationCoordinatorBackupErrorPresenterImpl:
 //                    )
 //                }
 //            })
+        case .retryableSVR🐝Error:
+            title = OWSLocalizedString(
+                "REGISTRATION_BACKUP_RESTORE_ERROR_RETRYABLE_SERVER_ERROR_TITLE",
+                comment: "Title for a sheet telling users to try restoring a backup again after a server error."
+            )
+            message = OWSLocalizedString(
+                "REGISTRATION_BACKUP_RESTORE_ERROR_RETRYABLE_SERVER_ERROR_BODY",
+                comment: "Body for a sheet telling users to try restoring a backup again after a server error."
+            )
+
+            actions.append(ActionSheetAction(title: tryAgainString) { _ in
+                continuation.resume(returning: .tryAgain)
+            })
+            actions.append(ActionSheetAction(title: CommonStrings.cancelButton) { _ in
+                continuation.resume(returning: .skipRestore)
+            })
+        case .unretryableSVR🐝Error:
+            title = OWSLocalizedString(
+                "REGISTRATION_BACKUP_RESTORE_ERROR_UNRETRYABLE_SERVER_ERROR_TITLE",
+                comment: "Title for a sheet telling users restoring a backup unrecoverably failed."
+            )
+            message = OWSLocalizedString(
+                "REGISTRATION_BACKUP_RESTORE_ERROR_UNRETRYABLE_SERVER_ERROR_BODY",
+                comment: "Body for a sheet telling users restoring a backup unrecoverably failed."
+            )
+
+            actions.append(ActionSheetAction(title: CommonStrings.contactSupport) { @MainActor _ in
+                    Task { @MainActor in
+                        self.presentContactSupportSheet(presenter: presenter) {
+                            continuation.resume(returning: .skipRestore)
+                        }
+                    }
+            })
+            actions.append(ActionSheetAction(title: CommonStrings.okButton) { _ in
+                continuation.resume(returning: .skipRestore)
+            })
         case .networkError, .timeout:
             title = OWSLocalizedString(
                 "REGISTRATION_BACKUP_RESTORE_ERROR_NETWORK_TITLE",
@@ -326,9 +374,10 @@ public class RegistrationCoordinatorBackupErrorPresenterImpl:
     private func presentAppStorePage(
         completion: @escaping () -> Void
     ) {
-        UIApplication.shared.open(Constants.itunesStoreUrl) { _ in
-            completion()
-        }
+        CurrentAppContext().open(
+            TSConstants.appStoreUrl,
+            completion: { _ in completion() }
+        )
     }
 
     @objc

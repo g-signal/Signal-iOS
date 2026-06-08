@@ -13,10 +13,17 @@ public class RegistrationStateChangeManagerImpl: RegistrationStateChangeManager 
     private let accountKeyStore: AccountKeyStore
     private let appContext: AppContext
     private let authCredentialStore: AuthCredentialStore
-    private let backupIdManager: BackupIdManager
-    private let backupListMediaManager: BackupListMediaManager
+    private let backupAttachmentUploadEraStore: BackupAttachmentUploadEraStore
+    private let backupCDNCredentialStore: BackupCDNCredentialStore
+    private let backupKeyService: BackupKeyService
     private let backupRequestManager: BackupRequestManager
     private let backupSettingsStore: BackupSettingsStore
+    private let backupSubscriptionManager: BackupSubscriptionManager
+    private let backupTestFlightEntitlementManager: BackupTestFlightEntitlementManager
+    private var chatConnectionManager: any ChatConnectionManager {
+        // TODO: Fix circular dependency.
+        return DependenciesBridge.shared.chatConnectionManager
+    }
     private let db: DB
     private let dmConfigurationStore: DisappearingMessagesConfigurationStore
     private let groupsV2: GroupsV2
@@ -37,10 +44,13 @@ public class RegistrationStateChangeManagerImpl: RegistrationStateChangeManager 
         accountKeyStore: AccountKeyStore,
         appContext: AppContext,
         authCredentialStore: AuthCredentialStore,
-        backupIdManager: BackupIdManager,
-        backupListMediaManager: BackupListMediaManager,
+        backupAttachmentUploadEraStore: BackupAttachmentUploadEraStore,
+        backupCDNCredentialStore: BackupCDNCredentialStore,
+        backupKeyService: BackupKeyService,
         backupRequestManager: BackupRequestManager,
         backupSettingsStore: BackupSettingsStore,
+        backupSubscriptionManager: BackupSubscriptionManager,
+        backupTestFlightEntitlementManager: BackupTestFlightEntitlementManager,
         db: DB,
         dmConfigurationStore: DisappearingMessagesConfigurationStore,
         groupsV2: GroupsV2,
@@ -60,10 +70,13 @@ public class RegistrationStateChangeManagerImpl: RegistrationStateChangeManager 
         self.accountKeyStore = accountKeyStore
         self.appContext = appContext
         self.authCredentialStore = authCredentialStore
-        self.backupIdManager = backupIdManager
-        self.backupListMediaManager = backupListMediaManager
+        self.backupAttachmentUploadEraStore = backupAttachmentUploadEraStore
+        self.backupCDNCredentialStore = backupCDNCredentialStore
+        self.backupKeyService = backupKeyService
         self.backupRequestManager = backupRequestManager
         self.backupSettingsStore = backupSettingsStore
+        self.backupSubscriptionManager = backupSubscriptionManager
+        self.backupTestFlightEntitlementManager = backupTestFlightEntitlementManager
         self.db = db
         self.dmConfigurationStore = dmConfigurationStore
         self.groupsV2 = groupsV2
@@ -161,8 +174,23 @@ public class RegistrationStateChangeManagerImpl: RegistrationStateChangeManager 
             } else {
                 notificationPresenter.notifyUserOfDeregistration(tx: tx)
             }
-            // Ensure when we reregister, we will query list media.
-            backupListMediaManager.setNeedsQueryListMedia(tx: tx)
+
+            // Rotate the upload era, thereby ensuring that when we reregister
+            // we will run a list-media.
+            backupAttachmentUploadEraStore.rotateUploadEra(tx: tx)
+
+            // Wipe our cached Backup credentials, which may be invalid if we
+            // eventually re-register.
+            authCredentialStore.removeAllBackupAuthCredentials(tx: tx)
+            backupCDNCredentialStore.wipe(tx: tx)
+
+            // A registration event that caused us to become deregistered will
+            // have wiped our server-side Backup entitlement, so we should make
+            // sure that if we ever become registered again we attempt to get
+            // said entitlement again immediately.
+            backupSubscriptionManager.setRedemptionAttemptIsNecessary(tx: tx)
+            backupTestFlightEntitlementManager.setRenewEntitlementIsNecessary(tx: tx)
+
             // On linked devices, reset all DM timer versions. If the user
             // relinks a new primary and resets all its DM timer versions,
             // our local higher version number would prevent us getting
@@ -305,30 +333,7 @@ public class RegistrationStateChangeManagerImpl: RegistrationStateChangeManager 
             backupAuths = nil
         }
 
-        self.isUnregisteringFromService.set(true)
-        defer { self.isUnregisteringFromService.set(false) }
-
-        let request = OWSRequestFactory.unregisterAccountRequest()
-        do {
-            _ = try await networkManager.asyncRequest(request)
-        } catch OWSHTTPError.networkFailure(.wrappedFailure(SignalError.connectionInvalidated)) {
-            Logger.warn("Connection was invalidated -- we probably deleted our account.")
-            // We should try to reconnect and should learn that we're no longer
-            // registered. This should happen immediately, but if it doesn't, the
-            // account *might* still exist, and we should inform the user that
-            // something may have gone wrong.
-            try await withCooperativeTimeout(seconds: 30, operation: { [tsAccountManager] in
-                try await Preconditions([
-                    NotificationPrecondition(notificationName: .registrationStateDidChange, isSatisfied: {
-                        return !tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegistered
-                    }),
-                ]).waitUntilSatisfied()
-            })
-            // If we get past this point, the account is gone.
-        } catch {
-            owsFailDebugUnlessNetworkFailure(error)
-            throw error
-        }
+        try await deleteLocalDevice(OWSRequestFactory.unregisterAccountRequest())
 
         // Now that we've successfully unregistered, make a best effort to wipe
         // our Backups. This is safe to try even if Backups were disabled.
@@ -338,7 +343,7 @@ public class RegistrationStateChangeManagerImpl: RegistrationStateChangeManager 
                     maxAttempts: 3,
                     isRetryable: { $0.isNetworkFailureOrTimeout || ($0 as? OWSHTTPError)?.isRetryable == true },
                     block: {
-                        try await backupIdManager.deleteBackupId(
+                        try await backupKeyService.deleteBackupKey(
                             localIdentifiers: localIdentifiers,
                             backupAuth: backupAuth
                         )
@@ -346,9 +351,51 @@ public class RegistrationStateChangeManagerImpl: RegistrationStateChangeManager 
                 )
             }
         }
-
         // No need to set any state, as we wipe the whole app anyway.
+
         await appContext.resetAppDataAndExit()
+    }
+
+    public func unlinkLocalDevice(localDeviceId: LocalDeviceId, auth: ChatServiceAuth) async throws {
+        owsPrecondition(!localDeviceId.equals(.primary))
+        if let localDeviceId = localDeviceId.ifValid {
+            var request = TSRequest.deleteDevice(deviceId: localDeviceId)
+            request.auth = .identified(auth)
+            try await deleteLocalDevice(request)
+        } else {
+            // If localDeviceId isn't valid, we've already been unlinked.
+        }
+    }
+
+    private func deleteLocalDevice(_ request: TSRequest) async throws {
+        self.isUnregisteringFromService.set(true)
+        defer { self.isUnregisteringFromService.set(false) }
+
+        do {
+            _ = try await networkManager.asyncRequest(request)
+        } catch OWSHTTPError.networkFailure(.wrappedFailure(SignalError.connectionInvalidated)) {
+            Logger.warn("Connection was invalidated -- we this device (or account) was probably deleted.")
+            // The server closed the connection before we got a response. This almost
+            // certainly happened because this device is no longer registered, but
+            // `connectionInvalidated` may happen for other reasons. This is (sort of)
+            // a "flaky" failure, so we retry the request. We expect to receive a
+            // NotRegisteredError (via a 403 when reopening the socket), but if we
+            // don't, we throw whatever error happens on the second attempt.
+            do {
+                _ = try await networkManager.asyncRequest(request)
+            } catch is NotRegisteredError {
+                // This is expected when the `connectionInvalidated` error races the
+                // response to the INITIAL request.
+            }
+        } catch {
+            owsFailDebugUnlessNetworkFailure(error)
+            throw error
+        }
+
+        // If we successfully delete this device, the connection will close and
+        // stop trying to reopen. Wait until that happens to ensure we don't post a
+        // notification about being deregistered.
+        try await chatConnectionManager.waitUntilIdentifiedConnectionShouldBeClosed()
     }
 
     // MARK: - Helpers

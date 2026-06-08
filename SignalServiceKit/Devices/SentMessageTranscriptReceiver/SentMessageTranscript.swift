@@ -18,8 +18,6 @@ public enum SentMessageTranscriptTarget {
             return thread
         }
     }
-
-    var threadUniqueId: String { thread.uniqueId }
 }
 
 public enum SentMessageTranscriptType {
@@ -27,8 +25,7 @@ public enum SentMessageTranscriptType {
     public struct Message {
         public let target: SentMessageTranscriptTarget
 
-        public let body: String?
-        public let bodyRanges: MessageBodyRanges?
+        public let body: ValidatedInlineMessageBody?
 
         public let attachmentPointerProtos: [SSKProtoAttachmentPointer]
 

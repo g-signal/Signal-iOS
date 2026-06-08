@@ -11,14 +11,17 @@ import Testing
 @testable import SignalServiceKit
 
 public class RegistrationCoordinatorTest {
+    // Default to the SSK AEP.
+    typealias AccountEntropyPool = SignalServiceKit.AccountEntropyPool
+
     private var stubs = Stubs()
 
     private var date: Date { self.stubs.date }
-    private var dateProvider: DateProvider!
 
     private var appExpiry: AppExpiry!
     private var changeNumberPniManager: ChangePhoneNumberPniManagerMock!
     private var contactsStore: RegistrationCoordinatorImpl.TestMocks.ContactsStore!
+    private var dateProvider: DateProvider!
     private var db: (any DB)!
     private var experienceManager: RegistrationCoordinatorImpl.TestMocks.ExperienceManager!
     private var featureFlags: RegistrationCoordinatorImpl.TestMocks.FeatureFlags!
@@ -45,7 +48,6 @@ public class RegistrationCoordinatorTest {
     private var tsAccountManagerMock: MockTSAccountManager!
     private var usernameApiClientMock: RegistrationCoordinatorImpl.TestMocks.UsernameApiClient!
     private var usernameLinkManagerMock: MockUsernameLinkManager!
-    private var missingKeyGenerator: MissingKeyGenerator!
 
     class RegistrationTestRun {
         private(set) var recordedSteps = [TestStep]()
@@ -55,28 +57,18 @@ public class RegistrationCoordinatorTest {
     }
     private var testRun = RegistrationTestRun()
 
-    private class MissingKeyGenerator {
-        var masterKey: () -> MasterKey = { fatalError("Default MasterKey not provided") }
-        var accountEntropyPool: () -> SignalServiceKit.AccountEntropyPool = { fatalError("Default AccountEntropyPool not provided")  }
-    }
-
     init() {
         dateProvider = { self.date }
         db = InMemoryDB()
 
-        missingKeyGenerator = .init()
-
         appExpiry = .forUnitTests()
+        accountKeyStore = AccountKeyStore(backupSettingsStore: BackupSettingsStore())
         changeNumberPniManager = ChangePhoneNumberPniManagerMock(
             mockKyberStore: KyberPreKeyStoreImpl(for: .pni, dateProvider: dateProvider)
         )
         contactsStore = RegistrationCoordinatorImpl.TestMocks.ContactsStore()
         experienceManager = RegistrationCoordinatorImpl.TestMocks.ExperienceManager()
         featureFlags = RegistrationCoordinatorImpl.TestMocks.FeatureFlags()
-        accountKeyStore = AccountKeyStore(
-            masterKeyGenerator: { self.missingKeyGenerator.masterKey() },
-            accountEntropyPoolGenerator: { self.missingKeyGenerator.accountEntropyPool() }
-        )
         localUsernameManagerMock = {
             let mock = MockLocalUsernameManager()
             // This should result in no username reclamation. Tests that want to
@@ -113,7 +105,11 @@ public class RegistrationCoordinatorTest {
 
         let dependencies = RegistrationCoordinatorDependencies(
             appExpiry: appExpiry,
+            accountEntropyPoolGenerator: { Stubs.accountEntropyPoolToGenerate },
+            accountKeyStore: accountKeyStore,
             backupArchiveManager: BackupArchiveManagerMock(),
+            backupNonceStore: BackupNonceMetadataStore(),
+            backupRequestManager: BackupRequestManagerMock(),
             changeNumberPniManager: changeNumberPniManager,
             contactsManager: RegistrationCoordinatorImpl.TestMocks.ContactsManager(),
             contactsStore: contactsStore,
@@ -122,7 +118,6 @@ public class RegistrationCoordinatorTest {
             deviceTransferService: RegistrationCoordinatorImpl.TestMocks.DeviceTransferService(),
             experienceManager: experienceManager,
             featureFlags: featureFlags,
-            accountKeyStore: accountKeyStore,
             identityManager: RegistrationCoordinatorImpl.TestMocks.IdentityManager(),
             localUsernameManager: localUsernameManagerMock,
             messagePipelineSupervisor: mockMessagePipelineSupervisor,
@@ -137,9 +132,9 @@ public class RegistrationCoordinatorTest {
             receiptManager: receiptManagerMock,
             registrationBackupErrorPresenter: RegistrationCoordinatorBackupErrorPresenterMock(),
             registrationStateChangeManager: registrationStateChangeManagerMock,
+            registrationWebSocketManager: MockRegistrationWebSocketManager(),
             sessionManager: sessionManager,
             signalService: mockSignalService,
-            storageServiceRecordIkmCapabilityStore: StorageServiceRecordIkmCapabilityStoreImpl(),
             storageServiceManager: storageServiceManagerMock,
             svr: svr,
             svrAuthCredentialStore: svrAuthCredentialStore,
@@ -251,11 +246,11 @@ public class RegistrationCoordinatorTest {
         switch mode {
         case .registering:
             // With no state set up, should show the splash.
-            #expect(await coordinator.nextStep().awaitable() == .registrationSplash)
+            #expect(await coordinator.nextStep() == .registrationSplash)
             // Once we show it, don't show it again.
             #expect(await coordinator.continueFromSplash().awaitable() != .registrationSplash)
         case .reRegistering, .changingNumber:
-            #expect(await coordinator.nextStep().awaitable() != .registrationSplash)
+            #expect(await coordinator.nextStep() != .registrationSplash)
         }
     }
 
@@ -268,7 +263,7 @@ public class RegistrationCoordinatorTest {
         setupDefaultAccountAttributes()
 
         // We should start with the banner.
-        #expect(await coordinator.nextStep().awaitable() == .appUpdateBanner)
+        #expect(await coordinator.nextStep() == .appUpdateBanner)
     }
 
     @MainActor @Test(arguments: Self.testCases())
@@ -285,17 +280,17 @@ public class RegistrationCoordinatorTest {
         switch mode {
         case .registering:
             // Gotta get the splash out of the way.
-            #expect(await coordinator.nextStep().awaitable() == .registrationSplash)
+            #expect(await coordinator.nextStep() == .registrationSplash)
             nextStep = await coordinator.continueFromSplash().awaitable()
         case .reRegistering, .changingNumber:
             // No splash for these.
-            nextStep = await coordinator.nextStep().awaitable()
+            nextStep = await coordinator.nextStep()
         }
 
         // Now we should show the permissions.
         #expect(nextStep == .permissions)
         // Doesn't change even if we try and proceed.
-        #expect(await coordinator.nextStep().awaitable() == .permissions)
+        #expect(await coordinator.nextStep() == .permissions)
 
         // Once the state is updated we can proceed.
         nextStep = await coordinator.requestPermissions().awaitable()
@@ -325,11 +320,11 @@ public class RegistrationCoordinatorTest {
         // It needs an apns token to register.
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
         // It needs prekeys as well.
-        preKeyManagerMock.addCreatePreKeysMock({ return .value(Stubs.prekeyBundles()) })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
         // And will finalize prekeys after success.
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed)
-            return .value(())
+            return Task {}
         }
 
         let identityResponse = Stubs.accountIdentityResponse()
@@ -369,13 +364,13 @@ public class RegistrationCoordinatorTest {
         // When registered, we should create pre-keys.
         preKeyManagerMock.addRotateOneTimePreKeyMock({ auth in
             #expect(auth == expectedAuthedAccount().chatServiceAuth)
-            return .value(())
+            return Task {}
         })
 
         if wasReglockEnabled {
             // If we had reglock before registration, it should be re-enabled.
             let expectedReglockRequest = OWSRequestFactory.enableRegistrationLockV2Request(token: finalMasterKey.reglockToken)
-            networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+            networkManagerMock.asyncRequestHandlers.append({ request, _ in
                 if request.url == expectedReglockRequest.url {
                     #expect(finalMasterKey.reglockToken == request.parameters["registrationLock"] as! String)
                     return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
@@ -418,7 +413,7 @@ public class RegistrationCoordinatorTest {
                 deviceId: .primary,
                 password: authPassword
             ))
-            return .value(.success(usernameLinkHandle: mockUsernameLink.handle))
+            return .success(usernameLinkHandle: mockUsernameLink.handle)
         }]
 
         // Once we do the username reclamation,
@@ -427,7 +422,7 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(finalMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+        networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url == expectedAttributesRequest.url {
                 return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
             }
@@ -440,7 +435,7 @@ public class RegistrationCoordinatorTest {
 
         // We haven't set a phone number so it should ask for that.
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .phoneNumberEntry(stubs.phoneNumberEntryState(mode: mode))
         )
 
@@ -479,11 +474,11 @@ public class RegistrationCoordinatorTest {
         // It needs an apns token to register.
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
         // Every time we register we also ask for prekeys.
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
         // And we finalize them after.
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed)
-            return .value(())
+            return Task {}
         }
 
         let identityResponse = Stubs.accountIdentityResponse()
@@ -516,7 +511,7 @@ public class RegistrationCoordinatorTest {
         // When registered, we should create pre-keys.
         preKeyManagerMock.addRotateOneTimePreKeyMock({ auth in
             #expect(auth == expectedAuthedAccount().chatServiceAuth)
-            return .value(())
+            return Task {}
         })
 
         // We haven't done a SVR backup; that should happen now.
@@ -555,7 +550,7 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(finalMasterKey),
             auth: .implicit() // // doesn't matter for url matching
         )
-        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+        networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url == expectedAttributesRequest.url {
                 #expect(finalMasterKey.regRecoveryPw == (request.parameters["recoveryPassword"] as? String) ?? "")
                 return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
@@ -565,7 +560,7 @@ public class RegistrationCoordinatorTest {
 
         // We haven't set a phone number so it should ask for that.
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .phoneNumberEntry(stubs.phoneNumberEntryState(mode: mode))
         )
 
@@ -620,18 +615,18 @@ public class RegistrationCoordinatorTest {
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Every time we register we also ask for prekeys.
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
 
         // And we finalize them after.
         // Set up a list of mocks that should be returned in order
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed.negated)
-            return .value(())
+            return Task {}
         }
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed)
-            return .value(())
+            return Task {}
         }
 
         // Fail the request; the reg recovery pw is invalid.
@@ -658,7 +653,7 @@ public class RegistrationCoordinatorTest {
 
         // We haven't set a phone number so it should ask for that.
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .phoneNumberEntry(stubs.phoneNumberEntryState(mode: mode))
         )
 
@@ -725,17 +720,17 @@ public class RegistrationCoordinatorTest {
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
 
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed.negated)
-            return .value(())
+            return Task {}
         }
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed.negated)
-            return .value(())
+            return Task {}
         }
 
         // Fail the first request; the reglock is invalid.
@@ -773,7 +768,7 @@ public class RegistrationCoordinatorTest {
 
         // We haven't set a phone number so it should ask for that.
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .phoneNumberEntry(stubs.phoneNumberEntryState(mode: mode))
         )
 
@@ -824,17 +819,17 @@ public class RegistrationCoordinatorTest {
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Every time we register we also ask for prekeys.
-        preKeyManagerMock.addCreatePreKeysMock({ return .value(Stubs.prekeyBundles()) })
-        preKeyManagerMock.addCreatePreKeysMock({ return .value(Stubs.prekeyBundles()) })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
 
         // And we finalize them after.
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed.negated)
-            return .value(())
+            return Task {}
         }
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed)
-            return .value(())
+            return Task {}
         }
 
         // Fail the request with a network error.
@@ -884,7 +879,7 @@ public class RegistrationCoordinatorTest {
         // When registered, it should try and sync pre-keys.
         preKeyManagerMock.addRotateOneTimePreKeyMock({ auth in
             #expect(auth == expectedAuthedAccount().chatServiceAuth)
-            return .value(())
+            return Task {}
         })
 
         // We haven't done a SVR backup; that should happen.
@@ -933,7 +928,7 @@ public class RegistrationCoordinatorTest {
                 deviceId: .primary,
                 password: authPassword
             ))
-            return .value(.success(usernameLinkHandle: mockUsernameLink.handle))
+            return .success(usernameLinkHandle: mockUsernameLink.handle)
         }]
 
         // Once we do the storage service restore,
@@ -942,7 +937,7 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(finalMasterKey),
             auth: .implicit() // // doesn't matter for url matching
         )
-        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+        networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url == expectedAttributesRequest.url {
                 self.testRun.addObservedStep(.updateAccountAttribute)
                 return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
@@ -952,7 +947,7 @@ public class RegistrationCoordinatorTest {
 
         // We haven't set a phone number so it should ask for that.
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .phoneNumberEntry(stubs.phoneNumberEntryState(mode: mode))
         )
 
@@ -1039,11 +1034,11 @@ public class RegistrationCoordinatorTest {
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
 
-        preKeyManagerMock.addFinalizePreKeyMock({ _ in .value(()) })
-        preKeyManagerMock.addFinalizePreKeyMock({ _ in .value(()) })
+        preKeyManagerMock.addFinalizePreKeyMock({ _ in Task {} })
+        preKeyManagerMock.addFinalizePreKeyMock({ _ in Task {} })
 
         // Fail the first request;
         let expectedRecoveryPwRequest = createAccountWithRecoveryPw(masterKey)
@@ -1099,7 +1094,7 @@ public class RegistrationCoordinatorTest {
 
         // We haven't set a phone number so it should ask for that.
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .phoneNumberEntry(stubs.phoneNumberEntryState(mode: mode))
         )
 
@@ -1191,16 +1186,16 @@ public class RegistrationCoordinatorTest {
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
 
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed.negated)
-            return .value(())
+            return Task {}
         }
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed)
-            return .value(())
+            return Task {}
         }
 
         // Fail the first request; the reglock is invalid.
@@ -1244,12 +1239,12 @@ public class RegistrationCoordinatorTest {
         // When registered, we should create pre-keys.
         preKeyManagerMock.addRotateOneTimePreKeyMock({ auth in
             #expect(auth == expectedAuthedAccount().chatServiceAuth)
-            return .value(())
+            return Task {}
         })
 
         // If we had reglock before registration, it should be re-enabled.
         let expectedReglockRequest = OWSRequestFactory.enableRegistrationLockV2Request(token: finalMasterKey.reglockToken)
-        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+        networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url == expectedReglockRequest.url {
                 #expect(finalMasterKey.reglockToken == request.parameters["registrationLock"] as! String)
                 return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
@@ -1292,7 +1287,7 @@ public class RegistrationCoordinatorTest {
                 deviceId: .primary,
                 password: authPassword
             ))
-            return .value(.success(usernameLinkHandle: mockUsernameLink.handle))
+            return .success(usernameLinkHandle: mockUsernameLink.handle)
         }]
 
         storageServiceManagerMock.addRotateManifestMock({ _, _ in return .value(()) })
@@ -1303,7 +1298,7 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(finalMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+        networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url == expectedAttributesRequest.url {
                 return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
             }
@@ -1312,7 +1307,7 @@ public class RegistrationCoordinatorTest {
 
         // We haven't set a phone number so it should ask for that.
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .phoneNumberEntry(stubs.phoneNumberEntryState(mode: mode))
         )
 
@@ -1401,13 +1396,13 @@ public class RegistrationCoordinatorTest {
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
 
-        preKeyManagerMock.addFinalizePreKeyMock({ _ in .value(()) })
-        preKeyManagerMock.addFinalizePreKeyMock({ _ in .value(()) })
-        preKeyManagerMock.addFinalizePreKeyMock({ _ in .value(()) })
+        preKeyManagerMock.addFinalizePreKeyMock({ _ in Task {} })
+        preKeyManagerMock.addFinalizePreKeyMock({ _ in Task {} })
+        preKeyManagerMock.addFinalizePreKeyMock({ _ in Task {} })
 
         // Fail the first request; the local key is invalid.
         let expectedRecoveryPwRequest = createAccountWithRecoveryPw(masterKey)
@@ -1456,7 +1451,7 @@ public class RegistrationCoordinatorTest {
 
         // We haven't set a phone number so it should ask for that.
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .phoneNumberEntry(stubs.phoneNumberEntryState(mode: mode))
         )
 
@@ -1530,12 +1525,12 @@ public class RegistrationCoordinatorTest {
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // Every time we register we also ask for prekeys.
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
 
         // And we finalize them after.
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed)
-            return .value(())
+            return Task {}
         }
 
         // Now still at it should make a reg recovery pw request
@@ -1567,7 +1562,7 @@ public class RegistrationCoordinatorTest {
         // When registered, it should try and create pre-keys.
         preKeyManagerMock.addRotateOneTimePreKeyMock({ auth in
             #expect(auth == expectedAuthedAccount().chatServiceAuth)
-            return .value(())
+            return Task {}
         })
 
         // Once we create pre-keys, we should back up to svr.
@@ -1616,7 +1611,7 @@ public class RegistrationCoordinatorTest {
                 deviceId: .primary,
                 password: authPassword
             ))
-            return .value(.success(usernameLinkHandle: mockUsernameLink.handle))
+            return .success(usernameLinkHandle: mockUsernameLink.handle)
         }]
 
         // Once we do the storage service restore, we will sync account attributes and then we are finished!
@@ -1624,7 +1619,7 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(finalMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+        networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url == expectedAttributesRequest.url {
                 self.testRun.addObservedStep(.updateAccountAttribute)
                 return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
@@ -1826,15 +1821,9 @@ public class RegistrationCoordinatorTest {
     func testSessionPath_happyPath(testCase: TestCase) async {
         let coordinator = setupTest(testCase)
         let mode = testCase.mode
+        let newMasterKey = Stubs.accountEntropyPoolToGenerate.getMasterKey()
         var authPassword: String!
 
-        let accountEntropyPool = AccountEntropyPool()
-        let newMasterKey = accountEntropyPool.getMasterKey()
-        if testCase.newKey == .accountEntropyPool {
-            missingKeyGenerator.accountEntropyPool = { accountEntropyPool }
-        } else {
-            missingKeyGenerator.masterKey = { newMasterKey }
-        }
         await createSessionAndRequestFirstCode(coordinator: coordinator, mode: mode)
 
         // Give back a verified session.
@@ -1847,7 +1836,7 @@ public class RegistrationCoordinatorTest {
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // It should also fetch the prekeys for account creation
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles()) })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
 
         let expectedRequest = createAccountWithSession(newMasterKey)
         mockURLSession.addResponse(
@@ -1874,14 +1863,14 @@ public class RegistrationCoordinatorTest {
         // Once we are registered, we should finalize prekeys.
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed)
-            return .value(())
+            return Task {}
         }
 
         // Then we should try and create one time pre-keys
         // with the credentials we got in the identity response.
         preKeyManagerMock.addRotateOneTimePreKeyMock({ auth in
             #expect(auth == expectedAuthedAccount().chatServiceAuth)
-            return .value(())
+            return Task {}
         })
 
         // Finish the validation.
@@ -1915,7 +1904,7 @@ public class RegistrationCoordinatorTest {
                 deviceId: .primary,
                 password: authPassword
             ))
-            return Promise(error: OWSGenericError("Something went wrong :("))
+            throw OWSGenericError("Something went wrong :(")
         }]
 
         // And once we do the storage service restore,
@@ -1924,7 +1913,7 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(newMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+        networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url == expectedAttributesRequest.url {
                 return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
             }
@@ -2128,7 +2117,7 @@ public class RegistrationCoordinatorTest {
         )
 
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .verificationCodeEntry(stubs.verificationCodeEntryState(
                     mode: mode,
                     nextVerificationAttempt: nil,
@@ -2356,7 +2345,7 @@ public class RegistrationCoordinatorTest {
 
         // We should still be waiting.
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .verificationCodeEntry(stubs.verificationCodeEntryState(mode: mode))
         )
         #expect(
@@ -2777,7 +2766,7 @@ public class RegistrationCoordinatorTest {
         )
 
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .verificationCodeEntry(stubs.verificationCodeEntryState(
                     mode: mode,
                     nextVerificationAttempt: nil
@@ -2802,7 +2791,7 @@ public class RegistrationCoordinatorTest {
         )
 
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .verificationCodeEntry(stubs.verificationCodeEntryState(
                     mode: mode,
                     nextVerificationAttempt: nil
@@ -2844,7 +2833,7 @@ public class RegistrationCoordinatorTest {
         )
 
         #expect(
-            await coordinator.nextStep().awaitable() ==
+            await coordinator.nextStep() ==
                 .phoneNumberEntry(stubs.phoneNumberEntryState(
                     mode: mode,
                     previouslyEnteredE164: Stubs.e164
@@ -2856,16 +2845,9 @@ public class RegistrationCoordinatorTest {
     func testSessionPath_skipPINCode(testCase: TestCase) async {
         let coordinator = setupTest(testCase)
         let mode = testCase.mode
+        let newMasterKey = Stubs.accountEntropyPoolToGenerate.getMasterKey()
 
         await createSessionAndRequestFirstCode(coordinator: coordinator, mode: mode)
-
-        let accountEntropyPool = AccountEntropyPool()
-        let newMasterKey = accountEntropyPool.getMasterKey()
-        if testCase.newKey == .accountEntropyPool {
-            missingKeyGenerator.accountEntropyPool = { accountEntropyPool }
-        } else {
-            missingKeyGenerator.masterKey = { newMasterKey }
-        }
 
         // Give back a verified session.
         sessionManager.addSubmitCodeResponseMock(.success(stubs.session(
@@ -2883,9 +2865,7 @@ public class RegistrationCoordinatorTest {
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // It should also fetch the prekeys for account creation
-        preKeyManagerMock.addCreatePreKeysMock({
-            return .value(Stubs.prekeyBundles())
-        })
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
 
         let expectedRequest = createAccountWithSession(newMasterKey)
         mockURLSession.addResponse(
@@ -2916,14 +2896,14 @@ public class RegistrationCoordinatorTest {
         // Once we are registered, we should finalize prekeys.
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed)
-            return .value(())
+            return Task {}
         }
 
         // Then we should try and create one time pre-keys
         // with the credentials we got in the identity response.
         preKeyManagerMock.addRotateOneTimePreKeyMock({ auth in
             #expect(auth == expectedAuthedAccount().chatServiceAuth)
-            return .value(())
+            return Task {}
         })
 
         // When we skip the pin, it should skip any SVR backups.
@@ -2942,24 +2922,12 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(newMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+        networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url == expectedAttributesRequest.url {
                 return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
             }
             throw OWSAssertionError("")
         })
-
-        var didSetLocalAccountEntropyPool = false
-        svr.useDeviceLocalAccountEntropyPoolMock = { _ in
-            #expect(self.svr.hasAccountEntropyPool == false)
-            didSetLocalAccountEntropyPool = true
-        }
-
-        var didSetLocalMasterKey = false
-        svr.useDeviceLocalMasterKeyMock = { _ in
-            #expect(self.svr.hasMasterKey == false)
-            didSetLocalMasterKey = true
-        }
 
         // Once we sync push tokens, we should restore from storage service.
         storageServiceManagerMock.addRestoreOrCreateManifestIfNecessaryMock({ auth, masterKeySource in
@@ -2987,18 +2955,14 @@ public class RegistrationCoordinatorTest {
                 )
         )
 
-        // At this point we should have no master key.
-        #expect(svr.hasMasterKey == false)
-        #expect(svr.hasAccountEntropyPool == false)
+        // At this point we should not have set the AEP.
+        #expect(db.read { accountKeyStore.getAccountEntropyPool(tx: $0) == nil })
 
         // Skip the PIN code.
         #expect(await coordinator.skipPINCode().awaitable() == .done)
 
-        if testCase.newKey == .accountEntropyPool {
-            #expect(didSetLocalAccountEntropyPool)
-        } else {
-            #expect(didSetLocalMasterKey)
-        }
+        // We should now have set the AEP.
+        #expect(db.read { accountKeyStore.getAccountEntropyPool(tx: $0) != nil })
 
         // Since we set profile info, we should have scheduled a reupload.
         #expect(profileManagerMock.didScheduleReuploadLocalProfile)
@@ -3008,6 +2972,7 @@ public class RegistrationCoordinatorTest {
     func testSessionPath_skipPINRestore_createNewPIN(testCase: TestCase) async {
         let coordinator = setupTest(testCase)
         let mode = testCase.mode
+        let newMasterKey = Stubs.accountEntropyPoolToGenerate.getMasterKey()
 
         switch mode {
         case .registering:
@@ -3018,14 +2983,6 @@ public class RegistrationCoordinatorTest {
         }
 
         await createSessionAndRequestFirstCode(coordinator: coordinator, mode: mode)
-
-        let accountEntropyPool = AccountEntropyPool()
-        let newMasterKey = accountEntropyPool.getMasterKey()
-        if testCase.newKey == .accountEntropyPool {
-            missingKeyGenerator.accountEntropyPool = { accountEntropyPool }
-        } else {
-            missingKeyGenerator.masterKey = { newMasterKey }
-        }
 
         // Give back a verified session.
         sessionManager.addSubmitCodeResponseMock(.success(stubs.session(
@@ -3042,7 +2999,7 @@ public class RegistrationCoordinatorTest {
         pushRegistrationManagerMock.addRequestPushTokenMock({ .success(Stubs.apnsRegistrationId) })
 
         // It should also fetch the prekeys for account creation
-        preKeyManagerMock.addCreatePreKeysMock({ .value(Stubs.prekeyBundles())})
+        preKeyManagerMock.addCreatePreKeysMock({ Task { Stubs.prekeyBundles() } })
 
         let expectedRequest = createAccountWithSession(newMasterKey)
         mockURLSession.addResponse(
@@ -3069,14 +3026,14 @@ public class RegistrationCoordinatorTest {
         // Once we are registered, we should finalize prekeys.
         preKeyManagerMock.addFinalizePreKeyMock { didSucceed in
             #expect(didSucceed)
-            return .value(())
+            return Task {}
         }
 
         // Then we should try and create one time pre-keys
         // with the credentials we got in the identity response.
         preKeyManagerMock.addRotateOneTimePreKeyMock({ auth in
             #expect(auth == expectedAuthedAccount().chatServiceAuth)
-            return .value(())
+            return Task {}
         })
 
         // When we skip the pin, it should skip any SVR backups.
@@ -3105,24 +3062,12 @@ public class RegistrationCoordinatorTest {
             Stubs.accountAttributes(newMasterKey),
             auth: .implicit() // doesn't matter for url matching
         )
-        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+        networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url == expectedAttributesRequest.url {
                 return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: nil)
             }
             throw OWSAssertionError("")
         })
-
-        var didSetLocalAccountEntropyPool = false
-        svr.useDeviceLocalAccountEntropyPoolMock = { _ in
-            #expect(self.svr.hasAccountEntropyPool == false)
-            didSetLocalAccountEntropyPool = true
-        }
-
-        var didSetLocalMasterKey = false
-        svr.useDeviceLocalMasterKeyMock = { _ in
-            #expect(self.svr.hasMasterKey == false)
-            didSetLocalMasterKey = true
-        }
 
         // Now we should ask to restore the PIN.
         #expect(
@@ -3141,17 +3086,14 @@ public class RegistrationCoordinatorTest {
                 )
         )
 
-        // At this point we should have no master key.
-        #expect(svr.hasMasterKey.negated)
+        // At this point we should not have set the AEP.
+        #expect(db.read { accountKeyStore.getAccountEntropyPool(tx: $0) == nil })
 
         // Skip this PIN code, too.
         #expect(await coordinator.skipPINCode().awaitable() == .done)
 
-        if testCase.newKey == .accountEntropyPool {
-            #expect(didSetLocalAccountEntropyPool)
-        } else {
-            #expect(didSetLocalMasterKey)
-        }
+        // We should now have set the master key (i.e., the AEP).
+        #expect(db.read { accountKeyStore.getAccountEntropyPool(tx: $0) != nil })
 
         // Since we set profile info, we should have scheduled a reupload.
         #expect(profileManagerMock.didScheduleReuploadLocalProfile)
@@ -3250,7 +3192,7 @@ public class RegistrationCoordinatorTest {
         switch mode {
         case .registering:
             // Gotta get the splash out of the way.
-            #expect(await coordinator.nextStep().awaitable() == .registrationSplash)
+            #expect(await coordinator.nextStep() == .registrationSplash)
         case .reRegistering, .changingNumber:
             break
         }
@@ -3361,10 +3303,10 @@ public class RegistrationCoordinatorTest {
     // MARK: - Helpers
 
     func buildKeyDataMocks(_ testCase: TestCase) -> (MasterKey, MasterKey) {
-        let newAccountEntropyPool = AccountEntropyPool()
-        let newMasterKey = newAccountEntropyPool.getMasterKey()
         let oldAccountEntropyPool = AccountEntropyPool()
         let oldMasterKey = oldAccountEntropyPool.getMasterKey()
+        let newMasterKey = Stubs.accountEntropyPoolToGenerate.getMasterKey()
+
         switch (testCase.oldKey, testCase.newKey) {
         case (.accountEntropyPool, .accountEntropyPool):
             // on re-registration, make the AEP be present
@@ -3377,17 +3319,10 @@ public class RegistrationCoordinatorTest {
             // If this is a reregistration from an non-AEP client,
             // AEP is only available after calling getOrGenerateAEP()
             db.write { accountKeyStore.setMasterKey(oldMasterKey, tx: $0) }
-            missingKeyGenerator.accountEntropyPool = {
-                return newAccountEntropyPool
-            }
             return (oldMasterKey, newMasterKey)
         case (.none, .masterKey):
-            missingKeyGenerator.masterKey = { newMasterKey }
             return (newMasterKey, newMasterKey)
         case (.none, .accountEntropyPool):
-            missingKeyGenerator.accountEntropyPool = {
-                newAccountEntropyPool
-            }
             return (newMasterKey, newMasterKey)
         case (.accountEntropyPool, .masterKey):
             fatalError("Migrating to masterkey from AEP not supported")
@@ -3428,6 +3363,7 @@ public class RegistrationCoordinatorTest {
 
     private struct Stubs {
 
+        static let accountEntropyPoolToGenerate = AccountEntropyPool()
         static let e164 = E164("+17875550100")!
         static let aci = Aci.randomForTesting()
         static let pinCode = "1234"
@@ -3453,7 +3389,7 @@ public class RegistrationCoordinatorTest {
                 pniRegistrationId: 0,
                 unidentifiedAccessKey: "",
                 unrestrictedUnidentifiedAccess: false,
-                twofaMode: .none,
+                reglockToken: nil,
                 registrationRecoveryPassword: masterKey?.regRecoveryPw,
                 encryptedDeviceName: nil,
                 discoverableByPhoneNumber: .nobody,
@@ -3792,7 +3728,7 @@ private extension Usernames.UsernameLink {
 private extension TSRequest {
     var authPassword: String {
         var httpHeaders = HttpHeaders()
-        applyAuth(to: &httpHeaders, willSendViaWebSocket: false)
+        try! applyAuth(to: &httpHeaders, socketAuth: nil)
         let authHeader = httpHeaders.value(forHeader: "Authorization")!
         owsPrecondition(authHeader.hasPrefix("Basic "))
         let authValue = String(data: Data(base64Encoded: String(authHeader.dropFirst(6)))!, encoding: .utf8)!

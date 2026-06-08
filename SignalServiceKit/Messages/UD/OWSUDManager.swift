@@ -90,15 +90,15 @@ public struct SenderCertificates {
 
 public protocol OWSUDManager {
 
-    var trustRoot: PublicKey { get }
+    var trustRoots: [PublicKey] { get }
 
     // MARK: - Recipient State
 
-    func setUnidentifiedAccessMode(_ mode: UnidentifiedAccessMode, for serviceId: ServiceId, tx: DBWriteTransaction)
+    func setUnidentifiedAccessMode(_ mode: UnidentifiedAccessMode, for aci: Aci, tx: DBWriteTransaction)
 
-    func udAccessKey(for serviceId: ServiceId, tx: DBReadTransaction) -> SMKUDAccessKey?
+    func udAccessKey(for aci: Aci, tx: DBReadTransaction) -> SMKUDAccessKey?
 
-    func udAccess(for serviceId: ServiceId, tx: DBReadTransaction) -> OWSUDAccess?
+    func udAccess(for aci: Aci, tx: DBReadTransaction) -> OWSUDAccess?
 
     func fetchAllAciUakPairs(tx: DBReadTransaction) -> [Aci: SMKUDAccessKey]
 
@@ -131,7 +131,7 @@ public protocol OWSUDManager {
 public class OWSUDManagerImpl: OWSUDManager {
 
     private let keyValueStore = KeyValueStore(collection: "kUDCollection")
-    private let serviceIdAccessStore = KeyValueStore(collection: "kUnidentifiedAccessUUIDCollection")
+    private let aciAccessStore = KeyValueStore(collection: "kUnidentifiedAccessUUIDCollection")
 
     // MARK: Local Configuration State
 
@@ -145,13 +145,13 @@ public class OWSUDManagerImpl: OWSUDManager {
     // MARK: Recipient State
 
     // Exposed for testing
-    public internal(set) var trustRoot: PublicKey
+    public internal(set) var trustRoots: [PublicKey]
 
     private let appReadiness: AppReadiness
 
     public init(appReadiness: AppReadiness) {
         self.appReadiness = appReadiness
-        self.trustRoot = OWSUDManagerImpl.trustRoot()
+        self.trustRoots = OWSUDManagerImpl.trustRoots()
 
         SwiftSingletons.register(self)
 
@@ -199,9 +199,9 @@ public class OWSUDManagerImpl: OWSUDManager {
 
     // MARK: - Recipient state
 
-    private func unidentifiedAccessMode(for serviceId: ServiceId, tx: DBReadTransaction) -> UnidentifiedAccessMode {
+    private func unidentifiedAccessMode(for aci: Aci, tx: DBReadTransaction) -> UnidentifiedAccessMode {
         let existingValue: UnidentifiedAccessMode? = {
-            guard let rawValue = serviceIdAccessStore.getInt(serviceId.serviceIdUppercaseString, transaction: tx) else {
+            guard let rawValue = aciAccessStore.getInt(aci.serviceIdUppercaseString, transaction: tx) else {
                 return nil
             }
             return UnidentifiedAccessMode(rawValue: rawValue)
@@ -211,15 +211,15 @@ public class OWSUDManagerImpl: OWSUDManager {
 
     public func setUnidentifiedAccessMode(
         _ mode: UnidentifiedAccessMode,
-        for serviceId: ServiceId,
+        for aci: Aci,
         tx: DBWriteTransaction
     ) {
-        serviceIdAccessStore.setInt(mode.rawValue, key: serviceId.serviceIdUppercaseString, transaction: tx)
+        aciAccessStore.setInt(mode.rawValue, key: aci.serviceIdUppercaseString, transaction: tx)
     }
 
     public func fetchAllAciUakPairs(tx: DBReadTransaction) -> [Aci: SMKUDAccessKey] {
-        let acis: [Aci] = serviceIdAccessStore.allKeys(transaction: tx).compactMap { serviceIdString in
-            guard let aci = try? ServiceId.parseFrom(serviceIdString: serviceIdString) as? Aci else {
+        let acis: [Aci] = aciAccessStore.allKeys(transaction: tx).compactMap { aciString in
+            guard let aci = Aci.parseFrom(aciString: aciString) else {
                 return nil
             }
             switch unidentifiedAccessMode(for: aci, tx: tx) {
@@ -238,31 +238,31 @@ public class OWSUDManagerImpl: OWSUDManager {
 
     // Returns the UD access key for a given recipient
     // if we have a valid profile key for them.
-    public func udAccessKey(for serviceId: ServiceId, tx: DBReadTransaction) -> SMKUDAccessKey? {
+    public func udAccessKey(for aci: Aci, tx: DBReadTransaction) -> SMKUDAccessKey? {
         let profileManager = SSKEnvironment.shared.profileManagerRef
-        guard let profileKey = profileManager.userProfile(for: SignalServiceAddress(serviceId), tx: tx)?.profileKey else {
+        guard let profileKey = profileManager.userProfile(for: SignalServiceAddress(aci), tx: tx)?.profileKey else {
             return nil
         }
         return SMKUDAccessKey(profileKey: profileKey)
     }
 
     // Returns the UD access key for sending to a given recipient or fetching a profile
-    public func udAccess(for serviceId: ServiceId, tx: DBReadTransaction) -> OWSUDAccess? {
+    public func udAccess(for aci: Aci, tx: DBReadTransaction) -> OWSUDAccess? {
         let accessKey: SMKUDAccessKey
         let accessMode: OWSUDAccess.Mode
 
-        switch unidentifiedAccessMode(for: serviceId, tx: tx) {
+        switch unidentifiedAccessMode(for: aci, tx: tx) {
         case .unrestricted:
             accessKey = .zeroedKey
             accessMode = .unrestricted
         case .unknown:
             // If we're not sure, try our best to use the right key.
-            accessKey = udAccessKey(for: serviceId, tx: tx) ?? .zeroedKey
+            accessKey = udAccessKey(for: aci, tx: tx) ?? .zeroedKey
             accessMode = .unknown
         case .enabled:
-            guard let knownAccessKey = udAccessKey(for: serviceId, tx: tx) else {
+            guard let knownAccessKey = udAccessKey(for: aci, tx: tx) else {
                 // Shouldn't happen because we need a profile key to enable it.
-                Logger.warn("Missing profile key for UD-enabled user: \(serviceId).")
+                Logger.warn("Missing profile key for UD-enabled user: \(aci)")
                 return nil
             }
             accessKey = knownAccessKey
@@ -292,18 +292,14 @@ public class OWSUDManagerImpl: OWSUDManager {
             return nil
         }
 
-        let senderCertificate: SenderCertificate
         do {
-            senderCertificate = try SenderCertificate(dataValue)
+            let senderCertificate = try SenderCertificate(dataValue)
+            try validateCertificate(senderCertificate)
+            return senderCertificate
         } catch {
-            owsFailDebug("Certificate could not be parsed: \(error)")
+            Logger.warn("Ignoring invalid cached sender certificate: \(error)")
             return nil
         }
-        guard isValidCertificate(senderCertificate) else {
-            Logger.warn("Existing sender certificate isn't valid. Ignoring it and fetching a new one...")
-            return nil
-        }
-        return senderCertificate
     }
 
     func setSenderCertificate(aciOnly: Bool, certificateData: Data) async {
@@ -342,7 +338,15 @@ public class OWSUDManagerImpl: OWSUDManager {
         }
     }
 
+    private let fetchQueue = ConcurrentTaskQueue(concurrentLimit: 1)
+
     public func fetchSenderCertificates(certificateExpirationPolicy: OWSUDCertificateExpirationPolicy) async throws -> SenderCertificates {
+        return try await fetchQueue.run {
+            return try await _fetchSenderCertificates(certificateExpirationPolicy: certificateExpirationPolicy)
+        }
+    }
+
+    private func _fetchSenderCertificates(certificateExpirationPolicy: OWSUDCertificateExpirationPolicy) async throws -> SenderCertificates {
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
         guard tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegistered else {
             // We don't want to assert but we should log and fail.
@@ -356,7 +360,7 @@ public class OWSUDManagerImpl: OWSUDManager {
         )
     }
 
-    public func fetchSenderCertificate(aciOnly: Bool, certificateExpirationPolicy: OWSUDCertificateExpirationPolicy) async throws -> SenderCertificate {
+    private func fetchSenderCertificate(aciOnly: Bool, certificateExpirationPolicy: OWSUDCertificateExpirationPolicy) async throws -> SenderCertificate {
         // If there is a valid cached sender certificate, use that.
         if let certificate = senderCertificate(aciOnly: aciOnly, certificateExpirationPolicy: certificateExpirationPolicy) {
             return certificate
@@ -369,7 +373,7 @@ public class OWSUDManagerImpl: OWSUDManager {
             throw error
         } catch {
             Logger.warn("Couldn't fetch Sealed Sender certificate: \(error)")
-            SSKEnvironment.shared.notificationPresenterRef.notifyTestPopulation(ofErrorMessage: "Couldn't parse Sealed Sender certificate.")
+            SSKEnvironment.shared.notificationPresenterRef.notifyTestPopulation(ofErrorMessage: "Couldn't parse Sealed Sender certificate")
             throw error
         }
         await self.setSenderCertificate(aciOnly: aciOnly, certificateData: senderCertificate.serialize())
@@ -393,34 +397,29 @@ public class OWSUDManagerImpl: OWSUDManager {
         }()
 
         let senderCertificate = try SenderCertificate(certificateData)
-        guard self.isValidCertificate(senderCertificate) else {
-            throw OWSUDError.invalidData(description: "Invalid sender certificate returned by server")
-        }
+        try validateCertificate(senderCertificate)
         return senderCertificate
     }
 
-    private func isValidCertificate(_ certificate: SenderCertificate) -> Bool {
+    private func validateCertificate(_ certificate: SenderCertificate) throws {
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
 
         guard
             let deviceId = DeviceId(validating: certificate.deviceId),
             tsAccountManager.storedDeviceIdWithMaybeTransaction.equals(deviceId)
         else {
-            Logger.warn("Sender certificate has incorrect device ID")
-            return false
+            throw OWSUDError.invalidData(description: "Sender certificate has incorrect device ID")
         }
 
         let localIdentifiers = tsAccountManager.localIdentifiersWithMaybeSneakyTransaction
 
         let sender = certificate.sender
         guard sender.e164 == nil || sender.e164 == localIdentifiers?.phoneNumber else {
-            Logger.warn("Sender certificate has incorrect phone number")
-            return false
+            throw OWSUDError.invalidData(description: "Sender certificate has incorrect phone number")
         }
 
         guard sender.senderAci == localIdentifiers!.aci else {
-            Logger.error("Sender certificate has incorrect ACI")
-            return false
+            throw OWSUDError.invalidData(description: "Sender certificate has incorrect ACI")
         }
 
         // Ensure that the certificate will not expire in the next hour.
@@ -429,25 +428,26 @@ public class OWSUDManagerImpl: OWSUDManager {
         let nowMs = NSDate.ows_millisecondTimeStamp()
         let anHourFromNowMs = nowMs + UInt64.hourInMs
 
-        guard case .some(true) = try? certificate.validate(trustRoot: trustRoot, time: anHourFromNowMs) else {
-            return false
+        guard certificate.validate(trustRoots: trustRoots, time: anHourFromNowMs) else {
+            throw OWSUDError.invalidData(description: "Sender certificate failed validation")
         }
-
-        return true
     }
 
-    public class func trustRoot() -> PublicKey {
-        guard let trustRootData = Data(base64Encoded: TSConstants.kUDTrustRoot) else {
-            // This exits.
-            owsFail("Invalid trust root data.")
+    public class func trustRoots() -> [PublicKey] {
+        var trustRoots = [PublicKey]()
+        for trustRoot in TSConstants.kUDTrustRoots {
+            do {
+                guard let data = Data(base64Encoded: trustRoot) else {
+                    // This exits.
+                    owsFail("Invalid trust root data.")
+                }
+                trustRoots.append(try PublicKey(data))
+            } catch {
+                // This exits.
+                owsFail("Invalid trust root.")
+            }
         }
-
-        do {
-            return try PublicKey(trustRootData as Data)
-        } catch {
-            // This exits.
-            owsFail("Invalid trust root.")
-        }
+        return trustRoots
     }
 
     // MARK: - Unrestricted Access

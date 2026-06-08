@@ -15,6 +15,11 @@ public enum BackupRestoreState: Int, Codable {
     case finalized = 200
 }
 
+public struct BackupCdnInfo {
+    public let fileInfo: AttachmentDownloads.CdnInfo
+    public let metadataHeader: BackupNonce.MetadataHeader
+}
+
 public protocol BackupArchiveManager {
 
     // MARK: - Interact with remotes
@@ -22,13 +27,13 @@ public protocol BackupArchiveManager {
     /// Fetch the CDN info for the current backup
     func backupCdnInfo(
         backupKey: MessageRootBackupKey,
-        auth: ChatServiceAuth
-    ) async throws -> AttachmentDownloads.CdnInfo
+        backupAuth: BackupServiceAuth,
+    ) async throws -> BackupCdnInfo
 
     /// Download the encrypted backup for the current user to a local file.
     func downloadEncryptedBackup(
         backupKey: MessageRootBackupKey,
-        auth: ChatServiceAuth,
+        backupAuth: BackupServiceAuth,
         progress: OWSProgressSink?
     ) async throws -> URL
 
@@ -37,7 +42,7 @@ public protocol BackupArchiveManager {
     func uploadEncryptedBackup(
         backupKey: MessageRootBackupKey,
         metadata: Upload.EncryptedBackupUploadMetadata,
-        registeredBackupIDToken: RegisteredBackupIDToken,
+        registeredBackupKeyToken: RegisteredBackupKeyToken,
         auth: ChatServiceAuth,
         progress: OWSProgressSink?,
     ) async throws -> Upload.Result<Upload.EncryptedBackupUploadMetadata>
@@ -48,8 +53,7 @@ public protocol BackupArchiveManager {
     /// - SeeAlso `uploadEncryptedBackup`
     func exportEncryptedBackup(
         localIdentifiers: LocalIdentifiers,
-        backupKey: MessageRootBackupKey,
-        backupPurpose: MessageBackupPurpose,
+        backupPurpose: BackupExportPurpose,
         progress: OWSProgressSink?
     ) async throws -> Upload.EncryptedBackupUploadMetadata
 
@@ -58,7 +62,6 @@ public protocol BackupArchiveManager {
     /// integration tests.
     func exportPlaintextBackupForTests(
         localIdentifiers: LocalIdentifiers,
-        progress: OWSProgressSink?
     ) async throws -> URL
 #endif
 
@@ -74,33 +77,21 @@ public protocol BackupArchiveManager {
         fileUrl: URL,
         localIdentifiers: LocalIdentifiers,
         isPrimaryDevice: Bool,
-        backupKey: MessageRootBackupKey,
-        backupPurpose: MessageBackupPurpose,
+        source: BackupImportSource,
         progress: OWSProgressSink?
     ) async throws
 
+#if TESTABLE_BUILD
     /// Import a backup from the plaintext binary file at the given local URL.
-    func importPlaintextBackup(
+    func importPlaintextBackupForTests(
         fileUrl: URL,
         localIdentifiers: LocalIdentifiers,
-        isPrimaryDevice: Bool,
-        backupPurpose: MessageBackupPurpose,
-        progress: OWSProgressSink?
     ) async throws
+#endif
 
     /// Call this if ``backupRestoreState(tx:)`` returns ``BackupRestoreState/unfinalized``.
     /// ``importEncryptedBackup(fileUrl:localIdentifiers:isPrimaryDevice:backupKey:backupPurpose:progress:)``
-    /// and ``importPlaintextBackup(fileUrl:localIdentifiers:isPrimaryDevice:backupPurpose:progress:)`` will
-    /// finalize on their own; however if this process is interrupted (by e.g. cancellation or app termination) callers MUST NOT import again
+    /// will finalize on its own; however if this process is interrupted (by e.g. cancellation or app termination) callers MUST NOT import again
     /// but MUST call this method to finish the in-progress import finalization steps. This method is idempotent; import is not.
     func finalizeBackupImport(progress: OWSProgressSink?) async throws
-
-    // MARK: -
-
-    /// Validate the encrypted backup file located at the given local URL.
-    func validateEncryptedBackup(
-        fileUrl: URL,
-        backupKey: MessageRootBackupKey,
-        backupPurpose: MessageBackupPurpose
-    ) async throws
 }

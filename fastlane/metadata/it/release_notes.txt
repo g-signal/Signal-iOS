@@ -1,1 +1,1 @@
-• La costanza è fondamentale nella vita, ma è sempre bello quando le cose riescono al primo tentativo! Abbiamo risolto un bug che a volte richiedeva più tentativi per inviare un adesivo dalla tastiera delle emoji di iOS. Lo stesso bug è stato risolto anche per le Genmoji.
+• Abbiamo corretto un bug che causava la visualizzazione di uno schermo vuoto quando provavi a collegare un nuovo dispositivo. Da ora la schermata per navigare fra i media tornerà a vedersi chiaramente… a meno che tu non sia al buio.

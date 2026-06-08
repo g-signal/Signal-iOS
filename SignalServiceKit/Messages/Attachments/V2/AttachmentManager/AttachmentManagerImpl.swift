@@ -71,6 +71,7 @@ public class AttachmentManagerImpl: AttachmentManager {
     public func createAttachmentPointers(
         from backupProtos: [OwnedAttachmentBackupPointerProto],
         uploadEra: String,
+        attachmentByteCounter: BackupArchiveAttachmentByteCounter,
         tx: DBWriteTransaction
     ) -> [OwnedAttachmentBackupPointerProto.CreationError] {
         let results = createAttachments(
@@ -84,6 +85,7 @@ public class AttachmentManagerImpl: AttachmentManager {
                     owner: $1,
                     sourceOrder: $2,
                     uploadEra: uploadEra,
+                    attachmentByteCounter: attachmentByteCounter,
                     tx: $3
                 )
             },
@@ -328,7 +330,7 @@ public class AttachmentManagerImpl: AttachmentManager {
             blurHash: proto.blurHash,
             mimeType: mimeType,
             encryptionKey: transitTierInfo.encryptionKey,
-            transitTierInfo: transitTierInfo
+            latestTransitTierInfo: transitTierInfo
         )
         let sourceMediaSizePixels: CGSize?
         if
@@ -432,6 +434,7 @@ public class AttachmentManagerImpl: AttachmentManager {
         // Nil if no order is to be applied.
         sourceOrder: UInt32?,
         uploadEra: String,
+        attachmentByteCounter: BackupArchiveAttachmentByteCounter,
         tx: DBWriteTransaction
     ) -> Result<Void, OwnedAttachmentBackupPointerProto.CreationError> {
         let proto = ownedProto.proto
@@ -467,10 +470,10 @@ public class AttachmentManagerImpl: AttachmentManager {
             proto.hasIncrementalMac,
             proto.hasIncrementalMacChunkSize
         {
-            incrementalMacInfo = Attachment.IncrementalMacInfo(
-                mac: proto.incrementalMac,
-                chunkSize: proto.incrementalMacChunkSize
-            )
+            // Incremental mac is unsupported on iOS;
+            // when we add support and can validate at
+            // download time, we should pull it off the proto.
+            incrementalMacInfo = nil
         } else {
             incrementalMacInfo = nil
         }
@@ -504,7 +507,7 @@ public class AttachmentManagerImpl: AttachmentManager {
                     blurHash: proto.blurHash.nilIfEmpty,
                     mimeType: mimeType,
                     encryptionKey: encryptionKey,
-                    transitTierInfo: transitTierInfo,
+                    latestTransitTierInfo: transitTierInfo,
                     sha256ContentHash: sha256ContentHash,
                     mediaName: Attachment.mediaName(
                         sha256ContentHash: sha256ContentHash,
@@ -533,7 +536,7 @@ public class AttachmentManagerImpl: AttachmentManager {
                         blurHash: proto.blurHash.nilIfEmpty,
                         mimeType: mimeType,
                         encryptionKey: encryptionKey,
-                        transitTierInfo: transitTierInfo,
+                        latestTransitTierInfo: transitTierInfo,
                         sha256ContentHash: nil,
                         mediaName: nil,
                         mediaTierInfo: nil,
@@ -575,11 +578,18 @@ public class AttachmentManagerImpl: AttachmentManager {
         }
 
         do {
-            try attachmentStore.insert(
+            let attachmentRowId = try attachmentStore.insert(
                 attachmentParams,
                 reference: referenceParams,
                 tx: tx
             )
+
+            if let sourceUnencryptedByteCount {
+                attachmentByteCounter.addToByteCount(
+                    attachmentID: attachmentRowId,
+                    byteCount: Cryptography.estimatedMediaTierCDNSize(unencryptedSize: sourceUnencryptedByteCount)
+                )
+            }
 
             if let mediaName = attachmentParams.mediaName {
                 orphanedBackupAttachmentManager.didCreateOrUpdateAttachment(
@@ -836,7 +846,8 @@ public class AttachmentManagerImpl: AttachmentManager {
                         pendingAttachmentEncryptionKey: pendingAttachment.encryptionKey,
                         pendingAttachmentMimeType: pendingAttachment.mimeType,
                         pendingAttachmentOrphanRecordId: hasOrphanRecord ? pendingAttachment.orphanRecordId : nil,
-                        pendingAttachmentTransitTierInfo: attachmentParams.transitTierInfo,
+                        pendingAttachmentLatestTransitTierInfo: attachmentParams.latestTransitTierInfo,
+                        pendingAttachmentOriginalTransitTierInfo: attachmentParams.originalTransitTierInfo,
                         attachmentStore: attachmentStore,
                         orphanedAttachmentCleaner: orphanedAttachmentCleaner,
                         orphanedAttachmentStore: orphanedAttachmentStore,
@@ -967,7 +978,8 @@ public class AttachmentManagerImpl: AttachmentManager {
         pendingAttachmentEncryptionKey: Data,
         pendingAttachmentMimeType: String,
         pendingAttachmentOrphanRecordId: OrphanedAttachmentRecord.IDType?,
-        pendingAttachmentTransitTierInfo: Attachment.TransitTierInfo?,
+        pendingAttachmentLatestTransitTierInfo: Attachment.TransitTierInfo?,
+        pendingAttachmentOriginalTransitTierInfo: Attachment.TransitTierInfo?,
         attachmentStore: AttachmentStore,
         orphanedAttachmentCleaner: OrphanedAttachmentCleaner,
         orphanedAttachmentStore: OrphanedAttachmentStore,
@@ -1035,19 +1047,49 @@ public class AttachmentManagerImpl: AttachmentManager {
 
         // Transit tier info has its own key independent of the local file encryption key;
         // we should just keep whichever upload we think is newer.
-        let transitTierInfo: Attachment.TransitTierInfo?
+        let latestTransitTierInfo: Attachment.TransitTierInfo?
         if
-            let existingTransitTierInfo = existingAttachment.transitTierInfo,
-            let pendingAttachmentTransitTierInfo
+            let existingTransitTierInfo = existingAttachment.latestTransitTierInfo,
+            let pendingAttachmentLatestTransitTierInfo
         {
-            if existingTransitTierInfo.uploadTimestamp > pendingAttachmentTransitTierInfo.uploadTimestamp {
-                transitTierInfo = existingTransitTierInfo
+            if existingTransitTierInfo.uploadTimestamp > pendingAttachmentLatestTransitTierInfo.uploadTimestamp {
+                latestTransitTierInfo = existingTransitTierInfo
             } else {
-                transitTierInfo = pendingAttachmentTransitTierInfo
+                latestTransitTierInfo = pendingAttachmentLatestTransitTierInfo
             }
         } else {
             // Take whichever one we've got.
-            transitTierInfo = existingAttachment.transitTierInfo ?? pendingAttachmentTransitTierInfo
+            latestTransitTierInfo = existingAttachment.latestTransitTierInfo ?? pendingAttachmentLatestTransitTierInfo
+        }
+
+        // Original transit tier info must match the top level encryption key and digest.
+        // We will take any candidate transit tier info that meets those requirements.
+        var originalTransitTierInfo: Attachment.TransitTierInfo?
+        let candidateOriginalTransitTierInfos = [
+            existingAttachment.latestTransitTierInfo,
+            existingAttachment.originalTransitTierInfo,
+            pendingAttachmentLatestTransitTierInfo,
+            pendingAttachmentOriginalTransitTierInfo,
+        ].compacted()
+        for candidateOriginalTransitTierInfo in candidateOriginalTransitTierInfos {
+            guard candidateOriginalTransitTierInfo.encryptionKey == pendingAttachmentEncryptionKey else {
+                continue
+            }
+            switch candidateOriginalTransitTierInfo.integrityCheck {
+            case .sha256ContentHash:
+                // Can't verify the digest (and iv) match, so we can't use this one.
+                continue
+            case .digestSHA256Ciphertext(let infoDigest):
+                if
+                    infoDigest == pendingAttachmentStreamInfo.digestSHA256Ciphertext,
+                    originalTransitTierInfo == nil
+                        || originalTransitTierInfo!.uploadTimestamp
+                            < candidateOriginalTransitTierInfo.uploadTimestamp
+                {
+                    originalTransitTierInfo = candidateOriginalTransitTierInfo
+                }
+            }
+
         }
 
         // Set the stream info on the existing attachment, if needed.
@@ -1056,7 +1098,8 @@ public class AttachmentManagerImpl: AttachmentManager {
             into: existingAttachment,
             encryptionKey: pendingAttachmentEncryptionKey,
             validatedMimeType: pendingAttachmentMimeType,
-            transitTierInfo: transitTierInfo,
+            latestTransitTierInfo: latestTransitTierInfo,
+            originalTransitTierInfo: originalTransitTierInfo,
             mediaTierInfo: mediaTierInfo,
             thumbnailMediaTierInfo: thumbnailMediaTierInfo,
             tx: tx

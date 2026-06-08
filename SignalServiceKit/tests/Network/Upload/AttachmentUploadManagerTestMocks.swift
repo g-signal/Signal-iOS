@@ -40,6 +40,10 @@ class _Upload_FileSystemMock: Upload.Shims.FileSystem {
 
     func temporaryFileUrl() -> URL { return URL(string: "file://")! }
 
+    func fileOrFolderExists(url: URL) -> Bool {
+        true
+    }
+
     func deleteFile(url: URL) throws { }
 
     func createTempFileSlice(url: URL, start: Int) throws -> (URL, Int) {
@@ -56,10 +60,10 @@ class _Upload_SleepTimerMock: Upload.Shims.SleepTimer {
 
 class _AttachmentUploadManager_NetworkManagerMock: NetworkManager {
 
-    var performRequestBlock: ((TSRequest, Bool) -> Promise<HTTPResponse>)?
+    var performRequestBlock: ((TSRequest) -> Promise<HTTPResponse>)?
 
-    override func asyncRequestImpl(_ request: TSRequest, canUseWebSocket: Bool, retryPolicy: RetryPolicy) async throws -> any HTTPResponse {
-        return try await performRequestBlock!(request, canUseWebSocket).awaitable()
+    override func asyncRequestImpl(_ request: TSRequest, retryPolicy: RetryPolicy) async throws -> any HTTPResponse {
+        return try await performRequestBlock!(request).awaitable()
     }
 }
 
@@ -81,21 +85,17 @@ public class _AttachmentUploadManager_OWSURLSessionMock: BaseOWSURLSessionMock {
     }
 }
 
-class _AttachmentUploadManager_ChatConnectionManagerMock: ChatConnectionManager {
-    func updateCanOpenWebSocket() {}
-    var hasEmptiedInitialQueue: Bool { true }
-    var identifiedConnectionState: OWSChatConnectionState { .open }
-    func waitForIdentifiedConnectionToOpen() async throws { }
-    func waitUntilIdentifiedConnectionShouldBeClosed() async throws(CancellationError) { fatalError() }
-    func shouldWaitForSocketToMakeRequest(connectionType: OWSChatConnectionType) -> Bool { true }
-    func shouldSocketBeOpen_restOnly(connectionType: OWSChatConnectionType) -> Bool { fatalError() }
-    func requestIdentifiedConnection() -> OWSChatConnection.ConnectionToken { fatalError() }
-    func requestUnidentifiedConnection() -> OWSChatConnection.ConnectionToken { fatalError() }
-    func makeRequest(_ request: TSRequest) async throws -> HTTPResponse { fatalError() }
-    func waitForDisconnectIfClosed() async {}
-}
+class _AttachmentUploadManager_ChatConnectionManagerMock: ChatConnectionManagerMock {}
 
 class _AttachmentUploadManager_BackupRequestManagerMock: BackupRequestManager {
+    func fetchBackupServiceAuthForRegistration(
+        key: BackupKeyMaterial,
+        localAci: Aci,
+        chatServiceAuth: ChatServiceAuth
+    ) async throws -> BackupServiceAuth {
+        fatalError("Unimplemented for tests")
+    }
+
     func fetchBackupServiceAuth(
         for key: BackupKeyMaterial,
         localAci: Aci,
@@ -157,6 +157,14 @@ class _AttachmentUploadManager_BackupRequestManagerMock: BackupRequestManager {
     }
 
     func redeemReceipt(receiptCredentialPresentation: Data) async throws {
+    }
+
+    func fetchSvr🐝AuthCredential(
+        key: SignalServiceKit.MessageRootBackupKey,
+        chatServiceAuth auth: SignalServiceKit.ChatServiceAuth,
+        forceRefresh: Bool
+    ) async throws -> LibSignalClient.Auth {
+        return LibSignalClient.Auth(username: "", password: "")
     }
 }
 

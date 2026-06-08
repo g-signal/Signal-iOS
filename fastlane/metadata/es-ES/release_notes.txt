@@ -1,1 +1,1 @@
-• La constancia siempre da sus frutos, pero a veces es mejor cuando todo funciona a la primera. Por eso, hemos corregido un error que a veces hacía que enviar un sticker desde el teclado emoji de iOS llevase varios intentos.
+• Hemos corregido un error que, al intentar vincular un nuevo dispositivo, hacía que el visor de la cámara no mostrase nada. Ahora solo se verá así si estás intentando vincular un nuevo dispositivo en una habitación a oscuras.

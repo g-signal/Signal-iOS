@@ -11,7 +11,7 @@ import Testing
 
 public class BackupListMediaManagerTests {
 
-    let accountKeyStore = AccountKeyStore()
+    let accountKeyStore: AccountKeyStore
     let attachmentStore = AttachmentStoreImpl()
     let backupAttachmentDownloadStore = BackupAttachmentDownloadStoreImpl()
     let backupAttachmentUploadScheduler = BackupAttachmentUploadSchedulerMock()
@@ -29,6 +29,9 @@ public class BackupListMediaManagerTests {
         let dateProvider: DateProvider = {
             Date()
         }
+        self.accountKeyStore = AccountKeyStore(
+            backupSettingsStore: backupSettingsStore
+        )
         self.listMediaManager = BackupListMediaManagerImpl(
             accountKeyStore: accountKeyStore,
             attachmentStore: attachmentStore,
@@ -61,7 +64,7 @@ public class BackupListMediaManagerTests {
             valueFlags: ["global.backups.mediaTierFallbackCdnNumber": "\(remoteConfigCdnNumber)"],
         )
 
-        let mediaRootBackupKey = try! MediaRootBackupKey(data: Data(repeating: 8, count: 32))
+        let mediaRootBackupKey = MediaRootBackupKey(backupKey: .generateRandom())
         await db.awaitableWrite { tx in
             accountKeyStore.setMediaRootBackupKey(mediaRootBackupKey, tx: tx)
             backupSettingsStore.setBackupPlan(.paid(optimizeLocalStorage: false), tx: tx)
@@ -307,7 +310,7 @@ public class BackupListMediaManagerTests {
                 blurHash: nil,
                 mimeType: "image/jpeg",
                 encryptionKey: UUID().data,
-                transitTierInfo: nil,
+                latestTransitTierInfo: nil,
                 sha256ContentHash: UUID().data,
                 mediaName: mediaName,
                 mediaTierInfo: mediaTierInfo,
@@ -368,82 +371,5 @@ public class BackupListMediaManagerTests {
         }
 
         return attachmentRecord.sqliteId!
-    }
-}
-
-// MAEK: - Mocks
-
-private class BackupRequestManagerMock: BackupRequestManager {
-
-    init() {}
-
-    func fetchBackupServiceAuth(
-        for key: SignalServiceKit.BackupKeyMaterial,
-        localAci: LibSignalClient.Aci,
-        auth: SignalServiceKit.ChatServiceAuth,
-        forceRefreshUnlessCachedPaidCredential: Bool
-    ) async throws -> SignalServiceKit.BackupServiceAuth {
-        return BackupServiceAuth.mock(type: .media, backupLevel: .paid)
-    }
-
-    func fetchBackupUploadForm(
-        backupByteLength: UInt32,
-        auth: SignalServiceKit.BackupServiceAuth
-    ) async throws -> SignalServiceKit.Upload.Form {
-        fatalError("Unimplemented")
-    }
-
-    func fetchBackupMediaAttachmentUploadForm(
-        auth: SignalServiceKit.BackupServiceAuth
-    ) async throws -> SignalServiceKit.Upload.Form {
-        fatalError("Unimplemented")
-    }
-
-    func fetchMediaTierCdnRequestMetadata(
-        cdn: Int32,
-        auth: SignalServiceKit.BackupServiceAuth
-    ) async throws -> SignalServiceKit.MediaTierReadCredential {
-        fatalError("Unimplemented")
-    }
-
-    func fetchBackupRequestMetadata(
-        auth: SignalServiceKit.BackupServiceAuth
-    ) async throws -> SignalServiceKit.BackupReadCredential {
-        fatalError("Unimplemented")
-    }
-
-    func copyToMediaTier(
-        item: SignalServiceKit.BackupArchive.Request.MediaItem,
-        auth: SignalServiceKit.BackupServiceAuth
-    ) async throws -> UInt32 {
-        fatalError("Unimplemented")
-    }
-
-    func copyToMediaTier(
-        items: [SignalServiceKit.BackupArchive.Request.MediaItem],
-        auth: SignalServiceKit.BackupServiceAuth
-    ) async throws -> [SignalServiceKit.BackupArchive.Response.BatchedBackupMediaResult] {
-        fatalError("Unimplemented")
-    }
-
-    var listMediaResults = [BackupArchive.Response.ListMediaResult]()
-
-    func listMediaObjects(
-        cursor: String?,
-        limit: UInt32?,
-        auth: SignalServiceKit.BackupServiceAuth
-    ) async throws -> SignalServiceKit.BackupArchive.Response.ListMediaResult {
-        return listMediaResults.popFirst()!
-    }
-
-    func deleteMediaObjects(
-        objects: [SignalServiceKit.BackupArchive.Request.DeleteMediaTarget],
-        auth: SignalServiceKit.BackupServiceAuth
-    ) async throws {
-        fatalError("Unimplemented")
-    }
-
-    func redeemReceipt(receiptCredentialPresentation: Data) async throws {
-        fatalError("Unimplemented")
     }
 }

@@ -68,16 +68,14 @@ public class UserNotificationConfig {
 
 // MARK: -
 
-class UserNotificationPresenter {
+public class UserNotificationPresenter {
     private static var notificationCenter: UNUserNotificationCenter { UNUserNotificationCenter.current() }
 
     // Delay notification of incoming messages when it's likely to be read by a linked device to
     // avoid notifying a user on their phone while a conversation is actively happening on desktop.
     let kNotificationDelayForRemoteRead: TimeInterval = 20
 
-    init() {
-        SwiftSingletons.register(self)
-    }
+    public init() {}
 
     /// Request notification permissions.
     func registerNotificationSettings() async {
@@ -153,7 +151,7 @@ class UserNotificationPresenter {
             let db = DependenciesBridge.shared.db
             let deviceStore = DependenciesBridge.shared.deviceStore
             let linkedDeviceDetails = db.read { tx in
-                try? deviceStore.mostRecentlyLinkedDeviceDetails(tx: tx)
+                deviceStore.mostRecentlyLinkedDeviceDetails(tx: tx)
             }
 
             let delay = {
@@ -165,6 +163,9 @@ class UserNotificationPresenter {
                 }
             }()
 
+            trigger = UNTimeIntervalNotificationTrigger(timeInterval: delay, repeats: false)
+        } else if category == .backupsEnabled {
+            let delay = TimeInterval.random(in: .hour...(3 * .hour))
             trigger = UNTimeIntervalNotificationTrigger(timeInterval: delay, repeats: false)
         } else {
             trigger = nil
@@ -221,7 +222,8 @@ class UserNotificationPresenter {
              .missedCallFromNoLongerVerifiedIdentity,
              .transferRelaunch,
              .deregistration,
-             .newDeviceLinked:
+             .newDeviceLinked,
+             .backupsEnabled:
             // Always show these notifications
             return true
 
@@ -234,7 +236,8 @@ class UserNotificationPresenter {
              .incomingMessageWithoutActions,
              .incomingReactionWithActions_CanReply,
              .incomingReactionWithActions_CannotReply,
-             .infoOrErrorMessage:
+             .infoOrErrorMessage,
+             .pollEndNotification:
             // Don't show these notifications when the thread is visible.
             if
                 let notificationThreadUniqueId = userInfo.threadId,
@@ -297,25 +300,29 @@ class UserNotificationPresenter {
         await cancel(cancellation: .storyMessage(storyMessageUniqueId))
     }
 
-    func clearAllNotifications() {
+    public func clearAllNotifications() {
         Logger.info("Clearing all notifications")
 
         Self.notificationCenter.removeAllPendingNotificationRequests()
         Self.notificationCenter.removeAllDeliveredNotifications()
     }
 
-    static func clearAllNotificationsExceptNewLinkedDevices() {
-        Logger.info("Clearing all notifications except new linked device notifications")
+    public func clearAllNonScheduledNotifications() {
+        Logger.info("Clearing all notifications except scheduled notifications")
 
         Task {
+            let scheduledNotifications: Set = [
+                AppNotificationCategory.newDeviceLinked.identifier,
+                AppNotificationCategory.backupsEnabled.identifier
+            ]
             let pendingNotificationIDs = await Self.notificationCenter.pendingNotificationRequests()
                 .filter { notificationRequest in
-                    notificationRequest.content.categoryIdentifier != AppNotificationCategory.newDeviceLinked.identifier
+                    scheduledNotifications.contains(notificationRequest.content.categoryIdentifier) == false
                 }
                 .map(\.identifier)
             let deliveredNotificationIDs = await Self.notificationCenter.deliveredNotifications()
                 .filter { notification in
-                    notification.request.content.categoryIdentifier != AppNotificationCategory.newDeviceLinked.identifier
+                    scheduledNotifications.contains(notification.request.content.categoryIdentifier) == false
                 }
                 .map(\.request.identifier)
 
@@ -324,7 +331,7 @@ class UserNotificationPresenter {
         }
     }
 
-    static func clearDeliveredNewLinkedDevicesNotifications() {
+    public func clearDeliveredNewLinkedDevicesNotifications() {
         Logger.info("Clearing delivered new linked device notifications")
         Task {
             let pendingNotificationRequestIDs = await Self.notificationCenter.deliveredNotifications()

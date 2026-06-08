@@ -62,7 +62,7 @@ public class ConversationSearchViewController: UITableViewController {
         StringStyle(
             .color(Theme.secondaryTextAndIconColor),
             .xmlRules([
-                .style(FullTextSearchIndexer.matchTag, StringStyle(.font(UIFont.dynamicTypeBody2.semibold())))
+                .style(FullTextSearchIndexer.matchTag, StringStyle(.font(UIFont.dynamicTypeSubheadline.semibold())))
             ])
         )
     }
@@ -464,11 +464,12 @@ public class ConversationSearchViewController: UITableViewController {
         textView.font = UIFont.dynamicTypeBodyClamped.semibold()
         textView.text = title
 
+        let hInset = OWSTableViewController2.cellOuterInset(in: view)
         var textContainerInset = UIEdgeInsets(
             top: 14,
-            left: OWSTableViewController2.cellHOuterLeftMargin(in: view),
+            left: hInset,
             bottom: 8,
-            right: OWSTableViewController2.cellHOuterRightMargin(in: view)
+            right: hInset
         )
         textContainerInset.left += tableView.safeAreaInsets.left
         textContainerInset.right += tableView.safeAreaInsets.right

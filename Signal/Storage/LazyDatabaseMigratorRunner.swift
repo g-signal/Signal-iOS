@@ -7,41 +7,26 @@ import Foundation
 import SignalServiceKit
 
 class LazyDatabaseMigratorRunner: BGProcessingTaskRunner {
-    private let backgroundMessageFetcherFactory: () -> BackgroundMessageFetcherFactory
     private let databaseStorage: SDSDatabaseStorage
-    private let remoteConfigManager: () -> any RemoteConfigManager
-    private let tsAccountManager: () -> any TSAccountManager
 
     init(
-        backgroundMessageFetcherFactory: @escaping () -> BackgroundMessageFetcherFactory,
         databaseStorage: SDSDatabaseStorage,
-        remoteConfigManager: @escaping () -> any RemoteConfigManager,
-        tsAccountManager: @escaping () -> any TSAccountManager
     ) {
-        self.backgroundMessageFetcherFactory = backgroundMessageFetcherFactory
         self.databaseStorage = databaseStorage
-        self.remoteConfigManager = remoteConfigManager
-        self.tsAccountManager = tsAccountManager
     }
 
     static var taskIdentifier: String = "LazyDatabaseMigratorTask"
 
-    static var requiresNetworkConnectivity: Bool = true
+    static var requiresNetworkConnectivity: Bool = false
+    public static let requiresExternalPower = false
 
     func startCondition() -> BGProcessingTaskStartCondition {
-        guard
-            tsAccountManager().registrationStateWithMaybeSneakyTransaction.isRegistered,
-            remoteConfigManager().currentConfig().isLazyDatabaseMigratorEnabled
-        else {
-            return .never
-        }
         do {
             let indexes = try databaseStorage.read { tx in
                 let db = tx.database
                 return Set(try String.fetchAll(db, sql: "SELECT name FROM sqlite_master WHERE type = 'index'"))
             }
             let lazilyRemovedIndexes = [
-                "index_interactions_on_view_once",
                 "index_interactions_on_uniqueId_and_threadUniqueId",
                 "index_interactions_on_expiresInSeconds_and_expiresAt",
                 "index_model_TSInteraction_on_uniqueThreadId_and_attachmentIds",
@@ -57,7 +42,6 @@ class LazyDatabaseMigratorRunner: BGProcessingTaskRunner {
                 return .asSoonAsPossible
             }
             let lazilyInsertedIndexes = [
-                "Interaction_incompleteViewOnce_partial",
                 "Interaction_disappearingMessages_partial",
                 "Interaction_timestamp",
                 "Interaction_unendedGroupCall_partial",
@@ -74,36 +58,12 @@ class LazyDatabaseMigratorRunner: BGProcessingTaskRunner {
         }
     }
 
-    func run() async throws {
-        try await runWithChatConnection(
-            backgroundMessageFetcherFactory: backgroundMessageFetcherFactory(),
-            operation: { try await _run() },
-        )
-    }
-
     /// Run the migrations.
     ///
     /// If you encounter an error in this method, you can update
     /// `simulatePriorCancellation` to return true and run on a simulator.
-    private func _run() async throws {
+    func run() async throws {
         // Must be idempotent.
-
-        guard tsAccountManager().registrationStateWithMaybeSneakyTransaction.isRegistered else {
-            Logger.warn("Skipping because we're not registered.")
-            return
-        }
-
-        try await remoteConfigManager().refreshIfNeeded()
-        guard remoteConfigManager().currentConfig().isLazyDatabaseMigratorEnabled else {
-            Logger.warn("Skipping because kill switch is set.")
-            return
-        }
-
-        try Task.checkCancellation()
-        await databaseStorage.awaitableWrite { tx in
-            Logger.info("Rebuilding incomplete view once index.")
-            try! GRDBSchemaMigrator.rebuildIncompleteViewOnceIndex(tx: tx)
-        }
 
         try Task.checkCancellation()
         await databaseStorage.awaitableWrite { tx in

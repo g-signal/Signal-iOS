@@ -13,7 +13,7 @@ public protocol BackupAttachmentUploadStore {
     /// If the same attachment is already enqueued, updates it to the greater of the old and new owner's timestamp.
     ///
     /// Doesn't actually trigger an upload; callers must later call `fetchNextUpload`, complete the upload of
-    /// both the fullsize and thumbnail as needed, and then call `removeQueuedUpload` once finished.
+    /// both the fullsize and thumbnail as needed, and then call `markUploadDone` once finished.
     /// Note that the upload operation can (and will) be separately durably enqueued in AttachmentUploadQueue,
     /// that's fine and doesn't change how this queue works.
     func enqueue(
@@ -29,13 +29,14 @@ public protocol BackupAttachmentUploadStore {
     /// to handle results with timestamps greater than the current time.
     func fetchNextUploads(
         count: UInt,
+        isFullsize: Bool,
         tx: DBReadTransaction
     ) throws -> [QueuedBackupAttachmentUpload]
 
     /// Remove the upload from the queue. Should be called once uploaded (or permanently failed).
     /// - returns the removed record, if any.
     @discardableResult
-    func removeQueuedUpload(
+    func markUploadDone(
         for attachmentId: Attachment.IDType,
         fullsize: Bool,
         tx: DBWriteTransaction
@@ -78,9 +79,14 @@ public class BackupAttachmentUploadStoreImpl: BackupAttachmentUploadStore {
             .fetchOne(db)
 
         if var existingRecord {
-            // Only update if the new one has higher priority; otherwise leave untouched.
-            if newRecord.highestPriorityOwnerType.isHigherPriority(than: existingRecord.highestPriorityOwnerType) {
+            // Only update if done or the new one has higher priority; otherwise leave untouched.
+            let shouldUpdate = switch existingRecord.state {
+            case .done: true
+            case .ready: newRecord.highestPriorityOwnerType.isHigherPriority(than: existingRecord.highestPriorityOwnerType)
+            }
+            if shouldUpdate {
                 existingRecord.highestPriorityOwnerType = newRecord.highestPriorityOwnerType
+                existingRecord.state = newRecord.state
                 try existingRecord.update(db)
             }
         } else {
@@ -92,37 +98,40 @@ public class BackupAttachmentUploadStoreImpl: BackupAttachmentUploadStore {
 
     public func fetchNextUploads(
         count: UInt,
+        isFullsize: Bool,
         tx: DBReadTransaction
     ) throws -> [QueuedBackupAttachmentUpload] {
         // NULLS FIRST is unsupported in GRDB so we bridge to raw SQL;
         // we want thread wallpapers to go first (null timestamp) and then
         // descending order after that.
-        // We do thumbnails first (bool ascending means false first).
         return try QueuedBackupAttachmentUpload
             .fetchAll(
                 tx.database,
                 sql: """
                     SELECT * FROM \(QueuedBackupAttachmentUpload.databaseTableName)
+                    WHERE
+                      \(QueuedBackupAttachmentUpload.CodingKeys.state.rawValue) = ?
+                      AND \(QueuedBackupAttachmentUpload.CodingKeys.isFullsize.rawValue) = ?
                     ORDER BY
-                        \(QueuedBackupAttachmentUpload.CodingKeys.maxOwnerTimestamp.rawValue) DESC NULLS FIRST,
-                        \(QueuedBackupAttachmentUpload.CodingKeys.isFullsize.rawValue) ASC
+                        \(QueuedBackupAttachmentUpload.CodingKeys.maxOwnerTimestamp.rawValue) DESC NULLS FIRST
                     LIMIT ?
                     """,
-                arguments: [count]
+                arguments: [QueuedBackupAttachmentUpload.State.ready.rawValue, isFullsize, count]
             )
     }
 
     @discardableResult
-    public func removeQueuedUpload(
+    public func markUploadDone(
         for attachmentId: Attachment.IDType,
         fullsize: Bool,
         tx: DBWriteTransaction
     ) throws -> QueuedBackupAttachmentUpload? {
-        let record = try QueuedBackupAttachmentUpload
+        var record = try QueuedBackupAttachmentUpload
             .filter(Column(QueuedBackupAttachmentUpload.CodingKeys.attachmentRowId) == attachmentId)
             .filter(Column(QueuedBackupAttachmentUpload.CodingKeys.isFullsize) == fullsize)
             .fetchOne(tx.database)
-        try record?.delete(tx.database)
+        record?.state = .done
+        try record?.update(tx.database)
         return record
     }
 }

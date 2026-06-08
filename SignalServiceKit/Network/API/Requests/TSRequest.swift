@@ -7,14 +7,6 @@ import Foundation
 public import LibSignalClient
 
 public struct TSRequest: CustomDebugStringConvertible {
-    /// If true, an HTTP 401 will trigger a follow up request to see if the account is deregistered.
-    /// If it is, the account will be marked as de-registered.
-    ///
-    /// - Warning: This only applies to REST requests. We handle HTTP 403 errors
-    /// (*not* HTTP 401) for web sockets during the initial handshake, not
-    /// during the processing for individual requests.
-    public var shouldCheckDeregisteredOn401: Bool = false
-
     public let url: URL
     public let method: String
     public var headers: HttpHeaders
@@ -91,24 +83,35 @@ public struct TSRequest: CustomDebugStringConvertible {
 
     public var auth: Auth = .identified(.implicit())
 
-    func applyAuth(to httpHeaders: inout HttpHeaders, willSendViaWebSocket: Bool) {
+    private struct ResolvedAuth: Equatable {
+        var username: String
+        var password: String
+    }
+
+    private func resolveAuth(_ chatServiceAuth: ChatServiceAuth) -> ResolvedAuth {
+        switch chatServiceAuth.credentials {
+        case .implicit:
+            let tsAccountManager = DependenciesBridge.shared.tsAccountManager
+            let username = tsAccountManager.storedServerUsernameWithMaybeTransaction ?? ""
+            let password = tsAccountManager.storedServerAuthTokenWithMaybeTransaction ?? ""
+            return ResolvedAuth(username: username, password: password)
+        case .explicit(let username, let password):
+            return ResolvedAuth(username: username, password: password)
+        }
+    }
+
+    func applyAuth(to httpHeaders: inout HttpHeaders, socketAuth: ChatServiceAuth?) throws {
         switch self.auth {
-        case .identified(let auth):
-            // If it's sent via the web socket, the "auth" is applied when the
-            // connection is opened, and thus the value here is ignored.
-            if !willSendViaWebSocket {
-                switch auth.credentials {
-                case .implicit:
-                    let tsAccountManager = DependenciesBridge.shared.tsAccountManager
-                    let username = tsAccountManager.storedServerUsernameWithMaybeTransaction ?? ""
-                    let password = tsAccountManager.storedServerAuthTokenWithMaybeTransaction ?? ""
-                    self.setAuth(username: username, password: password, for: &httpHeaders)
-                case .explicit(let username, let password):
-                    self.setAuth(username: username, password: password, for: &httpHeaders)
+        case .identified(let requestAuth):
+            if let socketAuth {
+                guard resolveAuth(requestAuth) == resolveAuth(socketAuth) else {
+                    throw OWSGenericError("Can't send request with \(requestAuth.logString) auth when the socket uses \(socketAuth.logString) auth")
                 }
+            } else {
+                self.setAuth(resolveAuth(requestAuth), for: &httpHeaders)
             }
         case .registration((let username, let password)?):
-            self.setAuth(username: username, password: password, for: &httpHeaders)
+            self.setAuth(ResolvedAuth(username: username, password: password), for: &httpHeaders)
         case .registration(nil):
             break
         case .anonymous:
@@ -120,10 +123,10 @@ public struct TSRequest: CustomDebugStringConvertible {
         }
     }
 
-    private func setAuth(username: String, password: String, for httpHeaders: inout HttpHeaders) {
-        owsAssertDebug(!username.isEmpty)
-        owsAssertDebug(!password.isEmpty)
-        httpHeaders.addAuthHeader(username: username, password: password)
+    private func setAuth(_ auth: ResolvedAuth, for httpHeaders: inout HttpHeaders) {
+        owsAssertDebug(!auth.username.isEmpty)
+        owsAssertDebug(!auth.password.isEmpty)
+        httpHeaders.addAuthHeader(username: auth.username, password: auth.password)
     }
 
     public enum SealedSenderAuth {
@@ -152,8 +155,7 @@ public struct TSRequest: CustomDebugStringConvertible {
 
     public enum RedactionStrategy {
         case none
-        /// Error responses must be separately handled
-        case redactURLForSuccessResponses(replacementString: String = "[REDACTED]")
+        case redactURL(replacement: String = "[REDACTED]")
     }
 
     private var redactionStrategy = RedactionStrategy.none
@@ -167,8 +169,8 @@ public struct TSRequest: CustomDebugStringConvertible {
         switch redactionStrategy {
         case .none:
             result += " \(self.url.relativeString)"
-        case .redactURLForSuccessResponses(let replacementString):
-            result += " \(replacementString)"
+        case .redactURL(let replacement):
+            result += " \(replacement)"
         }
         if !self.headers.headers.isEmpty {
             let formattedHeaderFields = self.headers.headers.keys.sorted().joined(separator: "; ")

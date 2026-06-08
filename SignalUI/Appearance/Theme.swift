@@ -312,6 +312,10 @@ final public class Theme: NSObject {
         UIColor.Signal.secondaryBackground.resolvedColor(with: darkTraitCollection)
     }
 
+    public static var actionSheetBackgroundColor: UIColor {
+        isDarkThemeEnabled ? .ows_gray75 : .ows_white
+    }
+
     public class var washColor: UIColor {
         isDarkThemeEnabled ? darkThemeWashColor : .ows_gray05
     }
@@ -378,12 +382,6 @@ final public class Theme: NSObject {
 
     // MARK: - Table View
 
-    public class var cellSelectedColor: UIColor {
-        isDarkThemeEnabled ? UIColor(white: 0.2, alpha: 1) : UIColor(white: 0.92, alpha: 1)
-    }
-
-    public class var cellSeparatorColor: UIColor { hairlineColor }
-
     public class var tableCell2BackgroundColor: UIColor {
         isDarkThemeEnabled
         ? darkThemeTableCell2BackgroundColor
@@ -397,19 +395,12 @@ final public class Theme: NSObject {
     }
 
     public class var tableCell2SelectedBackgroundColor: UIColor {
-        isDarkThemeEnabled ? darkThemeTableCell2SelectedBackgroundColor : .ows_gray15
-    }
-
-    public class var tableCell2SelectedBackgroundColor2: UIColor {
-        isDarkThemeEnabled ? darkThemeTableCell2SelectedBackgroundColor2 : .ows_gray15
-    }
-
-    public class var tableCell2MultiSelectedBackgroundColor: UIColor {
-        isDarkThemeEnabled ? darkThemeTableCell2MultiSelectedBackgroundColor : .ows_gray05
-    }
-
-    public class var tableCell2PresentedSelectedBackgroundColor: UIColor {
-        isDarkThemeEnabled ? darkThemeTableCell2PresentedSelectedBackgroundColor : .ows_gray15
+        UIColor(
+            light: UIColor(rgbHex: 0xD4D4D6),
+            lightHighContrast: UIColor(rgbHex: 0xD4D4D6), // TBD
+            dark: UIColor(rgbHex: 0x3A3A3D),
+            darkHighContrast: UIColor(rgbHex: 0x3A3A3D)   // TBD
+        )
     }
 
     public class var tableView2BackgroundColor: UIColor {
@@ -475,14 +466,6 @@ final public class Theme: NSObject {
     public class var darkThemeTableCell2PresentedBackgroundColor: UIColor {
         UIColor.Signal.secondaryGroupedBackground.resolvedColor(with: elevatedDarkTraitCollection)
     }
-
-    public class var darkThemeTableCell2SelectedBackgroundColor: UIColor { .ows_gray80 }
-
-    public class var darkThemeTableCell2SelectedBackgroundColor2: UIColor { .ows_gray65 }
-
-    public class var darkThemeTableCell2MultiSelectedBackgroundColor: UIColor { .ows_gray75 }
-
-    public class var darkThemeTableCell2PresentedSelectedBackgroundColor: UIColor { .ows_gray75 }
 
     public class var darkThemeTableView2BackgroundColor: UIColor {
         UIColor.Signal.groupedBackground.resolvedColor(with: darkTraitCollection)

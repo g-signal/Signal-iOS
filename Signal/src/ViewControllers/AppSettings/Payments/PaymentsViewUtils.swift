@@ -18,7 +18,7 @@ public class PaymentsViewUtils {
         let label = UILabel()
         label.text = memoMessage
         label.textColor = Theme.primaryTextColor
-        label.font = UIFont.dynamicTypeBody2Clamped
+        label.font = UIFont.dynamicTypeSubheadlineClamped
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
@@ -170,7 +170,7 @@ public class PaymentsViewUtils {
 
     static func buildTextWithLearnMoreLinkTextView(text: String,
                                                    font: UIFont,
-                                                   learnMoreUrl: String) -> UITextView {
+                                                   learnMoreUrl: URL) -> UITextView {
         let textView = LinkingTextView()
         textView.backgroundColor = OWSTableViewController2.tableBackgroundColor(isUsingPresentedStyle: true)
         textView.textColor = (Theme.isDarkThemeEnabled
@@ -183,7 +183,7 @@ public class PaymentsViewUtils {
             text,
             " ",
             CommonStrings.learnMore.styled(
-                with: .link(URL(string: learnMoreUrl)!)
+                with: .link(learnMoreUrl)
             )
         ]).styled(
             with: .font(font),

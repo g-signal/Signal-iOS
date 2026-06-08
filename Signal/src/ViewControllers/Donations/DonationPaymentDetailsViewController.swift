@@ -153,7 +153,7 @@ class DonationPaymentDetailsViewController: OWSTableViewController2 {
         // We'd like a link that doesn't go anywhere, because we'd like to
         // handle the tapping ourselves. We use a "fake" URL because BonMot
         // needs one.
-        let linkPart = StringStyle.Part.link(SupportConstants.subscriptionFAQURL)
+        let linkPart = StringStyle.Part.link(URL.Support.Donations.subscriptionFAQ)
 
         let subheaderText: String
         switch self.paymentMethod {
@@ -567,7 +567,7 @@ class DonationPaymentDetailsViewController: OWSTableViewController2 {
         ])
 
         let label = LinkingTextView()
-        let linkPart = StringStyle.Part.link(SupportConstants.subscriptionFAQURL)
+        let linkPart = StringStyle.Part.link(URL.Support.Donations.subscriptionFAQ)
         label.attributedText = OWSLocalizedString(
             "BANK_DONATION_FOOTER_FIND_ACCOUNT_INFO",
             comment: "On the bank donation screen, show a link below the input form to show help about finding account info."
@@ -779,3 +779,17 @@ extension DonationPaymentDetailsViewController: CreditOrDebitCardDonationFormVie
 fileprivate extension UInt8 {
     var isValidAsMonth: Bool { self >= 1 && self <= 12 }
 }
+
+// MARK: - Previews
+
+#if DEBUG
+@available(iOS 17, *)
+#Preview {
+    DonationPaymentDetailsViewController(
+        donationAmount: .init(currencyCode: "USD", value: 10),
+        donationMode: .oneTime,
+        paymentMethod: .card,
+        onFinished: { _ in }
+    )
+}
+#endif

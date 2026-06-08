@@ -197,13 +197,13 @@
 "APN_Message" = "ممکن است پیام‌های جدیدی داشته باشید";
 
 /* Default message for the 'app launch failed' alert. */
-"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "سیگنال قادر به راه‌اندازی نیست. لطفاً گزارش عیب‌یابی خود را به support@baxs.com ارسال کنید تا ما بتوانیم این مشکل را رفع کنیم.";
+"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "سیگنال قادر به راه‌اندازی نیست. لطفاً گزارش عیب‌یابی خود را به support@signal.org ارسال کنید تا ما بتوانیم این مشکل را رفع کنیم.";
 
 /* Button to try launching the app even though the last launch failed */
 "APP_LAUNCH_FAILURE_CONTINUE" = "به جای آن سیگنال را باز کنید";
 
 /* Message for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
-"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "لطفاً یک گزارش رفع اشکال به نشانی support@baxs.com بفرستید تا بتوانیم این مشکل را حل کنیم.";
+"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "لطفاً یک گزارش رفع اشکال به نشانی support@signal.org بفرستید تا بتوانیم این مشکل را حل کنیم.";
 
 /* Title for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
 "APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "سیگنال باز نشد";
@@ -218,7 +218,7 @@
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "نسخهٔ پایگاه داده شناخته شده نیست.";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "سیگنال هنگام تلاش برای باز کردن مشکل داشت. لطفاً برای کمک به رفع مشکل، گزارش عیب‌یابی را به support@baxs.com ارسال کنید.";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "سیگنال هنگام تلاش برای باز کردن مشکل داشت. لطفاً برای کمک به رفع مشکل، گزارش عیب‌یابی را به support@signal.org ارسال کنید.";
 
 /* Error indicating that the app crashed during the previous launch. */
 "APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "سیگنال باز نشد";
@@ -230,10 +230,19 @@
 "APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_TITLE" = "فضای حافظه کم است";
 
 /* Error indicating that the app could not restore transferred data. */
-"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "داده‌هایی که از دستگاه قدیمی شما انتقال یافته است امکان بازیابی ندارند. لطفاً یک گزارش عیب‌یابی به support@baxs.com ارسال کنید تا ما بتوانیم این مشکل را رفع کنیم. اگر سیگنال را دوباره نصب کنید، ممکن است تاریخچهٔ پیام‌های شما از دست برود.";
+"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "داده‌هایی که از دستگاه قدیمی شما انتقال یافته است امکان بازیابی ندارند. لطفاً یک گزارش عیب‌یابی به support@signal.org ارسال کنید تا ما بتوانیم این مشکل را رفع کنیم. اگر سیگنال را دوباره نصب کنید، ممکن است تاریخچهٔ پیام‌های شما از دست برود.";
 
 /* Error indicating that the app could not restore transferred data. */
 "APP_LAUNCH_FAILURE_RESTORE_FAILED_TITLE" = "امکان تکمیل انتقال وجود نداشت";
+
+/* Action in an action sheet offering to wipe all app data. */
+"APP_LAUNCH_FAILURE_WIPE_APP_DATA_ACTION_TITLE" = "بازنشانی داده‌های برنامه";
+
+/* Message for an action sheet confirming the user wants to wipe all app data. */
+"APP_LAUNCH_FAILURE_WIPE_APP_DATA_CONFIRMATION_MESSAGE" = "همه داده‌های برنامه برای همیشه حذف خواهد شد. این اقدام فقط وقتی لازم است که قادر به راه‌اندازی برنامه نباشید.";
+
+/* Title for an action sheet confirming the user wants to wipe all app data. */
+"APP_LAUNCH_FAILURE_WIPE_APP_DATA_CONFIRMATION_TITLE" = "همه داده‌های برنامه بازنشانی شود؟";
 
 /* Text prompting user to edit their profile name. */
 "APP_SETTINGS_EDIT_PROFILE_NAME_PROMPT" = "نام خود را وارد کنید";
@@ -298,7 +307,7 @@
 /* Apple Pay donation error for decline failures where the payment cannot be authorized. */
 "APPLE_PAY_DONATION_ERROR_PAYMENT_CANNOT_BE_AUTHORIZED" = "بررسی کنید که روش پرداخت شما در Apple Pay به‌روز باشد. اگر به‌روز نیست، آن را به‌روزرسانی و دوباره امتحان کنید.";
 
-/* On the iOS home screen, if you tap and hold the B&A icon, this shortcut will appear. Tapping it will let users send a new message. You may want to refer to similar behavior in other iOS apps, such as Messages, for equivalent strings. */
+/* On the iOS home screen, if you tap and hold the Signal icon, this shortcut will appear. Tapping it will let users send a new message. You may want to refer to similar behavior in other iOS apps, such as Messages, for equivalent strings. */
 "APPLICATION_SHORTCUT_NEW_MESSAGE" = "پیام جدید";
 
 /* Label for the archive button for conversations list view */
@@ -319,7 +328,7 @@
 /* Error that outgoing attachments could not be exported. */
 "ATTACHMENT_APPROVAL_FAILED_TO_EXPORT" = "صدور پیوست ناموفق بود.";
 
-/* alert text when B&A was unable to save a copy of the attachment to the system photo library */
+/* alert text when Signal was unable to save a copy of the attachment to the system photo library */
 "ATTACHMENT_APPROVAL_FAILED_TO_SAVE" = "ذخیره ناموفق بود";
 
 /* Format string for file extension label in call interstitial view */
@@ -376,16 +385,16 @@
 /* Accessibility hint describing what you can do with the attachment button */
 "ATTACHMENT_HINT" = "رسانه را برای ارسال انتخاب کنید";
 
-/* Button in chat attachment panel that allows to select photos/videos B&A has access to. */
+/* Button in chat attachment panel that allows to select photos/videos Signal has access to. */
 "ATTACHMENT_KEYBOARD_BUTTON_MANAGE" = "مدیریت";
 
 /* A button to select a contact from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_CONTACT" = "مخاطب";
 
-/* Button in a context menu from the 'manage' button in attachment panel that allows to select more photos/videos to give B&A access to */
+/* Button in a context menu from the 'manage' button in attachment panel that allows to select more photos/videos to give Signal access to */
 "ATTACHMENT_KEYBOARD_CONTEXT_MENU_BUTTON_SELECT_MORE" = "انتخاب عکس‌های بیشتر";
 
-/* Button in a context menu from the 'manage' button in attachment panel that opens the iOS system settings for B&A to update access permissions */
+/* Button in a context menu from the 'manage' button in attachment panel that opens the iOS system settings for Signal to update access permissions */
 "ATTACHMENT_KEYBOARD_CONTEXT_MENU_BUTTON_SYSTEM_SETTINGS" = "به تنظیمات بروید";
 
 /* A button to select a file from the Attachment Keyboard */
@@ -394,7 +403,7 @@
 /* A button to select a GIF from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_GIF" = "گیف";
 
-/* Text in chat attachment panel when B&A only has access to some photos/videos. This string is in a compact horizontal space, so it should be short if possible. */
+/* Text in chat attachment panel when Signal only has access to some photos/videos. This string is in a compact horizontal space, so it should be short if possible. */
 "ATTACHMENT_KEYBOARD_LIMITED_ACCESS" = "سیگنال دسترسی محدودی به عکس‌ها دارد";
 
 /* A button to select a location from the Attachment Keyboard */
@@ -406,10 +415,10 @@
 /* First block of text in chat attachment panel when there's no recent photos to show. */
 "ATTACHMENT_KEYBOARD_NO_MEDIA_TITLE" = "عکس یا ویدیویی وجود ندارد";
 
-/* Text in chat attachment panel explaining that user needs to give B&A permission to access photos. */
+/* Text in chat attachment panel explaining that user needs to give Signal permission to access photos. */
 "ATTACHMENT_KEYBOARD_NO_PHOTO_ACCESS" = "سیگنال به عکس‌ها یا ویدیوهای شما دسترسی ندارد. برای فعال کردن دسترسی، «تنظیمات» را باز کنید و روی «عکس‌ها» ضربه بزنید";
 
-/* Button in chat attachment panel to let user open Settings app and give B&A persmission to access photos. */
+/* Button in chat attachment panel to let user open Settings app and give Signal persmission to access photos. */
 "ATTACHMENT_KEYBOARD_OPEN_SETTINGS" = "بازکردن تنظیمات";
 
 /* A button to select a payment from the Attachment Keyboard */
@@ -484,8 +493,8 @@
 /* Title for sheet shown when tapping a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "پیام صوتی در دسترس نیست";
 
-/* Username for backup key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "پشتیبان‌های سیگنال";
+/* Username for recovery key autofill */
+"AUTOFILL_BACKUP_KEY_USERNAME" = "پشتیبان‌های امن سیگنال";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "یک رنگ انتخاب کنید";
@@ -511,7 +520,7 @@
 /* return to the previous screen */
 "BACK_BUTTON" = "بازگشت";
 
-/* Action text for Backup Key reminder megaphone */
+/* Action text for Recovery Key reminder megaphone */
 "BACKUP_ENABLEMENT_REMINDER_MEGAPHONE_ACTION" = "روشن کردن";
 
 /* Body for Backup enablement reminder megaphone */
@@ -523,41 +532,44 @@
 /* Snooze text for Backup enablement reminder megaphone */
 "BACKUP_ENABLEMENT_REMINDER_NOT_NOW_ACTION" = "حالا نه";
 
-/* Text used as placeholder in backup key text view. */
-"BACKUP_KEY_PLACEHOLDER" = "رمز پشتیبان";
+/* Toast indicating that the user has copied their recovery key. */
+"BACKUP_KEY_COPIED_MESSAGE_TOAST" = "رمز بازیابی کپی شد";
 
-/* Title of button to tap if you forgot your backup key. */
+/* Text used as placeholder in recovery key text view. */
+"BACKUP_KEY_PLACEHOLDER" = "رمز بازیابی";
+
+/* Title of button to tap if you forgot your recovery key. */
 "BACKUP_KEY_REMINDER_FORGOT_KEY" = "رمز را فراموش کردید؟";
 
-/* Action text for Backup Key reminder megaphone */
+/* Action text for Recovery Key reminder megaphone */
 "BACKUP_KEY_REMINDER_MEGAPHONE_ACTION" = "تأیید";
 
-/* Body for Backup Key reminder megaphone */
+/* Body for Recovery Key reminder megaphone */
 "BACKUP_KEY_REMINDER_MEGAPHONE_BODY" = "هر چند وقت یک‌بار از شما می‌خواهیم که رمزتان را تأیید کنید تا مطمئن شویم هنوز از آن مطلع هستید";
 
-/* Title for Backup Key reminder megaphone */
-"BACKUP_KEY_REMINDER_MEGAPHONE_TITLE" = "رمز پشتیبان خود را تأیید کنید";
+/* Title for Recovery Key reminder megaphone */
+"BACKUP_KEY_REMINDER_MEGAPHONE_TITLE" = "رمز بازیابی‌تان را تأیید کنید";
 
-/* Snooze text for Backup Key reminder megaphone */
+/* Snooze text for Recovery Key reminder megaphone */
 "BACKUP_KEY_REMINDER_NOT_NOW_ACTION" = "حالا نه";
 
-/* Toast indicating that the Backup Key was correct. */
-"BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "رمز پشتیبان درست است. رمزتان را امن نگه دارید.";
+/* Toast indicating that the Recovery Key was correct. */
+"BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "رمز بازیابی صحیح است. رمزتان را امن نگه دارید.";
 
-/* Body for a sheet warning users to their 'Backup Key' safe. */
+/* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "اگر کلید خود را گم کنید، سیگنال نمی‌تواند در بازیابی نسخه پشتیبان به شما کمک کند. آن را در مکانی امن و مطمئن نگهداری کنید و با دیگران به اشتراک نگذارید.";
 
-/* Title for a sheet warning users to their 'Backup Key' safe. */
+/* Title for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_TITLE" = "در مراقبت از کلید خود بکوشید";
 
-/* Title for a button offering to let users see their 'Backup Key'. */
+/* Title for a button offering to let users see their 'Recovery Key'. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_SEE_KEY_AGAIN_BUTTON_TITLE" = "مشاهده دوباره کلید";
 
-/* Subtitle for a view asking users to confirm their 'Backup Key'. */
-"BACKUP_ONBOARDING_CONFIRM_KEY_SUBTITLE" = "رمز پشتیبان را که به‌تازگی ثبت کرده‌اید وارد کنید";
+/* Subtitle for a view asking users to confirm their 'Recovery Key'. */
+"BACKUP_ONBOARDING_CONFIRM_KEY_SUBTITLE" = "رمز بازیابی که ثبت کردید را وارد کنید";
 
-/* Title for a view asking users to confirm their 'Backup Key'. */
-"BACKUP_ONBOARDING_CONFIRM_KEY_TITLE" = "رمز پشتیبان خود را تأیید کنید";
+/* Title for a view asking users to confirm their 'Recovery Key'. */
+"BACKUP_ONBOARDING_CONFIRM_KEY_TITLE" = "رمز بازیابی خود را تأیید کنید";
 
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_1" = "سرتاسر رمزگذاری‌شده";
@@ -572,22 +584,25 @@
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "با استفاده از سرویس ذخیره‌سازی سرتاسر رمزگذاری‌شده و امن سیگنال، از پیام‌ها و رسانه‌های خود پشتیبان‌گیری کنید. وقتی تلفن جدید می‌گیرید یا سیگنال را دوباره نصب می‌کنید، هرگز پیامی را از دست ندهید.";
 
 /* Title for a view introducing Backups during an onboarding flow. */
-"BACKUP_ONBOARDING_INTRO_TITLE" = "پشتیبان‌های سیگنال";
+"BACKUP_ONBOARDING_INTRO_TITLE" = "پشتیبان‌های امن سیگنال";
 
-/* Subtitle for a view introducing the 'Backup Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "رمز پشتیبان شما یک کد ۶۴ رقمی است که می‌توانید با آن هنگام نصب مجدد سیگنال، نسخه پشتیبان خود را بازیابی کنید.\n\nاگر کلید خود را فراموش کنید، نمی‌توانید نسخه پشتیبان خود را بازیابی کنید. سیگنال نمی‌تواند به شما کمک کند نسخه پشتیبان خود را بازیابی کنید.";
+/* Subtitle for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "رمز بازیابی شما یک کد ۶۴ نویسه‌ای است که می‌توانید با آن هنگام نصب مجدد سیگنال، نسخه پشتیبان خود را بازیابی کنید.\n\nاگر کلید خود را فراموش کنید، نمی‌توانید نسخه پشتیبان خود را بازیابی کنید. سیگنال نمی‌تواند به شما کمک کند نسخه پشتیبان خود را بازیابی کنید.";
 
-/* Title for a view introducing the 'Backup Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "کلید پشتیبان شما";
+/* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "رمز بازیابی شما";
 
-/* Title for a button allowing users to copy their 'Backup Key' to the clipboard. */
+/* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "کپی به کلیپ‌بورد";
 
-/* Subtitle for a view allowing users to record their 'Backup Key'. */
+/* Title for a button allowing users to create a new 'Recovery Key'. */
+"BACKUP_RECORD_KEY_CREATE_NEW_KEY_BUTTON_TITLE" = "ایجاد رمز جدید";
+
+/* Subtitle for a view allowing users to record their 'Recovery Key'. */
 "BACKUP_RECORD_KEY_SUBTITLE" = "این کلید برای بازیابی حساب و اطلاعات شما ضروری است. این کلید را در مکانی امن نگهداری کنید. اگر آن را گم کنید، نمی‌توانید حساب خود را بازیابی کنید.";
 
-/* Title for a view allowing users to record their 'Backup Key'. */
-"BACKUP_RECORD_KEY_TITLE" = "کلید پشتیبان خود را ضبط کنید";
+/* Title for a view allowing users to record their 'Recovery Key'. */
+"BACKUP_RECORD_KEY_TITLE" = "رمز بازیابی خود را ثبت کنید";
 
 /* Subtitle for a progress spinner on a modal tracking active downloading. Embeds 1:{{ the amount downloaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to download as a file size, e.g. 1 GB }}; 3:{{ the amount downloaded as a percentage, e.g. 10% }}. */
 "BACKUP_RESTORE_MODAL_DOWNLOAD_PROGRESS_SUBTITLE" = "‏%1$@ از %2$@ (%3$@)";
@@ -613,17 +628,14 @@
 /* Message for an action sheet explaining that performing a backup failed with a network error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR" = "مشکلی حین ایجاد نسخه پشتیبان شما پیش آمد. اتصال اینترنت خود را بررسی و دوباره امتحان کنید.";
 
-/* Description for a progress bar tracking a multi-step backup operation. Embeds {{ the percentage complete of the overall operation, e.g. 20% }}. */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "در حال ایجاد پشتیبان: %1$@";
+/* Description for a progress bar tracking the optimizing of Backup media. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "در حال بهینه‌سازی فایل رسانه...";
 
-/* Description for a progress bar tracking a multi-step backup operation, where we are currently creating the backup. */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "در حال خروجی گرفتن از نسخه پشتیبان...";
+/* Description for a progress bar tracking the preparation of a Backup. Embeds 1:{{ the percentage completed preformatted as a percent, e.g. 10% }}. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PREPARING_BACKUP" = "در حال آماده‌سازی نسخه پشتیبان (%1$@)";
 
-/* Description for a progress bar tracking a multi-step backup operation, where we are currently uploading the backup. */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "در حال بارگذاری نسخه پشتیبان...";
-
-/* Description for a progress bar tracking a multi-step backup operation, where we are currently uploading backup media. */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "در حال بارگذاری رسانه نسخه پشتیبان...";
+/* Description for a progress bar tracking the processing of Backup media. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PROCESSING_MEDIA" = "در حال پردازش فایل رسانه...";
 
 /* Title for a button allowing users to upgrade from a free to paid backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "ارتقا";
@@ -665,7 +677,7 @@
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "مدیریت طرح";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
-"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "پولی است، اما تا زمانی که آزمایش‌کننده بمانید، رایگان است";
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "پولی (رایگان برای کاربران TestFlight)";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "پشتیبان‌گیری متن + تمام رسانه‌ها";
@@ -699,6 +711,24 @@
 
 /* Header for a menu section related to settings for when Backups are enabled. */
 "BACKUP_SETTINGS_BACKUPS_ENABLED_SECTION_HEADER" = "جزئیات پشتیبان";
+
+/* Notice that backups is a beta feature */
+"BACKUP_SETTINGS_BETA_NOTICE_HEADER" = "این قابلیت بتا است و به‌مرور زمان بهبود خواهد یافت.";
+
+/* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "برای ایجاد رمز بازیابی جدید، باید ثبت‌نام کرده باشید.";
+
+/* Toast shown when a new Recovery Key has been created successfully. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "رمز جدید ایجاد شد!";
+
+/* TItle for a sheet warning users that Backups must be disabled to create a new Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_WARNING_SHEET_BACKUPS_MUST_BE_DISABLED_TITLE" = "غیرفعال‌سازی و ایجاد کلید جدید";
+
+/* Body for a sheet warning users about creating a new Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_WARNING_SHEET_BODY" = "ایجاد رمز جدید فقط در صورتی ضروری است که شخص دیگری رمز شما را بداند. برای ایجاد رمز جدید، ابتدا نسخه‌های پشتیبان باید غیرفعال شوند.\n\nبعد از غیرفعال‌سازی پشتیبان‌ها و ایجاد رمز جدید، باید نسخه پشتیبان خود را دوباره فعال و بارگذاری کنید.";
+
+/* Title for a sheet warning users about creating a new Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_WARNING_SHEET_TITLE" = "رمز بازیابی جدید ایجاد کنید";
 
 /* Footer for a menu section allowing users to turn off Backups. */
 "BACKUP_SETTINGS_DISABLE_BACKUPS_BUTTON_FOOTER" = "با این کار تمام اطلاعات نسخه پشتیبان شما حذف می‌شود. هیچ نسخه پشتیبان جدیدی ایجاد نخواهد شد.";
@@ -742,6 +772,9 @@
 /* Subtitle for a progress bar tracking downloads that are paused because of low battery. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "دانلود موقتاً متوقف شد: باتری دستگاه کم است";
 
+/* Subtitle for a progress bar tracking downloads that are paused because of low power mode. */
+"BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_POWER_MODE" = "دانلود موقتاً متوقف شد: حالت شارژ کم";
+
 /* Subtitle for a progress bar tracking downloads that are paused because they need more disk space available. Embeds {{ the amount of space needed as a file size, e.g. 100 MB }}. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_DISK_SPACE" = "فضای کافی برای دانلود رسانه وجود ندارد. برای ادامه، %1$@ فضا خالی کنید.";
 
@@ -778,8 +811,8 @@
 /* Text explaining that the user's last backup was yesterday. Embeds {{ the time of the backup }}. */
 "BACKUP_SETTINGS_ENABLED_LAST_BACKUP_YESTERDAY_FORMAT" = "دیروز %1$@";
 
-/* Label for a menu item offering to show the user their backup key. */
-"BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "مشاهده کلید پشتیبان";
+/* Label for a menu item offering to show the user their recovery key. */
+"BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "مشاهده رمز بازیابی";
 
 /* Title for a button allowing users to trigger a manual backup. */
 "BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "اکنون پشتیبان‌گیری شود";
@@ -800,7 +833,7 @@
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_TITLE" = "رسانه آفلودشده دانلود شود؟";
 
 /* Message for an action sheet warning users who are testers about the Optimize Local Storage feature. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TESTER_WARNING_SHEET_MESSAGE" = "رسانه آفلودشده تا زمانی که همچنان آزمایش‌کننده بمانید، در دسترس خواهد بود. قبل از ترک برنامه آزمایشی، مطمئن شوید که تمام رسانه‌های خود را دانلود کرده‌اید.";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TESTER_WARNING_SHEET_MESSAGE" = "فایل‌های رسانه آفلود‌شده مادامی که از TestFlight استفاده می‌کنید در دسترس خواهند بود. قبل از ترک برنامه آزمایشی، مطمئن شوید که تمام فایل رسانه خود را دانلود کرده‌اید.";
 
 /* Title for an action sheet warning users who are testers about the Optimize Local Storage feature. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TESTER_WARNING_SHEET_TITLE" = "آزمایش رسانه آفلودشده";
@@ -809,7 +842,7 @@
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE" = "رسانه‌های استفاده‌نشده پاک می‌شوند، اما می‌توانید هر زمانی که خواستید از نسخه پشتیبان خود دانلودشان کنید.";
 
 /* Footer for a toggle allowing users to change the Optimize Local Storage setting, if the toggle is available and they are a tester. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE_FOR_TESTERS" = "رسانه استفاده‌نشده آفلود می‌شود، اما می‌توانید تا زمانی که همچنان آزمایش‌کننده هستید، آنها را از نسخه پشتیبان خود دانلود کنید.";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE_FOR_TESTERS" = "فایل‌های رسانه استفاده‌نشده آفلود خواهند شد، اما مادامی که از TestFlight استفاده می‌کنید، هر وقت خواستید می‌توانید آن‌ها را از نسخه پشتیبان خود دانلود کنید.";
 
 /* Footer for a toggle allowing users to change the Optimize Local Storage setting, if the toggle is unavailable. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_UNAVAILABLE" = "بهینه‌سازی فضای ذخیره‌سازی فقط با نسخه پولی پشتیبان‌های سیگنال امکان‌پذیر است. برای استفاده از این قابلیت، طرح پشتیبان‌گیری خود را ارتقا دهید.";
@@ -830,31 +863,37 @@
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "دانلود رد شود؟";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
-"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "بارگذاری موقتاً متوقف شد: باتری دستگاه کم است";
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "بارگذاری فایل رسانه موقتاً متوقف شد: شارژ باتری دستگاه کم است";
+
+/* Subtitle for a progress bar tracking uploads that are paused because of low power mode. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_POWER_MODE" = "بارگذاری فایل رسانه موقتاً متوقف شد: حالت شارژ کم";
 
 /* Subtitle for a progress bar tracking uploads that are paused because they need an internet connection */
-"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_INTERNET" = "بارگذاری موقتاً متوقف شد: عدم اتصال اینترنت…";
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_INTERNET" = "بارگذاری فایل رسانه موقتاً متوقف شد: بدون اینترنت…";
 
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
-"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "بارگذاری موقتاً متوقف شد: در حال انتظار برای Wi-Fi";
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "بارگذاری فایل رسانه موقتاً متوقف شد: در انتظار Wi-Fi";
 
-/* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the amount uploaded as a percentage, e.g. 10% }}. */
+/* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "در حال بارگذاری %1$@ از %2$@ ‏(%3$@)";
 
 /* Message for a sheet shown after the user enables backups. */
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE" = "بسته به اندازه نسخه پشتیبان شما، این امر ممکن است زمان زیادی طول بکشد. هنگام پشتیبان‌گیری، می‌توانید مثل همیشه از تلفن خود استفاده کنید.";
-
-/* Title for the primary button for a sheet shown after the user enables backups. */
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "اکنون پشتیبان‌گیری شود";
-
-/* Title for the secondary button for a sheet shown after the user enables backups. */
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "بعداً پشتیبان‌گیری شود";
+"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE" = "بسته به اندازه نسخه پشتیبان شما، این کار ممکن است زمان زیادی طول بکشد. حین اجرای پشتیبان‌گیری می‌توانید به روال معمول از سیگنال استفاده کنید.";
 
 /* Title for a sheet shown after the user enables backups. */
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "به «پشتیبان‌های سیگنال» خوش آمدید. اکنون پشتیبان‌گیری را شروع کنید.";
+"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "به «پشتیبان‌گیری امن سیگنال» خوش آمدید. اکنون پشتیبان‌گیری را شروع کنید.";
 
 /* Title for the 'Backup' settings menu. */
-"BACKUPS_SETTINGS_TITLE" = "پشتیبان‌های سیگنال";
+"BACKUPS_SETTINGS_TITLE" = "پشتیبان‌های امن";
+
+/* Body for system notification or megaphone when backups is enabled. Embeds {{ time backups was enabled }} */
+"BACKUPS_TURNED_ON_NOTIFICATION_BODY_FORMAT" = "نسخه‌های پشتیبان سیگنال در %1$@ برای این حساب روشن شدند. برای مشاهده، ضربه بزنید.";
+
+/* Title for system notification or megaphone when backups is enabled */
+"BACKUPS_TURNED_ON_TITLE" = "شما «نسخه‌های پشتیبان» را روشن کردید";
+
+/* Action text for backups enabled megaphone taking user to backup settings */
+"BACKUPS_VIEW_SETTINGS_BUTTON" = "مشاهدهٔ تنظیمات";
 
 /* Section header for badge view section in the badge configuration page */
 "BADGE_CONFIGURATION_BADGE_SECTION_TITLE" = "نشان‌های من";
@@ -862,7 +901,7 @@
 /* The title for the badge configuration page */
 "BADGE_CONFIGURATION_TITLE" = "نشان‌ها";
 
-/* When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to B&A\" button will be shown. This is the text in that button. */
+/* When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to Signal\" button will be shown. This is the text in that button. */
 "BADGE_DETAILS_DONATE_TO_SIGNAL" = "اکنون اهدا کنید";
 
 /* When viewing someone else's donor badge, you'll see a sheet. This is the title on that sheet. Embeds {badge owner's short name} */
@@ -895,7 +934,7 @@
 /* Title for a sheet explaining that a bank transfer donation is complete, and that you have received a badge. */
 "BADGE_THANKS_BANK_DONATION_COMPLETE_TITLE" = "کمک مالی تکمیل شد";
 
-/* When you make a donation to B&A, you will receive a badge. A thank-you sheet appears when this happens. This is the body text on that sheet. */
+/* When you make a donation to Signal, you will receive a badge. A thank-you sheet appears when this happens. This is the body text on that sheet. */
 "BADGE_THANKS_BODY" = "اگر خواستید، می‌توانید با نمایش این نشان در نمایه‌تان این حمایت را به دیگران نشان دهید.";
 
 /* Label prompting the user to display the new badge on their profile on the badge thank you sheet. */
@@ -904,7 +943,7 @@
 /* Label prompting the user to feature the new badge on their profile on the badge thank you sheet. */
 "BADGE_THANKS_MAKE_FEATURED" = "تبدیل به نشان برجسته";
 
-/* When you make a donation to B&A, you will receive a badge. A thank-you sheet appears when this happens. This is the title of that sheet. */
+/* When you make a donation to Signal, you will receive a badge. A thank-you sheet appears when this happens. This is the title of that sheet. */
 "BADGE_THANKS_TITLE" = "از پشتیبانی شما سپاسگزاریم!";
 
 /* Footer explaining that only one badge can be featured at a time on the thank you sheet. */
@@ -913,23 +952,26 @@
 /* On the bank donation screen, show a link below the input form to show help about finding account info. */
 "BANK_DONATION_FOOTER_FIND_ACCOUNT_INFO" = "یافتن اطلاعات حساب";
 
-/* On the bank transfer donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their bank information (2) tell them that B&A does not collect or store their personal information. */
+/* On the bank transfer donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their bank information (2) tell them that Signal does not collect or store their personal information. */
 "BANK_DONATION_SUBHEADER_TEXT" = "مشخصات بانکی خود را وارد کنید. سیگنال اطلاعات شخصی شما را جمع‌آوری یا ذخیره نمی‌کند.";
 
-/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button to agree to the mandate. */
+/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button to agree to the mandate. */
 "BANK_MANDATE_AGREE" = "موافقم";
 
-/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button that shows more of the mandate if it is not all visible. */
+/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button that shows more of the mandate if it is not all visible. */
 "BANK_MANDATE_READ_MORE" = "بیشتر بخوانید";
 
-/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is a subtitle about the payment processor Stripe above that mandate. */
+/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a subtitle about the payment processor Stripe above that mandate. */
 "BANK_MANDATE_SUBTITLE" = "Stripe کمک‌های مالی اهدایی به سیگنال را پردازش می‌کند. سیگنال اطلاعات شخصی شما را جمع آوری یا ذخیره نمی‌کند.";
 
-/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is the title above that mandate. */
+/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is the title above that mandate. */
 "BANK_MANDATE_TITLE" = "انتقال بانکی";
 
 /* Accessibility label for banner close button */
 "BANNER_CLOSE_ACCESSIBILITY_LABEL" = "بستن بنر";
+
+/* Beta label */
+"BETA_LABEL" = "بتا";
 
 /* An explanation of the consequences of blocking a group. */
 "BLOCK_GROUP_BEHAVIOR_EXPLANATION" = "شما دیگر از این گروه پیام یا به‌روزرسانی دریافت نخواهید کرد.";
@@ -1144,7 +1186,7 @@
 /* Tappable label that appears below a user's name on a toast when they request to join a call link. */
 "CALL_LINK_JOIN_REQUEST_PROMPT" = "می‌خواهد بپیوندد…";
 
-/* Shown in a message bubble when you send a call link in a B&A chat */
+/* Shown in a message bubble when you send a call link in a Signal chat */
 "CALL_LINK_LINK_PREVIEW_DESCRIPTION" = "از این پیوند برای پیوستن به یک تماس سیگنال استفاده کنید";
 
 /* Text that appears on a toast in a call lobby before joining a call link informing the user what information will be shared with other call members when they have phone number sharing turned off. */
@@ -1168,7 +1210,7 @@
 /* Name of a toggle switch to enable/disable admin approval for joining a Call Link. */
 "CALL_LINK_REQUIRE_APPROVAL" = "نیازمند تأیید مدیر";
 
-/* Button to open UI to share a Call Link with someone on B&A. */
+/* Button to open UI to share a Call Link with someone on Signal. */
 "CALL_LINK_SHARE_VIA_SIGNAL" = "اشتراک‌گذاری پیوند از طریق سیگنال";
 
 /* Button to open the system share sheet to share a Call Link. */
@@ -1426,28 +1468,28 @@
 /* Alert shown when the user needs to exchange messages to see the safety number. */
 "CANT_VERIFY_IDENTITY_EXCHANGE_MESSAGES" = "بعد از اینکه با این فرد پیامی رد و بدل کنید، یک شماره ایمنی برای او ایجاد خواهد شد.";
 
-/* Users can donate to B&A with a credit or debit card. If their card number is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to Signal with a credit or debit card. If their card number is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_CARD_NUMBER_GENERIC_ERROR" = "شماره کارت نامعتبر است";
 
-/* Users can donate to B&A with a credit or debit card. This is the label for the card number field on that screen. */
+/* Users can donate to Signal with a credit or debit card. This is the label for the card number field on that screen. */
 "CARD_DONATION_CARD_NUMBER_LABEL" = "شماره کارت";
 
-/* Users can donate to B&A with a credit or debit card. If their card verification code (CVV) is invalid for reasons we cannot determine, this generic error message will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to Signal with a credit or debit card. If their card verification code (CVV) is invalid for reasons we cannot determine, this generic error message will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_CVV_GENERIC_ERROR" = "CVV نامعتبر است";
 
-/* Users can donate to B&A with a credit or debit card. This is the label for the card verification code (CVV) field on that screen. */
+/* Users can donate to Signal with a credit or debit card. This is the label for the card verification code (CVV) field on that screen. */
 "CARD_DONATION_CVV_LABEL" = "CVV";
 
-/* Users can donate to B&A with a credit or debit card. If their card verification code (CVV) is too long, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to Signal with a credit or debit card. If their card verification code (CVV) is too long, this error will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_CVV_TOO_LONG_ERROR" = "کد بیش‌ازحد طولانی است";
 
-/* Users can donate to B&A with a credit or debit card. If their expiration date is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to Signal with a credit or debit card. If their expiration date is invalid, this generic error message will be shown. Try to use a short string to make space in the UI. */
 "CARD_DONATION_EXPIRATION_DATE_GENERIC_ERROR" = "تاریخ انقضا نامعتبر است";
 
-/* Users can donate to B&A with a credit or debit card. This is the label for the expiration date field on that screen. Try to use a short string to make space in the UI. (For example, the English text uses \"Exp. Date\" instead of \"Expiration Date\"). */
+/* Users can donate to Signal with a credit or debit card. This is the label for the expiration date field on that screen. Try to use a short string to make space in the UI. (For example, the English text uses \"Exp. Date\" instead of \"Expiration Date\"). */
 "CARD_DONATION_EXPIRATION_DATE_LABEL" = "تاریخ انقضا";
 
-/* Users can donate to B&A with a credit or debit card. This is the label for the card expiration date field on that screen. */
+/* Users can donate to Signal with a credit or debit card. This is the label for the card expiration date field on that screen. */
 "CARD_DONATION_EXPIRATION_DATE_PLACEHOLDER" = "سال/ماه";
 
 /* Users can choose to learn more about their credit/debit card donations, which will open a sheet with additional information. This is the body text of that sheet. */
@@ -1459,7 +1501,7 @@
 /* On the credit/debit card donation screen, a small amount of information text is shown. Users can click this link to learn more information. */
 "CARD_DONATION_SUBHEADER_LEARN_MORE" = "اطلاعات بیشتر.";
 
-/* On the credit/debit card donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their credit/debit card information (2) tell them that B&A does not collect or store their personal information. */
+/* On the credit/debit card donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their credit/debit card information (2) tell them that Signal does not collect or store their personal information. */
 "CARD_DONATION_SUBHEADER_TEXT" = "مشخصات کارت خود را وارد کنید. سیگنال اطلاعات شخصی شما را جمع آوری یا ذخیره نمی‌کند.";
 
 /* Title for the 'censorship circumvention country' view. */
@@ -1541,7 +1583,7 @@
 "CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "رسانه‌های ۴۵ روز اخیر";
 
 /* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
-"CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "۱ ترابایت حافظه (حدود ۲۵۰ هزار عکس)";
+"CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "۱۰۰ گیگابایت فضای ذخیره‌سازی";
 
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "مشکلی پیش آمد. لطفاً با پشتیبانی تماس بگیرید.";
@@ -2158,10 +2200,10 @@
 /* Label for button that enables you to make a new call link. */
 "CREATE_CALL_LINK_LABEL" = "ایجاد یک پیوند تماس";
 
-/* Body text for an interactive in-app prompt to set up a B&A username. */
+/* Body text for an interactive in-app prompt to set up a Signal username. */
 "CREATE_USERNAME_MEGAPHONE_BODY" = "معرفی حریم شخصی شماره تلفن، نام کاربری انتخابی و پیوندها.";
 
-/* Title for an interactive in-app prompt to set up a B&A username. */
+/* Title for an interactive in-app prompt to set up a Signal username. */
 "CREATE_USERNAME_MEGAPHONE_TITLE" = "روش‌های جدید برقراری ارتباط";
 
 /* Credit/debit card donation error for decline failures where the card has expired. */
@@ -2227,13 +2269,13 @@
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "مشکل در بازیابی داده‌ها";
 
-/* On the database recovery screen, if the user's device storage is nearly full, B&A will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
+/* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
 "DATABASE_RECOVERY_MORE_STORAGE_SPACE_NEEDED_CONTINUE_ANYWAY" = "به هر حال ادامه بده";
 
-/* On the database recovery screen, if the user's device storage is nearly full, B&A will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the line of text on that screen. Embeds an amount like \"2GB\". */
+/* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the line of text on that screen. Embeds an amount like \"2GB\". */
 "DATABASE_RECOVERY_MORE_STORAGE_SPACE_NEEDED_DESCRIPTION" = "به منظور تکمیل بازیابی داده‌ها، توصیه می‌کنیم حداقل %1$@ فضای ذخیره‌سازی آزاد در دستگاه خود داشته باشید.";
 
-/* On the database recovery screen, if the user's device storage is nearly full, B&A will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the title of that screen. */
+/* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the title of that screen. */
 "DATABASE_RECOVERY_MORE_STORAGE_SPACE_NEEDED_TITLE" = "فضای ذخیره سازی بیشتری مورد نیاز است";
 
 /* The user has tried to recover their data after it was lost due to corruption. (They have not been hacked.) This is the description on the screen where we show an error message. */
@@ -2365,7 +2407,7 @@
 /* 'Delete' button label on the delete contact confirmation action sheet */
 "DELETE_CONTACT_ACTION_SHEET_BUTTON" = "پاک کردن";
 
-/* An explanation of what happens in B&A when you remove a system contact. */
+/* An explanation of what happens in Signal when you remove a system contact. */
 "DELETE_CONTACT_ACTION_SHEET_EXPLANATION" = "این شخص از مخاطبان تلفن شما پاک خواهد شد. هنگام جستجو این شخص را نخواهید دید. اگر در آینده برای شما پیام ارسال کند، یک درخواست پیام دریافت خواهید کرد.";
 
 /* Title of action sheet confirming the user wants to delete a system contact. */
@@ -2410,7 +2452,7 @@
 /* If the user has been deregistered, they'll see a warning. This is This is the call to action on that warning. */
 "DEREGISTRATION_WARNING_ACTION_TITLE" = "دستگاه را مجدداْ ثبت کنید";
 
-/* {{Short Date}} when device last communicated with B&A Server. */
+/* {{Short Date}} when device last communicated with Signal Server. */
 "DEVICE_LAST_ACTIVE_AT_LABEL" = "آخرین فعالیت %1$@";
 
 /* {{Short Date}} when device was linked. */
@@ -2530,6 +2572,42 @@
 /* The title for the action sheet asking the user to scan the QR code to transfer */
 "DEVICE_TRANSFER_SCANNING_TITLE" = "دستگاه جدیدتان را روبروی دوربین قرار دهید";
 
+/* Status message on new device when cancelling transfer. */
+"DEVICE_TRANSFER_STATUS_NEW_DEVICE_CANCELLING" = "در حال لغو اتصال به آیفون قدیمی…";
+
+/* Status message on new device when connecting to old device. */
+"DEVICE_TRANSFER_STATUS_NEW_DEVICE_CONNECTING" = "در حال اتصال به آیفون قدیمی…";
+
+/* Description message on new device displayed during device transfer. */
+"DEVICE_TRANSFER_STATUS_NEW_DEVICE_CONNECTING_MESSAGE" = "دستگاه قدیمی‌تان را نزدیک بیاورید و مطمئن شوید که Wi-Fi و بلوتوث فعال باشند.";
+
+/* Status message on new device when transfer is starting. */
+"DEVICE_TRANSFER_STATUS_NEW_DEVICE_STARTING" = "در حال انتظار برای اتصال به آیفون قدیمی…";
+
+/* Description in the progress view displayed after failure of device transfer. */
+"DEVICE_TRANSFER_STATUS_NEW_DEVICE_TRANSFER_FAILED_BODY" = "انتقال به دستگاه جدید ناموفق بود. لطفاً دستگاه قدیمی‌تان را نزدیک بیاورید، و دوباره امتحان کنید.";
+
+/* Title for a progress view displayed after failure of device transfer. */
+"DEVICE_TRANSFER_STATUS_NEW_DEVICE_TRANSFER_FAILED_TITLE" = "انتقال موفق نبود";
+
+/* Title for a progress view displayed during device transfer. */
+"DEVICE_TRANSFER_STATUS_NEW_DEVICE_TRANSFERRING" = "در حال انتقال";
+
+/* Description in the progress view displayed during device transfer. */
+"DEVICE_TRANSFER_STATUS_NEW_DEVICE_TRANSFERRING_DESCRIPTION" = "هر دو دستگاه را نزدیک هم قرار دهید. هیچکدام را خاموش نکنید و سیگنال را باز نگه دارید. عملیات انتقال رمزگذاری سرتاسری شده است.";
+
+/* Status message on old device when cancelling transfer. */
+"DEVICE_TRANSFER_STATUS_OLD_DEVICE_CANCELLING" = "در حال لغو اتصال به آیفون جدید…";
+
+/* Status message on new device when connecting to new device. */
+"DEVICE_TRANSFER_STATUS_OLD_DEVICE_CONNECTING" = "در حال اتصال به آیفون جدید…";
+
+/* Description message on old device displayed during device transfer. */
+"DEVICE_TRANSFER_STATUS_OLD_DEVICE_CONNECTING_MESSAGE" = "دستگاه جدیدتان را نزدیک بیاورید و مطمئن شوید که Wi-Fi و بلوتوث فعال باشند.";
+
+/* Status message on old device when transfer is starting. */
+"DEVICE_TRANSFER_STATUS_OLD_DEVICE_STARTING" = "در حال انتظار برای اتصال به آیفون جدید…";
+
 /* The explanation on the action sheet that shows transfer progress */
 "DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "هر دو دستگاه را نزدیک هم قرار دهید. هیچکدام را خاموش نکنید و سیگنال را باز نگه دارید.";
 
@@ -2599,10 +2677,10 @@
 /* Section title for the 'domain fronting country' view. */
 "DOMAIN_FRONTING_COUNTRY_VIEW_SECTION_HEADER" = "محل دورزدن سانسور";
 
-/* Users can donate to B&A with a credit or debit card. This is the heading on that screen, telling them how much they'll donate. Embeds {{formatted amount of money}}, such as \"$20\". */
+/* Users can donate to Signal with a credit or debit card. This is the heading on that screen, telling them how much they'll donate. Embeds {{formatted amount of money}}, such as \"$20\". */
 "DONATE_BUTTON" = "اهدای مالی %1$@";
 
-/* Users can donate to B&A with a credit or debit card. This is the heading on that screen, telling them how much they'll donate every month. Embeds {{formatted amount of money}}, such as \"$20\". */
+/* Users can donate to Signal with a credit or debit card. This is the heading on that screen, telling them how much they'll donate every month. Embeds {{formatted amount of money}}, such as \"$20\". */
 "DONATE_BUTTON_MONTHLY" = "اهدای کمک مالی %1$@ در ماه";
 
 /* When users make donations, they can choose which payment method they want to use. This is the text on the button that lets them choose to pay with bank transfer. */
@@ -2638,6 +2716,12 @@
 /* If a donation badge has been sent, indicates that it's expired and can no longer be redeemed. This is shown in the chat. */
 "DONATE_ON_BEHALF_OF_A_FRIEND_CHAT_EXPIRED" = "منقضی‌شده";
 
+/* Message for an action sheet shown when the user tries to cancel their donation subscription, but they have a pending donation. */
+"DONATE_SCREEN_CANCEL_SUBSCRIPTION_PENDING_DONATION_WARNING_MESSAGE" = "یک اهدای مالی در انتظار تأیید دارید. اگر اشتراکتان را لغو کنید، اهدای مالی‌تان تمدید نخواهد شد اما اهدای مالی در انتظار تأیید، لغو نخواهد شد.";
+
+/* Title for an action sheet shown when the user tries to cancel their donation subscription, but they have a pending donation. */
+"DONATE_SCREEN_CANCEL_SUBSCRIPTION_PENDING_DONATION_WARNING_TITLE" = "کمک مالی در انتظار تأیید";
+
 /* Message in an alert presented when the user tries to make a donation, but already has an iDEAL donation that is currently awaiting approval. */
 "DONATE_SCREEN_ERROR_MESSAGE_APPROVE_IDEAL_DONATION_BEFORE_MAKING_ANOTHER_DONATION" = "اهدای مالی iDEAL شما در حال پردازش است. برای تأیید پرداخت‌تان و قبل از اهدای مالی دیگر، اپلیکیشن بانک‌تان را بررسی کنید.";
 
@@ -2659,10 +2743,10 @@
 /* Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently processing via non-bank payment. */
 "DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_UPDATING_YOUR_SUBSCRIPTION" = "اهدای مالی شما هنوز در حال پردازش است. بسته به اتصال اینترنت شما، این پردازش ممکن است چند دقیقه طول بکشد. لطفاً قبل از به‌روزرسانی اشتراک خود، صبر کنید تا این اهدای مالی تکمیل شود.";
 
-/* If the user tries to donate to B&A but no amount is selected, this error message is shown. */
+/* If the user tries to donate to Signal but no amount is selected, this error message is shown. */
 "DONATE_SCREEN_ERROR_NO_AMOUNT_SELECTED" = "مبلغی را برای اهدا کردن انتخاب کنید.";
 
-/* If the user tries to donate to B&A but they've entered an amount that's too small, this error message is shown. Embeds {{currency string}}, such as \"$5\". */
+/* If the user tries to donate to Signal but they've entered an amount that's too small, this error message is shown. Embeds {{currency string}}, such as \"$5\". */
 "DONATE_SCREEN_ERROR_SELECT_A_LARGER_AMOUNT_FORMAT" = "حداقل مبلغی که می‌توانید اهدا کنید %1$@ است.";
 
 /* Title for an alert presented when the user tries to make a donation, but already has a donation that is currently awaiting authorization. */
@@ -2809,16 +2893,16 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ از طرف شما به سیگنال کمک مالی اهدا کرد! حمایت خود از سیگنال را در نمایه‌تان نشان دهید.";
 
-/* There is a screen where users can read more about their donation to B&A. This is the 1st paragraph of that screen. */
+/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
 "DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "پیام‌رسانی خصوصی. بدون تبلیغات، بدون ردیاب، بدون نظارت.";
 
-/* There is a screen where users can read more about their donation to B&A. This is the 2nd paragraph of that screen. */
+/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
 "DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "سیگنال از طریق کمک‌های مالی پشتیبانی می‌شود و این یعنی حریم خصوصی شما در رأس هر کاری است که ما انجام می‌دهیم. سیگنال برای شما ساخته شده است؛ نه برای داده‌های شما و نه برای سود.";
 
-/* There is a screen where users can read more about their donation to B&A. This is the 3rd paragraph of that screen. */
+/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
 "DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "اگر می‌توانید، لطفاً همین امروز کمک مالی کنید تا سیگنال سرگرم‌کننده، قابل‌اعتماد و در دسترس همه باشد.";
 
-/* There is a screen where users can read more about their donation to B&A. This is the title of that screen. */
+/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
 "DONATION_READ_MORE_SCREEN_TITLE" = "سیگنال متفاوت است.";
 
 /* Section title for donation amount on receipts */
@@ -2947,7 +3031,7 @@
 /* Title for the \"donate for a friend\" button on the donation view. */
 "DONATION_VIEW_DONATE_ON_BEHALF_OF_A_FRIEND" = "از طرف یکی از دوستان کمک مالی اهدا کنید";
 
-/* Text describing to the user that they're going to pay a donation to B&A */
+/* Text describing to the user that they're going to pay a donation to Signal */
 "DONATION_VIEW_DONATION_TO_SIGNAL" = "حمایت از سیگنال";
 
 /* Title for the 'Donor FAQ' button on the donation screen */
@@ -2959,7 +3043,7 @@
 /* Title for the 'Badges' button on the donation screen */
 "DONATION_VIEW_MANAGE_BADGES" = "نشان‌ها";
 
-/* Text describing to the user that they're going to pay a monthly donation to B&A */
+/* Text describing to the user that they're going to pay a monthly donation to Signal */
 "DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "اهدای ماهانه به سیگنال";
 
 /* Title for the 'more' section on the donation screen */
@@ -2971,7 +3055,7 @@
 /* Title for the \"other ways to donate\" section on the donation view. */
 "DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "راه‌‌های دیگر کمک مالی";
 
-/* Title on the 'Donate to B&A' screen */
+/* Title on the 'Donate to Signal' screen */
 "DONATION_VIEW_TITLE" = "حمایت از سیگنال";
 
 /* Label for the currency picker button in donation views */
@@ -2983,10 +3067,10 @@
 /* Title for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_TITLE" = "برای ویرایش، دو بار ضربه بزنید";
 
-/* Alert body for when the user has just tried to edit a contacts after declining to give B&A contacts permissions */
+/* Alert body for when the user has just tried to edit a contacts after declining to give Signal contacts permissions */
 "EDIT_CONTACT_WITHOUT_CONTACTS_PERMISSION_ALERT_BODY" = "شما میتوانید در برنامه تنظیمات iOS دسترسی را اعمال کنید.";
 
-/* Alert title for when the user has just tried to edit a contacts after declining to give B&A contacts permissions */
+/* Alert title for when the user has just tried to edit a contacts after declining to give Signal contacts permissions */
 "EDIT_CONTACT_WITHOUT_CONTACTS_PERMISSION_ALERT_TITLE" = "برای ویرایش اطلاعات مخاطبین، سیگنال نیاز به دسترسی به مخاطبین دارد";
 
 /* The navbar title for the 'update group' view. */
@@ -3019,14 +3103,14 @@
 /* Edit failed for an unexpected reason */
 "EDIT_MESSAGE_SEND_MESSAGE_UNKNOWN_ERROR" = "EDIT_MESSAGE_SEND_MESSAGE_UNKNOWN_ERROR";
 
-/* body of email sent to contacts when inviting to install B&A. Embeds {{link to install B&A}} and {{link to the B&A home page}} */
+/* body of email sent to contacts when inviting to install Signal. Embeds {{link to install Signal}} and {{link to the Signal home page}} */
 "EMAIL_INVITE_BODY" = "سلام،\n\nمن این روزها از سیگنال استفاده می‌کنم تا گفتگوهایم را در آیفون خصوصی نگه دارم. دوست دارم شما هم این برنامه را نصب کنید تا خیالمان راحت باشد که فقط من و شما می‌توانیم پیام‌هایمان را بخوانیم یا تماس‌هایمان را بشنویم.\n\nسیگنال برای آیفون، اندروید و دسکتاپ در دسترس است. دریافت برنامه از: %1$@\n\nسیگنال مثل برنامه پیام‌رسان فعلی شما کار می‌کند. می‌توانیم عکس و ویدیو بفرستیم، تماس بگیریم، و گفتگوهای گروهی داشته باشیم. بهترین قسمتش این است که هیچ فرد دیگری، حتی سازنده‌های سیگنال هم نمی‌توانند آنها را ببینند!\n\nاگر می‌خواهید بیشتر درباره سیگنال بدانید، اینجا را بخوانید: %2$@";
 
-/* subject of email sent to contacts when inviting to install B&A */
+/* subject of email sent to contacts when inviting to install Signal */
 "EMAIL_INVITE_SUBJECT" = "به نرم افزار پیام رسان سیگنال بپیوندید";
 
 /* Description for the fallback support sheet if user cannot send email */
-"EMAIL_SIGNAL_MESSAGE" = "دستگاه شما برای ارسال ایمیل پیکربندی نشده است. برای ارسال یک درخواست پشتیبانی، ایمیل را روی دستگاه خود تنظیم کنید یا به support@baxs.com ایمیل ارسال کنید";
+"EMAIL_SIGNAL_MESSAGE" = "دستگاه شما برای ارسال ایمیل پیکربندی نشده است. برای ارسال یک درخواست پشتیبانی، ایمیل را روی دستگاه خود تنظیم کنید یا به support@signal.org ایمیل ارسال کنید";
 
 /* Title for the fallback support sheet if user cannot send email */
 "EMAIL_SIGNAL_TITLE" = "ایمیل در دسترس نیست";
@@ -3073,11 +3157,11 @@
 /* Call setup status label */
 "END_CALL_UNCATEGORIZED_FAILURE" = "تماس ناموفق";
 
-/* Label explaining that an entered 'Backup Key' is incorrect. */
-"ENTER_ACCOUNT_ENTROPY_POOL_VIEW_INCORRECT_AEP_LABEL" = "رمز پشتیبان نادرست است";
+/* Label explaining that an entered 'Recovery Key' is incorrect. */
+"ENTER_ACCOUNT_ENTROPY_POOL_VIEW_INCORRECT_AEP_LABEL" = "رمز بازیابی نادرست";
 
-/* Label explaining that an entered 'Backup Key' is malformed. */
-"ENTER_ACCOUNT_ENTROPY_POOL_VIEW_MALFORMED_AEP_LABEL" = "رمز پشتیبان نامعتبر است";
+/* Label explaining that an entered 'Recovery Key' is malformed. */
+"ENTER_ACCOUNT_ENTROPY_POOL_VIEW_MALFORMED_AEP_LABEL" = "رمز بازیابی نامعتبر";
 
 /* Error indicating that a message could not be forwarded. */
 "ERROR_COULD_NOT_FORWARD_MESSAGES_1" = "امکان بازارسال پیام فراهم نبود.";
@@ -3173,7 +3257,7 @@
 "ERROR_NETWORK_FAILURE" = "خطا در شبکه";
 
 /* Format string for an error alert notification message. Embeds {{ error string }} */
-"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "لطفاً به ما در بهبود سیگنال با ارسال گزارش این خطا به همراه گزارش‌های عیب‌یابی از دستگاه خود به support@baxs.com کمک کنید: %1$@";
+"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "لطفاً به ما در بهبود سیگنال با ارسال گزارش این خطا به همراه گزارش‌های عیب‌یابی از دستگاه خود به support@signal.org کمک کنید: %1$@";
 
 /* Format string for an error alert notification title. */
 "ERROR_NOTIFICATION_TITLE" = "سیگنال بتا: خطایی رخ داد";
@@ -3199,7 +3283,7 @@
 /* Label notifying the user that the app has expired. */
 "EXPIRATION_ERROR" = "این نسخه سیگنال منقضی شده است. برای ارسال و دریافت پیام‌ها به‌روزرسانی کنید.";
 
-/* If the user's app is too old, they'll be shown a warning asking them to upgrade. This is the text on the warning, and tapping it will open the App Store page for B&A. */
+/* If the user's app is too old, they'll be shown a warning asking them to upgrade. This is the text on the warning, and tapping it will open the App Store page for Signal. */
 "EXPIRATION_WARNING_ACTION_TITLE" = "اکنون به‌روزرسانی کنید";
 
 /* Label warning the user that the app will expire soon. Embeds {{date}}. */
@@ -3210,9 +3294,6 @@
 
 /* action sheet header when re-sending message which failed because of an invalid key signature */
 "FAILED_SENDING_BECAUSE_INVALID_KEY_SIGNATURE" = "پیام ارسال نشد، چون %1$@ نیاز به به‌روزرسانی و باز کردن دوبارۀ سیگنال دارد.";
-
-/* action sheet header when re-sending message which failed because of too many attempts */
-"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "خطاهای زیادی با این مخاطب وجود دارد. لطفا بعدا تلاش کنید.";
 
 /* action sheet header when re-sending message which failed because of untrusted identity keys */
 "FAILED_SENDING_BECAUSE_UNTRUSTED_IDENTITY_KEY" = "کد امنیتی شما با %1$@ به تازگی تغییر کرده است. بهتر است قبل از ارسال دوباره این ‍پیام آن را تایید نمایید.";
@@ -3751,7 +3832,7 @@
 /* Label for the 'share group link via QR code' button in the 'group link' view. */
 "GROUP_LINK_VIEW_SHARE_LINK_VIA_QR_CODE" = "کد QR";
 
-/* Label for the 'share group link via B&A' button in the 'group link' view. */
+/* Label for the 'share group link via Signal' button in the 'group link' view. */
 "GROUP_LINK_VIEW_SHARE_LINK_VIA_SIGNAL" = "اشتراک‌گذاری از طریق سیگنال";
 
 /* Message for the 'share group link' action sheet in the 'group link' view. */
@@ -4117,7 +4198,7 @@
 /* Help item allowing the user to file a support request */
 "HELP_CONTACT_US" = "تماس با ما";
 
-/* Help item that takes the user to the B&A support website */
+/* Help item that takes the user to the Signal support website */
 "HELP_SUPPORT_CENTER" = "مرکز پشتیبانی";
 
 /* A format for the 'remove user' action sheet title. Embeds {{the removed user's name or phone number}}. */
@@ -4159,16 +4240,16 @@
 /* A prefix indicating that a message preview is a draft */
 "HOME_VIEW_DRAFT_PREFIX" = "پیش نویس: ";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have 1 B&A contact.  Embeds {{The name of 1 of your B&A contacts}}. */
+/* Format string for a label offering to start a new conversation with your contacts, if you have 1 Signal contact.  Embeds {{The name of 1 of your Signal contacts}}. */
 "HOME_VIEW_FIRST_CONVERSATION_OFFER_1_CONTACT_FORMAT" = "برخی از مخاطبان از سیگنال استفاده میکنند، مثل %1$@.";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have 2 B&A contacts.  Embeds {{The names of 2 of your B&A contacts}}. */
+/* Format string for a label offering to start a new conversation with your contacts, if you have 2 Signal contacts.  Embeds {{The names of 2 of your Signal contacts}}. */
 "HOME_VIEW_FIRST_CONVERSATION_OFFER_2_CONTACTS_FORMAT" = "برخی از مخاطبان هم اکنون در حال استفاده از سیگنال می باشند، مثل %1$@ و %2$@";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have at least 3 B&A contacts.  Embeds {{The names of 3 of your B&A contacts}}. */
+/* Format string for a label offering to start a new conversation with your contacts, if you have at least 3 Signal contacts.  Embeds {{The names of 3 of your Signal contacts}}. */
 "HOME_VIEW_FIRST_CONVERSATION_OFFER_3_CONTACTS_FORMAT" = "برخی از مخاطبان از سیگنال استفاده میکنند، مثل %1$@ ، %2$@ و %3$@";
 
-/* A label offering to start a new conversation with your contacts, if you have no B&A contacts. */
+/* A label offering to start a new conversation with your contacts, if you have no Signal contacts. */
 "HOME_VIEW_FIRST_CONVERSATION_OFFER_NO_CONTACTS" = "اولین گفتگوی خود را از اینجا آغاز کنید.";
 
 /* Table cell subtitle label for a group the user has been added to. {Embeds inviter name} */
@@ -4336,7 +4417,7 @@
 /* Indicates that another user has changed their phone number. Embeds: {{ the user's name}} */
 "INFO_MESSAGE_USER_CHANGED_PHONE_NUMBER_FORMAT" = "%1$@ شماره تلفن خود را تغییر داد.";
 
-/* Shown in inbox and conversation when a user joins B&A, embeds the new user's {{contact name}} */
+/* Shown in inbox and conversation when a user joins Signal, embeds the new user's {{contact name}} */
 "INFO_MESSAGE_USER_JOINED_SIGNAL_BODY_FORMAT" = "%1$@ عضو سیگنال شده است!";
 
 /* Label at the top of the input text when editing a message */
@@ -4498,7 +4579,7 @@
 /* Title for a sheet when a user tries to link a device informing them that they will need to authenticate their device */
 "LINK_NEW_DEVICE_AUTHENTICATION_INFO_SHEET_TITLE" = "قبل از متصل کردن، تأیید کنید که خودتان هستید";
 
-/* Description of how and why B&A iOS uses Touch ID/Face ID/Phone Passcode to unlock device linking. */
+/* Description of how and why Signal iOS uses Touch ID/Face ID/Phone Passcode to unlock device linking. */
 "LINK_NEW_DEVICE_AUTHENTICATION_REASON" = "احراز هویت برای متصل کردن دستگاه";
 
 /* Body text for a sheet when a user has started linking a device informing them to finish the process on that other device */
@@ -4567,9 +4648,6 @@
 /* Message for an action sheet telling users how to link a device, when trying to open a device-linking URL from the in-app camera. */
 "LINKED_DEVICE_URL_OPENED_ACTION_SHEET_IN_APP_CAMERA_MESSAGE" = "به نظر می‌رسد می‌خواهید یک دستگاه سیگنال را متصل کنید. روی ادامه و سپس روی «اتصال دستگاه جدید» ضربه بزنید و دوباره کد QR را اسکن کنید.";
 
-/* Message for an action sheet telling users how to link a BAXS account, when trying to open a BAXS linking URL from the in-app camera. */
-"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "به نظر می‌رسد می‌خواهید یک حساب BAXS را متصل کنید. روی ادامه و سپس روی «اسکن کد QR» ضربه بزنید و دوباره کد QR را اسکن کنید.";
-
 /* Bullet point about downloads on the linked devices education sheet. Embeds {{ %1$@ iPad download link, %2$@ desktop download link }} */
 "LINKED_DEVICES_EDUCATION_POINT_DOWNLOADS" = "در دستگاه دیگرتان، برای نصب برنامه iPad به %1$@ یا برای نصب برنامه دسک‌تاپ به %2$@ بروید.";
 
@@ -4608,73 +4686,6 @@
 
 /* Menu item and navbar title for the device manager */
 "LINKED_DEVICES_TITLE" = "دستگاه‌های متصل شده";
-
-
-/* Menu item for linking BAXS account */
-"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "پیوند حساب پلتفرم BA";
-
-/* Section header when BAXS account is linked */
-"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "حساب BAXS پیوند شده";
-
-/* Section header when BAXS account is not linked */
-"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "حساب پلتفرم BA";
-
-/* Footer text explaining how to link BAXS account */
-"LINK_BA_PLATFORM_SCAN_FOOTER" = "کد QR نمایش داده شده در پلتفرم پرداخت BA را اسکن کنید تا حساب خود را پیوند دهید.";
-
-/* Button to scan QR code to link BAXS account */
-"LINK_BA_PLATFORM_SCAN_QR_CODE" = "اسکن کد QR";
-
-/* Label for BA operator mobile */
-"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "موبایل";
-
-/* Label for BA operator email */
-"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "ایمیل";
-
-/* Label for BAXS user ID */
-"LINK_BA_PLATFORM_USER_ID" = "User ID";
-
-/* Label for BAXS user name */
-"LINK_BA_PLATFORM_USER_NAME" = "User Name";
-
-/* Title for BAXS binding confirmation dialog */
-"LINK_BA_PLATFORM_CONFIRM_TITLE" = "پیوند حساب پلتفرم BA";
-
-/* Message for BAXS binding confirmation dialog. Placeholder is merchant/operator name. */
-"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "حساب خود را به \"%@\" پیوند می‌دهید؟";
-
-/* Toast shown when BAXS account is successfully linked */
-"LINK_BA_PLATFORM_SUCCESS_TOAST" = "حساب پلتفرم BA با موفقیت پیوند داده شد.";
-
-/* Invalid QR code alert title */
-"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "کد QR نامعتبر";
-
-/* Invalid QR code alert message */
-"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "این کد QR یک کد پیوند معتبر پلتفرم BA نیست.";
-
-/* Button to scan QR code again */
-"LINK_BA_PLATFORM_SCAN_AGAIN" = "اسکن مجدد";
-
-/* Cannot link alert title */
-"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "پیوند امکان‌پذیر نیست";
-
-/* Default message when BAXS linking is not allowed */
-"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "این کد QR برای پیوند قابل استفاده نیست.";
-
-/* Linking failed alert title */
-"LINK_BA_PLATFORM_FAILED_TITLE" = "پیوند ناموفق بود";
-
-/* Default message when BAXS linking fails */
-"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "پلتفرم BA درخواست پیوند را رد کرد.";
-
-/* Linking timeout alert title */
-"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "زمان پیوند به پایان رسید";
-
-/* Linking timeout alert message */
-"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "پلتفرم BA به موقع پاسخ نداد. لطفاً دوباره تلاش کنید.";
-
-/* Generic error alert title */
-"LINK_BA_PLATFORM_ERROR_TITLE" = "خطا";
 
 /* Alert Title */
 "LINKING_DEVICE_FAILED_TITLE" = "خطا در اتصال دستگاه جدید";
@@ -5141,7 +5152,7 @@
 /* status message for read messages */
 "MESSAGE_STATUS_READ" = "خوانده‌شده";
 
-/* message status if message delivery to a recipient is skipped. We skip delivering group messages to users who have left the group or unregistered their B&A account. */
+/* message status if message delivery to a recipient is skipped. We skip delivering group messages to users who have left the group or unregistered their Signal account. */
 "MESSAGE_STATUS_RECIPIENT_SKIPPED" = "ارسال نشد";
 
 /* Label indicating that a message failed to send. */
@@ -5174,7 +5185,7 @@
 /* info message text in conversation view for when a call was dropped because the contact is blocked in iOS settings */
 "MISSED_CALL_BLOCKED_SYSTEM_CONTACT" = "تماس از‌دست‌رفته از مخاطب مسدودشده در تنظیمات تلفن";
 
-/* Action to block contact in B&A for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
+/* Action to block contact in Signal for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
 "MISSED_CALL_BLOCKED_SYSTEM_SETTINGS_SHEET_BLOCK_ACTION" = "مخاطب در سیگنال هم مسدود شود";
 
 /* Message for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
@@ -5465,7 +5476,7 @@
 /* No comment provided by engineer. */
 "NOTIFICATIONS_NONE" = "هیچ نام و یا محتوایی وجود ندارد";
 
-/* Table cell switch label. When disabled, B&A will not play notification sounds while the app is in the foreground. */
+/* Table cell switch label. When disabled, Signal will not play notification sounds while the app is in the foreground. */
 "NOTIFICATIONS_SECTION_INAPP" = "پخش در هنگام باز بودن برنامه";
 
 /* Label for settings UI that allows user to add a new notification sound. */
@@ -5516,7 +5527,7 @@
 /* The title for the device transfer 'choice' view 'transfer' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "بازیابی پشتیبان سیگنال";
 
-/* If a user is installing B&A on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
+/* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "انتخاب کنید که می‌خواهید چطور تاریخچه پیام و داده‌های حسابتان را بازیابی کنید.";
 
 /* The body for the skip restore 'choice' option */
@@ -5528,7 +5539,7 @@
 /* The title for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_TITLE" = "ثبت نام بدون انتقال";
 
-/* If a user is installing B&A on a new phone, they may be asked whether they want to restore their device from a backup. */
+/* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_TITLE" = "بازیابی یا انتقال حساب";
 
 /* The body for the device transfer 'choice' view 'transfer' option */
@@ -5699,19 +5710,19 @@
 /* Button text which opens the settings app */
 "OPEN_SETTINGS_BUTTON" = "تنظیمات";
 
-/* B&A doesn't support old versions of iOS and shows a warning if you're on unsupported version. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this text. */
+/* Signal doesn't support old versions of iOS and shows a warning if you're on unsupported version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. */
 "OS_EXPIRED_AND_CAN_UPGRADE_OS" = "سیگنال دیگر در این دستگاه کار نمی‌کند. برای استفاده دوباره از سیگنال، دستگاهتان را به نسخه جدیدتر iOS به‌روزرسانی کنید.";
 
-/* B&A doesn't support old devices. If that's the case, they'll be shown this action, and tapping it will open information about B&A's minimum supported operating systems. */
+/* Signal doesn't support old devices. If that's the case, they'll be shown this action, and tapping it will open information about Signal's minimum supported operating systems. */
 "OS_EXPIRED_AND_DEVICE_IS_STUCK" = "سیگنال دیگر در این دستگاه کار نمی‌کند. برای استفاده دوباره از سیگنال، به دستگاه جدیدتر جابجا شوید.";
 
-/* B&A doesn't support old versions of iOS and shows a warning if you're on an old version. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this action, and tapping it will open device update instructions. */
+/* Signal doesn't support old versions of iOS and shows a warning if you're on an old version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this action, and tapping it will open device update instructions. */
 "OS_SOON_TO_EXPIRE_ACTION_TITLE" = "حالا به‌روز کنید";
 
-/* B&A doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
+/* Signal doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
 "OS_SOON_TO_EXPIRE_AND_CAN_UPGRADE_OS_FORMAT" = "سیگنال به‌زودی دیگر از نسخه iOS دستگاه شما پشتیبانی نخواهد کرد. برای ادامه استفاده از سیگنال، دستگاهتان را تا %1$@ به نسخه جدیدتر iOS به‌روزرسانی کنید.";
 
-/* B&A doesn't support old versions of iOS and shows a warning if you're on an old version that will soon lose support. This is the text on that warning when users can't upgrade iOS without getting a new device. Embeds {{expiration date}}. */
+/* Signal doesn't support old versions of iOS and shows a warning if you're on an old version that will soon lose support. This is the text on that warning when users can't upgrade iOS without getting a new device. Embeds {{expiration date}}. */
 "OS_SOON_TO_EXPIRE_AND_DEVICE_WILL_BE_STUCK_FORMAT" = "سیگنال به‌زودی دیگر از نسخه iOS دستگاه شما پشتیبانی نخواهد کرد. برای ادامه استفاده از سیگنال، تا %1$@ به دستگاه جدیدتر جابجا شوید.";
 
 /* Info Message when another user disabled disappearing messages. Embeds {{name of other user}}. */
@@ -5720,20 +5731,38 @@
 /* Info Message when another user enabled disappearing messages. Embeds {{name of other user}} and {{time amount}} before messages disappear. See the *_TIME_AMOUNT strings for context. */
 "OTHER_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "%1$@ زمان ناپدید شدن پیام را روی %2$@ تنظیم کرد.";
 
-/* Label warning the user that the B&A service may be down. */
+/* Label warning the user that the Signal service may be down. */
 "OUTAGE_WARNING" = "سیگنال با مشکلات فنی روبروست. به سختی تلاش میکنیم تا سرویس را تا حد ممکن سریعا برگردانیم.";
 
 /* Label for action link when the user has an outdated payment client */
 "OUTDATED_PAYMENT_CLIENT_ACTION_TITLE" = "همین حالا به‌روزرسانی کن";
 
-/* Label warning the user that they should update B&A to continue using payments. */
+/* Label warning the user that they should update Signal to continue using payments. */
 "OUTDATED_PAYMENT_CLIENT_REMINDER_TEXT" = "برای ادامه استفاده از پرداخت‌ها، سیگنال را به‌روزرسانی کنید. موجودی شما ممکن است به‌روز نباشد.";
+
+/* Body of prompt notifying restore was cancelled. */
+"OUTGOING_DEVICE_REGISTRATION_CANCELLED_RESTORE_BODY" = "بازیابی لغو شد. لطفاً دوباره امتحان کنید.";
+
+/* Title of prompt notifying restore was cancelled. */
+"OUTGOING_DEVICE_REGISTRATION_CANCELLED_RESTORE_TITLE" = "بازیابی لغو شد";
 
 /* Body of prompt notifying registration without restore completed on the new device. */
 "OUTGOING_DEVICE_REGISTRATION_COMPLETE_BODY" = "حساب سیگنال شما در دستگاه دیگرتان فعال شده است. اکنون سیگنال در این دستگاه غیرفعال است.";
 
 /* Title of prompt notifying registration without restore completed on the new device. */
 "OUTGOING_DEVICE_REGISTRATION_COMPLETE_TITLE" = "ثبت‌نام تکمیل شد";
+
+/* Body of prompt notifying restore failed. */
+"OUTGOING_DEVICE_REGISTRATION_FAILED_RESTORE_BODY" = "بازیابی پیام‌ها از دستگاه دیگرتان حاوی داده‌های نامعتبر یا منقضی‌شده بود.  لطفاً دوباره امتحان کنید.";
+
+/* Title of prompt notifying restore failed. */
+"OUTGOING_DEVICE_REGISTRATION_FAILED_RESTORE_TITLE" = "بازیابی ناموفق بود";
+
+/* Body of prompt notifying restore failed for unknown reasons. */
+"OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_BODY" = "خطای ناشناخته، لطفاً دوباره امتحان کنید.";
+
+/* Title of prompt notifying restore failed for unknown reasons. */
+"OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_TITLE" = "خطای ناشناخته";
 
 /* Body of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "حساب سیگنال و پیام‌های شما در حال انتقال به دستگاه دیگر شماست. اکنون سیگنال در این دستگاه غیرفعال است.";
@@ -5771,7 +5800,7 @@
 /* info message text in conversation view */
 "OUTGOING_MISSED_VOICE_CALL" = "تماس صوتی بی‌پاسخ";
 
-/* Button for action sheet shown when device transfer completes; quits the B&A app immediately (does not automatically relaunch, but the user may choose to relaunch). */
+/* Button for action sheet shown when device transfer completes; quits the Signal app immediately (does not automatically relaunch, but the user may choose to relaunch). */
 "OUTGOING_TRANSFER_COMPLETE_EXIT_ACTION" = "خروج از سیگنال";
 
 /* Message for action sheet shown when device transfer completes */
@@ -5897,7 +5926,7 @@
 /* Title for action sheet shown when unlocking with biometrics like Face ID or TouchID fails because it is disabled at a system level. */
 "PAYMENTS_LOCK_LOCAL_BIOMETRY_AUTH_DISABLED_TITLE" = "احراز هویت بیومتریک ناموفق بود";
 
-/* Description of how and why B&A iOS uses Touch ID/Face ID/Phone Passcode to unlock 'payments lock'. */
+/* Description of how and why Signal iOS uses Touch ID/Face ID/Phone Passcode to unlock 'payments lock'. */
 "PAYMENTS_LOCK_REASON_UNLOCK_PAYMENTS_LOCK" = "برای تأیید پرداخت، احراز هویت کنید.";
 
 /* Label for the 'add memo' ui in the 'send payment' UI. */
@@ -6320,21 +6349,6 @@
 /* The re-creation explanation in the 'pin creation' view. */
 "PIN_CREATION_RECREATION_EXPLANATION" = "تا زمانی که این دستگاه ثبت شده باشد شما می‌توانید پین خود را تغییر دهید.";
 
-/* Action of the 'pin disable' reglock action sheet. */
-"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "خاموش کن";
-
-/* Message of the 'pin disable' reglock action sheet. */
-"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "برای غیرفعال کردن پین، شما باید ابتدا قفل ثبت‌نام را خاموش کنید.";
-
-/* Title of the 'pin disable' reglock action sheet. */
-"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "قفل ثبت نام خاموش شود؟";
-
-/* Error body indicating that the attempt to create a PIN succeeded but enabling reglock failed. */
-"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "ایجاد پین با موفقیت انجام شد، اما قفل ثبت‌نام فعال نشد. اتصال خود را بررسی کنید و دوباره امتحان کنید.";
-
-/* Error title indicating that the attempt to create a PIN succeeded but enabling reglock failed. */
-"PIN_CREATION_REGLOCK_ERROR_TITLE" = "فعال کردن قفل ثبت‌نام ناموفق بود";
-
 /* Skip action on the pin creation view */
 "PIN_CREATION_SKIP" = "غیرفعال کردن پین";
 
@@ -6346,12 +6360,6 @@
 
 /* If your attempted PIN is too weak, you'll see an error message. This is the text on the error dialog. */
 "PIN_CREATION_WEAK_ERROR_MESSAGE" = "پین‌ها اطلاعات ذخیره‌شده شما نزد سیگنال را رمزگذاری‌شده نگه می‌دارند تا فقط شما به آن دسترسی داشته باشید. برای حفاظت از حسابتان، پین قوی‌تری انتخاب کنید.";
-
-/* Error body indicating that the attempt to disable a PIN failed. */
-"PIN_DISABLE_ERROR_MESSAGE" = "غیرفعال کردن پین شما میسر نبود.";
-
-/* Error title indicating that the attempt to disable a PIN failed. */
-"PIN_DISABLE_ERROR_TITLE" = "غیرفعال‌سازی پین ناموفق بود";
 
 /* If the user is re-registering, they need to enter their PIN to restore all their data. In some cases, they can skip this entry and lose some data. This text is shown on a button that lets them begin to do this. */
 "PIN_ENTER_EXISTING_SKIP" = "عبور از وارد کردن پین";
@@ -6430,6 +6438,33 @@
 
 /* Accessibility label for button to start media playback */
 "PLAY_BUTTON_ACCESSABILITY_LABEL" = "پخش رسانه";
+
+/* Button to view poll results */
+"POLL_BUTTON_VIEW_RESULTS" = "مشاهده نتایج";
+
+/* Button to view poll votes */
+"POLL_BUTTON_VIEW_VOTES" = "مشاهده رأی‌ها";
+
+/* Label for button to end a poll */
+"POLL_DETAILS_END_POLL" = "پایان نظرسنجی";
+
+/* Title of poll details pane */
+"POLL_DETAILS_TITLE" = "جزئیات نظرسنجی";
+
+/* Notification that {{contact}} ended a poll with question {{poll question}} */
+"POLL_ENDED_NOTIFICATION" = "‏%1$@ نظرسنجی «%2$@» را به پایان رساند";
+
+/* Label specifying the message type as a poll */
+"POLL_LABEL" = "نظرسنجی";
+
+/* Prefix for a poll preview */
+"POLL_PREFIX" = "نظرسنجی:";
+
+/* Label specifying the user can select more than one option */
+"POLL_SELECT_LABEL_MULTIPLE" = "یک یا چند مورد را انتخاب کنید";
+
+/* Label specifying the user can select one option */
+"POLL_SELECT_LABEL_SINGULAR" = "یک مورد را انتخاب کنید";
 
 /* Badge indicating that the user is verified. */
 "PRIVACY_IDENTITY_IS_VERIFIED_BADGE" = "تأیید شده";
@@ -6737,13 +6772,13 @@
 /* Alert title. Shown after selecting a phone number that isn't valid. */
 "RECIPIENT_PICKER_INVALID_NUMBER_TITLE" = "شماره تلفن معتبر نیست";
 
-/* Button. Shown after selecting a phone number that isn't a B&A user. Tapping the button will open a view that allows the user to send an SMS message to specified phone number. */
+/* Button. Shown after selecting a phone number that isn't a Signal user. Tapping the button will open a view that allows the user to send an SMS message to specified phone number. */
 "RECIPIENT_PICKER_INVITE_ACTION" = "دعوت";
 
-/* Alert text. Shown after selecting a phone number that isn't a B&A user. */
+/* Alert text. Shown after selecting a phone number that isn't a Signal user. */
 "RECIPIENT_PICKER_INVITE_MESSAGE" = "%1$@ کاربر سیگنال نیست. آیا می خواهید این شماره را دعوت کنید؟";
 
-/* Alert title. Shown after selecting a phone number that isn't a B&A user. */
+/* Alert title. Shown after selecting a phone number that isn't a Signal user. */
 "RECIPIENT_PICKER_INVITE_TITLE" = "دعوت به سیگنال";
 
 /* Alert title explaining what happens if you forget your 'two-factor auth pin'. */
@@ -6768,13 +6803,10 @@
 "REGISTER_RATE_LIMITING_ALERT" = "در مدت زمانی مشخص بیش از حد مجاز امتحان کرده‌اید. لطفاً چند دقیقه صبر کنید و بعد دوباره تلاش کنید.";
 
 /* No comment provided by engineer. */
-"REGISTER_RATE_LIMITING_BODY" = "شما چندین بار امتحان کردید. لطفا قبل از امتحان مجدد، یک دقیقه صبر کنید.";
-
-/* No comment provided by engineer. */
 "REGISTER_RATE_LIMITING_ERROR" = "شما چندین بار امتحان کردید. لطفا قبل از امتحان مجدد، یک دقیقه صبر کنید.";
 
 /* Body for a sheet warning users about a missing backup. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_BACKUP_NOT_FOUND_BODY" = "رمز نسخه پشتیبان واردشده صحیح است، اما هیچ نسخه پشتیبان مرتبط با آن وجود ندارد. اگر هنوز تلفن قدیمی خود را دارید، مطمئن شوید که پشتیبان‌گیری فعال است و پشتیبان‌گیری تکمیل شده است، سپس دوباره امتحان کنید.";
+"REGISTRATION_BACKUP_RESTORE_ERROR_BACKUP_NOT_FOUND_BODY" = "رمز بازیابی واردشده صحیح است، اما هیچ نسخه پشتیبان مرتبط با آن وجود ندارد. اگر هنوز تلفن قدیمی خود را دارید، مطمئن شوید که پشتیبان‌گیری فعال است و پشتیبان‌گیری تکمیل شده است، سپس دوباره امتحان کنید.";
 
 /* Title for a sheet warning users about a missing backup. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_BACKUP_NOT_FOUND_TITLE" = "نسخه پشتیبان یافت نشد";
@@ -6806,11 +6838,11 @@
 /* Title for a sheet warning users about a generic backup manual restore failure. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_GENERIC_TITLE" = "انتقال انجام نشد";
 
-/* Body for a sheet warning users about an incorrect backup key. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
+/* Body for a sheet warning users about an incorrect recovery key. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "حتماً همان رمز بازیابی ۶۴ نویسه‌ای را وارد کنید که هنگام فعال‌سازی پشتیبان‌های سیگنال ذخیره کرده‌اید. نسخه‌های پشتیبان بدون این رمز قابل‌بازیابی نیستند.";
 
-/* Title for a sheet warning users about an incorrect backup key. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "رمز پشتیبان نادرست است";
+/* Title for a sheet warning users about an incorrect recovery key. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "رمز بازیابی نادرست";
 
 /* Body for a sheet warning users about a network error during backup restore. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_NETWORK_BODY" = "نسخه پشتیبان شما اکنون قابل بازیابی نیست. اتصال اینترنت خود را بررسی و دوباره امتحان کنید.";
@@ -6818,11 +6850,23 @@
 /* Title for a sheet warning users about a network error during backup restore. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_NETWORK_TITLE" = "نسخه پشتیبان بازیابی نشد";
 
+/* Body for a sheet telling users to try restoring a backup again after a server error. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_RETRYABLE_SERVER_ERROR_BODY" = "نسخه پشتیبان شما اکنون قابل بازیابی نیست. اتصال اینترنت خود را بررسی و دوباره امتحان کنید.";
+
+/* Title for a sheet telling users to try restoring a backup again after a server error. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_RETRYABLE_SERVER_ERROR_TITLE" = "نسخه پشتیبان بازیابی نشد";
+
 /* Skip restore action label for backup restore error recovery. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_SKIP_RESTORE_ACTION" = "رد کردن بازیابی";
 
 /* Try again action label for backup restore error recovery. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_TRY_AGAIN_ACTION" = "دوباره تلاش کنید";
+
+/* Body for a sheet telling users restoring a backup unrecoverably failed. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_UNRETRYABLE_SERVER_ERROR_BODY" = "خطایی هنگام بازیابی نسخه پشتیبان شما رخ داد. نسخه پشتیبان شما قابل بازیابی نیست. لطفاً برای راهنمایی با پشتیبانی تماس بگیرید.";
+
+/* Title for a sheet telling users restoring a backup unrecoverably failed. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_UNRETRYABLE_SERVER_ERROR_TITLE" = "نسخه پشتیبان بازیابی نشد";
 
 /* Body for a sheet warning users about an incompatible backup version. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_UNSUPPORTED_BACKUP_VERSION_BODY" = "برای بازیابی نسخه پشتیبان، مطمئن شوید که از آخرین نسخه سیگنال استفاده می‌کنید و دوباره امتحان کنید. اگر مشکل همچنان ادامه یافت، با پشتیبانی تماس بگیرید.";
@@ -6848,17 +6892,17 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "پیش‌شماره کشور";
 
-/* If a user is installing B&A on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
+/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
 "REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "در صورت ادامه، سیگنال روی سایر دستگاه‌هایی که با همین شماره تلفن ثبت‌نام شده‌اند غیرفعال می‌شود.";
 
-/* If a user is installing B&A on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
+/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
 "REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "انتقال حساب و پیام‌ها";
 
-/* Description for the screen that allows users to enter their backup key. */
-"REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "رمز پشتیبان شما یک کد ۶۴ رقمی است که برای بازیابی حساب و اطلاعاتتان الزامی است.";
+/* Description for the screen that allows users to enter their recovery key. */
+"REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "رمز بازیابی شما یک کد ۶۴ نویسه‌ای است که برای بازیابی حساب و اطلاعاتتان الزامی است.";
 
-/* Title for the screen that allows users to enter their backup key. */
-"REGISTRATION_ENTER_BACKUP_KEY_TITLE" = "رمز پشتیبان خود را وارد کنید";
+/* Title for the screen that allows users to enter their recovery key. */
+"REGISTRATION_ENTER_BACKUP_KEY_TITLE" = "رمز بازیابی‌تان را وارد کنید";
 
 /* Placeholder text for the phone number textfield */
 "REGISTRATION_ENTERNUMBER_DEFAULT_TEXT" = "شناره را وارد کنید";
@@ -6881,16 +6925,16 @@
 /* A network error occurred during registration, and an error is shown to the user. This is the title on that error sheet. */
 "REGISTRATION_NETWORK_ERROR_TITLE" = "اتصال را بررسی کنید";
 
-/* Title of button to tap if you do not have a backup key during registration. */
-"REGISTRATION_NO_BACKUP_KEY_BUTTON_TITLE" = "رمز پشتیبان ندارید؟";
+/* Title of button to tap if you do not have a recovery key during registration. */
+"REGISTRATION_NO_BACKUP_KEY_BUTTON_TITLE" = "رمز بازیابی ندارید؟";
 
-/* Body text on a sheet with info for what to do if you don't have a backup key */
-"REGISTRATION_NO_BACKUP_KEY_SHEET_BODY" = "فایل‌های پشتیبان بدون کد بازیابی ۶۴ رقمی قابل بازیابی نیستند. اگر رمز پشتیبان خود را گم کرده‌اید، سیگنال نمی‌تواند به بازیابی نسخه پشتیبان شما کمک کند.\n\nاگر دستگاه قدیمی خود را دارید، می‌توانید رمز پشتیبان خود را در «تنظیمات > گفتگوها > پشتیبان‌های سیگنال» مشاهده کنید. سپس روی «مشاهده رمز پشتیبان» ضربه بزنید.";
+/* Body text on a sheet with info for what to do if you don't have a recovery key */
+"REGISTRATION_NO_BACKUP_KEY_SHEET_BODY" = "نسخه‌های پشتیبان بدون کد بازیابی ۶۴ نویسه‌ای قابل‌بازیابی نیستند. اگر رمز بازیابی‌تان را گم کرده‌اید، سیگنال نمی‌تواند به بازیابی نسخه پشتیبان شما کمک کند.\n\nاگر دستگاه قدیمی‌تان را دارید، می‌توانید رمز بازیابی‌تان را در «تنظیمات > گفتگوها > نسخه‌های پشتیبان» مشاهده کنید. سپس روی«مشاهده رمز بازیابی» ضربه بزنید.";
 
-/* Title for sheet with info for what to do if you don't have a backup key */
-"REGISTRATION_NO_BACKUP_KEY_SHEET_TITLE" = "رمز پشتیبان ندارید؟";
+/* Title for sheet with info for what to do if you don't have a recovery key */
+"REGISTRATION_NO_BACKUP_KEY_SHEET_TITLE" = "رمز بازیابی ندارید؟";
 
-/* Title for button on sheet for when you don't have a backup key */
+/* Title for button on sheet for when you don't have a recovery key */
 "REGISTRATION_NO_BACKUP_KEY_SKIP_RESTORE_BUTTON_TITLE" = "رد کردن و عدم بازیابی";
 
 /* During registration, users are asked to enter their phone number. This is the subtitle on that screen, which gives users some instructions. */
@@ -6953,10 +6997,16 @@
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "قبل از ارسال پیام نیاز دارید ثبت نام کنید.";
 
+/* Body of error notifying restore failed. */
+"REGISTRATION_SCAN_QR_CODE_FAILED_BODY" = "Failed to restore from old device. Try again.";
+
+/* Title of error notifying restore failed. */
+"REGISTRATION_SCAN_QR_CODE_FAILED_TITLE" = "بازیابی ناموفق بود";
+
 /* Title for screen containing QR code that users scan with their old phone when they want to transfer/restore their message history to a new device. */
 "REGISTRATION_SCAN_QR_CODE_TITLE" = "این کد را با تلفن قدیمی خود اسکن کنید";
 
-/* Tutorial text describing the first step to scanning the restore/transfer QR code with your old phone: opening B&A */
+/* Tutorial text describing the first step to scanning the restore/transfer QR code with your old phone: opening Signal */
 "REGISTRATION_SCAN_QR_CODE_TUTORIAL_OPEN_SIGNAL" = "سیگنال را در دستگاه قدیمی‌تان باز کنید";
 
 /* Tutorial text describing the third step to scanning the restore/transfer QR code with your old phone: scan the code */
@@ -7045,6 +7095,9 @@
 
 /* Subtitle shown on chat list banner for restoring media from a backup when paused because the device has low battery */
 "RESTORING_MEDIA_BANNER_PAUSED_BATTERY_SUBTITLE" = "باتری دستگاه کم است";
+
+/* Subtitle shown on chat list banner for restoring media from a backup when paused because the device is in low power mode */
+"RESTORING_MEDIA_BANNER_PAUSED_LOW_POWER_MODE_SUBTITLE" = "حالت کم‌مصرف";
 
 /* Subtitle shown on chat list banner for restoring media from a backup when paused because the device has no internet connection */
 "RESTORING_MEDIA_BANNER_PAUSED_NOT_REACHABLE_SUBTITLE" = "اینترنت متصل نیست…";
@@ -7199,13 +7252,13 @@
 /* Indicates that Touch ID/Face ID/Phone Passcode passcode is not set. */
 "SCREEN_LOCK_ERROR_LOCAL_AUTHENTICATION_PASSCODE_NOT_SET" = "برای استفاده از قفل صفحه نمایش می بایستی یک رمزعبور از تنظیمات iOS فعال کنید.";
 
-/* Description of how and why B&A iOS uses Touch ID/Face ID/Phone Passcode to unlock 'screen lock'. */
+/* Description of how and why Signal iOS uses Touch ID/Face ID/Phone Passcode to unlock 'screen lock'. */
 "SCREEN_LOCK_REASON_UNLOCK_SCREEN_LOCK" = "برای باز کردن سیگنال هویت خود را احراز کنید";
 
 /* Title for alert indicating that screen lock could not be unlocked. */
 "SCREEN_LOCK_UNLOCK_FAILED" = "احراز هویت ناموفق بود";
 
-/* Label for button on lock screen that lets users unlock B&A. */
+/* Label for button on lock screen that lets users unlock Signal. */
 "SCREEN_LOCK_UNLOCK_SIGNAL" = "آنلاک کردن سیگنال";
 
 /* Placeholder text indicating the user can search for contacts by name, username, or phone number. */
@@ -7262,7 +7315,7 @@
 /* Message for action sheet when secondary device fails to sync messages due to an unspecified error. */
 "SECONDARY_LINKING_SYNCING_OTHER_ERROR_MESSAGE" = "پیام‌هایتان به‌دلیل بروز خطا منتقل نشد. با اتصال مجدد این دستگاه، دوباره امتحان کنید.";
 
-/* Button on an action sheet to open B&A on the App Store. */
+/* Button on an action sheet to open Signal on the App Store. */
 "SECONDARY_LINKING_SYNCING_UPDATE_REQUIRED_CHECK_FOR_UPDATE_BUTTON" = "بررسی به‌روزرسانی‌ها";
 
 /* Message for action sheet when the secondary device fails to sync messages due to an app update being required. */
@@ -7343,10 +7396,10 @@
 /* String describing standard quality sent media */
 "SENT_MEDIA_QUALITY_STANDARD" = "استاندارد";
 
-/* Users can donate to B&A with a bank account. This is the label for email field on that screen. */
+/* Users can donate to Signal with a bank account. This is the label for email field on that screen. */
 "SEPA_DONATION_EMAIL_LABEL" = "ایمیل";
 
-/* Users can donate to B&A with a bank account. This is placeholder text for the email field before the user starts typing. */
+/* Users can donate to Signal with a bank account. This is placeholder text for the email field before the user starts typing. */
 "SEPA_DONATION_EMAIL_PLACEHOLDER" = "نشانی ایمیل";
 
 /* SEPA bank account donation error for insufficient funds. */
@@ -7364,28 +7417,28 @@
 /* SEPA bank account donation error for the payment not being authorizing by the account holder. */
 "SEPA_DONATION_ERROR_PAYMENT_NOT_AUTHORIZED" = "دارندۀ حساب این پرداخت را لغو کرده است و قابل پردازش نیست. مبلغی از حسابتان برداشت نشده است.";
 
-/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) contains characters other than letters and numbers, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) contains characters other than letters and numbers, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_INVALID_CHARACTERS_ERROR" = "‏IBAN فقط می‌تواند حاوی حروف A تا Z و اعداد ۰ تا ۹ باشد";
 
-/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) does not pass validation, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) does not pass validation, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_INVALID_CHECK_ERROR" = "شماره IBAN نامعتبر";
 
-/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) has an unsupported country code, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) has an unsupported country code, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_INVALID_COUNTRY_ERROR" = "کد کشور IBAN پشتیبانی نمی‌شود";
 
-/* Users can donate to B&A with a bank account. This is the label for IBAN (internation bank account number) field on that screen. */
+/* Users can donate to Signal with a bank account. This is the label for IBAN (internation bank account number) field on that screen. */
 "SEPA_DONATION_IBAN_LABEL" = "IBAN";
 
-/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_TOO_LONG_ERROR" = "شمارۀ IBAN زیاده طولانی است";
 
-/* Users can donate to B&A with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
+/* Users can donate to Signal with a bank account. If their internation bank account number (IBAN) is too long, this error will be shown. Try to use a short string to make space in the UI. */
 "SEPA_DONATION_IBAN_TOO_SHORT_ERROR" = "شمارۀ IBAN زیاده کوتاه است";
 
-/* Users can donate to B&A with a bank account. This is the label for name field on that screen. */
+/* Users can donate to Signal with a bank account. This is the label for name field on that screen. */
 "SEPA_DONATION_NAME_LABEL" = "نام";
 
-/* Users can donate to B&A with a bank account. This is placeholder text for the name field before the user starts typing. */
+/* Users can donate to Signal with a bank account. This is placeholder text for the name field before the user starts typing. */
 "SEPA_DONATION_NAME_PLACEHOLDER" = "نام دارندۀ حساب بانکی";
 
 /* Description for the session refresh alert */
@@ -7433,7 +7486,7 @@
 /* Table footer for the 'censorship circumvention' section shown when the app is not connected to the internet. */
 "SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_NO_CONNECTION" = "دورزدن سانسور تنها در زمان اتصال به اینترنت فعال خواهد شد.";
 
-/* Table footer for the 'censorship circumvention' section shown when the app is connected to the B&A service. */
+/* Table footer for the 'censorship circumvention' section shown when the app is connected to the Signal service. */
 "SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_WEBSOCKET_CONNECTED" = "نیازی به دورزدن سانسور نیست؛ شما به سرویس سیگنال دسترسی مستقیم دارید.";
 
 /* Label for the 'advanced pin settings' button. */
@@ -7444,6 +7497,12 @@
 
 /* No comment provided by engineer. */
 "SETTINGS_ADVANCED_PINS_DISABLE_PIN_ACTION" = "غیرفعال کردن پین";
+
+/* Message shown in an action sheet when attempting to disable PIN, but Backups is enabled. */
+"SETTINGS_ADVANCED_PINS_DISABLE_PIN_ACTION_BACKUPS_DISABLE_REQUIRED" = "قبل از غیرفعال کردن پین خود، باید «نسخه‌های پشتیبان» را غیرفعال کنید.";
+
+/* Message shown in an action sheet when attempting to disable PIN, but registration lock is enabled. */
+"SETTINGS_ADVANCED_PINS_DISABLE_PIN_ACTION_REGLOCK_DISABLE_REQUIRED" = "قبل از غیرفعال کردن پین خود، باید قفل ثبت‌نام را غیرفعال کنید.";
 
 /* No comment provided by engineer. */
 "SETTINGS_ADVANCED_PINS_ENABLE_PIN_ACTION" = "فعال کردن پین";
@@ -7490,7 +7549,7 @@
 /* A label for the 'add phone number' button in the block list table. */
 "SETTINGS_BLOCK_LIST_ADD_BUTTON" = "افزودن کاربر مسدودشده";
 
-/* A label that indicates the user has no B&A contacts that they haven't blocked. */
+/* A label that indicates the user has no Signal contacts that they haven't blocked. */
 "SETTINGS_BLOCK_LIST_NO_CONTACTS" = "هیچ کدام از مخاطبین شما سیگنال را نصب نکرده‌اند.";
 
 /* A label that indicates the user's search has no matching results. */
@@ -7602,10 +7661,16 @@
 "SETTINGS_DELETE_DATA_BUTTON" = "پاک کردن تمام اطلاعات";
 
 /* Alert message before user confirms clearing history */
-"SETTINGS_DELETE_HISTORYLOG_CONFIRMATION" = "مطمئن هستید که می‌خواهید تمام تاریخچه (پیام‌ها، پیوست‌ها، تماس‌ها و …) را پاک کنید؟ این عمل بازگشت‌پذیر نیست.";
+"SETTINGS_DELETE_HISTORYLOG_CONFIRMATION" = "مطمئنید که می‌خواهید همه تاریخچه گفتگو (پیام‌ها، فایل‌های رسانه، تماس‌ها و غیره) را از تمام دستگاه‌هایتان حذف کنید؟ این اقدام بازگشت‌پذیر نیست.";
 
 /* Confirmation text for button which deletes all message, calling, attachments, etc. */
 "SETTINGS_DELETE_HISTORYLOG_CONFIRMATION_BUTTON" = "پاک کردن همه چیز";
+
+/* Secondary alert message before user confirms clearing history */
+"SETTINGS_DELETE_HISTORYLOG_CONFIRMATION_SECONDARY_MESSAGE" = "همه تاریخچه گفتگو برای همیشه حذف خواهد شد. این اقدام بازگشت‌پذیر نیست.";
+
+/* Secondary alert title before user confirms clearing history */
+"SETTINGS_DELETE_HISTORYLOG_CONFIRMATION_SECONDARY_TITLE" = "مطمئنید که می‌خواهید همه تاریخچه گفتگو را حذف کنید؟";
 
 /* Label for the 'disappearing messages' privacy settings. */
 "SETTINGS_DISAPPEARING_MESSAGES" = "پیام‌های ناپدید شونده";
@@ -8243,11 +8308,26 @@
 /* Action to turn off registration lock */
 "SETTINGS_REGISTRATION_LOCK_TURN_OFF" = "خاموش کن";
 
+/* Message shown in an action sheet when attempting to enable registration lock, but encountering a generic error. */
+"SETTINGS_REGISTRATION_LOCK_TURN_OFF_ERROR_GENERIC" = "غیرفعال‌سازی قفل ثبت‌نام ناموفق بود. لطفاً با پشتیبانی تماس بگیرید.";
+
+/* Message shown in an action sheet when attempting to enable registration lock, but encountering a network error. */
+"SETTINGS_REGISTRATION_LOCK_TURN_OFF_ERROR_NETWORK" = "غیرفعال‌سازی قفل ثبت‌نام ناموفق بود. اتصال اینترنت خود را بررسی و دوباره امتحان کنید.";
+
 /* Title for the alert confirming that the user wants to turn off registration lock. */
 "SETTINGS_REGISTRATION_LOCK_TURN_OFF_TITLE" = "قفل ثبت نام خاموش شود؟";
 
 /* Action to turn on registration lock */
 "SETTINGS_REGISTRATION_LOCK_TURN_ON" = "روشن کن";
+
+/* Message shown in an action sheet when attempting to enable registration lock, but encountering a generic error. */
+"SETTINGS_REGISTRATION_LOCK_TURN_ON_ERROR_GENERIC" = "فعال‌سازی قفل ثبت‌نام ناموفق بود. لطفاً با پشتیبانی تماس بگیرید.";
+
+/* Message shown in an action sheet when attempting to enable registration lock, but encountering a network error. */
+"SETTINGS_REGISTRATION_LOCK_TURN_ON_ERROR_NETWORK" = "فعال‌سازی قفل ثبت‌نام ناموفق بود. اتصال اینترنت خود را بررسی و دوباره امتحان کنید.";
+
+/* Message shown in an action sheet when attempting to enable registration lock, but the user does not have a PIN. */
+"SETTINGS_REGISTRATION_LOCK_TURN_ON_ERROR_PIN_REQUIRED" = "برای استفاده از قفل ثبت‌نام، باید پین ایجاد کنید.";
 
 /* Body for the alert confirming that the user wants to turn on registration lock. */
 "SETTINGS_REGISTRATION_LOCK_TURN_ON_MESSAGE" = "اگر شما پین سیگنال خود را هنگام ثبت‌نام دوباره فراموش کنید، حساب شما به مدت ۷ روز قفل خواهد شد و قادر به استفاده از آن نخواهید بود.";
@@ -8312,7 +8392,7 @@
 /* Label for the 'enable registration lock' switch of the privacy settings. */
 "SETTINGS_TWO_FACTOR_AUTH_SWITCH_LABEL" = "قفل ثبت‌نام";
 
-/* Footer for the 'two factor auth' section of the privacy settings when B&A PINs are available. */
+/* Footer for the 'two factor auth' section of the privacy settings when Signal PINs are available. */
 "SETTINGS_TWO_FACTOR_PINS_AUTH_FOOTER" = "درخواست پین سیگنال شما برای ثبت‌نام دوباره با شماره تلفن شما در سیگنال.";
 
 /* Label for the 'typing indicators' setting. */
@@ -8360,7 +8440,7 @@
 /* Alert title */
 "SHARE_EXTENSION_SENDING_IN_PROGRESS_TITLE" = "در حال بارگذاری…";
 
-/* Shown when trying to share content to a B&A user for the share extension. Followed by failure details. */
+/* Shown when trying to share content to a Signal user for the share extension. Followed by failure details. */
 "SHARE_EXTENSION_UNABLE_TO_BUILD_ATTACHMENT_ALERT_TITLE" = "پیوست فراهم نشد";
 
 /* Title for the 'share extension' view. */
@@ -8375,7 +8455,7 @@
 /* Shown in the header when the user hasn't provided a custom name for a call. */
 "SIGNAL_CALL" = "تماس با سیگنال";
 
-/* body sent to contacts when inviting to Install B&A */
+/* body sent to contacts when inviting to Install Signal */
 "SMS_INVITE_BODY" = "من شما را از طریق این لینک، به نصب برنامه سیگنال دعوت می‌کنم:";
 
 /* An error message generically indicating that something went wrong. */
@@ -8772,7 +8852,7 @@
 "SUPPORT_EMAIL_DEFAULT_DESCRIPTION" = "درباره این موضوع به ما بگویید: ";
 
 /* Message for alert dialog presented when a support email failed to send */
-"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "لطفاً درخواست پشتیبانی خود را به نشانی ایمیل support@baxs.com ارسال کنید";
+"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "لطفاً درخواست پشتیبانی خود را به نشانی ایمیل support@signal.org ارسال کنید";
 
 /* Localized label for support request email filter string. Embeds {{filter text}}. */
 "SUPPORT_EMAIL_FILTER_LABEL_FORMAT" = "فیلتر: %1$@";
@@ -8801,7 +8881,7 @@
 /* Header for emoji mood selection */
 "SUPPORT_EMOJI_PROMPT" = "چه حسی دارید؟ (اختیاری)";
 
-/* Label in support request informing user about B&A FAQ */
+/* Label in support request informing user about Signal FAQ */
 "SUPPORT_FAQ_PROMPT" = "آیا قسمت پرسش‌های متداول را خوانده‌اید؟";
 
 /* Label describing support switch to attach debug logs */
@@ -9026,7 +9106,7 @@
 /* Label text below navbar button, embeds {{number of weeks}}. Must be very short, like 1 or 2 characters, The space is intentionally omitted between the text and the embedded duration so that we get, e.g. '5w' not '5 w'. See other *_TIME_AMOUNT strings */
 "TIME_AMOUNT_WEEKS_SHORT_FORMAT" = "%1$@ه";
 
-/* Button for bottom sheet shown when device transfer completes on the receiving device. Tapping will terminate the B&A app and trigger a notification to relaunch. */
+/* Button for bottom sheet shown when device transfer completes on the receiving device. Tapping will terminate the Signal app and trigger a notification to relaunch. */
 "TRANSFER_COMPLETE_SHEET_BUTTON" = "بستن سیگنال";
 
 /* Subtitle for bottom sheet shown when device transfer completes on the receiving device. */
@@ -9035,7 +9115,7 @@
 /* Title for bottom sheet shown when device transfer completes on the receiving device. */
 "TRANSFER_COMPLETE_SHEET_TITLE" = "انتقال انجام شد";
 
-/* Notification prompting the user to relaunch B&A after a device transfer completed. */
+/* Notification prompting the user to relaunch Signal after a device transfer completed. */
 "TRANSFER_RELAUNCH_NOTIFICATION" = "برای شروع ارسال پیام، سیگنال را باز کنید";
 
 /* Label for the cancel button in an alert or action sheet. */
@@ -9119,7 +9199,7 @@
 /* No comment provided by engineer. */
 "UNSUPPORTED_ATTACHMENT" = "نوع پیوست دریافت شده پشتیانی نشده است.";
 
-/* When inviting contacts to use B&A, this error is shown if the device doesn't support SMS or if there aren't any registered email accounts. */
+/* When inviting contacts to use Signal, this error is shown if the device doesn't support SMS or if there aren't any registered email accounts. */
 "UNSUPPORTED_FEATURE_ERROR" = "دستگاه شما این قابلیت را پشتیبانی نمی‌کند.";
 
 /* Description for the unverified safety number change. Embeds {name of contact with identity change} */
@@ -9233,10 +9313,10 @@
 /* A message indicating that a username link the user attempted to query is no longer valid. */
 "USERNAME_LOOKUP_LINK_NO_LONGER_VALID_MESSAGE" = "این پیوند نام کاربری دیگر معتبر نیست.";
 
-/* A message indicating that the given username is not associated with a registered B&A account. Embeds {{ a username }}. */
+/* A message indicating that the given username is not associated with a registered Signal account. Embeds {{ a username }}. */
 "USERNAME_LOOKUP_NOT_FOUND_MESSAGE_FORMAT" = "%1$@ کاربر سیگنال نیست. اطمینان حاصل کنید که نام کاربری را کامل وارد کرده‌اید.";
 
-/* Title for an action sheet indicating that the given username is not associated with a registered B&A account. */
+/* Title for an action sheet indicating that the given username is not associated with a registered Signal account. */
 "USERNAME_LOOKUP_NOT_FOUND_TITLE" = "کاربر پیدا نشد";
 
 /* Instructions that appear below the username QR code on a sharable exported image. */
@@ -9340,9 +9420,6 @@
 
 /* Indicates how to cancel a voice message. */
 "VOICE_MESSAGE_CANCEL_INSTRUCTIONS" = "برای لغو به کناره بکشید";
-
-/* Filename for voice messages. */
-"VOICE_MESSAGE_FILE_NAME" = "B&A";
 
 /* Message for the tooltip indicating the 'voice message' needs to be held to be held down to record. */
 "VOICE_MESSAGE_TOO_SHORT_TOOLTIP" = "برای ضبط کردن فشار داده و نگه دارید.";

@@ -1,1 +1,1 @@
-• Chúng tôi đã sửa lỗi liên quan đến nhãn dán được gửi từ bàn phím emoji trên iOS.
+• Chúng tôi đã sửa lỗi thỉnh thoảng camera hiển thị hình ảnh trống trong quá trình liên kết thiết bị mới.

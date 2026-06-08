@@ -19,7 +19,7 @@ public enum OWSRequestFactory {
     static let textSecureRegistrationLockV2API  = "v1/accounts/registration_lock"
     static let textSecureGiftBadgePricesAPI = "v1/subscription/boost/amounts/gift"
 
-    static let textSecureHTTPTimeOut: TimeInterval = 10
+    public static let textSecureHTTPTimeOut: TimeInterval = 10
 
     // MARK: - Other
 
@@ -87,27 +87,18 @@ public enum OWSRequestFactory {
 
     // MARK: - Messages
 
-    static func getMessagesRequest() -> TSRequest {
-        var request = TSRequest(url: URL(string: "v1/messages")!, method: "GET", parameters: [:])
-        StoryManager.appendStoryHeaders(to: &request)
-        request.shouldCheckDeregisteredOn401 = true
-        return request
-    }
-
-    static func acknowledgeMessageDeliveryRequest(serverGuid: String) -> TSRequest {
-        owsAssertDebug(!serverGuid.isEmpty)
-
-        let path = "v1/messages/uuid/\(serverGuid)"
-
-        return TSRequest(url: URL(string: path)!, method: "DELETE", parameters: [:])
-    }
-
     static func udSenderCertificateRequest(uuidOnly: Bool) -> TSRequest {
         var path = "v1/certificate/delivery"
         if uuidOnly {
             path += "?includeE164=false"
         }
         return TSRequest(url: URL(string: path)!, method: "GET", parameters: [:])
+    }
+
+    static func accountRequest(serviceId: ServiceId) -> TSRequest {
+        var request = TSRequest(url: URL(string: "v1/accounts/account/\(serviceId.serviceIdString)")!, method: "HEAD")
+        request.auth = .anonymous
+        return request
     }
 
     static func submitMessageRequest(
@@ -135,10 +126,7 @@ public enum OWSRequestFactory {
         ]
 
         var request = TSRequest(url: URL(string: path)!, method: "PUT", parameters: parameters)
-        // Use 45 seconds (the maximum time allowed by the pinging logic) to
-        // support larger messages. Message sends have automatic retries, so short
-        // timeouts aren't useful because errors are invisible for ~24 hours.
-        request.timeoutInterval = 45
+        request.timeoutInterval = sendMessageTimeout(estimatedRequestSize: messages.reduce(into: 0, { $0 += $1.content.count + 50 }) + 100)
         if let auth {
             request.auth = .sealedSender(auth)
         }
@@ -165,21 +153,24 @@ public enum OWSRequestFactory {
         ]
 
         var request = TSRequest(url: components.url!, method: "PUT", parameters: nil)
-        // Use 45 seconds (the maximum time allowed by the pinging logic) to
-        // support larger messages. Message sends have automatic retries, so short
-        // timeouts aren't useful because errors are invisible for ~24 hours.
-        request.timeoutInterval = 45
+        request.timeoutInterval = sendMessageTimeout(estimatedRequestSize: ciphertext.count + 200)
         request.headers["Content-Type"] = "application/vnd.signal-messenger.mrm"
         request.auth = .sealedSender(auth)
         request.body = .data(ciphertext)
         return request
     }
 
-    // MARK: - Registration
-
-    static func disable2FARequest() -> TSRequest {
-        return TSRequest(url: URL(string: self.textSecure2FAAPI)!, method: "DELETE", parameters: [:])
+    private static func sendMessageTimeout(estimatedRequestSize: Int) -> TimeInterval {
+        let bandwidthEstimate: Double = 40_000 // kbit/s
+        let transferEstimate = Double(estimatedRequestSize) / (bandwidthEstimate / 8)
+        let latencyEstimate: Double = Self.textSecureHTTPTimeOut
+        let overallEstimate = latencyEstimate + transferEstimate
+        // Limit to 45 seconds (the maximum time allowed by the pinging logic) to
+        // support larger messages.
+        return min(overallEstimate, 45)
     }
+
+    // MARK: - Registration
 
     public static func enableRegistrationLockV2Request(token: String) -> TSRequest {
         owsAssertDebug(nil != token.nilIfEmpty)
@@ -279,7 +270,7 @@ public enum OWSRequestFactory {
             parameters: nil
         )
         result.auth = .anonymous
-        result.applyRedactionStrategy(.redactURLForSuccessResponses())
+        result.applyRedactionStrategy(.redactURL())
         return result
     }
 
@@ -290,7 +281,7 @@ public enum OWSRequestFactory {
             parameters: nil
         )
         result.auth = .anonymous
-        result.applyRedactionStrategy(.redactURLForSuccessResponses())
+        result.applyRedactionStrategy(.redactURL())
         return result
     }
 
@@ -312,7 +303,7 @@ public enum OWSRequestFactory {
             parameters: nil
         )
         result.auth = .anonymous
-        result.applyRedactionStrategy(.redactURLForSuccessResponses())
+        result.applyRedactionStrategy(.redactURL())
         return result
     }
 
@@ -332,7 +323,7 @@ public enum OWSRequestFactory {
             parameters: nil
         )
         result.auth = .anonymous
-        result.applyRedactionStrategy(.redactURLForSuccessResponses())
+        result.applyRedactionStrategy(.redactURL())
         return result
     }
 
@@ -348,7 +339,7 @@ public enum OWSRequestFactory {
             parameters: nil
         )
         result.auth = .anonymous
-        result.applyRedactionStrategy(.redactURLForSuccessResponses())
+        result.applyRedactionStrategy(.redactURL())
         return result
     }
 
@@ -372,7 +363,7 @@ public enum OWSRequestFactory {
             ]
         )
         result.auth = .anonymous
-        result.applyRedactionStrategy(.redactURLForSuccessResponses())
+        result.applyRedactionStrategy(.redactURL())
         return result
     }
 
@@ -396,7 +387,7 @@ public enum OWSRequestFactory {
             parameters: nil
         )
         result.auth = .anonymous
-        result.applyRedactionStrategy(.redactURLForSuccessResponses())
+        result.applyRedactionStrategy(.redactURL())
         return result
     }
 
@@ -417,12 +408,13 @@ public enum OWSRequestFactory {
             ]
         )
         result.auth = .anonymous
-        result.applyRedactionStrategy(.redactURLForSuccessResponses())
+        result.applyRedactionStrategy(.redactURL())
         return result
     }
 
     static func subscriptionRedeemReceiptCredential(
-        receiptCredentialPresentation: Data
+        receiptCredentialPresentation: Data,
+        displayBadgesOnProfile: Bool,
     ) -> TSRequest {
         return TSRequest(
             url: .init(pathComponents: [
@@ -433,7 +425,7 @@ public enum OWSRequestFactory {
             method: "POST",
             parameters: [
                 "receiptCredentialPresentation": receiptCredentialPresentation.base64EncodedString(),
-                "visible": DonationSubscriptionManager.displayBadgesOnProfile,
+                "visible": displayBadgesOnProfile,
                 "primary": false,
             ]
         )
@@ -511,7 +503,7 @@ public enum OWSRequestFactory {
         return TSRequest(url: URL(string: path)!, method: "GET", parameters: [:])
     }
 
-    static func recipientPreKeyRequest(serviceId: ServiceId, deviceId: DeviceId, auth: TSRequest.SealedSenderAuth?) -> TSRequest {
+    static func recipientPreKeyRequest(serviceId: ServiceId, deviceId: String, auth: TSRequest.SealedSenderAuth?) -> TSRequest {
         let path = "\(self.textSecureKeysAPI)/\(serviceId.serviceIdString)/\(deviceId)"
 
         var request = TSRequest(url: URL(string: path)!, method: "GET", parameters: [:])

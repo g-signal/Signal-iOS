@@ -18,17 +18,15 @@ public class ChangePhoneNumberPniManagerMock: ChangePhoneNumberPniManager {
     public func generatePniIdentity(
         forNewE164 newE164: E164,
         localAci: Aci,
-        localRecipientUniqueId: String,
         localDeviceId: DeviceId,
-        localUserAllDeviceIds: [DeviceId]
-    ) -> Guarantee<ChangePhoneNumberPni.GeneratePniIdentityResult> {
+    ) async -> ChangePhoneNumberPni.GeneratePniIdentityResult {
         let keyPair = ECKeyPair.generateKeyPair()
         let registrationId = UInt32.random(in: 1...0x3fff)
 
         let localPqKey1 = self.mockKyberStore.generateLastResortKyberPreKeyForLinkedDevice(signedBy: keyPair)
         let localPqKey2 = self.mockKyberStore.generateLastResortKyberPreKeyForLinkedDevice(signedBy: keyPair)
 
-        return .value(.success(
+        return .success(
             parameters: PniDistribution.Parameters.mock(
                 pniIdentityKeyPair: keyPair,
                 localDeviceId: localDeviceId,
@@ -43,7 +41,7 @@ public class ChangePhoneNumberPniManagerMock: ChangePhoneNumberPniManager {
                 localDevicePniPqLastResortPreKeyRecord: localPqKey2,
                 localDevicePniRegistrationId: registrationId
             )
-        ))
+        )
     }
 
     public func finalizePniIdentity(

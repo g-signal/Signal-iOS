@@ -26,8 +26,7 @@ extension RegistrationCoordinatorImpl {
                 credentials: candidateCredentials
             )
             return await makeRequest(
-                request,
-                signalService: signalService,
+                { try await signalService.urlSessionForMainSignalService().performRequest(request) },
                 handler: self.handleSVR2AuthCheckResponse(statusCode:retryAfterHeader:bodyData:),
                 fallbackError: .genericError,
                 networkFailureError: .networkError
@@ -80,8 +79,7 @@ extension RegistrationCoordinatorImpl {
                 prekeyBundles: prekeyBundles
             )
             return await makeRequest(
-                request,
-                signalService: signalService,
+                { try await signalService.urlSessionForMainSignalService().performRequest(request) },
                 handler: {
                     self.handleCreateAccountResponse(
                         authPassword: authPassword,
@@ -177,7 +175,7 @@ extension RegistrationCoordinatorImpl {
             reglockToken: String?,
             authPassword: String,
             pniChangeNumberParameters: PniDistribution.Parameters,
-            signalService: OWSSignalServiceProtocol,
+            networkManager: any NetworkManagerProtocol,
         ) async -> AccountResponse {
             let request = RegistrationRequestFactory.changeNumberRequest(
                 verificationMethod: method,
@@ -186,8 +184,7 @@ extension RegistrationCoordinatorImpl {
                 pniChangeNumberParameters: pniChangeNumberParameters
             )
             return await makeRequest(
-                request,
-                signalService: signalService,
+                { try await networkManager.asyncRequest(request) },
                 handler: {
                     return self.handleChangeNumberResponse(authPassword: authPassword, statusCode: $0, retryAfterHeader: $1, bodyData: $2)
                 },
@@ -280,7 +277,7 @@ extension RegistrationCoordinatorImpl {
             ) {
                 var request = OWSRequestFactory.enableRegistrationLockV2Request(token: reglockToken)
                 request.auth = .identified(auth)
-                _ = try await networkManager.asyncRequest(request, canUseWebSocket: false)
+                _ = try await networkManager.asyncRequest(request)
             }
         }
 
@@ -297,7 +294,7 @@ extension RegistrationCoordinatorImpl {
                     attributes,
                     auth: auth
                 )
-                let response = try await networkManager.asyncRequest(request, canUseWebSocket: false)
+                let response = try await networkManager.asyncRequest(request)
                 guard response.responseStatusCode >= 200, response.responseStatusCode < 300 else {
                     // Errors are undifferentiated; the only actual error we can get is an unauthenticated
                     // one and there isn't any way to handle that as different from a, say server 500.
@@ -322,7 +319,7 @@ extension RegistrationCoordinatorImpl {
                     isRetryable: { $0.isNetworkFailureOrTimeout },
                 ) {
                     let request = WhoAmIRequestFactory.whoAmIRequest(auth: auth)
-                    let response = try await networkManager.asyncRequest(request, canUseWebSocket: false)
+                    let response = try await networkManager.asyncRequest(request)
                     guard response.responseStatusCode >= 200, response.responseStatusCode < 300 else {
                         return .genericError
                     }
@@ -342,14 +339,13 @@ extension RegistrationCoordinatorImpl {
         }
 
         private static func makeRequest<ResponseType>(
-            _ request: TSRequest,
-            signalService: OWSSignalServiceProtocol,
+            _ makeRequest: () async throws -> any HTTPResponse,
             handler: (_ statusCode: Int, _ retryAfterHeader: String?, _ bodyData: Data?) -> ResponseType,
             fallbackError: ResponseType,
             networkFailureError: ResponseType
         ) async -> ResponseType {
             do {
-                let response = try await signalService.urlSessionForMainSignalService().performRequest(request)
+                let response = try await makeRequest()
                 return handler(
                     response.responseStatusCode,
                     response.headers[Constants.retryAfterHeader],

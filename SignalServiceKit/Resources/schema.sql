@@ -126,6 +126,7 @@ CREATE
             ,"archivedPaymentInfo" BLOB
             ,"expireTimerVersion" INTEGER
             ,"isSmsMessageRestoredFromBackup" BOOLEAN DEFAULT 0
+            ,"isPoll" BOOLEAN DEFAULT 0
         )
 ;
 
@@ -294,20 +295,6 @@ CREATE
         ON "model_OWSUserProfile"("lastFetchDate"
     ,"lastMessagingDate"
 )
-;
-
-CREATE
-    TABLE
-        IF NOT EXISTS "model_OWSDevice" (
-            "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
-            ,"recordType" INTEGER NOT NULL
-            ,"uniqueId" TEXT NOT NULL UNIQUE
-                ON CONFLICT FAIL
-            ,"createdAt" DOUBLE NOT NULL
-            ,"deviceId" INTEGER NOT NULL
-            ,"lastSeenAt" DOUBLE NOT NULL
-            ,"name" TEXT
-        )
 ;
 
 CREATE
@@ -1248,6 +1235,13 @@ CREATE
                 ,"transitTierIncrementalMac" BLOB
                 ,"transitTierIncrementalMacChunkSize" INTEGER
                 ,"lastFullscreenViewTimestamp" INTEGER
+                ,"originalTransitCdnNumber" INTEGER
+                ,"originalTransitCdnKey" TEXT
+                ,"originalTransitUploadTimestamp" INTEGER
+                ,"originalTransitUnencryptedByteCount" INTEGER
+                ,"originalTransitDigestSHA256Ciphertext" BLOB
+                ,"originalTransitTierIncrementalMac" BLOB
+                ,"originalTransitTierIncrementalMacChunkSize" INTEGER
 )
 ;
 
@@ -2301,19 +2295,13 @@ CREATE
                 ,"isFullsize" BOOLEAN NOT NULL
                 ,"numRetries" INTEGER NOT NULL DEFAULT 0
                 ,"minRetryTimestamp" INTEGER NOT NULL DEFAULT 0
+                ,"state" INTEGER DEFAULT 0
 )
 ;
 
 CREATE
     INDEX "index_BackupAttachmentUploadQueue_on_attachmentRowId"
         ON "BackupAttachmentUploadQueue"("attachmentRowId"
-)
-;
-
-CREATE
-    INDEX "index_BackupAttachmentUploadQueue_on_maxOwnerTimestamp_isFullsize"
-        ON "BackupAttachmentUploadQueue"("maxOwnerTimestamp"
-    ,"isFullsize"
 )
 ;
 
@@ -2409,6 +2397,17 @@ CREATE
 
 CREATE
     TABLE
+        IF NOT EXISTS "OWSDevice" (
+            "id" INTEGER PRIMARY KEY AUTOINCREMENT
+            ,"deviceId" INTEGER NOT NULL
+            ,"createdAt" DOUBLE NOT NULL
+            ,"lastSeenAt" DOUBLE NOT NULL
+            ,"name" TEXT
+        )
+;
+
+CREATE
+    TABLE
         IF NOT EXISTS "gext_groups" (
             "_id" INTEGER PRIMARY KEY AUTOINCREMENT
             ,"group_id" VARCHAR(64) NOT NULL
@@ -2416,4 +2415,102 @@ CREATE
             ,"last_updated" INTEGER NOT NULL
             ,UNIQUE("group_id")
         )
+;
+
+CREATE
+    TABLE
+        IF NOT EXISTS "Poll" (
+            "id" INTEGER PRIMARY KEY NOT NULL
+            ,"interactionId" INTEGER NOT NULL REFERENCES "model_TSInteraction"("id"
+        )
+            ON DELETE
+                CASCADE
+                    ON UPDATE
+                        CASCADE
+                        ,"isEnded" BOOLEAN
+                        ,"allowsMultiSelect" BOOLEAN
+)
+;
+
+CREATE
+    TABLE
+        IF NOT EXISTS "PollOption" (
+            "id" INTEGER PRIMARY KEY NOT NULL
+            ,"pollId" INTEGER NOT NULL REFERENCES "Poll"("id"
+        )
+            ON DELETE
+                CASCADE
+                    ON UPDATE
+                        CASCADE
+                        ,"option" TEXT
+                        ,"optionIndex" INTEGER
+)
+;
+
+CREATE
+    INDEX "index_poll_on_interactionId"
+        ON "Poll"("interactionId"
+)
+;
+
+CREATE
+    INDEX "index_polloption_on_pollId"
+        ON "PollOption"("pollId"
+)
+;
+
+CREATE
+    INDEX "index_BackupAttachmentUploadQueue_on_state_isFullsize_maxOwnerTimestamp"
+        ON "BackupAttachmentUploadQueue"("state"
+    ,"isFullsize"
+    ,"maxOwnerTimestamp"
+)
+;
+
+CREATE
+    TRIGGER __BackupAttachmentUploadQueue_au AFTER UPDATE
+            OF state
+                ON BackupAttachmentUploadQueue BEGIN DELETE
+                FROM
+                    BackupAttachmentUploadQueue
+                WHERE
+                    state = 1
+                    AND NOT EXISTS (
+                        SELECT
+                                id
+                            FROM
+                                BackupAttachmentUploadQueue
+                            WHERE
+                                state = 0
+                    )
+;
+
+END
+;
+
+CREATE
+    TABLE
+        IF NOT EXISTS "PollVote" (
+            "id" INTEGER PRIMARY KEY NOT NULL
+            ,"optionId" INTEGER NOT NULL REFERENCES "PollOption"("id"
+        )
+            ON DELETE
+                CASCADE
+                    ON UPDATE
+                        CASCADE
+                        ,"voteAuthorId" INTEGER REFERENCES "model_SignalRecipient"("id"
+)
+    ON DELETE
+        CASCADE
+            ON UPDATE
+                CASCADE
+                ,"voteCount" INTEGER
+)
+;
+
+CREATE
+    UNIQUE INDEX "index_pollVote_on_voteAuthorId_and_optionId"
+        ON "PollVote"("voteAuthorId"
+    ,"optionId"
+)
 ;

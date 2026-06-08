@@ -67,6 +67,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
 
     private var bottomButtons: CVComponent?
 
+    private var poll: CVComponent?
+
     private var swipeActionProgress: CVMessageSwipeActionState.Progress?
 
     private var hasSendFailureBadge = false
@@ -143,6 +145,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
             return self.contactShare
         case .bottomButtons:
             return self.bottomButtons
+        case .poll:
+            return self.poll
 
         // We don't render sender avatars with a subcomponent.
         case .senderAvatar:
@@ -258,6 +262,11 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
             contactShare = CVComponentContactShare(itemModel: itemModel,
                                                    contactShareState: contactShareState)
         }
+
+        if let pollState = componentState.poll {
+            poll = CVComponentPoll(itemModel: itemModel, poll: pollState)
+        }
+
         if let bottomButtonsState = componentState.bottomButtons {
             bottomButtons = CVComponentBottomButtons(itemModel: itemModel,
                                                      bottomButtonsState: bottomButtonsState)
@@ -928,7 +937,7 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
     private static var topFullWidthCVComponentKeys: [CVComponentKey] { [.linkPreview] }
     private static var topNestedCVComponentKeys: [CVComponentKey] { [.senderName] }
     private static var bottomFullWidthCVComponentKeys: [CVComponentKey] { [.quotedReply, .bodyMedia] }
-    private static var bottomNestedShareCVComponentKeys: [CVComponentKey] { [.viewOnce, .audioAttachment, .genericAttachment, .paymentAttachment, .archivedPaymentAttachment, .contactShare, .giftBadge] }
+    private static var bottomNestedShareCVComponentKeys: [CVComponentKey] { [.viewOnce, .audioAttachment, .genericAttachment, .paymentAttachment, .archivedPaymentAttachment, .contactShare, .giftBadge, .poll] }
     private static var bottomNestedTextCVComponentKeys: [CVComponentKey] { [.bodyText, .footer, .undownloadableAttachment] }
 
     // The "message" contents of this component for most messages are vertically
@@ -1198,6 +1207,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
             case .footer:
                 return false
             case .bottomButtons:
+                return true
+            case .poll:
                 return true
             }
         }
@@ -2002,6 +2013,7 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
         var archivedPaymentView: CVComponentView?
         var contactShareView: CVComponentView?
         var bottomButtonsView: CVComponentView?
+        var pollView: CVComponentView?
 
         private var allSubcomponentViews: [CVComponentView] {
             [
@@ -2061,6 +2073,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
                 return contactShareView
             case .bottomButtons:
                 return bottomButtonsView
+            case .poll:
+                return pollView
 
             // We don't render sender avatars with a subcomponent.
             case .senderAvatar:
@@ -2108,6 +2122,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
                 contactShareView = subcomponentView
             case .bottomButtons:
                 bottomButtonsView = subcomponentView
+            case .poll:
+                pollView = subcomponentView
 
             // We don't render sender avatars with a subcomponent.
             case .senderAvatar:

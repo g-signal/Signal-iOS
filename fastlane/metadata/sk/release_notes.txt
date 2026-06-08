@@ -1,1 +1,1 @@
-• Opravili sme chybu týkajúcu sa nálepiek odoslaných z klávesnice emoji v systéme iOS.
+• Opravili sme chybu, ktorá spôsobovala prázdne zobrazenie hľadáčika fotoaparátu pri pokuse o prepojenie nového zariadenia.

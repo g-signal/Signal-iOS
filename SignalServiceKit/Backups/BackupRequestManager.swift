@@ -90,13 +90,14 @@ public extension BackupArchive {
 
 public protocol BackupRequestManager {
 
-    /// Creates a ``BackupServiceAuth``, which wraps a ``BackupAuthCredential``.
-    /// Created from local ACI and the current valid backup credential. This
-    /// `BackupServiceAuth` is used to authenticate all further `/v1/archive` operations.
-    ///
-    /// - parameter forceRefreshUnlessCachedPaidCredential: Forces a refresh if we have a cached
-    /// credential that isn't ``BackupLevel.paid``. Default false. Set this to true if intending to check whether a
-    /// paid credential is available.
+    /// Passthrough API for ``BackupAuthCredentialManager/fetchBackupServiceAuthForRegistration``.
+    func fetchBackupServiceAuthForRegistration(
+        key: BackupKeyMaterial,
+        localAci: Aci,
+        chatServiceAuth: ChatServiceAuth,
+    ) async throws -> BackupServiceAuth
+
+    /// Passthrough API for ``BackupAuthCredentialManager/fetchBackupServiceAuth``.
     func fetchBackupServiceAuth(
         for key: BackupKeyMaterial,
         localAci: Aci,
@@ -136,6 +137,12 @@ public protocol BackupRequestManager {
         objects: [BackupArchive.Request.DeleteMediaTarget],
         auth: BackupServiceAuth
     ) async throws
+
+    func fetchSvr🐝AuthCredential(
+        key: MessageRootBackupKey,
+        chatServiceAuth auth: ChatServiceAuth,
+        forceRefresh: Bool,
+    ) async throws -> LibSignalClient.Auth
 }
 
 extension BackupRequestManager {
@@ -182,27 +189,29 @@ public struct BackupRequestManagerImpl: BackupRequestManager {
 
     // MARK: - Backup Auth
 
+    public func fetchBackupServiceAuthForRegistration(
+        key: BackupKeyMaterial,
+        localAci: Aci,
+        chatServiceAuth: ChatServiceAuth
+    ) async throws -> BackupServiceAuth {
+        return try await backupAuthCredentialManager.fetchBackupServiceAuthForRegistration(
+            key: key,
+            localAci: localAci,
+            chatServiceAuth: chatServiceAuth,
+        )
+    }
+
     public func fetchBackupServiceAuth(
         for key: BackupKeyMaterial,
         localAci: Aci,
         auth: ChatServiceAuth,
         forceRefreshUnlessCachedPaidCredential: Bool
     ) async throws -> BackupServiceAuth {
-        let backupKey = key.deriveBackupId(aci: localAci)
-        let privateKey = key.deriveEcKey(aci: localAci)
-
-        let authCredential = try await backupAuthCredentialManager.fetchBackupCredential(
-            for: key,
+        return try await backupAuthCredentialManager.fetchBackupServiceAuth(
+            key: key,
             localAci: localAci,
             chatServiceAuth: auth,
-            forceRefreshUnlessCachedPaidCredential: forceRefreshUnlessCachedPaidCredential
-        )
-
-        return try BackupServiceAuth(
-            backupKey: backupKey,
-            privateKey: privateKey,
-            authCredential: authCredential,
-            type: key.credentialType
+            forceRefreshUnlessCachedPaidCredential: forceRefreshUnlessCachedPaidCredential,
         )
     }
 
@@ -422,14 +431,25 @@ public struct BackupRequestManagerImpl: BackupRequestManager {
         )
     }
 
+    public func fetchSvr🐝AuthCredential(
+        key: MessageRootBackupKey,
+        chatServiceAuth auth: ChatServiceAuth,
+        forceRefresh: Bool,
+    ) async throws -> LibSignalClient.Auth {
+        return try await backupAuthCredentialManager.fetchSvr🐝AuthCredential(
+            key: key,
+            chatServiceAuth: auth,
+            forceRefresh: forceRefresh,
+        )
+    }
+
     // MARK: - Private utility methods
 
     private func executeBackupServiceRequest(
         auth: BackupServiceAuth,
         requestFactory: (BackupServiceAuth) -> TSRequest
     ) async throws -> HTTPResponse {
-        // TODO: Switch this back to true when reg supports websockets
-        return try await networkManager.asyncRequest(requestFactory(auth), canUseWebSocket: false)
+        return try await networkManager.asyncRequest(requestFactory(auth))
     }
 
     private func executeBackupService<T: Decodable>(
@@ -505,3 +525,100 @@ public struct BackupReadCredential {
         return "backups/\(metadata.backupDir)/\(metadata.backupName)"
     }
 }
+
+// MARK: -
+
+#if TESTABLE_BUILD
+
+public class BackupRequestManagerMock: BackupRequestManager {
+
+    init() {}
+
+    public func fetchBackupServiceAuthForRegistration(
+        key: BackupKeyMaterial,
+        localAci: Aci,
+        chatServiceAuth: ChatServiceAuth,
+    ) async throws -> BackupServiceAuth {
+        return BackupServiceAuth.mock(type: .media, backupLevel: .paid)
+    }
+
+    public func fetchBackupServiceAuth(
+        for key: SignalServiceKit.BackupKeyMaterial,
+        localAci: LibSignalClient.Aci,
+        auth: SignalServiceKit.ChatServiceAuth,
+        forceRefreshUnlessCachedPaidCredential: Bool
+    ) async throws -> SignalServiceKit.BackupServiceAuth {
+        return BackupServiceAuth.mock(type: .media, backupLevel: .paid)
+    }
+
+    public func fetchBackupUploadForm(
+        backupByteLength: UInt32,
+        auth: SignalServiceKit.BackupServiceAuth
+    ) async throws -> SignalServiceKit.Upload.Form {
+        fatalError("Unimplemented")
+    }
+
+    public func fetchBackupMediaAttachmentUploadForm(
+        auth: SignalServiceKit.BackupServiceAuth
+    ) async throws -> SignalServiceKit.Upload.Form {
+        fatalError("Unimplemented")
+    }
+
+    public func fetchMediaTierCdnRequestMetadata(
+        cdn: Int32,
+        auth: SignalServiceKit.BackupServiceAuth
+    ) async throws -> SignalServiceKit.MediaTierReadCredential {
+        fatalError("Unimplemented")
+    }
+
+    public func fetchBackupRequestMetadata(
+        auth: SignalServiceKit.BackupServiceAuth
+    ) async throws -> SignalServiceKit.BackupReadCredential {
+        fatalError("Unimplemented")
+    }
+
+    public func copyToMediaTier(
+        item: SignalServiceKit.BackupArchive.Request.MediaItem,
+        auth: SignalServiceKit.BackupServiceAuth
+    ) async throws -> UInt32 {
+        fatalError("Unimplemented")
+    }
+
+    public func copyToMediaTier(
+        items: [SignalServiceKit.BackupArchive.Request.MediaItem],
+        auth: SignalServiceKit.BackupServiceAuth
+    ) async throws -> [SignalServiceKit.BackupArchive.Response.BatchedBackupMediaResult] {
+        fatalError("Unimplemented")
+    }
+
+    var listMediaResults = [BackupArchive.Response.ListMediaResult]()
+
+    public func listMediaObjects(
+        cursor: String?,
+        limit: UInt32?,
+        auth: SignalServiceKit.BackupServiceAuth
+    ) async throws -> SignalServiceKit.BackupArchive.Response.ListMediaResult {
+        return listMediaResults.popFirst()!
+    }
+
+    public func deleteMediaObjects(
+        objects: [SignalServiceKit.BackupArchive.Request.DeleteMediaTarget],
+        auth: SignalServiceKit.BackupServiceAuth
+    ) async throws {
+        fatalError("Unimplemented")
+    }
+
+    func redeemReceipt(receiptCredentialPresentation: Data) async throws {
+        fatalError("Unimplemented")
+    }
+
+    public func fetchSvr🐝AuthCredential(
+        key: SignalServiceKit.MessageRootBackupKey,
+        chatServiceAuth auth: SignalServiceKit.ChatServiceAuth,
+        forceRefresh: Bool
+    ) async throws -> LibSignalClient.Auth {
+        return LibSignalClient.Auth(username: "", password: "")
+    }
+}
+
+#endif

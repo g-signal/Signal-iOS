@@ -50,9 +50,7 @@ public class RegistrationCoordinatorLoaderImpl: RegistrationCoordinatorLoader {
             public let oldE164: E164
             public let oldAuthToken: String
             @AciUuid public var localAci: Aci
-            public let localAccountId: String
             public let localDeviceId: DeviceId
-            public let localUserAllDeviceIds: [DeviceId]
 
             public struct PendingPniState {
                 public let newE164: E164
@@ -68,17 +66,13 @@ public class RegistrationCoordinatorLoaderImpl: RegistrationCoordinatorLoader {
                 oldE164: E164,
                 oldAuthToken: String,
                 localAci: Aci,
-                localAccountId: String,
                 localDeviceId: DeviceId,
-                localUserAllDeviceIds: [DeviceId],
                 pniState: PendingPniState?
             ) {
                 self.oldE164 = oldE164
                 self.oldAuthToken = oldAuthToken
                 self._localAci = localAci.codableUuid
-                self.localAccountId = localAccountId
                 self.localDeviceId = localDeviceId
-                self.localUserAllDeviceIds = localUserAllDeviceIds
                 self.pniState = pniState
             }
         }
@@ -120,6 +114,7 @@ public class RegistrationCoordinatorLoaderImpl: RegistrationCoordinatorLoader {
         if mode.hasPendingChangeNumber {
             // This should happen on app startup, but do it here too to be safe.
             deps.messagePipelineSupervisor.suspendMessageProcessingWithoutHandle(for: .pendingChangeNumber)
+            deps.preKeyManager.setIsChangingNumber(true)
         }
         let delegate = CoordinatorDelegate(loader: self)
         Logger.info("Starting registration, mode: \(mode.logString)")
@@ -168,12 +163,16 @@ public class RegistrationCoordinatorLoaderImpl: RegistrationCoordinatorLoader {
             var newState = oldState
             newState.pniState = pniState
             try loader.kvStore.setCodable(Mode.changingNumber(newState), key: Constants.modeKey, transaction: transaction)
-            transaction.addSyncCompletion { [messagePipelineSupervisor = loader.deps.messagePipelineSupervisor] in
-                if Mode.changingNumber(newState).hasPendingChangeNumber {
+            let messagePipelineSupervisor = loader.deps.messagePipelineSupervisor
+            let preKeyManager = loader.deps.preKeyManager
+            transaction.addSyncCompletion {
+                let hasPendingChangeNumber = Mode.changingNumber(newState).hasPendingChangeNumber
+                if  hasPendingChangeNumber {
                     messagePipelineSupervisor.suspendMessageProcessingWithoutHandle(for: .pendingChangeNumber)
                 } else {
                     messagePipelineSupervisor.unsuspendMessageProcessing(for: .pendingChangeNumber)
                 }
+                preKeyManager.setIsChangingNumber(hasPendingChangeNumber)
             }
             return newState
         }
@@ -200,9 +199,7 @@ extension RegistrationMode {
                 oldE164: params.oldE164,
                 oldAuthToken: params.oldAuthToken,
                 localAci: params.localAci,
-                localAccountId: params.localAccountId,
                 localDeviceId: params.localDeviceId,
-                localUserAllDeviceIds: params.localUserAllDeviceIds,
                 pniState: nil
             ))
         }
@@ -222,9 +219,7 @@ extension RegistrationCoordinatorLoaderImpl.Mode {
                 oldE164: state.oldE164,
                 oldAuthToken: state.oldAuthToken,
                 localAci: state.localAci,
-                localAccountId: state.localAccountId,
-                localDeviceId: state.localDeviceId,
-                localUserAllDeviceIds: state.localUserAllDeviceIds
+                localDeviceId: state.localDeviceId
             ))
         }
     }

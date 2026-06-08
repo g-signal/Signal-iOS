@@ -1,1 +1,1 @@
-• Ihärdighet lönar sig, men det är ännu bättre när saker fungerar på första försöket. Vi har åtgärdat ett fel som ibland krävde flera försök för att skicka ett klistermärke från iOS-emojitangentbordet. Samma fix fungerar även för Genmoji, så vi hoppas att du gillar den.
+• Vi har åtgärdat ett fel som gjorde att kameran visades tom vid försök att länka en ny enhet. Nu kommer sökaren bara att se ut så om du försöker länka en ny enhet i ett riktigt mörkt rum.

@@ -579,11 +579,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Grupurile B&amp;A funcționează cel mai bine cu %1$d membru sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
+			<string>Grupurile Signal funcționează cel mai bine cu %1$d membru sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
 			<key>few</key>
-			<string>Grupurile B&amp;A funcționează cel mai bine cu %1$d membri sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
+			<string>Grupurile Signal funcționează cel mai bine cu %1$d membri sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
 			<key>other</key>
-			<string>Grupurile B&amp;A funcționează cel mai bine cu %1$d de membri sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
+			<string>Grupurile Signal funcționează cel mai bine cu %1$d de membri sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -759,11 +759,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>B&amp;A va suna pe %2$@, %3$@, și %1$d altul</string>
+			<string>Signal va suna pe %2$@, %3$@, și %1$d altul</string>
 			<key>few</key>
-			<string>B&amp;A va apela %2$@, %3$@, și încă %1$d</string>
+			<string>Signal va apela %2$@, %3$@, și încă %1$d</string>
 			<key>other</key>
-			<string>B&amp;A va apela %2$@, %3$@, și încă %1$d</string>
+			<string>Signal va apela %2$@, %3$@, și încă %1$d</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -1083,11 +1083,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Pentru a menține &quot;%2$@&quot; conectat, deschide B&amp;A pe dispozitivul respectiv în termen de %1$d zi.</string>
+			<string>Pentru a menține &quot;%2$@&quot; conectat, deschide Signal pe dispozitivul respectiv în termen de %1$d zi.</string>
 			<key>few</key>
-			<string>Pentru a menține &quot;%2$@&quot; conectat, deschide B&amp;A pe dispozitivul respectiv în termen de %1$d zile.</string>
+			<string>Pentru a menține &quot;%2$@&quot; conectat, deschide Signal pe dispozitivul respectiv în termen de %1$d zile.</string>
 			<key>other</key>
-			<string>Pentru a menține &quot;%2$@&quot; conectat, deschide B&amp;A pe dispozitivul respectiv în termen de %1$d de zile.</string>
+			<string>Pentru a menține &quot;%2$@&quot; conectat, deschide Signal pe dispozitivul respectiv în termen de %1$d de zile.</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1317,11 +1317,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Toate conexiunile B&amp;A · %1$d spectator</string>
+			<string>Toate conexiunile Signal · %1$d spectator</string>
 			<key>few</key>
-			<string>Toate conexiunile B&amp;A · %1$d spectatori</string>
+			<string>Toate conexiunile Signal · %1$d spectatori</string>
 			<key>other</key>
-			<string>Toate conexiunile B&amp;A · %1$d de spectatori</string>
+			<string>Toate conexiunile Signal · %1$d de spectatori</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1335,11 +1335,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Toate conexiunile B&amp;A · %1$d exclusă</string>
+			<string>Toate conexiunile Signal · %1$d exclusă</string>
 			<key>few</key>
-			<string>Toate conexiunile B&amp;A · %1$d excluse</string>
+			<string>Toate conexiunile Signal · %1$d excluse</string>
 			<key>other</key>
-			<string>Toate conexiunile B&amp;A · %1$d excluse</string>
+			<string>Toate conexiunile Signal · %1$d excluse</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1502,6 +1502,24 @@
 			<string>Anulezi %1$d invitații trimise de „%2$@”?</string>
 			<key>other</key>
 			<string>Anulezi %1$d de invitații trimise de „%2$@”?</string>
+		</dict>
+	</dict>
+	<key>POLL_VOTE_COUNT</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d Vot</string>
+			<key>few</key>
+			<string>%1$d Voturi</string>
+			<key>other</key>
+			<string>%1$d de Voturi</string>
 		</dict>
 	</dict>
 	<key>PRIVATE_STORY_VIEWERS_%d</key>

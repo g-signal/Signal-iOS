@@ -1,1 +1,1 @@
-• Corrigimos um erro nos autocolantes enviados do teclado de emojis do iOS. A mesma correção também funciona para Genmoji.
+• Corrigimos um erro que fazia com que a câmara aparecesse em branco quando se tentava ligar um novo dispositivo.

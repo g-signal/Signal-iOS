@@ -10,7 +10,7 @@ public class PinReminderViewController: OWSViewController {
 
     enum PinReminderResult {
         case canceled(didGuessWrong: Bool)
-        case changedOrRemovedPin
+        case changedPin
         case succeeded
     }
 
@@ -260,10 +260,8 @@ public class PinReminderViewController: OWSViewController {
 
         let viewController = PinSetupViewController(
             mode: .creating,
-            hideNavigationBar: false,
             showCancelButton: true,
-            showDisablePinButton: true,
-            completionHandler: { [weak self] _, _ in self?.completionHandler?(.changedOrRemovedPin) }
+            completionHandler: { [weak self] _, _ in self?.completionHandler?(.changedPin) }
         )
         present(OWSNavigationController(rootViewController: viewController), animated: true)
     }
@@ -300,19 +298,12 @@ public class PinReminderViewController: OWSViewController {
         }
 
         SSKEnvironment.shared.ows2FAManagerRef.verifyPin(pin) { success in
-            guard success else {
-                guard SSKEnvironment.shared.ows2FAManagerRef.needsLegacyPinMigration, pin.count > kLegacyTruncated2FAv1PinLength else {
-                    if !silent { self.validationState = .mismatch }
-                    return
-                }
-                // We have a legacy pin that may have been truncated to 16 characters.
-                let truncatedPinCode = String(pin.prefix(Int(kLegacyTruncated2FAv1PinLength)))
-                self.verifyAndDismissOnSuccess(truncatedPinCode, silent: silent)
-                return
+            if success {
+                SSKEnvironment.shared.ows2FAManagerRef.reminderCompleted(incorrectAttempts: self.hasGuessedWrong)
+                self.completionHandler?(.succeeded)
+            } else if !silent {
+                self.validationState = .mismatch
             }
-
-            SSKEnvironment.shared.ows2FAManagerRef.reminderCompleted(incorrectAttempts: self.hasGuessedWrong)
-            self.completionHandler?(.succeeded)
         }
     }
 

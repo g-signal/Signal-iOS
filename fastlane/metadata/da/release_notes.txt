@@ -1,1 +1,1 @@
-• Vedholdenhed betaler sig, men det er sjovere, når det virker i første forsøg! Vi har rettet en fejl, hvor det nogle gange krævede flere forsøg at sende en sticker fra iOS emoji-tastaturet. Den samme løsning virker også for Genmoji, så vi håber, du vil synes, det er Genialt.
+• Vi har rettet en fejl, der forårsagede, at kameraet blev vist tomt, når vi forsøgte at forbinde en ny enhed. Nu vil søgeren kun se sådan ud, hvis du prøver at forbinde en ny enhed i et meget mørkt rum.

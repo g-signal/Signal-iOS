@@ -1,1 +1,1 @@
-• Tout vient à point à qui sait attendre... Mais c'est encore mieux quand tout fonctionne du premier coup. Vous deviez vous y reprendre à plusieurs fois pour envoyer un sticker depuis le clavier d'émojis iOS ? On a envoyé valser ce bug. Et ce correctif s'applique aussi aux genmojis. Génial, non ?
+• Au moment de scanner un code QR pour associer un nouvel appareil, l'appareil photo vous jouait des tours et n'affichait rien à l'écran ? Vous ne devriez plus rencontrer ce problème. À moins que vous ne tentiez d'associer un nouvel appareil dans le noir complet !

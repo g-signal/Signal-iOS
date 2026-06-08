@@ -339,6 +339,16 @@ public class GRDBSchemaMigrator {
         case createGExtGroupTagTables
         case addRetriesToBackupAttachmentUploadQueue
         case addGExtRecipientRobotColumn
+        case replaceOWSDeviceTable
+        case reindexBackupAttachmentUploadQueue
+        case dropAllIncrementalMacs
+        case addOriginalTransitTierInfoAttachmentColumns
+        case rebuildIncompleteViewOnceIndex
+        case addIsPollToTSInteraction
+        case addBackupAttachmentUploadQueueStateColumn
+        case addBackupAttachmentUploadQueueTrigger
+        case migrateRecipientDeviceIds
+        case fixUniqueConstraintOnPollVotes
 
         // NOTE: Every time we add a migration id, consider
         // incrementing grdbSchemaVersionLatest.
@@ -402,7 +412,7 @@ public class GRDBSchemaMigrator {
     }
 
     public static let grdbSchemaVersionDefault: UInt = 0
-    public static let grdbSchemaVersionLatest: UInt = 122
+    public static let grdbSchemaVersionLatest: UInt = 128
 
     // An optimization for new users, we have the first migration import the latest schema
     // and mark any other migrations as "already run".
@@ -641,9 +651,7 @@ public class GRDBSchemaMigrator {
         }
 
         migrator.registerMigration(.dedupeSignalRecipients) { transaction in
-            autoreleasepool {
-                dedupeSignalRecipients(transaction: transaction)
-            }
+            try dedupeSignalRecipients(tx: transaction)
 
             try transaction.database.drop(index: "index_signal_recipients_on_recipientPhoneNumber")
             try transaction.database.drop(index: "index_signal_recipients_on_recipientUUID")
@@ -4234,7 +4242,214 @@ public class GRDBSchemaMigrator {
                 ALTER TABLE gext_recipient
                 ADD COLUMN robot BLOB DEFAULT NULL
             """)
+        migrator.registerMigration(.replaceOWSDeviceTable) { tx in
+            try tx.database.drop(table: "model_OWSDevice")
 
+            try tx.database.create(table: "OWSDevice") { table in
+                table.autoIncrementedPrimaryKey("id")
+                table.column("deviceId", .integer).notNull()
+                table.column("createdAt", .double).notNull()
+                table.column("lastSeenAt", .double).notNull()
+                table.column("name", .text)
+            }
+
+            return .success(())
+        }
+
+        migrator.registerMigration(.reindexBackupAttachmentUploadQueue) { tx in
+            try tx.database.drop(index: "index_BackupAttachmentUploadQueue_on_maxOwnerTimestamp_isFullsize")
+            // For efficient sorting by timestamp
+            try tx.database.create(
+                index: "index_BackupAttachmentUploadQueue_on_isFullsize_maxOwnerTimestamp",
+                on: "BackupAttachmentUploadQueue",
+                columns: ["isFullsize", "maxOwnerTimestamp"]
+            )
+            return .success(())
+        }
+
+        // MARK: - Schema Migration Insertion Point
+
+        migrator.registerMigration(.dropAllIncrementalMacs) { tx in
+            try tx.database.execute(sql: """
+                UPDATE Attachment
+                SET
+                    mediaTierIncrementalMac = NULL,
+                    mediaTierIncrementalMacChunkSize = NULL,
+                    transitTierIncrementalMac = NULL,
+                    transitTierIncrementalMacChunkSize = NULL;
+            """)
+            return .success(())
+        }
+
+        migrator.registerMigration(.addOriginalTransitTierInfoAttachmentColumns) { tx in
+            try tx.database.alter(table: "Attachment") { table in
+                table.add(column: "originalTransitCdnNumber", .integer)
+                table.add(column: "originalTransitCdnKey", .text)
+                table.add(column: "originalTransitUploadTimestamp", .integer)
+                table.add(column: "originalTransitUnencryptedByteCount", .integer)
+                table.add(column: "originalTransitDigestSHA256Ciphertext", .blob)
+                table.add(column: "originalTransitTierIncrementalMac", .blob)
+                table.add(column: "originalTransitTierIncrementalMacChunkSize", .integer)
+            }
+            return .success(())
+        }
+
+        migrator.registerMigration(.rebuildIncompleteViewOnceIndex) { tx in
+            try self.rebuildIncompleteViewOnceIndex(tx: tx)
+            return .success(())
+        }
+
+        migrator.registerMigration(.addIsPollToTSInteraction) { tx in
+            try tx.database.alter(table: "model_TSInteraction") { table in
+                table.add(column: "isPoll", .boolean)
+                    .defaults(to: false)
+            }
+
+            try tx.database.create(
+                table: "Poll"
+            ) { table in
+                table.column("id", .integer).primaryKey().notNull()
+                table.column("interactionId", .integer)
+                    .notNull()
+                    .references(
+                        "model_TSInteraction",
+                        column: "id",
+                        onDelete: .cascade,
+                        onUpdate: .cascade
+                    )
+                table.column("isEnded", .boolean)
+                table.column("allowsMultiSelect", .boolean)
+            }
+
+            try tx.database.create(
+                table: "PollOption"
+            ) { table in
+                table.column("id", .integer).primaryKey().notNull()
+                table.column("pollId", .integer)
+                    .notNull()
+                    .references(
+                        "Poll",
+                        column: "id",
+                        onDelete: .cascade,
+                        onUpdate: .cascade
+                    )
+                table.column("option", .text)
+                table.column("optionIndex", .integer)
+            }
+
+            try tx.database.create(
+                table: "PollVote"
+            ) { table in
+                table.column("id", .integer).primaryKey().notNull()
+                table.column("optionId", .integer)
+                    .notNull()
+                    .references(
+                        "PollOption",
+                        column: "id",
+                        onDelete: .cascade,
+                        onUpdate: .cascade
+                    )
+                table.column("voteAuthorId", .integer)
+                    .unique()
+                    .references(
+                        "model_SignalRecipient",
+                        column: "id",
+                        onDelete: .cascade,
+                        onUpdate: .cascade
+                    )
+                table.column("voteCount", .integer)
+            }
+
+            try tx.database.create(
+                index: "index_poll_on_interactionId",
+                on: "Poll",
+                columns: ["interactionId"]
+            )
+
+            try tx.database.create(
+                index: "index_polloption_on_pollId",
+                on: "PollOption",
+                columns: ["pollId"]
+            )
+
+            try tx.database.create(
+                index: "index_pollvote_on_optionId",
+                on: "PollVote",
+                columns: ["optionId"]
+            )
+
+            return .success(())
+        }
+
+        migrator.registerMigration(.addBackupAttachmentUploadQueueStateColumn) { tx in
+
+            try tx.database.alter(table: "BackupAttachmentUploadQueue") { table in
+                table.add(column: "state", .integer)
+                    .defaults(to: 0)
+            }
+
+            try tx.database.drop(index: "index_BackupAttachmentUploadQueue_on_isFullsize_maxOwnerTimestamp")
+
+            try tx.database.create(
+                index: "index_BackupAttachmentUploadQueue_on_state_isFullsize_maxOwnerTimestamp",
+                on: "BackupAttachmentUploadQueue",
+                columns: ["state", "isFullsize", "maxOwnerTimestamp"]
+            )
+
+            return .success(())
+        }
+
+        migrator.registerMigration(.addBackupAttachmentUploadQueueTrigger) { tx in
+            try tx.database.execute(sql: """
+                CREATE TRIGGER __BackupAttachmentUploadQueue_au
+                AFTER UPDATE OF state ON BackupAttachmentUploadQueue
+                BEGIN
+                    DELETE FROM BackupAttachmentUploadQueue
+                        WHERE state = 1
+                        AND NOT EXISTS (
+                            SELECT id FROM BackupAttachmentUploadQueue WHERE state = 0
+                        );
+                END;
+            """)
+            return .success(())
+        }
+
+        migrator.registerMigration(.migrateRecipientDeviceIds) { tx in
+            try migrateRecipientDeviceIds(tx: tx)
+            return .success(())
+        }
+
+        migrator.registerMigration(.fixUniqueConstraintOnPollVotes) { tx in
+            try tx.database.drop(table: "PollVote")
+
+            try tx.database.create(
+                table: "PollVote"
+            ) { table in
+                table.column("id", .integer).primaryKey().notNull()
+                table.column("optionId", .integer)
+                    .notNull()
+                    .references(
+                        "PollOption",
+                        column: "id",
+                        onDelete: .cascade,
+                        onUpdate: .cascade
+                    )
+                table.column("voteAuthorId", .integer)
+                    .references(
+                        "model_SignalRecipient",
+                        column: "id",
+                        onDelete: .cascade,
+                        onUpdate: .cascade
+                    )
+                table.column("voteCount", .integer)
+            }
+
+            try tx.database.create(
+                index: "index_pollVote_on_voteAuthorId_and_optionId",
+                on: "PollVote",
+                columns: ["voteAuthorId", "optionId"],
+                options: [.unique]
+            )
             return .success(())
         }
 
@@ -4261,11 +4476,11 @@ public class GRDBSchemaMigrator {
         }
 
         migrator.registerMigration(.dataMigration_enableV2RegistrationLockIfNecessary) { transaction in
-            guard DependenciesBridge.shared.svr.hasMasterKey(transaction: transaction) else {
-                return .success(())
+            if DependenciesBridge.shared.svr.hasMasterKey(transaction: transaction) {
+                KeyValueStore(collection: "kOWS2FAManager_Collection")
+                    .setBool(true, key: "isRegistrationLockV2Enabled", transaction: transaction)
             }
 
-            OWS2FAManager.keyValueStore.setBool(true, key: OWS2FAManager.isRegistrationLockV2EnabledKey, transaction: transaction)
             return .success(())
         }
 
@@ -5727,7 +5942,7 @@ public class GRDBSchemaMigrator {
         return Array(((groupIdMap as? [Data: TSBlockedGroupModel]) ?? [:]).keys)
     }
 
-    public static func rebuildIncompleteViewOnceIndex(tx: DBWriteTransaction) throws {
+    private static func rebuildIncompleteViewOnceIndex(tx: DBWriteTransaction) throws {
         try tx.database.execute(sql: """
             DROP INDEX IF EXISTS "index_interactions_on_view_once"
             """
@@ -6097,6 +6312,20 @@ public class GRDBSchemaMigrator {
         }
         return result
     }
+
+    static func migrateRecipientDeviceIds(tx: DBWriteTransaction) throws {
+        let rowIds = try Int64.fetchAll(tx.database, sql: "SELECT id FROM model_SignalRecipient")
+        for rowId in rowIds {
+            let oldEncodedValue = try Data.fetchOne(tx.database, sql: "SELECT devices FROM model_SignalRecipient WHERE id = ?", arguments: [rowId])
+            guard let oldEncodedValue else { throw OWSGenericError("Missing oldEncodedValue") }
+            let deviceIdsObjC = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSOrderedSet.self, NSNumber.self], from: oldEncodedValue) as? NSOrderedSet
+            guard let deviceIdsObjC else { throw OWSGenericError("Missing deviceIdsObjC") }
+            let deviceIds = (deviceIdsObjC.array as? [NSNumber])?.map { $0.uint32Value }
+            let validDeviceIds = (deviceIds ?? []).compactMap(UInt8.init(exactly:)).filter({ 1 <= $0 && $0 <= 127 })
+            let newEncodedValue = Data(validDeviceIds.sorted())
+            try tx.database.execute(sql: "UPDATE model_SignalRecipient SET devices = ? WHERE id = ?", arguments: [newEncodedValue, rowId])
+        }
+    }
 }
 
 // MARK: -
@@ -6109,37 +6338,49 @@ public func createInitialGalleryRecords(transaction: DBWriteTransaction) throws 
     /// will just be removed by a later migration before they're ever used.
 }
 
-func dedupeSignalRecipients(transaction: DBWriteTransaction) {
-    let recipientDatabaseTable = DependenciesBridge.shared.recipientDatabaseTable
-
-    var recipients: [SignalServiceAddress: [SignalRecipient.RowId]] = [:]
-
-    recipientDatabaseTable.enumerateAll(tx: transaction) { recipient in
-        recipients[recipient.address, default: []].append(recipient.id!)
-    }
-
-    for (address, recipientIds) in recipients {
-        guard recipientIds.count > 1 else {
-            continue
+extension GRDBSchemaMigrator {
+    static func dedupeSignalRecipients(tx: DBWriteTransaction) throws {
+        struct Recipient: FetchableRecord, Decodable {
+            var id: Int64
+            var aciString: String?
+            var phoneNumber: String?
         }
-        // Since we have duplicate recipients for an address, we want to keep the one returned by the
-        // finder, since that is the one whose uniqueId is used as the `accountId` for the
-        // accountId finder.
-        guard
-            let primaryRecipient = recipientDatabaseTable.fetchRecipient(address: address, tx: transaction)
-        else {
-            owsFailDebug("primaryRecipient was unexpectedly nil")
-            continue
-        }
+        let fetchAllRecipients = "SELECT id, recipientUUID aciString, recipientPhoneNumber phoneNumber FROM model_SignalRecipient"
 
-        let redundantRecipientIds = recipientIds.filter { $0 != primaryRecipient.id }
-        for redundantId in redundantRecipientIds {
-            guard let redundantRecipient = recipientDatabaseTable.fetchRecipient(rowId: redundantId, tx: transaction) else {
-                owsFailDebug("redundantRecipient was unexpectedly nil")
-                continue
+        let recipientCursor = try Recipient.fetchCursor(tx.database, sql: fetchAllRecipients)
+        var recipientsByAciString = [String: [Int64]]()
+        var recipientsByPhoneNumber = [String: [Recipient]]()
+        while let recipient = try recipientCursor.next() {
+            if let aciString = recipient.aciString {
+                recipientsByAciString[aciString, default: []].append(recipient.id)
             }
-            Logger.info("removing redundant recipient: \(redundantRecipient)")
-            recipientDatabaseTable.removeRecipient(redundantRecipient, transaction: transaction)
+            if let phoneNumber = recipient.phoneNumber {
+                recipientsByPhoneNumber[phoneNumber, default: []].append(recipient)
+            }
+        }
+
+        // First, ensure there are no duplicate ACIs. If there are, we pick the one
+        // with the lowest rowID because that's the one that would be returned when
+        // fetching by ACI.
+        for (_, rowIds) in recipientsByAciString {
+            for duplicateRowId in rowIds.sorted().dropFirst() {
+                try tx.database.execute(sql: "DELETE FROM model_SignalRecipient WHERE id = ?", arguments: [duplicateRowId])
+            }
+        }
+
+        // Next, ensure there are no duplicate phone numbers. If there are, we
+        // similarly keep the first one, and then we clear (if there's an ACI) or
+        // delete (if there's not an ACI) the others.
+        for (_, recipients) in recipientsByPhoneNumber {
+            for recipient in recipients.sorted(by: { $0.id < $1.id }).dropFirst() {
+                let mutationSql: String
+                if recipient.aciString != nil {
+                    mutationSql = "UPDATE model_SignalRecipient SET recipientPhoneNumber = NULL WHERE id = ?"
+                } else {
+                    mutationSql = "DELETE FROM model_SignalRecipient WHERE id = ?"
+                }
+                try tx.database.execute(sql: mutationSql, arguments: [recipient.id])
+            }
         }
     }
 }

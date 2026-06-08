@@ -9,9 +9,11 @@ import UIKit
 
 @MainActor
 class BackupOnboardingCoordinator {
+    private static let onboardingRootViewControllerType = BackupOnboardingIntroViewController.self
+
     private let accountKeyStore: AccountKeyStore
     private let backupEnablingManager: BackupEnablingManager
-    private let backupSubscriptionManager: BackupSubscriptionManager
+    private let backupSettingsStore: BackupSettingsStore
     private let db: DB
 
     private weak var onboardingNavController: UINavigationController?
@@ -20,7 +22,7 @@ class BackupOnboardingCoordinator {
         self.init(
             accountKeyStore: DependenciesBridge.shared.accountKeyStore,
             backupEnablingManager: AppEnvironment.shared.backupEnablingManager,
-            backupSubscriptionManager: DependenciesBridge.shared.backupSubscriptionManager,
+            backupSettingsStore: BackupSettingsStore(),
             db: DependenciesBridge.shared.db,
             tsAccountManager: DependenciesBridge.shared.tsAccountManager,
         )
@@ -29,7 +31,7 @@ class BackupOnboardingCoordinator {
     init(
         accountKeyStore: AccountKeyStore,
         backupEnablingManager: BackupEnablingManager,
-        backupSubscriptionManager: BackupSubscriptionManager,
+        backupSettingsStore: BackupSettingsStore,
         db: DB,
         tsAccountManager: TSAccountManager,
     ) {
@@ -40,47 +42,67 @@ class BackupOnboardingCoordinator {
 
         self.accountKeyStore = accountKeyStore
         self.backupEnablingManager = backupEnablingManager
-        self.backupSubscriptionManager = backupSubscriptionManager
+        self.backupSettingsStore = backupSettingsStore
         self.db = db
     }
 
-    func present(fromViewController: UIViewController) {
-        let navController = UINavigationController()
-        onboardingNavController = navController
+    func prepareForPresentation(
+        inNavController navController: UINavigationController,
+    ) -> UIViewController {
+        let haveBackupsEverBeenEnabled = db.read { tx in
+            backupSettingsStore.haveBackupsEverBeenEnabled(tx: tx)
+        }
 
-        // Retain ourselves as long as the nav controller is presented.
-        ObjectRetainer.retainObject(self, forLifetimeOf: navController)
+        if haveBackupsEverBeenEnabled {
+            return BackupSettingsViewController(onAppearAction: nil)
+        } else {
+            // Weakly retain the nav controller, so we can use it throughout
+            // onboarding.
+            onboardingNavController = navController
 
-        navController.viewControllers = [
-            BackupOnboardingIntroViewController(
-                onContinue: { [weak self] in
-                    self?.showBackupKeyIntro()
+            // Strongly retain this instance through the various view controller
+            // callbacks, so that we stay alive to facilitate navigation. We
+            // don't retain any of the view controllers retaining us, so we'll
+            // be released when they are: when the user finishes or dismisses
+            // onboarding.
+            let introViewController = BackupOnboardingIntroViewController(
+                onContinue: { [self] in
+                    showRecoveryKeyIntro()
                 },
-                onNotNow: { [weak self] in
-                    self?.onboardingNavController?.dismiss(animated: true)
+                onNotNow: { [self] in
+                    onboardingNavController?.popViewController(animated: true)
                 }
-            ),
-        ]
+            )
 
-        fromViewController.present(navController, animated: true)
+            // At the end of onboarding we'll look for this as the "root" of the
+            // onboarding view controller stack, so we don't want to update the
+            // returned type here without updating that site too.
+            owsPrecondition(type(of: introViewController) == Self.onboardingRootViewControllerType)
+
+            return introViewController
+        }
     }
 
     // MARK: -
 
-    private func showBackupKeyIntro() {
+    private func showRecoveryKeyIntro() {
         guard let onboardingNavController else { return }
 
         onboardingNavController.pushViewController(
-            BackupOnboardingKeyIntroViewController(onDeviceAuthSucceeded: { [weak self] in
-                self?.showRecordBackupKey()
-            }),
+            BackupOnboardingKeyIntroViewController(
+                onDeviceAuthSucceeded: { [self] authSuccess in
+                    showRecordRecoveryKey(localDeviceAuthSuccess: authSuccess)
+                }
+            ),
             animated: true
         )
     }
 
     // MARK: -
 
-    private func showRecordBackupKey() {
+    private func showRecordRecoveryKey(
+        localDeviceAuthSuccess: LocalDeviceAuthentication.AuthSuccess
+    ) {
         guard
             let onboardingNavController,
             let aep = db.read(block: { accountKeyStore.getAccountEntropyPool(tx: $0) })
@@ -88,10 +110,10 @@ class BackupOnboardingCoordinator {
 
         onboardingNavController.pushViewController(
             BackupRecordKeyViewController(
-                aep: aep,
-                isOnboardingFlow: true,
-                onCompletion: { [weak self] _ in
-                    self?.showConfirmBackupKey(aep: aep)
+                aepMode: .current(aep, localDeviceAuthSuccess),
+                options: [.showContinueButton],
+                onContinuePressed: { [self] _ in
+                    showConfirmRecoveryKey(aep: aep)
                 },
             ),
             animated: true
@@ -100,15 +122,15 @@ class BackupOnboardingCoordinator {
 
     // MARK: -
 
-    private func showConfirmBackupKey(aep: AccountEntropyPool) {
+    private func showConfirmRecoveryKey(aep: AccountEntropyPool) {
         guard let onboardingNavController else { return }
 
         onboardingNavController.pushViewController(
-            BackupOnboardingConfirmKeyViewController(
+            BackupConfirmKeyViewController(
                 aep: aep,
-                onContinue: { [weak self] in
-                    Task { [weak self] in
-                        await self?.showChooseBackupPlan()
+                onContinue: { [self] in
+                    Task {
+                        await showChooseBackupPlan()
                     }
                 },
                 onSeeKeyAgain: {
@@ -129,14 +151,22 @@ class BackupOnboardingCoordinator {
             chooseBackupPlanViewController = try await .load(
                 fromViewController: onboardingNavController,
                 initialPlanSelection: nil,
-            ) { [weak self] chooseBackupPlanViewController, planSelection in
-                Task { [weak self] in
-                    guard let self else { return }
+            ) { [self] chooseBackupPlanViewController, planSelection in
+                Task {
+                    do throws(BackupEnablingManager.DisplayableError) {
+                        try await backupEnablingManager.enableBackups(
+                            fromViewController: chooseBackupPlanViewController,
+                            planSelection: planSelection
+                        )
+                    } catch {
+                        OWSActionSheets.showActionSheet(
+                            message: error.localizedActionSheetMessage,
+                            fromViewController: chooseBackupPlanViewController,
+                        )
+                        return
+                    }
 
-                    await enableBackups(
-                        fromViewController: chooseBackupPlanViewController,
-                        planSelection: planSelection
-                    )
+                    completeOnboarding()
                 }
             }
         } catch {
@@ -149,27 +179,20 @@ class BackupOnboardingCoordinator {
         )
     }
 
-    private func enableBackups(
-        fromViewController: ChooseBackupPlanViewController,
-        planSelection: ChooseBackupPlanViewController.PlanSelection
-    ) async {
-        guard let onboardingNavController else { return }
-
-        do throws(BackupEnablingManager.DisplayableError) {
-            try await backupEnablingManager.enableBackups(
-                fromViewController: fromViewController,
-                planSelection: planSelection
-            )
-        } catch {
-            OWSActionSheets.showActionSheet(
-                message: error.localizedActionSheetMessage,
-                fromViewController: fromViewController,
-            )
+    private func completeOnboarding() {
+        guard
+            let onboardingNavController,
+            let onboardingRootVCIndex = onboardingNavController.viewControllers
+                .firstIndex(where: { type(of: $0) == Self.onboardingRootViewControllerType })
+        else {
             return
         }
 
+        let preOnboardingViewControllers = onboardingNavController.viewControllers[0..<onboardingRootVCIndex]
+        let backupSettingsViewController = BackupSettingsViewController(onAppearAction: .presentWelcomeToBackupsSheet)
+
         onboardingNavController.setViewControllers(
-            [BackupSettingsViewController(onLoadAction: .presentWelcomeToBackupsSheet)],
+            preOnboardingViewControllers + [backupSettingsViewController],
             animated: true
         )
     }

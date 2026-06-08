@@ -388,7 +388,7 @@ extension ContactSupportViewController {
         label.textColor = Theme.primaryTextColor
 
         let infoButton = OWSButton(imageName: "help", tintColor: Theme.secondaryTextAndIconColor) { [weak self] in
-            let vc = SFSafariViewController(url: SupportConstants.debugLogsInfoURL)
+            let vc = SFSafariViewController(url: URL.Support.debugLogs)
             self?.present(vc, animated: true)
         }
         infoButton.accessibilityLabel = OWSLocalizedString("DEBUG_LOG_INFO_BUTTON",
@@ -434,7 +434,6 @@ extension ContactSupportViewController {
                 self?.updateRightBarButton()
                 self?.rebuildTableContents()
             }
-            if selectedFilter == filter { action.trailingIcon = .checkCircle }
             actionSheet.addAction(action)
         }
 

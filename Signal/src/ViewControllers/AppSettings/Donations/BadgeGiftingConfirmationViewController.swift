@@ -163,9 +163,8 @@ class BadgeGiftingConfirmationViewController: OWSTableViewController2 {
         }
 
         let badgeSection = OWSTableSection()
-        badgeSection.add(.init(customCellBlock: { [weak self] in
-            guard let self = self else { return UITableViewCell() }
-            let cell = AppSettingsViewsUtil.newCell(cellOuterInsets: self.cellOuterInsets)
+        badgeSection.add(.init(customCellBlock: {
+            let cell = AppSettingsViewsUtil.newCell()
 
             let badgeCellView = GiftBadgeCellView(badge: badge, price: price)
             cell.contentView.addSubview(badgeCellView)
@@ -175,9 +174,8 @@ class BadgeGiftingConfirmationViewController: OWSTableViewController2 {
         }))
 
         let recipientSection = OWSTableSection()
-        recipientSection.add(.init(customCellBlock: { [weak self] in
-            guard let self = self else { return UITableViewCell() }
-            let cell = AppSettingsViewsUtil.newCell(cellOuterInsets: self.cellOuterInsets)
+        recipientSection.add(.init(customCellBlock: {
+            let cell = AppSettingsViewsUtil.newCell()
 
             let nameLabel = UILabel()
             nameLabel.text = recipientName
@@ -202,7 +200,7 @@ class BadgeGiftingConfirmationViewController: OWSTableViewController2 {
                     seconds: disappearingMessagesDuration,
                     useShortFormat: true
                 )
-                disappearingMessagesTimerLabelView.font = .dynamicTypeBody2
+                disappearingMessagesTimerLabelView.font = .dynamicTypeSubheadline
                 disappearingMessagesTimerLabelView.textAlignment = .center
                 disappearingMessagesTimerLabelView.minimumScaleFactor = 0.8
 
@@ -223,16 +221,16 @@ class BadgeGiftingConfirmationViewController: OWSTableViewController2 {
 
         let messageInfoSection = OWSTableSection()
         messageInfoSection.hasBackground = false
-        messageInfoSection.add(.init(customCellBlock: { [weak self] in
-            guard let self = self else { return UITableViewCell() }
-            let cell = AppSettingsViewsUtil.newCell(cellOuterInsets: self.cellOuterInsets)
+        messageInfoSection.add(.init(customCellBlock: {
+            let cell = AppSettingsViewsUtil.newCell()
+            cell.layoutMargins = .zero
 
             let messageInfoLabel = UILabel()
             messageInfoLabel.text = OWSLocalizedString(
                 "DONATE_ON_BEHALF_OF_A_FRIEND_ADDITIONAL_MESSAGE_INFO",
                 comment: "Users can donate on a friend's behalf and can optionally add a message. This is tells users about that optional message."
             )
-            messageInfoLabel.font = .dynamicTypeBody2
+            messageInfoLabel.font = .dynamicTypeSubheadline
             messageInfoLabel.textColor = Theme.primaryTextColor
             messageInfoLabel.numberOfLines = 0
             cell.contentView.addSubview(messageInfoLabel)
@@ -254,12 +252,12 @@ class BadgeGiftingConfirmationViewController: OWSTableViewController2 {
         if disappearingMessagesDuration != 0 {
             let disappearingMessagesInfoSection = OWSTableSection()
             disappearingMessagesInfoSection.hasBackground = false
-            disappearingMessagesInfoSection.add(.init(customCellBlock: { [weak self] in
-                guard let self else { return UITableViewCell() }
-                let cell = AppSettingsViewsUtil.newCell(cellOuterInsets: self.cellOuterInsets)
+            disappearingMessagesInfoSection.add(.init(customCellBlock: {
+                let cell = AppSettingsViewsUtil.newCell()
+                cell.layoutMargins = .zero
 
                 let disappearingMessagesInfoLabel = UILabel()
-                disappearingMessagesInfoLabel.font = .dynamicTypeBody2
+                disappearingMessagesInfoLabel.font = .dynamicTypeSubheadline
                 disappearingMessagesInfoLabel.textColor = Theme.secondaryTextAndIconColor
                 disappearingMessagesInfoLabel.numberOfLines = 0
 
@@ -322,8 +320,6 @@ class BadgeGiftingConfirmationViewController: OWSTableViewController2 {
             let view = UIStackView(arrangedSubviews: [descriptionLabel, priceLabel])
             view.axis = .horizontal
             view.distribution = .equalSpacing
-            view.layoutMargins = cellOuterInsets
-            view.isLayoutMarginsRelativeArrangement = true
 
             return view
         }()

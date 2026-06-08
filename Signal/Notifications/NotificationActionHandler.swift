@@ -15,18 +15,6 @@ public class NotificationActionHandler {
     class func handleNotificationResponse(
         _ response: UNNotificationResponse,
         appReadiness: AppReadinessSetter
-    ) async {
-        do {
-            try await _handleNotificationResponse(response, appReadiness: appReadiness)
-        } catch {
-            owsFailDebug("error: \(error)")
-        }
-    }
-
-    @MainActor
-    private class func _handleNotificationResponse(
-        _ response: UNNotificationResponse,
-        appReadiness: AppReadinessSetter
     ) async throws {
         owsAssertDebug(appReadiness.isAppReady)
 
@@ -55,6 +43,8 @@ public class NotificationActionHandler {
                 break
             case .showLinkedDevices:
                 showLinkedDevices()
+            case .showBackupsEnabled:
+                showBackupsEnabled()
             }
         case UNNotificationDismissActionIdentifier:
             // TODO - mark as read?
@@ -116,6 +106,8 @@ public class NotificationActionHandler {
     }
 
     private class func reply(userInfo: AppNotificationUserInfo, replyText: String) async throws {
+        guard !replyText.isEmpty else { return }
+
         let notificationMessage = try await self.notificationMessage(forUserInfo: userInfo)
         let thread = notificationMessage.thread
         let interaction = notificationMessage.interaction
@@ -137,10 +129,13 @@ public class NotificationActionHandler {
             draftModelForSending = try? await DependenciesBridge.shared.quotedReplyManager.prepareDraftForSending(draftModel)
         }
 
+        let messageBody = try await DependenciesBridge.shared.attachmentContentValidator
+            .prepareOversizeTextIfNeeded(MessageBody(text: replyText, ranges: .empty))
+
         do {
             try await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { transaction in
                 let builder: TSOutgoingMessageBuilder = .withDefaultValues(thread: thread)
-                builder.messageBody = replyText
+                builder.setMessageBody(messageBody)
 
                 // If we're replying to a group story reply, keep the reply within that context.
                 if
@@ -160,16 +155,20 @@ public class NotificationActionHandler {
                     builder.expireTimerVersion = NSNumber(value: dmConfig.timerVersion)
                 }
 
-                let unpreparedMessage = UnpreparedOutgoingMessage.forMessage(TSOutgoingMessage(
-                    outgoingMessageWith: builder,
-                    additionalRecipients: [],
-                    explicitRecipients: [],
-                    skippedRecipients: [],
-                    transaction: transaction
-                ), quotedReplyDraft: draftModelForSending)
+                let unpreparedMessage = UnpreparedOutgoingMessage.forMessage(
+                    TSOutgoingMessage(
+                        outgoingMessageWith: builder,
+                        additionalRecipients: [],
+                        explicitRecipients: [],
+                        skippedRecipients: [],
+                        transaction: transaction
+                    ),
+                    body: messageBody,
+                    quotedReplyDraft: draftModelForSending
+                )
                 let preparedMessage = try unpreparedMessage.prepare(tx: transaction)
                 return ThreadUtil.enqueueMessagePromise(message: preparedMessage, transaction: transaction)
-            }.awaitable()
+            }.awaitableWithUncooperativeCancellationHandling()
         } catch {
             Logger.warn("Failed to send reply message from notification with error: \(error)")
             SSKEnvironment.shared.notificationPresenterRef.notifyUserOfFailedSend(inThread: thread)
@@ -269,7 +268,7 @@ public class NotificationActionHandler {
                     isHighPriority: false,
                     tx: transaction
                 )
-            }.awaitable()
+            }.awaitableWithUncooperativeCancellationHandling()
         } catch {
             Logger.warn("Failed to send reply message from notification with error: \(error)")
             SSKEnvironment.shared.notificationPresenterRef.notifyUserOfFailedSend(inThread: thread)
@@ -370,6 +369,11 @@ public class NotificationActionHandler {
     @MainActor
     private class func showLinkedDevices() {
         SignalApp.shared.showAppSettings(mode: .linkedDevices)
+    }
+
+    @MainActor
+    private class func showBackupsEnabled() {
+        SignalApp.shared.showAppSettings(mode: .backups)
     }
 
     private struct NotificationMessage {

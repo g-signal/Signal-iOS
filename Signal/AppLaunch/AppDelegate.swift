@@ -144,6 +144,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
+        // If we reach this point, the app has launched & terminated successfully,
+        // which means this flag can be cleared.
+        CurrentAppContext().appUserDefaults().removeObject(forKey: Constants.appLaunchesAttemptedKey)
         Logger.info("")
         Logger.flush()
     }
@@ -228,7 +231,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             Logger.error("Couldn't launch with broken database: \(error.grdbErrorForLogging)")
             let viewController = terminalErrorViewController()
             _ = initializeWindow(mainAppContext: mainAppContext, rootViewController: viewController)
-            presentDatabaseUnrecoverablyCorruptedError(from: viewController, action: .submitDebugLogsAndCrash)
+
+            presentDatabaseUnrecoverablyCorruptedError(
+                from: viewController,
+                actions: [
+                    .submitDebugLogsAndCrash,
+                    .wipeAppDataAndCrash(keyFetcher: GRDBKeyFetcher(keychainStorage: keychainStorage)),
+                ]
+            )
             return true
         }
 
@@ -319,19 +329,18 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         attachmentValidationRunner.registerBGProcessingTask(appReadiness: appReadiness)
 
-        let backupSettingsStore = BackupSettingsStore()
         let backupRunner = BackupBGProcessingTaskRunner(
-            backupSettingsStore: backupSettingsStore,
+            backgroundMessageFetcherFactory: { DependenciesBridge.shared.backgroundMessageFetcherFactory },
+            backupSettingsStore: BackupSettingsStore(),
+            dateProvider: { Date() },
             db: databaseStorage,
-            exportJob: { DependenciesBridge.shared.backupExportJob }
+            exportJob: { DependenciesBridge.shared.backupExportJob },
+            tsAccountManager: { DependenciesBridge.shared.tsAccountManager },
         )
         backupRunner.registerBGProcessingTask(appReadiness: appReadiness)
 
         let databaseMigratorRunner = LazyDatabaseMigratorRunner(
-            backgroundMessageFetcherFactory: { DependenciesBridge.shared.backgroundMessageFetcherFactory },
             databaseStorage: databaseStorage,
-            remoteConfigManager: { SSKEnvironment.shared.remoteConfigManagerRef },
-            tsAccountManager: { DependenciesBridge.shared.tsAccountManager }
         )
         databaseMigratorRunner.registerBGProcessingTask(appReadiness: appReadiness)
 
@@ -442,7 +451,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             notificationPresenter: NotificationPresenterImpl(),
             incrementalMessageTSAttachmentMigratorFactory: launchContext.incrementalMessageTSAttachmentMigratorFactory
         )
-        setupNSEInteroperation()
         SUIEnvironment.shared.setUp(
             appReadiness: appReadiness,
             authCredentialManager: databaseContinuation.authCredentialManager
@@ -477,10 +485,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         let migrateTask = Task {
             _ = await continuation.dependenciesBridge.incrementalMessageTSAttachmentMigrator
-                .runInMainAppUntilFinished(ignorePastFailures: false, progress: progressSink)
-        }
-        Task {
-            loadingViewController?.setCancellableTask(migrateTask)
+                .runInMainAppUntilFinished(ignorePastFailures: true, progress: progressSink)
         }
         await migrateTask.value
         return (continuation, sleepBlockObject)
@@ -505,35 +510,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             return succeededCreatingDir
         }
 
-        // Require 100MB free in order to launch.
-        return freeSpaceInBytes >= 100_000_000
-    }
-
-    private func setupNSEInteroperation() {
-        // We immediately post a notification letting the NSE know the main app has launched.
-        // If it's running it should take this as a sign to terminate so we don't unintentionally
-        // try and fetch messages from two processes at once.
-        DarwinNotificationCenter.postNotification(name: .mainAppLaunched)
-
-        let appReadiness: AppReadiness = self.appReadiness
-
-        // We listen to this notification for the lifetime of the application, so we don't
-        // record the returned observer token.
-        _ = DarwinNotificationCenter.addObserver(
-            name: .nseDidReceiveNotification,
-            queue: DispatchQueue.global(qos: .userInitiated)
-        ) { token in
-            appReadiness.runNowOrWhenAppDidBecomeReadySync {
-                DispatchQueue.global(qos: .userInitiated).async {
-                    let chatConnectionManager = DependenciesBridge.shared.chatConnectionManager
-                    if chatConnectionManager.shouldSocketBeOpen_restOnly(connectionType: .identified) {
-                        // Immediately let the NSE know we will handle this notification so that it
-                        // does not attempt to process messages while we are active.
-                        DarwinNotificationCenter.postNotification(name: .mainAppHandledNotification)
-                    }
-                }
-            }
-        }
+        // Require 500MB free in order to launch.
+        return freeSpaceInBytes >= 500_000_000
     }
 
     private func didLoadDatabase(
@@ -557,6 +535,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         if hasPendingChangeNumber {
             // The registration loader will clear the suspension later on.
             SSKEnvironment.shared.messagePipelineSupervisorRef.suspendMessageProcessingWithoutHandle(for: .pendingChangeNumber)
+            DependenciesBridge.shared.preKeyManager.setIsChangingNumber(true)
         }
 
         let launchInterface = buildLaunchInterface(regLoader: regLoader)
@@ -727,7 +706,16 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // Note that this does much more than set a flag; it will also run all deferred blocks.
         appReadiness.setAppIsReadyUIStillPending()
 
-        appContext.appUserDefaults().removeObject(forKey: Constants.appLaunchesAttemptedKey)
+        Task {
+            let backgroundTask = OWSBackgroundTask(label: "AppLaunchesAttemptedCleanup")
+            defer { backgroundTask.end() }
+
+            // Wait a few seconds after the app has launched to clear the
+            // counter, in case something is causing us to repeatedly crash not
+            // *during* launch, but just after.
+            try! await Task.sleep(nanoseconds: 3.clampedNanoseconds)
+            appContext.appUserDefaults().removeObject(forKey: Constants.appLaunchesAttemptedKey)
+        }
 
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
         let recipientDatabaseTable = DependenciesBridge.shared.recipientDatabaseTable
@@ -836,7 +824,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let application: UIApplication = .shared
         let userNotificationCenter: UNUserNotificationCenter = .current()
 
-        NotificationPresenterImpl.clearAllNotificationsExceptNewLinkedDevices()
+        UserNotificationPresenter().clearAllNonScheduledNotifications()
         application.applicationIconBadgeNumber = 0
 
         userNotificationCenter.add(notificationRequest)
@@ -956,7 +944,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 // but we haven't built the UI for it.
                 return .databaseUnrecoverablyCorrupted
             }
-            guard databaseCorruptionState.count <= 3 else {
+            guard databaseCorruptionState.count <= 5 else {
                 return .databaseUnrecoverablyCorrupted
             }
             return .databaseCorruptedAndMightBeRecoverable
@@ -1013,7 +1001,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         case .databaseUnrecoverablyCorrupted:
             presentDatabaseUnrecoverablyCorruptedError(
                 from: viewController,
-                action: .submitDebugLogsWithDatabaseIntegrityCheckAndCrash(databaseStorage: launchContext.databaseStorage)
+                actions: [
+                    .submitDebugLogsWithDatabaseIntegrityCheckAndCrash(databaseStorage: launchContext.databaseStorage),
+                    .wipeAppDataAndCrash(keyFetcher: GRDBKeyFetcher(keychainStorage: launchContext.keychainStorage)),
+                ]
             )
             return
 
@@ -1120,7 +1111,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func presentDatabaseUnrecoverablyCorruptedError(
         from viewController: UIViewController,
-        action: LaunchFailureActionSheetAction
+        actions: [LaunchFailureActionSheetAction],
     ) {
         presentLaunchFailureActionSheet(
             from: viewController,
@@ -1134,7 +1125,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 "APP_LAUNCH_FAILURE_ALERT_MESSAGE",
                 comment: "Default message for the 'app launch failed' alert."
             ),
-            actions: [action]
+            actions: actions
         )
     }
 
@@ -1142,6 +1133,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         case submitDebugLogsAndCrash
         case submitDebugLogsAndLaunchApp(window: UIWindow, launchContext: LaunchContext)
         case submitDebugLogsWithDatabaseIntegrityCheckAndCrash(databaseStorage: SDSDatabaseStorage)
+        case wipeAppDataAndCrash(keyFetcher: GRDBKeyFetcher)
         case launchApp(window: UIWindow, launchContext: LaunchContext)
     }
 
@@ -1198,12 +1190,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                         owsFail("Exiting after submitting debug logs")
                     }
                 }
+
             case .submitDebugLogsAndLaunchApp(let window, let launchContext):
                 addSubmitDebugLogsAction { [unowned window] in
                     DebugLogs.submitLogs(supportTag: supportTag, dumper: logDumper) {
                         ignoreErrorAndLaunchApp(in: window, launchContext: launchContext)
                     }
                 }
+
             case .submitDebugLogsWithDatabaseIntegrityCheckAndCrash(let databaseStorage):
                 addSubmitDebugLogsAction { [unowned viewController] in
                     SignalApp.showDatabaseIntegrityCheckUI(from: viewController, databaseStorage: databaseStorage) {
@@ -1212,6 +1206,37 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                         }
                     }
                 }
+
+            case .wipeAppDataAndCrash(let keyFetcher):
+                let wipeAppDataActionTitle = OWSLocalizedString(
+                    "APP_LAUNCH_FAILURE_WIPE_APP_DATA_ACTION_TITLE",
+                    comment: "Action in an action sheet offering to wipe all app data."
+                )
+
+                actionSheet.addAction(.init(
+                    title: wipeAppDataActionTitle,
+                    style: .destructive,
+                    handler: { _ in
+                        OWSActionSheets.showConfirmationAlert(
+                            title: OWSLocalizedString(
+                                "APP_LAUNCH_FAILURE_WIPE_APP_DATA_CONFIRMATION_TITLE",
+                                comment: "Title for an action sheet confirming the user wants to wipe all app data."
+                            ),
+                            message: OWSLocalizedString(
+                                "APP_LAUNCH_FAILURE_WIPE_APP_DATA_CONFIRMATION_MESSAGE",
+                                comment: "Message for an action sheet confirming the user wants to wipe all app data."
+                            ),
+                            proceedTitle: wipeAppDataActionTitle,
+                            proceedStyle: .destructive,
+                            proceedAction: { _ in
+                                ModalActivityIndicatorViewController.present(fromViewController: viewController) { _ in
+                                    SignalApp.resetAppDataAndExit(keyFetcher: keyFetcher)
+                                }
+                            },
+                        )
+                    }
+                ))
+
             case .launchApp(let window, let launchContext):
                 actionSheet.addAction(.init(
                     title: OWSLocalizedString(
@@ -1342,17 +1367,23 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             self.backgroundFetchHandle?.interrupt()
             self.backgroundFetchHandle = nil
         } else {
-            let backgroundFetcher = DependenciesBridge.shared.backgroundMessageFetcherFactory.buildFetcher(useWebSocket: true)
+            let backgroundFetcher = DependenciesBridge.shared.backgroundMessageFetcherFactory.buildFetcher()
             self.activeConnectionTokens = []
             self.backgroundFetchHandle?.interrupt()
             let startDate = MonotonicDate()
+            let isPastRegistration = SignalApp.shared.conversationSplitViewController != nil
             self.backgroundFetchHandle = UIApplication.shared.beginBackgroundTask(
                 backgroundBlock: {
                     do {
                         await backgroundFetcher.start()
                         oldActiveConnectionTokens.forEach { $0.releaseConnection() }
                         // This will usually be limited to 30 seconds rather than 3 minutes.
-                        try await backgroundFetcher.waitUntil(deadline: startDate.adding(180))
+                        let waitDeadline = startDate.adding(180)
+                        if isPastRegistration {
+                            try await backgroundFetcher.waitUntil(deadline: waitDeadline)
+                        } else {
+                            try await Task.sleep(nanoseconds: (waitDeadline - MonotonicDate()).nanoseconds)
+                        }
                     } catch {
                         // We were canceled, either because we entered the foreground or our
                         // background execution time expired.
@@ -1464,7 +1495,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 Logger.info("Ignoring remote notification; user is not registered.")
                 return
             }
-            let backgroundMessageFetcher = DependenciesBridge.shared.backgroundMessageFetcherFactory.buildFetcher(useWebSocket: true)
+            let backgroundMessageFetcher = DependenciesBridge.shared.backgroundMessageFetcherFactory.buildFetcher()
             await backgroundMessageFetcher.start()
 
             // If we get canceled, we want to ignore the contact sync in this method
@@ -1513,7 +1544,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         appReadiness.runNowOrWhenAppDidBecomeReadySync {
             let oldBadgeValue = UIApplication.shared.applicationIconBadgeNumber
-            SSKEnvironment.shared.notificationPresenterRef.clearAllNotificationsExceptNewLinkedDevices()
+            SSKEnvironment.shared.notificationPresenterRef.clearAllNonScheduledNotifications()
             UIApplication.shared.applicationIconBadgeNumber = oldBadgeValue
         }
     }
@@ -1792,23 +1823,32 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
+        let startDate = MonotonicDate()
         Task { @MainActor [appReadiness] () -> Void in
             defer { completionHandler() }
 
             try await self.appReadiness.waitForAppReady()
 
             let backgroundMessageFetcherFactory = DependenciesBridge.shared.backgroundMessageFetcherFactory
-            let backgroundMessageFetcher = backgroundMessageFetcherFactory.buildFetcher(useWebSocket: true)
+            let backgroundMessageFetcher = backgroundMessageFetcherFactory.buildFetcher()
             // So that we open up a connection for replies.
             await backgroundMessageFetcher.start()
-            await NotificationActionHandler.handleNotificationResponse(response, appReadiness: appReadiness)
-            let result = await Result(catching: {
-                // So that we wait for any enqueued messages to be sent.
-                try await backgroundMessageFetcher.waitForFetchingProcessingAndSideEffects()
-            })
+
+            do {
+                let elapsedDuration = (MonotonicDate() - startDate).seconds
+                try await withCooperativeTimeout(seconds: 27 - elapsedDuration) {
+                    // Do the actual thing we care about.
+                    try await NotificationActionHandler.handleNotificationResponse(response, appReadiness: appReadiness)
+
+                    // Then wait for any enqueued messages (e.g., read receipts) to be sent.
+                    try await backgroundMessageFetcher.waitForFetchingProcessingAndSideEffects()
+                }
+            } catch {
+                Logger.warn("\(error)")
+            }
+
             // So that we tear down gracefully.
             await backgroundMessageFetcher.stopAndWaitBeforeSuspending()
-            try result.get()
         }
     }
 }

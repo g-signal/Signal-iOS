@@ -11,6 +11,7 @@ final class BackupSettingsAttachmentUploadTracker {
         enum State {
             case running
             case pausedLowBattery
+            case pausedLowPowerMode
             case pausedNeedsWifi
             case pausedNeedsInternet
         }
@@ -26,7 +27,6 @@ final class BackupSettingsAttachmentUploadTracker {
             self.init(state: state, progress: OWSProgress(
                 completedUnitCount: bytesUploaded,
                 totalUnitCount: totalBytesToUpload,
-                sourceProgresses: [:]
             ))
         }
 
@@ -132,20 +132,21 @@ private class Tracker {
 
     @MainActor
     private func observeUploadQueueStatus() -> NotificationCenter.Observer {
+        // We only care about fullsize uploads, ignore thumbnails
         let uploadQueueStatusObserver = NotificationCenter.default.addObserver(
-            name: .backupAttachmentUploadQueueStatusDidChange
+            name: .backupAttachmentUploadQueueStatusDidChange(for: .fullsize)
         ) { [weak self] notification in
             guard let self else { return }
 
             handleQueueStatusUpdate(
-                backupAttachmentUploadQueueStatusReporter.currentStatus()
+                backupAttachmentUploadQueueStatusReporter.currentStatus(for: .fullsize)
             )
         }
 
         // Now that we're observing updates, handle the initial value as if we'd
         // just gotten it in an update.
         handleQueueStatusUpdate(
-            backupAttachmentUploadQueueStatusReporter.currentStatus()
+            backupAttachmentUploadQueueStatusReporter.currentStatus(for: .fullsize)
         )
 
         return uploadQueueStatusObserver
@@ -179,14 +180,14 @@ private class Tracker {
                 // observer we just added will do so.
                 return
 
-            case .empty, .notRegisteredAndReady:
+            case .empty, .notRegisteredAndReady, .appBackgrounded:
                 if let uploadProgressObserver = _state.uploadProgressObserver {
                     await backupAttachmentUploadProgress.removeObserver(uploadProgressObserver)
                 }
 
                 _state.uploadProgressObserver = nil
 
-            case .noWifiReachability, .lowBattery, .noReachability:
+            case .noWifiReachability, .lowBattery, .lowPowerMode, .noReachability:
                 break
             }
 
@@ -221,7 +222,9 @@ private class Tracker {
                 return .pausedNeedsWifi
             case .lowBattery:
                 return .pausedLowBattery
-            case .empty, .notRegisteredAndReady:
+            case .lowPowerMode:
+                return .pausedLowPowerMode
+            case .empty, .notRegisteredAndReady, .appBackgrounded:
                 return nil
             }
         }()

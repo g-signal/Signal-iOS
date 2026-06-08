@@ -529,18 +529,18 @@ class MessageRequestView: UIStackView {
             .foregroundColor: Theme.accentBlueColor
         ]
 
-//        if appendLearnMoreLink {
-//            textView.attributedText = .composed(of: [
-//                attributedString,
-//                " ",
-//                CommonStrings.learnMore.styled(
-//                    with: .link(URL(string: "https://support.signal.org/hc/articles/360007459591")!),
-//                    .font(.dynamicTypeSubheadlineClamped)
-//                )
-//            ])
-//        } else {
+        if appendLearnMoreLink {
+            textView.attributedText = .composed(of: [
+                attributedString,
+                " ",
+                CommonStrings.learnMore.styled(
+                    with: .link(URL.Support.profilesAndMessageRequests),
+                    .font(.dynamicTypeSubheadlineClamped)
+                )
+            ])
+        } else {
             textView.attributedText = attributedString
-//        }
+        }
 
         return textView
     }

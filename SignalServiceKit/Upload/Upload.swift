@@ -6,7 +6,7 @@
 import Foundation
 
 public enum Upload {
-    public static let uploadQueue = ConcurrentTaskQueue(concurrentLimit: CurrentAppContext().isNSE ? 2 : 8)
+    public static let uploadQueue = ConcurrentTaskQueue(concurrentLimit: CurrentAppContext().isNSE ? 2 : 12)
 
     public enum Constants {
         public static let attachmentUploadProgressNotification = NSNotification.Name("AttachmentUploadProgressNotification")
@@ -41,8 +41,8 @@ public enum Upload {
 
     // MARK: -
 
-    public enum FailureMode {
-        public enum RetryMode {
+    public enum FailureMode: Equatable {
+        public enum RetryMode: Equatable {
             /// This was a temporary failure, such as a network
             /// timeout, so an immediate retry should be possible
             case immediately
@@ -79,18 +79,19 @@ public enum Upload {
         case uploaded(Int)
     }
 
-    public enum Error: Swift.Error, IsRetryableProvider, LocalizedError {
+    public enum Error: Swift.Error, IsRetryableProvider, LocalizedError, Equatable {
         case invalidUploadURL
         case networkError
         case networkTimeout
         case uploadFailure(recovery: FailureMode)
         case unsupportedEndpoint
         case unexpectedResponseStatusCode(Int)
+        case missingFile
         case unknown
 
         public var isRetryableProvider: Bool {
             switch self {
-            case .invalidUploadURL, .uploadFailure, .unsupportedEndpoint, .unexpectedResponseStatusCode, .networkTimeout, .networkError, .unknown:
+            case .invalidUploadURL, .uploadFailure, .unsupportedEndpoint, .unexpectedResponseStatusCode, .networkTimeout, .networkError, .missingFile, .unknown:
                 return false
             }
         }
@@ -124,6 +125,10 @@ public enum Upload {
         /// Does NOT take into account current backup plan state; just per-attachment
         /// backup eligibility.
         public let attachmentByteSize: UInt64
+
+        /// Metadata related to the SVR🐝 nonce used for forward secrecy that should be persisted
+        /// after upload success.
+        let nonceMetadata: BackupExportPurpose.NonceMetadata?
 
         /// We don't enforce a size limit locally for backups; we let the server
         /// enforce the limit and fail the upload if we surpass it.
@@ -182,7 +187,7 @@ public enum Upload {
         /// The length of the encrypted data, consiting of "iv  + encrypted data + hmac"
         public let encryptedDataLength: UInt32
 
-        public var isReusedTransitTierUpload: Bool { false }
+        public var isReusedTransitTierUpload: Bool { true }
 
         public static var maxUploadSizeBytes: UInt { OWSMediaUtils.kMaxAttachmentUploadSizeBytes }
         public static var maxPlaintextSizeBytes: UInt { OWSMediaUtils.kMaxFileSizeGeneric }

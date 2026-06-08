@@ -15,7 +15,8 @@ ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '9deda01db906201479111f35ab80f4df4bcc45
 pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.77.1-BA', testspecs: ["Tests"]
 # pod 'LibSignalClient', path: '../libsignal', testspecs: ["Tests"]
 
-pod 'SignalRingRTC', git: 'https://github.com/signalapp/ringrtc', tag: 'v2.56.0', inhibit_warnings: true
+ENV['RINGRTC_PREBUILD_CHECKSUM'] = '16d03a8f5f0e93baef045b7db1fadd1e64a19e6e45f21ca4ff42fd129424d7c7'
+pod 'SignalRingRTC', git: 'https://github.com/signalapp/ringrtc', tag: 'v2.57.1', inhibit_warnings: true
 # pod 'SignalRingRTC', path: '../ringrtc', testspecs: ["Tests"]
 
 pod 'GRDB.swift/SQLCipher'
@@ -36,6 +37,8 @@ pod 'Mantle', git: 'https://github.com/signalapp/Mantle', branch: 'signal-master
 pod 'libPhoneNumber-iOS', git: 'https://github.com/signalapp/libPhoneNumber-iOS', branch: 'signal-master'
 # pod 'libPhoneNumber-iOS', path: '../libPhoneNumber-iOS'
 
+pod 'SDWebImage'
+pod 'SDWebImageWebPCoder'
 pod 'YYImage', git: 'https://github.com/signalapp/YYImage', :inhibit_warnings => true
 pod 'YYImage/libwebp', git: 'https://github.com/signalapp/YYImage', :inhibit_warnings => true
 pod 'libwebp', podspec: './ThirdParty/libwebp.podspec.json'

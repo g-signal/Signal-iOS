@@ -431,7 +431,7 @@ class MessageDetailViewController: OWSTableViewController2 {
             let sectionTitle = self.sectionTitle(for: statusGroup)
             if let iconName = sectionIconName(for: statusGroup) {
                 let headerView = UIView()
-                headerView.layoutMargins = cellOuterInsetsWithMargin(
+                headerView.layoutMargins = .init(
                     top: (defaultSpacingBetweenSections ?? 0) + 12,
                     left: Self.cellHInnerMargin * 0.5,
                     bottom: 10,
@@ -1279,6 +1279,8 @@ extension MessageDetailViewController: CVComponentDelegate {
     func didTapMessageRequestAcceptedOptions() {}
 
     func didTapJoinCallLinkCall(callLink: CallLink) {}
+
+    func didTapViewVotes(poll: OWSPoll) {}
 }
 
 extension MessageDetailViewController: UINavigationControllerDelegate {

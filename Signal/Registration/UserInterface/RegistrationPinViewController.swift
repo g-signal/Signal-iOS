@@ -93,8 +93,6 @@ protocol RegistrationPinPresenter: AnyObject {
 // MARK: - RegistrationPinViewController
 
 class RegistrationPinViewController: OWSViewController {
-    private var learnMoreAboutPinsURL: URL { URL(string: "https://support.signal.org/hc/articles/360007059792")! }
-
     public init(
         state: RegistrationPinState,
         presenter: RegistrationPinPresenter
@@ -369,6 +367,8 @@ class RegistrationPinViewController: OWSViewController {
         scrollView.addSubview(stackView)
         stackView.autoPinWidth(toWidthOf: scrollView)
         stackView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor).isActive = true
+
+        pinTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
 
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(explanationView)
@@ -874,6 +874,11 @@ class RegistrationPinViewController: OWSViewController {
 
         presentActionSheet(actionSheet)
     }
+
+    @objc
+    private func textFieldDidChange(_ textField: UITextField) {
+        render()
+    }
 }
 
 // MARK: - UITextViewDelegate
@@ -914,11 +919,12 @@ extension RegistrationPinViewController: UITextFieldDelegate {
                 replacementString: replacementString
             )
             result = false
+            render()
         case .alphanumeric:
+            // render() will happen in textFieldDidChange, after the textField has
+            // updated input. This makes sure buttons appear correctly.
             result = true
         }
-
-        render()
 
         return result
     }

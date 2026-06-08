@@ -35,7 +35,7 @@ public class RegistrationNavigationController: OWSNavigationController {
 
         if viewControllers.isEmpty, !isLoading {
             Logger.info("Performing initial load")
-            pushNextController(coordinator.nextStep())
+            pushNextController(Guarantee.wrapAsync { await self.coordinator.nextStep() })
         }
 
         let submitLogsGesture = UITapGestureRecognizer(
@@ -133,7 +133,7 @@ public class RegistrationNavigationController: OWSNavigationController {
             }
 
             Logger.info("Pushing controller for \(step.logSafeString)")
-            self.pushViewController(vc, animated: true, completion: nil)
+            self.pushViewController(vc, animated: true)
         }
     }
 
@@ -390,11 +390,11 @@ public class RegistrationNavigationController: OWSNavigationController {
                 // No state to update.
                 update: nil
             )
-        case .enterBackupKey:
+        case .enterRecoveryKey(let state):
             return Controller(
                 type: RegistrationEnterAccountEntropyPoolViewController.self,
                 make: { presenter in
-                    return RegistrationEnterAccountEntropyPoolViewController(presenter: presenter)
+                    return RegistrationEnterAccountEntropyPoolViewController(state: state, presenter: presenter)
                 },
                 // No state to update.
                 update: nil
@@ -436,7 +436,7 @@ public class RegistrationNavigationController: OWSNavigationController {
             let actionSheet = ActionSheetController(title: title, message: message)
             actionSheet.addAction(.init(title: CommonStrings.okButton, style: .default, handler: { [weak self] _ in
                 guard let self else { return }
-                self.pushNextController(self.coordinator.nextStep())
+                self.pushNextController(Guarantee.wrapAsync { await self.coordinator.nextStep() })
             }))
             // We explicitly don't want the user to be able to dismiss.
             actionSheet.isCancelable = false
@@ -510,7 +510,7 @@ extension RegistrationNavigationController: RegistrationSplashPresenter {
     public func switchToDeviceLinkingMode() {
         Logger.info("Pushing device linking")
         let controller = RegistrationConfirmModeSwitchViewController(presenter: self)
-        pushViewController(controller, animated: true, completion: nil)
+        pushViewController(controller, animated: true)
     }
 }
 
@@ -615,7 +615,7 @@ extension RegistrationNavigationController: RegistrationPinPresenter {
 
 extension RegistrationNavigationController: RegistrationPinAttemptsExhaustedAndMustCreateNewPinPresenter {
     func acknowledgePinGuessesExhausted() {
-        pushNextController(coordinator.nextStep())
+        pushNextController(Guarantee.wrapAsync { await self.coordinator.nextStep() })
     }
 }
 
@@ -636,7 +636,7 @@ extension RegistrationNavigationController: RegistrationTransferChoicePresenter 
             // back (direct calls to push and pop) and, when they complete, they will have _totally_
             // overwritten our local database, thus wiping any in progress reg coordinator state
             // and putting us into the chat list.
-            pushViewController(RegistrationTransferQRCodeViewController(url: url), animated: true, completion: nil)
+            pushViewController(RegistrationTransferQRCodeViewController(url: url), animated: true)
         } catch {
             // TODO: [Backups] - update this error handling
             Logger.error("Error transferring")
@@ -698,7 +698,7 @@ extension RegistrationNavigationController: RegistrationEnterAccountEntropyPoolP
     }
 
     func cancelKeyEntry() {
-        let guarantee = coordinator.cancelBackupKeyEntry()
+        let guarantee = coordinator.cancelRecoveryKeyEntry()
         pushNextController(guarantee)
     }
 
@@ -734,7 +734,7 @@ extension RegistrationNavigationController: RegistrationQuickRestoreQRCodePresen
 
 extension RegistrationNavigationController: RegistrationTransferStatusPresenter {
     func cancelTransfer() {
-        let guarantee = coordinator.resetRestoreMethodChoice()
+        let guarantee = coordinator.resetRestoreMode()
         pushNextController(guarantee)
     }
 }
@@ -751,11 +751,17 @@ extension RegistrationNavigationController: RegistrationRestoreFromBackupConfirm
     }
 
     func restoreFromBackupConfirmed() {
-        let progressModal = BackupProgressModal(style: .backupRestore)
-        let guarantee = coordinator.confirmRestoreFromBackup { progress in
-            progressModal.viewModel.updateProgress(progress: progress)
+        Task { @MainActor in
+            let progressModal = BackupProgressModal(style: .backupRestore)
+            let (progress, stream) = await OWSSequentialProgress<BackupRestoreProgressPhase>.createSink()
+            Task { @MainActor in
+                for await progress in stream {
+                    progressModal.viewModel.updateBackupRestoreProgress(progress: progress)
+                }
+            }
+            let guarantee = coordinator.confirmRestoreFromBackup(progress: progress)
+            pushNextController(guarantee, loadingMode: .restoringBackup(progressModal))
         }
-        pushNextController(guarantee, loadingMode: .restoringBackup(progressModal))
     }
 }
 

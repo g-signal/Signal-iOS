@@ -36,7 +36,7 @@ public class OWSMessageDecrypter {
     func messageProcessorDidDrainQueue() {
         Task {
             // We don't want to send additional resets until we have received the
-            // "empty" response from the WebSocket or finished at least one REST fetch.
+            // "empty" response from the WebSocket.
             guard await SSKEnvironment.shared.messageFetcherJobRef.hasCompletedInitialFetch else { return }
 
             // We clear all recently reset sender ids any time the decryption queue has
@@ -562,7 +562,7 @@ public class OWSMessageDecrypter {
         let decryptResult: SMKDecryptResult
         do {
             decryptResult = try cipher.decryptMessage(
-                trustRoot: SSKEnvironment.shared.udManagerRef.trustRoot,
+                trustRoots: SSKEnvironment.shared.udManagerRef.trustRoots,
                 cipherTextData: encryptedData,
                 timestamp: validatedEnvelope.serverTimestamp,
                 localIdentifiers: localIdentifiers,

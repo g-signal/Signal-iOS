@@ -53,14 +53,16 @@ public class ProvisioningManagerTests {
         let myRecipient = SignalRecipient(aci: myAci, pni: myPni, phoneNumber: myPhoneNumber)
         let profileKey = Aes256Key.generateRandom()
         let accountEntropyPool = AccountEntropyPool()
-        let mrbk = MediaRootBackupKey.forTesting()
+        let mrbk = MediaRootBackupKey(backupKey: .generateRandom())
         let readReceiptsEnabled = true
         let provisioningCode = "ABC123"
 
         let ephemeralDeviceId = "ephemeral-device-id"
         let newDeviceIdentityKeyPair = IdentityKeyPair.generate()
 
-        let accountKeyStore = AccountKeyStore()
+        let accountKeyStore = AccountKeyStore(
+            backupSettingsStore: BackupSettingsStore(),
+        )
         db.write { tx in
             accountKeyStore.setAccountEntropyPool(accountEntropyPool, tx: tx)
             accountKeyStore.setMediaRootBackupKey(mrbk, tx: tx)
@@ -157,13 +159,13 @@ private class MockLinkAndSyncManager: LinkAndSyncManager {
     func setIsLinkAndSyncEnabledOnPrimary(_ isEnabled: Bool, tx: DBWriteTransaction) {}
 
     func generateEphemeralBackupKey(aci: Aci) -> MessageRootBackupKey {
-        return .forTesting(aci: aci)
+        return MessageRootBackupKey(backupKey: .generateRandom(), aci: aci)
     }
 
     func waitForLinkingAndUploadBackup(
         ephemeralBackupKey: MessageRootBackupKey,
         tokenId: DeviceProvisioningTokenId,
-        progress: OWSProgressSink
+        progress: OWSSequentialProgressRootSink<PrimaryLinkNSyncProgressPhase>
     ) async throws(PrimaryLinkNSyncError) {
         return
     }
@@ -172,7 +174,7 @@ private class MockLinkAndSyncManager: LinkAndSyncManager {
         localIdentifiers: LocalIdentifiers,
         auth: ChatServiceAuth,
         ephemeralBackupKey: MessageRootBackupKey,
-        progress: OWSProgressSink
+        progress: OWSSequentialProgressRootSink<SecondaryLinkNSyncProgressPhase>
     ) async throws(SecondaryLinkNSyncError) {
         return
     }

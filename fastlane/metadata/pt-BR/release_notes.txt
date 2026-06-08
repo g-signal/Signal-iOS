@@ -1,1 +1,1 @@
-• Corrigimos um erro que às vezes exigia várias tentativas para enviar figurinhas pelo teclado de emojis do iOS. A mesma correção também se aplica ao Genmoji.  Esperamos que você aproveite!
+• Corrigimos um erro que deixava a câmera em branco ao vincular um novo dispositivo. Agora, isso só acontece se você tentar fazer a conexão em um ambiente sem iluminação suficiente. 

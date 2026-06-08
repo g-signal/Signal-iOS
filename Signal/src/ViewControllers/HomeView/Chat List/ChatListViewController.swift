@@ -144,6 +144,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         }
 
         viewState.searchResultsController.viewWillAppear(animated)
+        viewState.backupDownloadProgressView.willAppear()
 
         updateUnreadPaymentNotificationsCountWithSneakyTransaction()
 
@@ -259,6 +260,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         super.viewDidDisappear(animated)
 
         searchResultsController.viewDidDisappear(animated)
+        viewState.backupDownloadProgressView.didDisappear()
     }
 
     public override func viewIsAppearing(_ animated: Bool) {
@@ -682,7 +684,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
     private func applyDefaultBackButton() {
         AssertIsOnMainThread()
 
-        guard #unavailable(iOS 26) else { return }
+        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable { return }
 
         // We don't show any text for the back button, so there's no need to localize it. But because we left align the
         // conversation title view, we add a little tappable padding after the back button, by having a title of spaces.
@@ -936,9 +938,9 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         stack.spacing = 10
         stack.layoutMargins = UIEdgeInsets(
             top: OWSTableViewController2.cellVInnerMargin,
-            left: OWSTableViewController2.cellHOuterLeftMargin(in: view),
+            left: OWSTableViewController2.cellOuterInset(in: view),
             bottom: OWSTableViewController2.cellVInnerMargin,
-            right: OWSTableViewController2.cellHOuterRightMargin(in: view)
+            right: OWSTableViewController2.cellOuterInset(in: view)
         )
         stack.isLayoutMarginsRelativeArrangement = true
         paymentsBannerView.addSubview(stack)
@@ -1053,7 +1055,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
             return
         }
 
-        let actionSheet = ActionSheetController(
+        OWSActionSheets.showContactSupportActionSheet(
             title: OWSLocalizedString(
                 "NOTIFICATIONS_ERROR_TITLE",
                 comment: "Shown as the title of an alert when notifications can't be shown due to an error."
@@ -1064,24 +1066,12 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
                     comment: "Shown as the body of an alert when notifications can't be shown due to an error."
                 ),
                 UIDevice.current.localizedModel
-            )
+            ),
+            emailFilter: .custom("NotLaunchingNSE"),
+            fromViewController: self
         )
-        actionSheet.addAction(ActionSheetAction(
-            title: CommonStrings.contactSupport,
-            handler: { [weak self] _ in
-                guard let self else { return }
-                ContactSupportActionSheet.present(
-                    emailFilter: .custom("NotLaunchingNSE"),
-                    logDumper: .fromGlobals(),
-                    fromViewController: self,
-                )
-            }
-        ))
-        actionSheet.addAction(ActionSheetAction(title: CommonStrings.okButton))
 
         let promptDate = Date()
-        self.present(actionSheet, animated: true)
-
         await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
             keyValueStore.setDate(promptDate, key: mostRecentDateKey, transaction: tx)
             keyValueStore.setInt(
@@ -1156,14 +1146,16 @@ extension ChatListViewController: ChatListProxyButtonDelegate {
     }
 }
 
+// MARK: -
+
 extension ChatListViewController {
     enum ShowAppSettingsMode {
-        case none
         case payments
         case payment(paymentsHistoryItem: PaymentsHistoryItem)
         case paymentsTransferIn
         case appearance
         case avatarBuilder
+        case backups
         case corruptedUsernameResolution
         case corruptedUsernameLinkResolution
         case donate(donateMode: DonateViewController.DonateMode)
@@ -1172,19 +1164,7 @@ extension ChatListViewController {
         case linkBaPlatform
     }
 
-    func showAppSettings() {
-        showAppSettings(mode: .none)
-    }
-
-    func showAppSettingsInAppearanceMode() {
-        showAppSettings(mode: .appearance)
-    }
-
-    func showAppSettingsInAvatarBuilderMode() {
-        showAppSettings(mode: .avatarBuilder)
-    }
-
-    func showAppSettings(mode: ShowAppSettingsMode) {
+    func showAppSettings(mode: ShowAppSettingsMode? = nil) {
         AssertIsOnMainThread()
 
         Logger.info("")
@@ -1193,14 +1173,16 @@ extension ChatListViewController {
         conversationSplitViewController?.selectedConversationViewController?
             .dismissMessageContextMenu(animated: true)
 
+        let navigationController = OWSNavigationController()
         let appSettingsViewController = AppSettingsViewController(appReadiness: appReadiness)
 
         var completion: (() -> Void)?
         var viewControllers: [UIViewController] = [ appSettingsViewController ]
 
         switch mode {
-        case .none:
+        case nil:
             break
+
         case .payments:
             // let paymentsSettings = PaymentsSettingsViewController(mode: .inAppSettings, appReadiness: appReadiness)
             // viewControllers += [ paymentsSettings ] // Commented out due to MobileCoin removal
@@ -1218,30 +1200,37 @@ extension ChatListViewController {
         case .appearance:
             let appearance = AppearanceSettingsTableViewController()
             viewControllers += [ appearance ]
+
         case .avatarBuilder:
             let profile = ProfileSettingsViewController(
                 usernameChangeDelegate: appSettingsViewController,
                 usernameLinkScanDelegate: appSettingsViewController
             )
-
             viewControllers += [ profile ]
             completion = { profile.presentAvatarSettingsView() }
+
+        case .backups:
+            viewControllers += [
+                BackupOnboardingCoordinator()
+                    .prepareForPresentation(inNavController: navigationController)
+            ]
+
         case .corruptedUsernameResolution:
             let profile = ProfileSettingsViewController(
                 usernameChangeDelegate: appSettingsViewController,
                 usernameLinkScanDelegate: appSettingsViewController
             )
-
             viewControllers += [ profile ]
             completion = { profile.presentUsernameCorruptedResolution() }
+
         case .corruptedUsernameLinkResolution:
             let profile = ProfileSettingsViewController(
                 usernameChangeDelegate: appSettingsViewController,
                 usernameLinkScanDelegate: appSettingsViewController
             )
-
             viewControllers += [ profile ]
             completion = { profile.presentUsernameLinkCorruptedResolution() }
+
         case let .donate(donateMode):
             guard DonationUtilities.canDonate(
                 inMode: donateMode.asDonationMode,
@@ -1250,7 +1239,6 @@ extension ChatListViewController {
                 DonationViewsUtil.openDonateWebsite()
                 return
             }
-
             let donate = DonateViewController(preferredDonateMode: donateMode) { [weak self] finishResult in
                 switch finishResult {
                 case let .completedDonation(donateSheet, receiptCredentialSuccessMode):
@@ -1276,19 +1264,23 @@ extension ChatListViewController {
                 }
             }
             viewControllers += [donate]
+
         case .linkedDevices:
             viewControllers += [ LinkedDevicesHostingController() ]
+
         case .proxy:
             viewControllers += [ PrivacySettingsViewController(), AdvancedPrivacySettingsViewController(), ProxySettingsViewController() ]
+
         case .linkBaPlatform:
             viewControllers += [ LinkBAPlatformViewController() ]
         }
 
-        let navigationController = OWSNavigationController()
         navigationController.setViewControllers(viewControllers, animated: false)
         presentFormSheet(navigationController, animated: true, completion: completion)
     }
 }
+
+// MARK: -
 
 extension ChatListViewController: ThreadSwipeHandler {
     func updateUIAfterSwipeAction() {
@@ -1326,7 +1318,7 @@ extension ChatListViewController: GetStartedBannerViewControllerDelegate {
     }
 
     func getStartedBannerDidTapAppearance(_ banner: GetStartedBannerViewController) {
-        showAppSettingsInAppearanceMode()
+        showAppSettings(mode: .appearance)
     }
 
     func getStartedBannerDidDismissAllCards(_ banner: GetStartedBannerViewController, animated: Bool) {
@@ -1346,7 +1338,7 @@ extension ChatListViewController: GetStartedBannerViewControllerDelegate {
     }
 
     func getStartedBannerDidTapAvatarBuilder(_ banner: GetStartedBannerViewController) {
-        showAppSettingsInAvatarBuilderMode()
+        showAppSettings(mode: .avatarBuilder)
     }
 }
 

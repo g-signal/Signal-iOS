@@ -222,6 +222,21 @@ public class AttachmentContentValidatorImpl: AttachmentContentValidator {
         ).values.first!
     }
 
+    public func truncatedMessageBodyForInlining(
+        _ body: MessageBody,
+        tx: DBWriteTransaction
+    ) -> ValidatedInlineMessageBody {
+        guard !body.text.isEmpty else {
+            return ValidatedMessageBodyImpl(inlinedBody: body, oversizeText: nil)
+        }
+        guard let truncatedText = body.text.trimmedIfNeeded(maxByteCount: OWSMediaUtils.kOversizeTextMessageSizeThresholdBytes) else {
+            // No need to truncate
+            return ValidatedMessageBodyImpl(inlinedBody: body, oversizeText: nil)
+        }
+        let truncatedBody = MessageBody(text: truncatedText, ranges: body.ranges)
+        return ValidatedMessageBodyImpl(inlinedBody: truncatedBody, oversizeText: nil)
+    }
+
     public func prepareOversizeTextsIfNeeded<Key: Hashable>(
         from texts: [Key: MessageBody],
         encryptionKeys: [Key: Data],
@@ -230,15 +245,18 @@ public class AttachmentContentValidatorImpl: AttachmentContentValidator {
         var oversizedTextInputs = [Key: Input]()
         var results = [Key: ValidatedMessageBody]()
         for (key, messageBody) in texts {
-            let truncatedText = messageBody.text.trimmedIfNeeded(maxByteCount: Int(kOversizeTextMessageSizeThreshold))
+            let truncatedText = messageBody.text.trimmedIfNeeded(maxByteCount: OWSMediaUtils.kOversizeTextMessageSizeThresholdBytes)
             guard let truncatedText else {
                 // No need to truncate
-                results[key] = .inline(messageBody)
+                results[key] = ValidatedMessageBodyImpl(inlinedBody: messageBody, oversizeText: nil)
                 continue
             }
             let truncatedBody = MessageBody(text: truncatedText, ranges: messageBody.ranges)
             truncatedBodies[key] = truncatedBody
-            let inputType = InputType.inMemory(Data(messageBody.text.utf8))
+            // Trim to the max length for oversize text.
+            // TODO: throw a user-visible error if we pass this threshold; for now silently truncate.
+            let oversizedTextData = Data(messageBody.text.trimToUtf8ByteCount(OWSMediaUtils.kMaxOversizeTextMessageSendSizeBytes).utf8)
+            let inputType = InputType.inMemory(oversizedTextData)
             let primaryFilePlaintextHash = try computePlaintextHash(inputType: inputType)
             let encryptionKey = encryptionKeyToUse(
                 primaryFilePlaintextHash: primaryFilePlaintextHash,
@@ -262,7 +280,7 @@ public class AttachmentContentValidatorImpl: AttachmentContentValidator {
             guard let truncatedBody = truncatedBodies[key] else {
                 throw OWSAssertionError("Missing truncated body!")
             }
-            results[key] = .oversize(truncated: truncatedBody, fullsize: pendingAttachment)
+            results[key] = ValidatedMessageBodyImpl(inlinedBody: truncatedBody, oversizeText: pendingAttachment)
         }
 
         return results
@@ -339,6 +357,11 @@ public class AttachmentContentValidatorImpl: AttachmentContentValidator {
         let orphanRecordId: OrphanedAttachmentRecord.IDType
     }
 
+    private struct ValidatedMessageBodyImpl: ValidatedMessageBody {
+        let inlinedBody: MessageBody
+        let oversizeText: (any PendingAttachment)?
+    }
+
     private enum InputType {
         case inMemory(Data)
         case unencryptedFile(URL)
@@ -373,6 +396,17 @@ public class AttachmentContentValidatorImpl: AttachmentContentValidator {
             self.mimeType = mimeType
             self.renderingFlag = renderingFlag
             self.sourceFilename = sourceFilename
+        }
+
+        var byteSize: Int {
+            switch type {
+            case .inMemory(let data):
+                return data.count
+            case .unencryptedFile(let fileUrl):
+                return OWSFileSystem.fileSize(of: fileUrl)?.intValue ?? 0
+            case .encryptedFile(_, _, let plaintextLength, _):
+                return Int(plaintextLength)
+            }
         }
     }
 
@@ -486,6 +520,12 @@ public class AttachmentContentValidatorImpl: AttachmentContentValidator {
             blurHash = nil
             audioWaveformFile = nil
             videoStillFrameFile = nil
+            if
+                input.mimeType == MimeType.textXSignalPlain.rawValue,
+                input.byteSize > OWSMediaUtils.kMaxOversizeTextMessageReceiveSizeBytes
+            {
+                throw OWSAssertionError("Oversize text attachment too big!")
+            }
         case .image, .animatedImage:
             var mimeType = input.mimeType
             (contentType, blurHash) = try validateImageContentType(input, mimeType: &mimeType)
@@ -604,17 +644,7 @@ public class AttachmentContentValidatorImpl: AttachmentContentValidator {
     private func validateVideoContentType(
         _ input: Input
     ) throws -> (Attachment.ContentType, stillFrame: PendingFile?, blurHash: String?) {
-        let byteSize: Int = {
-            switch input.type {
-            case .inMemory(let data):
-                return data.count
-            case .unencryptedFile(let fileUrl):
-                return OWSFileSystem.fileSize(of: fileUrl)?.intValue ?? 0
-            case .encryptedFile(_, _, let plaintextLength, _):
-                return Int(plaintextLength)
-            }
-        }()
-        guard byteSize < SignalAttachment.kMaxFileSizeVideo else {
+        guard input.byteSize < SignalAttachment.kMaxFileSizeVideo else {
             throw OWSAssertionError("Video too big!")
         }
 

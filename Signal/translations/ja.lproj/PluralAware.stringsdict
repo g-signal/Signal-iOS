@@ -451,7 +451,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>B&amp;Aグループは%1$d人以下の人数で適切に作動します。これ以上のメンバー追加はメッセージの送受信に遅れが生じる可能性があります。</string>
+			<string>Signalグループは%1$d人以下の人数で適切に作動します。これ以上のメンバー追加はメッセージの送受信に遅れが生じる可能性があります。</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -591,7 +591,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>B&amp;Aは %2$@、 %3$@、他 %1$d 人を呼び出します</string>
+			<string>Signalは %2$@、 %3$@、他 %1$d 人を呼び出します</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -843,7 +843,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>「%2$@」のリンクを維持するために、%1$d日以内にその端末でB&amp;Aを開いてください。</string>
+			<string>「%2$@」のリンクを維持するために、%1$d日以内にその端末でSignalを開いてください。</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1025,7 +1025,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>すべてのB&amp;Aコネクション · %1$d 人の閲覧者</string>
+			<string>すべてのSignalコネクション · %1$d 人の閲覧者</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1039,7 +1039,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>すべてのB&amp;Aコネクション　%1$d 人を除く</string>
+			<string>すべてのSignalコネクション　%1$d 人を除く</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1166,6 +1166,20 @@
 			<string>d</string>
 			<key>other</key>
 			<string>%2$@から送信された%1$d件の招待を取り消しますか？</string>
+		</dict>
+	</dict>
+	<key>POLL_VOTE_COUNT</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%1$d人が投票済み</string>
 		</dict>
 	</dict>
 	<key>PRIVATE_STORY_VIEWERS_%d</key>

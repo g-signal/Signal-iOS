@@ -50,7 +50,9 @@ public class ProvisioningCoordinatorTest: XCTestCase {
         self.identityManagerMock = .init(recipientIdFinder: recipientIdFinder)
 
         self.chatConnectionManagerMock = .init()
-        self.accountKeyStore = .init()
+        self.accountKeyStore = .init(
+            backupSettingsStore: BackupSettingsStore(),
+        )
         self.messageFactoryMock = .init()
         self.networkManagerMock = .init()
         self.prekeyManagerMock = .init()
@@ -69,7 +71,6 @@ public class ProvisioningCoordinatorTest: XCTestCase {
         self.provisioningCoordinator = ProvisioningCoordinatorImpl(
             chatConnectionManager: chatConnectionManagerMock,
             db: mockDb,
-            deviceService: MockOWSDeviceService(),
             identityManager: identityManagerMock,
             linkAndSyncManager: MockLinkAndSyncManager(),
             accountKeyStore: accountKeyStore,
@@ -80,6 +81,7 @@ public class ProvisioningCoordinatorTest: XCTestCase {
             pushRegistrationManager: pushRegistrationManagerMock,
             receiptManager: receiptManagerMock,
             registrationStateChangeManager: registrationStateChangeManagerMock,
+            registrationWebSocketManager: MockRegistrationWebSocketManager(),
             signalProtocolStoreManager: MockSignalProtocolStoreManager(),
             signalService: signalServiceMock,
             storageServiceManager: storageServiceManagerMock,
@@ -103,7 +105,7 @@ public class ProvisioningCoordinatorTest: XCTestCase {
             aciIdentityKeyPair: IdentityKeyPair.generate(),
             pniIdentityKeyPair: IdentityKeyPair.generate(),
             profileKey: .generateRandom(),
-            mrbk: MediaRootBackupKey.forTesting(),
+            mrbk: MediaRootBackupKey(backupKey: .generateRandom()),
             ephemeralBackupKey: nil,
             areReadReceiptsEnabled: true,
             provisioningCode: "1234"
@@ -135,7 +137,7 @@ public class ProvisioningCoordinatorTest: XCTestCase {
             return mockSession
         }
 
-        networkManagerMock.asyncRequestHandlers.append({ request, _, _ in
+        networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url.absoluteString.hasSuffix("v1/devices/capabilities") {
                 return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: Data())
             }
@@ -215,13 +217,13 @@ private class MockLinkAndSyncManager: LinkAndSyncManager {
     func setIsLinkAndSyncEnabledOnPrimary(_ isEnabled: Bool, tx: DBWriteTransaction) {}
 
     func generateEphemeralBackupKey(aci: Aci) -> MessageRootBackupKey {
-        return .forTesting(aci: aci)
+        return MessageRootBackupKey(backupKey: .generateRandom(), aci: aci)
     }
 
     func waitForLinkingAndUploadBackup(
         ephemeralBackupKey: MessageRootBackupKey,
         tokenId: DeviceProvisioningTokenId,
-        progress: OWSProgressSink
+        progress: OWSSequentialProgressRootSink<PrimaryLinkNSyncProgressPhase>
     ) async throws(PrimaryLinkNSyncError) {
         return
     }
@@ -230,26 +232,9 @@ private class MockLinkAndSyncManager: LinkAndSyncManager {
         localIdentifiers: LocalIdentifiers,
         auth: ChatServiceAuth,
         ephemeralBackupKey: MessageRootBackupKey,
-        progress: OWSProgressSink
+        progress: OWSSequentialProgressRootSink<SecondaryLinkNSyncProgressPhase>
     ) async throws(SecondaryLinkNSyncError) {
         return
-    }
-}
-
-private class MockOWSDeviceService: OWSDeviceService {
-
-    init() {}
-
-    func refreshDevices() async throws -> Bool {
-        return true
-    }
-
-    func renameDevice(device: SignalServiceKit.OWSDevice, toEncryptedName encryptedName: String) async throws {
-        // do nothing
-    }
-
-    func unlinkDevice(deviceId: DeviceId, auth: SignalServiceKit.ChatServiceAuth) async throws {
-        // do nothing
     }
 }
 

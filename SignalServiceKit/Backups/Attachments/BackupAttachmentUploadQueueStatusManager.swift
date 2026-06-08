@@ -3,6 +3,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+public enum BackupAttachmentUploadQueueMode {
+    case fullsize
+    case thumbnail
+}
+
 public enum BackupAttachmentUploadQueueStatus {
     /// The queue is running, and attachment are uploading.
     case running
@@ -16,12 +21,23 @@ public enum BackupAttachmentUploadQueueStatus {
     case noWifiReachability
     /// Internet access is required for uploads, but not available.
     case noReachability
-    /// The device has low battery or is in low power mode.
+    /// The device has low battery.
     case lowBattery
+    /// The device is in low power mode.
+    case lowPowerMode
+    /// The app is running in the background.
+    case appBackgrounded
 }
 
 public extension Notification.Name {
-    static let backupAttachmentUploadQueueStatusDidChange = Notification.Name(rawValue: "BackupAttachmentUploadQueueStatusDidChange")
+    static func backupAttachmentUploadQueueStatusDidChange(for mode: BackupAttachmentUploadQueueMode) -> Notification.Name {
+        switch mode {
+        case .fullsize:
+            return Notification.Name(rawValue: "BackupAttachmentUploadQueueStatusDidChange_fullsize")
+        case .thumbnail:
+            return Notification.Name(rawValue: "BackupAttachmentUploadQueueStatusDidChange_thumbnail")
+        }
+    }
 }
 
 // MARK: -
@@ -32,13 +48,13 @@ public extension Notification.Name {
 /// `@MainActor`-isolated because most of the inputs are themselves isolated.
 @MainActor
 public protocol BackupAttachmentUploadQueueStatusReporter {
-    func currentStatus() -> BackupAttachmentUploadQueueStatus
+    func currentStatus(for mode: BackupAttachmentUploadQueueMode) -> BackupAttachmentUploadQueueStatus
 }
 
 extension BackupAttachmentUploadQueueStatusReporter {
-    func notifyStatusDidChange() {
+    fileprivate func notifyStatusDidChange(for mode: BackupAttachmentUploadQueueMode) {
         NotificationCenter.default.postOnMainThread(
-            name: .backupAttachmentUploadQueueStatusDidChange,
+            name: .backupAttachmentUploadQueueStatusDidChange(for: mode),
             object: nil,
         )
     }
@@ -52,10 +68,12 @@ extension BackupAttachmentUploadQueueStatusReporter {
 protocol BackupAttachmentUploadQueueStatusManager: BackupAttachmentUploadQueueStatusReporter {
 
     /// Begin observing status updates, if necessary.
-    func beginObservingIfNecessary() -> BackupAttachmentUploadQueueStatus
+    func beginObservingIfNecessary(for mode: BackupAttachmentUploadQueueMode) -> BackupAttachmentUploadQueueStatus
 
     /// Notifies the status manager that the upload queue was emptied.
-    func didEmptyQueue()
+    func didEmptyQueue(for mode: BackupAttachmentUploadQueueMode)
+
+    func setIsMainAppAndActiveOverride(_ newValue: Bool)
 }
 
 // MARK: -
@@ -65,20 +83,31 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
 
     // MARK: - BackupAttachmentUploadQueueStatusReporter
 
-    public func currentStatus() -> BackupAttachmentUploadQueueStatus {
-        return state.asQueueStatus
+    public func currentStatus(for mode: BackupAttachmentUploadQueueMode) -> BackupAttachmentUploadQueueStatus {
+        return state.asQueueStatus(for: mode)
     }
 
     // MARK: - BackupAttachmentUploadQueueStatusManager
 
-    public func beginObservingIfNecessary() -> BackupAttachmentUploadQueueStatus {
+    public func beginObservingIfNecessary(for mode: BackupAttachmentUploadQueueMode) -> BackupAttachmentUploadQueueStatus {
         observeDeviceAndLocalStatesIfNecessary()
-        return currentStatus()
+        return currentStatus(for: mode)
     }
 
-    public func didEmptyQueue() {
-        state.isQueueEmpty = true
-        stopObservingDeviceAndLocalStates()
+    public func didEmptyQueue(for mode: BackupAttachmentUploadQueueMode) {
+        switch mode {
+        case .fullsize:
+            state.isFullsizeQueueEmpty = true
+        case .thumbnail:
+            state.isThumbnailQueueEmpty = true
+        }
+        if state.isFullsizeQueueEmpty == true && state.isThumbnailQueueEmpty == true {
+            stopObservingDeviceAndLocalStates()
+        }
+    }
+
+    public func setIsMainAppAndActiveOverride(_ newValue: Bool) {
+        state.isMainAppAndActiveOverride = newValue
     }
 
     // MARK: - Init
@@ -119,7 +148,8 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
         self.tsAccountManager = tsAccountManager
 
         self.state = State(
-            isQueueEmpty: nil,
+            isFullsizeQueueEmpty: nil,
+            isThumbnailQueueEmpty: nil,
             isMainApp: appContext.isMainApp,
             isAppReady: false,
             isRegistered: nil,
@@ -129,6 +159,7 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
             isReachable: nil,
             batteryLevel: nil,
             isLowPowerMode: nil,
+            isMainAppAndActive: appContext.isMainAppAndActive,
         )
 
         appReadiness.runNowOrWhenMainAppDidBecomeReadyAsync { [weak self] in
@@ -139,7 +170,8 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
     // MARK: - Private
 
     private struct State {
-        var isQueueEmpty: Bool?
+        var isFullsizeQueueEmpty: Bool?
+        var isThumbnailQueueEmpty: Bool?
 
         var isMainApp: Bool
         var isAppReady: Bool
@@ -155,8 +187,12 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
         var batteryLevel: Float?
         var isLowPowerMode: Bool?
 
+        var isMainAppAndActive: Bool
+        var isMainAppAndActiveOverride: Bool = false
+
         init(
-            isQueueEmpty: Bool?,
+            isFullsizeQueueEmpty: Bool?,
+            isThumbnailQueueEmpty: Bool?,
             isMainApp: Bool,
             isAppReady: Bool,
             isRegistered: Bool?,
@@ -166,8 +202,10 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
             isReachable: Bool?,
             batteryLevel: Float?,
             isLowPowerMode: Bool?,
+            isMainAppAndActive: Bool
         ) {
-            self.isQueueEmpty = isQueueEmpty
+            self.isFullsizeQueueEmpty = isFullsizeQueueEmpty
+            self.isThumbnailQueueEmpty = isThumbnailQueueEmpty
             self.isMainApp = isMainApp
             self.isAppReady = isAppReady
             self.isRegistered = isRegistered
@@ -177,11 +215,19 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
             self.isReachable = isReachable
             self.batteryLevel = batteryLevel
             self.isLowPowerMode = isLowPowerMode
+            self.isMainAppAndActive = isMainAppAndActive
         }
 
-        var asQueueStatus: BackupAttachmentUploadQueueStatus {
-            if isQueueEmpty == true {
-                return .empty
+        func asQueueStatus(for mode: BackupAttachmentUploadQueueMode) -> BackupAttachmentUploadQueueStatus {
+            switch mode {
+            case .fullsize:
+                if isFullsizeQueueEmpty == true {
+                    return .empty
+                }
+            case .thumbnail:
+                if isThumbnailQueueEmpty == true {
+                    return .empty
+                }
             }
 
             switch backupPlan {
@@ -215,7 +261,11 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
             }
 
             if isLowPowerMode == true {
-                return .lowBattery
+                return .lowPowerMode
+            }
+
+            if !isMainAppAndActive && !isMainAppAndActiveOverride {
+                return .appBackgrounded
             }
 
             return .running
@@ -224,8 +274,11 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
 
     private var state: State {
         didSet {
-            if oldValue.asQueueStatus != state.asQueueStatus {
-                notifyStatusDidChange()
+            if oldValue.asQueueStatus(for: .fullsize) != state.asQueueStatus(for: .fullsize) {
+                notifyStatusDidChange(for: .fullsize)
+            }
+            if oldValue.asQueueStatus(for: .thumbnail) != state.asQueueStatus(for: .thumbnail) {
+                notifyStatusDidChange(for: .thumbnail)
             }
         }
     }
@@ -234,12 +287,25 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
 
     private func observeDeviceAndLocalStatesIfNecessary() {
         // For change logic, treat nil as empty (if nil, observation is unstarted)
-        let wasQueueEmpty = state.isQueueEmpty ?? true
-
-        let isQueueEmpty = db.read { tx in
-            return ((try? backupAttachmentUploadStore.fetchNextUploads(count: 1, tx: tx)) ?? []).isEmpty
+        let wasQueueEmpty: Bool
+        if
+            let wasFullsizeQueueEmpty = state.isFullsizeQueueEmpty,
+            let wasThumbnailQueueEmpty = state.isThumbnailQueueEmpty
+        {
+            wasQueueEmpty = wasFullsizeQueueEmpty && wasThumbnailQueueEmpty
+        } else {
+            wasQueueEmpty = true
         }
-        state.isQueueEmpty = isQueueEmpty
+
+        let (isFullsizeQueueEmpty, isThumbnailQueueEmpty) = db.read { tx in
+            return (
+                ((try? backupAttachmentUploadStore.fetchNextUploads(count: 1, isFullsize: true, tx: tx)) ?? []).isEmpty,
+                ((try? backupAttachmentUploadStore.fetchNextUploads(count: 1, isFullsize: false, tx: tx)) ?? []).isEmpty
+            )
+        }
+        state.isFullsizeQueueEmpty = isFullsizeQueueEmpty
+        state.isThumbnailQueueEmpty = isThumbnailQueueEmpty
+        let isQueueEmpty = isFullsizeQueueEmpty && isThumbnailQueueEmpty
 
         // Only observe if the queue is non-empty, so as to not waste resources;
         // for example, by telling the OS we want battery level updates.
@@ -263,8 +329,10 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
             (.backupPlanChanged, #selector(backupPlanDidChange)),
             (.shouldAllowBackupUploadsOnCellularChanged, #selector(shouldAllowBackupUploadsOnCellularDidChange)),
             (.reachabilityChanged, #selector(reachabilityDidChange)),
-            (UIDevice.batteryLevelDidChangeNotification, #selector(batteryLevelDidChange)),
-            (Notification.Name.NSProcessInfoPowerStateDidChange, #selector(lowPowerModeDidChange)),
+            (.batteryLevelChanged, #selector(batteryLevelDidChange)),
+            (.batteryLowPowerModeChanged, #selector(lowPowerModeDidChange)),
+            (.OWSApplicationDidEnterBackground, #selector(isMainAppAndActiveDidChange)),
+            (.OWSApplicationDidBecomeActive, #selector(isMainAppAndActiveDidChange)),
         ]
         for (name, selector) in notificationsToObserve {
             NotificationCenter.default.addObserver(
@@ -277,7 +345,8 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
 
         self.batteryLevelMonitor = deviceBatteryLevelManager?.beginMonitoring(reason: "BackupDownloadQueue")
         self.state = State(
-            isQueueEmpty: state.isQueueEmpty,
+            isFullsizeQueueEmpty: state.isFullsizeQueueEmpty,
+            isThumbnailQueueEmpty: state.isThumbnailQueueEmpty,
             isMainApp: appContext.isMainApp,
             isAppReady: appReadiness.isAppReady,
             isRegistered: tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegistered,
@@ -287,6 +356,7 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
             isReachable: reachabilityManager.isReachable(via: .any),
             batteryLevel: batteryLevelMonitor?.batteryLevel,
             isLowPowerMode: deviceBatteryLevelManager?.isLowPowerModeEnabled,
+            isMainAppAndActive: appContext.isMainAppAndActive
         )
     }
 
@@ -336,5 +406,10 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
     @objc
     private func lowPowerModeDidChange() {
         self.state.isLowPowerMode = deviceBatteryLevelManager?.isLowPowerModeEnabled
+    }
+
+    @objc
+    private func isMainAppAndActiveDidChange() {
+        self.state.isMainAppAndActive = appContext.isMainAppAndActive
     }
 }

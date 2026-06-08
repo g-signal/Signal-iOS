@@ -76,7 +76,7 @@ class EditHistoryTableSheetViewController: OWSTableSheetViewController {
             message = newMessage
 
             let edits: [TSMessage] = try DependenciesBridge.shared.editMessageStore.findEditHistory(
-                for: message,
+                forMostRecentRevision: message,
                 tx: tx
             ).compactMap { $0.message }
 
@@ -494,6 +494,8 @@ extension EditHistoryTableSheetViewController: CVComponentDelegate {
     func didTapMessageRequestAcceptedOptions() {}
 
     func didTapJoinCallLinkCall(callLink: CallLink) {}
+
+    func didTapViewVotes(poll: OWSPoll) {}
 }
 
 extension EditHistoryTableSheetViewController: LongTextViewDelegate {

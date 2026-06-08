@@ -191,10 +191,7 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
             }
 
             let hasShortOrMissingPin: Bool = {
-                guard SSKEnvironment.shared.ows2FAManagerRef.is2FAEnabled else {
-                    return true
-                }
-                guard let pinCode = SSKEnvironment.shared.ows2FAManagerRef.pinCode else {
+                guard let pinCode = SSKEnvironment.shared.ows2FAManagerRef.pinCodeWithSneakyTransaction else {
                     return true
                 }
                 let shortPinLength: UInt = 4
@@ -442,8 +439,6 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
         let balanceStack = UIStackView(arrangedSubviews: [ balanceLabel ])
         balanceStack.axis = .vertical
         balanceStack.alignment = .fill
-        balanceStack.layoutMargins = cellOuterInsets
-        balanceStack.isLayoutMarginsRelativeArrangement = true
 
         let conversionRefreshSize: CGFloat = 20
         let conversionRefreshIcon = UIImageView.withTemplateImageName("refresh-20",
@@ -531,7 +526,7 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
         ])
         headerStack.axis = .vertical
         headerStack.alignment = .fill
-        headerStack.layoutMargins = cellOuterInsetsWithMargin(top: 30, bottom: 8)
+        headerStack.layoutMargins = .init(top: 30, left: 0, bottom: 8, right: 0)
         headerStack.isLayoutMarginsRelativeArrangement = true
         cell.contentView.addSubview(headerStack)
         headerStack.autoPinEdgesToSuperviewEdges()
@@ -853,7 +848,7 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
             let bodyLabel = UILabel()
             bodyLabel.text = body
             bodyLabel.textColor = Theme.secondaryTextAndIconColor
-            bodyLabel.font = UIFont.dynamicTypeBody2Clamped
+            bodyLabel.font = UIFont.dynamicTypeSubheadlineClamped
             bodyLabel.numberOfLines = 0
             bodyLabel.lineBreakMode = .byWordWrapping
 
@@ -904,7 +899,7 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
             dismissIconView.autoCenterInSuperview()
             cell.contentView.addSubview(dismissButton)
             dismissButton.autoPinEdge(toSuperviewEdge: .top, withInset: 8)
-            dismissButton.autoPinEdge(toSuperviewEdge: .trailing, withInset: 8 + self.cellOuterInsets.trailing)
+            dismissButton.autoPinEdge(toSuperviewEdge: .trailing, withInset: 8)
 
             cell.isUserInteractionEnabled = true
             cell.addGestureRecognizer(tapGestureRecognizer)
@@ -923,37 +918,50 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
     private func showSettingsActionSheet() {
         let actionSheet = ActionSheetController(title: nil, message: nil)
 
-        actionSheet.addAction(ActionSheetAction(title: OWSLocalizedString("SETTINGS_PAYMENTS_TRANSFER_TO_EXCHANGE",
-                                                                         comment: "Label for the 'transfer to exchange' button in the payment settings."),
-                                                accessibilityIdentifier: "payments.settings.transfer_to_exchange",
-                                                style: .default) { [weak self] _ in
+        actionSheet.addAction(ActionSheetAction(
+            title: OWSLocalizedString(
+                "SETTINGS_PAYMENTS_TRANSFER_TO_EXCHANGE",
+                comment: "Label for the 'transfer to exchange' button in the payment settings."
+            ),
+            style: .default
+        ) { [weak self] _ in
             self?.didTapTransferToExchangeButton()
         })
 
-        actionSheet.addAction(ActionSheetAction(title: OWSLocalizedString("SETTINGS_PAYMENTS_SET_CURRENCY",
-                                                                         comment: "Title for the 'set currency' view in the app settings."),
-                                                accessibilityIdentifier: "payments.settings.set_currency",
-                                                style: .default) { [weak self] _ in
+        actionSheet.addAction(ActionSheetAction(
+            title: OWSLocalizedString(
+                "SETTINGS_PAYMENTS_SET_CURRENCY",
+                comment: "Title for the 'set currency' view in the app settings."
+            ),
+            style: .default
+        ) { [weak self] _ in
             self?.didTapSetCurrencyButton()
         })
 
-        actionSheet.addAction(ActionSheetAction(title: OWSLocalizedString("SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS",
-                                                                         comment: "Label for 'deactivate payments' button in the app settings."),
-                                                accessibilityIdentifier: "payments.settings.deactivate_payments",
-                                                style: .default) { [weak self] _ in
+        actionSheet.addAction(ActionSheetAction(
+            title: OWSLocalizedString(
+                "SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS",
+                comment: "Label for 'deactivate payments' button in the app settings."
+            ),
+            style: .default
+        ) { [weak self] _ in
             self?.didTapDeactivatePaymentsButton()
         })
 
-        actionSheet.addAction(ActionSheetAction(title: OWSLocalizedString("SETTINGS_PAYMENTS_VIEW_RECOVERY_PASSPHRASE",
-                                                                         comment: "Label for 'view payments recovery passphrase' button in the app settings."),
-                                                accessibilityIdentifier: "payments.settings.view_recovery_passphrase",
-                                                style: .default) { [weak self] _ in
+        actionSheet.addAction(ActionSheetAction(
+            title: OWSLocalizedString(
+                "SETTINGS_PAYMENTS_VIEW_RECOVERY_PASSPHRASE",
+                comment: "Label for 'view payments recovery passphrase' button in the app settings."
+            ),
+            style: .default
+        ) { [weak self] _ in
             self?.didTapViewPaymentsPassphraseButton()
         })
 
-        actionSheet.addAction(ActionSheetAction(title: CommonStrings.help,
-                                                accessibilityIdentifier: "payments.settings.help",
-                                                style: .default) { [weak self] _ in
+        actionSheet.addAction(ActionSheetAction(
+            title: CommonStrings.help,
+            style: .default
+        ) { [weak self] _ in
             self?.didTapHelpButton()
         })
 
@@ -968,9 +976,10 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
                                                 message: OWSLocalizedString("SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION",
                                                                            comment: "Description for the 'deactivate payments confirmation' UI in the payment settings."))
 
-        actionSheet.addAction(ActionSheetAction(title: CommonStrings.continueButton,
-                                                accessibilityIdentifier: "payments.settings.deactivate.continue",
-                                                style: .default) { [weak self] _ in
+        actionSheet.addAction(ActionSheetAction(
+            title: CommonStrings.continueButton,
+            style: .default
+        ) { [weak self] _ in
             self?.didTapConfirmDeactivatePaymentsButton()
         })
 
@@ -1031,17 +1040,23 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
                                                 message: OWSLocalizedString("SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION",
                                                                            comment: "Description for the 'activate payments confirmation' UI in the payment settings."))
 
-        actionSheet.addAction(ActionSheetAction(title: OWSLocalizedString("SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_AGREE",
-                                                                         comment: "Label for the 'agree to payments terms' button in the 'activate payments confirmation' UI in the payment settings."),
-                                                accessibilityIdentifier: "payments.settings.activate.agree",
-                                                style: .default) { [weak self] _ in
+        actionSheet.addAction(ActionSheetAction(
+            title: OWSLocalizedString(
+                "SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_AGREE",
+                comment: "Label for the 'agree to payments terms' button in the 'activate payments confirmation' UI in the payment settings."
+            ),
+            style: .default
+        ) { [weak self] _ in
             self?.enablePayments()
             self?.promptBiometryPaymentsLock()
         })
-        actionSheet.addAction(ActionSheetAction(title: OWSLocalizedString("SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_VIEW_TERMS",
-                                                                         comment: "Label for the 'view payments terms' button in the 'activate payments confirmation' UI in the payment settings."),
-                                                accessibilityIdentifier: "payments.settings.activate.view-terms",
-                                                style: .default) { _ in
+        actionSheet.addAction(ActionSheetAction(
+            title: OWSLocalizedString(
+                "SETTINGS_PAYMENTS_ACTIVATE_PAYMENTS_CONFIRM_VIEW_TERMS",
+                comment: "Label for the 'view payments terms' button in the 'activate payments confirmation' UI in the payment settings."
+            ),
+            style: .default
+        ) { _ in
             UIApplication.shared.open(
                 URL(string: "https://www.mobilecoin.com/terms-of-use.html")!,
                 options: [:],
@@ -1260,12 +1275,10 @@ public class PaymentsSettingsViewController: OWSTableViewController2 {
             navigationController.popViewController(animated: true) { [appReadiness] in
                 let accountSettingsView = AccountSettingsViewController(appReadiness: appReadiness)
                 navigationController.pushViewController(accountSettingsView, animated: true)
-                accountSettingsView.showCreateOrChangePin()
             }
         case .standalone:
             let accountSettingsView = AccountSettingsViewController(appReadiness: appReadiness)
             navigationController.pushViewController(accountSettingsView, animated: true)
-            accountSettingsView.showCreateOrChangePin()
         }
     }
 

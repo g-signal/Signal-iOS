@@ -335,6 +335,11 @@ public class CVComponentState: Equatable {
     }
     let giftBadge: GiftBadge?
 
+    struct Poll: Equatable {
+        let state: CVPollView.State
+    }
+    let poll: Poll?
+
     struct SystemMessage: Equatable {
         typealias ReferencedUser = CVTextLabel.ReferencedUserItem
 
@@ -487,9 +492,9 @@ public class CVComponentState: Equatable {
         failedOrPendingDownloads: FailedOrPendingDownloads?,
         sendFailureBadge: SendFailureBadge?,
         messageHasBodyAttachments: Bool,
-        hasRenderableContent: Bool
+        hasRenderableContent: Bool,
+        poll: Poll?
     ) {
-
         self.messageCellType = messageCellType
         self.senderName = senderName
         self.senderAvatar = senderAvatar
@@ -519,6 +524,7 @@ public class CVComponentState: Equatable {
         self.sendFailureBadge = sendFailureBadge
         self.messageHasBodyAttachments = messageHasBodyAttachments
         self.hasRenderableContent = hasRenderableContent
+        self.poll = poll
     }
 
     // MARK: - Equatable
@@ -550,7 +556,8 @@ public class CVComponentState: Equatable {
                     lhs.defaultDisappearingMessageTimer == rhs.defaultDisappearingMessageTimer &&
                     lhs.bottomButtons == rhs.bottomButtons &&
                     lhs.failedOrPendingDownloads == rhs.failedOrPendingDownloads &&
-                    lhs.sendFailureBadge == rhs.sendFailureBadge)
+                    lhs.sendFailureBadge == rhs.sendFailureBadge &&
+                    lhs.poll == rhs.poll)
     }
 
     // MARK: - Building
@@ -581,6 +588,7 @@ public class CVComponentState: Equatable {
         typealias FailedOrPendingDownloads = CVComponentState.FailedOrPendingDownloads
         typealias BottomButtons = CVComponentState.BottomButtons
         typealias SendFailureBadge = CVComponentState.SendFailureBadge
+        typealias Poll = CVComponentState.Poll
 
         let interaction: TSInteraction
         let itemBuildingContext: CVItemBuildingContext
@@ -616,6 +624,7 @@ public class CVComponentState: Equatable {
         var sendFailureBadge: SendFailureBadge?
         var messageHasBodyAttachments: Bool
         var hasRenderableContent: Bool
+        var poll: Poll?
 
         var bottomButtonsActions = [CVMessageAction]()
 
@@ -661,7 +670,8 @@ public class CVComponentState: Equatable {
                 failedOrPendingDownloads: failedOrPendingDownloads,
                 sendFailureBadge: sendFailureBadge,
                 messageHasBodyAttachments: messageHasBodyAttachments,
-                hasRenderableContent: hasRenderableContent
+                hasRenderableContent: hasRenderableContent,
+                poll: poll
             )
         }
 
@@ -732,6 +742,9 @@ public class CVComponentState: Equatable {
             }
             if quotedReply != nil {
                 return .quoteOnlyMessage
+            }
+            if poll != nil {
+                return .poll
             }
 
             owsFailDebug("Unknown state.")
@@ -823,6 +836,9 @@ public class CVComponentState: Equatable {
         }
         if sendFailureBadge != nil {
             result.insert(.sendFailureBadge)
+        }
+        if poll != nil {
+            result.insert(.poll)
         }
         return result
     }()
@@ -1085,6 +1101,10 @@ fileprivate extension CVComponentState.Builder {
 
         if let giftBadge = message.giftBadge {
             return try buildGiftBadge(messageUniqueId: message.uniqueId, giftBadge: giftBadge)
+        }
+
+        if message.isPoll {
+            return try buildPoll(message: message, transaction: transaction)
         }
 
         do {
@@ -1387,6 +1407,9 @@ fileprivate extension CVComponentState.Builder {
     }
 
     mutating func buildBodyText(message: TSMessage) throws {
+        if message.isPoll {
+            return
+        }
         bodyText = try CVComponentBodyText.buildComponentState(
             message: message,
             viewStateSnapshot: viewStateSnapshot,
@@ -1721,6 +1744,39 @@ fileprivate extension CVComponentState.Builder {
         )
         return build()
     }
+
+    mutating func buildPoll(message: TSMessage, transaction: DBReadTransaction) throws -> CVComponentState {
+        guard let poll = try DependenciesBridge.shared.pollMessageManager.buildPoll(message: message, transaction: transaction) else {
+            Logger.error("Failed to build poll")
+            return build()
+        }
+
+        let state = CVPollView.buildState(
+            poll: poll,
+            isIncoming: isIncoming,
+            conversationStyle: conversationStyle)
+
+        self.poll = Poll(state: state)
+
+        if poll.totalVotes() > 0 {
+            let title = poll.isEnded ? OWSLocalizedString(
+                "POLL_BUTTON_VIEW_RESULTS",
+                comment: "Button to view poll results"
+            ) : OWSLocalizedString(
+                "POLL_BUTTON_VIEW_VOTES",
+                comment: "Button to view poll votes"
+            )
+            let viewVotesAction = CVMessageAction(
+                title: title,
+                accessibilityIdentifier: "view_votes",
+                action: .didTapViewVotes(poll: poll)
+            )
+
+            bottomButtonsActions.append(viewVotesAction)
+        }
+
+        return build()
+    }
 }
 
 // MARK: - DisplayableText
@@ -1818,6 +1874,8 @@ public extension CVComponentState {
                 break
             case .paymentAttachment, .archivedPaymentAttachment:
                 // Payments can't be forwarded.
+                break
+            case .poll:
                 break
             case .undownloadableAttachment:
                 break

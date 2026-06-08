@@ -1,1 +1,1 @@
-• Mówi się, że wytrwałość popłaca… My wolimy, gdy wszystko udaje się za pierwszym razem. Naprawiliśmy więc błąd, przez który wysłanie naklejki z klawiatury iOS wymagało czasem nawet kilku podejść. Poprawka dotyczy również Genmoji. Nie ma za co.
+• Naprawiliśmy błąd, przez który podczas próby połączenia nowego urządzenia aparat nie działał. Od teraz ekran aparatu będzie taki ciemny tylko nocą, gdy nie zapalisz wokół siebie żadnego światła.

@@ -28,8 +28,6 @@ protocol RegistrationProfilePresenter: AnyObject {
 // MARK: - RegistrationProfileViewController
 
 class RegistrationProfileViewController: OWSViewController {
-    private var profilesFAQURL: URL { URL(string: "https://support.signal.org/hc/articles/360007459591")! }
-
     var state: RegistrationProfileState
     public init(
         state: RegistrationProfileState,
@@ -191,7 +189,7 @@ class RegistrationProfileViewController: OWSViewController {
 
     private lazy var textFieldStrokes: [UIView] = [givenNameTextField, familyNameTextField].map {
         // This color will be swiftly updated during renders.
-        $0.addBottomStroke(color: Theme.cellSeparatorColor, strokeWidth: .hairlineWidth)
+        $0.addBottomStroke(color: Theme.hairlineColor, strokeWidth: .hairlineWidth)
     }
 
     private enum NameOrder {
@@ -311,7 +309,7 @@ class RegistrationProfileViewController: OWSViewController {
         cameraImageView.tintColor = Theme.secondaryTextAndIconColor
         cameraImageWrapperView.backgroundColor = Theme.backgroundColor
         [givenNameTextField, familyNameTextField].forEach { $0.textColor = Theme.primaryTextColor }
-        textFieldStrokes.forEach { $0.backgroundColor = Theme.cellSeparatorColor }
+        textFieldStrokes.forEach { $0.backgroundColor = Theme.hairlineColor }
 
         phoneNumberDisclosureView.render()
     }

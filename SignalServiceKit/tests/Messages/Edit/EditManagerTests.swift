@@ -43,7 +43,7 @@ class EditManagerTests: SSKBaseTest {
 
     func testBasicValidation() throws {
         let targetMessage = createIncomingMessage(with: thread) { builder in
-            builder.messageBody = "BAR"
+            builder.setMessageBody(AttachmentContentValidatorMock.mockValidatedBody("BAR"))
             builder.authorAci = authorAci
             builder.expireStartedAt = 3
         }
@@ -53,6 +53,7 @@ class EditManagerTests: SSKBaseTest {
         let editMessageStoreMock = EditMessageStoreMock()
         let editManager = EditManagerImpl(context:
             .init(
+                attachmentContentValidator: AttachmentContentValidatorMock(),
                 attachmentStore: AttachmentStoreMock(),
                 dataStore: dataStoreMock,
                 editManagerAttachments: MockEditManagerAttachments(),
@@ -100,6 +101,7 @@ class EditManagerTests: SSKBaseTest {
         let editMessageStoreMock = EditMessageStoreMock()
         let editManager = EditManagerImpl(context:
             .init(
+                attachmentContentValidator: AttachmentContentValidatorMock(),
                 attachmentStore: AttachmentStoreMock(),
                 dataStore: dataStoreMock,
                 editManagerAttachments: MockEditManagerAttachments(),
@@ -144,6 +146,7 @@ class EditManagerTests: SSKBaseTest {
         let editMessageStoreMock = EditMessageStoreMock()
         let editManager = EditManagerImpl(context:
             .init(
+                attachmentContentValidator: AttachmentContentValidatorMock(),
                 attachmentStore: AttachmentStoreMock(),
                 dataStore: dataStoreMock,
                 editManagerAttachments: MockEditManagerAttachments(),
@@ -190,6 +193,7 @@ class EditManagerTests: SSKBaseTest {
 
         let editManager = EditManagerImpl(context:
             .init(
+                attachmentContentValidator: AttachmentContentValidatorMock(),
                 attachmentStore: AttachmentStoreMock(),
                 dataStore: dataStoreMock,
                 editManagerAttachments: MockEditManagerAttachments(),
@@ -238,6 +242,7 @@ class EditManagerTests: SSKBaseTest {
 
         let editManager = EditManagerImpl(context:
             .init(
+                attachmentContentValidator: AttachmentContentValidatorMock(),
                 attachmentStore: AttachmentStoreMock(),
                 dataStore: dataStoreMock,
                 editManagerAttachments: MockEditManagerAttachments(),
@@ -436,16 +441,16 @@ class EditManagerTests: SSKBaseTest {
         }
 
         func findEditHistory<MessageType: TSMessage>(
-            for message: MessageType,
+            forMostRecentRevision message: MessageType,
             tx: DBReadTransaction
         ) throws -> [(record: EditRecord, message: MessageType?)] {
             return []
         }
 
-        func findEditDeleteRecords<MessageType: TSMessage>(
-            for message: MessageType,
+        func findEditRecords(
+            relatedTo message: TSMessage,
             tx: DBReadTransaction
-        ) throws -> [(record: EditRecord, message: MessageType?)] {
+        ) throws -> [EditRecord] {
             return []
         }
 
@@ -470,8 +475,8 @@ class EditManagerTests: SSKBaseTest {
     // MARK: - Test Data
 
     /// There are three types
-    ///     'match': The values before and after should always match.
-    ///     'change': If the value is present, it should change before and after the edit
+    ///     'unchanged': The values before and after should always match.
+    ///     'changed': If the value is present, it should change before and after the edit
     ///     'ignore': Properties that arent checked in these tests
     enum EditedMessageValidationType {
         case unchanged
@@ -510,6 +515,7 @@ class EditManagerTests: SSKBaseTest {
         "storyAuthorUuidString": .unchanged,
         "isGroupStoryReply": .unchanged,
         "isStoryReply": .unchanged,
+        "isPoll": .unchanged,
         "hash": .ignore,
         "superclass": .ignore,
         "description": .ignore,
@@ -547,6 +553,7 @@ class EditManagerTests: SSKBaseTest {
         "storyAuthorUuidString": .unchanged,
         "isGroupStoryReply": .unchanged,
         "isStoryReply": .unchanged,
+        "isPoll": .unchanged,
         "hash": .ignore,
         "superclass": .ignore,
         "description": .ignore,

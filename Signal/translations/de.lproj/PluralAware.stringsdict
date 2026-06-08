@@ -515,9 +515,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>B&amp;A-Gruppen funktionieren am besten mit %1$d Mitglied. Das Hinzufügen weiterer Mitglieder führt zu Verzögerungen beim Senden und Empfangen von Nachrichten.</string>
+			<string>Signal-Gruppen funktionieren am besten mit %1$d Mitglied. Das Hinzufügen weiterer Mitglieder führt zu Verzögerungen beim Senden und Empfangen von Nachrichten.</string>
 			<key>other</key>
-			<string>B&amp;A-Gruppen funktionieren am besten mit %1$d oder weniger Mitgliedern. Das Hinzufügen weiterer Mitglieder führt zu Verzögerungen beim Senden und Empfangen von Nachrichten.</string>
+			<string>Signal-Gruppen funktionieren am besten mit %1$d oder weniger Mitgliedern. Das Hinzufügen weiterer Mitglieder führt zu Verzögerungen beim Senden und Empfangen von Nachrichten.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -675,9 +675,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>B&amp;A wird bei %2$@, %3$@ und %1$d weiteren Person klingeln</string>
+			<string>Signal wird bei %2$@, %3$@ und %1$d weiteren Person klingeln</string>
 			<key>other</key>
-			<string>B&amp;A wird bei %2$@, %3$@ und %1$d weiteren Personen klingeln</string>
+			<string>Signal wird bei %2$@, %3$@ und %1$d weiteren Personen klingeln</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -963,9 +963,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Öffne B&amp;A auf dem Gerät innerhalb %1$d Tages, damit »%2$@« weiterhin gekoppelt bleibt.</string>
+			<string>Öffne Signal auf dem Gerät innerhalb %1$d Tages, damit »%2$@« weiterhin gekoppelt bleibt.</string>
 			<key>other</key>
-			<string>Öffne B&amp;A auf dem Gerät innerhalb von %1$d Tagen, damit »%2$@« weiterhin gekoppelt bleibt.</string>
+			<string>Öffne Signal auf dem Gerät innerhalb von %1$d Tagen, damit »%2$@« weiterhin gekoppelt bleibt.</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1171,9 +1171,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Alle B&amp;A-Kontakte · %1$d Betrachter</string>
+			<string>Alle Signal-Kontakte · %1$d Betrachter</string>
 			<key>other</key>
-			<string>Alle B&amp;A-Kontakte · %1$d Betrachter</string>
+			<string>Alle Signal-Kontakte · %1$d Betrachter</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1187,9 +1187,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Alle B&amp;A-Kontakte · %1$d ausgenommen</string>
+			<string>Alle Signal-Kontakte · %1$d ausgenommen</string>
 			<key>other</key>
-			<string>Alle B&amp;A-Kontakte · %1$d ausgenommen</string>
+			<string>Alle Signal-Kontakte · %1$d ausgenommen</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1334,6 +1334,22 @@
 			<string>Von »%2$@« versendete Einladung widerrufen?</string>
 			<key>other</key>
 			<string>%1$d von »%2$@« versendete Einladungen widerrufen?</string>
+		</dict>
+	</dict>
+	<key>POLL_VOTE_COUNT</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d Stimme</string>
+			<key>other</key>
+			<string>%1$d Stimmen</string>
 		</dict>
 	</dict>
 	<key>PRIVATE_STORY_VIEWERS_%d</key>

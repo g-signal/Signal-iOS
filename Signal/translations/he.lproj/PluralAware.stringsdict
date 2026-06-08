@@ -643,13 +643,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>קבוצות B&amp;A מתפקדות בצורה הטובה ביותר עם חבר/ה %1$d. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
+			<string>קבוצות Signal מתפקדות בצורה הטובה ביותר עם חבר/ה %1$d. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
 			<key>two</key>
-			<string>קבוצות B&amp;A מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
+			<string>קבוצות Signal מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
 			<key>many</key>
-			<string>קבוצות B&amp;A מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
+			<string>קבוצות Signal מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
 			<key>other</key>
-			<string>קבוצות B&amp;A מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
+			<string>קבוצות Signal מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -843,13 +843,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>B&amp;A תתקשר ל%2$@, %3$@, ועוד %1$d</string>
+			<string>Signal תתקשר ל%2$@, %3$@, ועוד %1$d</string>
 			<key>two</key>
-			<string>B&amp;A תתקשר ל%2$@, %3$@, ועוד %1$d</string>
+			<string>Signal תתקשר ל%2$@, %3$@, ועוד %1$d</string>
 			<key>many</key>
-			<string>B&amp;A תתקשר ל%2$@, %3$@, ועוד %1$d</string>
+			<string>Signal תתקשר ל%2$@, %3$@, ועוד %1$d</string>
 			<key>other</key>
-			<string>B&amp;A תתקשר ל%2$@, %3$@, ועוד %1$d</string>
+			<string>Signal תתקשר ל%2$@, %3$@, ועוד %1$d</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -1203,13 +1203,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את B&amp;A במכשיר הזה תוך יום אחד.</string>
+			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את Signal במכשיר הזה תוך יום אחד.</string>
 			<key>two</key>
-			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את B&amp;A במכשיר הזה תוך יומיים.</string>
+			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את Signal במכשיר הזה תוך יומיים.</string>
 			<key>many</key>
-			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את B&amp;A במכשיר הזה תוך %1$d ימים.</string>
+			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את Signal במכשיר הזה תוך %1$d ימים.</string>
 			<key>other</key>
-			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את B&amp;A במכשיר הזה תוך %1$d ימים.</string>
+			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את Signal במכשיר הזה תוך %1$d ימים.</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1463,13 +1463,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>כל חברי ה–B&amp;A · צופה %1$d</string>
+			<string>כל חברי ה–Signal · צופה %1$d</string>
 			<key>two</key>
-			<string>כל חברי ה–B&amp;A · %1$d צופים</string>
+			<string>כל חברי ה–Signal · %1$d צופים</string>
 			<key>many</key>
-			<string>כל חברי ה–B&amp;A · %1$d צופים</string>
+			<string>כל חברי ה–Signal · %1$d צופים</string>
 			<key>other</key>
-			<string>כל חברי ה–B&amp;A · %1$d צופים</string>
+			<string>כל חברי ה–Signal · %1$d צופים</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1483,13 +1483,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>כל חברי ה–B&amp;A · מוסתר מאדם %1$d</string>
+			<string>כל חברי ה–Signal · מוסתר מאדם %1$d</string>
 			<key>two</key>
-			<string>כל חברי ה–B&amp;A · מוסתר מ–%1$d אנשים</string>
+			<string>כל חברי ה–Signal · מוסתר מ–%1$d אנשים</string>
 			<key>many</key>
-			<string>כל חברי ה–B&amp;A · מוסתר מ–%1$d אנשים</string>
+			<string>כל חברי ה–Signal · מוסתר מ–%1$d אנשים</string>
 			<key>other</key>
-			<string>כל חברי ה–B&amp;A · מוסתר מ–%1$d אנשים</string>
+			<string>כל חברי ה–Signal · מוסתר מ–%1$d אנשים</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1670,6 +1670,26 @@
 			<string>לבטל %1$d הזמנות שנשלחו על ידי ”%2$@“?</string>
 			<key>other</key>
 			<string>לבטל %1$d הזמנות שנשלחו על ידי ”%2$@“?</string>
+		</dict>
+	</dict>
+	<key>POLL_VOTE_COUNT</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>הצבעה %1$d</string>
+			<key>two</key>
+			<string>%1$d הצבעות</string>
+			<key>many</key>
+			<string>%1$d הצבעות</string>
+			<key>other</key>
+			<string>%1$d הצבעות</string>
 		</dict>
 	</dict>
 	<key>PRIVATE_STORY_VIEWERS_%d</key>

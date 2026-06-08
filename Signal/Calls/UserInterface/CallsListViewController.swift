@@ -13,7 +13,6 @@ import SignalServiceKit
 private protocol CallCellDelegate: AnyObject {
     func joinCall(from viewModel: CallsListViewController.CallViewModel)
     func returnToCall(from viewModel: CallsListViewController.CallViewModel)
-    func showCallInfo(from viewModel: CallsListViewController.CallViewModel)
 }
 
 // MARK: - CallsListViewController
@@ -115,6 +114,11 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
         navigationItem.titleView = filterPicker
         updateBarButtonItems()
         OWSTableViewController2.removeBackButtonText(viewController: self)
+
+        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+            toolbarDeleteButton.image = UIImage(resource: .trash)
+            self.toolbarItems = [.flexibleSpace(), toolbarDeleteButton]
+        }
 
         view.addSubview(tableView)
         tableView.autoPinEdgesToSuperviewEdges()
@@ -229,6 +233,12 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
     )
 
     private func showToolbar() {
+        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+            navigationController?.setToolbarHidden(false, animated: true)
+            (tabBarController as? HomeTabBarController)?.setTabBarHidden(true)
+            return
+        }
+
         guard
             // Don't create a new toolbar if we already have one
             multiselectToolbarContainer == nil,
@@ -341,6 +351,12 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
     }
 
     private func hideToolbar() {
+        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+            self.navigationController?.setToolbarHidden(true, animated: true)
+            (self.tabBarController as? HomeTabBarController)?.setTabBarHidden(false)
+            return
+        }
+
         guard let multiselectToolbarContainer else { return }
         UIView.animate(withDuration: 0.25) {
             multiselectToolbarContainer.alpha = 0
@@ -1665,7 +1681,7 @@ extension CallsListViewController: UITableViewDelegate {
             guard let viewModel = viewModelWithSneakyTransaction(at: indexPath) else {
                 return
             }
-            startCall(from: viewModel)
+            showCallInfo(from: viewModel)
         }
     }
 
@@ -2209,7 +2225,7 @@ private extension CallsListViewController {
 
         private lazy var timestampLabel: UILabel = {
             let label = UILabel()
-            label.font = .dynamicTypeBody2
+            label.font = .dynamicTypeSubheadline
             return label
         }()
 
@@ -2249,7 +2265,7 @@ private extension CallsListViewController {
             }
 
             let button = OWSRoundedButton()
-            let font = UIFont.dynamicTypeBody2.bold()
+            let font = UIFont.dynamicTypeSubheadline.bold()
             let title = NSAttributedString.composed(of: [
                 NSAttributedString.with(
                     image: icon,
@@ -2275,6 +2291,8 @@ private extension CallsListViewController {
 
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+            multipleSelectionBackgroundView = UIView(frame: contentView.bounds)
 
             let bodyVStack = UIStackView(arrangedSubviews: [
                 titleLabel,
@@ -2430,12 +2448,12 @@ private extension CallsListViewController {
                     NSAttributedString.with(
                         image: Theme.iconImage(icon),
                         font: .dynamicTypeCallout,
-                        centerVerticallyRelativeTo: .dynamicTypeBody2,
+                        centerVerticallyRelativeTo: .dynamicTypeSubheadline,
                         heightReference: .pointSize
                     ),
                     " ",
                     viewModel.direction.label,
-                ]).styled(with: .font(.dynamicTypeBody2))
+                ]).styled(with: .font(.dynamicTypeSubheadline))
             }()
 
             self.joinPill?.removeFromSuperview()
@@ -2453,8 +2471,14 @@ private extension CallsListViewController {
                     joinPill.autoPinWidthToSuperviewMargins()
                 }
             case .inactive:
-                // Info button
-                detailsButton.setImage(imageName: "info")
+                let icon: ThemeIcon = switch viewModel.medium {
+                case .audio:
+                    .buttonVoiceCall
+                case .video, .link:
+                    .buttonVideoCall
+                }
+
+                detailsButton.setImage(imageName: Theme.iconName(icon))
                 detailsButton.tintColor = Theme.primaryIconColor
             }
 
@@ -2464,7 +2488,7 @@ private extension CallsListViewController {
         private func applyTheme() {
             backgroundColor = Theme.backgroundColor
             selectedBackgroundView?.backgroundColor = Theme.tableCell2SelectedBackgroundColor
-            multipleSelectionBackgroundView?.backgroundColor = Theme.tableCell2MultiSelectedBackgroundColor
+            multipleSelectionBackgroundView?.backgroundColor = Theme.tableCell2SelectedBackgroundColor
 
             titleLabel.textColor = Theme.primaryTextColor
             subtitleLabel.textColor = Theme.snippetColor
@@ -2483,12 +2507,10 @@ private extension CallsListViewController {
             }
 
             switch viewModel.state {
-            case .active:
+            case .active, .inactive:
                 delegate.joinCall(from: viewModel)
             case .participating:
                 delegate.returnToCall(from: viewModel)
-            case .inactive:
-                delegate.showCallInfo(from: viewModel)
             }
         }
     }

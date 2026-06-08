@@ -5,6 +5,7 @@
 
 import AVFoundation
 import GRDB
+import LibSignalClient
 import SignalServiceKit
 import SignalUI
 
@@ -207,7 +208,9 @@ class InternalSettingsViewController: OWSTableViewController2 {
             messageCount,
             attachmentCount,
             donationSubscriberID,
-            storageServiceManifestVersion
+            storageServiceManifestVersion,
+            aciRegistrationId,
+            pniRegistrationId
         ) = SSKEnvironment.shared.databaseStorageRef.read { tx in
             return (
                 TSThread.anyFetchAll(transaction: tx).filter { !$0.isGroupThread }.count,
@@ -215,7 +218,9 @@ class InternalSettingsViewController: OWSTableViewController2 {
                 TSInteraction.anyCount(transaction: tx),
                 try? Attachment.Record.fetchCount(tx.database),
                 DonationSubscriptionManager.getSubscriberID(transaction: tx),
-                SSKEnvironment.shared.storageServiceManagerRef.currentManifestVersion(tx: tx)
+                SSKEnvironment.shared.storageServiceManagerRef.currentManifestVersion(tx: tx),
+                DependenciesBridge.shared.tsAccountManager.getRegistrationId(for: .aci, tx: tx),
+                DependenciesBridge.shared.tsAccountManager.getRegistrationId(for: .pni, tx: tx)
             )
         }
 
@@ -225,6 +230,8 @@ class InternalSettingsViewController: OWSTableViewController2 {
         regSection.add(.copyableItem(label: "ACI", value: localIdentifiers?.aci.serviceIdString))
         regSection.add(.copyableItem(label: "PNI", value: localIdentifiers?.pni?.serviceIdString))
         regSection.add(.copyableItem(label: "Device ID", value: "\(DependenciesBridge.shared.tsAccountManager.storedDeviceIdWithMaybeTransaction)"))
+        regSection.add(.copyableItem(label: "ACI Registration ID", value: aciRegistrationId.map({"\($0)"}) ?? "<missing>"))
+        regSection.add(.copyableItem(label: "PNI Registration ID", value: pniRegistrationId.map({"\($0)"}) ?? "<missing>"))
         regSection.add(.copyableItem(label: "Push Token", value: SSKEnvironment.shared.preferencesRef.pushToken))
         regSection.add(.copyableItem(label: "Profile Key", value: SSKEnvironment.shared.databaseStorageRef.read(block: SSKEnvironment.shared.profileManagerRef.localUserProfile(tx:))?.profileKey?.keyData.hexadecimalString ?? "none"))
         if let donationSubscriberID {
@@ -337,48 +344,6 @@ private extension InternalSettingsViewController {
         SpinningCheckmarks.shouldSpin = !wasSpinning
     }
 
-    func validateMessageBackupProto() {
-        let accountKeyStore = DependenciesBridge.shared.accountKeyStore
-        let backupArchiveManager = DependenciesBridge.shared.backupArchiveManager
-        let tsAccountManager = DependenciesBridge.shared.tsAccountManager
-
-        guard let localIdentifiers = SSKEnvironment.shared.databaseStorageRef.read(block: {tx in
-            return tsAccountManager.localIdentifiers(tx: tx)
-        }) else {
-            return
-        }
-        Task {
-            do {
-                guard let backupKey = try SSKEnvironment.shared.databaseStorageRef.read(block: { tx in
-                    try accountKeyStore.getMessageRootBackupKey(aci: localIdentifiers.aci, tx: tx)
-                }) else {
-                    return
-                }
-                let metadata = try await backupArchiveManager.exportEncryptedBackup(
-                    localIdentifiers: localIdentifiers,
-                    backupKey: backupKey,
-                    backupPurpose: .remoteBackup,
-                    progress: nil
-                )
-                try await backupArchiveManager.validateEncryptedBackup(
-                    fileUrl: metadata.fileUrl,
-                    backupKey: backupKey,
-                    backupPurpose: .remoteBackup
-                )
-                try? FileManager.default.removeItem(at: metadata.fileUrl)
-                await MainActor.run {
-                    self.presentToast(text: "Passed validation")
-                }
-            } catch {
-                await MainActor.run {
-                    DependenciesBridge.shared.backupArchiveErrorPresenter.presentOverTopmostViewController(completion: {
-                        self.presentToast(text: "Failed validation")
-                    })
-                }
-            }
-        }
-    }
-
     func exportMessageBackupProto() {
         ModalActivityIndicatorViewController.present(
             fromViewController: self,
@@ -460,15 +425,19 @@ private extension InternalSettingsViewController {
             return
         }
 
+        let backupEncryptionKey = try MessageBackupKey(
+            backupKey: messageBackupKey.backupKey,
+            backupId: messageBackupKey.backupId
+        )
+
         let metadata = try await backupArchiveManager.exportEncryptedBackup(
             localIdentifiers: localIdentifiers,
-            backupKey: messageBackupKey,
-            backupPurpose: .remoteBackup,
+            backupPurpose: .remoteExport(key: messageBackupKey, chatAuth: .implicit()),
             progress: nil
         )
 
-        let keyString = "AES key: \(messageBackupKey.aesKey.base64EncodedString())"
-            + "\nHMAC key: \(messageBackupKey.hmacKey.base64EncodedString())"
+        let keyString = "AES key: \(backupEncryptionKey.aesKey.base64EncodedString())"
+            + "\nHMAC key: \(backupEncryptionKey.hmacKey.base64EncodedString())"
 
         await withCheckedContinuation { continuation in
             DispatchQueue.main.async {
@@ -489,7 +458,7 @@ private extension InternalSettingsViewController {
     func exportMessageBackupProtoRemotely() async throws {
         let accountKeyStore = DependenciesBridge.shared.accountKeyStore
         let backupArchiveManager = DependenciesBridge.shared.backupArchiveManager
-        let backupIdManager = DependenciesBridge.shared.backupIdManager
+        let backupKeyService = DependenciesBridge.shared.backupKeyService
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
 
         let (messageBackupKey, localIdentifiers) = try SSKEnvironment.shared.databaseStorageRef.read { tx in
@@ -506,12 +475,11 @@ private extension InternalSettingsViewController {
 
         let metadata = try await backupArchiveManager.exportEncryptedBackup(
             localIdentifiers: localIdentifiers,
-            backupKey: messageBackupKey,
-            backupPurpose: .remoteBackup,
+            backupPurpose: .remoteExport(key: messageBackupKey, chatAuth: .implicit()),
             progress: nil
         )
 
-        let registeredBackupIDToken = try await backupIdManager.registerBackupId(
+        let registeredBackupKeyToken = try await backupKeyService.registerBackupKey(
             localIdentifiers: localIdentifiers,
             auth: .implicit()
         )
@@ -519,7 +487,7 @@ private extension InternalSettingsViewController {
         _ = try await backupArchiveManager.uploadEncryptedBackup(
             backupKey: messageBackupKey,
             metadata: metadata,
-            registeredBackupIDToken: registeredBackupIDToken,
+            registeredBackupKeyToken: registeredBackupKeyToken,
             auth: .implicit(),
             progress: nil,
         )

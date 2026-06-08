@@ -75,7 +75,7 @@ open class OWSNavigationController: UINavigationController {
     }
 
     public init() {
-        if #available(iOS 26, *) {
+        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
             super.init(nibName: nil, bundle: nil)
         } else {
             super.init(navigationBarClass: OWSNavigationBar.self, toolbarClass: nil)
@@ -115,6 +115,11 @@ open class OWSNavigationController: UINavigationController {
         super.viewDidLoad()
 
         interactivePopGestureRecognizer?.delegate = self
+#if compiler(>=6.2)
+        if #available(iOS 26.0, *) {
+            interactiveContentPopGestureRecognizer?.delegate = self
+        }
+#endif
     }
 
     open override func viewWillAppear(_ animated: Bool) {
@@ -163,7 +168,7 @@ open class OWSNavigationController: UINavigationController {
         let navChildController = viewController.getFinalNavigationChildController()
         let shouldHideNavbar = navChildController?.prefersNavigationBarHidden ?? false
 
-        if #unavailable(iOS 26), !shouldHideNavbar, let owsNavigationBar {
+        if !shouldHideNavbar, let owsNavigationBar {
             // Only update visible attributes if we aren't hiding; if its hidden anyway
             // they won't matter and seeing them blink then hide is weird.
             owsNavigationBar.navbarBackgroundColorOverride = navChildController?.navbarBackgroundColorOverride
@@ -222,7 +227,15 @@ extension OWSNavigationController: UIGestureRecognizerDelegate {
     }
 
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+#if compiler(>=6.2)
+        if #available(iOS 26.0, *) {
+            owsAssertDebug(gestureRecognizer === self.interactivePopGestureRecognizer || gestureRecognizer === self.interactiveContentPopGestureRecognizer)
+        } else {
+            owsAssertDebug(gestureRecognizer === self.interactivePopGestureRecognizer)
+        }
+#else
         owsAssertDebug(gestureRecognizer === self.interactivePopGestureRecognizer)
+#endif
 
         guard viewControllers.count > 1 else {
             return false
@@ -245,6 +258,11 @@ extension OWSNavigationController: UINavigationBarDelegate {
     // if a view has unsaved changes.
     public func navigationBar(_ navigationBar: UINavigationBar, shouldPop item: UINavigationItem) -> Bool {
         owsAssertDebug(interactivePopGestureRecognizer?.delegate === self)
+#if compiler(>=6.2)
+        if #available(iOS 26.0, *) {
+            owsAssertDebug(interactiveContentPopGestureRecognizer?.delegate === self)
+        }
+#endif
 
         // wasBackButtonClicked is true if the back button was pressed but not
         // if a back gesture was performed or if the view is popped programmatically.

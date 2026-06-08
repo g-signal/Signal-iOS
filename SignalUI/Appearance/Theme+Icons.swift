@@ -86,6 +86,7 @@ public enum ThemeIcon: UInt {
     case qrCode
     case qrCodeLight
     case threadCompact
+    case info
 
     case buttonCamera
     case buttonMicrophone
@@ -134,6 +135,8 @@ public enum ThemeIcon: UInt {
     case composeFindByPhoneNumberLarge
     case composeInviteLarge
 
+    case errorCircle
+
     case check16
     case compose16
     case error16
@@ -180,6 +183,8 @@ public enum ThemeIcon: UInt {
     case profilePlaceholder
 
     case raiseHand
+
+    case pollStop
 }
 
 // MARK: -
@@ -367,6 +372,8 @@ public extension Theme {
             return "qr_code-light"
         case .threadCompact:
             return isDarkThemeEnabled ? "thread-compact-fill" : "thread-compact"
+        case .info:
+            return "info"
 
             // Buttons (24 dp)
         case .buttonCamera:
@@ -462,6 +469,10 @@ public extension Theme {
         case .composeInviteLarge:
             return "invite-resizable"
 
+            // Error icon
+        case .errorCircle:
+            return "error-circle"
+
             // Compact 16 dp icons
         case .check16:
             return "check-compact"
@@ -550,95 +561,10 @@ public extension Theme {
 
         case .raiseHand:
             return "raise_hand"
-        }
-    }
-}
 
-// MARK: -
-
-extension Theme {
-
-    // Bridging the old name to new name for our ObjC friends
-    public static var actionSheetBackgroundColor: UIColor {
-        return ActionSheet.default.backgroundColor
-    }
-
-    public enum ActionSheet {
-        case `default`
-        case grouped
-        case translucentDark
-
-        public var hairlineColor: UIColor {
-            switch self {
-            case .default, .grouped: return isDarkThemeEnabled ? .ows_gray65 : .ows_gray05
-            case .translucentDark: return .ows_whiteAlpha20
-            }
-        }
-
-        public var headerTitleColor: UIColor {
-            switch self {
-            case .default, .grouped: return Theme.primaryTextColor
-            case .translucentDark: return Theme.darkThemePrimaryColor
-            }
-        }
-
-        public var headerMessageColor: UIColor {
-            switch self {
-            case .default, .grouped: return Theme.primaryTextColor
-            case .translucentDark: return Theme.darkThemeSecondaryTextAndIconColor
-            }
-        }
-
-        public var buttonTextColor: UIColor {
-            switch self {
-            case .default, .grouped: return Theme.primaryTextColor
-            case .translucentDark: return Theme.darkThemePrimaryColor
-            }
-        }
-
-        public var safetyNumberChangeButtonBackgroundColor: UIColor {
-            switch self {
-            case .default, .grouped: return Theme.conversationButtonBackgroundColor
-            case .translucentDark: return .ows_gray75
-            }
-        }
-
-        public var safetyNumberChangeButtonTextColor: UIColor {
-            switch self {
-            case .default, .grouped: return Theme.conversationButtonTextColor
-            case .translucentDark: return .ows_accentBlueDark
-            }
-        }
-
-        public var destructiveButtonTextColor: UIColor {
-            return .ows_accentRed
-        }
-
-        public var buttonHighlightColor: UIColor {
-            switch self {
-            case .default, .grouped: return Theme.cellSelectedColor
-            case .translucentDark: return .ows_whiteAlpha20
-            }
-        }
-
-        public var backgroundColor: UIColor {
-            switch self {
-            case .default: return isDarkThemeEnabled ? .ows_gray75 : .ows_white
-            case .grouped: return Theme.tableView2BackgroundColor
-            case .translucentDark: return .clear
-            }
-        }
-
-        public func createBackgroundView() -> UIView {
-            switch self {
-            case .default, .grouped:
-                let background = UIView()
-                background.backgroundColor = backgroundColor
-                return background
-            case .translucentDark:
-                let background = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-                return background
-            }
+            // Polls
+        case .pollStop:
+            return "pollstop"
         }
     }
 }

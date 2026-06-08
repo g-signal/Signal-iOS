@@ -340,7 +340,7 @@ private class MentionableUserCell: UITableViewCell {
         avatarView.autoVCenterInSuperview()
         avatarView.autoMatch(.height, to: .height, of: avatarContainer, withOffset: 0, relation: .lessThanOrEqual)
 
-        displayNameLabel.font = .dynamicTypeBody2
+        displayNameLabel.font = .dynamicTypeSubheadline
 
         let stackView = UIStackView(arrangedSubviews: [
             avatarContainer,
@@ -370,7 +370,7 @@ private class MentionableUserCell: UITableViewCell {
             selectedBackgroundView?.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         case .`default`:
             displayNameLabel.textColor = Theme.primaryTextColor
-            selectedBackgroundView?.backgroundColor = Theme.cellSelectedColor
+            selectedBackgroundView?.backgroundColor = Theme.tableCell2SelectedBackgroundColor
         }
 
         displayNameLabel.text = mentionableUser.displayName

@@ -235,7 +235,7 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
                 attempt: attempt,
                 dateProvider: dateProvider,
                 sleepTimer: sleepTimer,
-                progress: nil
+                progress: progress,
             )
         } catch {
             if error.isNetworkFailureOrTimeout {
@@ -416,7 +416,7 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
         progress: OWSProgressSink?
     ) async throws {
         let logger = PrefixedLogger(prefix: "[MediaTierUpload]", suffix: "[\(attachmentId)]")
-        let (record, result) = try await uploadAttachment(
+        let (record, uploadResult) = try await uploadAttachment(
             attachmentId: attachmentId,
             type: .mediaTier(auth: auth, isThumbnail: false),
             logger: logger,
@@ -439,23 +439,49 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
         let cdnNumber: UInt32
         do {
             cdnNumber =  try await self.copyToMediaTier(
-                localAci: localAci,
                 backupKey: backupKey,
+                auth: auth,
                 mediaName: mediaName,
                 uploadEra: uploadEra,
-                result: result,
+                result: uploadResult,
                 logger: logger
             )
         } catch let error as BackupArchive.Response.CopyToMediaTierError {
             switch error {
             case .sourceObjectNotFound:
-                if
-                    result.localUploadMetadata.isReusedTransitTierUpload,
-                    let transitTierInfo = attachmentStream.attachment.transitTierInfo
-                {
-                    // We reused a transit tier upload but the source couldn't be found.
-                    // That transit tier upload is now invalid.
-                    try await db.awaitableWrite { tx in
+                let attachmentFileUrl = AttachmentStream.absoluteAttachmentFileURL(
+                    relativeFilePath: attachmentStream.localRelativeFilePath
+                )
+                let fileMissingOrEmpty = !OWSFileSystem.fileOrFolderExists(url: attachmentFileUrl)
+                    || (OWSFileSystem.fileSize(of: attachmentFileUrl)?.uint32Value ?? 0) == 0
+
+                try await db.awaitableWrite { tx in
+                    // Clean up the upload record; if we failed to copy
+                    // we want to start an upload fresh next time.
+                    self.cleanup(record: record, logger: logger, tx: tx)
+
+                    if fileMissingOrEmpty {
+                        logger.error("Missing attachment file!")
+
+                        guard let attachment = attachmentStore.fetch(id: attachmentStream.id, tx: tx) else {
+                            return
+                        }
+
+                        let params = Attachment.ConstructionParams.forOffloadingFiles(
+                            attachment: attachment,
+                            localRelativeFilePathThumbnail: nil
+                        )
+                        var newRecord = Attachment.Record(params: params)
+                        newRecord.sqliteId = attachment.id
+                        try newRecord.update(tx.database)
+                    }
+
+                    if
+                        uploadResult.localUploadMetadata.isReusedTransitTierUpload,
+                        let transitTierInfo = attachmentStream.attachment.latestTransitTierInfo
+                    {
+                        // We reused a transit tier upload but the source couldn't be found.
+                        // That transit tier upload is now invalid.
                         // Refetch the attachment
                         guard let attachment = attachmentStore.fetch(id: attachmentStream.id, tx: tx) else {
                             return
@@ -484,7 +510,7 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
 
             let mediaTierInfo = Attachment.MediaTierInfo(
                 cdnNumber: cdnNumber,
-                unencryptedByteCount: result.localUploadMetadata.plaintextDataLength,
+                unencryptedByteCount: uploadResult.localUploadMetadata.plaintextDataLength,
                 sha256ContentHash: attachmentStream.sha256ContentHash,
                 // TODO: [Attachment Streaming] support incremental mac
                 incrementalMacInfo: nil,
@@ -498,6 +524,64 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
                 mediaName: attachmentStream.info.mediaName,
                 tx: tx
             )
+
+            // To upload to media tier, we also upload to transit tier and then perform a copy.
+            // We can save the transit tier info from that upload to the attachment, in some cases.
+            let shouldUpdateTransitTierInfo: Bool = {
+                guard let oldTransitTierInfo = attachmentStream.attachment.latestTransitTierInfo else {
+                    // First case: we had no transit tier info; something is better than nothing.
+                    return true
+                }
+                let nowMs = dateProvider().ows_millisecondsSince1970
+                if
+                    nowMs > oldTransitTierInfo.uploadTimestamp,
+                    nowMs - oldTransitTierInfo.uploadTimestamp > remoteConfigProvider.currentConfig().messageQueueTimeMs
+                {
+                    // Second case: the transit tier info is old and expired.
+                    return true
+                }
+                if
+                    nowMs > oldTransitTierInfo.uploadTimestamp,
+                    nowMs - oldTransitTierInfo.uploadTimestamp > UInt64(Upload.Constants.uploadReuseWindow * Double(MSEC_PER_SEC)),
+                    oldTransitTierInfo.encryptionKey != attachmentStream.attachment.encryptionKey
+                {
+                    // Third case: the transit tier info isn't expired, but exceeded its reuse window
+                    // anyway so it wasn't going to be used for forwarding. May as well replace it
+                    // with an upload that can be used for _something_.
+                    return true
+                }
+                // Note: if the old transit tier info has been within the reuse window
+                // _and_ used the same encryption key, we wouldn't have reuploaded for
+                // this media tier copy so "oldTransitTierInfo" would be the very one
+                // we reused to create "uploadResult" without uploading to begin with.
+                return false
+            }()
+
+            if shouldUpdateTransitTierInfo {
+                let transitTierInfo = Attachment.TransitTierInfo(
+                    cdnNumber: uploadResult.cdnNumber,
+                    cdnKey: uploadResult.cdnKey,
+                    uploadTimestamp: uploadResult.beginTimestamp,
+                    encryptionKey: uploadResult.localUploadMetadata.key,
+                    unencryptedByteCount: uploadResult.localUploadMetadata.plaintextDataLength,
+                    // ALWAYS use digest for integrity check for uploaded attachments;
+                    // we only allow sending using a digest integrity check not a plaintext hash
+                    // so prefer digest if we have both. If we don't, this attachment we just
+                    // uploaded will fail to send.
+                    integrityCheck: .digestSHA256Ciphertext(uploadResult.localUploadMetadata.digest),
+                    // TODO: [Attachment Streaming] support incremental mac
+                    incrementalMacInfo: nil,
+                    lastDownloadAttemptTimestamp: nil
+                )
+                // Refetch so we get the updated media tier info from above.
+                if let attachmentStream = attachmentStore.fetch(id: attachmentStream.id, tx: tx)?.asStream() {
+                    try self.attachmentUploadStore.markUploadedToTransitTier(
+                        attachmentStream: attachmentStream,
+                        info: transitTierInfo,
+                        tx: tx
+                    )
+                }
+            }
 
             self.cleanup(record: record, logger: logger, tx: tx)
         }
@@ -532,14 +616,31 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
             return
         }
 
-        let cdnNumber =  try await self.copyToMediaTier(
-            localAci: localAci,
-            backupKey: backupKey,
-            mediaName: AttachmentBackupThumbnail.thumbnailMediaName(fullsizeMediaName: mediaName),
-            uploadEra: uploadEra,
-            result: result,
-            logger: logger
-        )
+        let cdnNumber: UInt32
+        do {
+            cdnNumber = try await self.copyToMediaTier(
+                backupKey: backupKey,
+                auth: auth,
+                mediaName: AttachmentBackupThumbnail.thumbnailMediaName(fullsizeMediaName: mediaName),
+                uploadEra: uploadEra,
+                result: result,
+                logger: logger
+            )
+        } catch let error as BackupArchive.Response.CopyToMediaTierError {
+            switch error {
+            case .sourceObjectNotFound:
+                await db.awaitableWrite { tx in
+                    // Clean up the upload record; if we failed to copy
+                    // we want to start an upload fresh.
+                    self.cleanup(record: record, logger: logger, tx: tx)
+                }
+                throw error
+            default:
+                throw error
+            }
+        } catch {
+            throw error
+        }
 
         try await db.awaitableWrite { tx in
             // Refetch the attachment to ensure other fields are up-to-date.
@@ -653,6 +754,17 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
         case .existing(let metadata), .reuse(let metadata):
             // Cached metadata is still good to use
             localMetadata = metadata
+
+            if metadata.key != attachmentUploadRecord.localMetadata?.key {
+                // If we're using a different key, reset the metadata
+                // and start with a fresh upload form.
+                updateRecord = true
+                attachmentUploadRecord.localMetadata = metadata
+                attachmentUploadRecord.uploadForm = nil
+                attachmentUploadRecord.uploadFormTimestamp = nil
+                attachmentUploadRecord.uploadSessionUrl = nil
+            }
+
         case .new(let metadata):
             localMetadata = metadata
             updateRecord = true
@@ -738,10 +850,18 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
             // new local metadata, otherwise the existing attachment file location is used.
             // TODO: Tie this in with OrphanedAttachmentRecord to track this
             if cleanupMetadata {
-                do {
-                    try fileSystem.deleteFile(url: localMetadata.fileUrl)
-                } catch {
-                    owsFailDebug("Error: \(error)")
+                if
+                    localMetadata.fileUrl == (attachment.streamInfo?.localRelativeFilePath).map({
+                        AttachmentStream.absoluteAttachmentFileURL(relativeFilePath: $0)
+                    })
+                {
+                    owsFailDebug("Attempting to delete attachment file!")
+                } else {
+                    do {
+                        try fileSystem.deleteFile(url: localMetadata.fileUrl)
+                    } catch {
+                        owsFailDebug("Error: \(error)")
+                    }
                 }
             }
             return (attachmentUploadRecord, result.asAttachmentResult)
@@ -781,6 +901,32 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
                     logger: logger,
                     progress: progress
                 )
+            } else if case Upload.Error.missingFile = error {
+                try await db.awaitableWrite { tx in
+                    if
+                        let attachmentRelFilePath = attachment.streamInfo?.localRelativeFilePath,
+                        // If the missing file matches the url of the primary attachment file,
+                        // mark the whole attachment as not having a file anymore.
+                        localMetadata.fileUrl == AttachmentStream.absoluteAttachmentFileURL(relativeFilePath: attachmentRelFilePath),
+                        let attachment = attachmentStore.fetch(id: attachmentId, tx: tx)
+                    {
+                        logger.error("Primary attachment file missing!")
+                        let params = Attachment.ConstructionParams.forOffloadingFiles(
+                            attachment: attachment,
+                            localRelativeFilePathThumbnail: nil
+                        )
+                        var newRecord = Attachment.Record(params: params)
+                        newRecord.sqliteId = attachment.id
+                        try newRecord.update(tx.database)
+                    }
+                    // Delete the upload record; whatever the state was we need to start over next time.
+                    try self.attachmentUploadStore.removeRecord(
+                        for: attachmentUploadRecord.attachmentId,
+                        sourceType: attachmentUploadRecord.sourceType,
+                        tx: tx
+                    )
+                }
+                throw error
             } else {
                 // Some other non-upload error was encountered - exit from the upload for now.
                 // Network failures or task cancellation shouldn't bump the attempt count, but
@@ -818,7 +964,7 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
         }) {
             attachmentUploadRecord = record
         } else {
-            attachmentUploadRecord = AttachmentUploadRecord(sourceType: .transit, attachmentId: attachmentId)
+            attachmentUploadRecord = AttachmentUploadRecord(sourceType: sourceType, attachmentId: attachmentId)
         }
         return attachmentUploadRecord
     }
@@ -846,8 +992,9 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
             }
 
             if
+                !Upload.disableTransitTierUploadReuse,
                 // We have an existing upload
-                let transitTierInfo = attachment.transitTierInfo,
+                let transitTierInfo = attachment.latestTransitTierInfo,
                 // It uses the same primary key (it isn't a reupload with a rotated key)
                 transitTierInfo.encryptionKey == attachment.encryptionKey,
                 // We expect it isn't expired
@@ -1052,18 +1199,13 @@ public actor AttachmentUploadManagerImpl: AttachmentUploadManager {
     }
 
     public func copyToMediaTier(
-        localAci: Aci,
         backupKey: MediaRootBackupKey,
+        auth: BackupServiceAuth,
         mediaName: String,
         uploadEra: String,
         result: Upload.AttachmentResult,
         logger: PrefixedLogger
     ) async throws -> UInt32 {
-        let auth = try await backupRequestManager.fetchBackupServiceAuth(
-            for: backupKey,
-            localAci: localAci,
-            auth: .implicit()
-        )
         let mediaEncryptionMetadata = try backupKey.mediaEncryptionMetadata(
             mediaName: mediaName,
             type: .outerLayerFullsizeOrThumbnail
@@ -1129,5 +1271,15 @@ extension Upload.Result where Metadata: AttachmentUploadMetadata {
             beginTimestamp: beginTimestamp,
             finishTimestamp: finishTimestamp
         )
+    }
+}
+
+extension Upload {
+    public static var disableTransitTierUploadReuse: Bool {
+        get { DebugFlags.internalSettings && UserDefaults.standard.bool(forKey: "disableTransitTierUploadReuse") }
+        set {
+            guard DebugFlags.internalSettings else { return }
+            UserDefaults.standard.set(newValue, forKey: "disableTransitTierUploadReuse")
+        }
     }
 }

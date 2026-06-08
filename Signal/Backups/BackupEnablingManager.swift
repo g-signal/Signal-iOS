@@ -29,31 +29,36 @@ final class BackupEnablingManager {
 
     private let backupAttachmentUploadEraStore: BackupAttachmentUploadEraStore
     private let backupDisablingManager: BackupDisablingManager
-    private let backupIdManager: BackupIdManager
+    private let backupKeyService: BackupKeyService
     private let backupPlanManager: BackupPlanManager
+    private let backupSettingsStore: BackupSettingsStore
     private let backupSubscriptionManager: BackupSubscriptionManager
     private let backupTestFlightEntitlementManager: BackupTestFlightEntitlementManager
     private let db: DB
     private let tsAccountManager: TSAccountManager
+    private let notificationPresenter: NotificationPresenter
 
     init(
         backupAttachmentUploadEraStore: BackupAttachmentUploadEraStore,
         backupDisablingManager: BackupDisablingManager,
-        backupIdManager: BackupIdManager,
+        backupKeyService: BackupKeyService,
         backupPlanManager: BackupPlanManager,
         backupSubscriptionManager: BackupSubscriptionManager,
         backupTestFlightEntitlementManager: BackupTestFlightEntitlementManager,
         db: DB,
-        tsAccountManager: TSAccountManager
+        tsAccountManager: TSAccountManager,
+        notificationPresenter: NotificationPresenter
     ) {
         self.backupAttachmentUploadEraStore = backupAttachmentUploadEraStore
         self.backupDisablingManager = backupDisablingManager
-        self.backupIdManager = backupIdManager
+        self.backupKeyService = backupKeyService
         self.backupPlanManager = backupPlanManager
+        self.backupSettingsStore = BackupSettingsStore()
         self.backupSubscriptionManager = backupSubscriptionManager
         self.backupTestFlightEntitlementManager = backupTestFlightEntitlementManager
         self.db = db
         self.tsAccountManager = tsAccountManager
+        self.notificationPresenter = notificationPresenter
     }
 
     @MainActor
@@ -61,9 +66,25 @@ final class BackupEnablingManager {
         fromViewController: UIViewController,
         planSelection: ChooseBackupPlanViewController.PlanSelection,
     ) async throws(DisplayableError) {
-        guard let localIdentifiers = db.read(block: { tx in
-            tsAccountManager.localIdentifiers(tx: tx)
-        }) else {
+        let (
+            isRegisteredPrimaryDevice,
+            localIdentifiers,
+        ): (
+            Bool,
+            LocalIdentifiers?
+        ) = db.read { tx in
+            return (
+                tsAccountManager.registrationState(tx: tx).isPrimaryDevice ?? false,
+                tsAccountManager.localIdentifiers(tx: tx),
+            )
+        }
+
+        owsPrecondition(
+            isRegisteredPrimaryDevice,
+            "Attempting to enable Backups on a non-primary device!"
+        )
+
+        guard let localIdentifiers else {
             throw DisplayableError(OWSLocalizedString(
                 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED",
                 comment: "Message shown in an action sheet when the user tries to confirm a plan selection, but is not registered."
@@ -85,6 +106,7 @@ final class BackupEnablingManager {
             owsFailDebug("Unexpected non-displayable error enabling Backups! \(error)")
             throw .genericError
         }
+        scheduleEnableBackupsNotification()
     }
 
     private func _enableBackups(
@@ -101,7 +123,7 @@ final class BackupEnablingManager {
             // it to finish.
             await self.backupDisablingManager.disableRemotelyIfNecessary()
 
-            _ = try await self.backupIdManager.registerBackupId(
+            _ = try await self.backupKeyService.registerBackupKey(
                 localIdentifiers: localIdentifiers,
                 auth: .implicit()
             )
@@ -122,6 +144,21 @@ final class BackupEnablingManager {
                 try await enablePaidPlanWithStoreKit()
             }
         }
+    }
+
+    // MARK: -
+
+    private func scheduleEnableBackupsNotification() {
+        let backupsEnabledTimestamp = Date()
+        let notificationDelay = TimeInterval.random(in: .hour...(.hour * 3))
+        db.write { tx in
+            backupSettingsStore.setLastBackupEnabledDetails(
+                backupsEnabledTime: backupsEnabledTimestamp,
+                notificationDelay: notificationDelay,
+                tx: tx
+            )
+        }
+        notificationPresenter.scheduleNotifyForBackupsEnabled(backupsTimestamp: backupsEnabledTimestamp)
     }
 
     // MARK: -

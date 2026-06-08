@@ -33,7 +33,7 @@ extension BackupArchive {
         }
 
         struct Text {
-            struct RestoredMessageBody {
+            struct RestoredMessageBody: ValidatedInlineMessageBody {
                 enum OversizeText {
                     // The exporter presumably hadn't downloaded the attachment
                     // at export time, so all we have is a pointer.
@@ -45,11 +45,11 @@ extension BackupArchive {
                 }
 
                 // This is the body we put on the message
-                let messageBody: MessageBody
+                let inlinedBody: MessageBody
                 fileprivate let oversizeText: OversizeText?
 
-                init(messageBody: MessageBody, oversizeText: OversizeText?) {
-                    self.messageBody = messageBody
+                init(inlinedBody: MessageBody, oversizeText: OversizeText?) {
+                    self.inlinedBody = inlinedBody
                     self.oversizeText = oversizeText
                 }
             }
@@ -535,14 +535,25 @@ class BackupArchiveTSMessageContentsArchiver: BackupArchiveProtoStreamWriter {
                 return errorResult
             }
 
-            quote.text = { () -> BackupProto_Text in
+            let quoteText = { () -> BackupProto_Text? in
                 var quoteText = BackupProto_Text()
-                quoteText.body = text.body
-                quoteText.bodyRanges = text.bodyRanges
-                return quoteText
+                // We do not allow oversize text in quotes; truncate if some historical bug
+                // cause quotes to contain more than the usual oversize text threshold.
+                let trimmedQuoteText = text.body.trimToUtf8ByteCount(OWSMediaUtils.kOversizeTextMessageSizeThresholdBytes)
+                // If, after trimming the quote text, we end up with an empty string,
+                // skip setting a quote text entirely
+                if let quoteTextBody = trimmedQuoteText.nilIfEmpty {
+                    quoteText.body = quoteTextBody
+                    quoteText.bodyRanges = text.bodyRanges
+                    return quoteText
+                } else {
+                    return nil
+                }
             }()
-
-            didArchiveText = true
+            if let quoteText {
+                quote.text = quoteText
+                didArchiveText = true
+            }
         }
 
         if let attachmentInfo = quotedMessage.attachmentInfo() {
@@ -1636,7 +1647,7 @@ class BackupArchiveTSMessageContentsArchiver: BackupArchiveProtoStreamWriter {
                         chatItemId
                     ))
                 }
-                quoteBody = component?.messageBody
+                quoteBody = component?.inlinedBody
             case .bubbleUpError(let error):
                 return error
             }

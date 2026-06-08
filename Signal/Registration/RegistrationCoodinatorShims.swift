@@ -20,7 +20,6 @@ extension RegistrationCoordinatorImpl {
         public typealias MessagePipelineSupervisor = _RegistrationCoordinator_MessagePipelineSupervisorShim
         public typealias MessageProcessor = _RegistrationCoordinator_MessageProcessorShim
         public typealias OWS2FAManager = _RegistrationCoordinator_OWS2FAManagerShim
-        public typealias PreKeyManager = _RegistrationCoordinator_PreKeyManagerShim
         public typealias ProfileManager = _RegistrationCoordinator_ProfileManagerShim
         public typealias PushRegistrationManager = _RegistrationCoordinator_PushRegistrationManagerShim
         typealias QuickRestoreManager = _RegistrationCoordinator_QuickRestoreManagerShim
@@ -40,7 +39,6 @@ extension RegistrationCoordinatorImpl {
         public typealias MessagePipelineSupervisor = _RegistrationCoordinator_MessagePipelineSupervisorWrapper
         public typealias MessageProcessor = _RegistrationCoordinator_MessageProcessorWrapper
         public typealias OWS2FAManager = _RegistrationCoordinator_OWS2FAManagerWrapper
-        public typealias PreKeyManager = _RegistrationCoordinator_PreKeyManagerWrapper
         public typealias ProfileManager = _RegistrationCoordinator_ProfileManagerWrapper
         public typealias PushRegistrationManager = _RegistrationCoordinator_PushRegistrationManagerWrapper
         typealias QuickRestoreManager = _RegistrationCoordinator_QuickRestoreManagerWrapper
@@ -109,6 +107,7 @@ protocol _RegistrationCoordinator_DeviceTransferServiceShim {
     func addObserver(_ observer: DeviceTransferServiceObserver)
     func removeObserver(_ observer: DeviceTransferServiceObserver)
     func stopAcceptingTransfersFromOldDevices()
+    func cancelTransferFromOldDevice()
 }
 
 class _RegistrationCoordinator_DeviceTransferServiceWrapper: _RegistrationCoordinator_DeviceTransferServiceShim {
@@ -131,6 +130,10 @@ class _RegistrationCoordinator_DeviceTransferServiceWrapper: _RegistrationCoordi
 
     func stopAcceptingTransfersFromOldDevices() {
         deviceTransferService.stopAcceptingTransfersFromOldDevices()
+    }
+
+    func cancelTransferFromOldDevice() {
+        deviceTransferService.cancelTransferFromOldDevice()
     }
 }
 
@@ -277,48 +280,6 @@ public class _RegistrationCoordinator_OWS2FAManagerWrapper: _RegistrationCoordin
     }
 }
 
-// MARK: - PreKeyManager
-
-// TODO: Remove this layer of abstraction; it's no longer necessary.
-public protocol _RegistrationCoordinator_PreKeyManagerShim {
-
-    func createPreKeysForRegistration() async throws -> RegistrationPreKeyUploadBundles
-
-    func finalizeRegistrationPreKeys(
-        _ prekeyBundles: RegistrationPreKeyUploadBundles,
-        uploadDidSucceed: Bool
-    ) async throws
-
-    func rotateOneTimePreKeysForRegistration(auth: ChatServiceAuth) async throws
-}
-
-public class _RegistrationCoordinator_PreKeyManagerWrapper: _RegistrationCoordinator_PreKeyManagerShim {
-
-    private let preKeyManager: PreKeyManager
-
-    public init(_ preKeyManager: PreKeyManager) {
-        self.preKeyManager = preKeyManager
-    }
-
-    public func createPreKeysForRegistration() async throws -> RegistrationPreKeyUploadBundles {
-        return try await preKeyManager.createPreKeysForRegistration().value
-    }
-
-    public func finalizeRegistrationPreKeys(
-        _ prekeyBundles: RegistrationPreKeyUploadBundles,
-        uploadDidSucceed: Bool
-    ) async throws {
-        return try await preKeyManager.finalizeRegistrationPreKeys(
-            prekeyBundles,
-            uploadDidSucceed: uploadDidSucceed
-        ).value
-    }
-
-    public func rotateOneTimePreKeysForRegistration(auth: ChatServiceAuth) async throws {
-        return try await preKeyManager.rotateOneTimePreKeysForRegistration(auth: auth).value
-    }
-}
-
 // MARK: - ProfileManager
 
 public protocol _RegistrationCoordinator_ProfileManagerShim {
@@ -374,7 +335,7 @@ public class _RegistrationCoordinator_ProfileManagerWrapper: _RegistrationCoordi
             await DependenciesBridge.shared.db.awaitableWrite { tx in
                 _ = manager.reuploadLocalProfile(
                     unsavedRotatedProfileKey: nil,
-                    mustReuploadAvatar: false,
+                    mustReuploadAvatar: true,
                     authedAccount: authedAccount,
                     tx: tx
                 )
@@ -570,7 +531,7 @@ public class _RegistrationCoordinator_UDManagerWrapper: _RegistrationCoordinator
 // MARK: - UsernameApiClient
 
 public protocol _RegistrationCoordinator_UsernameApiClientShim {
-    func confirmReservedUsername(reservedUsername: Usernames.HashedUsername, encryptedUsernameForLink: Data, chatServiceAuth: ChatServiceAuth) -> Promise<Usernames.ApiClientConfirmationResult>
+    func confirmReservedUsername(reservedUsername: Usernames.HashedUsername, encryptedUsernameForLink: Data, chatServiceAuth: ChatServiceAuth) async throws -> Usernames.ApiClientConfirmationResult
 }
 
 public class _RegistrationCoordinator_UsernameApiClientWrapper: _RegistrationCoordinator_UsernameApiClientShim {
@@ -578,9 +539,7 @@ public class _RegistrationCoordinator_UsernameApiClientWrapper: _RegistrationCoo
     private let usernameApiClient: any UsernameApiClient
     public init(_ usernameApiClient: any UsernameApiClient) { self.usernameApiClient = usernameApiClient }
 
-    public func confirmReservedUsername(reservedUsername: Usernames.HashedUsername, encryptedUsernameForLink: Data, chatServiceAuth: ChatServiceAuth) -> Promise<Usernames.ApiClientConfirmationResult> {
-        return Promise.wrapAsync {
-            return try await self.usernameApiClient.confirmReservedUsername(reservedUsername: reservedUsername, encryptedUsernameForLink: encryptedUsernameForLink, chatServiceAuth: chatServiceAuth)
-        }
+    public func confirmReservedUsername(reservedUsername: Usernames.HashedUsername, encryptedUsernameForLink: Data, chatServiceAuth: ChatServiceAuth) async throws -> Usernames.ApiClientConfirmationResult {
+        return try await self.usernameApiClient.confirmReservedUsername(reservedUsername: reservedUsername, encryptedUsernameForLink: encryptedUsernameForLink, chatServiceAuth: chatServiceAuth)
     }
 }

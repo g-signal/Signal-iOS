@@ -7,7 +7,7 @@ import Foundation
 import SignalServiceKit
 import Lottie
 
-public class HeroSheetViewController: StackSheetViewController {
+open class HeroSheetViewController: StackSheetViewController {
     public enum Hero {
         /// Scaled image to display at the top of the sheet
         case image(UIImage)
@@ -132,6 +132,15 @@ public class HeroSheetViewController: StackSheetViewController {
         self.primary = primary
         self.secondary = secondary
         super.init()
+    }
+
+    // .formSheet makes a blank sheet appear behind it
+    public override var modalPresentationStyle: UIModalPresentationStyle {
+        willSet {
+            if newValue == .formSheet {
+                owsFailDebug("Can't use formSheet for interactive sheets")
+            }
+        }
     }
 
     public override var stackViewInsets: UIEdgeInsets {
@@ -262,8 +271,8 @@ public class HeroSheetViewController: StackSheetViewController {
             tintColor: UIColor.Signal.label,
             backgroundColor: UIColor.Signal.background
         ),
-        title: LocalizationNotNeeded("No Backup Key?"),
-        body: LocalizationNotNeeded("Backups can’t be recovered without their 64-digit recovery code. If you’ve lost your backup key Signal can’t help restore your backup.\n\nIf you have your old device you can view your backup key in Settings > Chats > Signal Backups. Then tap View backup key."),
+        title: LocalizationNotNeeded("No Recovery Key?"),
+        body: LocalizationNotNeeded("Backups can’t be recovered without their 64-digit recovery code. If you’ve lost your recovery key Signal can’t help restore your backup.\n\nIf you have your old device you can view your recovery key in Settings > Chats > Signal Backups. Then tap View recovery key."),
         primaryButton: .dismissing(title: LocalizationNotNeeded("Skip & Don’t Restore")),
         secondaryButton: .dismissing(title: CommonStrings.learnMore)
     ))

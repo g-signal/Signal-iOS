@@ -94,7 +94,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
             // Don't continue processing lest we print a bubble for the session reset.
             return .success(nil)
         case .paymentNotification(let paymentNotification):
-            Logger.info("Recording payment notification from sync transcript in thread: \(paymentNotification.target.threadUniqueId) timestamp: \(transcript.timestamp)")
+            Logger.info("Recording payment notification from sync transcript in thread: \(paymentNotification.target.thread.logString) timestamp: \(transcript.timestamp)")
             guard validateTimestampValue() else {
                 return .failure(OWSAssertionError("Timestamp validation failed"))
             }
@@ -144,7 +144,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
 
             return .success(message)
         case .expirationTimerUpdate(let target):
-            Logger.info("Recording expiration timer update transcript in thread: \(target.threadUniqueId) timestamp: \(transcript.timestamp)")
+            Logger.info("Recording expiration timer update transcript in thread: \(target.thread.logString) timestamp: \(transcript.timestamp)")
             guard validateTimestampValue() else {
                 return .failure(OWSAssertionError("Timestamp validation failed"))
             }
@@ -156,7 +156,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
             return .success(nil)
 
         case .message(let messageParams):
-            Logger.info("Recording transcript in thread: \(messageParams.target.threadUniqueId) timestamp: \(transcript.timestamp)")
+            Logger.info("Recording transcript in thread: \(messageParams.target.thread.logString) timestamp: \(transcript.timestamp)")
             guard validateTimestampValue() else {
                 return .failure(OWSAssertionError("Timestamp validation failed"))
             }
@@ -199,7 +199,6 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
             timestamp: transcript.timestamp,
             receivedAtTimestamp: nil,
             messageBody: messageParams.body,
-            bodyRanges: messageParams.bodyRanges,
             editState: .none, // Sent transcripts with edit state are handled by a different codepath
             expiresInSeconds: messageParams.expirationDurationSeconds,
             expireTimerVersion: messageParams.expireTimerVersion,
@@ -219,7 +218,8 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
             contactShare: contactBuilder?.info,
             linkPreview: linkPreviewBuilder?.info,
             messageSticker: messageStickerBuilder?.info,
-            giftBadge: messageParams.giftBadge
+            giftBadge: messageParams.giftBadge,
+            isPoll: false // TODO(KC): fill in once poll sending is implemented
         )
         var outgoingMessage = interactionStore.buildOutgoingMessage(builder: outgoingMessageBuilder, tx: tx)
 
@@ -230,7 +230,8 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
             hasContactShare: contactBuilder != nil,
             hasSticker: messageStickerBuilder != nil,
             // Payment notifications go through a different path.
-            hasPayment: false
+            hasPayment: false,
+            hasPoll: false // TODO(KC): fill in once poll sending is implemented
         )
         if !hasRenderableContent && !outgoingMessage.isViewOnceMessage {
             switch messageParams.target {

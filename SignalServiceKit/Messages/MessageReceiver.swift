@@ -680,13 +680,15 @@ public final class MessageReceiver {
             // In rare cases this means we won't respond to the sync request, but
             // that's acceptable.
             let pendingTask = Self.buildPendingTask()
-            Task {
-                defer { pendingTask.complete() }
-                let syncManager = SSKEnvironment.shared.syncManagerRef
-                do {
-                    try await syncManager.syncAllContacts()
-                } catch {
-                    Logger.warn("\(error)")
+            tx.addSyncCompletion {
+                Task {
+                    defer { pendingTask.complete() }
+                    let syncManager = SSKEnvironment.shared.syncManagerRef
+                    do {
+                        try await syncManager.syncAllContacts()
+                    } catch {
+                        Logger.warn("\(error)")
+                    }
                 }
             }
 
@@ -969,14 +971,23 @@ public final class MessageReceiver {
             return nil
         }
 
-        // TODO: change this back to kOversizeTextMessageSizeThreshold
-        guard dataMessage.body?.utf8.count ?? 0 <= 6000 else {
+        // TODO: ideally, messages with bodies >OWSMediaUtils.kOversizeTextMessageSizeThresholdBytes
+        // but <=OWSMediaUtils.kMaxOversizeTextMessageReceiveSizeBytes would be truncated inline and transformed
+        // into oversized text attachments.
+        guard dataMessage.body?.utf8.count ?? 0 <= OWSMediaUtils.kOversizeTextMessageSizeThresholdBytes else {
             Logger.error("Dropping message with too large body: \(dataMessage.body?.utf8.count ?? 0)")
             return nil
         }
 
-        let body = dataMessage.body
-        let bodyRanges = dataMessage.bodyRanges.isEmpty ? nil : MessageBodyRanges(protos: dataMessage.bodyRanges)
+        let bodyRanges = dataMessage.bodyRanges.isEmpty ? MessageBodyRanges.empty : MessageBodyRanges(protos: dataMessage.bodyRanges)
+        var body = dataMessage.body.map {
+            // Note: we already checked above that the length doesn't need truncation; this
+            // just returns the validated body object needed for downstream APIs.
+            DependenciesBridge.shared.attachmentContentValidator.truncatedMessageBodyForInlining(
+                MessageBody(text: $0, ranges: bodyRanges),
+                tx: tx
+            )
+        }
         let serverGuid = envelope.envelope.serverGuid.flatMap { UUID(uuidString: $0) }
         let quotedMessageBuilder = DependenciesBridge.shared.quotedReplyManager.quotedMessage(
             for: dataMessage,
@@ -1086,6 +1097,66 @@ public final class MessageReceiver {
             }
         }
 
+        let pollCreate = dataMessage.pollCreate
+        if let pollCreate, let question = pollCreate.question {
+            guard question.count <= OWSPoll.Constants.maxCharacterLength
+                    && question.trimmedIfNeeded(maxByteCount: OWSMediaUtils.kOversizeTextMessageSizeThresholdBytes) == nil
+            else {
+                owsFailDebug("Poll question too large")
+                return nil
+            }
+
+            body =  DependenciesBridge.shared.attachmentContentValidator.truncatedMessageBodyForInlining(
+                MessageBody(text: question, ranges: .empty),
+                tx: tx
+            )
+        }
+
+        if let pollTerminate = dataMessage.pollTerminate {
+            do {
+                let targetMessage = try DependenciesBridge.shared.pollMessageManager.processIncomingPollTerminate(
+                    pollTerminateProto: pollTerminate,
+                    terminateAuthor: envelope.sourceAci,
+                    transaction: tx
+                )
+
+                if let targetMessage {
+                    SSKEnvironment.shared.databaseStorageRef.touch(interaction: targetMessage, shouldReindex: false, tx: tx)
+
+                    if let incomingMessage = targetMessage as? TSIncomingMessage {
+                        SSKEnvironment.shared.notificationPresenterRef.notifyUserOfPollEnd(forMessage: incomingMessage, thread: thread, transaction: tx)
+                    }
+                }
+            } catch {
+                owsFailDebug("Could not terminate poll!")
+                return nil
+            }
+
+            // Don't store poll terminate as a message.
+            return nil
+        }
+
+        if let pollVote = dataMessage.pollVote {
+            do {
+                let targetMessage = try DependenciesBridge.shared.pollMessageManager.processIncomingPollVote(
+                    voteAuthor: envelope.sourceAci,
+                    pollVoteProto: pollVote,
+                    transaction: tx
+                )
+
+                // Update interaction in the conversation view
+                if let targetMessage {
+                    SSKEnvironment.shared.databaseStorageRef.touch(interaction: targetMessage, shouldReindex: false, tx: tx)
+                }
+            } catch {
+                owsFailDebug("Could not insert poll vote!")
+                return nil
+            }
+
+            // Don't store PollVote as a message.
+            return nil
+        }
+
         // Legit usage of senderTimestamp when creating an incoming group message
         // record.
         let messageBuilder = TSIncomingMessageBuilder(
@@ -1095,7 +1166,6 @@ public final class MessageReceiver {
             authorAci: envelope.sourceAci,
             authorE164: nil,
             messageBody: body,
-            bodyRanges: bodyRanges,
             editState: .none,
             expiresInSeconds: dataMessage.expireTimer,
             expireTimerVersion: dataMessage.expireTimerVersion,
@@ -1117,7 +1187,8 @@ public final class MessageReceiver {
             linkPreview: linkPreviewBuilder?.info,
             messageSticker: messageStickerBuilder?.info,
             giftBadge: giftBadge,
-            paymentNotification: paymentModels?.notification
+            paymentNotification: paymentModels?.notification,
+            isPoll: pollCreate != nil
         )
         let message = messageBuilder.build()
 
@@ -1132,7 +1203,8 @@ public final class MessageReceiver {
             hasQuotedReply: quotedMessageBuilder != nil,
             hasContactShare: contactBuilder != nil,
             hasSticker: messageStickerBuilder != nil,
-            hasPayment: paymentModels != nil
+            hasPayment: paymentModels != nil,
+            hasPoll: pollCreate != nil
         )
         guard hasRenderableContent else {
             Logger.warn("Ignoring empty: \(messageDescription)")
@@ -1215,6 +1287,22 @@ public final class MessageReceiver {
             DependenciesBridge.shared.interactionDeleteManager
                 .delete(message, sideEffects: .default(), tx: tx)
             return nil
+        }
+
+        if let pollCreate = dataMessage.pollCreate,
+           let interactionId = message.grdbId?.int64Value {
+            do {
+                try DependenciesBridge.shared.pollMessageManager.processIncomingPollCreate(
+                    interactionId: interactionId,
+                    pollCreateProto: pollCreate,
+                    transaction: tx
+                )
+            } catch {
+                owsFailDebug("Could not insert poll!")
+                DependenciesBridge.shared.interactionDeleteManager
+                    .delete(message, sideEffects: .default(), tx: tx)
+                return nil
+            }
         }
 
         owsAssertDebug(message.insertedMessageHasRenderableContent(rowId: message.sqliteRowId!, tx: tx))

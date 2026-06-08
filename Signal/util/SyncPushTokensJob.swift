@@ -14,11 +14,8 @@ class SyncPushTokensJob: NSObject {
 
     private let mode: Mode
 
-    public let auth: ChatServiceAuth
-
-    init(mode: Mode, auth: ChatServiceAuth = .implicit()) {
+    init(mode: Mode) {
         self.mode = mode
-        self.auth = auth
     }
 
     private static let hasUploadedTokensOnce = AtomicBool(false, lock: .sharedGlobal)

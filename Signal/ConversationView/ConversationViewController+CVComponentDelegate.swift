@@ -736,10 +736,13 @@ extension ConversationViewController: CVComponentDelegate {
 
         alert.addAction(OWSActionSheets.cancelAction)
 
-        alert.addAction(ActionSheetAction(title: OWSLocalizedString("FINGERPRINT_SHRED_KEYMATERIAL_BUTTON",
-                                                                   comment: ""),
-                                          accessibilityIdentifier: "reset_session",
-                                          style: .default) { [weak self] _ in
+        alert.addAction(ActionSheetAction(
+            title: OWSLocalizedString(
+                "FINGERPRINT_SHRED_KEYMATERIAL_BUTTON",
+                comment: ""
+            ),
+            style: .default
+        ) { [weak self] _ in
             guard let self = self else { return }
             guard let contactThread = self.thread as? TSContactThread else {
                 // Corrupt Message errors only appear in contact threads.
@@ -759,17 +762,7 @@ extension ConversationViewController: CVComponentDelegate {
     public func didTapSessionRefreshMessage(_ message: TSErrorMessage) {
         dismissKeyBoard()
 
-        let headerImageView = UIImageView(image: UIImage(named: "chat-session-refresh"))
-
-        let headerView = UIView()
-        headerView.addSubview(headerImageView)
-        headerImageView.autoPinEdge(toSuperviewEdge: .top, withInset: 22)
-        headerImageView.autoPinEdge(toSuperviewEdge: .bottom)
-        headerImageView.autoHCenterInSuperview()
-        headerImageView.autoSetDimension(.width, toSize: 200)
-        headerImageView.autoSetDimension(.height, toSize: 110)
-
-        let sessionRefreshedActionSheet = ActionSheetController(
+        OWSActionSheets.showContactSupportActionSheet(
             title: OWSLocalizedString(
                 "SESSION_REFRESH_ALERT_TITLE",
                 comment: "Title for the session refresh alert"
@@ -777,19 +770,10 @@ extension ConversationViewController: CVComponentDelegate {
             message: OWSLocalizedString(
                 "SESSION_REFRESH_ALERT_MESSAGE",
                 comment: "Description for the session refresh alert"
-            )
+            ),
+            emailFilter: .custom("Signal iOS Session Refresh"),
+            fromViewController: self
         )
-        sessionRefreshedActionSheet.addAction(ActionSheetAction(title: CommonStrings.contactSupport) { _ in
-            ContactSupportActionSheet.present(
-                emailFilter: .custom("Signal iOS Session Refresh"),
-                logDumper: .fromGlobals(),
-                fromViewController: self
-            )
-        })
-        sessionRefreshedActionSheet.addAction(OWSActionSheets.okayAction)
-        sessionRefreshedActionSheet.customHeader = headerView
-
-        presentActionSheet(sessionRefreshedActionSheet)
     }
 
     // See: resendGroupUpdate
@@ -836,9 +820,10 @@ extension ConversationViewController: CVComponentDelegate {
                                           message: String(format: CallStrings.callBackAlertMessageFormat,
                                                           displayName))
 
-        alert.addAction(ActionSheetAction(title: CallStrings.callBackAlertCallButton,
-                                          accessibilityIdentifier: "call_back",
-                                          style: .default) { [weak self] _ in
+        alert.addAction(ActionSheetAction(
+            title: CallStrings.callBackAlertCallButton,
+            style: .default
+        ) { [weak self] _ in
             guard let self = self else { return }
             switch call.offerType {
             case .audio:
@@ -883,7 +868,6 @@ extension ConversationViewController: CVComponentDelegate {
                     "MISSED_CALL_BLOCKED_SYSTEM_SETTINGS_SHEET_BLOCK_ACTION",
                     comment: "Action to block contact in Signal for sheet shown when the user taps a missed call from a contact blocked in iOS settings."
                 ),
-                accessibilityIdentifier: "block_contact",
                 style: .destructive
             ) { [weak self] _ in
                 guard self != nil else { return }
@@ -1272,5 +1256,20 @@ extension ConversationViewController: CVComponentDelegate {
 
     public func didTapJoinCallLinkCall(callLink: CallLink) {
         GroupCallViewController.presentLobby(for: callLink)
+    }
+
+    public func didTapViewVotes(poll: OWSPoll) {
+        let pollDetails = PollDetailsViewController(poll: poll)
+        self.present(pollDetails, animated: true)
+    }
+}
+
+// MARK: - OWSNavigationChildController
+
+extension ConversationViewController: OWSNavigationChildController {
+    public var shouldCancelNavigationBack: Bool {
+        // If presentedViewController is not nil, it means we haven't finished dismissing
+        // and should not allow the back navigation gesture.
+        return presentedViewController != nil
     }
 }

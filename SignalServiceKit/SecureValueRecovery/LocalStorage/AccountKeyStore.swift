@@ -21,21 +21,19 @@ public class AccountKeyStore {
     private let mrbkKvStore: KeyValueStore
     private let masterKeyKvStore: KeyValueStore
 
-    private let masterKeyGenerator: (() -> MasterKey)
-    private let accountEntropyPoolGenerator: (() -> AccountEntropyPool)
+    private let backupSettingsStore: BackupSettingsStore
 
     public init(
-        masterKeyGenerator: (() -> MasterKey)? = nil,
-        accountEntropyPoolGenerator: (() -> AccountEntropyPool)? = nil
+        backupSettingsStore: BackupSettingsStore,
     ) {
-        self.masterKeyGenerator = masterKeyGenerator ?? { .init() }
-        self.accountEntropyPoolGenerator = accountEntropyPoolGenerator ?? { .init() }
-
         // Collection name must not be changed; matches that historically kept in KeyBackupServiceImpl.
         self.masterKeyKvStore = KeyValueStore(collection: "kOWSKeyBackupService_Keys")
         self.mrbkKvStore = KeyValueStore(collection: "MediaRootBackupKey")
         self.aepKvStore = KeyValueStore(collection: "AccountEntropyPool")
+        self.backupSettingsStore = backupSettingsStore
     }
+
+    // MARK: -
 
     public func getMasterKey(tx: DBReadTransaction) -> MasterKey? {
         if let aepDerivedKey = getAccountEntropyPool(tx: tx)?.getMasterKey() {
@@ -50,28 +48,19 @@ public class AccountKeyStore {
         return nil
     }
 
-    public func getOrGenerateMasterKey(tx: DBReadTransaction) -> MasterKey {
-        return getMasterKey(tx: tx) ?? masterKeyGenerator()
-    }
-
-    public func rotateMasterKey(tx: DBWriteTransaction) -> (old: MasterKey?, new: MasterKey) {
-        let oldValue = getMasterKey(tx: tx)
-        let newValue = masterKeyGenerator()
-        setMasterKey(newValue, tx: tx)
-        return (oldValue, newValue)
-    }
-
     public func setMasterKey(_ masterKey: MasterKey?, tx: DBWriteTransaction) {
         masterKeyKvStore.setData(masterKey?.rawData, key: Keys.masterKey, transaction: tx)
     }
+
+    // MARK: -
 
     /// Manages the "Media Root Backup Key" a.k.a. "MRBK" a.k.a. "Mr Burger King".
     /// This is a key we generate once and use forever that is used to derive encryption keys
     /// for all backed-up media.
     /// The MRBK is _not_ derived from the AccountEntropyPool any of its derivatives;
     /// instead we store the MRBK in the backup proto itself. This avoids needing to rotate
-    /// media uploads if the AEP or backup key/id ever changes (at time of writing, it never does);
-    /// the MRBK can be left the same and put into the new backup generated with the new backups keys.
+    /// media uploads if the AEP ever changes; the MRBK can be left the same and
+    /// put into the new backup generated with the new backups keys.
 
     /// Get the already-generated MRBK. Returns nil if none has been set. If you require an MRBK
     /// (e.g. you are creating a backup), use ``getOrGenerateMediaRootBackupKey``.
@@ -80,7 +69,7 @@ public class AccountKeyStore {
             return nil
         }
         do {
-            return try MediaRootBackupKey(data: data)
+            return try MediaRootBackupKey(backupKey: BackupKey(contents: data))
         } catch {
             owsFailDebug("Failed to instantiate MediaRootBackupKey")
         }
@@ -94,7 +83,7 @@ public class AccountKeyStore {
         if let value = getMediaRootBackupKey(tx: tx) {
             return value
         }
-        let newValue = MediaRootBackupKey()
+        let newValue = MediaRootBackupKey(backupKey: .generateRandom())
         mrbkKvStore.setData(newValue.serialize(), key: Keys.mrbkKeyName, transaction: tx)
         return newValue
     }
@@ -106,6 +95,18 @@ public class AccountKeyStore {
     public func setMediaRootBackupKey(_ mrbk: MediaRootBackupKey, tx: DBWriteTransaction) {
         mrbkKvStore.setData(mrbk.serialize(), key: Keys.mrbkKeyName, transaction: tx)
     }
+
+    // MARK: -
+
+    public func getMessageRootBackupKey(
+        aci: Aci,
+        tx: DBReadTransaction
+    ) throws -> MessageRootBackupKey? {
+        guard let aep = getAccountEntropyPool(tx: tx) else { return nil }
+        return try MessageRootBackupKey(accountEntropyPool: aep, aci: aci)
+    }
+
+    // MARK: -
 
     public func getAccountEntropyPool(tx: DBReadTransaction) -> SignalServiceKit.AccountEntropyPool? {
         guard let accountEntropyPool = aepKvStore.getString(Keys.aepKeyName, transaction: tx) else {
@@ -119,32 +120,21 @@ public class AccountKeyStore {
         return nil
     }
 
-    public func getOrGenerateAccountEntropyPool(tx: DBWriteTransaction) -> AccountEntropyPool {
-        return getAccountEntropyPool(tx: tx) ?? accountEntropyPoolGenerator()
-    }
-
-    public func setAccountEntropyPool(_ accountEntropyPool: AccountEntropyPool?, tx: DBWriteTransaction) {
+    /// Persist the given `AccountEntropyPool`, without side effects.
+    ///
+    /// - Warning
+    /// Rotating the `AccountEntropyPool` has external side-effects. Callers of
+    /// this method should be careful that those side-effects have been managed,
+    /// either by the caller or something upstream of the caller.
+    ///
+    /// Callers who are unsure should refer to ``AccountEntropyPoolManager``.
+    public func setAccountEntropyPool(_ accountEntropyPool: AccountEntropyPool, tx: DBWriteTransaction) {
         // Clear the old master key when setting the accountEntropyPool
         masterKeyKvStore.removeValue(forKey: Keys.masterKey, transaction: tx)
-        if let accountEntropyPool {
-            aepKvStore.setString(accountEntropyPool.rawData, key: Keys.aepKeyName, transaction: tx)
-        } else {
-            aepKvStore.removeValue(forKey: Keys.aepKeyName, transaction: tx)
-        }
-    }
 
-    public func rotateAccountEntropyPool(tx: DBWriteTransaction) -> (old: AccountEntropyPool?, new: AccountEntropyPool) {
-        let oldValue = getAccountEntropyPool(tx: tx)
-        let newValue = accountEntropyPoolGenerator()
-        setAccountEntropyPool(newValue, tx: tx)
-        return (oldValue, newValue)
-    }
+        // Setting the AEP means we need to set our Backup-ID again.
+        backupSettingsStore.setHaveSetBackupID(haveSetBackupID: false, tx: tx)
 
-    public func getMessageRootBackupKey(
-        aci: Aci,
-        tx: DBReadTransaction
-    ) throws -> MessageRootBackupKey? {
-        guard let aep = getAccountEntropyPool(tx: tx) else { return nil }
-        return try MessageRootBackupKey(accountEntropyPool: aep, aci: aci)
+        aepKvStore.setString(accountEntropyPool.rawData, key: Keys.aepKeyName, transaction: tx)
     }
 }

@@ -14,9 +14,8 @@ public class UsernameApiClientImpl: UsernameApiClient {
 
     private func performRequest(
         request: TSRequest,
-        canUseWebSocket: Bool = true,
     ) async throws -> any HTTPResponse {
-        try await networkManager.asyncRequest(request, canUseWebSocket: canUseWebSocket)
+        try await networkManager.asyncRequest(request)
     }
 
     // MARK: Selection
@@ -95,7 +94,7 @@ public class UsernameApiClientImpl: UsernameApiClient {
         request.auth = .identified(chatServiceAuth)
 
         do {
-            let response = try await performRequest(request: request, canUseWebSocket: false)
+            let response = try await performRequest(request: request)
 
             guard response.responseStatusCode == 200 else {
                 throw OWSAssertionError("Unexpected status code from successful request: \(response.responseStatusCode)")
@@ -149,38 +148,8 @@ public class UsernameApiClientImpl: UsernameApiClient {
     public func lookupAci(
         forHashedUsername hashedUsername: Usernames.HashedUsername
     ) async throws -> Aci? {
-        let request = OWSRequestFactory.lookupAciUsernameRequest(
-            usernameHashToLookup: hashedUsername.hashString
-        )
-
-        do {
-            let response = try await performRequest(request: request)
-
-            guard response.responseStatusCode == 200 else {
-                throw OWSAssertionError("Unexpected response code: \(response.responseStatusCode)")
-            }
-
-            guard let parser = ParamParser(responseObject: response.responseBodyJson) else {
-                throw OWSAssertionError("Unexpectedly missing JSON response body!")
-            }
-
-            let aciUuid: UUID = try parser.required(key: "uuid")
-
-            return Aci(fromUUID: aciUuid)
-        } catch {
-            guard let statusCode = error.httpStatusCode else {
-                owsFailDebug("Unexpectedly missing HTTP status code!")
-                throw error
-            }
-
-            switch statusCode {
-            case 404:
-                // If the requested username does not belong to any account,
-                // we get a 404.
-                return nil
-            default:
-                throw error
-            }
+        try await DependenciesBridge.shared.chatConnectionManager.withUnauthService(.usernames) {
+            try await $0.lookUpUsernameHash(hashedUsername.rawHash)
         }
     }
 
@@ -258,7 +227,7 @@ extension UsernameApiClientImpl {
 }
 
 protocol _UsernameApiClientImpl_NetworkManager_Shim {
-    func asyncRequest(_ request: TSRequest, canUseWebSocket: Bool) async throws -> HTTPResponse
+    func asyncRequest(_ request: TSRequest) async throws -> HTTPResponse
 }
 
 class _UsernameApiClientImpl_NetworkManager_Wrapper: _UsernameApiClientImpl_NetworkManager_Shim {
@@ -268,7 +237,7 @@ class _UsernameApiClientImpl_NetworkManager_Wrapper: _UsernameApiClientImpl_Netw
         self.networkManager = networkManager
     }
 
-    func asyncRequest(_ request: TSRequest, canUseWebSocket: Bool) async throws -> HTTPResponse {
-        return try await networkManager.asyncRequest(request, canUseWebSocket: canUseWebSocket)
+    func asyncRequest(_ request: TSRequest) async throws -> HTTPResponse {
+        return try await networkManager.asyncRequest(request)
     }
 }

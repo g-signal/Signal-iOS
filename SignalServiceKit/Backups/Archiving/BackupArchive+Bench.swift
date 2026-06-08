@@ -112,28 +112,28 @@ extension BackupArchive {
         override fileprivate func frameBencherDidProcessFrame(
             _ frameBencher: BackupArchive.Bencher.FrameBencher,
             frame: BackupProto_Frame,
-            frameProcessingDurationMs: UInt64,
-            enumerationStepDurationMs: UInt64?
+            frameProcessingDurationNanos: UInt64,
+            enumerationStepDurationNanos: UInt64?
         ) {
             super.frameBencherDidProcessFrame(
                 frameBencher,
                 frame: frame,
-                frameProcessingDurationMs: frameProcessingDurationMs,
-                enumerationStepDurationMs: enumerationStepDurationMs
+                frameProcessingDurationNanos: frameProcessingDurationNanos,
+                enumerationStepDurationNanos: enumerationStepDurationNanos,
             )
 
             dbFileSizeBencher?.logIfNecessary(totalFramesProcessed: totalFramesProcessed)
         }
 
         override func logResults() {
-            Logger.info("Pre-Frame Restore Metrics:")
+            logger.info("Pre-Frame Restore Metrics:")
             for (action, metrics) in self.preFrameRestoreMetrics.sorted(by: { $0.value.totalDurationMs > $1.value.totalDurationMs }) {
                 logMetrics(metrics, typeString: action.rawValue)
             }
 
             super.logResults()
 
-            Logger.info("Post-Frame Restore Metrics:")
+            logger.info("Post-Frame Restore Metrics:")
             for (action, metrics) in self.postFrameRestoreMetrics.sorted(by: { $0.value.totalDurationMs > $1.value.totalDurationMs }) {
                 logMetrics(metrics, typeString: action.rawValue)
             }
@@ -157,12 +157,12 @@ extension BackupArchive {
         ) rethrows -> T {
             let startDate = dateProvider()
             let result = try block()
-            let durationMs = (dateProvider() - startDate).milliseconds
+            let durationNanos = (dateProvider() - startDate).nanoseconds
 
             var metrics = self[keyPath: actionMetricsKeyPath][action] ?? Metrics()
             metrics.frameCount += 1
-            metrics.totalDurationMs += durationMs
-            metrics.maxDurationMs = max(durationMs, metrics.maxDurationMs)
+            metrics.totalDurationNanos += durationNanos
+            metrics.maxDurationNanos = max(durationNanos, metrics.maxDurationNanos)
             self[keyPath: actionMetricsKeyPath][action] = metrics
 
             return result
@@ -171,6 +171,8 @@ extension BackupArchive {
         class DBFileSizeBencher {
             private let dateProvider: DateProviderMonotonic
             private let dbFileSizeProvider: DBFileSizeProvider
+            private let logger: PrefixedLogger
+
 #if DEBUG
             private let secondsBetweenLogs: TimeInterval = 2
 #else
@@ -188,6 +190,7 @@ extension BackupArchive {
             ) {
                 self.dateProvider = dateProvider
                 self.dbFileSizeProvider = dbFileSizeProvider
+                self.logger = PrefixedLogger(prefix: "[Backups]")
             }
 
             func logIfNecessary(totalFramesProcessed: UInt64) {
@@ -201,7 +204,7 @@ extension BackupArchive {
 
                 let dbFileSize = dbFileSizeProvider.getDatabaseFileSize()
                 let walFileSize = dbFileSizeProvider.getDatabaseWALFileSize()
-                Logger.info("{DB:\(dbFileSize), WAL:\(walFileSize), frames:\(totalFramesProcessed), framesDelta:\(totalFramesProcessed - (lastTotalFramesProcessed ?? 0))}")
+                logger.info("{DB:\(dbFileSize), WAL:\(walFileSize), frames:\(totalFramesProcessed), framesDelta:\(totalFramesProcessed - (lastTotalFramesProcessed ?? 0))}")
 
                 lastLogDate = dateProvider()
                 lastTotalFramesProcessed = totalFramesProcessed
@@ -215,10 +218,10 @@ extension BackupArchive {
     /// archive/restore, per frame type.
     class Bencher {
         fileprivate let dateProvider: DateProviderMonotonic
+        fileprivate let logger: PrefixedLogger
         fileprivate let memorySampler: MemorySampler
 
         fileprivate let startDate: MonotonicDate
-
         fileprivate var totalFramesProcessed: UInt64 = 0
         fileprivate var frameProcessingMetrics = [FrameType: Metrics]()
 
@@ -227,6 +230,7 @@ extension BackupArchive {
             memorySampler: MemorySampler
         ) {
             self.dateProvider = dateProviderMonotonic
+            self.logger = PrefixedLogger(prefix: "[Backups]")
             self.memorySampler = memorySampler
 
             startDate = dateProviderMonotonic()
@@ -235,8 +239,8 @@ extension BackupArchive {
         fileprivate func frameBencherDidProcessFrame(
             _ frameBencher: FrameBencher,
             frame: BackupProto_Frame,
-            frameProcessingDurationMs: UInt64,
-            enumerationStepDurationMs: UInt64?
+            frameProcessingDurationNanos: UInt64,
+            enumerationStepDurationNanos: UInt64?
         ) {
             memorySampler.sample()
 
@@ -244,14 +248,13 @@ extension BackupArchive {
                 return
             }
 
-            let durationMs = (dateProvider() - frameBencher.startDate).milliseconds
             totalFramesProcessed += 1
 
             var metrics = frameProcessingMetrics[frameType] ?? Metrics()
             metrics.frameCount += 1
-            metrics.totalDurationMs += durationMs
-            metrics.maxDurationMs = max(durationMs, metrics.maxDurationMs)
-            metrics.totalEnumerationDurationMs += enumerationStepDurationMs ?? 0
+            metrics.totalDurationNanos += frameProcessingDurationNanos
+            metrics.maxDurationNanos = max(frameProcessingDurationNanos, metrics.maxDurationNanos)
+            metrics.totalEnumerationDurationNanos += enumerationStepDurationNanos ?? 0
             frameProcessingMetrics[frameType] = metrics
         }
 
@@ -303,8 +306,8 @@ extension BackupArchive {
                 bencher.frameBencherDidProcessFrame(
                     self,
                     frame: frame,
-                    frameProcessingDurationMs: (dateProvider() - startDate).milliseconds,
-                    enumerationStepDurationMs: enumerationStepStartDate.map { (startDate - $0).milliseconds }
+                    frameProcessingDurationNanos: (dateProvider() - startDate).nanoseconds,
+                    enumerationStepDurationNanos: enumerationStepStartDate.map { (startDate - $0).nanoseconds }
                 )
             }
         }
@@ -313,9 +316,9 @@ extension BackupArchive {
 
         func logResults() {
             let totalFrameCount = frameProcessingMetrics.reduce(0, { $0 + $1.value.frameCount })
-            Logger.info("Processed \(loggableCountString(totalFrameCount)) frames in \((dateProvider() - startDate).milliseconds)ms")
+            logger.info("Processed \(loggableCountString(totalFrameCount)) frames in \((dateProvider() - startDate).milliseconds)ms")
 
-            Logger.info("Frame Processing Metrics:")
+            logger.info("Frame Processing Metrics:")
             for (frameType, metrics) in self.frameProcessingMetrics.sorted(by: { $0.value.totalDurationMs > $1.value.totalDurationMs }) {
                 logMetrics(metrics, typeString: frameType.rawValue)
             }
@@ -331,7 +334,7 @@ extension BackupArchive {
             if metrics.totalEnumerationDurationMs > 0 {
                 logString += " Enum:\(metrics.totalEnumerationDurationMs)ms"
             }
-            Logger.info(logString)
+            logger.info(logString)
         }
 
         private func loggableCountString(_ number: UInt64) -> String {
@@ -353,9 +356,13 @@ extension BackupArchive {
 
         fileprivate struct Metrics {
             var frameCount: UInt64 = 0
-            var totalDurationMs: UInt64 = 0
-            var maxDurationMs: UInt64 = 0
-            var totalEnumerationDurationMs: UInt64 = 0
+            var totalDurationNanos: UInt64 = 0
+            var maxDurationNanos: UInt64 = 0
+            var totalEnumerationDurationNanos: UInt64 = 0
+
+            var totalDurationMs: UInt64 { totalDurationNanos / NSEC_PER_MSEC }
+            var maxDurationMs: UInt64 { maxDurationNanos / NSEC_PER_MSEC }
+            var totalEnumerationDurationMs: UInt64 { totalEnumerationDurationNanos / NSEC_PER_MSEC }
         }
 
         fileprivate enum FrameType: String {

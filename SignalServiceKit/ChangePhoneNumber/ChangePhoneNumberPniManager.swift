@@ -36,10 +36,8 @@ public protocol ChangePhoneNumberPniManager {
     func generatePniIdentity(
         forNewE164 newE164: E164,
         localAci: Aci,
-        localRecipientUniqueId: String,
         localDeviceId: DeviceId,
-        localUserAllDeviceIds: [DeviceId]
-    ) -> Guarantee<ChangePhoneNumberPni.GeneratePniIdentityResult>
+    ) async -> ChangePhoneNumberPni.GeneratePniIdentityResult
 
     /// Commits an identity generated for a change number request.
     ///
@@ -132,15 +130,13 @@ class ChangePhoneNumberPniManagerImpl: ChangePhoneNumberPniManager {
     func generatePniIdentity(
         forNewE164 newE164: E164,
         localAci: Aci,
-        localRecipientUniqueId: String,
         localDeviceId: DeviceId,
-        localUserAllDeviceIds: [DeviceId]
-    ) -> Guarantee<ChangePhoneNumberPni.GeneratePniIdentityResult> {
+    ) async -> ChangePhoneNumberPni.GeneratePniIdentityResult {
         logger.info("Generating PNI identity!")
 
         let pniIdentityKeyPair = identityManager.generateNewIdentityKeyPair()
 
-        let localDevicePniPqLastResortPreKeyRecord = db.write { tx in
+        let localDevicePniPqLastResortPreKeyRecord = await db.awaitableWrite { tx in
             pniKyberPreKeyStore.generateLastResortKyberPreKey(signedBy: pniIdentityKeyPair, tx: tx)
         }
 
@@ -152,23 +148,19 @@ class ChangePhoneNumberPniManagerImpl: ChangePhoneNumberPniManager {
             localDevicePniRegistrationId: registrationIdGenerator.generate()
         )
 
-        return Guarantee.wrapAsync {
-            do {
-                let parameters = try await self.pniDistributionParameterBuilder.buildPniDistributionParameters(
-                    localAci: localAci,
-                    localRecipientUniqueId: localRecipientUniqueId,
-                    localDeviceId: .valid(localDeviceId),
-                    localUserAllDeviceIds: localUserAllDeviceIds,
-                    localPniIdentityKeyPair: pniIdentityKeyPair,
-                    localE164: newE164,
-                    localDevicePniSignedPreKey: pendingState.localDevicePniSignedPreKeyRecord,
-                    localDevicePniPqLastResortPreKey: localDevicePniPqLastResortPreKeyRecord,
-                    localDevicePniRegistrationId: pendingState.localDevicePniRegistrationId
-                )
-                return .success(parameters: parameters, pendingState: pendingState)
-            } catch {
-                return .failure
-            }
+        do {
+            let parameters = try await self.pniDistributionParameterBuilder.buildPniDistributionParameters(
+                localAci: localAci,
+                localDeviceId: .valid(localDeviceId),
+                localPniIdentityKeyPair: pniIdentityKeyPair,
+                localE164: newE164,
+                localDevicePniSignedPreKey: pendingState.localDevicePniSignedPreKeyRecord,
+                localDevicePniPqLastResortPreKey: localDevicePniPqLastResortPreKeyRecord,
+                localDevicePniRegistrationId: pendingState.localDevicePniRegistrationId
+            )
+            return .success(parameters: parameters, pendingState: pendingState)
+        } catch {
+            return .failure
         }
     }
 
@@ -202,8 +194,9 @@ class ChangePhoneNumberPniManagerImpl: ChangePhoneNumberPniManager {
             tx: transaction
         )
 
-        tsAccountManager.setPniRegistrationId(
+        tsAccountManager.setRegistrationId(
             pendingState.localDevicePniRegistrationId,
+            for: .pni,
             tx: transaction
         )
 

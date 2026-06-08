@@ -26,6 +26,11 @@ public protocol BGProcessingTaskRunner {
     /// If true, informs iOS that we require a network connection to perform the task.
     static var requiresNetworkConnectivity: Bool { get }
 
+    /// If true, informs iOS that we require external power to perform the task; typically
+    /// you want this if CPU utilization will be very high, as without power iOS is much
+    /// more aggressive at terminating the process at high CPU utilization.
+    static var requiresExternalPower: Bool { get }
+
     /// See ``BGProcessingTaskStartCondition`` documentation.
     func startCondition() -> BGProcessingTaskStartCondition
 
@@ -112,6 +117,7 @@ extension BGProcessingTaskRunner where Self: Sendable {
             request.earliestBeginDate = date
         }
         request.requiresNetworkConnectivity = Self.requiresNetworkConnectivity
+        request.requiresExternalPower = Self.requiresExternalPower
 
         do {
             try BGTaskScheduler.shared.submit(request)
@@ -175,7 +181,7 @@ extension BGProcessingTaskRunner where Self: Sendable {
         backgroundMessageFetcherFactory: BackgroundMessageFetcherFactory,
         operation: () async throws -> T,
     ) async throws -> T {
-        let backgroundMessageFetcher = backgroundMessageFetcherFactory.buildFetcher(useWebSocket: true)
+        let backgroundMessageFetcher = backgroundMessageFetcherFactory.buildFetcher()
 
         // We want a chat connection, and if we get a chat connection, we're also
         // going to need to deal with message processing.
@@ -188,11 +194,7 @@ extension BGProcessingTaskRunner where Self: Sendable {
         // for any incoming messages so that we can tear down gracefully.
         try? await backgroundMessageFetcher.waitForFetchingProcessingAndSideEffects()
 
-        // Wrap the cleanup of message processing in a new Task, so if we're
-        // canceled, that method doesn't inherit our cancellation.
-        await Task {
-            await backgroundMessageFetcher.stopAndWaitBeforeSuspending()
-        }.value
+        await backgroundMessageFetcher.stopAndWaitBeforeSuspending()
 
         // Pass the result of operation() to the caller.
         return try result.get()

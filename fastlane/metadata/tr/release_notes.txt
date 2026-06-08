@@ -1,1 +1,1 @@
-• Tekrar tekrar denemene gerek kalmadan, emojini ilk denemede gönder. Emojinin pratikliği de burada, değil mi! iOS emoji klavyesinden gönderilen çıkartmalarla ilgili bir hatayı düzelttik. Aynı düzeltme Genmoji için de geçerlidir, umarız bunu beğenirsin.
+• Yeni bir cihaz bağlanmaya çalışıldığında kameranın boş görünmesine neden olan bir hatayı düzelttik. Artık vizör yalnızca gerçekten karanlık bir odada yeni bir cihazı bağlamaya çalışıyorsan böyle görünecektir.

@@ -3,6 +3,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import LibSignalClient
+
+public struct MostRecentlyEnabledBackupsDetails: Codable {
+    public let enabledTime: Date
+    public let notificationDelay: TimeInterval
+
+    public var shouldRemindUserAfter: Date { enabledTime.addingTimeInterval(notificationDelay) }
+}
+
 public enum BackupPlan: RawRepresentable {
     case disabled
     case disabling
@@ -57,12 +66,16 @@ public struct BackupSettingsStore {
         static let plan = "planKey2"
         static let firstBackupDate = "firstBackupDate"
         static let lastBackupDate = "lastBackupDate"
+        static let lastBackupFileSizeBytes = "lastBackupFileSizeBytes"
         static let lastBackupSizeBytes = "lastBackupSizeBytes"
         static let isBackupAttachmentDownloadQueueSuspended = "isBackupAttachmentDownloadQueueSuspended"
         static let shouldAllowBackupDownloadsOnCellular = "shouldAllowBackupDownloadsOnCellular"
         static let shouldAllowBackupUploadsOnCellular = "shouldAllowBackupUploadsOnCellular"
         static let shouldOptimizeLocalStorage = "shouldOptimizeLocalStorage"
-        static let lastBackupKeyReminderDate = "lastBackupKeyReminderDate"
+        static let lastRecoveryKeyReminderDate = "lastBackupKeyReminderDate"
+        static let haveSetBackupID = "haveSetBackupID"
+        static let lastBackupRefreshDate = "lastBackupRefreshDate"
+        static let lastBackupEnabledDetails = "lastBackupEnabledDetails"
     }
 
     private let kvStore: KeyValueStore
@@ -78,6 +91,23 @@ public struct BackupSettingsStore {
     public func haveBackupsEverBeenEnabled(tx: DBReadTransaction) -> Bool {
         return kvStore.getBool(Keys.haveEverBeenEnabled, defaultValue: false, transaction: tx)
     }
+
+    /// Not intended for production use.
+    ///
+    /// Wipes whether Backups have ever been enabled. Throws if Backups are not
+    /// currently disabled.
+    public func wipeHaveBackupsEverBeenEnabled(tx: DBWriteTransaction) throws(OWSAssertionError) {
+        switch backupPlan(tx: tx) {
+        case .disabled:
+            break
+        case .disabling, .free, .paid, .paidExpiringSoon, .paidAsTester:
+            throw OWSAssertionError("Backups must be disabled to wipe haveBackupsEverBeenEnabled.")
+        }
+
+        kvStore.removeValue(forKey: Keys.haveEverBeenEnabled, transaction: tx)
+    }
+
+    // MARK: -
 
     /// This device's view of the user's current Backup plan. A return value of
     /// `nil` indicates that the user has Backups disabled.
@@ -107,6 +137,48 @@ public struct BackupSettingsStore {
 
     // MARK: -
 
+    public func lastBackupEnabledDetails(
+        tx: DBReadTransaction
+    ) -> MostRecentlyEnabledBackupsDetails? {
+        do {
+            return try kvStore.getCodableValue(
+                forKey: Keys.lastBackupEnabledDetails,
+                transaction: tx
+            )
+        } catch {
+            owsFailDebug("Failed to get MostRecentlyEnabledBackupsDetails \(error)")
+            return nil
+        }
+    }
+
+    public func setLastBackupEnabledDetails(
+        backupsEnabledTime: Date,
+        notificationDelay: TimeInterval,
+        tx: DBWriteTransaction
+    ) {
+        do {
+            try kvStore.setCodable(
+                MostRecentlyEnabledBackupsDetails(
+                    enabledTime: backupsEnabledTime,
+                    notificationDelay: notificationDelay
+                ),
+                key: Keys.lastBackupEnabledDetails,
+                transaction: tx
+            )
+        } catch {
+            owsFailDebug("Failed to set MostRecentlyEnabledBackupsDetails")
+        }
+    }
+
+    public func clearLastBackupEnabledDetails(tx: DBWriteTransaction) {
+        kvStore.removeValue(
+            forKey: Keys.lastBackupEnabledDetails,
+            transaction: tx
+        )
+    }
+
+    // MARK: -
+
     public func firstBackupDate(tx: DBReadTransaction) -> Date? {
         return kvStore.getDate(Keys.firstBackupDate, transaction: tx)
     }
@@ -131,6 +203,8 @@ public struct BackupSettingsStore {
         if firstBackupDate(tx: tx) == nil {
             setFirstBackupDate(lastBackupDate, tx: tx)
         }
+
+        setLastBackupRefreshDate(lastBackupDate, tx: tx)
     }
 
     public func resetLastBackupDate(tx: DBWriteTransaction) {
@@ -140,15 +214,28 @@ public struct BackupSettingsStore {
 
     // MARK: -
 
+    /// THe size of the user's most recent Backup proto file.
+    public func lastBackupFileSizeBytes(tx: DBReadTransaction) -> UInt64? {
+        return kvStore.getUInt64(Keys.lastBackupFileSizeBytes, transaction: tx)
+    }
+
+    /// The total size of a user's most recent Backup, including their Backup
+    /// proto file and backed-up media.
     public func lastBackupSizeBytes(tx: DBReadTransaction) -> UInt64? {
         return kvStore.getUInt64(Keys.lastBackupSizeBytes, transaction: tx)
     }
 
-    public func setLastBackupSizeBytes(_ lastBackupSizeBytes: UInt64, tx: DBWriteTransaction) {
-        kvStore.setUInt64(lastBackupSizeBytes, key: Keys.lastBackupSizeBytes, transaction: tx)
+    public func setLastBackupSizeBytes(
+        backupFileSizeBytes: UInt64,
+        backupMediaSizeBytes: UInt64,
+        tx: DBWriteTransaction
+    ) {
+        kvStore.setUInt64(backupFileSizeBytes, key: Keys.lastBackupFileSizeBytes, transaction: tx)
+        kvStore.setUInt64(backupFileSizeBytes + backupMediaSizeBytes, key: Keys.lastBackupSizeBytes, transaction: tx)
     }
 
     public func resetLastBackupSizeBytes(tx: DBWriteTransaction) {
+        kvStore.removeValue(forKey: Keys.lastBackupFileSizeBytes, transaction: tx)
         kvStore.removeValue(forKey: Keys.lastBackupSizeBytes, transaction: tx)
     }
 
@@ -220,11 +307,44 @@ public struct BackupSettingsStore {
 
     // MARK: -
 
-    public func lastBackupKeyReminderDate(tx: DBReadTransaction) -> Date? {
-        return kvStore.getDate(Keys.lastBackupKeyReminderDate, transaction: tx)
+    public func lastRecoveryKeyReminderDate(tx: DBReadTransaction) -> Date? {
+        return kvStore.getDate(Keys.lastRecoveryKeyReminderDate, transaction: tx)
     }
 
-    public func setLastBackupKeyReminderDate(_ lastBackupKeyReminderDate: Date, tx: DBWriteTransaction) {
-        kvStore.setDate(lastBackupKeyReminderDate, key: Keys.lastBackupKeyReminderDate, transaction: tx)
+    public func setLastRecoveryKeyReminderDate(_ lastRecoveryKeyReminderDate: Date, tx: DBWriteTransaction) {
+        kvStore.setDate(lastRecoveryKeyReminderDate, key: Keys.lastRecoveryKeyReminderDate, transaction: tx)
+    }
+
+    // MARK: -
+
+    public func haveSetBackupID(tx: DBReadTransaction) -> Bool {
+        return kvStore.getBool(Keys.haveSetBackupID, defaultValue: false, transaction: tx)
+    }
+
+    public func setHaveSetBackupID(haveSetBackupID: Bool, tx: DBWriteTransaction) {
+        kvStore.setBool(haveSetBackupID, key: Keys.haveSetBackupID, transaction: tx)
+    }
+
+    // MARK: -
+
+    public func lastBackupRefreshDate(tx: DBReadTransaction) -> Date? {
+        return kvStore.getDate(Keys.lastBackupRefreshDate, transaction: tx)
+    }
+
+    public func setLastBackupRefreshDate(_ lastBackupRefreshDate: Date, tx: DBWriteTransaction) {
+        kvStore.setDate(lastBackupRefreshDate, key: Keys.lastBackupRefreshDate, transaction: tx)
+    }
+}
+
+fileprivate extension BackupPlan {
+    var asStorageServiceBackupTier: UInt64? {
+        switch self {
+        case .disabled, .disabling:
+            return nil
+        case .paid, .paidExpiringSoon, .paidAsTester:
+            return UInt64(LibSignalClient.BackupLevel.paid.rawValue)
+        case .free:
+            return UInt64(LibSignalClient.BackupLevel.free.rawValue)
+        }
     }
 }

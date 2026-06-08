@@ -35,6 +35,8 @@ public enum AppNotificationCategory: CaseIterable {
     case transferRelaunch
     case deregistration
     case newDeviceLinked
+    case backupsEnabled
+    case pollEndNotification
 }
 
 /// Represents "custom" notification actions. These are the ones that appear
@@ -63,6 +65,7 @@ public enum AppNotificationDefaultAction: String {
     case reregister
     case showChatList
     case showLinkedDevices
+    case showBackupsEnabled
 }
 
 public struct AppNotificationUserInfo {
@@ -189,6 +192,10 @@ extension AppNotificationCategory {
             return "Signal.AppNotificationCategory.authErrorLogout"
         case .newDeviceLinked:
             return "Signal.AppNotificationCategory.newDeviceLinked"
+        case .backupsEnabled:
+            return "Signal.AppNotificationCategory.backupsEnabled"
+        case .pollEndNotification:
+            return "Signal.AppNotificationCategory.pollEndNotification"
         }
     }
 
@@ -224,6 +231,10 @@ extension AppNotificationCategory {
         case .deregistration:
             return []
         case .newDeviceLinked:
+            return []
+        case .backupsEnabled:
+            return []
+        case .pollEndNotification:
             return []
         }
     }
@@ -589,6 +600,66 @@ public class NotificationPresenterImpl: NotificationPresenter {
         )
     }
 
+    public func notifyUserOfPollEnd(
+        forMessage message: TSIncomingMessage,
+        thread: TSThread,
+        transaction: DBWriteTransaction
+    ) {
+        guard let notifiableThread = NotifiableThread(thread) else {
+            owsFailDebug("Can't notify for \(type(of: thread))")
+            return
+        }
+
+        guard !isThreadMuted(thread, transaction: transaction) else { return }
+
+        // Poll terminate notifications only get displayed if we can include the poll details.
+        let previewType = self.previewType(tx: transaction)
+        guard previewType == .namePreview else {
+            return
+        }
+        owsPrecondition(Self.shouldShowActions(for: previewType))
+
+        let notificationTitle = self.notificationTitle(
+            for: notifiableThread,
+            senderAddress: message.authorAddress,
+            isGroupStoryReply: false,
+            previewType: previewType,
+            tx: transaction
+        )
+
+        let pollEndedFormat = OWSLocalizedString(
+            "POLL_ENDED_NOTIFICATION",
+            comment: "Notification that {{contact}} ended a poll with question {{poll question}}"
+        )
+        guard let pollQuestion = message.body else {
+            return
+        }
+
+        let pollAuthorName = SSKEnvironment.shared.contactManagerRef.nameForAddress(
+            message.authorAddress,
+            localUserDisplayMode: .noteToSelf,
+            short: false,
+            transaction: transaction
+        )
+
+        let notificationBody: String = "\u{1F4CA}" + String(format: pollEndedFormat, pollAuthorName.string, pollQuestion)
+
+        let intent = thread.generateSendMessageIntent(context: .senderAddress(message.authorAddress), transaction: transaction)
+
+        let threadUniqueId = thread.uniqueId
+        enqueueNotificationAction(afterCommitting: transaction) {
+            await self.notifyViaPresenter(
+                category: .pollEndNotification,
+                title: notificationTitle,
+                body: notificationBody,
+                threadIdentifier: threadUniqueId,
+                userInfo: AppNotificationUserInfo(),
+                intent: intent.map { ($0, .incoming) },
+                soundQuery: .thread(threadUniqueId)
+            )
+        }
+    }
+
     private enum NotifiableThread {
         case individualThread(TSContactThread)
         case groupThread(TSGroupThread)
@@ -932,7 +1003,7 @@ public class NotificationPresenterImpl: NotificationPresenter {
     }
 
     public func notifyTestPopulation(ofErrorMessage errorString: String) {
-        // Fail debug on all devices. External devices should still log the error string.
+        // External devices should still log the error string.
         Logger.error("Fatal error occurred: \(errorString).")
         guard DebugFlags.testPopulationErrorAlerts else {
             return
@@ -1018,6 +1089,30 @@ public class NotificationPresenterImpl: NotificationPresenter {
                         comment: "Body for system notification when a new device is linked. Embeds {{ time the device was linked }}"
                     ),
                     deviceLinkTimestamp.formatted(date: .omitted, time: .shortened)
+                ),
+                threadIdentifier: nil,
+                userInfo: userInfo,
+                soundQuery: .global
+            )
+        }
+    }
+
+    public func scheduleNotifyForBackupsEnabled(backupsTimestamp: Date) {
+        var userInfo = AppNotificationUserInfo()
+        userInfo.defaultAction = .showBackupsEnabled
+        enqueueNotificationAction {
+            await self.notifyViaPresenter(
+                category: .backupsEnabled,
+                title: ResolvableValue(resolvedValue: OWSLocalizedString(
+                    "BACKUPS_TURNED_ON_TITLE",
+                    comment: "Title for system notification or megaphone when backups is enabled"
+                )),
+                body: String(
+                    format: OWSLocalizedString(
+                        "BACKUPS_TURNED_ON_NOTIFICATION_BODY_FORMAT",
+                        comment: "Body for system notification or megaphone when backups is enabled. Embeds {{ time backups was enabled }}"
+                    ),
+                    backupsTimestamp.formatted(date: .omitted, time: .shortened)
                 ),
                 threadIdentifier: nil,
                 userInfo: userInfo,
@@ -1405,16 +1500,12 @@ public class NotificationPresenterImpl: NotificationPresenter {
         presenter.clearAllNotifications()
     }
 
-    public func clearAllNotificationsExceptNewLinkedDevices() {
-        Self.clearAllNotificationsExceptNewLinkedDevices()
-    }
-
-    public static func clearAllNotificationsExceptNewLinkedDevices() {
-        UserNotificationPresenter.clearAllNotificationsExceptNewLinkedDevices()
+    public func clearAllNonScheduledNotifications() {
+        presenter.clearAllNonScheduledNotifications()
     }
 
     public func clearDeliveredNewLinkedDevicesNotifications() {
-        UserNotificationPresenter.clearDeliveredNewLinkedDevicesNotifications()
+        presenter.clearDeliveredNewLinkedDevicesNotifications()
     }
 
     // MARK: - Serialization

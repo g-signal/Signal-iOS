@@ -28,8 +28,15 @@ extension HomeTabViewController {
         let contextButton = ContextMenuButton(actions: buildActions(settingsAction))
         contextButton.accessibilityLabel = CommonStrings.openAppSettingsButton
 
+        let sizeClass: ConversationAvatarView.Configuration.SizeClass
+        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+            sizeClass = .forty
+        } else {
+            sizeClass = .twentyEight
+        }
+
         let avatarView = ConversationAvatarView(
-            sizeClass: .twentyEight,
+            sizeClass: sizeClass,
             localUserDisplayMode: .asUser
         )
         databaseStorage.read { transaction in
@@ -56,6 +63,11 @@ extension HomeTabViewController {
 
         let barButtonItem = UIBarButtonItem(customView: barButtonView)
         barButtonItem.accessibilityLabel = CommonStrings.openAppSettingsButton
+#if compiler(>=6.2)
+        if #available(iOS 26.0, *) {
+            barButtonItem.hidesSharedBackground = true
+        }
+#endif
         return barButtonItem
     }
 }

@@ -173,9 +173,10 @@ public class AttachmentApprovalViewController: UIPageViewController, UIPageViewC
             options.insert(.disallowViewOnce)
         }
         let vc = AttachmentApprovalViewController(options: options, attachmentApprovalItems: attachmentApprovalItems)
+        // The data source needs to be set before the message body because it is needed to hydrate mentions.
+        vc.approvalDataSource = approvalDataSource
         vc.setMessageBody(initialMessageBody, txProvider: DependenciesBridge.shared.db.readTxProvider)
         vc.approvalDelegate = approvalDelegate
-        vc.approvalDataSource = approvalDataSource
         vc.stickerSheetDelegate = stickerSheetDelegate
         let navController = OWSNavigationController(rootViewController: vc)
         navController.setNavigationBarHidden(true, animated: false)
@@ -889,7 +890,8 @@ extension AttachmentApprovalViewController {
                             message: OWSLocalizedString(
                                 "ATTACHMENT_APPROVAL_FAILED_TO_EXPORT",
                                 comment: "Error that outgoing attachments could not be exported."),
-                            theme: .translucentDark)
+                        )
+                        actionSheet.overrideUserInterfaceStyle = .dark
                         actionSheet.addAction(ActionSheetAction(title: CommonStrings.okButton, style: .default))
 
                         self.present(actionSheet, animated: true)
@@ -1049,7 +1051,8 @@ extension AttachmentApprovalViewController {
     private func didTapMediaQuality() {
         AssertIsOnMainThread()
 
-        let actionSheet = ActionSheetController(theme: .translucentDark)
+        let actionSheet = ActionSheetController()
+        actionSheet.overrideUserInterfaceStyle = .dark
         actionSheet.isCancelable = true
 
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager

@@ -8,10 +8,10 @@ import SignalUI
 import SwiftUI
 
 class BackupOnboardingKeyIntroViewController: HostingController<BackupOnboardingKeyIntroView> {
-    private let onDeviceAuthSucceeded: () -> Void
+    private let onDeviceAuthSucceeded: (LocalDeviceAuthentication.AuthSuccess) -> Void
     private let viewModel: BackupsOnboardingKeyIntroViewModel
 
-    init(onDeviceAuthSucceeded: @escaping () -> Void) {
+    init(onDeviceAuthSucceeded: @escaping (LocalDeviceAuthentication.AuthSuccess) -> Void) {
         self.onDeviceAuthSucceeded = onDeviceAuthSucceeded
         self.viewModel = BackupsOnboardingKeyIntroViewModel()
 
@@ -26,8 +26,8 @@ class BackupOnboardingKeyIntroViewController: HostingController<BackupOnboarding
 extension BackupOnboardingKeyIntroViewController: BackupsOnboardingKeyIntroViewModel.ActionsDelegate {
     fileprivate func onContinue() {
         Task {
-            if await LocalDeviceAuthentication().performBiometricAuth() {
-                onDeviceAuthSucceeded()
+            if let authSuccess = await LocalDeviceAuthentication().performBiometricAuth() {
+                onDeviceAuthSucceeded(authSuccess)
             }
         }
     }
@@ -62,7 +62,7 @@ struct BackupOnboardingKeyIntroView: View {
 
                 Text(OWSLocalizedString(
                     "BACKUP_ONBOARDING_KEY_INTRO_TITLE",
-                    comment: "Title for a view introducing the 'Backup Key' during an onboarding flow."
+                    comment: "Title for a view introducing the 'Recovery Key' during an onboarding flow."
                 ))
                 .font(.title)
                 .fontWeight(.semibold)
@@ -72,7 +72,7 @@ struct BackupOnboardingKeyIntroView: View {
 
                 Text(OWSLocalizedString(
                     "BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE",
-                    comment: "Subtitle for a view introducing the 'Backup Key' during an onboarding flow."
+                    comment: "Subtitle for a view introducing the 'Recovery Key' during an onboarding flow."
                 ))
                 .font(.body)
                 .foregroundStyle(Color.Signal.secondaryLabel)
@@ -86,10 +86,10 @@ struct BackupOnboardingKeyIntroView: View {
                     .foregroundStyle(.white)
                     .font(.headline)
                     .padding(.vertical, 14)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.Signal.ultramarine)
             }
             .buttonStyle(.plain)
-            .frame(maxWidth: .infinity)
-            .background(Color.Signal.ultramarine)
             .cornerRadius(12)
             .padding(.horizontal, 40)
         }

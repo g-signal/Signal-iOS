@@ -1,1 +1,1 @@
-• Kijavítottunk egy hibát, amely az iOS emoji billentyűzetről küldött matricákkal járt.
+• Kijavítottunk egy hibát, amely miatt a Kamera üresen jelent meg új eszköz csatlakoztatásakor. A kereső mostantól csak akkor fog így kinézni, ha egy nagyon sötét szobában próbálsz új eszközt csatlakoztatni.

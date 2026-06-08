@@ -6,25 +6,9 @@
 import SignalServiceKit
 import SignalUI
 
-extension ActionSheetAction {
-    static func contactSupport(
-        emailFilter: ContactSupportActionSheet.EmailFilter,
-        fromViewController: UIViewController,
-    ) -> ActionSheetAction {
-        ActionSheetAction(title: CommonStrings.contactSupport) { _ in
-            ContactSupportActionSheet.present(
-                emailFilter: emailFilter,
-                logDumper: .fromGlobals(),
-                fromViewController: fromViewController,
-            )
-        }
-    }
-}
-
 enum ContactSupportActionSheet {
     enum EmailFilter: Equatable {
         enum RegistrationPINMode: String {
-            case v1
             case v2NoReglock
             case v2WithReglock
             case v2WithUnknownReglockState
@@ -39,7 +23,6 @@ enum ContactSupportActionSheet {
 
         fileprivate var asString: String {
             return switch self {
-            case .registrationPINMode(.v1): "Signal PIN - iOS (V1 PIN)"
             case .registrationPINMode(.v2NoReglock): "Signal PIN - iOS (V2 PIN without RegLock)"
             case .registrationPINMode(.v2WithReglock): "Signal PIN - iOS (V2 PIN)"
             case .registrationPINMode(.v2WithUnknownReglockState): "Signal PIN - iOS (V2 PIN with unknown reglock)"
@@ -152,5 +135,44 @@ enum ContactSupportActionSheet {
         ))
 
         fromViewController.present(actionSheet, animated: true)
+    }
+}
+
+// MARK: -
+
+extension ActionSheetAction {
+    static func contactSupport(
+        emailFilter: ContactSupportActionSheet.EmailFilter,
+        fromViewController: UIViewController,
+    ) -> ActionSheetAction {
+        ActionSheetAction(title: CommonStrings.contactSupport) { _ in
+            ContactSupportActionSheet.present(
+                emailFilter: emailFilter,
+                logDumper: .fromGlobals(),
+                fromViewController: fromViewController,
+            )
+        }
+    }
+}
+
+extension OWSActionSheets {
+    static func showContactSupportActionSheet(
+        title: String? = nil,
+        message: String,
+        emailFilter: ContactSupportActionSheet.EmailFilter,
+        fromViewController: UIViewController,
+    ) {
+        let actionSheet = ActionSheetController(title: title, message: message)
+
+        actionSheet.addAction(ActionSheetAction(title: CommonStrings.contactSupport) { _ in
+            ContactSupportActionSheet.present(
+                emailFilter: emailFilter,
+                logDumper: .fromGlobals(),
+                fromViewController: fromViewController,
+            )
+        })
+
+        actionSheet.addAction(.okay)
+        showActionSheet(actionSheet, fromViewController: fromViewController)
     }
 }

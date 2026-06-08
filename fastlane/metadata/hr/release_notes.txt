@@ -1,1 +1,1 @@
-• Ispravili smo programsku pogrešku pri slanju naljepnica s iOS emoji tipkovnice.
+• Ispravili smo programsku pogrešku zbog koje bi prilikom pokušaja povezivanja novog uređaja zaslon potpuno pocrnio.

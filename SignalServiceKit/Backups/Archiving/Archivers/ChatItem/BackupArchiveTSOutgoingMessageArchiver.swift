@@ -212,6 +212,7 @@ extension BackupArchiveTSOutgoingMessageArchiver: BackupArchiveTSMessageEditHist
 
         var wasAnySendSealedSender = false
         var outgoingDetails = BackupProto_ChatItem.OutgoingMessageDetails()
+        outgoingDetails.dateReceived = message.receivedAtTimestamp
 
         for (address, sendState) in message.recipientAddressStates ?? [:] {
             guard let recipientAddress = address.asSingleServiceIdBackupAddress()?.asArchivingAddress() else {
@@ -513,12 +514,13 @@ extension BackupArchiveTSOutgoingMessageArchiver: BackupArchiveTSMessageEditHist
             let outgoingMessageBuilder = TSOutgoingMessageBuilder(
                 thread: chatThread.tsThread,
                 timestamp: chatItem.dateSent,
-                // If we pass `nil` this will default to "now", which is a much
-                // worse approximation than the "sent" timestamp. For outgoing
-                // messages, "sent" and "received" are the same, anyway.
-                receivedAtTimestamp: chatItem.dateSent,
+                receivedAtTimestamp: outgoingDetails.dateReceived > 0
+                    ? outgoingDetails.dateReceived
+                    // If we pass `nil` this will default to "now", which is a much
+                    // worse approximation than the "sent" timestamp. For outgoing
+                    // messages, "sent" and "received" are the same, anyway.
+                    : chatItem.dateSent,
                 messageBody: nil,
-                bodyRanges: nil,
                 editState: editState,
                 expiresInSeconds: expiresInSeconds,
                 // Backed up messages don't set the chat timer; version is irrelevant.
@@ -540,7 +542,8 @@ extension BackupArchiveTSOutgoingMessageArchiver: BackupArchiveTSMessageEditHist
                 contactShare: nil,
                 linkPreview: nil,
                 messageSticker: nil,
-                giftBadge: nil
+                giftBadge: nil,
+                isPoll: false // TODO(KC): fill in once polls are implemented in backups
             )
 
             switch contents {
@@ -555,8 +558,7 @@ extension BackupArchiveTSOutgoingMessageArchiver: BackupArchiveTSMessageEditHist
             case .remoteDeleteTombstone:
                 outgoingMessageBuilder.wasRemotelyDeleted = true
             case .text(let text):
-                outgoingMessageBuilder.messageBody = text.body?.messageBody.text
-                outgoingMessageBuilder.bodyRanges = text.body?.messageBody.ranges
+                outgoingMessageBuilder.setMessageBody(text.body)
                 outgoingMessageBuilder.quotedMessage = text.quotedMessage
                 outgoingMessageBuilder.linkPreview = text.linkPreview
                 outgoingMessageBuilder.isVoiceMessage = text.isVoiceMessage
@@ -577,8 +579,7 @@ extension BackupArchiveTSOutgoingMessageArchiver: BackupArchiveTSMessageEditHist
             case .storyReply(let storyReply):
                 switch storyReply.replyType {
                 case .textReply(let textReply):
-                    outgoingMessageBuilder.messageBody = textReply.body.messageBody.text
-                    outgoingMessageBuilder.bodyRanges = textReply.body.messageBody.ranges
+                    outgoingMessageBuilder.setMessageBody(textReply.body)
                 case .emoji(let emoji):
                     outgoingMessageBuilder.storyReactionEmoji = emoji
                 }

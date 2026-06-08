@@ -21,7 +21,7 @@ class ChooseBackupPlanViewController: HostingController<ChooseBackupPlanView> {
         case paid
     }
 
-    private let backupIdManager: BackupIdManager
+    private let backupKeyService: BackupKeyService
     private let backupSettingsStore: BackupSettingsStore
     private let db: DB
     private let tsAccountManager: TSAccountManager
@@ -32,13 +32,13 @@ class ChooseBackupPlanViewController: HostingController<ChooseBackupPlanView> {
     init(
         initialPlanSelection: PlanSelection?,
         storeKitAvailability: StoreKitAvailability,
-        backupIdManager: BackupIdManager,
+        backupKeyService: BackupKeyService,
         backupSettingsStore: BackupSettingsStore,
         db: DB,
         tsAccountManager: TSAccountManager,
         onConfirmPlanSelectionBlock: @escaping OnConfirmPlanSelectionBlock,
     ) {
-        self.backupIdManager = backupIdManager
+        self.backupKeyService = backupKeyService
         self.backupSettingsStore = backupSettingsStore
         self.db = db
         self.tsAccountManager = tsAccountManager
@@ -81,7 +81,7 @@ class ChooseBackupPlanViewController: HostingController<ChooseBackupPlanView> {
         return ChooseBackupPlanViewController(
             initialPlanSelection: initialPlanSelection,
             storeKitAvailability: storeKitAvailability,
-            backupIdManager: DependenciesBridge.shared.backupIdManager,
+            backupKeyService: DependenciesBridge.shared.backupKeyService,
             backupSettingsStore: BackupSettingsStore(),
             db: DependenciesBridge.shared.db,
             tsAccountManager: DependenciesBridge.shared.tsAccountManager,
@@ -161,7 +161,10 @@ struct ChooseBackupPlanView: View {
                     comment: "Subtitle for a view allowing users to choose a Backup plan."
                 ))
                 .appendLink(CommonStrings.learnMore) {
-                    // TODO: [Backups] Open Support page
+                    CurrentAppContext().open(
+                        URL.Support.backups,
+                        completion: nil
+                    )
                 }
                 .foregroundStyle(Color.Signal.secondaryLabel)
 
@@ -265,11 +268,11 @@ struct ChooseBackupPlanView: View {
                     .foregroundStyle(.white)
                     .font(.headline)
                     .padding(.vertical, 14)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.Signal.ultramarine)
             }
             .disabled(viewModel.planSelection == viewModel.initialPlanSelection)
             .buttonStyle(.plain)
-            .frame(maxWidth: .infinity)
-            .background(Color.Signal.ultramarine)
             .cornerRadius(12)
             .padding(.horizontal, 40)
         }

@@ -451,7 +451,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>B&amp;A 群組喺人數唔超過 %1$d 個成員嘅時候表現最好。超過呢個數字嘅話，收發訊息嘅時間就會延遲。</string>
+			<string>Signal 群組喺人數唔超過 %1$d 個成員嘅時候表現最好。超過呢個數字嘅話，收發訊息嘅時間就會延遲。</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -591,7 +591,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>B&amp;A 將會打電話俾 %2$@、%3$@ 同另外 %1$d 個人</string>
+			<string>Signal 將會打電話俾 %2$@、%3$@ 同另外 %1$d 個人</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -843,7 +843,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>如果想保留「 %2$@ 」嘅連結，請喺 %1$d 日之內係嗰部裝置度打開 B&amp;A。</string>
+			<string>如果想保留「 %2$@ 」嘅連結，請喺 %1$d 日之內係嗰部裝置度打開 Signal。</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1025,7 +1025,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>所有 B&amp;A 人脈 · %1$d 個瀏覽者</string>
+			<string>所有 Signal 人脈 · %1$d 個瀏覽者</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1039,7 +1039,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>所有 B&amp;A 人脈 · 排除咗 %1$d 人</string>
+			<string>所有 Signal 人脈 · 排除咗 %1$d 人</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1166,6 +1166,20 @@
 			<string>d</string>
 			<key>other</key>
 			<string>係咪要撤回 %2$@ 發出嘅 %1$d 個邀請呀？</string>
+		</dict>
+	</dict>
+	<key>POLL_VOTE_COUNT</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%1$d 個投票</string>
 		</dict>
 	</dict>
 	<key>PRIVATE_STORY_VIEWERS_%d</key>

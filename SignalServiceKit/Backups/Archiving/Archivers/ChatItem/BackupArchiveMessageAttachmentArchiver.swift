@@ -434,6 +434,7 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
         let errors = attachmentManager.createAttachmentPointers(
             from: attachments,
             uploadEra: uploadEra,
+            attachmentByteCounter: context.attachmentByteCounter,
             tx: context.tx
         )
 
@@ -583,22 +584,15 @@ extension ReferencedAttachment {
 
         proto.locatorInfo = self.asBackupFilePointerLocatorInfo(currentBackupAttachmentUploadEra: currentBackupAttachmentUploadEra)
 
-        if let incrementalMacInfo = attachment.mediaTierInfo?.incrementalMacInfo ?? attachment.transitTierInfo?.incrementalMacInfo {
-            proto.incrementalMac = incrementalMacInfo.mac
-            proto.incrementalMacChunkSize = incrementalMacInfo.chunkSize
-        }
-
-        if attachment.mediaName != nil {
-            guard
-                let unencryptedByteCount =
-                    attachment.streamInfo?.unencryptedByteCount
-                    ?? attachment.mediaTierInfo?.unencryptedByteCount
-            else {
-                return proto
-            }
+        if
+            attachment.mediaName != nil,
+            let unencryptedByteCount =
+                attachment.streamInfo?.unencryptedByteCount
+                ?? attachment.mediaTierInfo?.unencryptedByteCount
+        {
             attachmentByteCounter.addToByteCount(
                 attachmentID: attachment.id,
-                byteCount: UInt64(Cryptography.estimatedMediaTierCDNSize(unencryptedSize: unencryptedByteCount))
+                byteCount: Cryptography.estimatedMediaTierCDNSize(unencryptedSize: unencryptedByteCount)
             )
         }
 
@@ -621,17 +615,26 @@ extension ReferencedAttachment {
         // When encryption keys don't match: if we reupload (e.g. forward) an
         // attachment after 3+ days, we rotate to a new encryption key; transit
         // tier info uses this new random key and can't be the fallback here.
+        let transitTierInfoToExport: Attachment.TransitTierInfo?
         if
-            let transitTierInfo = attachment.transitTierInfo,
-            transitTierInfo.encryptionKey == attachment.encryptionKey
+            let latestTransitTierInfo = attachment.latestTransitTierInfo,
+            latestTransitTierInfo.encryptionKey == attachment.encryptionKey
         {
-            locatorInfo.transitCdnKey = transitTierInfo.cdnKey
-            locatorInfo.transitCdnNumber = transitTierInfo.cdnNumber
-            locatorInfo.transitTierUploadTimestamp = transitTierInfo.uploadTimestamp
+            transitTierInfoToExport = latestTransitTierInfo
+        } else if let originalTransitTierInfo = attachment.originalTransitTierInfo {
+            transitTierInfoToExport = originalTransitTierInfo
+        } else {
+            transitTierInfoToExport = nil
+        }
+
+        if let transitTierInfoToExport {
+            locatorInfo.transitCdnKey = transitTierInfoToExport.cdnKey
+            locatorInfo.transitCdnNumber = transitTierInfoToExport.cdnNumber
+            locatorInfo.transitTierUploadTimestamp = transitTierInfoToExport.uploadTimestamp
             // We may overwrite this below with plaintext hash integrity check,
             // which is desired. We only use encrypted digest integrity check
             // if we don't have a plaintext hash and DO have a transit tier upload.
-            switch transitTierInfo.integrityCheck {
+            switch transitTierInfoToExport.integrityCheck {
             case .digestSHA256Ciphertext(let data):
                 locatorInfo.integrityCheck = .encryptedDigest(data)
             case .sha256ContentHash(let data):
@@ -654,7 +657,7 @@ extension ReferencedAttachment {
             if
                 let unencryptedByteCount = attachment.streamInfo?.unencryptedByteCount
                     ?? attachment.mediaTierInfo?.unencryptedByteCount
-                    ?? attachment.transitTierInfo?.unencryptedByteCount
+                    ?? attachment.latestTransitTierInfo?.unencryptedByteCount
             {
                 locatorInfo.size = unencryptedByteCount
             }

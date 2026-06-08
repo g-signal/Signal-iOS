@@ -64,12 +64,6 @@ public extension Notification.Name {
 /// similar things but designed around In-App Payments (StoreKit) and paid-tier
 /// Backups.
 public enum DonationSubscriptionManager {
-
-    public static func warmCaches() {
-        let value = SSKEnvironment.shared.databaseStorageRef.read { displayBadgesOnProfile(transaction: $0) }
-        displayBadgesOnProfileCache.set(value)
-    }
-
     public static func performMigrationToStorageServiceIfNecessary() async {
         let hasMigratedToStorageService = SSKEnvironment.shared.databaseStorageRef.read { transaction in
             subscriptionKVS.getBool(hasMigratedToStorageServiceKey, defaultValue: false, transaction: transaction)
@@ -605,9 +599,11 @@ public enum DonationSubscriptionManager {
         }()
         Logger.info("[Donations] Redeeming receipt credential presentation. Expires at \(expiresAtForLogging)")
 
+        let databaseStorage = SSKEnvironment.shared.databaseStorageRef
         let receiptCredentialPresentationData = receiptCredentialPresentation.serialize()
         let request = OWSRequestFactory.subscriptionRedeemReceiptCredential(
-            receiptCredentialPresentation: receiptCredentialPresentationData
+            receiptCredentialPresentation: receiptCredentialPresentationData,
+            displayBadgesOnProfile: databaseStorage.read(block: displayBadgesOnProfile(transaction:)),
         )
         let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(request)
         let statusCode = response.responseStatusCode
@@ -687,7 +683,7 @@ public enum DonationSubscriptionManager {
                 // "current" one.
                 return subscriptionBadgeEntitlements.map(\.expirationSeconds).max()
             },
-            enqueueRedemptionJobBlock: { subscriberId, subscription, tx -> DonationReceiptCredentialRedemptionJobRecord? in
+            saveRedemptionJobBlock: { subscriberId, subscription, tx -> DonationReceiptCredentialRedemptionJobRecord? in
                 if receiptCredentialRedemptionJobQueue.subscriptionJobExists(
                     subscriberID: subscriberId,
                     tx: tx
@@ -793,19 +789,12 @@ extension DonationSubscriptionManager {
 
     // MARK: -
 
-    private static var displayBadgesOnProfileCache = AtomicBool(false, lock: .sharedGlobal)
-
-    public static var displayBadgesOnProfile: Bool {
-        displayBadgesOnProfileCache.get()
-    }
-
     public static func displayBadgesOnProfile(transaction: DBReadTransaction) -> Bool {
         return subscriptionKVS.getBool(displayBadgesOnProfileKey, transaction: transaction) ?? false
     }
 
     public static func setDisplayBadgesOnProfile(_ value: Bool, updateStorageService: Bool = false, transaction: DBWriteTransaction) {
         guard value != displayBadgesOnProfile(transaction: transaction) else { return }
-        displayBadgesOnProfileCache.set(value)
         subscriptionKVS.setBool(value, key: displayBadgesOnProfileKey, transaction: transaction)
         if updateStorageService {
             SSKEnvironment.shared.storageServiceManagerRef.recordPendingLocalAccountUpdates()
@@ -880,7 +869,6 @@ extension DonationSubscriptionManager {
     }
 
     public static func setShowExpirySheetOnHomeScreenKey(show: Bool, transaction: DBWriteTransaction) {
-        Logger.info("\(show)")
         subscriptionKVS.setBool(show, key: showExpirySheetOnHomeScreenKey, transaction: transaction)
     }
 
@@ -968,8 +956,11 @@ extension DonationSubscriptionManager {
 // MARK: -
 
 extension DonationSubscriptionManager {
-    public static func reconcileBadgeStates(transaction: DBWriteTransaction) {
-        let currentBadges = SSKEnvironment.shared.profileManagerImplRef.localUserProfile(tx: transaction)?.badges ?? []
+    public static func reconcileBadgeStates(
+        currentLocalUserProfile: OWSUserProfile,
+        transaction: DBWriteTransaction
+    ) {
+        let currentBadges = currentLocalUserProfile.badges
 
         let currentSubscriberBadgeIDs = currentBadges.compactMap { (badge: OWSUserProfileBadgeInfo) -> String? in
             guard SubscriptionBadgeIds.contains(badge.badgeId) else { return nil }

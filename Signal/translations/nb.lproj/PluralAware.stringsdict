@@ -515,9 +515,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>B&amp;A-grupper fungerer best med opptil %1$d medlem. Det kan oppstå forsinkelser når dere sender og mottar meldinger hvis dere legger til flere medlemmer.</string>
+			<string>Signal-grupper fungerer best med opptil %1$d medlem. Det kan oppstå forsinkelser når dere sender og mottar meldinger hvis dere legger til flere medlemmer.</string>
 			<key>other</key>
-			<string>B&amp;A-grupper fungerer best med opptil %1$d medlemmer. Det kan oppstå forsinkelser når dere sender og mottar meldinger hvis dere legger til flere medlemmer.</string>
+			<string>Signal-grupper fungerer best med opptil %1$d medlemmer. Det kan oppstå forsinkelser når dere sender og mottar meldinger hvis dere legger til flere medlemmer.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -675,9 +675,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>B&amp;A kommer til å ringe %2$@, %3$@ og %1$d annen</string>
+			<string>Signal kommer til å ringe %2$@, %3$@ og %1$d annen</string>
 			<key>other</key>
-			<string>B&amp;A kommer til å ringe %2$@, %3$@ og %1$d andre</string>
+			<string>Signal kommer til å ringe %2$@, %3$@ og %1$d andre</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -963,9 +963,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>For å beholde koblingen til %2$@ må du åpne B&amp;A på enheten innen %1$d dag.</string>
+			<string>For å beholde koblingen til %2$@ må du åpne Signal på enheten innen %1$d dag.</string>
 			<key>other</key>
-			<string>For å beholde koblingen til %2$@ må du åpne B&amp;A på enheten i løpet av de neste %1$d dagene.</string>
+			<string>For å beholde koblingen til %2$@ må du åpne Signal på enheten i løpet av de neste %1$d dagene.</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1171,9 +1171,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Alle B&amp;A-kontakter · Sett av %1$d</string>
+			<string>Alle Signal-kontakter · Sett av %1$d</string>
 			<key>other</key>
-			<string>Alle B&amp;A-kontakter · Sett av %1$d</string>
+			<string>Alle Signal-kontakter · Sett av %1$d</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1187,9 +1187,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Alle B&amp;A-kontakter · %1$d ekskludert</string>
+			<string>Alle Signal-kontakter · %1$d ekskludert</string>
 			<key>other</key>
-			<string>Alle B&amp;A-kontakter · %1$d ekskludert</string>
+			<string>Alle Signal-kontakter · %1$d ekskludert</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1334,6 +1334,22 @@
 			<string>Vil du trekke tilbake %1$d invitasjon som er sendt av «%2$@»?</string>
 			<key>other</key>
 			<string>Vil du trekke tilbake de %1$d invitasjonene sendt av «%2$@»?</string>
+		</dict>
+	</dict>
+	<key>POLL_VOTE_COUNT</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d stemme</string>
+			<key>other</key>
+			<string>%1$d stemmer</string>
 		</dict>
 	</dict>
 	<key>PRIVATE_STORY_VIEWERS_%d</key>

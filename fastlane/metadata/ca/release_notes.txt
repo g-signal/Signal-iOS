@@ -1,1 +1,1 @@
-• Hem corregit un error que hi havia amb els stickers enviats des del teclat emoji d'iOS.
+• Hem corregit un error que, en intentar enllaçar un nou dispositiu, feia que la càmera aparegués no mostrés cap imatge.

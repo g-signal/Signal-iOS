@@ -7,8 +7,6 @@ import SignalServiceKit
 import SafariServices
 
 final class InactivePrimaryDeviceReminderMegaphone: MegaphoneView {
-    private var learnMoreURL: URL { URL(string: "https://support.signal.org/hc/articles/9021007554074")! }
-
     init(
         fromViewController: UIViewController,
         experienceUpgrade: ExperienceUpgrade
@@ -28,13 +26,6 @@ final class InactivePrimaryDeviceReminderMegaphone: MegaphoneView {
         imageName = "phone-warning"
         imageContentMode = .center
 
-//        let viewControllerRef = fromViewController
-//        let learnMoreButton = Button(title: OWSLocalizedString(
-//            "INACTIVE_PRIMARY_DEVICE_REMINDER_MEGAPHONE_LEARN_MORE_BUTTON",
-//            comment: "Title for a button in an in-app megaphone about a user's inactive linked device, indicating the user wants to learn more."
-//        )) { [weak viewControllerRef] in
-//            viewControllerRef?.present(SFSafariViewController(url: self.learnMoreURL), animated: true)
-//        }
 
         let learnMoreButton = Button(title: "") { () in
         }

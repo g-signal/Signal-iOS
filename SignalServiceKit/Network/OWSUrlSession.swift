@@ -59,6 +59,8 @@ public class OWSURLSession: OWSURLSessionProtocol {
         }
     }
 
+    private let onFailureCallback: ((any Error) -> Void)?
+
     // Note: not all protocol methods can be made visible to objc, but those
     // that can be are declared so here. Objc callers must use this implementation
     // directly and not touch the protocol.
@@ -93,7 +95,8 @@ public class OWSURLSession: OWSURLSessionProtocol {
         endpoint: OWSURLSessionEndpoint,
         configuration: URLSessionConfiguration,
         maxResponseSize: Int?,
-        canUseSignalProxy: Bool
+        canUseSignalProxy: Bool,
+        onFailureCallback: ((any Error) -> Void)?,
     ) {
         if canUseSignalProxy {
             configuration.connectionProxyDictionary = SignalProxy.connectionProxyDictionary
@@ -103,6 +106,7 @@ public class OWSURLSession: OWSURLSessionProtocol {
         self.configuration = configuration
         self.maxResponseSize = maxResponseSize
         self.canUseSignalProxy = canUseSignalProxy
+        self.onFailureCallback = onFailureCallback
 
         // Ensure this is set so that we don't try to create it in deinit().
         _ = self.delegateBox
@@ -257,9 +261,12 @@ public class OWSURLSession: OWSURLSessionProtocol {
 
     private let configuration: URLSessionConfiguration
 
-    private lazy var session: URLSession = {
-        URLSession(configuration: configuration, delegate: delegateBox, delegateQueue: Self.operationQueue)
-    }()
+    private let _session = AtomicValue<URLSession?>(nil, lock: .init())
+    private var session: URLSession {
+        return _session.map {
+            return $0 ?? URLSession(configuration: configuration, delegate: delegateBox, delegateQueue: Self.operationQueue)
+        }!
+    }
 
     private let maxResponseSize: Int?
 
@@ -339,13 +346,12 @@ public class OWSURLSession: OWSURLSessionProtocol {
                 if statusCode > 0 {
                     let requestUrl = requestConfig.requestUrl
                     let responseHeaders = HttpHeaders(response: httpUrlResponse)
-                    throw OWSHTTPError.forServiceResponse(
+                    throw OWSHTTPError.serviceResponse(.init(
                         requestUrl: requestUrl,
                         responseStatus: statusCode,
                         responseHeaders: responseHeaders,
-                        responseError: nil,
                         responseData: responseData
-                    )
+                    ))
                 } else {
                     owsFailDebug("Missing status code.")
                     throw OWSHTTPError.networkFailure(.invalidResponseStatus)
@@ -407,7 +413,7 @@ public class OWSURLSession: OWSURLSessionProtocol {
         }
 
         var httpHeaders = rawRequest.headers
-        rawRequest.applyAuth(to: &httpHeaders, willSendViaWebSocket: false)
+        try rawRequest.applyAuth(to: &httpHeaders, socketAuth: nil)
 
         let method: HTTPMethod
         do {
@@ -630,6 +636,7 @@ public class OWSURLSession: OWSURLSessionProtocol {
         }
         taskState.reject(error: error, task: task)
         task.cancel()
+        onFailureCallback?(error)
     }
 
     // MARK: -

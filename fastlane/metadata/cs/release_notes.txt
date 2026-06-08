@@ -1,1 +1,1 @@
-• Opravili jsme chybu, která se vyskytovala při odesílání nálepek z klávesnice emoji v systému iOS.
+• Opravili jsme chybu, kvůli které se při připojování nového zařízení zobrazoval prázdný náhled kamery.

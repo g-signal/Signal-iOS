@@ -1,1 +1,1 @@
-• Vi har rettet opp i en feil som oppsto ved sending av klistremerker fra emoji-tastaturet på iOS-enheter.
+• Vi rettet opp i en feil som førte til at kamerasymbolet forsvant ved forsøk på å koble til en ny enhet.

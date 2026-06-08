@@ -643,13 +643,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>B&amp;A skupiny najlepšie fungujú s %1$d členom. Pridanie ďalších členov spôsobí oneskorenia v posielaní a prijímaní správ.</string>
+			<string>Signal skupiny najlepšie fungujú s %1$d členom. Pridanie ďalších členov spôsobí oneskorenia v posielaní a prijímaní správ.</string>
 			<key>few</key>
-			<string>B&amp;A skupiny najlepšie fungujú s %1$d alebo menej členmi. Pridanie ďalších členov spôsobí oneskorenia v posielaní a prijímaní správ.</string>
+			<string>Signal skupiny najlepšie fungujú s %1$d alebo menej členmi. Pridanie ďalších členov spôsobí oneskorenia v posielaní a prijímaní správ.</string>
 			<key>many</key>
-			<string>B&amp;A skupiny najlepšie fungujú s %1$d alebo menej členom. Pridanie ďalších členov spôsobí oneskorenia v posielaní a prijímaní správ.</string>
+			<string>Signal skupiny najlepšie fungujú s %1$d alebo menej členom. Pridanie ďalších členov spôsobí oneskorenia v posielaní a prijímaní správ.</string>
 			<key>other</key>
-			<string>B&amp;A skupiny najlepšie fungujú s %1$d alebo menej členmi. Pridanie ďalších členov spôsobí oneskorenia v posielaní a prijímaní správ.</string>
+			<string>Signal skupiny najlepšie fungujú s %1$d alebo menej členmi. Pridanie ďalších členov spôsobí oneskorenia v posielaní a prijímaní správ.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -843,13 +843,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>B&amp;A zavolá používateľom %2$@, %3$@ a %1$d ďalšiemu</string>
+			<string>Signal zavolá používateľom %2$@, %3$@ a %1$d ďalšiemu</string>
 			<key>few</key>
-			<string>B&amp;A zavolá používateľom %2$@, %3$@ a %1$d ďalším</string>
+			<string>Signal zavolá používateľom %2$@, %3$@ a %1$d ďalším</string>
 			<key>many</key>
-			<string>B&amp;A zavolá používateľom %2$@, %3$@ a %1$d ďalšiemu</string>
+			<string>Signal zavolá používateľom %2$@, %3$@ a %1$d ďalšiemu</string>
 			<key>other</key>
-			<string>B&amp;A zavolá používateľom %2$@, %3$@ a %1$d ďalším</string>
+			<string>Signal zavolá používateľom %2$@, %3$@ a %1$d ďalším</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -1203,13 +1203,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Ak chcete ponechať zariadenie „%2$@“ prepojené, do jedného dňa otvorte na danom zariadení B&amp;A.</string>
+			<string>Ak chcete ponechať zariadenie „%2$@“ prepojené, do jedného dňa otvorte na danom zariadení Signal.</string>
 			<key>few</key>
-			<string>Ak chcete ponechať zariadenie „%2$@“ prepojené, do %1$d dní otvorte na danom zariadení B&amp;A.</string>
+			<string>Ak chcete ponechať zariadenie „%2$@“ prepojené, do %1$d dní otvorte na danom zariadení Signal.</string>
 			<key>many</key>
-			<string>Ak chcete ponechať zariadenie „%2$@“ prepojené, do %1$d dňa otvorte na danom zariadení B&amp;A.</string>
+			<string>Ak chcete ponechať zariadenie „%2$@“ prepojené, do %1$d dňa otvorte na danom zariadení Signal.</string>
 			<key>other</key>
-			<string>Ak chcete ponechať zariadenie „%2$@“ prepojené, do %1$d dní otvorte na danom zariadení B&amp;A.</string>
+			<string>Ak chcete ponechať zariadenie „%2$@“ prepojené, do %1$d dní otvorte na danom zariadení Signal.</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1463,13 +1463,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Všetky B&amp;A spojenia · %1$d sledovateľ</string>
+			<string>Všetky Signal spojenia · %1$d sledovateľ</string>
 			<key>few</key>
-			<string>Všetky B&amp;A spojenia · %1$d sledovatelia</string>
+			<string>Všetky Signal spojenia · %1$d sledovatelia</string>
 			<key>many</key>
-			<string>Všetky B&amp;A spojenia · %1$d sledovateľa</string>
+			<string>Všetky Signal spojenia · %1$d sledovateľa</string>
 			<key>other</key>
-			<string>Všetky B&amp;A spojenia · %1$d sledovateľov</string>
+			<string>Všetky Signal spojenia · %1$d sledovateľov</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1483,13 +1483,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Všetky B&amp;A spojenia · %1$d vylúčené</string>
+			<string>Všetky Signal spojenia · %1$d vylúčené</string>
 			<key>few</key>
-			<string>Všetky B&amp;A spojenia · %1$d vylúčené</string>
+			<string>Všetky Signal spojenia · %1$d vylúčené</string>
 			<key>many</key>
-			<string>Všetky B&amp;A spojenia · %1$d vylúčeného</string>
+			<string>Všetky Signal spojenia · %1$d vylúčeného</string>
 			<key>other</key>
-			<string>Všetky B&amp;A spojenia · %1$d vylúčených</string>
+			<string>Všetky Signal spojenia · %1$d vylúčených</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1670,6 +1670,26 @@
 			<string>Odvolať %1$d pozvánky odoslanej skupinou „%2$@“?</string>
 			<key>other</key>
 			<string>Odvolať %1$d pozvánok odoslaných skupinou „%2$@“?</string>
+		</dict>
+	</dict>
+	<key>POLL_VOTE_COUNT</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d hlas</string>
+			<key>few</key>
+			<string>%1$d hlasy</string>
+			<key>many</key>
+			<string>%1$d hlasu</string>
+			<key>other</key>
+			<string>%1$d hlasov</string>
 		</dict>
 	</dict>
 	<key>PRIVATE_STORY_VIEWERS_%d</key>

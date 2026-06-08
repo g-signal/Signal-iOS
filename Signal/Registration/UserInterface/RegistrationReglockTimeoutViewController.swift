@@ -204,6 +204,6 @@ class RegistrationReglockTimeoutViewController: OWSViewController {
 
     @objc
     private func didTapLearnMoreButton() {
-        present(SFSafariViewController(url: self.learnMoreURL), animated: true)
+        present(SFSafariViewController(url: URL.Support.pin), animated: true)
     }
 }

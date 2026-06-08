@@ -20,20 +20,9 @@ public protocol BackupAttachmentUploadQueueRunner {
     /// backed up as needed.
     ///
     /// Throws an error IFF something would prevent all attachments from backing up (e.g. network issue).
-    func backUpAllAttachments() async throws
-}
+    func backUpAllAttachments(waitOnThumbnails: Bool) async throws
 
-extension BackupAttachmentUploadQueueRunner where Self: Sendable {
-
-    public func backUpAllAttachmentsAfterTxCommits(
-        tx: DBWriteTransaction
-    ) {
-        tx.addSyncCompletion { [self] in
-            Task {
-                try await self.backUpAllAttachments()
-            }
-        }
-    }
+    func backUpAllAttachmentsAfterTxCommits(tx: DBWriteTransaction)
 }
 
 class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
@@ -49,8 +38,13 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
     private let listMediaManager: BackupListMediaManager
     private let progress: BackupAttachmentUploadProgress
     private let statusManager: BackupAttachmentUploadQueueStatusManager
-    private let taskQueue: TaskQueueLoader<TaskRunner>
     private let tsAccountManager: TSAccountManager
+
+    /// We keep these two separate because we allow more thumbnails in parallel
+    /// than fullsize, so we just run them as separate queues configured at init time
+    /// but sharing the same runner class.
+    private let fullsizeTaskQueue: TaskQueueLoader<TaskRunner>
+    private let thumbnailTaskQueue: TaskQueueLoader<TaskRunner>
 
     init(
         accountKeyStore: AccountKeyStore,
@@ -77,44 +71,118 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
         self.backupRequestManager = backupRequestManager
         self.backupSettingsStore = backupSettingsStore
         self.db = db
-        self.logger = PrefixedLogger(prefix: "[Backups]")
+        let logger = PrefixedLogger(prefix: "[Backups]")
+        self.logger = logger
         self.listMediaManager = backupListMediaManager
         self.progress = progress
         self.statusManager = statusManager
         self.tsAccountManager = tsAccountManager
-        let taskRunner = TaskRunner(
-            accountKeyStore: accountKeyStore,
-            attachmentStore: attachmentStore,
-            attachmentUploadManager: attachmentUploadManager,
-            backupAttachmentUploadScheduler: backupAttachmentUploadScheduler,
-            backupAttachmentUploadStore: backupAttachmentUploadStore,
-            backupAttachmentUploadEraStore: backupAttachmentUploadEraStore,
-            backupRequestManager: backupRequestManager,
-            backupSettingsStore: backupSettingsStore,
-            dateProvider: dateProvider,
-            db: db,
-            logger: logger,
-            orphanedBackupAttachmentStore: orphanedBackupAttachmentStore,
-            progress: progress,
-            statusManager: statusManager,
-            tsAccountManager: tsAccountManager
-        )
-        self.taskQueue = TaskQueueLoader(
-            maxConcurrentTasks: Constants.numParallelUploads,
-            dateProvider: dateProvider,
-            db: db,
-            runner: taskRunner
-        )
+
+        func makeTaskQueue(mode: BackupAttachmentUploadQueueMode) -> TaskQueueLoader<TaskRunner> {
+            let taskRunner = TaskRunner(
+                mode: mode,
+                accountKeyStore: accountKeyStore,
+                attachmentStore: attachmentStore,
+                attachmentUploadManager: attachmentUploadManager,
+                backupAttachmentUploadScheduler: backupAttachmentUploadScheduler,
+                backupAttachmentUploadStore: backupAttachmentUploadStore,
+                backupAttachmentUploadEraStore: backupAttachmentUploadEraStore,
+                backupRequestManager: backupRequestManager,
+                backupSettingsStore: backupSettingsStore,
+                dateProvider: dateProvider,
+                db: db,
+                logger: logger,
+                orphanedBackupAttachmentStore: orphanedBackupAttachmentStore,
+                progress: progress,
+                statusManager: statusManager,
+                tsAccountManager: tsAccountManager
+            )
+            return TaskQueueLoader(
+                maxConcurrentTasks: {
+                    switch mode {
+                    case .fullsize: Constants.numParallelUploadsFullsize
+                    case .thumbnail: Constants.numParallelUploadsThumbnail
+                    }
+                }(),
+                dateProvider: dateProvider,
+                db: db,
+                runner: taskRunner
+            )
+        }
+
+        self.fullsizeTaskQueue = makeTaskQueue(mode: .fullsize)
+        self.thumbnailTaskQueue = makeTaskQueue(mode: .thumbnail)
 
         appReadiness.runNowOrWhenMainAppDidBecomeReadyAsync { [weak self] in
             self?.startObservingQueueStatus()
-            Task { [weak self] in
-                try await self?.backUpAllAttachments()
+            self?.backUpAllAttachmentsIfNecessary()
+        }
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(backUpAllAttachmentsIfNecessary),
+            name: .backupPlanChanged,
+            object: nil,
+        )
+    }
+
+    @objc
+    private func backUpAllAttachmentsIfNecessary() {
+        backUpFullsizeAttachmentsIfNecessary()
+        backUpThumbnailAttachmentsIfNecessary()
+    }
+
+    private func backUpFullsizeAttachmentsIfNecessary() {
+        Task {
+            if await self.fullsizeTaskQueue.isRunning {
+                return
             }
+            try await self._backUpAllAttachments(mode: .fullsize)
         }
     }
 
-    public func backUpAllAttachments() async throws {
+    private func backUpThumbnailAttachmentsIfNecessary() {
+        Task {
+            if await self.thumbnailTaskQueue.isRunning {
+                return
+            }
+            try await self._backUpAllAttachments(mode: .thumbnail)
+        }
+    }
+
+    // MARK: -
+
+    public func backUpAllAttachmentsAfterTxCommits(tx: DBWriteTransaction) {
+        tx.addSyncCompletion { [self] in
+            backUpAllAttachmentsIfNecessary()
+        }
+    }
+
+    public func backUpAllAttachments(waitOnThumbnails: Bool) async throws {
+        async let fullsizeResult = Result.init { [self] in
+            try await self._backUpAllAttachments(mode: .fullsize)
+        }
+        async let thumbnailResult = Result.init { [self] in
+            try await self._backUpAllAttachments(mode: .thumbnail)
+        }
+        if waitOnThumbnails {
+            try await thumbnailResult.get()
+        }
+        try await fullsizeResult.get()
+    }
+
+    private func _backUpAllAttachments(mode: BackupAttachmentUploadQueueMode) async throws {
+        let taskQueue: TaskQueueLoader<TaskRunner>
+        let logString: String
+        switch mode {
+        case .fullsize:
+            taskQueue = fullsizeTaskQueue
+            logString = "fullsize"
+        case .thumbnail:
+            taskQueue = thumbnailTaskQueue
+            logString = "thumbnail"
+        }
+
         guard FeatureFlags.Backups.supported else {
             return
         }
@@ -132,7 +200,7 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
         }
 
         guard let backupKey else {
-            Logger.info("Skipping attachment backups while media backup key is missing")
+            Logger.info("Skipping \(logString) attachment backups while media backup key is missing")
             return
         }
 
@@ -159,7 +227,7 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
             switch error {
             case .noExistingBackupId:
                 // If we have no backup, we sure won't be uploading.
-                logger.info("Bailing on attachment backups when backup id not registered")
+                logger.info("Bailing on \(logString) attachment backups when backup id not registered")
                 return
             }
         } catch let error {
@@ -168,9 +236,9 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
 
         switch backupAuth.backupLevel {
         case .free:
-            owsFailDebug("Local backupPlan is paid but credential is free")
+            Logger.warn("Local backupPlan is paid but credential is free")
             // If our force refreshed credential is free tier, we definitely
-            // aren't uploading anything, so may as well stop the queue.
+            // aren't uploading anything, so may as well stop the queues.
             try? await taskQueue.stop()
             return
         case .paid:
@@ -181,24 +249,43 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
             try await listMediaManager.queryListMediaIfNeeded()
         }
 
-        switch await statusManager.beginObservingIfNecessary() {
+        switch await statusManager.beginObservingIfNecessary(for: mode) {
         case .running:
-            logger.info("Running Backup uploads.")
+            logger.info("Running \(logString) Backup uploads.")
+            let backgroundTask = OWSBackgroundTask(
+                label: #function + logString
+            ) { [weak taskQueue] status in
+                switch status {
+                case .expired:
+                    Task {
+                        try await taskQueue?.stop()
+                    }
+                case .couldNotStart, .success:
+                    break
+                }
+            }
+            defer { backgroundTask.end() }
             try await taskQueue.loadAndRunTasks()
         case .empty:
-            logger.info("Skipping Backup uploads: queue is empty.")
+            logger.info("Skipping \(logString) Backup uploads: queue is empty.")
             return
         case .notRegisteredAndReady:
-            logger.warn("Skipping Backup uploads: not registered and ready.")
+            logger.warn("Skipping \(logString) Backup uploads: not registered and ready.")
             try await taskQueue.stop()
         case .noWifiReachability:
-            logger.warn("Skipping Backup uploads: need wifi.")
+            logger.warn("Skipping \(logString) Backup uploads: need wifi.")
             try await taskQueue.stop()
         case .noReachability:
-            logger.warn("Skipping Backup uploads: need internet.")
+            logger.warn("Skipping \(logString) Backup uploads: need internet.")
             try await taskQueue.stop()
         case .lowBattery:
-            logger.warn("Skipping Backup uploads: low battery.")
+            logger.warn("Skipping \(logString) Backup uploads: low battery.")
+            try await taskQueue.stop()
+        case .lowPowerMode:
+            logger.warn("Skipping \(logString) Backup uploads: low power mode.")
+            try await taskQueue.stop()
+        case .appBackgrounded:
+            logger.warn("Skipping \(logString) Backup uploads: app backgrounded")
             try await taskQueue.stop()
         }
     }
@@ -208,17 +295,26 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
     private func startObservingQueueStatus() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(queueStatusDidChange),
-            name: .backupAttachmentUploadQueueStatusDidChange,
+            selector: #selector(fullsizeQueueStatusDidChange),
+            name: .backupAttachmentUploadQueueStatusDidChange(for: .fullsize),
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(thumbnailQueueStatusDidChange),
+            name: .backupAttachmentUploadQueueStatusDidChange(for: .thumbnail),
             object: nil
         )
     }
 
     @objc
-    private func queueStatusDidChange() {
-        Task {
-            try await self.backUpAllAttachments()
-        }
+    private func fullsizeQueueStatusDidChange() {
+        backUpFullsizeAttachmentsIfNecessary()
+    }
+
+    @objc
+    private func thumbnailQueueStatusDidChange() {
+        backUpThumbnailAttachmentsIfNecessary()
     }
 
     // MARK: - TaskRecordRunner
@@ -241,9 +337,11 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
         private let statusManager: BackupAttachmentUploadQueueStatusManager
         private let tsAccountManager: TSAccountManager
 
+        let mode: BackupAttachmentUploadQueueMode
         let store: TaskStore
 
         init(
+            mode: BackupAttachmentUploadQueueMode,
             accountKeyStore: AccountKeyStore,
             attachmentStore: AttachmentStore,
             attachmentUploadManager: AttachmentUploadManager,
@@ -276,7 +374,11 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
             self.statusManager = statusManager
             self.tsAccountManager = tsAccountManager
 
-            self.store = TaskStore(backupAttachmentUploadStore: backupAttachmentUploadStore)
+            self.mode = mode
+            self.store = TaskStore(
+                mode: mode,
+                backupAttachmentUploadStore: backupAttachmentUploadStore
+            )
         }
 
         func runTask(record: Store.Record, loader: TaskQueueLoader<TaskRunner>) async -> TaskRecordResult {
@@ -287,14 +389,15 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
             struct NeedsBatteryError: Error {}
             struct NeedsInternetError: Error {}
             struct NeedsToBeRegisteredError: Error {}
+            struct AppBackgroundedError: Error {}
 
-            switch await statusManager.currentStatus() {
+            switch await statusManager.currentStatus(for: mode) {
             case .running:
                 break
             case .empty:
                 // The queue will stop on its own, finish this task.
                 break
-            case .lowBattery:
+            case .lowBattery, .lowPowerMode:
                 try? await loader.stop()
                 return .retryableError(NeedsBatteryError())
             case .noWifiReachability, .noReachability:
@@ -303,6 +406,9 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
             case .notRegisteredAndReady:
                 try? await loader.stop()
                 return .retryableError(NeedsToBeRegisteredError())
+            case .appBackgrounded:
+                try? await loader.stop()
+                return .retryableError(AppBackgroundedError())
             }
 
             let (attachment, backupPlan, currentUploadEra, backupKey) = db.read { tx in
@@ -407,9 +513,14 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
                 return .retryableError(IsFreeTierError())
             }
 
-            let progressSink = await progress.willBeginUploadingAttachment(
-                uploadRecord: record.record
-            )
+            let progressSink: OWSProgressSink?
+            if record.record.isFullsize {
+                progressSink = await progress.willBeginUploadingFullsizeAttachment(
+                    uploadRecord: record.record
+                )
+            } else {
+                progressSink = nil
+            }
 
             guard
                 db.read(block: { tx in
@@ -421,9 +532,11 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
                     )
                 })
             else {
-                await progress.didFinishUploadOfAttachment(
-                    uploadRecord: record.record
-                )
+                if record.record.isFullsize {
+                    await progress.didFinishUploadOfFullsizeAttachment(
+                        uploadRecord: record.record
+                    )
+                }
                 // Not eligible anymore, count as success.
                 return .success
             }
@@ -476,8 +589,23 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
                     fallthrough
                 default:
                     // All other errors should be treated as per normal.
-                    if error.isNetworkFailureOrTimeout {
-                        switch await statusManager.currentStatus() {
+                    if error.httpStatusCode == 429 {
+                        if let retryAfter = error.httpResponseHeaders?.retryAfterTimeInterval {
+                            return .retryableError(RateLimitedRetryError(retryAfter: retryAfter))
+                        }
+
+                        // If for whatever reason we don't have a retry-after,
+                        // treat this like a network error that retries with
+                        // backoff.
+                        return .retryableError(NetworkRetryError())
+                    } else if
+                        error.isNetworkFailureOrTimeout
+                        // Retry 500s per-item with the same backoff as network errors
+                        || error.is5xxServiceResponse
+                        || (error as? Upload.Error) == .networkTimeout
+                        || (error as? Upload.Error) == .networkError
+                    {
+                        switch await statusManager.currentStatus(for: mode) {
                         case .running:
                             // If we _think_ we are connected and should be running,
                             // use a more crude retry time mechanism to retry later.
@@ -491,7 +619,7 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
                             // issue.
                             return .retryableError(NetworkRetryError())
                         case .noWifiReachability, .notRegisteredAndReady,
-                                .lowBattery, .empty:
+                                .lowBattery, .lowPowerMode, .appBackgrounded, .empty:
                             // These other states may be overriding reachability;
                             // just allow the queue itself to retry and once the
                             // other states are resolved reachability will kick in,
@@ -504,6 +632,42 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
                             // the record again immediately then.
                             return .retryableError(error)
                         }
+                    } else if let uploadError = error as? Upload.Error {
+                        switch uploadError {
+                        case .missingFile:
+                            // The file is missing! We can never retry this upload;
+                            // call it a "success" so we don't mess with progress
+                            // state and so we wipe the upload task row, and move on.
+                            logger.error("Missing attachment file; skipping and proceeding")
+                            if record.record.isFullsize {
+                                await progress.didFinishUploadOfFullsizeAttachment(
+                                    uploadRecord: record.record
+                                )
+                            }
+                            return .success
+                        case .uploadFailure(let recovery):
+                            switch recovery {
+                            case .resume(let retryMode), .restart(let retryMode):
+                                switch retryMode {
+                                case .afterBackoff:
+                                    return .retryableError(RateLimitedRetryError(retryAfter: nil))
+                                case .afterServerRequestedDelay(let retryAfter):
+                                    return .retryableError(RateLimitedRetryError(retryAfter: retryAfter))
+                                case .immediately:
+                                    return .retryableError(RateLimitedRetryError(retryAfter: 0))
+                                }
+                            case .noMoreRetries:
+                                logger.error("No more upload retries; stopping the queue")
+                                try? await loader.stop()
+                                return .retryableError(error)
+                            }
+                        default:
+                            // For other errors stop the queue to prevent thundering herd;
+                            // when it starts up again (e.g. on app launch) we will retry.
+                            logger.error("Unknown error occurred; stopping the queue")
+                            try? await loader.stop()
+                            return .retryableError(error)
+                        }
                     } else if record.record.isFullsize {
                         // For other errors stop the queue to prevent thundering herd;
                         // when it starts up again (e.g. on app launch) we will retry.
@@ -514,62 +678,76 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
                         // Ignore the error if we e.g. fail to generate a thumbnail;
                         // just upload the fullsize.
                         logger.error("Failed to upload thumbnail; proceeding")
-                        await progress.didFinishUploadOfAttachment(
-                            uploadRecord: record.record
-                        )
+                        if record.record.isFullsize {
+                            await progress.didFinishUploadOfFullsizeAttachment(
+                                uploadRecord: record.record
+                            )
+                        }
                         return .success
                     }
                 }
             }
 
-            await progress.didFinishUploadOfAttachment(
-                uploadRecord: record.record
-            )
+            if record.record.isFullsize {
+                await progress.didFinishUploadOfFullsizeAttachment(
+                    uploadRecord: record.record
+                )
+            }
 
             return .success
         }
 
         func didSucceed(record: Store.Record, tx: DBWriteTransaction) throws {
-            logger.info("Finished backing up attachment \(record.record.attachmentRowId), upload \(record.id)")
+            logger.info("Finished backing up attachment \(record.record.attachmentRowId), upload \(record.id), fullsize? \(record.record.isFullsize)")
         }
 
+        private struct RateLimitedRetryError: Error {
+            let retryAfter: TimeInterval?
+        }
         private struct NetworkRetryError: Error {}
 
         func didFail(record: Store.Record, error: any Error, isRetryable: Bool, tx: DBWriteTransaction) throws {
-            logger.warn("Failed backing up attachment \(record.record.attachmentRowId), upload \(record.id), isRetryable: \(isRetryable), error: \(error)")
+            logger.warn("Failed backing up attachment \(record.record.attachmentRowId), upload \(record.id), , fullsize? \(record.record.isFullsize), isRetryable: \(isRetryable), error: \(error)")
 
-            if isRetryable, error is NetworkRetryError {
-                var record = record.record
-                let nextRetryDelayMs = { () -> UInt64 in
-                    // Use a hard coded backoff schedule.
-                    switch record.numRetries {
-                    case 0:
-                        return .secondInMs * 5
-                    case 1:
-                        return .secondInMs * 10
-                    case 2:
-                        return .minuteInMs
-                    case 3:
-                        return .minuteInMs * 5
-                    case 4:
-                        return .hourInMs
-                    default:
-                        return .dayInMs
-                    }
-                }()
-                record.numRetries += 1
-                record.minRetryTimestamp = dateProvider().ows_millisecondsSince1970 + nextRetryDelayMs
-                try record.update(tx.database)
+            guard isRetryable else {
+                return
             }
+
+            var record = record.record
+            let retryDelay: TimeInterval
+
+            if error is NetworkRetryError {
+                record.numRetries += 1
+                retryDelay = OWSOperation.retryIntervalForExponentialBackoff(failureCount: record.numRetries)
+            } else if let rateLimitedError = error as? RateLimitedRetryError {
+                if let retryAfter = rateLimitedError.retryAfter {
+                    retryDelay = retryAfter
+                } else {
+                    // If no delay provided, use standard backoff and increment retry count.
+                    record.numRetries += 1
+                    retryDelay = OWSOperation.retryIntervalForExponentialBackoff(failureCount: record.numRetries)
+                }
+            } else {
+                return
+            }
+
+            record.minRetryTimestamp = dateProvider().addingTimeInterval(retryDelay).ows_millisecondsSince1970
+            try record.update(tx.database)
         }
 
         func didCancel(record: Store.Record, tx: DBWriteTransaction) throws {
-            logger.warn("Cancelled backing up attachment \(record.record.attachmentRowId), upload \(record.id)")
+            logger.warn("Cancelled backing up attachment \(record.record.attachmentRowId), upload \(record.id), fullsize? \(record.record.isFullsize)")
         }
 
         func didDrainQueue() async {
-            await progress.didEmptyUploadQueue()
-            await statusManager.didEmptyQueue()
+            switch mode {
+            case .fullsize:
+                Logger.info("Did drain fullsize upload queue")
+                await progress.didEmptyFullsizeUploadQueue()
+            case .thumbnail:
+                Logger.info("Did drain thumbnail upload queue")
+            }
+            await statusManager.didEmptyQueue(for: mode)
         }
     }
 
@@ -586,20 +764,33 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
 
     class TaskStore: TaskRecordStore {
 
+        private let mode: BackupAttachmentUploadQueueMode
         private let backupAttachmentUploadStore: BackupAttachmentUploadStore
 
-        init(backupAttachmentUploadStore: BackupAttachmentUploadStore) {
+        init(
+            mode: BackupAttachmentUploadQueueMode,
+            backupAttachmentUploadStore: BackupAttachmentUploadStore
+        ) {
+            self.mode = mode
             self.backupAttachmentUploadStore = backupAttachmentUploadStore
         }
 
         func peek(count: UInt, tx: DBReadTransaction) throws -> [TaskRecord] {
-            return try backupAttachmentUploadStore.fetchNextUploads(count: count, tx: tx).map {
+            let forFullsizeUploads = switch mode {
+            case .fullsize:
+                true
+            case .thumbnail:
+                false
+            }
+            return try backupAttachmentUploadStore.fetchNextUploads(count: count, isFullsize: forFullsizeUploads, tx: tx).map {
                 return .init(id: $0.id!, record: $0)
             }
         }
 
         func removeRecord(_ record: TaskRecord, tx: DBWriteTransaction) throws {
-            try backupAttachmentUploadStore.removeQueuedUpload(
+            // We don't actually delete records when finishing; we just mark
+            // them done so we can still keep track of their byte count.
+            try backupAttachmentUploadStore.markUploadDone(
                 for: record.record.attachmentRowId,
                 fullsize: record.record.isFullsize,
                 tx: tx
@@ -610,7 +801,8 @@ class BackupAttachmentUploadQueueRunnerImpl: BackupAttachmentUploadQueueRunner {
     // MARK: -
 
     private enum Constants {
-        static let numParallelUploads: UInt = 4
+        static let numParallelUploadsFullsize: UInt = 12
+        static let numParallelUploadsThumbnail: UInt = 8
     }
 }
 
@@ -620,7 +812,11 @@ open class BackupAttachmentUploadQueueRunnerMock: BackupAttachmentUploadQueueRun
 
     public init() {}
 
-    public func backUpAllAttachments() async throws {
+    public func backUpAllAttachments(waitOnThumbnails: Bool) async throws {
+        // Do nothing
+    }
+
+    public func backUpAllAttachmentsAfterTxCommits(tx: DBWriteTransaction) {
         // Do nothing
     }
 }

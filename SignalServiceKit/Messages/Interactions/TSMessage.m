@@ -77,8 +77,6 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
     if (messageBuilder.messageBody.length > 0) {
         _body = messageBuilder.messageBody;
         _bodyRanges = messageBuilder.bodyRanges;
-    } else if (messageBuilder.messageBody != nil) {
-        OWSFailDebug(@"Empty message body.");
     }
     _deprecated_attachmentIds = nil;
     _editState = messageBuilder.editState;
@@ -101,6 +99,7 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
     _linkPreview = messageBuilder.linkPreview;
     _messageSticker = messageBuilder.messageSticker;
     _giftBadge = messageBuilder.giftBadge;
+    _isPoll = messageBuilder.isPoll;
 
     return self;
 }
@@ -129,6 +128,7 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
                 expiresInSeconds:(unsigned int)expiresInSeconds
                        giftBadge:(nullable OWSGiftBadge *)giftBadge
                isGroupStoryReply:(BOOL)isGroupStoryReply
+                          isPoll:(BOOL)isPoll
   isSmsMessageRestoredFromBackup:(BOOL)isSmsMessageRestoredFromBackup
               isViewOnceComplete:(BOOL)isViewOnceComplete
                isViewOnceMessage:(BOOL)isViewOnceMessage
@@ -163,6 +163,7 @@ static const NSUInteger OWSMessageSchemaVersion = 4;
     _expiresInSeconds = expiresInSeconds;
     _giftBadge = giftBadge;
     _isGroupStoryReply = isGroupStoryReply;
+    _isPoll = isPoll;
     _isSmsMessageRestoredFromBackup = isSmsMessageRestoredFromBackup;
     _isViewOnceComplete = isViewOnceComplete;
     _isViewOnceMessage = isViewOnceMessage;
