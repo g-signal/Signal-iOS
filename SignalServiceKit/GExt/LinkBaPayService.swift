@@ -85,7 +85,7 @@ public class LinkBaPayService {
 
     public func getBaUserInfo(linkId: String) async throws -> BaUserInfo {
         let request = OWSRequestFactory.linkBaPayGetBaUserInfoRequest(linkId: linkId)
-        let response = try await networkManager.asyncRequest(request, canUseWebSocket: false)
+        let response = try await networkManager.asyncRequest(request)
         guard let json = response.responseBodyJson as? [String: Any] else {
             throw OWSGenericError("Invalid response from getBaUserInfo")
         }
@@ -96,7 +96,7 @@ public class LinkBaPayService {
 
     public func requestLink(linkId: String, userName: String, confirmResult: Bool) async throws -> LinkRequestResult {
         let request = OWSRequestFactory.linkBaPayRequestLinkRequest(linkId: linkId, userName: userName, confirmResult: confirmResult)
-        let response = try await networkManager.asyncRequest(request, canUseWebSocket: false)
+        let response = try await networkManager.asyncRequest(request)
         guard let json = response.responseBodyJson as? [String: Any] else {
             throw OWSGenericError("Invalid response from requestLink")
         }
@@ -107,7 +107,7 @@ public class LinkBaPayService {
 
     public func getLinkResult(linkId: String) async throws -> LinkResult {
         let request = OWSRequestFactory.linkBaPayGetLinkResultRequest(linkId: linkId)
-        let response = try await networkManager.asyncRequest(request, canUseWebSocket: false)
+        let response = try await networkManager.asyncRequest(request)
         guard let json = response.responseBodyJson as? [String: Any] else {
             throw OWSGenericError("Invalid response from getLinkResult")
         }
@@ -118,7 +118,7 @@ public class LinkBaPayService {
 
     public func getLinkedBaUserInfo() async throws -> LinkedBaUserInfo {
         let request = OWSRequestFactory.linkBaPayGetLinkedBaUserInfoRequest()
-        let response = try await networkManager.asyncRequest(request, canUseWebSocket: false)
+        let response = try await networkManager.asyncRequest(request)
         guard let json = response.responseBodyJson as? [String: Any] else {
             throw OWSGenericError("Invalid response from getLinkedBaUserInfo")
         }

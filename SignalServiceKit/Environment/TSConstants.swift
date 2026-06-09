@@ -223,7 +223,6 @@ public class TSConstantsStaging: TSConstantsProtocol {
     public let registrationCaptchaURL = "http://captcha.imba-test.com/registration/generate.html"
     public let challengeCaptchaURL = "http://captcha.imba-test.com/challenge/generate.html"
     // There's no separate test SFU for staging.
-    public let sfuTestURL = "https://sfu.ba-chat.com"
     public let kUDTrustRoots = ["BX4nQt7OxWnkqgcYeYyIA1XX43ZfPTEfusNoYTV5NJlj"]
     // There's no separate updates endpoint for staging.
     public let updatesURL = "http://updates2.imba-test.com"

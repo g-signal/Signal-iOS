@@ -83,7 +83,7 @@ class SyncPushTokensJob: NSObject {
         }
 
         Logger.warn("Uploading push tokens; reason: \(reason), pushToken: \(redact(pushToken)), voipToken: \(redact(voipToken))")
-        try await self.updatePushTokens(pushToken: pushToken, voipToken: voipToken, auth: auth)
+        try await self.updatePushTokens(pushToken: pushToken, voipToken: voipToken)
 
         await recordPushTokensLocally(pushToken: pushToken, voipToken: voipToken)
 
@@ -121,7 +121,7 @@ class SyncPushTokensJob: NSObject {
 
     // MARK: - Requests
 
-    func updatePushTokens(pushToken: String, voipToken: String?, auth: ChatServiceAuth) async throws {
+    func updatePushTokens(pushToken: String, voipToken: String?) async throws {
         Logger.info("Starting push token upload - pushToken: \(redact(pushToken)), voipToken: \(redact(voipToken))")
 
         // Upload regular push token
@@ -129,12 +129,10 @@ class SyncPushTokensJob: NSObject {
             Logger.info("Uploading regular push token...")
             try await Retry.performWithBackoff(maxAttempts: 3) {
                 let request = OWSRequestFactory.registerForPushRequest(apnsToken: pushToken)
-                var authedRequest = request
-                authedRequest.auth = .identified(auth)
 
                 Logger.info("Regular push API request - URL: \(request.url.absoluteString), method: \(request.method)")
 
-                let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(authedRequest, canUseWebSocket: false)
+                let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(request)
 
                 Logger.info("Regular push API response - statusCode: \(response.responseStatusCode), body: \(String(data: response.responseBodyData ?? Data(), encoding: .utf8) ?? "nil")")
             }
@@ -150,12 +148,10 @@ class SyncPushTokensJob: NSObject {
                 Logger.info("Uploading VoIP token...")
                 try await Retry.performWithBackoff(maxAttempts: 3) {
                     let request = OWSRequestFactory.registerForVoipPushRequest(voipToken: voipToken)
-                    var authedRequest = request
-                    authedRequest.auth = .identified(auth)
 
                     Logger.info("VoIP push API request - URL: \(request.url.absoluteString), method: \(request.method)")
 
-                    let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(authedRequest, canUseWebSocket: false)
+                    let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(request)
 
                     Logger.info("VoIP push API response - statusCode: \(response.responseStatusCode), body: \(String(data: response.responseBodyData ?? Data(), encoding: .utf8) ?? "nil")")
                 }

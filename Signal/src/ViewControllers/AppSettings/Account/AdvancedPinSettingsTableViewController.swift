@@ -76,10 +76,11 @@ class AdvancedPinSettingsTableViewController: OWSTableViewController2 {
         isBackupsEnabled: Bool,
     ) {
         if isPinEnabled {
-            if SSKEnvironment.shared.paymentsHelperRef.arePaymentsEnabled,
-               !PaymentsSettingsViewController.hasReviewedPassphraseWithSneakyTransaction() {
-                showReviewPassphraseAlertUI()
-            } else if isReglockV2Enabled {
+            // if SSKEnvironment.shared.paymentsHelperRef.arePaymentsEnabled,
+            //    !PaymentsSettingsViewController.hasReviewedPassphraseWithSneakyTransaction() {
+            //     showReviewPassphraseAlertUI()
+            // } else
+            if isReglockV2Enabled {
                 OWSActionSheets.showActionSheet(
                     message: OWSLocalizedString(
                         "SETTINGS_ADVANCED_PINS_DISABLE_PIN_ACTION_REGLOCK_DISABLE_REQUIRED",

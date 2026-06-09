@@ -55,8 +55,7 @@ public actor GExtGroupProfileFetcher {
     private func fetchGroupExtTags(groupId: String) async throws -> [GExtTag]? {
         let request = OWSRequestFactory.getGroupExtTagsRequest(groupId: groupId)
         let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(
-            request,
-            canUseWebSocket: false
+            request
         )
 
         guard let json = response.responseBodyJson as? [String: Any] else {
