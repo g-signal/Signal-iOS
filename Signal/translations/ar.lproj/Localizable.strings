@@ -197,13 +197,13 @@
 "APN_Message" = "قد تكون لديك رسائل جديدة";
 
 /* Default message for the 'app launch failed' alert. */
-"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "يتعذَّر بدء سيجنال. لتمكيننا من مساعدتك في حل المشكلة، يُرجى إرسال سجل الأخطاء إلى بريد الدعم: support@signal.org";
+"APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "يتعذَّر بدء سيجنال. لتمكيننا من مساعدتك في حل المشكلة، يُرجى إرسال سجل الأخطاء إلى بريد الدعم: support@baxs.com";
 
 /* Button to try launching the app even though the last launch failed */
 "APP_LAUNCH_FAILURE_CONTINUE" = "افتح تطبيق سيجنال بدلًا من ذلك";
 
 /* Message for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
-"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "يُرجى إرسال سِجلات الأخطاء إلى support@signal.org لكي نتمكّن من حل هذه المشكلة.";
+"APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_MESSAGE" = "يُرجى إرسال سِجلات الأخطاء إلى support@baxs.com لكي نتمكّن من حل هذه المشكلة.";
 
 /* Title for an error indicating that the app couldn't launch because some unexpected error happened with the user's registration status. */
 "APP_LAUNCH_FAILURE_CORRUPT_REGISTRATION_TITLE" = "تعذَّر فتح تطبيق سيجنال";
@@ -218,7 +218,7 @@
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "إصدار قاعدة البيانات مجهول.";
 
 /* Error indicating that the app crashed during the previous launch. */
-"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "وقع خطأ لسيجنال أثناء محاولة فتحه. يُرجى إرسال سجل الاخطاء إلى support@signal.org لمساعدتنا في حل المشكلة.";
+"APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "وقع خطأ لسيجنال أثناء محاولة فتحه. يُرجى إرسال سجل الاخطاء إلى support@baxs.com لمساعدتنا في حل المشكلة.";
 
 /* Error indicating that the app crashed during the previous launch. */
 "APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_TITLE" = "تعذَّر فتح تطبيق سيجنال";
@@ -230,7 +230,7 @@
 "APP_LAUNCH_FAILURE_LOW_STORAGE_SPACE_AVAILABLE_TITLE" = "مساحة التخزين مُنخفضة";
 
 /* Error indicating that the app could not restore transferred data. */
-"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "تعذَّر استعادة البيانات المنقولة من جهازك القديم. يُرجى إرسال سجل الأخطاء إلى support@signal.org حتى نتمكّن من حل المُشكلة. إذا قُمتَ بإعادة تثبيت سيجنال، فقد تفقد سجل الرسائل لديك.";
+"APP_LAUNCH_FAILURE_RESTORE_FAILED_MESSAGE" = "تعذَّر استعادة البيانات المنقولة من جهازك القديم. يُرجى إرسال سجل الأخطاء إلى support@baxs.com حتى نتمكّن من حل المُشكلة. إذا قُمتَ بإعادة تثبيت سيجنال، فقد تفقد سجل الرسائل لديك.";
 
 /* Error indicating that the app could not restore transferred data. */
 "APP_LAUNCH_FAILURE_RESTORE_FAILED_TITLE" = "تعذّر إتمام عملية النقل";
@@ -494,7 +494,7 @@
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "الرسالة الصوتية غير مُتوفِّرة";
 
 /* Username for recovery key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "النسخ الاحتياطية الآمنة لسيجنال";
+"AUTOFILL_BACKUP_KEY_USERNAME" = "النسخ الاحتياطية على سيجنال";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "اختر لونًا";
@@ -536,7 +536,7 @@
 "BACKUP_KEY_COPIED_MESSAGE_TOAST" = "تمَّ نسخ مفتاح الاستعادة";
 
 /* Text used as placeholder in recovery key text view. */
-"BACKUP_KEY_PLACEHOLDER" = "مفتاح الاستعادة";
+"BACKUP_KEY_PLACEHOLDER" = "مفتاح النسخة الاحتياطية";
 
 /* Title of button to tap if you forgot your recovery key. */
 "BACKUP_KEY_REMINDER_FORGOT_KEY" = "هل نسيت المفتاح؟";
@@ -548,13 +548,13 @@
 "BACKUP_KEY_REMINDER_MEGAPHONE_BODY" = "سَنطلب منك أحيانًا التحقُّق من مفتاحك للتأكُّد من أنك لا زلت تعرفه.";
 
 /* Title for Recovery Key reminder megaphone */
-"BACKUP_KEY_REMINDER_MEGAPHONE_TITLE" = "قُم بتأكيد مفتاح الاستعادة الخاص بك";
+"BACKUP_KEY_REMINDER_MEGAPHONE_TITLE" = "تحقّق من مفتاح النسخ الاحتياطي الخاص بك";
 
 /* Snooze text for Recovery Key reminder megaphone */
 "BACKUP_KEY_REMINDER_NOT_NOW_ACTION" = "ليس الآن";
 
 /* Toast indicating that the Recovery Key was correct. */
-"BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "مفتاح الاستعادة صحيح. حافِظ على مفتاحك في مكانٍ آمن.";
+"BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "مفتاح النسخ الاحتياطي صحيح. حافِظ على مفتاحك في مكانٍ آمن.";
 
 /* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "لن يتمكّن سيجنال من مُساعدتك على استعادة نسختك الاحتياطية إذا فقدتَ مفتاحك. احتفِظ بمفتاحك في مكانٍ آمن، ولا تُشاركه مع أي أحد.";
@@ -566,10 +566,10 @@
 "BACKUP_ONBOARDING_CONFIRM_KEY_SEE_KEY_AGAIN_BUTTON_TITLE" = "اطَّلِع على المفتاح مُجدَّدًا";
 
 /* Subtitle for a view asking users to confirm their 'Recovery Key'. */
-"BACKUP_ONBOARDING_CONFIRM_KEY_SUBTITLE" = "أدخِل مفتاح الاستعادة الذي سجّلته للتو";
+"BACKUP_ONBOARDING_CONFIRM_KEY_SUBTITLE" = "أدخِل مفتاح النسخة الاحتياطية الذي سجّلته للتو.";
 
 /* Title for a view asking users to confirm their 'Recovery Key'. */
-"BACKUP_ONBOARDING_CONFIRM_KEY_TITLE" = "قُم بتأكيد مفتاح الاستعادة الخاص بك";
+"BACKUP_ONBOARDING_CONFIRM_KEY_TITLE" = "تأكَّد من مفتاح نسختك الاحتياطية";
 
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_1" = "مُشفَّرة من طرف لطرف";
@@ -584,13 +584,13 @@
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "أنشِئ نسخة احتياطية من رسائلك ووسائطك باستخدام خدمة التخزين الآمنة المُشفَّرة من طرف لطرف من سيجنال. لا تفقد رسالة عندما تستخدم هاتفًا جديدًا أو تعيد تثبيت سيجنال.";
 
 /* Title for a view introducing Backups during an onboarding flow. */
-"BACKUP_ONBOARDING_INTRO_TITLE" = "النسخ الاحتياطية الآمنة لسيجنال";
+"BACKUP_ONBOARDING_INTRO_TITLE" = "النسخ الاحتياطية على سيجنال";
 
 /* Subtitle for a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "مفتاح الاستعادة الخاص بك هو كود مُكوَّن من 64 رقمًا يَسمح لك باستعادة نسختك الاحتياطية عندما تُعيد تثبيت سيجنال.\n\nإذا نسيتَ مفتاحك، لن تتمكَّن من استرجاع نسختك الاحتياطية. لا يُمكن لسيجنال مُساعدتك على استرجاع نسختك الاحتياطية.";
+"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "مفتاح النسخة الاحتياطية الخاص بك هو كود مُكوَّن من 64 رقمًا يَسمح لك باستعادة نسختك الاحتياطية عندما تُعيد تثبيت سيجنال.\n\nإذا نسيتَ مفتاحك، لن تتمكَّن من استرجاع نسختك الاحتياطية. لا يُمكن لسيجنال مُساعدتك على استرجاع نسختك الاحتياطية.";
 
 /* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "مفتاح الاستعادة الخاص بك";
+"BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "مفتاح النسخة الاحتياطية الخاص بك";
 
 /* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "نسخ إلى الحافظة";
@@ -602,7 +602,7 @@
 "BACKUP_RECORD_KEY_SUBTITLE" = "هذا المفتاح مطلوب لاسترجاع بياناتك وحسابك. احتفِظ بهذا المفتاح في مكانٍ آمن. إذا فقدته، لن تتمكّن من استرجاع حسابك.";
 
 /* Title for a view allowing users to record their 'Recovery Key'. */
-"BACKUP_RECORD_KEY_TITLE" = "قُم بتسجيل مفتاح الاستعادة الخاص بك";
+"BACKUP_RECORD_KEY_TITLE" = "احتفِظ بنسخة عن مفتاح النسخة الاحتياطية الخاص بك.";
 
 /* Subtitle for a progress spinner on a modal tracking active downloading. Embeds 1:{{ the amount downloaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to download as a file size, e.g. 1 GB }}; 3:{{ the amount downloaded as a percentage, e.g. 10% }}. */
 "BACKUP_RESTORE_MODAL_DOWNLOAD_PROGRESS_SUBTITLE" = "%1$@ من %2$@ (%3$@)";
@@ -677,7 +677,7 @@
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "إدارة الخطة";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
-"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "مدفوع (مجاني بالنسبة لمُستخدِمي TestFlight)";
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "الخطة مدفوعة ولكن تبقى مجانية طالما أنك تختبر الخطة.";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "النسخ الاحتياطي للنص وكل الوسائط";
@@ -812,7 +812,7 @@
 "BACKUP_SETTINGS_ENABLED_LAST_BACKUP_YESTERDAY_FORMAT" = "البارحة عند الساعة %1$@";
 
 /* Label for a menu item offering to show the user their recovery key. */
-"BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "عرض مفتاح الاستعادة";
+"BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "عرض مفتاح النسخة الاحتياطية";
 
 /* Title for a button allowing users to trigger a manual backup. */
 "BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "إنشاء نسخة احتياطية الآن";
@@ -833,7 +833,7 @@
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_TITLE" = "هل ترغبُ بتنزيل الوسائط المُفرَّغة؟";
 
 /* Message for an action sheet warning users who are testers about the Optimize Local Storage feature. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TESTER_WARNING_SHEET_MESSAGE" = "ستصبح الوسائط المُفرَّغة متوفرة طالما أنك مازلت تختبر TestFlight. تأكَّد من تنزيل كل ملفات وسائطك قبل مغادرة برنامج الاختبار.";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TESTER_WARNING_SHEET_MESSAGE" = "ستصبح الوسائط المُفرَّغة متوفرة طالما أنك مازلت تختبر الخطة. تأكَّد من تنزيل كل ملفات وسائطك قبل مغادرة برنامج الاختبار.";
 
 /* Title for an action sheet warning users who are testers about the Optimize Local Storage feature. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TESTER_WARNING_SHEET_TITLE" = "جارٍ اختبار ملفات الوسائط المُفرَّغة";
@@ -842,7 +842,7 @@
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE" = "سيتمُّ تفريغ ملفات الوسائط غير المُستخدِمة، لكن يُمكن تنزيلها من النسخة الاحتياطية لديك في أيّ وقت.";
 
 /* Footer for a toggle allowing users to change the Optimize Local Storage setting, if the toggle is available and they are a tester. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE_FOR_TESTERS" = "سيتمُّ تفريغ ملفات الوسائط غير المُستخدِمة، لكن يُمكن تنزيلها من النسخة الاحتياطية لديك في أيّ وقت طالما أنك تستخدم TestFlight.";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE_FOR_TESTERS" = "سيتمُّ تفريغ ملفات الوسائط غير المُستخدِمة، لكن يُمكن تنزيلها من النسخة الاحتياطية لديك في أيّ وقت طالما أنك تختبر الخطة.";
 
 /* Footer for a toggle allowing users to change the Optimize Local Storage setting, if the toggle is unavailable. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_UNAVAILABLE" = "لا يمكن استخدام ميزة تحسين التخزين إلّا مع المُستوى المدفوع لنسخ سيجنال الاحتياطية. يُرجى ترقية خطة النسخ الاحتياطية لديك لتفعيل هذه الميزة.";
@@ -863,28 +863,28 @@
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "هل ترغبُ بتخطي التنزيل؟";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
-"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "تمَّ إيقاف تحميل ملفات الوسائط مؤقَّتًا: بطارية الجهاز مُنخفضة";
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "التحميل متوقِّف مؤقتًا: بطارية الجهاز منخفضة";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low power mode. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_POWER_MODE" = "تمَّ إيقاف تحميل ملفات الوسائط مؤقَّتًا: وضع الطاقة المُنخفضة";
 
 /* Subtitle for a progress bar tracking uploads that are paused because they need an internet connection */
-"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_INTERNET" = "تمَّ إيقاف تحميل ملفات الوسائط مؤقَّتًا: لا يُوجد اتصال بالإنترنت…";
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_INTERNET" = "تمَّ إيقاف التحميل مؤقَّتًا: لا يوجد اتصال بالإنترنت…";
 
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
-"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "تمَّ إيقاف تحميل ملفات الوسائط مؤقَّتًا: في انتظار الاتصال بالواي فاي";
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "التحميل متوقِّف مؤقتًا: في انتظار الاتصال بالواي فاي";
 
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "جارٍ تحميل %1$@ من أصل %2$@ (%3$@)";
 
 /* Message for a sheet shown after the user enables backups. */
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE" = "قد يستغرق هذا وقتًا طويلًا حسب حجم النسخة الاحتياطية الخاصة بك. يمكنك استخدام سيجنال بشكل اعتيادي أثناء إجراء عملية النسخ الاحتياطي.";
+"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE" = "قد يستغرق هذا وقتًا طويلًا حسب حجم النسخة الاحتياطية الخاصة بك. يُمكنك استخدام هاتفك بشكل اعتيادي أثناء إجراء عملية النسخ الاحتياطي.";
 
 /* Title for a sheet shown after the user enables backups. */
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "مرحبًا بك في النسخ الاحتياطية الآمنة لسيجنال. ابدأ النسخ الاحتياطي لديك الآن.";
+"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "مرحبًا بك في النسخ الاحتياطية على سيجنال. ابدأ النسخ الاحتياطي لديك الآن.";
 
 /* Title for the 'Backup' settings menu. */
-"BACKUPS_SETTINGS_TITLE" = "النسخ الاحتياطية الآمنة";
+"BACKUPS_SETTINGS_TITLE" = "النسخ الاحتياطية على سيجنال";
 
 /* Body for system notification or megaphone when backups is enabled. Embeds {{ time backups was enabled }} */
 "BACKUPS_TURNED_ON_NOTIFICATION_BODY_FORMAT" = "تمّ تفعيل النسخ الاحتياطية على سيجنال لهذا الحساب في %1$@. انقر للمشاهدة.";
@@ -1583,7 +1583,7 @@
 "CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "الأيام 45 الأخيرة من الوسائط";
 
 /* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
-"CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "100 جيجابايت تخزين";
+"CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "مساحة تخزين 1 تيرابايت (~250 ألف صورة)";
 
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "حدث خطأ ما. يُرجى التواصل مع فريق الدعم.";
@@ -3110,7 +3110,7 @@
 "EMAIL_INVITE_SUBJECT" = "لننتقل إلى سيجنال";
 
 /* Description for the fallback support sheet if user cannot send email */
-"EMAIL_SIGNAL_MESSAGE" = "لم يتمّ تجهيز جهازك لإرسال رسائل إلكترونية. لإرسال طلب دعم، قُم بإعداد رسالة إلكترونية على جهازك أو أرسِل رسالة إلكترونية إلى support@signal.org";
+"EMAIL_SIGNAL_MESSAGE" = "لم يتمّ تجهيز جهازك لإرسال رسائل إلكترونية. لإرسال طلب دعم، قُم بإعداد رسالة إلكترونية على جهازك أو أرسِل رسالة إلكترونية إلى support@baxs.com";
 
 /* Title for the fallback support sheet if user cannot send email */
 "EMAIL_SIGNAL_TITLE" = "البريد الإلكتروني غير متاح";
@@ -3158,10 +3158,10 @@
 "END_CALL_UNCATEGORIZED_FAILURE" = "فشل الاتصال";
 
 /* Label explaining that an entered 'Recovery Key' is incorrect. */
-"ENTER_ACCOUNT_ENTROPY_POOL_VIEW_INCORRECT_AEP_LABEL" = "مفتاح الاستعادة خاطئ";
+"ENTER_ACCOUNT_ENTROPY_POOL_VIEW_INCORRECT_AEP_LABEL" = "مفتاح النسخة الاحتياطية غير صحيح.";
 
 /* Label explaining that an entered 'Recovery Key' is malformed. */
-"ENTER_ACCOUNT_ENTROPY_POOL_VIEW_MALFORMED_AEP_LABEL" = "مفتاح الاستعادة غير صالح";
+"ENTER_ACCOUNT_ENTROPY_POOL_VIEW_MALFORMED_AEP_LABEL" = "مفتاح النسخة الاحتياطية غير صالح.";
 
 /* Error indicating that a message could not be forwarded. */
 "ERROR_COULD_NOT_FORWARD_MESSAGES_1" = "تعذَّرت إعادة توجيه الرسالة.";
@@ -3257,7 +3257,7 @@
 "ERROR_NETWORK_FAILURE" = "خطأ في الشبكة";
 
 /* Format string for an error alert notification message. Embeds {{ error string }} */
-"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "‫نرجو منك مساعدتنا على تحسين سيجنال، وذلك بالإبلاغ عن هذا الخطأ مع إرفاق سِجلات الأخطاء من جهازك إلى support@signal.org؛ %1$@";
+"ERROR_NOTIFICATION_MESSAGE_FORMAT" = "‫نرجو منك مساعدتنا على تحسين سيجنال، وذلك بالإبلاغ عن هذا الخطأ مع إرفاق سِجلات الأخطاء من جهازك إلى support@baxs.com؛ %1$@";
 
 /* Format string for an error alert notification title. */
 "ERROR_NOTIFICATION_TITLE" = "‫إصدار سيجنال التجريبي‬: حدث خطأ ما";
@@ -6806,7 +6806,7 @@
 "REGISTER_RATE_LIMITING_ERROR" = "حاولتَ كثيرًا. يُرجى الانتظار لمُدة دقيقة واحدة قبل إعادة المحاولة.";
 
 /* Body for a sheet warning users about a missing backup. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_BACKUP_NOT_FOUND_BODY" = "مفتاح الاستعادة الذي أدخلته صحيح، لكن لا توجد أي نسخة احتياطية مرتبطة به. إذا كُنتَ لا تزال تحتفظ بهاتفك القديم، تأكَّد من أن النسخة الاحتياطية مُفعَّلة وأن عملية النسخ الاحتياطي قد اكتملت بالفعل، وحاوِل مرّة أخرى.";
+"REGISTRATION_BACKUP_RESTORE_ERROR_BACKUP_NOT_FOUND_BODY" = "مفتاح النسخة الاحتياطية الذي أدخلته صحيح، لكن لا توجد أي نسخة احتياطية مرتبطة به. إذا كُنتَ لا تزال تحتفظ بهاتفك القديم، تأكَّد من أن النسخة الاحتياطية مُفعَّلة وأن عملية النسخ الاحتياطي قد اكتملت بالفعل، وحاوِل مرّة أخرى.";
 
 /* Title for a sheet warning users about a missing backup. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_BACKUP_NOT_FOUND_TITLE" = "لا توجد نسخة احتياطية";
@@ -6839,10 +6839,10 @@
 "REGISTRATION_BACKUP_RESTORE_ERROR_GENERIC_TITLE" = "تعذَّر إنهاء عملية النقل";
 
 /* Body for a sheet warning users about an incorrect recovery key. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "تأكَّد من أنك أدخلتَ نفس مفتاح الاستعادة المُكوَّن من 64 رمزًا الذي حفظته عند تفعيل خاصية النسخ الاحتياطية على سيجنال. لا يُمكن استرجاع النُسخ الاحتياطية دون هذا المفتاح.";
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
 /* Title for a sheet warning users about an incorrect recovery key. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "مفتاح الاستعادة خاطئ";
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "مفتاح النسخة الاحتياطية غير صحيح.";
 
 /* Body for a sheet warning users about a network error during backup restore. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_NETWORK_BODY" = "لا يُمكن استعادة نسختك الاحتياطية الآن. تحقَّق من اتصالك بالإنترنت وحاوِل مُجدَّدًا.";
@@ -6899,10 +6899,10 @@
 "REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "نَقل الحساب والرسائل";
 
 /* Description for the screen that allows users to enter their recovery key. */
-"REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "مفتاح الاستعادة الخاص بك هو كود مُكوَّن من 64 رمزًا، وهو مطلوب لاستعادة حسابك وبياناتك.";
+"REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "مفتاح النسخة الاحتياطية الخاص بك هو كود مُكوَّن من 64 رقمًا، وهو مطلوب لاستعادة حسابك وبياناتك.";
 
 /* Title for the screen that allows users to enter their recovery key. */
-"REGISTRATION_ENTER_BACKUP_KEY_TITLE" = "أدخِل مفتاح الاستعادة الخاص بك.";
+"REGISTRATION_ENTER_BACKUP_KEY_TITLE" = "أدخِل مفتاح النسخة الاحتياطية الخاص بك";
 
 /* Placeholder text for the phone number textfield */
 "REGISTRATION_ENTERNUMBER_DEFAULT_TEXT" = "أدخِل الرقم";
@@ -6926,13 +6926,13 @@
 "REGISTRATION_NETWORK_ERROR_TITLE" = "تحقَّق من الاتصال";
 
 /* Title of button to tap if you do not have a recovery key during registration. */
-"REGISTRATION_NO_BACKUP_KEY_BUTTON_TITLE" = "لا حاجة لمفتاح استعادة جديد؟";
+"REGISTRATION_NO_BACKUP_KEY_BUTTON_TITLE" = "ليس بمتناولك مفتاح النسخة الاحتياطية؟";
 
 /* Body text on a sheet with info for what to do if you don't have a recovery key */
-"REGISTRATION_NO_BACKUP_KEY_SHEET_BODY" = "لا يُمكن استعادة النُسخ الاحتياطية دون كود الاستعادة المُكوَّن من 64 رمزًا. إذا فقدتَ مفتاح الاستعادة الخاص بك، فلا يُمكن لسيجنال مُساعدتك في استعادة نسختك الاحتياطية.\n\nإذا كُنتَ تستعمل جهازك القديم، يُمكنك عرض مفتاح الاستعادة الخاص بك في \"الإعدادات\" > \"الدردشات\" > \"النسخ الاحتياطية\". ثم انقر على عرض مفتاح الاستعادة.";
+"REGISTRATION_NO_BACKUP_KEY_SHEET_BODY" = "لا يُمكن استرجاع النسخ الاحتياطية دون كود الاستعادة المُكوَّن من 64 رقمًا. إذا فقدت مفتاح النسخة الاحتياطية الخاص بك، فلا يُمكن لسيجنال مُساعدتك في استعادة نسختك الاحتياطية.\n\nإذا كُنتَ تستعمل جهازك القديم، يُمكنك عرض مفتاح النسخة الاحتياطية الخاص بك في \"الإعدادات\" > \"الدردشات\" > \"النسخ الاحتياطية على سيجنال\". ثم انقر على \"عرض مفتاح النسخة الاحتياطية\".";
 
 /* Title for sheet with info for what to do if you don't have a recovery key */
-"REGISTRATION_NO_BACKUP_KEY_SHEET_TITLE" = "لا حاجة لمفتاح استعادة جديد؟";
+"REGISTRATION_NO_BACKUP_KEY_SHEET_TITLE" = "ليس بمتناولك مفتاح النسخة الاحتياطية؟";
 
 /* Title for button on sheet for when you don't have a recovery key */
 "REGISTRATION_NO_BACKUP_KEY_SKIP_RESTORE_BUTTON_TITLE" = "تخطّي دون الاستعادة";
@@ -7661,7 +7661,7 @@
 "SETTINGS_DELETE_DATA_BUTTON" = "حذف جميع البيانات";
 
 /* Alert message before user confirms clearing history */
-"SETTINGS_DELETE_HISTORYLOG_CONFIRMATION" = "هل أنت متأكِّد من أنك تريد حذف كل سِجلات الدردشات (الرسائل والوسائط والمكالمات، إلخ.) من جميع أجهزتك؟ لا يُمكن التراجع عن هذا الإجراء.";
+"SETTINGS_DELETE_HISTORYLOG_CONFIRMATION" = "هل أنت متأكِّد من أنك تريد حذف كل السجلات (الرسائل والملفات المُرفقة والمكالمات، إلخ.)؟ لا يمكن التراجع عن هذا الإجراء.";
 
 /* Confirmation text for button which deletes all message, calling, attachments, etc. */
 "SETTINGS_DELETE_HISTORYLOG_CONFIRMATION_BUTTON" = "حذف كل شيء";
@@ -8852,7 +8852,7 @@
 "SUPPORT_EMAIL_DEFAULT_DESCRIPTION" = "أخبِرنا حول المشكلة: ";
 
 /* Message for alert dialog presented when a support email failed to send */
-"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "يُرجى إرسال طلب الدعم بواسطة البَريد الإلكتروني إلى support@signal.org";
+"SUPPORT_EMAIL_ERROR_ALERT_DESCRIPTION" = "يُرجى إرسال طلب الدعم بواسطة البَريد الإلكتروني إلى support@baxs.com";
 
 /* Localized label for support request email filter string. Embeds {{filter text}}. */
 "SUPPORT_EMAIL_FILTER_LABEL_FORMAT" = "الفلتر: %1$@";
@@ -9525,3 +9525,46 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "ضبطتَ وقت إختفاء الرسائل على %1$@.";
+
+/* BA custom strings */
+"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "جارٍ إنشاء نسخة احتياطية: %1$@";
+"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "جارٍ تصدير النسخة الاحتياطية…";
+"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "جارٍ تحميل النسخة الاحتياطية…";
+"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "جارٍ تحميل ملفات وسائط النسخ الاحتياطية…";
+"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "إنشاء نسخة احتياطية الآن";
+"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "إجراء النسخ الاحتياطي لاحقًا";
+"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "العديد من الأخطاء مع جهة الاتصال هذه. يُرجى إعادة المحاولة لاحقًا.";
+"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "إيقاف";
+"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "لإيقاف رقم التعريف الشخصي (PIN) الخاص بك، عليك أولًا إيقاف قفل التسجيل.";
+"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "هل تُريد إيقاف قفل التسجيل؟";
+"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "أُنشِئَ رقم التعريف الشخصي (PIN) بنجاح، لكن قفل التسجيل تعذَّر تفعيله. تحقَّق من اتصالك وحاوِل مرّة أخرى.";
+"PIN_CREATION_REGLOCK_ERROR_TITLE" = "فشل تفعيل قفل التسجيل";
+"PIN_DISABLE_ERROR_MESSAGE" = "لم يكن بالإمكان تعطيل رقم التعريف الشخصي (PIN).";
+"PIN_DISABLE_ERROR_TITLE" = "فشل تعطيل رقم التعريف الشخصي (PIN)";
+"REGISTER_RATE_LIMITING_BODY" = "حاولتَ كثيرًا. يُرجى الانتظار لدقيقة واحدة قبل إعادة المحاولة.";
+"VOICE_MESSAGE_FILE_NAME" = "B&A";
+
+/* BA custom strings */
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "يبدو أنك تحاول ربط حساب BAXS. انقر على \"متابعة\" ثم انقر على \"مسح كود QR\" وامسح كود الـ QR من جديد.";
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "ربط حساب منصة BA";
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "حساب BAXS المرتبط";
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "حساب منصة BA";
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "امسح رمز QR المعروض على منصة الدفع BA لربط حسابك.";
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "مسح رمز QR";
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "الجوال";
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "البريد الإلكتروني";
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "ربط حساب منصة BA";
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "ربط حسابك بـ \"%@\"؟";
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "تم ربط حساب منصة BA بنجاح.";
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "رمز QR غير صالح";
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "رمز QR هذا ليس رمز ربط صالحاً لمنصة BA.";
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "مسح مجدداً";
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "تعذّر الربط";
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "لا يمكن استخدام رمز QR هذا للربط.";
+"LINK_BA_PLATFORM_FAILED_TITLE" = "فشل الربط";
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "رفضت منصة BA طلب الربط.";
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "انتهت مهلة الربط";
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "لم تستجب منصة BA في الوقت المحدد. يرجى المحاولة مجدداً.";
+"LINK_BA_PLATFORM_ERROR_TITLE" = "خطأ";
