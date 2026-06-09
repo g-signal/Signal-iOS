@@ -293,9 +293,9 @@ public class PinSetupViewController: OWSViewController, OWSNavigationChildContro
         backButton.autoPinEdge(toSuperviewSafeArea: .top)
         backButton.autoPinEdge(toSuperviewSafeArea: .leading)
 
-        view.addSubview(moreButton)
-        moreButton.autoPinEdge(toSuperviewSafeArea: .top)
-        moreButton.autoPinEdge(toSuperviewSafeArea: .trailing)
+//        view.addSubview(moreButton)
+//        moreButton.autoPinEdge(toSuperviewSafeArea: .top)
+//        moreButton.autoPinEdge(toSuperviewSafeArea: .trailing)
 
         let titleSpacer = SpacerView(preferredHeight: 12)
         let pinFieldSpacer = SpacerView(preferredHeight: 11)

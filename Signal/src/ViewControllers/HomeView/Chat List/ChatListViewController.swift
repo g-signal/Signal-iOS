@@ -1210,10 +1210,11 @@ extension ChatListViewController {
             completion = { profile.presentAvatarSettingsView() }
 
         case .backups:
-            viewControllers += [
-                BackupOnboardingCoordinator()
-                    .prepareForPresentation(inNavController: navigationController)
-            ]
+            break
+//            viewControllers += [
+//                BackupOnboardingCoordinator()
+//                    .prepareForPresentation(inNavController: navigationController)
+//            ]
 
         case .corruptedUsernameResolution:
             let profile = ProfileSettingsViewController(
