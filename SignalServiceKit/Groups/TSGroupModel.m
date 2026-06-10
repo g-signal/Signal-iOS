@@ -137,11 +137,11 @@ NSUInteger const TSGroupModelSchemaVersion = 2;
     }
 
     // First, resize the image if necessary
-    if (image.pixelWidth > kMaxAvatarDimension || image.pixelHeight > kMaxAvatarDimension) {
-        CGFloat thumbnailSizePixels = MIN(kMaxAvatarDimension, MIN(image.pixelWidth, image.pixelHeight));
+    if ((CGFloat)image.pixelWidth > kMaxAvatarDimension || (CGFloat)image.pixelHeight > kMaxAvatarDimension) {
+        CGFloat thumbnailSizePixels = MIN((CGFloat)kMaxAvatarDimension, (CGFloat)MIN(image.pixelWidth, image.pixelHeight));
         image = [image resizedImageToFillPixelSize:CGSizeMake(thumbnailSizePixels, thumbnailSizePixels)];
     }
-    if (image.pixelWidth > kMaxAvatarDimension || image.pixelHeight > kMaxAvatarDimension) {
+    if ((CGFloat)image.pixelWidth > kMaxAvatarDimension || (CGFloat)image.pixelHeight > kMaxAvatarDimension) {
         OWSFailDebug(@"Could not resize group avatar.");
         return nil;
     }

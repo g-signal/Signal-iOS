@@ -15,7 +15,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 static inline BOOL ShouldLogFlag(DDLogFlag flag)
 {
-    return (ddLogLevel & flag) != 0;
+    return ((DDLogFlag)ddLogLevel & flag) != 0;
 }
 
 static inline BOOL ShouldLogVerbose(void)
