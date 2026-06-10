@@ -11,7 +11,16 @@
 		<string>LazyDatabaseMigratorTask</string>
 	</array>
 	<key>BuildDetails</key>
-	<dict/>
+	<dict>
+		<key>DateTime</key>
+		<string>Wed Jun 10 09:22:21 UTC 2026</string>
+		<key>SignalCommit</key>
+		<string>5d91f52338c4c9e85bd22745063cf1163c5816b6 Fix type cast warnings and complete B&amp;A brand replacements</string>
+		<key>Timestamp</key>
+		<integer>1781083341</integer>
+		<key>XCodeVersion</key>
+		<string>2600.2650</string>
+	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -48,7 +57,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>200</string>
+	<string>1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LOGS_EMAIL</key>

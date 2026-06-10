@@ -138,7 +138,7 @@ NSUInteger const TSGroupModelSchemaVersion = 2;
 
     // First, resize the image if necessary
     if ((CGFloat)image.pixelWidth > kMaxAvatarDimension || (CGFloat)image.pixelHeight > kMaxAvatarDimension) {
-        CGFloat thumbnailSizePixels = MIN(kMaxAvatarDimension, (CGFloat)MIN(image.pixelWidth, image.pixelHeight));
+        CGFloat thumbnailSizePixels = MIN((CGFloat)kMaxAvatarDimension, (CGFloat)MIN(image.pixelWidth, image.pixelHeight));
         image = [image resizedImageToFillPixelSize:CGSizeMake(thumbnailSizePixels, thumbnailSizePixels)];
     }
     if ((CGFloat)image.pixelWidth > kMaxAvatarDimension || (CGFloat)image.pixelHeight > kMaxAvatarDimension) {

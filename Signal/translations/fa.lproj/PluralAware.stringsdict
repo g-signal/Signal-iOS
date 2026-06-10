@@ -515,9 +515,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>گروه‌های سیگنال با %1$d عضو یا کمتر بهترین عملکرد را دارند. افزودن اعضای بیشتر موجب تأخیر در ارسال و دریافت پیام‌ها خواهد شد.</string>
+			<string>گروه‌های B&amp;A با %1$d عضو یا کمتر بهترین عملکرد را دارند. افزودن اعضای بیشتر موجب تأخیر در ارسال و دریافت پیام‌ها خواهد شد.</string>
 			<key>other</key>
-			<string>گروه‌های سیگنال با %1$d عضو یا کمتر بهترین عملکرد را دارند. افزودن اعضای بیشتر موجب تأخیر در ارسال و دریافت پیام‌ها خواهد شد.</string>
+			<string>گروه‌های B&amp;A با %1$d عضو یا کمتر بهترین عملکرد را دارند. افزودن اعضای بیشتر موجب تأخیر در ارسال و دریافت پیام‌ها خواهد شد.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -675,9 +675,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>سیگنال به %2$@، %3$@ و %1$d نفر دیگر زنگ خواهد زد</string>
+			<string>B&amp;A به %2$@، %3$@ و %1$d نفر دیگر زنگ خواهد زد</string>
 			<key>other</key>
-			<string>سیگنال با %2$@، %3$@ و %1$d نفر دیگر زنگ خواهد زد</string>
+			<string>B&amp;A با %2$@، %3$@ و %1$d نفر دیگر زنگ خواهد زد</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -963,9 +963,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>برای اینکه «%2$@» همچنان متصل بماند، ظرف %1$d روز سیگنال را در آن دستگاه باز کنید.</string>
+			<string>برای اینکه «%2$@» همچنان متصل بماند، ظرف %1$d روز B&amp;A را در آن دستگاه باز کنید.</string>
 			<key>other</key>
-			<string>برای اینکه «%2$@» همچنان متصل بماند، ظرف %1$d روز سیگنال را در آن دستگاه باز کنید.</string>
+			<string>برای اینکه «%2$@» همچنان متصل بماند، ظرف %1$d روز B&amp;A را در آن دستگاه باز کنید.</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1171,9 +1171,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>همه آشنایان در سیگنال · %1$d بازدیدکننده</string>
+			<string>همه آشنایان در B&amp;A · %1$d بازدیدکننده</string>
 			<key>other</key>
-			<string>همه آشنایان در سیگنال · %1$d بازدیدکننده</string>
+			<string>همه آشنایان در B&amp;A · %1$d بازدیدکننده</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1187,9 +1187,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>همه آشنایان در سیگنال · به جز %1$d نفر</string>
+			<string>همه آشنایان در B&amp;A · به جز %1$d نفر</string>
 			<key>other</key>
-			<string>همه آشنایان در سیگنال · به جز %1$d نفر</string>
+			<string>همه آشنایان در B&amp;A · به جز %1$d نفر</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
