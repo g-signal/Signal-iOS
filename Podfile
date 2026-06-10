@@ -105,6 +105,7 @@ post_install do |installer|
   update_frameworks_script(installer)
   disable_non_development_pod_warnings(installer)
   fix_ringrtc_project_symlink(installer)
+  disable_ringrtc_script_sandboxing(installer)
   fetch_ringrtc
   copy_acknowledgements
 end
@@ -247,6 +248,17 @@ def fix_ringrtc_project_symlink(installer)
   ringrtc_header_ref = installer.pods_project.reference_for_path(installer.sandbox.pod_dir('SignalRingRTC') + 'out/release/libringrtc/ringrtc.h')
   if ringrtc_header_ref.path.start_with?('../') || ringrtc_header_ref.path.start_with?('/') then
     ringrtc_header_ref.path = 'out/release/libringrtc/ringrtc.h'
+  end
+end
+
+# The xcframeworks.sh script reads xcframework contents not explicitly listed as inputs,
+# which conflicts with Xcode's user script sandboxing. Disable it for SignalRingRTC.
+def disable_ringrtc_script_sandboxing(installer)
+  installer.pods_project.targets.each do |target|
+    next unless target.name == 'SignalRingRTC'
+    target.build_configurations.each do |config|
+      config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+    end
   end
 end
 
