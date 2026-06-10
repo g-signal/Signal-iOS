@@ -13,11 +13,11 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Tue Jun  9 12:41:48 UTC 2026</string>
+		<string>Wed Jun 10 09:22:21 UTC 2026</string>
 		<key>SignalCommit</key>
-		<string>1f697d213a142a0ab9a575b31331178565043733 Replace Signal brand name with B&amp;A in ar/fa/bn/pt_BR localizations</string>
+		<string>5d91f52338c4c9e85bd22745063cf1163c5816b6 Fix type cast warnings and complete B&amp;A brand replacements</string>
 		<key>Timestamp</key>
-		<integer>1781008908</integer>
+		<integer>1781083341</integer>
 		<key>XCodeVersion</key>
 		<string>2600.2650</string>
 	</dict>
@@ -90,7 +90,7 @@
 	<key>NSContactsUsageDescription</key>
 	<string>BA Chat uses your contacts to find users you know. We do not store your contacts on the server.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>BA Chat&apos;s Screen Lock uses Face ID.</string>
+	<string>BA Chat's Screen Lock uses Face ID.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>BA Chat uses the local network to allow you to directly transfer your account to a new phone. It will not be used unless you explicitly choose to initiate a transfer to a new device.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
