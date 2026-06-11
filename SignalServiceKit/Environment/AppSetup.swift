@@ -142,6 +142,7 @@ public class AppSetup {
                 libsignalRemoteConfig["chatRequestConnectionCheckTimeoutMillis"] = String(connectionCheckTimeoutMillis)
             }
         }
+        libsignalRemoteConfig["chatPermessageDeflate"] = "true"
         let libsignalNet = Net(
             env: TSConstants.isUsingProductionService ? .production : .staging,
             userAgent: HttpHeaders.userAgentHeaderValueSignalIos,
@@ -683,7 +684,7 @@ public class AppSetup {
         )
 
         let groupUpdateItemBuilder = GroupUpdateItemBuilderImpl(
-            contactsManager: GroupUpdateItemBuilderImpl.Wrappers.ContactsManager(contactManager),
+            contactsManager: contactManager,
             recipientDatabaseTable: recipientDatabaseTable
         )
 
@@ -1488,6 +1489,8 @@ public class AppSetup {
             interactionStore: interactionStore
         )
 
+        let backupFailureStateManager = BackupFailureStateManager(dateProvider: dateProvider)
+
         let dependenciesBridge = DependenciesBridge(
             accountAttributesUpdater: accountAttributesUpdater,
             accountEntropyPoolManager: accountEntropyPoolManager,
@@ -1519,6 +1522,7 @@ public class AppSetup {
             backupDisablingManager: backupDisablingManager,
             backupExportJob: backupExportJob,
             backupExportJobRunner: backupExportJobRunner,
+            backupFailureStateManager: backupFailureStateManager,
             backupIdService: backupIdService,
             backupKeyService: backupKeyService,
             backupListMediaManager: backupListMediaManager,
@@ -1675,7 +1679,8 @@ public class AppSetup {
             donationReceiptCredentialResultStore: donationReceiptCredentialResultStore,
             networkManager: networkManager,
             profileManager: profileManager,
-            reachabilityManager: reachabilityManager
+            reachabilityManager: reachabilityManager,
+            tsAccountManager: tsAccountManager,
         )
 
         let groupCallPeekClient = GroupCallPeekClient(db: db, groupsV2: groupsV2)

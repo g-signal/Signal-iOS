@@ -97,12 +97,12 @@ extension SignalApp {
         UIViewController.attemptRotationToDeviceOrientation()
     }
 
-    func showAppSettings(mode: ChatListViewController.ShowAppSettingsMode) {
+    func showAppSettings(mode: ChatListViewController.ShowAppSettingsMode, completion: (() -> Void)? = nil) {
         guard let conversationSplitViewController else {
             owsFailDebug("Missing conversationSplitViewController.")
             return
         }
-        conversationSplitViewController.showAppSettingsWithMode(mode)
+        conversationSplitViewController.showAppSettingsWithMode(mode, completion: completion)
     }
 
     func showRegistration(
@@ -131,6 +131,10 @@ extension SignalApp {
     @objc
     private func spamChallenge() {
         SpamCaptchaViewController.presentActionSheet(from: AppEnvironment.shared.windowManagerRef.captchaWindow.findFrontmostViewController(ignoringAlerts: true)!)
+
+        DependenciesBridge.shared.db.write { tx in
+            SupportKeyValueStore().setLastChallengeDate(value: Date(), transaction: tx)
+        }
     }
 
     @objc

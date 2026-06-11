@@ -42,8 +42,6 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        keyboardObservationBehavior = .never
-
         switch viewState.chatListMode {
         case .inbox:
             title = NSLocalizedString("CHAT_LIST_TITLE_INBOX", comment: "Title for the chat list's default mode.")
@@ -148,6 +146,9 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
 
         updateUnreadPaymentNotificationsCountWithSneakyTransaction()
 
+        // Update Backup error state
+        updateBackupErrorStateWithSneakyTransaction()
+
         // During main app launch, the chat list becomes visible _before_
         // app is foreground and active.  Therefore we need to make an
         // exception and update the view contents; otherwise, the home
@@ -235,6 +236,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         }
 
         showFYISheetIfNecessary()
+        checkForFailedBackups()
         Task { try await self.checkForFailedServiceExtensionLaunches() }
 
         hasEverAppeared = true
@@ -439,11 +441,43 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
     }()
 
     private func settingsBarButtonItem() -> UIBarButtonItem {
+        let db = SSKEnvironment.shared.databaseStorageRef
         let barButtonItem = createSettingsBarButtonItem(
-            databaseStorage: SSKEnvironment.shared.databaseStorageRef,
+            databaseStorage: db,
             shouldShowUnreadPaymentBadge: viewState.settingsButtonCreator.hasUnreadPaymentNotification,
-            buildActions: { settingsAction -> [UIAction] in
-                var contextMenuActions: [UIAction] = []
+            shouldShowBackupFailureBadge: viewState.settingsButtonCreator.showAvatarBackupBadge,
+            delegate: self,
+            buildActions: { settingsAction -> [UIMenuElement] in
+                var contextMenuActions: [UIMenuElement] = []
+
+                if viewState.settingsButtonCreator.hasBackupError {
+                    var image = Theme.iconImage(.backup)
+                    if viewState.settingsButtonCreator.showMenuBackupBadge {
+                        image = image.withBadge(color: UIColor.Signal.yellow)
+                    }
+
+                    contextMenuActions.append(
+                        UIMenu(options: [.displayInline], children: [
+                            UIAction(
+                                title: OWSLocalizedString(
+                                    "HOME_VIEW_TITLE_FAILED_TO_BACKUP",
+                                    comment: "Title for the conversation list's failed to backup context menu action."
+                                ),
+                                image: image,
+                                handler: { [weak self] _ in
+                                    SignalApp.shared.showAppSettings(mode: .backups)
+                                    db.write {
+                                        DependenciesBridge.shared.backupFailureStateManager.clearErrorBadge(
+                                            target: CLVViewState.BackupFailureBadgeType.menu.target,
+                                            tx: $0
+                                        )
+                                    }
+                                    self?.updateBackupErrorStateWithSneakyTransaction()
+                                }
+                            )
+                        ])
+                    )
+                }
 
                 // FIXME: combine viewState.inboxFilter and renderState.viewInfo.inboxFilter to avoid bugs with them getting out of sync
                 switch viewState.inboxFilter {
@@ -1081,6 +1115,60 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
             )
         }
     }
+
+    func checkForFailedBackups() {
+
+        guard isChatListTopmostViewController() else {
+            return
+        }
+
+        // Check if it's been more than 7 days since the last backup
+        guard SSKEnvironment.shared.databaseStorageRef.read(block: {
+            DependenciesBridge.shared.backupFailureStateManager.shouldShowBackupFailurePrompt(tx: $0)
+        }) else {
+            return
+        }
+
+        let heroSheet = HeroSheetViewController(
+            hero: .circleIcon(
+                icon: UIImage(named: "backup-error-display-bold")!.withRenderingMode(.alwaysTemplate),
+                iconSize: 40,
+                tintColor: UIColor.Signal.orange,
+                backgroundColor: UIColor.color(rgbHex: 0xF9E4B6)
+            ),
+            title: OWSLocalizedString(
+                "BACKUP_ERROR_COULD_NOT_COMPLETE_BACKUP_PROMPT_TITLE",
+                comment: "Title for error prompt shown when backups haven't succeeded in 7 days"
+            ),
+            body: OWSLocalizedString(
+                "BACKUP_ERROR_COULD_NOT_COMPLETE_BACKUP_PROMPT_BODY",
+                comment: "Body for error prompt shown when backups haven't succeeded in 7 days"
+            ),
+            primaryButton: .init(
+                title: OWSLocalizedString(
+                    "BACKUP_ERROR_COULD_NOT_COMPLETE_BACKUP_BACKUP_NOW_ACTION",
+                    comment: "Title for action from backups error prompt to try again now."
+                ),
+                action: .custom({ [weak self] _ in
+                    self?.dismiss(animated: true) {
+                        SignalApp.shared.showAppSettings(mode: .backups) {
+                            DependenciesBridge.shared.backupExportJobRunner.startIfNecessary()
+                        }
+                    }
+                })),
+            secondaryButton: .init(
+                title: OWSLocalizedString(
+                    "BACKUP_ERROR_COULD_NOT_COMPLETE_BACKUP_TRY_LATER_ACTION",
+                    comment: "Title for action from backups error prompt to try again later."
+                ),
+                style: .secondary,
+                action: .custom({ [weak self] _ in
+                    // Snooze
+                    self?.dismiss(animated: true)
+                }))
+        )
+        present(heroSheet, animated: true)
+    }
 }
 
 // MARK: - ChatListFilterActions
@@ -1164,7 +1252,7 @@ extension ChatListViewController {
         case linkBaPlatform
     }
 
-    func showAppSettings(mode: ShowAppSettingsMode? = nil) {
+    func showAppSettings(mode: ShowAppSettingsMode? = nil, completion: (() -> Void)? = nil) {
         AssertIsOnMainThread()
 
         Logger.info("")
@@ -1176,7 +1264,7 @@ extension ChatListViewController {
         let navigationController = OWSNavigationController()
         let appSettingsViewController = AppSettingsViewController(appReadiness: appReadiness)
 
-        var completion: (() -> Void)?
+        var internalCompletion: (() -> Void)?
         var viewControllers: [UIViewController] = [ appSettingsViewController ]
 
         switch mode {
@@ -1207,7 +1295,7 @@ extension ChatListViewController {
                 usernameLinkScanDelegate: appSettingsViewController
             )
             viewControllers += [ profile ]
-            completion = { profile.presentAvatarSettingsView() }
+            internalCompletion = { profile.presentAvatarSettingsView() }
 
         case .backups:
             break
@@ -1222,7 +1310,7 @@ extension ChatListViewController {
                 usernameLinkScanDelegate: appSettingsViewController
             )
             viewControllers += [ profile ]
-            completion = { profile.presentUsernameCorruptedResolution() }
+            internalCompletion = { profile.presentUsernameCorruptedResolution() }
 
         case .corruptedUsernameLinkResolution:
             let profile = ProfileSettingsViewController(
@@ -1230,12 +1318,12 @@ extension ChatListViewController {
                 usernameLinkScanDelegate: appSettingsViewController
             )
             viewControllers += [ profile ]
-            completion = { profile.presentUsernameLinkCorruptedResolution() }
+            internalCompletion = { profile.presentUsernameLinkCorruptedResolution() }
 
         case let .donate(donateMode):
             guard DonationUtilities.canDonate(
                 inMode: donateMode.asDonationMode,
-                localNumber: DependenciesBridge.shared.tsAccountManager.localIdentifiersWithMaybeSneakyTransaction?.phoneNumber
+                tsAccountManager: DependenciesBridge.shared.tsAccountManager,
             ) else {
                 DonationViewsUtil.openDonateWebsite()
                 return
@@ -1277,7 +1365,10 @@ extension ChatListViewController {
         }
 
         navigationController.setViewControllers(viewControllers, animated: false)
-        presentFormSheet(navigationController, animated: true, completion: completion)
+        presentFormSheet(navigationController, animated: true) {
+            completion?()
+            internalCompletion?()
+        }
     }
 }
 
@@ -1443,5 +1534,21 @@ extension ChatListViewController: ChatListFilterControlDelegate {
                 loadCoordinator.loadIfNecessary()
             }
         }
+    }
+}
+
+extension ChatListViewController: ContextMenuButtonDelegate {
+    func contextMenuWillDisplay(from contextMenuButton: ContextMenuButton) { }
+
+    func contextMenuDidDismiss(from contextMenuButton: ContextMenuButton) {
+        if viewState.settingsButtonCreator.showAvatarBackupBadge {
+            SSKEnvironment.shared.databaseStorageRef.write {
+                DependenciesBridge.shared.backupFailureStateManager.clearErrorBadge(
+                    target: CLVViewState.BackupFailureBadgeType.avatar.target,
+                    tx: $0
+                )
+            }
+        }
+        updateBackupErrorStateWithSneakyTransaction()
     }
 }

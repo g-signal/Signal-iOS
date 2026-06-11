@@ -51,6 +51,8 @@ protocol ConversationInputToolbarDelegate: AnyObject {
 
     func paymentButtonPressed()
 
+    func pollButtonPressed()
+
     func didSelectRecentPhoto(asset: PHAsset, attachment: SignalAttachment)
 
     func showUnblockConversationUI(completion: ((Bool) -> Void)?)
@@ -2289,6 +2291,10 @@ extension ConversationInputToolbar: AttachmentKeyboardDelegate {
 
     func didTapPayment() {
         inputToolbarDelegate?.paymentButtonPressed()
+    }
+
+    func didTapPoll() {
+        inputToolbarDelegate?.pollButtonPressed()
     }
 
     var isGroup: Bool {

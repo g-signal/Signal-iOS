@@ -1747,11 +1747,27 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
 
     @MainActor
     private func nextStepForQuickRestore() -> RegistrationStep {
-        if inMemoryState.accountEntropyPool == nil {
+        guard
+            inMemoryState.accountEntropyPool != nil,
+            let registrationMessage = inMemoryState.registrationMessage
+        else {
             return .scanQuickRegistrationQrCode
         }
-        if case .deviceTransfer = persistedState.restoreMethod {
-            if let restoreToken = inMemoryState.registrationMessage?.restoreMethodToken {
+
+        let backupTier: RegistrationStep.RestorePath.BackupTier? = switch registrationMessage.tier {
+        case .free: .free
+        case .paid: .paid
+        case .none: nil
+        }
+
+        let platform: RegistrationStep.RestorePath.Platform = switch registrationMessage.platform {
+        case .ios: .ios
+        case .android: .android
+        }
+
+        switch persistedState.restoreMethod {
+        case .deviceTransfer:
+            if let restoreToken = registrationMessage.restoreMethodToken {
                 let transferStatusState = RegistrationTransferStatusState(
                     deviceTransferService: deps.deviceTransferService,
                     quickRestoreManager: deps.quickRestoreManager,
@@ -1761,12 +1777,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             } else {
                 return .scanQuickRegistrationQrCode
             }
-        }
-
-        if
-            persistedState.restoreMethod?.isBackup == true,
-            let registrationMessage = inMemoryState.registrationMessage
-        {
+        case .remoteBackup, .localBackup:
             // if backup, show the confirmation screen
             return .confirmRestoreFromBackup(
                 RegistrationRestoreFromBackupConfirmationState(
@@ -1775,8 +1786,12 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
                     lastBackupDate: registrationMessage.backupTimestamp.map(Date.init(millisecondsSince1970:)),
                     lastBackupSizeBytes: registrationMessage.backupSizeBytes.map(UInt.init)
                 ))
-        } else {
-            return .chooseRestoreMethod(.quickRestore)
+        case .declined:
+            // We shouldn't get back into the QuickRestore pathway after declining, so warn about it
+            owsFailDebug("Quick restore declined, but attempting to ask for restore method again.")
+            fallthrough
+        case .none:
+            return .chooseRestoreMethod(.quickRestore(backupTier, platform))
         }
     }
 
@@ -1988,6 +2003,33 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             }
 
         case .rejectedVerificationMethod:
+            // If the user attempted to register the account using an incorrect AEP (sourced either
+            // from a QuickRestore registration message or manual entry), present an error, reset some
+            // state, and route the user back to the key entry method used to get here.
+            if
+                let restoreMode = persistedState.restoreMode,
+                inMemoryState.accountEntropyPool != nil
+            {
+                let result = await self.deps.registrationBackupErrorPresenter.presentError(
+                    error: .incorrectRecoveryKey,
+                    isQuickRestore: (restoreMode == .quickRestore)
+                )
+                db.write { tx in
+                    updatePersistedState(tx) {
+                        $0.restoreMethod = nil
+                    }
+                }
+                switch result {
+                case .skipRestore, .none:
+                    owsFailDebug("Encountered unexpected recovery path for incorrect recovery key.")
+                    fallthrough
+                case .incorrectRecoveryKey, .tryAgain:
+                    return .enterRecoveryKey(.init(canShowBackButton: true))
+                case .restartQuickRestore:
+                    return .scanQuickRegistrationQrCode
+                }
+            }
+
             // The reg recovery password was wrong. This can happen for two reasons:
             // 1) We have the wrong SVR master key locally
             // 2) We have been reglock challenged, forcing us to re-register via session
@@ -2992,6 +3034,9 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             // Our third choice: a captcha challenge
             if requestsCaptchaChallenge {
                 Logger.info("Showing the CAPTCHA challenge to the user")
+                db.write { transaction in
+                    SupportKeyValueStore().setLastChallengeDate(value: Date(), transaction: transaction)
+                }
                 return .captchaChallenge
             }
 
@@ -3538,7 +3583,20 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
                 accountIdentity: accountIdentity,
                 progress: inMemoryState.restoreFromBackupProgressSink,
             )
+
             return .restored
+        }
+
+        if
+            persistedState.restoreMethod?.isBackup == true {
+            // If restoring from backup, and the PIN hasn't been set,
+            // read the restored PIN and skip prompting the user.
+            if inMemoryState.pinFromUser == nil && inMemoryState.pinFromDisk == nil {
+                deps.db.read { tx in
+                    inMemoryState.pinFromDisk = deps.ows2FAManager.pinCode(tx)
+                    inMemoryState.pinFromUser = inMemoryState.pinFromDisk
+                }
+            }
         }
 
         if let step = await performSVRBackupStepsIfNeeded(

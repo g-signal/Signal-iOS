@@ -76,12 +76,18 @@ public struct BackupSettingsStore {
         static let haveSetBackupID = "haveSetBackupID"
         static let lastBackupRefreshDate = "lastBackupRefreshDate"
         static let lastBackupEnabledDetails = "lastBackupEnabledDetails"
+        static let lastBackupFailed = "lastBackupFailed"
+
+        static let mostRecentDateKey = "mostRecentPromptDate"
+        static let promptCountKey = "promptCount"
     }
 
     private let kvStore: KeyValueStore
+    private let errorStateStore: KeyValueStore
 
     public init() {
         kvStore = KeyValueStore(collection: "BackupSettingsStore")
+        errorStateStore = KeyValueStore(collection: "BackupSettingsErrorStateStore")
     }
 
     // MARK: -
@@ -205,6 +211,10 @@ public struct BackupSettingsStore {
         }
 
         setLastBackupRefreshDate(lastBackupDate, tx: tx)
+
+        // Clear any persisted error state
+        kvStore.removeValue(forKey: Keys.lastBackupFailed, transaction: tx)
+        errorStateStore.removeAll(transaction: tx)
     }
 
     public func resetLastBackupDate(tx: DBWriteTransaction) {
@@ -221,8 +231,15 @@ public struct BackupSettingsStore {
 
     /// The total size of a user's most recent Backup, including their Backup
     /// proto file and backed-up media.
+    ///
+    /// Only relevant on the paid tier.
     public func lastBackupSizeBytes(tx: DBReadTransaction) -> UInt64? {
-        return kvStore.getUInt64(Keys.lastBackupSizeBytes, transaction: tx)
+        switch backupPlan(tx: tx) {
+        case .disabled, .disabling, .free:
+            return nil
+        case .paid, .paidExpiringSoon, .paidAsTester:
+            return kvStore.getUInt64(Keys.lastBackupSizeBytes, transaction: tx)
+        }
     }
 
     public func setLastBackupSizeBytes(
@@ -237,6 +254,44 @@ public struct BackupSettingsStore {
     public func resetLastBackupSizeBytes(tx: DBWriteTransaction) {
         kvStore.removeValue(forKey: Keys.lastBackupFileSizeBytes, transaction: tx)
         kvStore.removeValue(forKey: Keys.lastBackupSizeBytes, transaction: tx)
+    }
+
+    // MARK: -
+
+    public func getLastBackupFailed(tx: DBReadTransaction) -> Bool {
+        kvStore.getBool(Keys.lastBackupFailed, defaultValue: false, transaction: tx)
+    }
+
+    public func setLastBackupFailed(tx: DBWriteTransaction) {
+        kvStore.setBool(true, key: Keys.lastBackupFailed, transaction: tx)
+    }
+
+    // MARK: -
+
+    public func getErrorBadgeMuted(target: String, tx: DBReadTransaction) -> Bool {
+        errorStateStore.getBool(target + "_muted", defaultValue: false, transaction: tx)
+    }
+
+    public func setErrorBadgeMuted(target: String, tx: DBWriteTransaction) {
+        errorStateStore.setBool(true, key: target + "_muted", transaction: tx)
+    }
+
+    // MARK: -
+
+    public func getBackupErrorPromptCount(tx: DBReadTransaction) -> Int {
+        errorStateStore.getInt(Keys.promptCountKey, defaultValue: 0, transaction: tx)
+    }
+
+    public func setBackupErrorPromptCount(_ count: Int, tx: DBWriteTransaction) {
+        errorStateStore.setInt(count, key: Keys.promptCountKey, transaction: tx)
+    }
+
+    public func getBackupErrorLastPromptDate(tx: DBReadTransaction) -> Date? {
+        errorStateStore.getDate(Keys.mostRecentDateKey, transaction: tx)
+    }
+
+    public func setBackupErrorLastPromptDate(_ date: Date, tx: DBWriteTransaction) {
+        errorStateStore.setDate(date, key: Keys.mostRecentDateKey, transaction: tx)
     }
 
     // MARK: -

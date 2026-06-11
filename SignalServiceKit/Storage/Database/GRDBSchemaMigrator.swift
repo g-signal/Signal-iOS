@@ -349,6 +349,7 @@ public class GRDBSchemaMigrator {
         case addBackupAttachmentUploadQueueTrigger
         case migrateRecipientDeviceIds
         case fixUniqueConstraintOnPollVotes
+        case migrateTSAccountManagerKeyValueStore
 
         // NOTE: Every time we add a migration id, consider
         // incrementing grdbSchemaVersionLatest.
@@ -412,7 +413,7 @@ public class GRDBSchemaMigrator {
     }
 
     public static let grdbSchemaVersionDefault: UInt = 0
-    public static let grdbSchemaVersionLatest: UInt = 128
+    public static let grdbSchemaVersionLatest: UInt = 129
 
     // An optimization for new users, we have the first migration import the latest schema
     // and mark any other migrations as "already run".
@@ -4456,6 +4457,28 @@ public class GRDBSchemaMigrator {
             return .success(())
         }
 
+        migrator.registerMigration(.migrateTSAccountManagerKeyValueStore) { tx in
+            let migrator = KeyValueStoreMigrator(collection: "TSStorageUserAccountCollection")
+            try migrator.migrateUInt32("TSStorageLocalRegistrationId", tx: tx)
+            try migrator.migrateUInt32("TSStorageLocalPniRegistrationId", tx: tx)
+            try migrator.migrateBool("TSAccountManager_ManualMessageFetchKey", tx: tx)
+            try migrator.migrateBool("TSAccountManager_IsDiscoverableByPhoneNumber", tx: tx)
+            try migrator.migrateDate("TSAccountManager_LastSetIsDiscoverableByPhoneNumberKey", tx: tx)
+            try migrator.migrateString("TSStorageRegisteredNumberKey", tx: tx)
+            try migrator.migrateString("TSStorageRegisteredUUIDKey", tx: tx)
+            try migrator.migrateString("TSAccountManager_RegisteredPNIKey", tx: tx)
+            try migrator.migrateUInt32("TSAccountManager_DeviceId", tx: tx)
+            try migrator.migrateString("TSStorageServerAuthToken", tx: tx)
+            try migrator.migrateDate("TSAccountManager_RegistrationDateKey", tx: tx)
+            try migrator.migrateBool("TSAccountManager_IsDeregisteredKey", tx: tx)
+            try migrator.migrateString("TSAccountManager_ReregisteringPhoneNumberKey", tx: tx)
+            try migrator.migrateString("TSAccountManager_ReregisteringUUIDKey", tx: tx)
+            try migrator.migrateBool("TSAccountManager_ReregisteringWasPrimaryDeviceKey", tx: tx)
+            try migrator.migrateBool("TSAccountManager_IsTransferInProgressKey", tx: tx)
+            try migrator.migrateBool("TSAccountManager_WasTransferredKey", tx: tx)
+            return .success(())
+        }
+
         // MARK: - Schema Migration Insertion Point
     }
 
@@ -4845,38 +4868,13 @@ public class GRDBSchemaMigrator {
         }
 
         migrator.registerMigration(.dataMigration_ensureLocalDeviceId) { tx in
-            let localAciSql = """
-                SELECT VALUE FROM keyvalue
-                WHERE collection = 'TSStorageUserAccountCollection'
-                    AND KEY = 'TSStorageRegisteredUUIDKey'
-            """
-            if
-                let localAciArchive = try Data.fetchOne(tx.database, sql: localAciSql),
-                let object = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(localAciArchive),
-                object is String
-            {
-                // If we have an aci, we must be registered.
-                let localDeviceIdSql = """
-                    SELECT * FROM keyvalue
-                        WHERE collection = 'TSStorageUserAccountCollection'
-                            AND KEY = 'TSAccountManager_DeviceId'
-                """
-                let localDeviceId = try Row.fetchOne(tx.database, sql: localDeviceIdSql)
+            let store = NewKeyValueStore(collection: "TSStorageUserAccountCollection")
+            let localAci = try store.fetchValueOrThrow(String.self, forKey: "TSStorageRegisteredUUIDKey", tx: tx)
+            if localAci != nil {
+                let localDeviceId = try store.fetchValueOrThrow(Int64.self, forKey: "TSAccountManager_DeviceId", tx: tx)
                 if localDeviceId == nil {
                     // If we don't have a device id written, put the primary device id.
-                    let deviceIdToInsert: UInt32 = 1
-                    let archiveData = try NSKeyedArchiver.archivedData(
-                        withRootObject: NSNumber(value: deviceIdToInsert),
-                        requiringSecureCoding: false
-                    )
-                    try tx.database.execute(
-                        sql: """
-                            INSERT OR REPLACE INTO keyvalue
-                                (KEY,collection,VALUE)
-                                VALUES ('TSAccountManager_DeviceId','TSStorageUserAccountCollection',?)
-                        """,
-                        arguments: [archiveData]
-                    )
+                    try store.writeValueOrThrow(1, forKey: "TSAccountManager_DeviceId", tx: tx)
                 }
             }
             return .success(())

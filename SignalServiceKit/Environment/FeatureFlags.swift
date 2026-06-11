@@ -43,8 +43,8 @@ public enum FeatureFlags {
     public static let periodicallyCheckDatabaseIntegrity: Bool = false
 
     public enum Backups {
-        public static let supported = build.includes(.internal)
-        public static let showSettings = build.includes(.internal)
+        public static let supported = build.includes(.beta)
+        public static let showSettings = build.includes(.beta)
         public static let showMegaphones = build.includes(.internal)
         public static let showOptimizeMedia = build.includes(.dev)
 
@@ -72,6 +72,10 @@ public enum FeatureFlags {
 #else
     public static let iOS26SDKIsAvailable = false
 #endif
+
+    public static let pollSend = build.includes(.dev)
+    public static let pollReceive = build.includes(.dev)
+    public static let pollKeepProtoVersion = build.includes(.dev)
 }
 
 // MARK: -

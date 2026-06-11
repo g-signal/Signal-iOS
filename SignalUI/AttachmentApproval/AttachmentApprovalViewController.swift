@@ -118,7 +118,12 @@ public class AttachmentApprovalViewController: UIPageViewController, UIPageViewC
     private var observerToken: NSObjectProtocol?
 
     private var observingKeyboardNotifications = false
-    private var keyboardHeight: CGFloat = 0
+    private var keyboardHeight: CGFloat = 0 {
+        didSet {
+            guard let iOS15BottomToolviewVerticalPositionConstraint else { return }
+            iOS15BottomToolviewVerticalPositionConstraint.constant = -max(view.safeAreaInsets.bottom, keyboardHeight)
+        }
+    }
 
     public init(options: AttachmentApprovalViewControllerOptions, attachmentApprovalItems: [AttachmentApprovalItem]) {
         assert(attachmentApprovalItems.count > 0)
@@ -196,14 +201,9 @@ public class AttachmentApprovalViewController: UIPageViewController, UIPageViewC
     private lazy var topBar = AttachmentApprovalTopBar(options: options)
 
     private let bottomToolView = AttachmentApprovalToolbar()
-    private var bottomToolViewBottomConstraint: NSLayoutConstraint?
 
-    private lazy var inputAccessoryPlaceholder: InputAccessoryViewPlaceholder = {
-        let placeholder = InputAccessoryViewPlaceholder()
-        placeholder.delegate = self
-        placeholder.referenceView = view
-        return placeholder
-    }()
+    // Manually adjust position of the bottom toolbar on iOS 15 because `keyboardLayoutGuide` is buggy.
+    private var iOS15BottomToolviewVerticalPositionConstraint: NSLayoutConstraint?
 
     lazy var contentDimmerView: UIView = {
         let dimmerView = UIView()
@@ -271,8 +271,20 @@ public class AttachmentApprovalViewController: UIPageViewController, UIPageViewC
             bottomToolView.layoutIfNeeded()
         }
         view.addSubview(bottomToolView)
-        bottomToolView.autoPinWidthToSuperview()
-        bottomToolViewBottomConstraint = bottomToolView.autoPinEdge(toSuperviewEdge: .bottom)
+        bottomToolView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            bottomToolView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomToolView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        if #unavailable(iOS 16) {
+            let constraint = bottomToolView.contentLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.safeAreaInsets.bottom)
+            constraint.isActive = true
+            iOS15BottomToolviewVerticalPositionConstraint = constraint
+        } else {
+            NSLayoutConstraint.activate([
+                bottomToolView.contentLayoutGuide.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor)
+            ])
+        }
 
         OWSTableViewController2.removeBackButtonText(viewController: self)
     }
@@ -308,6 +320,9 @@ public class AttachmentApprovalViewController: UIPageViewController, UIPageViewC
     public override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
 
+        if let iOS15BottomToolviewVerticalPositionConstraint {
+            iOS15BottomToolviewVerticalPositionConstraint.constant = -max(view.safeAreaInsets.bottom, keyboardHeight)
+        }
         if let currentPageViewController {
             updateContentLayoutMargins(for: currentPageViewController)
         }
@@ -353,18 +368,6 @@ public class AttachmentApprovalViewController: UIPageViewController, UIPageViewC
     }
 
     // MARK: - Input Accessory
-
-    public override var canBecomeFirstResponder: Bool {
-        return true
-    }
-
-    public override var inputAccessoryView: UIView? {
-        return inputAccessoryPlaceholder
-    }
-
-    public override var textInputContextIdentifier: String? {
-        return approvalDataSource?.attachmentApprovalTextInputContextIdentifier
-    }
 
     private func updateControlsVisibility(animated: Bool, completion: ((Bool) -> Void)? = nil) {
         let alpha: CGFloat = shouldHideControls ? 0 : 1
@@ -1396,50 +1399,6 @@ extension AttachmentApprovalViewController: ApprovalRailCellViewDelegate {
 
     func canRemoveApprovalRailCellView(_ approvalRailCellView: ApprovalRailCellView) -> Bool {
         return self.attachmentApprovalItems.count > 1
-    }
-}
-
-extension AttachmentApprovalViewController: InputAccessoryViewPlaceholderDelegate {
-
-    public func inputAccessoryPlaceholderKeyboardIsPresenting(animationDuration: TimeInterval, animationCurve: UIView.AnimationCurve) {
-        handleKeyboardStateChange(animationDuration: animationDuration, animationCurve: animationCurve)
-    }
-
-    public func inputAccessoryPlaceholderKeyboardDidPresent() {
-        updateBottomToolViewPosition()
-    }
-
-    public func inputAccessoryPlaceholderKeyboardIsDismissing(animationDuration: TimeInterval, animationCurve: UIView.AnimationCurve) {
-        handleKeyboardStateChange(animationDuration: animationDuration, animationCurve: animationCurve)
-    }
-
-    public func inputAccessoryPlaceholderKeyboardDidDismiss() {
-        updateBottomToolViewPosition()
-    }
-
-    public func inputAccessoryPlaceholderKeyboardIsDismissingInteractively() {
-        updateBottomToolViewPosition()
-    }
-
-    func handleKeyboardStateChange(animationDuration: TimeInterval, animationCurve: UIView.AnimationCurve) {
-        guard animationDuration > 0 else { return updateBottomToolViewPosition() }
-
-        UIView.animate(
-            withDuration: animationDuration,
-            delay: 0,
-            options: animationCurve.asAnimationOptions,
-            animations: { [self] in
-                self.updateBottomToolViewPosition()
-            }
-        )
-    }
-
-    func updateBottomToolViewPosition() {
-        bottomToolViewBottomConstraint?.constant = -inputAccessoryPlaceholder.keyboardOverlap
-
-        // We always want to apply the new bottom bar position immediately,
-        // as this only happens during animations (interactive or otherwise)
-        bottomToolView.superview?.layoutIfNeeded()
     }
 }
 

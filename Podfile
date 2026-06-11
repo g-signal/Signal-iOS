@@ -11,8 +11,8 @@ source 'https://cdn.cocoapods.org/'
 pod 'blurhash', podspec: './ThirdParty/blurhash.podspec'
 pod 'SwiftProtobuf', "1.30.0"
 
-ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '4aa0d86cdab09cf08c3eda8fd9597bef57e7dda0cc902f5d7668ccaf68523894'
-pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.80.3-BA', testspecs: ["Tests"]
+ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '2cf93a85bb516db46fdf17b25280770ff22f0ff8ce071d66dc3c30ec0f2ded2e'
+pod 'LibSignalClient', git: 'https://github.com/signalapp/libsignal.git', tag: 'v0.81.1', testspecs: ["Tests"]
 # pod 'LibSignalClient', path: '../libsignal', testspecs: ["Tests"]
 
 ENV['RINGRTC_PREBUILD_CHECKSUM'] = '16d03a8f5f0e93baef045b7db1fadd1e64a19e6e45f21ca4ff42fd129424d7c7'
@@ -39,11 +39,7 @@ pod 'libPhoneNumber-iOS', git: 'https://github.com/signalapp/libPhoneNumber-iOS'
 
 pod 'SDWebImage'
 pod 'SDWebImageWebPCoder'
-pod 'YYImage', git: 'https://github.com/signalapp/YYImage', :inhibit_warnings => true
-pod 'YYImage/libwebp', git: 'https://github.com/signalapp/YYImage', :inhibit_warnings => true
-pod 'libwebp', podspec: './ThirdParty/libwebp.podspec.json'
-# pod 'YYImage', path: '../YYImage'
-# pod 'YYImage/libwebp', path:'../YYImage'
+pod 'libwebp' 
 
 ###
 # third party pods
@@ -56,8 +52,8 @@ def ui_pods
   pod 'PureLayout', :inhibit_warnings => true
   pod 'lottie-ios', :inhibit_warnings => true
 
-#  pod 'LibMobileCoin/CoreHTTP', git: 'https://github.com/signalapp/libmobilecoin-ios-artifacts', tag: 'signal/6.0.2', submodules: true
-#  pod 'MobileCoin/CoreHTTP', git: 'https://github.com/mobilecoinofficial/MobileCoin-Swift', tag: 'v6.0.3'
+  pod 'LibMobileCoin/CoreHTTP', git: 'https://github.com/signalapp/libmobilecoin-ios-artifacts', tag: 'signal/6.0.2', submodules: true
+  pod 'MobileCoin/CoreHTTP', git: 'https://github.com/mobilecoinofficial/MobileCoin-Swift', tag: 'v6.0.3'
 end
 
 target 'Signal' do
@@ -108,7 +104,6 @@ post_install do |installer|
   update_frameworks_script(installer)
   disable_non_development_pod_warnings(installer)
   fix_ringrtc_project_symlink(installer)
-  disable_ringrtc_script_sandboxing(installer)
   fetch_ringrtc
   copy_acknowledgements
 end
@@ -251,17 +246,6 @@ def fix_ringrtc_project_symlink(installer)
   ringrtc_header_ref = installer.pods_project.reference_for_path(installer.sandbox.pod_dir('SignalRingRTC') + 'out/release/libringrtc/ringrtc.h')
   if ringrtc_header_ref.path.start_with?('../') || ringrtc_header_ref.path.start_with?('/') then
     ringrtc_header_ref.path = 'out/release/libringrtc/ringrtc.h'
-  end
-end
-
-# The xcframeworks.sh script reads xcframework contents not explicitly listed as inputs,
-# which conflicts with Xcode's user script sandboxing. Disable it for SignalRingRTC.
-def disable_ringrtc_script_sandboxing(installer)
-  installer.pods_project.targets.each do |target|
-    next unless target.name == 'SignalRingRTC'
-    target.build_configurations.each do |config|
-      config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
-    end
   end
 end
 
