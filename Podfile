@@ -11,8 +11,8 @@ source 'https://cdn.cocoapods.org/'
 pod 'blurhash', podspec: './ThirdParty/blurhash.podspec'
 pod 'SwiftProtobuf', "1.30.0"
 
-ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '2cf93a85bb516db46fdf17b25280770ff22f0ff8ce071d66dc3c30ec0f2ded2e'
-pod 'LibSignalClient', git: 'https://github.com/signalapp/libsignal.git', tag: 'v0.81.1', testspecs: ["Tests"]
+ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = 'deb5a05bd75c68753ccec4340f701fdba46596385c3d7b74515da0facbf4943c'
+pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.81.1-BA', testspecs: ["Tests"]
 # pod 'LibSignalClient', path: '../libsignal', testspecs: ["Tests"]
 
 ENV['RINGRTC_PREBUILD_CHECKSUM'] = '16d03a8f5f0e93baef045b7db1fadd1e64a19e6e45f21ca4ff42fd129424d7c7'
@@ -52,8 +52,9 @@ def ui_pods
   pod 'PureLayout', :inhibit_warnings => true
   pod 'lottie-ios', :inhibit_warnings => true
 
-  pod 'LibMobileCoin/CoreHTTP', git: 'https://github.com/signalapp/libmobilecoin-ios-artifacts', tag: 'signal/6.0.2', submodules: true
-  pod 'MobileCoin/CoreHTTP', git: 'https://github.com/mobilecoinofficial/MobileCoin-Swift', tag: 'v6.0.3'
+# B&A don't need pay
+#  pod 'LibMobileCoin/CoreHTTP', git: 'https://github.com/signalapp/libmobilecoin-ios-artifacts', tag: 'signal/6.0.2', submodules: true
+#  pod 'MobileCoin/CoreHTTP', git: 'https://github.com/mobilecoinofficial/MobileCoin-Swift', tag: 'v6.0.3'
 end
 
 target 'Signal' do
@@ -106,6 +107,18 @@ post_install do |installer|
   fix_ringrtc_project_symlink(installer)
   fetch_ringrtc
   copy_acknowledgements
+  patch_reachability(installer)
+end
+
+# Remove private netinet6/in6.h import that breaks newer Xcode/SDK builds.
+# The IPv6 types it provides are already included via netinet/in.h.
+def patch_reachability(installer)
+  file = File.join(installer.sandbox.root, 'Reachability/Reachability.m')
+  if File.exist?(file)
+    content = File.read(file)
+    patched = content.gsub(/^#import <netinet6\/in6\.h>\n/, '')
+    File.write(file, patched) if patched != content
+  end
 end
 
 # Works around CocoaPods behavior designed for static libraries.
