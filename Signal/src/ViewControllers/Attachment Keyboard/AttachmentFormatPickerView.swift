@@ -225,6 +225,7 @@ class AttachmentFormatPickerView: UIView {
         case .photo:    return v.photos    ?? true
         case .gif:      return v.gif       ?? true
         case .file:     return v.file      ?? true
+        case .poll:     return true
         case .contact:  return v.contact   ?? true
         case .location: return v.location  ?? true
         case .payment:  return true

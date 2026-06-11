@@ -69,6 +69,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
 
     private var poll: CVComponent?
 
+    private var bottomLabel: CVComponent?
+
     private var swipeActionProgress: CVMessageSwipeActionState.Progress?
 
     private var hasSendFailureBadge = false
@@ -147,6 +149,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
             return self.bottomButtons
         case .poll:
             return self.poll
+        case .bottomLabel:
+            return self.bottomLabel
 
         // We don't render sender avatars with a subcomponent.
         case .senderAvatar:
@@ -270,6 +274,10 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
         if let bottomButtonsState = componentState.bottomButtons {
             bottomButtons = CVComponentBottomButtons(itemModel: itemModel,
                                                      bottomButtonsState: bottomButtonsState)
+        }
+
+        if let bottomLabelState = componentState.bottomLabel {
+            bottomLabel = CVComponentBottomLabel(itemModel: itemModel, bottomLabelState: bottomLabelState)
         }
 
 //        if let paymentAttachment = componentState.paymentAttachment {
@@ -1210,6 +1218,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
                 return true
             case .poll:
                 return true
+            case .bottomLabel:
+                return false
             }
         }
 
@@ -2014,6 +2024,7 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
         var contactShareView: CVComponentView?
         var bottomButtonsView: CVComponentView?
         var pollView: CVComponentView?
+        var bottomLabelView: CVComponentView?
 
         private var allSubcomponentViews: [CVComponentView] {
             [
@@ -2033,7 +2044,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
                 undownloadableAttachmentView,
                 archivedPaymentView,
                 contactShareView,
-                bottomButtonsView
+                bottomButtonsView,
+                bottomLabelView
             ].compactMap { $0 }
         }
 
@@ -2075,6 +2087,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
                 return bottomButtonsView
             case .poll:
                 return pollView
+            case .bottomLabel:
+                return bottomLabelView
 
             // We don't render sender avatars with a subcomponent.
             case .senderAvatar:
@@ -2124,6 +2138,8 @@ public class CVComponentMessage: CVComponentBase, CVRootComponent {
                 bottomButtonsView = subcomponentView
             case .poll:
                 pollView = subcomponentView
+            case .bottomLabel:
+                bottomLabelView = subcomponentView
 
             // We don't render sender avatars with a subcomponent.
             case .senderAvatar:

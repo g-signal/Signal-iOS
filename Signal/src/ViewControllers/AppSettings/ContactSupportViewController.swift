@@ -257,14 +257,14 @@ final class ContactSupportViewController: OWSTableViewController2 {
     private var currentEmailComposeTask: Task<Void, any Error>?
 
     private func didTapNext() {
-        var emailRequest = SupportEmailModel()
-        emailRequest.userDescription = descriptionField.text
-        emailRequest.emojiMood = emojiPicker.selectedMood
-//        emailRequest.debugLogPolicy = debugSwitch.isOn ? .attemptUpload(.fromGlobals()) : .none
-        emailRequest.debugLogPolicy = .none
-        if let selectedFilter = selectedFilter {
-            emailRequest.supportFilter = "iOS \(selectedFilter.emailFilterString)"
-        }
+        let emailRequest = SupportEmailModel(
+            userDescription: descriptionField.text,
+            emojiMood: emojiPicker.selectedMood,
+            supportFilter: selectedFilter.map { "iOS \($0.emailFilterString)" },
+//            debugLogPolicy: debugSwitch.isOn ? .attemptUpload(DebugLogDumper.fromGlobals()) : nil,
+            debugLogPolicy: nil,
+            hasRecentChallenge: false
+        )
         showSpinnerOnNextButton = true
 
         Task { @MainActor in
