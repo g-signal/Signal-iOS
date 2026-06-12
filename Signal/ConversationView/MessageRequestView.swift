@@ -199,7 +199,7 @@ class MessageRequestView: UIStackView {
                         "MESSAGE_REQUEST_VIEW_EXISTING_GROUP_PROMPT",
                         comment: "A prompt notifying that the user must share their profile with this group."
                     )
-                    appendLearnMoreLink = true
+//                    appendLearnMoreLink = true
                 } else {
                     string = OWSLocalizedString(
                         "MESSAGE_REQUEST_VIEW_NEW_GROUP_PROMPT",
@@ -246,7 +246,7 @@ class MessageRequestView: UIStackView {
                     "MESSAGE_REQUEST_VIEW_EXISTING_CONTACT_PROMPT_FORMAT",
                     comment: "A prompt notifying that the user must share their profile with this conversation. Embeds {{contact name}}."
                 )
-                appendLearnMoreLink = true
+//                appendLearnMoreLink = true
             } else {
                 formatString = OWSLocalizedString(
                     "MESSAGE_REQUEST_VIEW_NEW_CONTACT_PROMPT_FORMAT",
