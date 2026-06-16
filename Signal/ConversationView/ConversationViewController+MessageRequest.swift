@@ -90,9 +90,8 @@ extension ConversationViewController: MessageRequestDelegate {
 
     func messageRequestViewDidTapLearnMore() {
         AssertIsOnMainThread()
-
-        let safariVC = SFSafariViewController(url: URL.Support.profilesAndMessageRequests)
-        present(safariVC, animated: true)
+//        let safariVC = SFSafariViewController(url: URL.Support.profilesAndMessageRequests)
+//        present(safariVC, animated: true)
     }
 }
 

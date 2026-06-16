@@ -388,22 +388,22 @@ extension ContactSupportViewController {
         label.textColor = Theme.primaryTextColor
 
         let infoButton = OWSButton(imageName: "help", tintColor: Theme.secondaryTextAndIconColor) { [weak self] in
-            let vc = SFSafariViewController(url: URL.Support.debugLogs)
-            self?.present(vc, animated: true)
+//            let vc = SFSafariViewController(url: URL.Support.debugLogs)
+//            self?.present(vc, animated: true)
         }
         infoButton.accessibilityLabel = OWSLocalizedString("DEBUG_LOG_INFO_BUTTON",
                                                           comment: "Accessibility label for the ? vector asset used to get info about debug logs")
 
         cell.contentView.addSubview(label)
-        cell.contentView.addSubview(infoButton)
+//        cell.contentView.addSubview(infoButton)
         cell.accessoryView = debugSwitch
 
         label.autoPinEdges(toSuperviewMarginsExcludingEdge: .trailing)
         label.setCompressionResistanceHigh()
 
-        infoButton.autoPinHeightToSuperviewMargins()
-        infoButton.autoPinLeading(toTrailingEdgeOf: label, offset: 6)
-        infoButton.autoPinEdge(toSuperviewMargin: .trailing, relation: .greaterThanOrEqual)
+//        infoButton.autoPinHeightToSuperviewMargins()
+//        infoButton.autoPinLeading(toTrailingEdgeOf: label, offset: 6)
+//        infoButton.autoPinEdge(toSuperviewMargin: .trailing, relation: .greaterThanOrEqual)
 
         return cell
     }

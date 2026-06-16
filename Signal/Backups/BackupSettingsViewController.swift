@@ -837,15 +837,15 @@ class BackupSettingsViewController:
                         }
                     }
                 ))
-                warningSheet.addAction(ActionSheetAction(
-                    title: CommonStrings.learnMore,
-                    handler: { _ in
-                        CurrentAppContext().open(
-                            URL.Support.backups,
-                            completion: nil
-                        )
-                    }
-                ))
+//                warningSheet.addAction(ActionSheetAction(
+//                    title: CommonStrings.learnMore,
+//                    handler: { _ in
+//                        CurrentAppContext().open(
+//                            URL.Support.backups,
+//                            completion: nil
+//                        )
+//                    }
+//                ))
                 warningSheet.addAction(.cancel)
 
                 presentActionSheet(warningSheet)

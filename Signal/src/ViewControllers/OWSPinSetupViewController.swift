@@ -399,20 +399,20 @@ public class PinSetupViewController: OWSViewController, OWSNavigationChildContro
         proportionalSpacerConstraint?.isActive = false
         let pinnedHeightConstraint = topSpacer.autoSetDimension(.height, toSize: topSpacer.height)
 
-        let learnMoreAction = ActionSheetAction(
-            title: OWSLocalizedString(
-                "PIN_CREATION_LEARN_MORE",
-                comment: "Learn more action on the pin creation view"
-            )
-        ) { [weak self] _ in
-            guard let self = self else { return }
-            let vc = SFSafariViewController(url: URL.Support.pin)
-            self.present(vc, animated: true) {
-                pinnedHeightConstraint.isActive = false
-                self.proportionalSpacerConstraint?.isActive = true
-            }
-        }
-        actionSheet.addAction(learnMoreAction)
+//        let learnMoreAction = ActionSheetAction(
+//            title: OWSLocalizedString(
+//                "PIN_CREATION_LEARN_MORE",
+//                comment: "Learn more action on the pin creation view"
+//            )
+//        ) { [weak self] _ in
+//            guard let self = self else { return }
+//            let vc = SFSafariViewController(url: URL.Support.pin)
+//            self.present(vc, animated: true) {
+//                pinnedHeightConstraint.isActive = false
+//                self.proportionalSpacerConstraint?.isActive = true
+//            }
+//        }
+//        actionSheet.addAction(learnMoreAction)
 
         presentActionSheet(actionSheet)
     }

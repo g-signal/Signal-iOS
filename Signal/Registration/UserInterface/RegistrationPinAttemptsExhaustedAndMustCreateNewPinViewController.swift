@@ -175,6 +175,6 @@ class RegistrationPinAttemptsExhaustedAndMustCreateNewPinViewController: OWSView
 
     @objc
     private func didTapLearnMoreButton() {
-        present(SFSafariViewController(url: URL.Support.pin), animated: true)
+//        present(SFSafariViewController(url: URL.Support.pin), animated: true)
     }
 }

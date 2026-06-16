@@ -386,8 +386,8 @@ public class FingerprintViewController: OWSViewController, OWSNavigationChildCon
     }
 
     fileprivate static func showLearnMoreUrl(from viewController: UIViewController) {
-        let safariVC = SFSafariViewController(url: URL.Support.safetyNumbers)
-        viewController.present(safariVC, animated: true)
+//        let safariVC = SFSafariViewController(url: URL.Support.safetyNumbers)
+//        viewController.present(safariVC, animated: true)
     }
 
     @objc

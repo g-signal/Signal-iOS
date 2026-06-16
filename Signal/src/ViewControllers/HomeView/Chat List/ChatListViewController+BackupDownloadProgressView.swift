@@ -912,16 +912,16 @@ private class BackupAttachmentDownloadProgressView: UIView {
                 }
             }
         ))
-        actionSheet.addAction(.init(
-            title: CommonStrings.learnMore,
-            style: .default,
-            handler: { _ in
-                CurrentAppContext().open(
-                    URL.Support.backups,
-                    completion: nil
-                )
-            }
-        ))
+//        actionSheet.addAction(.init(
+//            title: CommonStrings.learnMore,
+//            style: .default,
+//            handler: { _ in
+//                CurrentAppContext().open(
+//                    URL.Support.backups,
+//                    completion: nil
+//                )
+//            }
+//        ))
         actionSheet.addAction(.init(
             title: CommonStrings.cancelButton,
             style: .cancel

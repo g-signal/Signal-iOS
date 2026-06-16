@@ -162,14 +162,14 @@ extension ConversationViewController {
                         : OWSLocalizedString("ALERT_UNKNOWN_THREAD_WARNING_CONTACT_MESSAGE",
                                             comment: "Message for UI warning about an unknown contact thread."))
         let actionSheet = ActionSheetController(message: message)
-        actionSheet.addAction(ActionSheetAction(
-            title: OWSLocalizedString("ALERT_UNKNOWN_THREAD_WARNING_LEARN_MORE",
-                                     comment: "Label for button to learn more about message requests."),
-            style: .default,
-            handler: { _ in
-                CurrentAppContext().open(URL.Support.profilesAndMessageRequests, completion: nil)
-            }
-        ))
+//        actionSheet.addAction(ActionSheetAction(
+//            title: OWSLocalizedString("ALERT_UNKNOWN_THREAD_WARNING_LEARN_MORE",
+//                                     comment: "Label for button to learn more about message requests."),
+//            style: .default,
+//            handler: { _ in
+//                CurrentAppContext().open(URL.Support.profilesAndMessageRequests, completion: nil)
+//            }
+//        ))
         actionSheet.addAction(OWSActionSheets.cancelAction)
         presentActionSheet(actionSheet)
     }
@@ -203,14 +203,14 @@ extension ConversationViewController {
             message: alertMessage)
         actionSheet.customHeader = headerView
         actionSheet.addAction(OWSActionSheets.okayAction)
-        actionSheet.addAction(
-            ActionSheetAction(
-                title: CommonStrings.learnMore,
-                style: .default
-            ) { _ in
-                CurrentAppContext().open(URL.Support.deliveryIssue, completion: nil)
-            }
-        )
+//        actionSheet.addAction(
+//            ActionSheetAction(
+//                title: CommonStrings.learnMore,
+//                style: .default
+//            ) { _ in
+//                CurrentAppContext().open(URL.Support.deliveryIssue, completion: nil)
+//            }
+//        )
         presentActionSheet(actionSheet)
     }
 }

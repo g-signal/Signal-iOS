@@ -160,12 +160,12 @@ struct ChooseBackupPlanView: View {
                     "CHOOSE_BACKUP_PLAN_SUBTITLE",
                     comment: "Subtitle for a view allowing users to choose a Backup plan."
                 ))
-                .appendLink(CommonStrings.learnMore) {
-                    CurrentAppContext().open(
-                        URL.Support.backups,
-                        completion: nil
-                    )
-                }
+//                .appendLink(CommonStrings.learnMore) {
+//                    CurrentAppContext().open(
+//                        URL.Support.backups,
+//                        completion: nil
+//                    )
+//                }
                 .foregroundStyle(Color.Signal.secondaryLabel)
 
                 Spacer().frame(height: 20)

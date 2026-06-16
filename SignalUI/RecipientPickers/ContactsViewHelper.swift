@@ -225,20 +225,20 @@ public extension ContactsViewHelper {
             )
         )
 
-        actionSheet.addAction(ActionSheetAction(title: CommonStrings.learnMore) { [weak viewController] _ in
-            guard let viewController else { return }
-            presentContactAccessNotAllowedLearnMore(from: viewController)
-        })
-
+//        actionSheet.addAction(ActionSheetAction(title: CommonStrings.learnMore) { [weak viewController] _ in
+//            guard let viewController else { return }
+//            presentContactAccessNotAllowedLearnMore(from: viewController)
+//        })
+//
         actionSheet.addAction(ActionSheetAction(title: CommonStrings.okButton, style: .cancel))
 
         viewController.presentActionSheet(actionSheet)
     }
 
     static func presentContactAccessNotAllowedLearnMore(from viewController: UIViewController) {
-        viewController.present(
-            SFSafariViewController(url: URL.Support.contactAccessNotAllowed),
-            animated: true
-        )
+//        viewController.present(
+//            SFSafariViewController(url: URL.Support.contactAccessNotAllowed),
+//            animated: true
+//        )
     }
 }

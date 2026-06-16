@@ -68,16 +68,16 @@ public class GroupViewUtils {
                                                 message: OWSLocalizedString("EDIT_GROUP_ERROR_CANNOT_ADD_MEMBER",
                                                                            comment: "Error message indicating the a user can't be added to a group."))
 
-        actionSheet.addAction(ActionSheetAction(title: CommonStrings.learnMore,
-                                                style: .default) { _ in
-                                                    self.showCantAddMemberView(fromViewController: fromViewController)
-        })
+//        actionSheet.addAction(ActionSheetAction(title: CommonStrings.learnMore,
+//                                                style: .default) { _ in
+//                                                    self.showCantAddMemberView(fromViewController: fromViewController)
+//        })
         actionSheet.addAction(OWSActionSheets.okayAction)
         fromViewController.presentActionSheet(actionSheet)
     }
 
     private static func showCantAddMemberView(fromViewController: UIViewController) {
-        let vc = SFSafariViewController(url: URL.Support.groups)
-        fromViewController.present(vc, animated: true, completion: nil)
+//        let vc = SFSafariViewController(url: URL.Support.groups)
+//        fromViewController.present(vc, animated: true, completion: nil)
     }
 }
