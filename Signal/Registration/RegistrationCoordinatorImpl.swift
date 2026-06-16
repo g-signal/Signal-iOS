@@ -359,7 +359,8 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
         deps.db.write { tx in
             updatePersistedState(tx) {
                 $0.hasShownSplash = true
-                $0.restoreMode = hasOldDevice ? .quickRestore : .manualRestore
+                // BA: always use manualRestore, hide backup restore flow
+                $0.restoreMode = .manualRestore
             }
         }
         return Guarantee.wrapAsync { await self.nextStep() }
@@ -1849,7 +1850,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
         }
 
         if inMemoryState.needsToAskForDeviceTransfer && persistedState.restoreMethod == nil {
-            if deps.featureFlags.backupSupported {
+            if false /* deps.featureFlags.backupSupported */ {
                 return .chooseRestoreMethod(.unspecified)
             } else if !persistedState.hasDeclinedTransfer {
                 return .transferSelection
@@ -2376,7 +2377,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
         }
 
         if inMemoryState.needsToAskForDeviceTransfer && !persistedState.hasDeclinedTransfer {
-            if deps.featureFlags.backupSupported {
+            if false /* deps.featureFlags.backupSupported */ {
                 return .chooseRestoreMethod(.unspecified)
             } else {
                 return .transferSelection
@@ -2697,7 +2698,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             return await nextStep()
         case .deviceTransferPossible:
             inMemoryState.needsToAskForDeviceTransfer = true
-            if deps.featureFlags.backupSupported {
+            if false /* deps.featureFlags.backupSupported */ {
                 return .chooseRestoreMethod(.unspecified)
             } else {
                 return .transferSelection
@@ -4884,17 +4885,18 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
     }
 
     private func shouldRestoreFromMessageBackup() -> Bool {
-        switch mode {
-        case .registering:
-            return
-                deps.featureFlags.backupSupported
-                && inMemoryState.accountEntropyPool != nil
-                && inMemoryState.hasBackedUpToSVR
-                && inMemoryState.backupRestoreState == .none
-                && !inMemoryState.hasSkippedRestoreFromMessageBackup
-        case .changingNumber, .reRegistering:
-            return false
-        }
+        return false
+        // switch mode {
+        // case .registering:
+        //     return
+        //         deps.featureFlags.backupSupported
+        //         && inMemoryState.accountEntropyPool != nil
+        //         && inMemoryState.hasBackedUpToSVR
+        //         && inMemoryState.backupRestoreState == .none
+        //         && !inMemoryState.hasSkippedRestoreFromMessageBackup
+        // case .changingNumber, .reRegistering:
+        //     return false
+        // }
     }
 
     private func shouldRestoreFromStorageServiceBeforeUpdatingSVR() -> Bool {
