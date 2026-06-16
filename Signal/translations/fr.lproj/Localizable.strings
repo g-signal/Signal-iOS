@@ -239,7 +239,7 @@
 "APP_LAUNCH_FAILURE_WIPE_APP_DATA_ACTION_TITLE" = "Réinitialiser les données de l'appli";
 
 /* Message for an action sheet confirming the user wants to wipe all app data. */
-"APP_LAUNCH_FAILURE_WIPE_APP_DATA_CONFIRMATION_MESSAGE" = "Toutes les données de l'application seront définitivement supprimées. Cela n'est nécessaire que si vous ne parvenez plus à lancer Signal.";
+"APP_LAUNCH_FAILURE_WIPE_APP_DATA_CONFIRMATION_MESSAGE" = "Toutes les données de l'application seront définitivement supprimées. Cela n'est nécessaire que si vous ne parvenez plus à lancer B&A.";
 
 /* Title for an action sheet confirming the user wants to wipe all app data. */
 "APP_LAUNCH_FAILURE_WIPE_APP_DATA_CONFIRMATION_TITLE" = "Réinitialiser toutes les données de l'appli ?";
@@ -716,7 +716,7 @@
 "BACKUP_SETTINGS_BETA_NOTICE_HEADER" = "Fonctionnalité bêta : nous y apporterons des améliorations au fil du temps.";
 
 /* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
-"BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "L'appareil que vous utilisez pour créer une nouvelle clé de récupération doit être inscrit à Signal.";
+"BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "L'appareil que vous utilisez pour créer une nouvelle clé de récupération doit être inscrit à B&A.";
 
 /* Toast shown when a new Recovery Key has been created successfully. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "Nouvelle clé créée";
