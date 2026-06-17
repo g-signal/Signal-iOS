@@ -387,12 +387,12 @@ extension ContactSupportViewController {
         label.numberOfLines = 0
         label.textColor = Theme.primaryTextColor
 
-        let infoButton = OWSButton(imageName: "help", tintColor: Theme.secondaryTextAndIconColor) { [weak self] in
+//        let infoButton = OWSButton(imageName: "help", tintColor: Theme.secondaryTextAndIconColor) { [weak self] in
 //            let vc = SFSafariViewController(url: URL.Support.debugLogs)
 //            self?.present(vc, animated: true)
-        }
-        infoButton.accessibilityLabel = OWSLocalizedString("DEBUG_LOG_INFO_BUTTON",
-                                                          comment: "Accessibility label for the ? vector asset used to get info about debug logs")
+//        }
+//        infoButton.accessibilityLabel = OWSLocalizedString("DEBUG_LOG_INFO_BUTTON",
+//                                                          comment: "Accessibility label for the ? vector asset used to get info about debug logs")
 
         cell.contentView.addSubview(label)
 //        cell.contentView.addSubview(infoButton)

@@ -393,11 +393,11 @@ public class PinSetupViewController: OWSViewController, OWSNavigationChildContro
 
     @objc
     private func didTapMoreButton() {
-        let actionSheet = ActionSheetController()
-        actionSheet.addAction(OWSActionSheets.cancelAction)
-
-        proportionalSpacerConstraint?.isActive = false
-        let pinnedHeightConstraint = topSpacer.autoSetDimension(.height, toSize: topSpacer.height)
+//        let actionSheet = ActionSheetController()
+//        actionSheet.addAction(OWSActionSheets.cancelAction)
+//
+//        proportionalSpacerConstraint?.isActive = false
+//        let pinnedHeightConstraint = topSpacer.autoSetDimension(.height, toSize: topSpacer.height)
 
 //        let learnMoreAction = ActionSheetAction(
 //            title: OWSLocalizedString(
@@ -414,7 +414,7 @@ public class PinSetupViewController: OWSViewController, OWSNavigationChildContro
 //        }
 //        actionSheet.addAction(learnMoreAction)
 
-        presentActionSheet(actionSheet)
+//        presentActionSheet(actionSheet)
     }
 
     @objc

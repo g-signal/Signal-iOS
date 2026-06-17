@@ -187,7 +187,7 @@ class MessageRequestView: UIStackView {
     func prepareMessageRequestPrompt() -> UITextView {
         if thread.isGroupThread {
             let string: String
-            var appendLearnMoreLink = false
+//            var appendLearnMoreLink = false
             if thread.isGroupV1Thread {
                 if isThreadBlocked {
                     string = OWSLocalizedString(
@@ -227,11 +227,11 @@ class MessageRequestView: UIStackView {
                     .font: UIFont.dynamicTypeSubheadlineClamped,
                     .foregroundColor: Theme.secondaryTextAndIconColor
                 ]),
-                appendLearnMoreLink: appendLearnMoreLink
+                appendLearnMoreLink: false
             )
         } else if let thread = thread as? TSContactThread {
             let formatString: String
-            var appendLearnMoreLink = false
+//            var appendLearnMoreLink = false
 
             if isThreadBlocked {
                 formatString = OWSLocalizedString(
@@ -261,7 +261,7 @@ class MessageRequestView: UIStackView {
             return preparePromptTextView(
                 formatString: formatString,
                 embeddedString: shortName,
-                appendLearnMoreLink: appendLearnMoreLink
+                appendLearnMoreLink: false
             )
         } else {
             owsFailDebug("unexpected thread type")
