@@ -6,6 +6,7 @@
 git diff <new-tag> HEAD --name-only
 git diff <new-tag> HEAD -- \
   SignalServiceKit/Environment/TSConstants.swift \
+  SignalServiceKit/Network/OWSSignalService.swift \
   SignalServiceKit/Network/OWSSignalServiceProtocol.swift \
   SignalServiceKit/Network/OWSUrlSession.swift \
   SignalServiceKit/Network/ChatConnectionManager.swift \
@@ -1438,3 +1439,11 @@ Signal/src/ViewControllers/AppSettings/Payments/TSPaymentModelHistoryItem.swift
 
 由于该闭包不逃逸（仅在同一函数体内同步调用），`[weak self]` 完全多余，移除后改为隐式强引用即可。
 
+
+## 163. `SignalServiceKit/Network/OWSSignalService.swift`
+
+修复图片、视频发送失败及收到后无法打开的问题。
+
+CDN session 原本使用 `shouldUseSignalCertificate: true`，即用 `signal-messenger.cer`（`CN=*.imba-test.com` / RapidSSL 签发）做证书 pinning。但 BA CDN 服务器（`cdn.ba-chat.com`、`cdn2.ba-chat.com`）实际使用 Amazon / Google 公信 CA 签发的证书，导致所有 TLS handshake 失败，附件上传下载全部被拒。
+
+改为 `shouldUseSignalCertificate: false`，使用系统信任链验证即可，与主服务、Storage Service、SVR2 等其他 session 保持一致。
