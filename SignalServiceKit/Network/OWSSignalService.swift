@@ -297,7 +297,7 @@ public class OWSSignalService: OWSSignalServiceProtocol {
                         censorshipConfigurationParams: ccParams,
                         baseUrl: baseUrl,
                         censorshipCircumventionPathPrefix: censorshipCircumventionPathPrefix,
-                        shouldUseSignalCertificate: true
+                        shouldUseSignalCertificate: false
                     ),
                     configuration: urlSessionConfiguration,
                     maxResponseSize: maxResponseSize.map(Int.init(clamping:)),
