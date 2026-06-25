@@ -11,7 +11,16 @@
 		<string>LazyDatabaseMigratorTask</string>
 	</array>
 	<key>BuildDetails</key>
-	<dict/>
+	<dict>
+		<key>DateTime</key>
+		<string>Thu Jun 25 12:14:30 UTC 2026</string>
+		<key>SignalCommit</key>
+		<string>e1588245850e49fef5277100fc060109b67dc8d4 Update CUSTOM_CHANGES.md: add OWSSignalService.swift CDN cert fix entry</string>
+		<key>Timestamp</key>
+		<integer>1782389670</integer>
+		<key>XCodeVersion</key>
+		<string>2600.2650</string>
+	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
