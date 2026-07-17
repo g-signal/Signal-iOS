@@ -423,7 +423,7 @@ GExtGroupProfileFetcher.shared.fetchAndStoreGroupExtTags(groupId: ...)
 
 ---
 
-## 19. `SignalServiceKit/Groups/GroupManager.swift`
+## 19. `SignalServiceKit/Groups/GroupV2UpdatesImpl.swift`
 
 群组信息更新后调用：
 ```swift
