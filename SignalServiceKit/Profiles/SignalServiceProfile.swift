@@ -157,7 +157,7 @@ public class SignalServiceProfile {
 
         var result: [GExtTag] = []
         for tagDict in gextTagsArray {
-            let tagParams = ParamParser(dictionary: tagDict)
+            let tagParams = ParamParser(tagDict)
 
             do {
                 guard let tagIdString: String = try tagParams.required(key: "tagId"),
