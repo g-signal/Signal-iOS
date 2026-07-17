@@ -71,9 +71,9 @@ class SyncPushTokensJob: NSObject {
         } else if currentVoipToken != voipToken {
             reason = "voip_changed"
             Logger.info("VoIP token changed: \(redact(currentVoipToken)) -> \(redact(voipToken))")
-        } else if AppVersionImpl.shared.lastAppVersion != AppVersionImpl.shared.currentAppVersion {
+        } else if AppVersionImpl.shared.lastCompletedLaunchAppVersion != AppVersionImpl.shared.currentAppVersion {
             reason = "upgraded"
-            Logger.info("App version changed: \(AppVersionImpl.shared.lastAppVersion ?? "nil") -> \(AppVersionImpl.shared.currentAppVersion)")
+            Logger.info("App version changed: \(AppVersionImpl.shared.lastCompletedLaunchAppVersion ?? "nil") -> \(AppVersionImpl.shared.currentAppVersion)")
         } else if !Self.hasUploadedTokensOnce.get() {
             reason = "launched"
             Logger.info("First time uploading tokens since app launch")
