@@ -186,7 +186,8 @@ git diff <new-tag> HEAD -- \
   "Signal/src/ViewControllers/AppSettings/Payments/TSPaymentModelHistoryItem.swift" \
   Signal/Images.xcassets/signal-logo-40.imageset/Contents.json \
   Signal/Images.xcassets/signal-logo-128-launch-screen.imageset/Contents.json \
-  "Signal/src/ViewControllers/HomeView/Chat List/ChatListViewController+BackupDownloadProgressView.swift"
+  "Signal/src/ViewControllers/HomeView/Chat List/ChatListViewController+BackupDownloadProgressView.swift" \
+  Podfile
 ```
 
 ---
@@ -1449,3 +1450,26 @@ Signal/src/ViewControllers/AppSettings/Payments/TSPaymentModelHistoryItem.swift
 CDN session 原本使用 `shouldUseSignalCertificate: true`，即用 `signal-messenger.cer`（`CN=*.imba-test.com` / RapidSSL 签发）做证书 pinning。但 BA CDN 服务器（`cdn.ba-chat.com`、`cdn2.ba-chat.com`）实际使用 Amazon / Google 公信 CA 签发的证书，导致所有 TLS handshake 失败，附件上传下载全部被拒。
 
 改为 `shouldUseSignalCertificate: false`，使用系统信任链验证即可，与主服务、Storage Service、SVR2 等其他 session 保持一致。
+
+## 164. `Podfile`
+
+三处 B&A 自定义改动，每次合并上游 tag 时必须手动恢复：
+
+**1. LibSignalClient 使用自己的 fork**
+```ruby
+ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '94d879a51ba1e45a33efc6c0259cbb62bfc2393ea027756d57ac4b39a2db1c0b'
+pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.81.1-BA', testspecs: ["Tests"]
+```
+上游用 `signalapp/libsignal` 官方 repo，我们必须切回 `g-signal/libsignal` fork，并更新对应的 checksum 和 tag。  
+> ⚠️ 每次 libsignal 版本升级时，需要先在 fork 上打好对应的 BA tag，再更新这里的 tag 和 checksum。
+
+**2. 禁用 MobileCoin 支付功能**
+```ruby
+# B&A don't need pay
+#  pod 'LibMobileCoin/CoreHTTP', ...
+#  pod 'MobileCoin/CoreHTTP', ...
+```
+B&A 不需要支付功能，这两个 pod 保持注释状态。
+
+**3. Mantle / patch_reachability（已随上游删除，无需恢复）**
+上游 v7.94 已删除 Mantle pod 和 patch_reachability 函数，B&A 代码无自定义依赖，跟随删除即可。
