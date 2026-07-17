@@ -213,18 +213,7 @@ class OutgoingDeviceRestorePresenter: OutgoingDeviceRestoreInitialPresenter {
             if await pushBackupPropmtViewController(presentingViewController: presentingViewController) {
                 await internalNavigationController.dismiss(animated: true)
                 Task { @MainActor in
-                    SignalApp.shared.showAppSettings(
-                        mode: .backups(
-                            onAppearAction: .automaticallyStartBackup(
-                                completion: { [weak self] backupSettingsVC in
-                                    guard let self else { return }
-                                    showRestoreReturnSheetAfterBackup(
-                                        presentingViewController: backupSettingsVC,
-                                    )
-                                },
-                            ),
-                        ),
-                    )
+                    SignalApp.shared.showAppSettings(mode: .backups)
                 }
                 return
             }
