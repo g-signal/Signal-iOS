@@ -121,8 +121,8 @@ public class SDSDatabaseStorage: NSObject, DB {
         //
         // We only reach this point by a predictable code path; the autoreleasepool
         // should be drained by this point.
-        owsAssertDebug(weakPool.value == nil)
-        owsAssertDebug(weakGrdbStorage.value == nil)
+        owsAssertDebug(weakPool == nil)
+        owsAssertDebug(weakGrdbStorage == nil)
     }
 
     // MARK: - Id Mapping
