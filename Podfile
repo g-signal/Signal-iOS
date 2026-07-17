@@ -103,6 +103,18 @@ post_install do |installer|
   fix_ringrtc_project_symlink(installer)
   fetch_ringrtc
   copy_acknowledgements
+  patch_reachability(installer)
+end
+
+# Remove private netinet6/in6.h import that breaks newer Xcode/SDK builds.
+# The IPv6 types it provides are already included via netinet/in.h.
+def patch_reachability(installer)
+  file = File.join(installer.sandbox.root, 'Reachability/Reachability.m')
+  if File.exist?(file)
+    content = File.read(file)
+    patched = content.gsub(/^#import <netinet6\/in6\.h>\n/, '')
+    File.write(file, patched) if patched != content
+  end
 end
 
 # Works around CocoaPods behavior designed for static libraries.

@@ -1471,5 +1471,18 @@ pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v
 ```
 B&A 不需要支付功能，这两个 pod 保持注释状态。
 
-**3. Mantle / patch_reachability（已随上游删除，无需恢复）**
-上游 v7.94 已删除 Mantle pod 和 patch_reachability 函数，B&A 代码无自定义依赖，跟随删除即可。
+**3. patch_reachability（需要保留）**
+```ruby
+def patch_reachability(installer)
+  file = File.join(installer.sandbox.root, 'Reachability/Reachability.m')
+  if File.exist?(file)
+    content = File.read(file)
+    patched = content.gsub(/^#import <netinet6\/in6\.h>\n/, '')
+    File.write(file, patched) if patched != content
+  end
+end
+```
+移除 `Reachability.m` 中 `#import <netinet6/in6.h>` 的私有头文件引用，修复新版 Xcode/SDK 的编译错误。上游删除了这个函数，但 B&A 仍然使用 Reachability pod，必须保留。
+
+**4. Mantle（已随上游删除，无需恢复）**
+上游 v7.94 已删除 Mantle pod，B&A 代码无自定义依赖，跟随删除即可。
