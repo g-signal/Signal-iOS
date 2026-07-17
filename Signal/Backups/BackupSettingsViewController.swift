@@ -19,8 +19,8 @@ class BackupSettingsViewController:
 
     private let accountEntropyPoolManager: AccountEntropyPoolManager
     private let accountKeyStore: AccountKeyStore
-    private let backupAttachmentDownloadTracker: BackupSettingsAttachmentDownloadTracker
-    private let backupAttachmentUploadTracker: BackupSettingsAttachmentUploadTracker
+    private let backupAttachmentDownloadTracker: BackupAttachmentDownloadTracker
+    private let backupAttachmentUploadTracker: BackupAttachmentUploadTracker
     private let backupDisablingManager: BackupDisablingManager
     private let backupEnablingManager: BackupEnablingManager
     private let backupExportJobRunner: BackupExportJobRunner
@@ -88,11 +88,11 @@ class BackupSettingsViewController:
 
         self.accountEntropyPoolManager = accountEntropyPoolManager
         self.accountKeyStore = accountKeyStore
-        self.backupAttachmentDownloadTracker = BackupSettingsAttachmentDownloadTracker(
+        self.backupAttachmentDownloadTracker = BackupAttachmentDownloadTracker(
             backupAttachmentDownloadQueueStatusReporter: backupAttachmentDownloadQueueStatusReporter,
             backupAttachmentDownloadProgress: backupAttachmentDownloadProgress
         )
-        self.backupAttachmentUploadTracker = BackupSettingsAttachmentUploadTracker(
+        self.backupAttachmentUploadTracker = BackupAttachmentUploadTracker(
             backupAttachmentUploadQueueStatusReporter: backupAttachmentUploadQueueStatusReporter,
             backupAttachmentUploadProgress: backupAttachmentUploadProgress
         )
@@ -1064,8 +1064,8 @@ private class BackupSettingsViewModel: ObservableObject {
     @Published var failedToDisableBackupsRemotely: Bool
 
     @Published var latestBackupExportProgressUpdate: OWSSequentialProgress<BackupExportJobStep>?
-    @Published var latestBackupAttachmentDownloadUpdate: BackupSettingsAttachmentDownloadTracker.DownloadUpdate?
-    @Published var latestBackupAttachmentUploadUpdate: BackupSettingsAttachmentUploadTracker.UploadUpdate?
+    @Published var latestBackupAttachmentDownloadUpdate: BackupAttachmentDownloadTracker.DownloadUpdate?
+    @Published var latestBackupAttachmentUploadUpdate: BackupAttachmentUploadTracker.UploadUpdate?
 
     @Published var lastBackupDate: Date?
     @Published var lastBackupSizeBytes: UInt64?
@@ -1079,8 +1079,8 @@ private class BackupSettingsViewModel: ObservableObject {
         backupPlan: BackupPlan,
         failedToDisableBackupsRemotely: Bool,
         latestBackupExportProgressUpdate: OWSSequentialProgress<BackupExportJobStep>?,
-        latestBackupAttachmentDownloadUpdate: BackupSettingsAttachmentDownloadTracker.DownloadUpdate?,
-        latestBackupAttachmentUploadUpdate: BackupSettingsAttachmentUploadTracker.UploadUpdate?,
+        latestBackupAttachmentDownloadUpdate: BackupAttachmentDownloadTracker.DownloadUpdate?,
+        latestBackupAttachmentUploadUpdate: BackupAttachmentUploadTracker.UploadUpdate?,
         lastBackupDate: Date?,
         lastBackupSizeBytes: UInt64?,
         shouldAllowBackupUploadsOnCellular: Bool,
@@ -1204,7 +1204,7 @@ private class BackupSettingsViewModel: ObservableObject {
 struct BackupSettingsView: View {
     private enum Contents {
         case enabled
-        case disablingDownloadsRunning(BackupSettingsAttachmentDownloadTracker.DownloadUpdate)
+        case disablingDownloadsRunning(BackupAttachmentDownloadTracker.DownloadUpdate)
         case disabling
         case disabledFailedToDisableRemotely
         case disabled
@@ -1532,7 +1532,7 @@ private struct BackupExportProgressView: View {
     }
 
     let latestExportProgressUpdate: OWSSequentialProgress<BackupExportJobStep>
-    let latestAttachmentUploadUpdate: BackupSettingsAttachmentUploadTracker.UploadUpdate?
+    let latestAttachmentUploadUpdate: BackupAttachmentUploadTracker.UploadUpdate?
     let viewModel: BackupSettingsViewModel
 
     private var progressBarState: ProgressBarState {
@@ -1754,7 +1754,7 @@ private struct PulsingProgressBar: View {
 // MARK: -
 
 private struct BackupAttachmentDownloadProgressView: View {
-    let latestDownloadUpdate: BackupSettingsAttachmentDownloadTracker.DownloadUpdate
+    let latestDownloadUpdate: BackupAttachmentDownloadTracker.DownloadUpdate
     let viewModel: BackupSettingsViewModel
 
     var body: some View {
@@ -1896,7 +1896,7 @@ private struct BackupAttachmentDownloadProgressView: View {
 // MARK: -
 
 private struct BackupAttachmentUploadProgressView: View {
-    let latestUploadUpdate: BackupSettingsAttachmentUploadTracker.UploadUpdate
+    let latestUploadUpdate: BackupAttachmentUploadTracker.UploadUpdate
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -1914,7 +1914,7 @@ private struct BackupAttachmentUploadProgressView: View {
     }
 
     static func subtitleText(
-        uploadUpdate: BackupSettingsAttachmentUploadTracker.UploadUpdate?
+        uploadUpdate: BackupAttachmentUploadTracker.UploadUpdate?
     ) -> String {
         switch uploadUpdate?.state {
         case nil, .running:
@@ -2279,8 +2279,8 @@ private extension BackupSettingsViewModel {
         backupPlan: BackupPlan,
         failedToDisableBackupsRemotely: Bool = false,
         latestBackupExportProgressUpdate: OWSSequentialProgress<BackupExportJobStep>? = nil,
-        latestBackupAttachmentDownloadUpdateState: BackupSettingsAttachmentDownloadTracker.DownloadUpdate.State? = nil,
-        latestBackupAttachmentUploadUpdateState: BackupSettingsAttachmentUploadTracker.UploadUpdate.State? = nil,
+        latestBackupAttachmentDownloadUpdateState: BackupAttachmentDownloadTracker.DownloadUpdate.State? = nil,
+        latestBackupAttachmentUploadUpdateState: BackupAttachmentUploadTracker.UploadUpdate.State? = nil,
         backupSubscriptionLoadingState: BackupSubscriptionLoadingState,
     ) -> BackupSettingsViewModel {
         class PreviewActionsDelegate: ActionsDelegate {
@@ -2311,14 +2311,14 @@ private extension BackupSettingsViewModel {
             failedToDisableBackupsRemotely: failedToDisableBackupsRemotely,
             latestBackupExportProgressUpdate: latestBackupExportProgressUpdate,
             latestBackupAttachmentDownloadUpdate: latestBackupAttachmentDownloadUpdateState.map {
-                BackupSettingsAttachmentDownloadTracker.DownloadUpdate(
+                BackupAttachmentDownloadTracker.DownloadUpdate(
                     state: $0,
                     bytesDownloaded: 1_400_000_000,
                     totalBytesToDownload: 1_600_000_000,
                 )
             },
             latestBackupAttachmentUploadUpdate: latestBackupAttachmentUploadUpdateState.map {
-                BackupSettingsAttachmentUploadTracker.UploadUpdate(
+                BackupAttachmentUploadTracker.UploadUpdate(
                     state: $0,
                     bytesUploaded: 400_000_000,
                     totalBytesToUpload: 1_600_000_000,
@@ -2335,7 +2335,6 @@ private extension BackupSettingsViewModel {
 
         return viewModel
     }
-}
 
 #Preview("Plan: Paid") {
     BackupSettingsView(viewModel: .forPreview(
@@ -2594,5 +2593,7 @@ extension OWSSequentialProgress<BackupExportJobStep> {
         backupSubscriptionLoadingState: .loaded(.free),
     ))
 }
+
+} // end private extension BackupSettingsViewModel
 
 #endif
