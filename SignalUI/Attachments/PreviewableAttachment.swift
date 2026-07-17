@@ -26,6 +26,13 @@ public struct PreviewableAttachment {
     public let rawValue: SignalAttachment
     public let attachmentType: AttachmentType
 
+    /// Direct initializer for wrapping an existing SignalAttachment.
+    /// `attachmentType` defaults to `.other`; callers that know the precise type may pass it explicitly.
+    public init(rawValue: SignalAttachment, attachmentType: AttachmentType = .other) {
+        self.rawValue = rawValue
+        self.attachmentType = attachmentType
+    }
+
     public enum AttachmentType {
         case image(NormalizedImage)
         case animatedImage

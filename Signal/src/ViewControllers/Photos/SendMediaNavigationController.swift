@@ -187,7 +187,7 @@ class SendMediaNavigationController: OWSNavigationController {
     // MARK: - Child View Controllers
 
     fileprivate lazy var captureViewController: PhotoCaptureViewController = {
-        let viewController = PhotoCaptureViewController(attachmentLimits: attachmentLimits)
+        let viewController = PhotoCaptureViewController()
         viewController.delegate = self
         viewController.dataSource = self
         return viewController
@@ -381,10 +381,10 @@ extension SendMediaNavigationController: PhotoCaptureViewControllerDataSource {
         return self.pendingAttachments.count
     }
 
-    func addMedia(attachment: PreviewableAttachment) {
+    func addMedia(attachment: SignalAttachment) {
         self.pendingAttachments.append(PendingAttachment(
             source: .camera,
-            approvalItem: AttachmentApprovalItem(attachment: attachment, canSave: true),
+            approvalItem: AttachmentApprovalItem(attachment: PreviewableAttachment(rawValue: attachment), canSave: true),
         ))
     }
 }
