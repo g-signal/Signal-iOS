@@ -222,7 +222,7 @@ class NSECallMessageHandler: CallMessageHandler {
 
     private func requestVoipPushFromServer(payloadId: String) async throws {
         // Get server URL from TSConstants or configuration
-        let baseURL = TSConstants.mainServiceIdentifiedURL
+        let baseURL = TSConstants.mainServiceURL
         guard let serverURL = URL(string: "\(baseURL)/v1/voip/push") else {
             throw NSError(domain: "InvalidURL", code: 1, userInfo: nil)
         }
