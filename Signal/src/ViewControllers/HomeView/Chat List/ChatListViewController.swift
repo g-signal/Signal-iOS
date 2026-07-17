@@ -22,7 +22,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         tableDataSource.scrollViewDelegate = self
         tableDataSource.viewController = self
         loadCoordinator.viewController = self
-        reminderViews.chatListViewController = self
+        viewState.reminderViews.chatListViewController = self
         viewState.backupDownloadProgressView.chatListViewController = self
         viewState.settingsButtonCreator.delegate = self
         viewState.proxyButtonCreator.delegate = self
@@ -147,7 +147,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         updateUnreadPaymentNotificationsCountWithSneakyTransaction()
 
         // Update Backup error state
-        updateBackupErrorStateWithSneakyTransaction()
+        updateBackupFailureAlertsWithSneakyTransaction()
 
         // During main app launch, the chat list becomes visible _before_
         // app is foreground and active.  Therefore we need to make an
@@ -353,6 +353,8 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
     @objc
     func showFYISheetIfNecessary() {
         let fyiSheetCoordinator = ChatListFYISheetCoordinator(
+            backupExportJobRunner: DependenciesBridge.shared.backupExportJobRunner,
+            backupSubscriptionIssueStore: BackupSubscriptionIssueStore(),
             donationReceiptCredentialResultStore: DependenciesBridge.shared.donationReceiptCredentialResultStore,
             donationSubscriptionManager: DonationSubscriptionManager.self,
             db: DependenciesBridge.shared.db,
@@ -445,25 +447,25 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         let barButtonItem = createSettingsBarButtonItem(
             databaseStorage: db,
             shouldShowUnreadPaymentBadge: viewState.settingsButtonCreator.hasUnreadPaymentNotification,
-            shouldShowBackupFailureBadge: viewState.settingsButtonCreator.showAvatarBackupBadge,
+            shouldShowBackupFailureBadge: viewState.settingsButtonCreator.showBackupsFailedAvatarBadge,
             onDidDismissContextMenu: { [weak self] in
                 guard let self else { return }
-                if self.viewState.settingsButtonCreator.showAvatarBackupBadge {
+                if self.viewState.settingsButtonCreator.showBackupsFailedAvatarBadge {
                     SSKEnvironment.shared.databaseStorageRef.write {
-                        DependenciesBridge.shared.backupFailureStateManager.clearErrorBadge(
-                            target: CLVViewState.BackupFailureBadgeType.avatar.target,
+                        BackupSettingsStore().setErrorBadgeMuted(
+                            target: .chatListAvatar,
                             tx: $0
                         )
                     }
                 }
-                self.updateBackupErrorStateWithSneakyTransaction()
+                self.updateBackupFailureAlertsWithSneakyTransaction()
             },
             buildActions: { settingsAction -> [UIMenuElement] in
                 var contextMenuActions: [UIMenuElement] = []
 
-                if viewState.settingsButtonCreator.hasBackupError {
+                if viewState.settingsButtonCreator.showBackupsFailedMenuItem {
                     var image = Theme.iconImage(.backup)
-                    if viewState.settingsButtonCreator.showMenuBackupBadge {
+                    if viewState.settingsButtonCreator.showBackupsFailedMenuItemBadge {
                         image = image.withBadge(color: UIColor.Signal.yellow)
                     }
 
@@ -478,12 +480,12 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
                                 handler: { [weak self] _ in
                                     SignalApp.shared.showAppSettings(mode: .backups)
                                     db.write {
-                                        DependenciesBridge.shared.backupFailureStateManager.clearErrorBadge(
-                                            target: CLVViewState.BackupFailureBadgeType.menu.target,
+                                        BackupSettingsStore().setErrorBadgeMuted(
+                                            target: .chatListMenuItem,
                                             tx: $0
                                         )
                                     }
-                                    self?.updateBackupErrorStateWithSneakyTransaction()
+                                    self?.updateBackupFailureAlertsWithSneakyTransaction()
                                 }
                             )
                         ])
@@ -729,7 +731,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
     private func applyDefaultBackButton() {
         AssertIsOnMainThread()
 
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable { return }
+        if #available(iOS 26, *) { return }
 
         // We don't show any text for the back button, so there's no need to localize it. But because we left align the
         // conversation title view, we add a little tappable padding after the back button, by having a title of spaces.
@@ -1135,7 +1137,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
 
         // Check if it's been more than 7 days since the last backup
         guard SSKEnvironment.shared.databaseStorageRef.read(block: {
-            DependenciesBridge.shared.backupFailureStateManager.shouldShowBackupFailurePrompt(tx: $0)
+            DependenciesBridge.shared.backupFailureStateManager.hasFailedBackup(tx: $0)
         }) else {
             return
         }
@@ -1546,6 +1548,4 @@ extension ChatListViewController: ChatListFilterControlDelegate {
             }
         }
     }
-}
-
 }
