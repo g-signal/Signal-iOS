@@ -29,11 +29,9 @@ public class GExtTagStore: NSObject {
         do {
             let aciString = try getAciString(for: address)
 
-            let record = transaction.database.strictRead { database in
-                try GRecipientGExtTagRecord
-                    .filter(GRecipientGExtTagRecord.Columns.aci == aciString)
-                    .fetchOne(database)
-            }
+            let record = try GRecipientGExtTagRecord
+                .filter(GRecipientGExtTagRecord.Columns.aci == aciString)
+                .fetchOne(transaction.database)
 
             guard let record = record else {
                 return []
@@ -55,11 +53,9 @@ public class GExtTagStore: NSObject {
         do {
             let aciString = try getAciString(for: address)
 
-            guard let robotData = transaction.database.strictRead({ database in
-                try GRecipientGExtTagRecord
-                    .filter(GRecipientGExtTagRecord.Columns.aci == aciString)
-                    .fetchOne(database)
-            })?.robot else {
+            guard let robotData = (try GRecipientGExtTagRecord
+                .filter(GRecipientGExtTagRecord.Columns.aci == aciString)
+                .fetchOne(transaction.database))?.robot else {
                 return nil
             }
 
@@ -190,11 +186,9 @@ public class GExtTagStore: NSObject {
         transaction: DBReadTransaction
     ) -> [GExtTag] {
         do {
-            let record = transaction.database.strictRead { database in
-                try GGroupGExtTagRecord
-                    .filter(GGroupGExtTagRecord.Columns.group_id == groupId)
-                    .fetchOne(database)
-            }
+            let record = try GGroupGExtTagRecord
+                .filter(GGroupGExtTagRecord.Columns.group_id == groupId)
+                .fetchOne(transaction.database)
 
             guard let record = record else {
                 return []
