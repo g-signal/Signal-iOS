@@ -15,7 +15,6 @@ extension ConversationViewController {
 
         if thread.isNoteToSelf {
             headerView.titleIcon = Theme.iconImage(.official)
-            headerView.titleIconSize = 16
         } else {
             headerView.titleIcon = nil
         }
@@ -36,8 +35,8 @@ extension ConversationViewController {
             attributedName.append(contactIcon)
         }
 
-        if headerView.attributedTitle != attributedName {
-            headerView.attributedTitle = attributedName
+        if headerView.titleLabel.attributedText != attributedName {
+            headerView.titleLabel.attributedText = attributedName
         }
     }
 
@@ -184,7 +183,6 @@ extension ConversationViewController {
             }
 
             navigationItem.rightBarButtonItems = barButtons
-            showGroupCallTooltipIfNecessary()
             return
         }
     }
@@ -194,12 +192,12 @@ extension ConversationViewController {
 
         let hasCompactHeader = self.traitCollection.verticalSizeClass == .compact
         if hasCompactHeader {
-            self.headerView.attributedSubtitle = nil
+            self.headerView.subtitleLabel.attributedText = nil
             return
         }
 
         let subtitleText = NSMutableAttributedString()
-        let subtitleFont = self.headerView.subtitleFont
+        let subtitleFont = self.headerView.subtitleLabel.font
         // Use higher-contrast color for the blurred iOS 26 nav bars
         let fontColor: UIColor = if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
             UIColor.Signal.label
@@ -257,7 +255,7 @@ extension ConversationViewController {
             )
         }
 
-        headerView.attributedSubtitle = subtitleText
+        headerView.subtitleLabel.attributedText = subtitleText
     }
 
     public var safeContentHeight: CGFloat {

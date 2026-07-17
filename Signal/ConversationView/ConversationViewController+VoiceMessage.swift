@@ -111,15 +111,14 @@ extension ConversationViewController {
             let attachment = try voiceMemoDraft.prepareAttachment(attachmentLimits: attachmentLimits)
             Task { @MainActor in
                 await self.sendAttachments(
-                    ApprovedAttachments(nonViewOnceAttachments: [attachment], imageQuality: .standard),
-                    messageBody: nil,
+                    [attachment.rawValue],
                     from: self,
-                    attachmentLimits: attachmentLimits,
+                    messageBody: nil,
                 )
                 clearVoiceMessageDraft()
             }
         } catch {
-            self.showErrorAlert(attachmentError: error as? SignalAttachmentError)
+            self.showErrorAlert(forAttachment: nil)
         }
     }
 
