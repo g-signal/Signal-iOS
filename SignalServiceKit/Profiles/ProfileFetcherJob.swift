@@ -468,7 +468,7 @@ public class ProfileFetcherJob {
 
             // 获取更新后的 profile 以获得 profile ID
             let profileAddress = SignalServiceAddress(serviceId)
-            if let userProfile = self.profileManager.userProfile(for: profileAddress, tx: SDSDB.shimOnlyBridge(transaction)),
+            if let userProfile = self.profileManager.userProfile(for: profileAddress, tx: transaction),
                let profileId = userProfile.id {
 
                 // 处理 ExtTag 数据，使用 profile ID
