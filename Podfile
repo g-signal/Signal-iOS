@@ -11,8 +11,8 @@ source 'https://cdn.cocoapods.org/'
 pod 'blurhash', podspec: './ThirdParty/blurhash.podspec'
 pod 'SwiftProtobuf', "1.31.1"
 
-ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = 'd81281e197ea9a9140438e7285e63eab97f50342286bd743ac18f21bc39cf267'
-pod 'LibSignalClient', git: 'https://github.com/signalapp/libsignal.git', tag: 'v0.86.14', testspecs: ["Tests"]
+ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '94d879a51ba1e45a33efc6c0259cbb62bfc2393ea027756d57ac4b39a2db1c0b'
+pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.81.1-BA', testspecs: ["Tests"]
 # pod 'LibSignalClient', path: '../libsignal', testspecs: ["Tests"]
 
 ENV['RINGRTC_PREBUILD_CHECKSUM'] = 'd474dd93d163a259494db79b1ed09d6cae0b934178347450c6f94fc29782af12'
@@ -48,8 +48,9 @@ def ui_pods
   pod 'PureLayout', :inhibit_warnings => true
   pod 'lottie-ios', :inhibit_warnings => true
 
-  pod 'LibMobileCoin/CoreHTTP', git: 'https://github.com/signalapp/libmobilecoin-ios-artifacts', tag: 'signal/6.0.2', submodules: true
-  pod 'MobileCoin/CoreHTTP', git: 'https://github.com/mobilecoinofficial/MobileCoin-Swift', tag: 'v6.0.3'
+  # B&A don't need pay
+  #  pod 'LibMobileCoin/CoreHTTP', git: 'https://github.com/signalapp/libmobilecoin-ios-artifacts', tag: 'signal/6.0.2', submodules: true
+  #  pod 'MobileCoin/CoreHTTP', git: 'https://github.com/mobilecoinofficial/MobileCoin-Swift', tag: 'v6.0.3'
 end
 
 target 'Signal' do
