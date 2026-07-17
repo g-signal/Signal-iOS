@@ -446,7 +446,18 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
             databaseStorage: db,
             shouldShowUnreadPaymentBadge: viewState.settingsButtonCreator.hasUnreadPaymentNotification,
             shouldShowBackupFailureBadge: viewState.settingsButtonCreator.showAvatarBackupBadge,
-            delegate: self,
+            onDidDismissContextMenu: { [weak self] in
+                guard let self else { return }
+                if self.viewState.settingsButtonCreator.showAvatarBackupBadge {
+                    SSKEnvironment.shared.databaseStorageRef.write {
+                        DependenciesBridge.shared.backupFailureStateManager.clearErrorBadge(
+                            target: CLVViewState.BackupFailureBadgeType.avatar.target,
+                            tx: $0
+                        )
+                    }
+                }
+                self.updateBackupErrorStateWithSneakyTransaction()
+            },
             buildActions: { settingsAction -> [UIMenuElement] in
                 var contextMenuActions: [UIMenuElement] = []
 
@@ -1537,18 +1548,4 @@ extension ChatListViewController: ChatListFilterControlDelegate {
     }
 }
 
-extension ChatListViewController: ContextMenuButtonDelegate {
-    func contextMenuWillDisplay(from contextMenuButton: ContextMenuButton) { }
-
-    func contextMenuDidDismiss(from contextMenuButton: ContextMenuButton) {
-        if viewState.settingsButtonCreator.showAvatarBackupBadge {
-            SSKEnvironment.shared.databaseStorageRef.write {
-                DependenciesBridge.shared.backupFailureStateManager.clearErrorBadge(
-                    target: CLVViewState.BackupFailureBadgeType.avatar.target,
-                    tx: $0
-                )
-            }
-        }
-        updateBackupErrorStateWithSneakyTransaction()
-    }
 }

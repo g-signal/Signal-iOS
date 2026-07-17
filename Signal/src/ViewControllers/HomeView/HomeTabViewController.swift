@@ -17,7 +17,8 @@ extension HomeTabViewController {
         databaseStorage: SDSDatabaseStorage,
         shouldShowUnreadPaymentBadge: Bool = false,
         shouldShowBackupFailureBadge: Bool = false,
-        delegate: ContextMenuButtonDelegate? = nil,
+        onWillDisplayContextMenu: @escaping () -> Void = {},
+        onDidDismissContextMenu: @escaping () -> Void = {},
         buildActions: (_ settingsAction: UIMenuElement) -> [UIMenuElement],
         showAppSettings: @escaping () -> Void
     ) -> UIBarButtonItem {
@@ -27,12 +28,15 @@ extension HomeTabViewController {
             handler: { _ in showAppSettings() }
         )
 
-        let contextButton = ContextMenuButton(actions: buildActions(settingsAction))
+        let contextButton = ContextMenuButton(
+            actions: buildActions(settingsAction),
+            onWillDisplayContextMenu: onWillDisplayContextMenu,
+            onDidDismissContextMenu: onDidDismissContextMenu,
+        )
         contextButton.accessibilityLabel = CommonStrings.openAppSettingsButton
-        contextButton.delegate = delegate
 
         let sizeClass: ConversationAvatarView.Configuration.SizeClass
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) {
             sizeClass = .forty
         } else {
             sizeClass = .twentyEight
