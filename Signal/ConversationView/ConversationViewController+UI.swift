@@ -79,7 +79,7 @@ extension ConversationViewController {
     public func updateBarButtonItems() {
         AssertIsOnMainThread()
 
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) {
             // iOS 26 already doesn't show back button text
         } else {
             // Don't include "Back" text on view controllers pushed above us, just use the arrow.
@@ -197,9 +197,9 @@ extension ConversationViewController {
         }
 
         let subtitleText = NSMutableAttributedString()
-        let subtitleFont = self.headerView.subtitleLabel.font
+        let subtitleFont = self.headerView.subtitleLabel.font!
         // Use higher-contrast color for the blurred iOS 26 nav bars
-        let fontColor: UIColor = if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        let fontColor: UIColor = if #available(iOS 26, *) {
             UIColor.Signal.label
         } else {
             Theme.navbarTitleColor.withAlphaComponent(0.9)
