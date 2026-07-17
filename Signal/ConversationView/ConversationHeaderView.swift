@@ -51,6 +51,8 @@ class ConversationHeaderView: UIView {
         return titleIconView
     }()
 
+    private let extTagsStackView = GExtTagsStackView()
+
     private var titleIconSizeConstraint: NSLayoutConstraint!
 
     private var avatarSizeClass: ConversationAvatarView.Configuration.SizeClass {
@@ -72,7 +74,7 @@ class ConversationHeaderView: UIView {
 
         translatesAutoresizingMaskIntoConstraints = false
 
-        let titleColumns = UIStackView(arrangedSubviews: [titleLabel, titleIconView])
+        let titleColumns = UIStackView(arrangedSubviews: [titleLabel, extTagsStackView, titleIconView])
         titleColumns.spacing = 5
         titleColumns.translatesAutoresizingMaskIntoConstraints = false
         // There is a strange bug where an initial height of 0
@@ -154,6 +156,37 @@ class ConversationHeaderView: UIView {
             config.dataSource = .thread(threadViewModel.threadRecord)
             config.storyConfiguration = .autoUpdate()
             config.applyConfigurationSynchronously()
+        }
+
+        // 配置 GExt 标签
+        if let groupThread = threadViewModel.threadRecord as? TSGroupThread {
+            let groupId = groupThread.groupId.hexadecimalString
+            SSKEnvironment.shared.databaseStorageRef.asyncRead(
+                file: #file, function: #function, line: #line,
+                block: { GExtTagStore.shared.getGroupExtTags(for: groupId, transaction: $0) },
+                completionQueue: .main,
+                completion: { [weak self] tags in
+                    guard let self else { return }
+                    self.extTagsStackView.configure(with: tags, tagHeight: self.titleLabel.font.pointSize)
+                }
+            )
+        } else if let contactThread = threadViewModel.threadRecord as? TSContactThread {
+            let address = contactThread.contactAddress
+            if address.isLocalAddress {
+                extTagsStackView.configure(with: [])
+            } else {
+                SSKEnvironment.shared.databaseStorageRef.asyncRead(
+                    file: #file, function: #function, line: #line,
+                    block: { GExtTagStore.shared.getUserExtTags(for: address, transaction: $0) },
+                    completionQueue: .main,
+                    completion: { [weak self] tags in
+                        guard let self else { return }
+                        self.extTagsStackView.configure(with: tags, tagHeight: self.titleLabel.font.pointSize)
+                    }
+                )
+            }
+        } else {
+            extTagsStackView.configure(with: [])
         }
     }
 

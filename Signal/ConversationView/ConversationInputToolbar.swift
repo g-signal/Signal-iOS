@@ -76,6 +76,8 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
 
     private weak var inputToolbarDelegate: ConversationInputToolbarDelegate?
 
+    private let msgButtonVisible: GExtRobot.MsgButtonVisible?
+
     init(
         conversationStyle: ConversationStyle,
         spoilerState: SpoilerRenderState,
@@ -86,12 +88,14 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
         inputToolbarDelegate: ConversationInputToolbarDelegate,
         inputTextViewDelegate: ConversationInputTextViewDelegate,
         bodyRangesTextViewDelegate: BodyRangesTextViewDelegate,
+        msgButtonVisible: GExtRobot.MsgButtonVisible? = nil,
     ) {
         self.conversationStyle = conversationStyle
         self.spoilerState = spoilerState
         self.mediaCache = mediaCache
         self.editTarget = editTarget
         self.inputToolbarDelegate = inputToolbarDelegate
+        self.msgButtonVisible = msgButtonVisible
         self.linkPreviewFetchState = LinkPreviewFetchState(
             db: DependenciesBridge.shared.db,
             linkPreviewFetcher: SUIEnvironment.shared.linkPreviewFetcher,
@@ -514,6 +518,8 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
                 self?.cameraButtonPressed()
             },
         )
+        view.isCameraHidden = msgButtonVisible?.camera == false
+        view.isMicrophoneHidden = msgButtonVisible?.microphone == false
 
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleVoiceMemoLongPress(gesture:)))
         longPressGestureRecognizer.minimumPressDuration = 0
@@ -964,13 +970,16 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
         // Sticker/keyboard buttons will also be hidden if there's whitespace-only input.
         let textFieldHasAnyInput = !inputTextView.untrimmedText.isEmpty
         let hideInputMethodButtons = hideAllTextFieldButtons || textFieldHasAnyInput || hasQuotedMessage
-        let hideStickerButton = hideInputMethodButtons || desiredKeyboardType == .sticker
+        let stickerDisabledByRobot = msgButtonVisible?.sticker == false
+        let hideStickerButton = hideInputMethodButtons || desiredKeyboardType == .sticker || stickerDisabledByRobot
         let hideKeyboardButton = hideInputMethodButtons || !hideStickerButton
         ConversationInputToolbar.setView(stickerButton, hidden: hideStickerButton, usingAnimator: animator)
         ConversationInputToolbar.setView(keyboardButton, hidden: hideKeyboardButton, usingAnimator: animator)
         if iOS26Layout {
-            ConversationInputToolbar.setView(cameraButton, hidden: hideAllTextFieldButtons, usingAnimator: animator)
-            ConversationInputToolbar.setView(voiceNoteButton, hidden: hideAllTextFieldButtons, usingAnimator: animator)
+            let cameraDisabledByRobot = msgButtonVisible?.camera == false
+            let micDisabledByRobot = msgButtonVisible?.microphone == false
+            ConversationInputToolbar.setView(cameraButton, hidden: hideAllTextFieldButtons || cameraDisabledByRobot, usingAnimator: animator)
+            ConversationInputToolbar.setView(voiceNoteButton, hidden: hideAllTextFieldButtons || micDisabledByRobot, usingAnimator: animator)
         }
 
         // Text input is hidden whenever Voice Message UI is presented.
@@ -1268,6 +1277,22 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
             return button
         }()
 
+        var isCameraHidden: Bool = false {
+            didSet {
+                guard oldValue != isCameraHidden else { return }
+                configureViewsForState(_state)
+                invalidateIntrinsicContentSize()
+            }
+        }
+
+        var isMicrophoneHidden: Bool = false {
+            didSet {
+                guard oldValue != isMicrophoneHidden else { return }
+                configureViewsForState(_state)
+                invalidateIntrinsicContentSize()
+            }
+        }
+
         init(
             sendButtonAction: UIAction,
             cameraButtonAction: UIAction,
@@ -1318,10 +1343,12 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
             switch state {
             case .default:
                 cameraButton.transform = .identity
-                cameraButton.alpha = 1
+                cameraButton.alpha = isCameraHidden ? 0 : 1
+                cameraButton.isUserInteractionEnabled = !isCameraHidden
 
                 voiceMemoButton.transform = .identity
-                voiceMemoButton.alpha = 1
+                voiceMemoButton.alpha = isMicrophoneHidden ? 0 : 1
+                voiceMemoButton.isUserInteractionEnabled = !isMicrophoneHidden
 
                 sendButton.transform = .scale(0.1)
                 sendButton.alpha = 0
@@ -1342,7 +1369,11 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
         override var intrinsicContentSize: CGSize {
             let width: CGFloat = {
                 switch state {
-                case .default: return cameraButton.width + voiceMemoButton.width + 2 * Self.cameraButtonHMargin
+                case .default:
+                    let cameraWidth = isCameraHidden ? 0 : cameraButton.width
+                    let micWidth = isMicrophoneHidden ? 0 : voiceMemoButton.width
+                    let hasAny = !isCameraHidden || !isMicrophoneHidden
+                    return cameraWidth + micWidth + (hasAny ? 2 * Self.cameraButtonHMargin : 0)
                 case .sendButton, .disabledSendButton, .hiddenSendButton: return sendButton.width + 2 * Self.sendButtonHMargin
                 }
             }()
@@ -2953,7 +2984,7 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
         if let attachmentKeyboard = _attachmentKeyboard {
             return attachmentKeyboard
         }
-        let keyboard = AttachmentKeyboard(delegate: self)
+        let keyboard = AttachmentKeyboard(delegate: self, msgButtonVisible: msgButtonVisible)
         _attachmentKeyboard = keyboard
         return keyboard
     }

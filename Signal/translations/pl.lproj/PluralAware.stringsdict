@@ -12,12 +12,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d minuta</string>
 			<key>few</key>
 			<string>%1$d minuty</string>
 			<key>many</key>
 			<string>%1$d minut</string>
+			<key>one</key>
+			<string>%1$d minuta</string>
 			<key>other</key>
 			<string>%1$d minuty</string>
 		</dict>
@@ -27,12 +27,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$d sekunda</string>
 			<key>few</key>
 			<string>%2$d sekundy</string>
 			<key>many</key>
 			<string>%2$d sekund</string>
+			<key>one</key>
+			<string>%2$d sekunda</string>
 			<key>other</key>
 			<string>%2$d sekundy</string>
 		</dict>
@@ -47,12 +47,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Wiadomość głosowa %1$d sekunda</string>
 			<key>few</key>
 			<string>Wiadomość głosowa %1$d sekundy</string>
 			<key>many</key>
 			<string>Wiadomość głosowa %1$d sekund</string>
+			<key>one</key>
+			<string>Wiadomość głosowa %1$d sekunda</string>
 			<key>other</key>
 			<string>Wiadomość głosowa %1$d sekund</string>
 		</dict>
@@ -67,12 +67,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Dodaj osobę</string>
 			<key>few</key>
 			<string>Dodaj osoby</string>
 			<key>many</key>
 			<string>Dodaj osoby</string>
+			<key>one</key>
+			<string>Dodaj osobę</string>
 			<key>other</key>
 			<string>Dodaj osoby</string>
 		</dict>
@@ -87,12 +87,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Dodać %1$d osobę do grupy %2$@?</string>
 			<key>few</key>
 			<string>Dodać %1$d osoby do grupy %2$@?</string>
 			<key>many</key>
 			<string>Dodać %1$d osób do grupy %2$@?</string>
+			<key>one</key>
+			<string>Dodać %1$d osobę do grupy %2$@?</string>
 			<key>other</key>
 			<string>Dodać %1$d osoby do grupy %2$@?</string>
 		</dict>
@@ -107,12 +107,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Dodaj nową osobę</string>
 			<key>few</key>
 			<string>Dodaj nowe osoby</string>
 			<key>many</key>
 			<string>Dodaj nowe osoby</string>
+			<key>one</key>
+			<string>Dodaj nową osobę</string>
 			<key>other</key>
 			<string>Dodaj nowe osoby</string>
 		</dict>
@@ -127,12 +127,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Wiadomości tekstowe, w tym multimedia z ostatniego dnia</string>
 			<key>few</key>
 			<string>Wiadomości tekstowe, w tym multimedia z ostatnich %1$d dni</string>
 			<key>many</key>
 			<string>Wiadomości tekstowe, w tym multimedia z ostatnich %1$d dni</string>
+			<key>one</key>
+			<string>Wiadomości tekstowe, w tym multimedia z ostatniego dnia</string>
 			<key>other</key>
 			<string>Wiadomości tekstowe, w tym multimedia z ostatnich %1$d dni</string>
 		</dict>
@@ -147,12 +147,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Usunąć %1$ld połączenie?</string>
 			<key>few</key>
 			<string>Usunąć %1$ld połączenia?</string>
 			<key>many</key>
 			<string>Usunąć %1$ld połączeń?</string>
+			<key>one</key>
+			<string>Usunąć %1$ld połączenie?</string>
 			<key>other</key>
 			<string>Usunąć %1$ld połączenia?</string>
 		</dict>
@@ -167,12 +167,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>Do połączenia zostanie dodana %1$ld osoba.</string>
 			<key>few</key>
 			<string>Do połączenia zostaną dodane %1$ld osoby.</string>
 			<key>many</key>
 			<string>Do połączenia zostanie dodanych %1$ld osób.</string>
+			<key>one</key>
+			<string>Do połączenia zostanie dodana %1$ld osoba.</string>
 			<key>other</key>
 			<string>Do połączenia zostanie dodane %1$ld osoby.</string>
 		</dict>
@@ -187,12 +187,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>Zatwierdzić %1$ld prośbę?</string>
 			<key>few</key>
 			<string>Zatwierdzić %1$ld prośby?</string>
 			<key>many</key>
 			<string>Zatwierdzić %1$ld próśb?</string>
+			<key>one</key>
+			<string>Zatwierdzić %1$ld prośbę?</string>
 			<key>other</key>
 			<string>Zatwierdzić %1$ld prośby?</string>
 		</dict>
@@ -207,12 +207,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>%1$ld osoba nie zostanie dodana do połączenia.</string>
 			<key>few</key>
 			<string>%1$ld osoby nie zostaną dodane do połączenia.</string>
 			<key>many</key>
 			<string>%1$ld osób nie zostanie dodanych do połączenia.</string>
+			<key>one</key>
+			<string>%1$ld osoba nie zostanie dodana do połączenia.</string>
 			<key>other</key>
 			<string>%1$ld osoby nie zostanie dodane do połączenia.</string>
 		</dict>
@@ -227,12 +227,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>Odrzucić %1$ld prośbę?</string>
 			<key>few</key>
 			<string>Odrzucić %1$ld prośby?</string>
 			<key>many</key>
 			<string>Odrzucić %1$ld próśb?</string>
+			<key>one</key>
+			<string>Odrzucić %1$ld prośbę?</string>
 			<key>other</key>
 			<string>Odrzucić %1$ld prośby?</string>
 		</dict>
@@ -247,12 +247,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>+ %1$ld prośba</string>
 			<key>few</key>
 			<string>+ %1$ld prośby</string>
 			<key>many</key>
 			<string>+ %1$ld próśb</string>
+			<key>one</key>
+			<string>+ %1$ld prośba</string>
 			<key>other</key>
 			<string>+ %1$ld prośby</string>
 		</dict>
@@ -267,12 +267,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Usunięto %1$ld dziennik połączeń.</string>
 			<key>few</key>
 			<string>Usunięto %1$ld dzienniki połączeń.</string>
 			<key>many</key>
 			<string>Usunięto %1$ld dzienników połączeń.</string>
+			<key>one</key>
+			<string>Usunięto %1$ld dziennik połączeń.</string>
 			<key>other</key>
 			<string>Usunięto %1$ld dziennika połączeń.</string>
 		</dict>
@@ -287,12 +287,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Czeka %1$ld osoba</string>
 			<key>few</key>
 			<string>Czekają %1$ld osoby</string>
 			<key>many</key>
 			<string>Czeka %1$ld osób</string>
+			<key>one</key>
+			<string>Czeka %1$ld osoba</string>
 			<key>other</key>
 			<string>Czeka %1$ld osoby</string>
 		</dict>
@@ -307,12 +307,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>%1$ld osoba</string>
 			<key>few</key>
 			<string>%1$ld osoby</string>
 			<key>many</key>
 			<string>%1$ld osób</string>
+			<key>one</key>
+			<string>%1$ld osoba</string>
 			<key>other</key>
 			<string>%1$ld osoby</string>
 		</dict>
@@ -327,12 +327,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>Czeka %1$ld osoba</string>
 			<key>few</key>
 			<string>Czekają %1$ld osoby</string>
 			<key>many</key>
 			<string>Czeka %1$ld osób</string>
+			<key>one</key>
+			<string>Czeka %1$ld osoba</string>
 			<key>other</key>
 			<string>Czeka %1$ld osoby</string>
 		</dict>
@@ -347,12 +347,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d element</string>
 			<key>few</key>
 			<string>%1$d elementy</string>
 			<key>many</key>
 			<string>%1$d elementów</string>
+			<key>one</key>
+			<string>%1$d element</string>
 			<key>other</key>
 			<string>%1$d elementu</string>
 		</dict>
@@ -367,12 +367,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Ten kolor niestandardowy jest używany w %1$d czacie. Czy chcesz usunąć ten kolor?</string>
 			<key>few</key>
 			<string>Ten kolor niestandardowy jest używany w %1$d czatach. Czy chcesz go usunąć ze wszystkich czatów?</string>
 			<key>many</key>
 			<string>Ten kolor niestandardowy jest używany w %1$d czatach. Czy chcesz go usunąć ze wszystkich czatów?</string>
+			<key>one</key>
+			<string>Ten kolor niestandardowy jest używany w %1$d czacie. Czy chcesz usunąć ten kolor?</string>
 			<key>other</key>
 			<string>Ten kolor niestandardowy jest używany w %1$d czatu. Czy chcesz usunąć ten kolor ze wszystkich czatów?</string>
 		</dict>
@@ -387,12 +387,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Ten kolor jest używany w %1$d czacie. Czy chcesz zapisać zmiany?</string>
 			<key>few</key>
 			<string>Ten kolor jest używany w %1$d czatach. Czy chcesz zapisać zmiany we wszystkich czatach?</string>
 			<key>many</key>
 			<string>Ten kolor jest używany w %1$d czatach. Czy chcesz zapisać zmiany we wszystkich czatach?</string>
+			<key>one</key>
+			<string>Ten kolor jest używany w %1$d czacie. Czy chcesz zapisać zmiany?</string>
 			<key>other</key>
 			<string>Ten kolor jest używany w %1$d czatu. Czy chcesz zapisać zmiany we wszystkich czatach?</string>
 		</dict>
@@ -407,12 +407,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Multimedia z ostatniego dnia</string>
 			<key>few</key>
 			<string>Multimedia z ostatnich %1$d dni</string>
 			<key>many</key>
 			<string>Multimedia z ostatnich %1$d dni</string>
+			<key>one</key>
+			<string>Multimedia z ostatniego dnia</string>
 			<key>other</key>
 			<string>Multimedia z ostatnich %1$d dni</string>
 		</dict>
@@ -427,12 +427,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Jeśli zmienisz tryb, kopia zapasowa będzie obejmować multimedia z ostatniego dnia oraz wszystkie wiadomości tekstowe.</string>
 			<key>few</key>
 			<string>Jeśli zmienisz tryb, kopia zapasowa będzie obejmować multimedia z ostatnich %1$d dni oraz wszystkie wiadomości tekstowe.</string>
 			<key>many</key>
 			<string>Jeśli zmienisz tryb, kopia zapasowa będzie obejmować multimedia z ostatnich %1$d dni oraz wszystkie wiadomości tekstowe.</string>
+			<key>one</key>
+			<string>Jeśli zmienisz tryb, kopia zapasowa będzie obejmować multimedia z ostatniego dnia oraz wszystkie wiadomości tekstowe.</string>
 			<key>other</key>
 			<string>Jeśli zmienisz tryb, kopia zapasowa będzie obejmować multimedia z ostatnich %1$d dni oraz wszystkie wiadomości tekstowe.</string>
 		</dict>
@@ -447,12 +447,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Wszystkie wiadomości tekstowe + multimedia z %1$d dnia</string>
 			<key>few</key>
 			<string>Wszystkie wiadomości tekstowe + multimedia z %1$d dni</string>
 			<key>many</key>
 			<string>Wszystkie wiadomości tekstowe + multimedia z %1$d dni</string>
+			<key>one</key>
+			<string>Wszystkie wiadomości tekstowe + multimedia z %1$d dnia</string>
 			<key>other</key>
 			<string>Wszystkie wiadomości tekstowe + multimedia z %1$d dni</string>
 		</dict>
@@ -467,12 +467,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Usunąć czat?</string>
 			<key>few</key>
 			<string>Usunąć %1$d czaty?</string>
 			<key>many</key>
 			<string>Usunąć %1$d czatów?</string>
+			<key>one</key>
+			<string>Usunąć czat?</string>
 			<key>other</key>
 			<string>Usunąć %1$d czatu?</string>
 		</dict>
@@ -487,12 +487,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Ten czat zostanie usunięty ze wszystkich Twoich urządzeń.</string>
 			<key>few</key>
 			<string>Te czaty zostaną usunięte ze wszystkich Twoich urządzeń.</string>
 			<key>many</key>
 			<string>Te czaty zostaną usunięte ze wszystkich Twoich urządzeń.</string>
+			<key>one</key>
+			<string>Ten czat zostanie usunięty ze wszystkich Twoich urządzeń.</string>
 			<key>other</key>
 			<string>Te czaty zostaną usunięte ze wszystkich Twoich urządzeń.</string>
 		</dict>
@@ -507,12 +507,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Nie możesz wybrać więcej niż %1$d czatu.</string>
 			<key>few</key>
 			<string>Nie możesz wybrać więcej niż %1$d czatów.</string>
 			<key>many</key>
 			<string>Nie możesz wybrać więcej niż %1$d czatów.</string>
+			<key>one</key>
+			<string>Nie możesz wybrać więcej niż %1$d czatu.</string>
 			<key>other</key>
 			<string>Nie możesz wybrać więcej niż %1$d czatu.</string>
 		</dict>
@@ -527,11 +527,11 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d %2$#@total@</string>
 			<key>few</key>
 			<string>%1$d %2$#@total@</string>
 			<key>many</key>
+			<string>%1$d %2$#@total@</string>
+			<key>one</key>
 			<string>%1$d %2$#@total@</string>
 			<key>other</key>
 			<string>%1$d %2$#@total@</string>
@@ -542,12 +542,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>wynik</string>
 			<key>few</key>
 			<string>z %2$d wyników</string>
 			<key>many</key>
 			<string>z %2$d wyników</string>
+			<key>one</key>
+			<string>wynik</string>
 			<key>other</key>
 			<string>z %2$d wyników</string>
 		</dict>
@@ -562,12 +562,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d osoba</string>
 			<key>few</key>
 			<string>%1$d osoby</string>
 			<key>many</key>
 			<string>%1$d osób</string>
+			<key>one</key>
+			<string>%1$d osoba</string>
 			<key>other</key>
 			<string>%1$d osoby</string>
 		</dict>
@@ -582,12 +582,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d wspólna grupa</string>
 			<key>few</key>
 			<string>%1$d wspólne grupy</string>
 			<key>many</key>
 			<string>%1$d wspólnych grup</string>
+			<key>one</key>
+			<string>%1$d wspólna grupa</string>
 			<key>other</key>
 			<string>%1$d wspólnej grupy</string>
 		</dict>
@@ -602,11 +602,11 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d min</string>
 			<key>few</key>
 			<string>%1$d min</string>
 			<key>many</key>
+			<string>%1$d min</string>
+			<key>one</key>
 			<string>%1$d min</string>
 			<key>other</key>
 			<string>%1$d min</string>
@@ -622,12 +622,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d minutę temu</string>
 			<key>few</key>
 			<string>%1$d minuty temu</string>
 			<key>many</key>
 			<string>%1$d minut temu</string>
+			<key>one</key>
+			<string>%1$d minutę temu</string>
 			<key>other</key>
 			<string>%1$d minuty temu</string>
 		</dict>
@@ -642,12 +642,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Usunąć wiadomość?</string>
 			<key>few</key>
 			<string>Usunąć %1$d wiadomości?</string>
 			<key>many</key>
 			<string>Usunąć %1$d wiadomości?</string>
+			<key>one</key>
+			<string>Usunąć wiadomość?</string>
 			<key>other</key>
 			<string>Usunąć %1$d wiadomości?</string>
 		</dict>
@@ -662,12 +662,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Osiągnięto maksymalną liczebność grupy (%1$d osoba).</string>
 			<key>few</key>
 			<string>Osiągnięto maksymalną liczebność grupy (%1$d osoby).</string>
 			<key>many</key>
 			<string>Osiągnięto maksymalną liczebność grupy (%1$d osób).</string>
+			<key>one</key>
+			<string>Osiągnięto maksymalną liczebność grupy (%1$d osoba).</string>
 			<key>other</key>
 			<string>Osiągnięto maksymalną liczebność grupy (%1$d osoby).</string>
 		</dict>
@@ -682,12 +682,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Tę wiadomość można edytować tylko raz.</string>
 			<key>few</key>
 			<string>Tę wiadomość można edytować tylko %1$d razy.</string>
 			<key>many</key>
 			<string>Tę wiadomość można edytować tylko %1$d razy.</string>
+			<key>one</key>
+			<string>Tę wiadomość można edytować tylko raz.</string>
 			<key>other</key>
 			<string>Tę wiadomość można edytować tylko %1$d raza.</string>
 		</dict>
@@ -702,14 +702,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Grupy Signal działają najlepiej, gdy należy do nich nie więcej niż %1$d osoba. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
 			<key>few</key>
-			<string>Grupy Signal działają najlepiej, gdy należą do nich nie więcej niż %1$d osoby. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
+			<string>Grupy B&A działają najlepiej, gdy należą do nich nie więcej niż %1$d osoby. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
 			<key>many</key>
-			<string>Grupy Signal działają najlepiej, gdy należy do nich nie więcej niż %1$d osób. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
+			<string>Grupy B&A działają najlepiej, gdy należy do nich nie więcej niż %1$d osób. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
+			<key>one</key>
+			<string>Grupy B&A działają najlepiej, gdy należy do nich nie więcej niż %1$d osoba. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
 			<key>other</key>
-			<string>Grupy Signal działają najlepiej, gdy należy do nich nie więcej niż %1$d osoby. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
+			<string>Grupy B&A działają najlepiej, gdy należy do nich nie więcej niż %1$d osoby. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -722,11 +722,11 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>W połączeniu uczestniczy już maksymalna liczba osób (%1$d). Spróbuj ponownie później.</string>
 			<key>few</key>
 			<string>W połączeniu uczestniczy już maksymalna liczba osób (%1$d). Spróbuj ponownie później.</string>
 			<key>many</key>
+			<string>W połączeniu uczestniczy już maksymalna liczba osób (%1$d). Spróbuj ponownie później.</string>
+			<key>one</key>
 			<string>W połączeniu uczestniczy już maksymalna liczba osób (%1$d). Spróbuj ponownie później.</string>
 			<key>other</key>
 			<string>W połączeniu uczestniczy już maksymalna liczba osób (%1$d). Spróbuj ponownie później.</string>
@@ -742,12 +742,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Nawiązywanie połączenia, w którym mają uczestniczyć %2$@, %3$@ i jeszcze %1$d osoba…</string>
 			<key>few</key>
 			<string>Nawiązywanie połączenia, w którym mają uczestniczyć %2$@, %3$@ i jeszcze %1$d osoby…</string>
 			<key>many</key>
 			<string>Nawiązywanie połączenia, w którym mają uczestniczyć %2$@, %3$@ i jeszcze %1$d osób…</string>
+			<key>one</key>
+			<string>Nawiązywanie połączenia, w którym mają uczestniczyć %2$@, %3$@ i jeszcze %1$d osoba…</string>
 			<key>other</key>
 			<string>Nawiązywanie połączenia, w którym mają uczestniczyć %2$@, %3$@ i jeszcze %1$d osoby…</string>
 		</dict>
@@ -762,12 +762,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>W rozmowie uczestniczy %1$ld osoba</string>
 			<key>few</key>
 			<string>W rozmowie uczestniczą %1$ld osoby</string>
 			<key>many</key>
 			<string>W rozmowie uczestniczy %1$ld osób</string>
+			<key>one</key>
+			<string>W rozmowie uczestniczy %1$ld osoba</string>
 			<key>other</key>
 			<string>W rozmowie uczestniczy %1$ld osoby</string>
 		</dict>
@@ -782,12 +782,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>W rozmowie uczestniczą %2$@, %3$@ i jeszcze %1$d osoba</string>
 			<key>few</key>
 			<string>W rozmowie uczestniczą %2$@, %3$@ i jeszcze %1$d osoby</string>
 			<key>many</key>
 			<string>W rozmowie uczestniczą %2$@, %3$@ i jeszcze %1$d osób</string>
+			<key>one</key>
+			<string>W rozmowie uczestniczą %2$@, %3$@ i jeszcze %1$d osoba</string>
 			<key>other</key>
 			<string>W rozmowie uczestniczą %2$@, %3$@ i jeszcze %1$d osoby</string>
 		</dict>
@@ -802,12 +802,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>+ %1$ld osoba</string>
 			<key>few</key>
 			<string>+ %1$ld osoby</string>
 			<key>many</key>
 			<string>+ %1$ld osób</string>
+			<key>one</key>
+			<string>+ %1$ld osoba</string>
 			<key>other</key>
 			<string>+ %1$ld osoby</string>
 		</dict>
@@ -822,12 +822,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Do rozmowy dołączają %2$@, %3$@ i jeszcze %1$d osoba</string>
 			<key>few</key>
 			<string>Do rozmowy dołączają %2$@, %3$@ i jeszcze %1$d osoby</string>
 			<key>many</key>
 			<string>Do rozmowy dołączają %2$@, %3$@ i jeszcze %1$d osób</string>
+			<key>one</key>
+			<string>Do rozmowy dołączają %2$@, %3$@ i jeszcze %1$d osoba</string>
 			<key>other</key>
 			<string>Do rozmowy dołączają %2$@, %3$@ i jeszcze %1$d osoby</string>
 		</dict>
@@ -842,12 +842,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@, %3$@ i jeszcze %1$d osoba opuszczają rozmowę</string>
 			<key>few</key>
 			<string>%2$@, %3$@ i jeszcze %1$d osoby opuszczają rozmowę</string>
 			<key>many</key>
 			<string>%2$@, %3$@ i jeszcze %1$d osób opuszczają rozmowę</string>
+			<key>one</key>
+			<string>%2$@, %3$@ i jeszcze %1$d osoba opuszczają rozmowę</string>
 			<key>other</key>
 			<string>%2$@, %3$@ i jeszcze %1$d osoby opuszczają rozmowę</string>
 		</dict>
@@ -862,12 +862,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>W rozmowie uczestniczy %2$@ z jeszcze %1$ld osobą</string>
 			<key>few</key>
 			<string>W rozmowie uczestniczy %2$@ z jeszcze %1$ld osobami</string>
 			<key>many</key>
 			<string>W rozmowie uczestniczy %2$@ z jeszcze %1$ld osobami</string>
+			<key>one</key>
+			<string>W rozmowie uczestniczy %2$@ z jeszcze %1$ld osobą</string>
 			<key>other</key>
 			<string>W rozmowie uczestniczy %2$@ z jeszcze %1$ld osoby</string>
 		</dict>
@@ -882,12 +882,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@, %3$@ i jeszcze %1$d osoba otrzymają powiadomienie</string>
 			<key>few</key>
 			<string>%2$@, %3$@ i jeszcze %1$d osoby otrzymają powiadomienie</string>
 			<key>many</key>
 			<string>%2$@, %3$@ i jeszcze %1$d osób otrzymają powiadomienie</string>
+			<key>one</key>
+			<string>%2$@, %3$@ i jeszcze %1$d osoba otrzymają powiadomienie</string>
 			<key>other</key>
 			<string>%2$@, %3$@ i jeszcze %1$d osoby otrzymają powiadomienie</string>
 		</dict>
@@ -902,14 +902,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Signal zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osoby</string>
 			<key>few</key>
-			<string>Signal zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osób</string>
+			<string>B&A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osób</string>
 			<key>many</key>
-			<string>Signal zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osób</string>
+			<string>B&A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osób</string>
+			<key>one</key>
+			<string>B&A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osoby</string>
 			<key>other</key>
-			<string>Signal zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osoby</string>
+			<string>B&A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osoby</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -922,12 +922,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Wysłano zaproszenie</string>
 			<key>few</key>
 			<string>Wysłano %1$d zaproszenia</string>
 			<key>many</key>
 			<string>Wysłano %1$d zaproszeń</string>
+			<key>one</key>
+			<string>Wysłano zaproszenie</string>
 			<key>other</key>
 			<string>Wysłano %1$d zaproszenia</string>
 		</dict>
@@ -942,12 +942,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d osoba w grupie nazywa się tak samo.</string>
 			<key>few</key>
 			<string>%1$d osoby w grupie nazywają się tak samo.</string>
 			<key>many</key>
 			<string>%1$d osób w grupie nazywa się tak samo.</string>
+			<key>one</key>
+			<string>%1$d osoba w grupie nazywa się tak samo.</string>
 			<key>other</key>
 			<string>%1$d osoby w grupie nazywa się tak samo.</string>
 		</dict>
@@ -962,12 +962,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>W tej grupie jest %1$d konflikt imion i nazwisk.</string>
 			<key>few</key>
 			<string>W tej grupie są %1$d konflikty imion i nazwisk.</string>
 			<key>many</key>
 			<string>W tej grupie jest %1$d konfliktów imion i nazwisk.</string>
+			<key>one</key>
+			<string>W tej grupie jest %1$d konflikt imion i nazwisk.</string>
 			<key>other</key>
 			<string>W tej grupie jest %1$d konfliktu imion i nazwisk.</string>
 		</dict>
@@ -982,12 +982,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d osoba</string>
 			<key>few</key>
 			<string>%1$d osoby</string>
 			<key>many</key>
 			<string>%1$d osób</string>
+			<key>one</key>
+			<string>%1$d osoba</string>
 			<key>other</key>
 			<string>%1$d osoby</string>
 		</dict>
@@ -1002,12 +1002,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>W tej grupie jest %1$d konflikt imion i nazwisk. Sprawdź poniżej, o kim mowa, i zdecyduj, co chcesz zrobić.</string>
 			<key>few</key>
 			<string>W tej grupie są %1$d konflikty imion i nazwisk. Sprawdź poniżej, o kim mowa, i zdecyduj, co chcesz zrobić.</string>
 			<key>many</key>
 			<string>W tej grupie jest %1$d konfliktów imion i nazwisk. Sprawdź poniżej, o kim mowa, i zdecyduj, co chcesz zrobić.</string>
+			<key>one</key>
+			<string>W tej grupie jest %1$d konflikt imion i nazwisk. Sprawdź poniżej, o kim mowa, i zdecyduj, co chcesz zrobić.</string>
 			<key>other</key>
 			<string>W tej grupie jest %1$d konfliktu imion i nazwisk. Sprawdź poniżej, o kim mowa, i zdecyduj, co chcesz zrobić.</string>
 		</dict>
@@ -1022,12 +1022,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d osoba w grupie nazywa się tak samo. Sprawdź poniżej, o kim mowa, i zdecyduj, co chcesz zrobić.</string>
 			<key>few</key>
 			<string>%1$d osoby w grupie nazywają się tak samo. Sprawdź poniżej, o kim mowa, i zdecyduj, co chcesz zrobić.</string>
 			<key>many</key>
 			<string>%1$d osób w grupie nazywa się tak samo. Sprawdź poniżej, o kim mowa, i zdecyduj, co chcesz zrobić.</string>
+			<key>one</key>
+			<string>%1$d osoba w grupie nazywa się tak samo. Sprawdź poniżej, o kim mowa, i zdecyduj, co chcesz zrobić.</string>
 			<key>other</key>
 			<string>%1$d osoby w grupie nazywa się tak samo. Sprawdź poniżej, o kim mowa, i zdecyduj, co chcesz zrobić.</string>
 		</dict>
@@ -1042,12 +1042,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d osoba</string>
 			<key>few</key>
 			<string>%1$d osoby</string>
 			<key>many</key>
 			<string>%1$d osób</string>
+			<key>one</key>
+			<string>%1$d osoba</string>
 			<key>other</key>
 			<string>%1$d osoby</string>
 		</dict>
@@ -1062,12 +1062,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d osoba</string>
 			<key>few</key>
 			<string>%1$d osoby</string>
 			<key>many</key>
 			<string>%1$d osób</string>
+			<key>one</key>
+			<string>%1$d osoba</string>
 			<key>other</key>
 			<string>%1$d osoby</string>
 		</dict>
@@ -1082,12 +1082,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Do grupy zostaje zaproszona %1$d osoba.</string>
 			<key>few</key>
 			<string>Do grupy zostają zaproszone %1$d osoby.</string>
 			<key>many</key>
 			<string>Do grupy zostaje zaproszonych %1$d osób.</string>
+			<key>one</key>
+			<string>Do grupy zostaje zaproszona %1$d osoba.</string>
 			<key>other</key>
 			<string>Do grupy zostaje zaproszone %1$d osoby.</string>
 		</dict>
@@ -1102,12 +1102,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@ zaprasza %1$d osobę do grupy.</string>
 			<key>few</key>
 			<string>%2$@ zaprasza %1$d osoby do grupy.</string>
 			<key>many</key>
 			<string>%2$@ zaprasza %1$d osób do grupy.</string>
+			<key>one</key>
+			<string>%2$@ zaprasza %1$d osobę do grupy.</string>
 			<key>other</key>
 			<string>%2$@ zaprasza %1$d osoby do grupy.</string>
 		</dict>
@@ -1122,12 +1122,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Zaproszenie do grupy dla %1$d osoby zostaje wycofane.</string>
 			<key>few</key>
 			<string>Zaproszenia do grupy dla %1$d osób zostają wycofane.</string>
 			<key>many</key>
 			<string>Zaproszenia do grupy dla %1$d osób zostają wycofane.</string>
+			<key>one</key>
+			<string>Zaproszenie do grupy dla %1$d osoby zostaje wycofane.</string>
 			<key>other</key>
 			<string>Zaproszenia do grupy dla %1$d osoby zostają wycofane.</string>
 		</dict>
@@ -1142,12 +1142,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@ cofa zaproszenie do grupy dla %1$d osoby.</string>
 			<key>few</key>
 			<string>%2$@ cofa zaproszenia do grupy dla %1$d osób.</string>
 			<key>many</key>
 			<string>%2$@ cofa zaproszenia do grupy dla %1$d osób.</string>
+			<key>one</key>
+			<string>%2$@ cofa zaproszenie do grupy dla %1$d osoby.</string>
 			<key>other</key>
 			<string>%2$@ cofa zaproszenia do grupy dla %1$d osoby.</string>
 		</dict>
@@ -1162,12 +1162,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@ wysyła, a potem cofa %1$d prośbę o przyjęcie do grupy przez link.</string>
 			<key>few</key>
 			<string>%2$@ wysyła, a potem cofa %1$d prośby o przyjęcie do grupy przez link.</string>
 			<key>many</key>
 			<string>%2$@ wysyła, a potem cofa %1$d próśb o przyjęcie do grupy przez link.</string>
+			<key>one</key>
+			<string>%2$@ wysyła, a potem cofa %1$d prośbę o przyjęcie do grupy przez link.</string>
 			<key>other</key>
 			<string>%2$@ wysyła, a potem cofa %1$d prośby o przyjęcie do grupy przez link.</string>
 		</dict>
@@ -1182,12 +1182,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Relacja grupowa · %1$d odbiorca</string>
 			<key>few</key>
 			<string>Relacja grupowa · %1$d odbiorców</string>
 			<key>many</key>
 			<string>Relacja grupowa · %1$d odbiorców</string>
+			<key>one</key>
+			<string>Relacja grupowa · %1$d odbiorca</string>
 			<key>other</key>
 			<string>Relacja grupowa · %1$d odbiorcy</string>
 		</dict>
@@ -1202,12 +1202,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Nie udało się dodać do nowej grupy %1$d osoby, więc została ona z tej grupy usunięta.</string>
 			<key>few</key>
 			<string>Nie udało się dodać do nowej grupy %1$d osób, więc zostały one z tej grupy usunięte.</string>
 			<key>many</key>
 			<string>Nie udało się dodać do nowej grupy %1$d osób, więc zostały one z tej grupy usunięte.</string>
+			<key>one</key>
+			<string>Nie udało się dodać do nowej grupy %1$d osoby, więc została ona z tej grupy usunięta.</string>
 			<key>other</key>
 			<string>Nie udało się dodać do nowej grupy %1$d osoby, więc zostały one z tej grupy usunięte.</string>
 		</dict>
@@ -1222,12 +1222,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Nie udało się dodać do nowej grupy %1$d osoby, więc została ona do tej grupy zaproszona.</string>
 			<key>few</key>
 			<string>Nie udało się dodać do nowej grupy %1$d osób, więc zostały one do tej grupy zaproszone.</string>
 			<key>many</key>
 			<string>Nie udało się dodać do nowej grupy %1$d osób, więc zostały one do tej grupy zaproszone.</string>
+			<key>one</key>
+			<string>Nie udało się dodać do nowej grupy %1$d osoby, więc została ona do tej grupy zaproszona.</string>
 			<key>other</key>
 			<string>Nie udało się dodać do nowej grupy %1$d osoby, więc zostały one do tej grupy zaproszone.</string>
 		</dict>
@@ -1242,12 +1242,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Nie można udostępnić więcej niż %1$d element.</string>
 			<key>few</key>
 			<string>Nie można udostępnić więcej niż %1$d elementy.</string>
 			<key>many</key>
 			<string>Nie można udostępnić więcej niż %1$d elementów.</string>
+			<key>one</key>
+			<string>Nie można udostępnić więcej niż %1$d element.</string>
 			<key>other</key>
 			<string>Nie można udostępnić więcej niż %1$d elementu.</string>
 		</dict>
@@ -1262,14 +1262,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim Signal w ciągu %1$d dnia.</string>
 			<key>few</key>
-			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim Signal w ciągu %1$d dni.</string>
+			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&A w ciągu %1$d dni.</string>
 			<key>many</key>
-			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim Signal w ciągu %1$d dni.</string>
+			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&A w ciągu %1$d dni.</string>
+			<key>one</key>
+			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&A w ciągu %1$d dnia.</string>
 			<key>other</key>
-			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim Signal w ciągu %1$d dnia.</string>
+			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&A w ciągu %1$d dnia.</string>
 		</dict>
 	</dict>
 	<key>LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE_%d</key>
@@ -1282,12 +1282,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Przenieś swoje wiadomości tekstowe, w tym multimedia z ostatniego dnia</string>
 			<key>few</key>
 			<string>Przenieś swoje wiadomości tekstowe, w tym multimedia z ostatnich %1$d dni</string>
 			<key>many</key>
 			<string>Przenieś swoje wiadomości tekstowe, w tym multimedia z ostatnich %1$d dni</string>
+			<key>one</key>
+			<string>Przenieś swoje wiadomości tekstowe, w tym multimedia z ostatniego dnia</string>
 			<key>other</key>
 			<string>Przenieś swoje wiadomości tekstowe, w tym multimedia z ostatnich %1$d dni</string>
 		</dict>
@@ -1302,12 +1302,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d wspólna grupa</string>
 			<key>few</key>
 			<string>%1$d wspólne grupy</string>
 			<key>many</key>
 			<string>%1$d wspólnych grup</string>
+			<key>one</key>
+			<string>%1$d wspólna grupa</string>
 			<key>other</key>
 			<string>%1$d wspólnej grupy</string>
 		</dict>
@@ -1322,12 +1322,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Usunąć %1$d element?</string>
 			<key>few</key>
 			<string>Usunąć %1$d elementy?</string>
 			<key>many</key>
 			<string>Usunąć %1$d elementów?</string>
+			<key>one</key>
+			<string>Usunąć %1$d element?</string>
 			<key>other</key>
 			<string>Usunąć %1$d elementu?</string>
 		</dict>
@@ -1342,12 +1342,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Usunięto %1$d element</string>
 			<key>few</key>
 			<string>Usunięto %1$d elementy</string>
 			<key>many</key>
 			<string>Usunięto %1$d elementów</string>
+			<key>one</key>
+			<string>Usunięto %1$d element</string>
 			<key>other</key>
 			<string>Usunięto %1$d elementu</string>
 		</dict>
@@ -1362,12 +1362,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d zdjęcie</string>
 			<key>few</key>
 			<string>%1$d zdjęcia</string>
 			<key>many</key>
 			<string>%1$d zdjęć</string>
+			<key>one</key>
+			<string>%1$d zdjęcie</string>
 			<key>other</key>
 			<string>%1$d zdjęcia</string>
 		</dict>
@@ -1382,12 +1382,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d element</string>
 			<key>few</key>
 			<string>%1$d elementy</string>
 			<key>many</key>
 			<string>%1$d elementów</string>
+			<key>one</key>
+			<string>%1$d element</string>
 			<key>other</key>
 			<string>%1$d elementu</string>
 		</dict>
@@ -1402,11 +1402,11 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Przekaż %1$d</string>
 			<key>few</key>
 			<string>Przekaż %1$d</string>
 			<key>many</key>
+			<string>Przekaż %1$d</string>
+			<key>one</key>
 			<string>Przekaż %1$d</string>
 			<key>other</key>
 			<string>Przekaż %1$d</string>
@@ -1422,11 +1422,11 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Zaznaczono %1$d</string>
 			<key>few</key>
 			<string>Zaznaczono %1$d</string>
 			<key>many</key>
+			<string>Zaznaczono %1$d</string>
+			<key>one</key>
 			<string>Zaznaczono %1$d</string>
 			<key>other</key>
 			<string>Zaznaczono %1$d</string>
@@ -1442,12 +1442,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d reakcja: %2$@</string>
 			<key>few</key>
 			<string>%1$d reakcje: %2$@</string>
 			<key>many</key>
 			<string>%1$d reakcji: %2$@</string>
+			<key>one</key>
+			<string>%1$d reakcja: %2$@</string>
 			<key>other</key>
 			<string>%1$d reakcji: %2$@</string>
 		</dict>
@@ -1462,12 +1462,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d pominięta osoba</string>
 			<key>few</key>
 			<string>%1$d pominięte osoby</string>
 			<key>many</key>
 			<string>%1$d pominiętych osób</string>
+			<key>one</key>
+			<string>%1$d pominięta osoba</string>
 			<key>other</key>
 			<string>%1$d pominiętej osoby</string>
 		</dict>
@@ -1482,12 +1482,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d odbiorca</string>
 			<key>few</key>
 			<string>%1$d odbiorców</string>
 			<key>many</key>
 			<string>%1$d odbiorców</string>
+			<key>one</key>
+			<string>%1$d odbiorca</string>
 			<key>other</key>
 			<string>%1$d odbiorcy</string>
 		</dict>
@@ -1502,12 +1502,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d odbiorca</string>
 			<key>few</key>
 			<string>%1$d odbiorców</string>
 			<key>many</key>
 			<string>%1$d odbiorców</string>
+			<key>one</key>
+			<string>%1$d odbiorca</string>
 			<key>other</key>
 			<string>%1$d odbiorcy</string>
 		</dict>
@@ -1522,14 +1522,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Wszystkie kontakty Signal · %1$d odbiorca</string>
 			<key>few</key>
-			<string>Wszystkie kontakty Signal · %1$d odbiorców</string>
+			<string>Wszystkie kontakty B&A · %1$d odbiorców</string>
 			<key>many</key>
-			<string>Wszystkie kontakty Signal · %1$d odbiorców</string>
+			<string>Wszystkie kontakty B&A · %1$d odbiorców</string>
+			<key>one</key>
+			<string>Wszystkie kontakty B&A · %1$d odbiorca</string>
 			<key>other</key>
-			<string>Wszystkie kontakty Signal · %1$d odbiorcy</string>
+			<string>Wszystkie kontakty B&A · %1$d odbiorcy</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1542,14 +1542,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Wszystkie kontakty Signal · %1$d pominięta osoba</string>
 			<key>few</key>
-			<string>Wszystkie kontakty Signal · %1$d pominięte osoby</string>
+			<string>Wszystkie kontakty B&A · %1$d pominięte osoby</string>
 			<key>many</key>
-			<string>Wszystkie kontakty Signal · %1$d pominiętych osób</string>
+			<string>Wszystkie kontakty B&A · %1$d pominiętych osób</string>
+			<key>one</key>
+			<string>Wszystkie kontakty B&A · %1$d pominięta osoba</string>
 			<key>other</key>
-			<string>Wszystkie kontakty Signal · %1$d pominiętej osoby</string>
+			<string>Wszystkie kontakty B&A · %1$d pominiętej osoby</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1562,12 +1562,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Udostępniaj tylko · %1$d odbiorca</string>
 			<key>few</key>
 			<string>Udostępniaj tylko · %1$d odbiorców</string>
 			<key>many</key>
 			<string>Udostępniaj tylko · %1$d odbiorców</string>
+			<key>one</key>
+			<string>Udostępniaj tylko · %1$d odbiorca</string>
 			<key>other</key>
 			<string>Udostępniaj tylko · %1$d odbiorcy</string>
 		</dict>
@@ -1582,12 +1582,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d osoba</string>
 			<key>few</key>
 			<string>%1$d osoby</string>
 			<key>many</key>
 			<string>%1$d osób</string>
+			<key>one</key>
+			<string>%1$d osoba</string>
 			<key>other</key>
 			<string>%1$d osoby</string>
 		</dict>
@@ -1602,12 +1602,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d odbiorca</string>
 			<key>few</key>
 			<string>%1$d odbiorców</string>
 			<key>many</key>
 			<string>%1$d odbiorców</string>
+			<key>one</key>
+			<string>%1$d odbiorca</string>
 			<key>other</key>
 			<string>%1$d odbiorcy</string>
 		</dict>
@@ -1622,12 +1622,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Jeszcze %1$d reakcja.</string>
 			<key>few</key>
 			<string>Jeszcze %1$d reakcje.</string>
 			<key>many</key>
 			<string>Jeszcze %1$d reakcji.</string>
+			<key>one</key>
+			<string>Jeszcze %1$d reakcja.</string>
 			<key>other</key>
 			<string>Jeszcze %1$d reakcji.</string>
 		</dict>
@@ -1642,12 +1642,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@ zaprasza %1$d osobę</string>
 			<key>few</key>
 			<string>%2$@ zaprasza %1$d osoby</string>
 			<key>many</key>
 			<string>%2$@ zaprasza %1$d osób</string>
+			<key>one</key>
+			<string>%2$@ zaprasza %1$d osobę</string>
 			<key>other</key>
 			<string>%2$@ zaprasza %1$d osoby</string>
 		</dict>
@@ -1662,12 +1662,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d oczekująca prośba o przyjęcie.</string>
 			<key>few</key>
 			<string>%1$d oczekujące prośby o przyjęcie.</string>
 			<key>many</key>
 			<string>%1$d oczekujących próśb o przyjęcie.</string>
+			<key>one</key>
+			<string>%1$d oczekująca prośba o przyjęcie.</string>
 			<key>other</key>
 			<string>%1$d oczekującej prośby o przyjęcie.</string>
 		</dict>
@@ -1682,12 +1682,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Cofnij %1$d nieprawidłowe zaproszenie</string>
 			<key>few</key>
 			<string>Cofnij %1$d nieprawidłowe zaproszenia</string>
 			<key>many</key>
 			<string>Cofnij %1$d nieprawidłowych zaproszeń</string>
+			<key>one</key>
+			<string>Cofnij %1$d nieprawidłowe zaproszenie</string>
 			<key>other</key>
 			<string>Cofnij %1$d nieprawidłowego zaproszenia</string>
 		</dict>
@@ -1702,12 +1702,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Cofnij zaproszenie</string>
 			<key>few</key>
 			<string>Cofnij zaproszenia</string>
 			<key>many</key>
 			<string>Cofnij zaproszenia</string>
+			<key>one</key>
+			<string>Cofnij zaproszenie</string>
 			<key>other</key>
 			<string>Cofnij zaproszenia</string>
 		</dict>
@@ -1722,12 +1722,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Cofnąć %1$d zaproszenie do grupy, którego nadawcą jest %2$@?</string>
 			<key>few</key>
 			<string>Cofnąć %1$d zaproszenia do grupy, których nadawcą jest %2$@?</string>
 			<key>many</key>
 			<string>Cofnąć %1$d zaproszeń do grupy, których nadawcą jest %2$@?</string>
+			<key>one</key>
+			<string>Cofnąć %1$d zaproszenie do grupy, którego nadawcą jest %2$@?</string>
 			<key>other</key>
 			<string>Cofnąć %1$d zaproszenia do grupy, którego nadawcą jest %2$@?</string>
 		</dict>
@@ -1742,12 +1742,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d głos</string>
 			<key>few</key>
 			<string>%1$d głosy</string>
 			<key>many</key>
 			<string>%1$d głosów</string>
+			<key>one</key>
+			<string>%1$d głos</string>
 			<key>other</key>
 			<string>%1$d głosu</string>
 		</dict>
@@ -1762,12 +1762,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Relacja niestandardowa · %1$d odbiorca</string>
 			<key>few</key>
 			<string>Relacja niestandardowa · %1$d odbiorców</string>
 			<key>many</key>
 			<string>Relacja niestandardowa · %1$d odbiorców</string>
+			<key>one</key>
+			<string>Relacja niestandardowa · %1$d odbiorca</string>
 			<key>other</key>
 			<string>Relacja niestandardowa · %1$d odbiorcy</string>
 		</dict>
@@ -1782,12 +1782,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>%2$@ + %1$ld osoba podnoszą rękę</string>
 			<key>few</key>
 			<string>%2$@ + %1$ld osoby podnoszą rękę</string>
 			<key>many</key>
 			<string>%2$@ + %1$ld osób podnoszą rękę</string>
+			<key>one</key>
+			<string>%2$@ + %1$ld osoba podnoszą rękę</string>
 			<key>other</key>
 			<string>%2$@ + %1$ld osoby podnoszą rękę</string>
 		</dict>
@@ -1802,12 +1802,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Została Ci %1$d próba</string>
 			<key>few</key>
 			<string>Zostały Ci %1$d próby</string>
 			<key>many</key>
 			<string>Zostało Ci %1$d prób</string>
+			<key>one</key>
+			<string>Została Ci %1$d próba</string>
 			<key>other</key>
 			<string>Zostało Ci %1$d próby</string>
 		</dict>
@@ -1822,12 +1822,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>&lt;bold&gt;%1$d&lt;/bold&gt; odpowiedź</string>
 			<key>few</key>
 			<string>&lt;bold&gt;%1$d&lt;/bold&gt; odpowiedzi</string>
 			<key>many</key>
 			<string>&lt;bold&gt;%1$d&lt;/bold&gt; odpowiedzi</string>
+			<key>one</key>
+			<string>&lt;bold&gt;%1$d&lt;/bold&gt; odpowiedź</string>
 			<key>other</key>
 			<string>&lt;bold&gt;%1$d&lt;/bold&gt; odpowiedzi</string>
 		</dict>
@@ -1842,12 +1842,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d odbiorca</string>
 			<key>few</key>
 			<string>%1$d odbiorców</string>
 			<key>many</key>
 			<string>%1$d odbiorców</string>
+			<key>one</key>
+			<string>%1$d odbiorca</string>
 			<key>other</key>
 			<string>%1$d odbiorcy</string>
 		</dict>
@@ -1862,12 +1862,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d pominięta osoba</string>
 			<key>few</key>
 			<string>%1$d pominięte osoby</string>
 			<key>many</key>
 			<string>%1$d pominiętych osób</string>
+			<key>one</key>
+			<string>%1$d pominięta osoba</string>
 			<key>other</key>
 			<string>%1$d pominiętej osoby</string>
 		</dict>
@@ -1882,12 +1882,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Udostępnianie…</string>
 			<key>few</key>
 			<string>Udostępnianie %1$d…</string>
 			<key>many</key>
 			<string>Udostępnianie %1$d…</string>
+			<key>one</key>
+			<string>Udostępnianie…</string>
 			<key>other</key>
 			<string>Udostępnianie %1$d…</string>
 		</dict>
@@ -1902,12 +1902,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d wyświetlenie</string>
 			<key>few</key>
 			<string>%1$d wyświetlenia</string>
 			<key>many</key>
 			<string>%1$d wyświetleń</string>
+			<key>one</key>
+			<string>%1$d wyświetlenie</string>
 			<key>other</key>
 			<string>%1$d wyświetlenia</string>
 		</dict>
@@ -1922,12 +1922,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>&lt;bold&gt;%1$d&lt;/bold&gt; wyświetlenie</string>
 			<key>few</key>
 			<string>&lt;bold&gt;%1$d&lt;/bold&gt; wyświetlenia</string>
 			<key>many</key>
 			<string>&lt;bold&gt;%1$d&lt;/bold&gt; wyświetleń</string>
+			<key>one</key>
+			<string>&lt;bold&gt;%1$d&lt;/bold&gt; wyświetlenie</string>
 			<key>other</key>
 			<string>&lt;bold&gt;%1$d&lt;/bold&gt; wyświetlenia</string>
 		</dict>
@@ -1942,12 +1942,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>Należy do grup %1$@, %2$@ i jeszcze %3$ld innej</string>
 			<key>few</key>
 			<string>Należy do grup %1$@, %2$@ i jeszcze %3$ld innych</string>
 			<key>many</key>
 			<string>Należy do grup %1$@, %2$@ i jeszcze %3$ld innych</string>
+			<key>one</key>
+			<string>Należy do grup %1$@, %2$@ i jeszcze %3$ld innej</string>
 			<key>other</key>
 			<string>Należy do grup %1$@, %2$@ i jeszcze %3$ld innej</string>
 		</dict>
@@ -1962,12 +1962,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>jeszcze %1$ld osoba</string>
 			<key>few</key>
 			<string>jeszcze %1$ld osoby</string>
 			<key>many</key>
 			<string>jeszcze %1$ld osób</string>
+			<key>one</key>
+			<string>jeszcze %1$ld osoba</string>
 			<key>other</key>
 			<string>jeszcze %1$ld osoby</string>
 		</dict>
@@ -1982,12 +1982,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Podczas łączenia urządzenia z Twoim telefonem wiadomość głosowa nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dzień, nie są synchronizowane.</string>
 			<key>few</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem wiadomość głosowa nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
 			<key>many</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem wiadomość głosowa nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
+			<key>one</key>
+			<string>Podczas łączenia urządzenia z Twoim telefonem wiadomość głosowa nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dzień, nie są synchronizowane.</string>
 			<key>other</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem wiadomość głosowa nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
 		</dict>
@@ -2002,12 +2002,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Podczas łączenia urządzenia z Twoim telefonem plik nie został przeniesiony. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dzień, nie są synchronizowane.</string>
 			<key>few</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem plik nie został przeniesiony. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
 			<key>many</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem plik nie został przeniesiony. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
+			<key>one</key>
+			<string>Podczas łączenia urządzenia z Twoim telefonem plik nie został przeniesiony. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dzień, nie są synchronizowane.</string>
 			<key>other</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem plik nie został przeniesiony. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
 		</dict>
@@ -2022,12 +2022,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Podczas łączenia urządzenia z Twoim telefonem pełna treść wiadomości tekstowej nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dzień, nie są synchronizowane.</string>
 			<key>few</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem pełna treść wiadomości tekstowej nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
 			<key>many</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem pełna treść wiadomości tekstowej nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
+			<key>one</key>
+			<string>Podczas łączenia urządzenia z Twoim telefonem pełna treść wiadomości tekstowej nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dzień, nie są synchronizowane.</string>
 			<key>other</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem pełna treść wiadomości tekstowej nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
 		</dict>
@@ -2042,12 +2042,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Podczas łączenia urządzenia z Twoim telefonem naklejka nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dzień, nie są synchronizowane.</string>
 			<key>few</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem naklejka nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
 			<key>many</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem naklejka nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
+			<key>one</key>
+			<string>Podczas łączenia urządzenia z Twoim telefonem naklejka nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dzień, nie są synchronizowane.</string>
 			<key>other</key>
 			<string>Podczas łączenia urządzenia z Twoim telefonem naklejka nie została przeniesiona. Pliki i multimedia, które w momencie łączenia urządzeń mają ponad %1$d dni, nie są synchronizowane.</string>
 		</dict>
@@ -2062,12 +2062,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Pierwsza część nazwy użytkownika musi mieć co najmniej %1$d znak</string>
 			<key>few</key>
 			<string>Pierwsza część nazwy użytkownika musi mieć co najmniej %1$d znaki</string>
 			<key>many</key>
 			<string>Pierwsza część nazwy użytkownika musi mieć co najmniej %1$d znaków</string>
+			<key>one</key>
+			<string>Pierwsza część nazwy użytkownika musi mieć co najmniej %1$d znak</string>
 			<key>other</key>
 			<string>Pierwsza część nazwy użytkownika musi mieć co najmniej %1$d znaku</string>
 		</dict>

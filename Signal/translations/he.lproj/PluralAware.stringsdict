@@ -12,13 +12,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>דקה %1$d</string>
-			<key>two</key>
-			<string>%1$d דקות</string>
 			<key>many</key>
 			<string>%1$d דקות</string>
+			<key>one</key>
+			<string>דקה %1$d</string>
 			<key>other</key>
+			<string>%1$d דקות</string>
+			<key>two</key>
 			<string>%1$d דקות</string>
 		</dict>
 		<key>seconds</key>
@@ -27,13 +27,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>שנייה %2$d</string>
-			<key>two</key>
-			<string>%2$d שניות</string>
 			<key>many</key>
 			<string>%2$d שניות</string>
+			<key>one</key>
+			<string>שנייה %2$d</string>
 			<key>other</key>
+			<string>%2$d שניות</string>
+			<key>two</key>
 			<string>%2$d שניות</string>
 		</dict>
 	</dict>
@@ -47,13 +47,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>הודעה קולית שנייה %1$d</string>
-			<key>two</key>
-			<string>הודעה קולית %1$d שניות</string>
 			<key>many</key>
 			<string>הודעה קולית %1$d שניות</string>
+			<key>one</key>
+			<string>הודעה קולית שנייה %1$d</string>
 			<key>other</key>
+			<string>הודעה קולית %1$d שניות</string>
+			<key>two</key>
 			<string>הודעה קולית %1$d שניות</string>
 		</dict>
 	</dict>
@@ -67,13 +67,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>הוסף חבר קבוצה</string>
-			<key>two</key>
-			<string>הוסף חברי קבוצה</string>
 			<key>many</key>
 			<string>הוסף חברי קבוצה</string>
+			<key>one</key>
+			<string>הוסף חבר קבוצה</string>
 			<key>other</key>
+			<string>הוסף חברי קבוצה</string>
+			<key>two</key>
 			<string>הוסף חברי קבוצה</string>
 		</dict>
 	</dict>
@@ -87,13 +87,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>להוסיף חבר/ה ל“%2$@”?</string>
-			<key>two</key>
-			<string>להוסיף %1$d חברים ל“%2$@”?</string>
 			<key>many</key>
 			<string>להוסיף %1$d חברים ל“%2$@”?</string>
+			<key>one</key>
+			<string>להוסיף חבר/ה ל“%2$@”?</string>
 			<key>other</key>
+			<string>להוסיף %1$d חברים ל“%2$@”?</string>
+			<key>two</key>
 			<string>להוסיף %1$d חברים ל“%2$@”?</string>
 		</dict>
 	</dict>
@@ -107,13 +107,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>הוסף חבר קבוצה חדש</string>
-			<key>two</key>
-			<string>הוסף חברי קבוצה חדשים</string>
 			<key>many</key>
 			<string>הוסף חברי קבוצה חדשים</string>
+			<key>one</key>
+			<string>הוסף חבר קבוצה חדש</string>
 			<key>other</key>
+			<string>הוסף חברי קבוצה חדשים</string>
+			<key>two</key>
 			<string>הוסף חברי קבוצה חדשים</string>
 		</dict>
 	</dict>
@@ -127,14 +127,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>גיבוי טקסט + יום %1$d של מדיה</string>
-			<key>two</key>
-			<string>גיבוי טקסט + יומיים של מדיה</string>
 			<key>many</key>
 			<string>גיבוי טקסט + %1$d ימים של מדיה</string>
+			<key>one</key>
+			<string>גיבוי טקסט + יום %1$d של מדיה</string>
 			<key>other</key>
 			<string>גיבוי טקסט + %1$d ימים של מדיה</string>
+			<key>two</key>
+			<string>גיבוי טקסט + יומיים של מדיה</string>
 		</dict>
 	</dict>
 	<key>CALLS_TAB_DELETE_MULTIPLE_TITLE</key>
@@ -147,13 +147,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>למחוק שיחה %1$ld?</string>
-			<key>two</key>
-			<string>למחוק %1$ld שיחות?</string>
 			<key>many</key>
 			<string>למחוק %1$ld שיחות?</string>
+			<key>one</key>
+			<string>למחוק שיחה %1$ld?</string>
 			<key>other</key>
+			<string>למחוק %1$ld שיחות?</string>
+			<key>two</key>
 			<string>למחוק %1$ld שיחות?</string>
 		</dict>
 	</dict>
@@ -167,13 +167,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>%1$ld אחד יתווסף לשיחה.</string>
-			<key>two</key>
-			<string>%1$ld אנשים יתווספו לשיחה.</string>
 			<key>many</key>
 			<string>%1$ld אנשים יתווספו לשיחה.</string>
+			<key>one</key>
+			<string>%1$ld אחד יתווסף לשיחה.</string>
 			<key>other</key>
+			<string>%1$ld אנשים יתווספו לשיחה.</string>
+			<key>two</key>
 			<string>%1$ld אנשים יתווספו לשיחה.</string>
 		</dict>
 	</dict>
@@ -187,13 +187,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>לאשר בקשה %1$ld?</string>
-			<key>two</key>
-			<string>לאשר %1$ld בקשות?</string>
 			<key>many</key>
 			<string>לאשר %1$ld בקשות?</string>
+			<key>one</key>
+			<string>לאשר בקשה %1$ld?</string>
 			<key>other</key>
+			<string>לאשר %1$ld בקשות?</string>
+			<key>two</key>
 			<string>לאשר %1$ld בקשות?</string>
 		</dict>
 	</dict>
@@ -207,13 +207,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>%1$ld אחד לא יתווסף לשיחה.</string>
-			<key>two</key>
-			<string>%1$ld אנשים לא יתווספו לשיחה.</string>
 			<key>many</key>
 			<string>%1$ld אנשים לא יתווספו לשיחה.</string>
+			<key>one</key>
+			<string>%1$ld אחד לא יתווסף לשיחה.</string>
 			<key>other</key>
+			<string>%1$ld אנשים לא יתווספו לשיחה.</string>
+			<key>two</key>
 			<string>%1$ld אנשים לא יתווספו לשיחה.</string>
 		</dict>
 	</dict>
@@ -227,13 +227,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>לדחות בקשה %1$ld?</string>
-			<key>two</key>
-			<string>לדחות %1$ld בקשות?</string>
 			<key>many</key>
 			<string>לדחות %1$ld בקשות?</string>
+			<key>one</key>
+			<string>לדחות בקשה %1$ld?</string>
 			<key>other</key>
+			<string>לדחות %1$ld בקשות?</string>
+			<key>two</key>
 			<string>לדחות %1$ld בקשות?</string>
 		</dict>
 	</dict>
@@ -247,13 +247,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>+בקשה %1$ld</string>
-			<key>two</key>
-			<string>+%1$ld בקשות</string>
 			<key>many</key>
 			<string>+%1$ld בקשות</string>
+			<key>one</key>
+			<string>+בקשה %1$ld</string>
 			<key>other</key>
+			<string>+%1$ld בקשות</string>
+			<key>two</key>
 			<string>+%1$ld בקשות</string>
 		</dict>
 	</dict>
@@ -267,13 +267,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>יומן שיחה %1$ld נמחק.</string>
-			<key>two</key>
-			<string>%1$ld יומני שיחות נמחקו.</string>
 			<key>many</key>
 			<string>%1$ld יומני שיחות נמחקו.</string>
+			<key>one</key>
+			<string>יומן שיחה %1$ld נמחק.</string>
 			<key>other</key>
+			<string>%1$ld יומני שיחות נמחקו.</string>
+			<key>two</key>
 			<string>%1$ld יומני שיחות נמחקו.</string>
 		</dict>
 	</dict>
@@ -287,13 +287,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>אדם %1$ld ממתין</string>
-			<key>two</key>
-			<string>%1$ld אנשים ממתינים</string>
 			<key>many</key>
 			<string>%1$ld אנשים ממתינים</string>
+			<key>one</key>
+			<string>אדם %1$ld ממתין</string>
 			<key>other</key>
+			<string>%1$ld אנשים ממתינים</string>
+			<key>two</key>
 			<string>%1$ld אנשים ממתינים</string>
 		</dict>
 	</dict>
@@ -307,13 +307,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>איש %1$ld</string>
-			<key>two</key>
-			<string>%1$ld אנשים</string>
 			<key>many</key>
 			<string>%1$ld אנשים</string>
+			<key>one</key>
+			<string>איש %1$ld</string>
 			<key>other</key>
+			<string>%1$ld אנשים</string>
+			<key>two</key>
 			<string>%1$ld אנשים</string>
 		</dict>
 	</dict>
@@ -327,13 +327,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>אדם %1$ld ממתין</string>
-			<key>two</key>
-			<string>%1$ld אנשים ממתינים</string>
 			<key>many</key>
 			<string>%1$ld אנשים ממתינים</string>
+			<key>one</key>
+			<string>אדם %1$ld ממתין</string>
 			<key>other</key>
+			<string>%1$ld אנשים ממתינים</string>
+			<key>two</key>
 			<string>%1$ld אנשים ממתינים</string>
 		</dict>
 	</dict>
@@ -347,13 +347,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>פריט %1$d</string>
-			<key>two</key>
-			<string>%1$d פריטים</string>
 			<key>many</key>
 			<string>%1$d פריטים</string>
+			<key>one</key>
+			<string>פריט %1$d</string>
 			<key>other</key>
+			<string>%1$d פריטים</string>
+			<key>two</key>
 			<string>%1$d פריטים</string>
 		</dict>
 	</dict>
@@ -367,13 +367,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>צבע מותאם אישית זה נמצא בשימוש בצ׳אט %1$d. למחוק אותו?</string>
-			<key>two</key>
-			<string>צבע מותאם אישית זה נמצא בשימוש ב–%1$d צ׳אטים. למחוק אותו עבור כל הצ׳אטים?</string>
 			<key>many</key>
 			<string>צבע מותאם אישית זה נמצא בשימוש ב–%1$d צ׳אטים. למחוק אותו עבור כל הצ׳אטים?</string>
+			<key>one</key>
+			<string>צבע מותאם אישית זה נמצא בשימוש בצ׳אט %1$d. למחוק אותו?</string>
 			<key>other</key>
+			<string>צבע מותאם אישית זה נמצא בשימוש ב–%1$d צ׳אטים. למחוק אותו עבור כל הצ׳אטים?</string>
+			<key>two</key>
 			<string>צבע מותאם אישית זה נמצא בשימוש ב–%1$d צ׳אטים. למחוק אותו עבור כל הצ׳אטים?</string>
 		</dict>
 	</dict>
@@ -387,13 +387,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>צבע זה נמצא בשימוש בצ׳אט %1$d. לשמור את השינויים עבור כל הצ׳אטים?</string>
-			<key>two</key>
-			<string>צבע זה נמצא בשימוש ב–%1$d צ׳אטים. לשמור את השינויים עבור כל הצ׳אטים?</string>
 			<key>many</key>
 			<string>צבע זה נמצא בשימוש ב–%1$d צ׳אטים. לשמור את השינויים עבור כל הצ׳אטים?</string>
+			<key>one</key>
+			<string>צבע זה נמצא בשימוש בצ׳אט %1$d. לשמור את השינויים עבור כל הצ׳אטים?</string>
 			<key>other</key>
+			<string>צבע זה נמצא בשימוש ב–%1$d צ׳אטים. לשמור את השינויים עבור כל הצ׳אטים?</string>
+			<key>two</key>
 			<string>צבע זה נמצא בשימוש ב–%1$d צ׳אטים. לשמור את השינויים עבור כל הצ׳אטים?</string>
 		</dict>
 	</dict>
@@ -407,14 +407,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>יום אחרון %1$d של מדיה</string>
-			<key>two</key>
-			<string>יומיים אחרונים של מדיה</string>
 			<key>many</key>
 			<string>%1$d ימים אחרונים של מדיה</string>
+			<key>one</key>
+			<string>יום אחרון %1$d של מדיה</string>
 			<key>other</key>
 			<string>%1$d ימים אחרונים של מדיה</string>
+			<key>two</key>
+			<string>יומיים אחרונים של מדיה</string>
 		</dict>
 	</dict>
 	<key>CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_MESSAGE_%d</key>
@@ -427,14 +427,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>כל הודעות הטקסט שלך והמדיה מהיום האחרון ייכללו בגיבוי שלך בעת החלפת התכנית.</string>
-			<key>two</key>
-			<string>כל הודעות הטקסט שלך והמדיה מהיומיים האחרון ייכללו בגיבוי שלך בעת החלפת התכנית.</string>
 			<key>many</key>
 			<string>כל הודעות הטקסט שלך והמדיה מ–%1$d הימים האחרונים ייכללו בגיבוי שלך בעת החלפת התכנית.</string>
+			<key>one</key>
+			<string>כל הודעות הטקסט שלך והמדיה מהיום האחרון ייכללו בגיבוי שלך בעת החלפת התכנית.</string>
 			<key>other</key>
 			<string>כל הודעות הטקסט שלך והמדיה מ–%1$d הימים האחרונים ייכללו בגיבוי שלך בעת החלפת התכנית.</string>
+			<key>two</key>
+			<string>כל הודעות הטקסט שלך והמדיה מהיומיים האחרון ייכללו בגיבוי שלך בעת החלפת התכנית.</string>
 		</dict>
 	</dict>
 	<key>CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE_%d</key>
@@ -447,14 +447,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>טקסט + יום %1$d של מדיה</string>
-			<key>two</key>
-			<string>טקסט + יומיים של מדיה</string>
 			<key>many</key>
 			<string>טקסט + %1$d ימים של מדיה</string>
+			<key>one</key>
+			<string>טקסט + יום %1$d של מדיה</string>
 			<key>other</key>
 			<string>טקסט + %1$d ימים של מדיה</string>
+			<key>two</key>
+			<string>טקסט + יומיים של מדיה</string>
 		</dict>
 	</dict>
 	<key>CONVERSATION_DELETE_CONFIRMATIONS_ALERT_TITLE_%d</key>
@@ -467,13 +467,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>למחוק צ&apos;אט?</string>
-			<key>two</key>
-			<string>למחוק %1$d צ׳אטים?</string>
 			<key>many</key>
 			<string>למחוק %1$d צ׳אטים?</string>
+			<key>one</key>
+			<string>למחוק צ'אט?</string>
 			<key>other</key>
+			<string>למחוק %1$d צ׳אטים?</string>
+			<key>two</key>
 			<string>למחוק %1$d צ׳אטים?</string>
 		</dict>
 	</dict>
@@ -487,13 +487,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>צ&apos;אט זה יימחק מכל המכשירים שלך.</string>
-			<key>two</key>
-			<string>צ׳אטים אלה יימחקו מכל המכשירים שלך.</string>
 			<key>many</key>
 			<string>צ׳אטים אלה יימחקו מכל המכשירים שלך.</string>
+			<key>one</key>
+			<string>צ'אט זה יימחק מכל המכשירים שלך.</string>
 			<key>other</key>
+			<string>צ׳אטים אלה יימחקו מכל המכשירים שלך.</string>
+			<key>two</key>
 			<string>צ׳אטים אלה יימחקו מכל המכשירים שלך.</string>
 		</dict>
 	</dict>
@@ -507,13 +507,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>אי אפשר לבחור יותר מצ׳אט %1$d.</string>
-			<key>two</key>
-			<string>אי אפשר לבחור יותר מ–%1$d צ׳אטים.</string>
 			<key>many</key>
 			<string>אי אפשר לבחור יותר מ–%1$d צ׳אטים.</string>
+			<key>one</key>
+			<string>אי אפשר לבחור יותר מצ׳אט %1$d.</string>
 			<key>other</key>
+			<string>אי אפשר לבחור יותר מ–%1$d צ׳אטים.</string>
+			<key>two</key>
 			<string>אי אפשר לבחור יותר מ–%1$d צ׳אטים.</string>
 		</dict>
 	</dict>
@@ -527,13 +527,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d %2$#@total@</string>
-			<key>two</key>
-			<string>%1$d %2$#@total@</string>
 			<key>many</key>
 			<string>%1$d %2$#@total@</string>
+			<key>one</key>
+			<string>%1$d %2$#@total@</string>
 			<key>other</key>
+			<string>%1$d %2$#@total@</string>
+			<key>two</key>
 			<string>%1$d %2$#@total@</string>
 		</dict>
 		<key>total</key>
@@ -542,13 +542,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>התאמה</string>
-			<key>two</key>
-			<string>מתוך %2$d התאמות</string>
 			<key>many</key>
 			<string>מתוך %2$d התאמות</string>
+			<key>one</key>
+			<string>התאמה</string>
 			<key>other</key>
+			<string>מתוך %2$d התאמות</string>
+			<key>two</key>
 			<string>מתוך %2$d התאמות</string>
 		</dict>
 	</dict>
@@ -562,13 +562,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>חבר/ה %1$d</string>
-			<key>two</key>
-			<string>%1$d חברים</string>
 			<key>many</key>
 			<string>%1$d חברים</string>
+			<key>one</key>
+			<string>חבר/ה %1$d</string>
 			<key>other</key>
+			<string>%1$d חברים</string>
+			<key>two</key>
 			<string>%1$d חברים</string>
 		</dict>
 	</dict>
@@ -582,13 +582,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>קבוצה %1$d במשותף</string>
-			<key>two</key>
-			<string>%1$d קבוצות במשותף</string>
 			<key>many</key>
 			<string>%1$d קבוצות במשותף</string>
+			<key>one</key>
+			<string>קבוצה %1$d במשותף</string>
 			<key>other</key>
+			<string>%1$d קבוצות במשותף</string>
+			<key>two</key>
 			<string>%1$d קבוצות במשותף</string>
 		</dict>
 	</dict>
@@ -602,13 +602,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d דקות</string>
-			<key>two</key>
-			<string>%1$d דקות</string>
 			<key>many</key>
 			<string>%1$d דקות</string>
+			<key>one</key>
+			<string>%1$d דקות</string>
 			<key>other</key>
+			<string>%1$d דקות</string>
+			<key>two</key>
 			<string>%1$d דקות</string>
 		</dict>
 	</dict>
@@ -622,13 +622,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>לפני דקה %1$d</string>
-			<key>two</key>
-			<string>לפני %1$d דקות</string>
 			<key>many</key>
 			<string>לפני %1$d דקות</string>
+			<key>one</key>
+			<string>לפני דקה %1$d</string>
 			<key>other</key>
+			<string>לפני %1$d דקות</string>
+			<key>two</key>
 			<string>לפני %1$d דקות</string>
 		</dict>
 	</dict>
@@ -642,13 +642,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>למחוק הודעה?</string>
-			<key>two</key>
-			<string>למחוק %1$d הודעות?</string>
 			<key>many</key>
 			<string>למחוק %1$d הודעות?</string>
+			<key>one</key>
+			<string>למחוק הודעה?</string>
 			<key>other</key>
+			<string>למחוק %1$d הודעות?</string>
+			<key>two</key>
 			<string>למחוק %1$d הודעות?</string>
 		</dict>
 	</dict>
@@ -662,13 +662,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>גודל קבוצה מרבי של חבר/ת קבוצה %1$d הושג.</string>
-			<key>two</key>
-			<string>גודל קבוצה מרבי של %1$d חברי קבוצה הושג.</string>
 			<key>many</key>
 			<string>גודל קבוצה מרבי של %1$d חברי קבוצה הושג.</string>
+			<key>one</key>
+			<string>גודל קבוצה מרבי של חבר/ת קבוצה %1$d הושג.</string>
 			<key>other</key>
+			<string>גודל קבוצה מרבי של %1$d חברי קבוצה הושג.</string>
+			<key>two</key>
 			<string>גודל קבוצה מרבי של %1$d חברי קבוצה הושג.</string>
 		</dict>
 	</dict>
@@ -682,13 +682,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>אפשר לבצע רק עריכה %1$d בהודעה זו.</string>
-			<key>two</key>
-			<string>אפשר לבצע רק %1$d עריכות בהודעה זו.</string>
 			<key>many</key>
 			<string>אפשר לבצע רק %1$d עריכות בהודעה זו.</string>
+			<key>one</key>
+			<string>אפשר לבצע רק עריכה %1$d בהודעה זו.</string>
 			<key>other</key>
+			<string>אפשר לבצע רק %1$d עריכות בהודעה זו.</string>
+			<key>two</key>
 			<string>אפשר לבצע רק %1$d עריכות בהודעה זו.</string>
 		</dict>
 	</dict>
@@ -702,14 +702,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>קבוצות Signal מתפקדות בצורה הטובה ביותר עם חבר/ה %1$d. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
-			<key>two</key>
-			<string>קבוצות Signal מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
 			<key>many</key>
-			<string>קבוצות Signal מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
+			<string>קבוצות B&A מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
+			<key>one</key>
+			<string>קבוצות B&A מתפקדות בצורה הטובה ביותר עם חבר/ה %1$d. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
 			<key>other</key>
-			<string>קבוצות Signal מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
+			<string>קבוצות B&A מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
+			<key>two</key>
+			<string>קבוצות B&A מתפקדות בצורה הטובה ביותר עם %1$d חברים או פחות. הוספת חברים נוספים תגרום לעיכובים בשליחה ובקבלה של הודעות.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -722,13 +722,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>הגעת למספר המרבי של משתתף %1$d עבור שיחה זו. כדאי לנסות שוב מאוחר יותר.</string>
-			<key>two</key>
-			<string>הגעת למספר המרבי של %1$d משתתפים עבור שיחה זו. כדאי לנסות שוב מאוחר יותר.</string>
 			<key>many</key>
 			<string>הגעת למספר המרבי של %1$d משתתפים עבור שיחה זו. כדאי לנסות שוב מאוחר יותר.</string>
+			<key>one</key>
+			<string>הגעת למספר המרבי של משתתף %1$d עבור שיחה זו. כדאי לנסות שוב מאוחר יותר.</string>
 			<key>other</key>
+			<string>הגעת למספר המרבי של %1$d משתתפים עבור שיחה זו. כדאי לנסות שוב מאוחר יותר.</string>
+			<key>two</key>
 			<string>הגעת למספר המרבי של %1$d משתתפים עבור שיחה זו. כדאי לנסות שוב מאוחר יותר.</string>
 		</dict>
 	</dict>
@@ -742,13 +742,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>מתקשרים ל%2$@, %3$@, ועוד %1$d…</string>
-			<key>two</key>
-			<string>מתקשרים ל%2$@, %3$@, ועוד %1$d…</string>
 			<key>many</key>
 			<string>מתקשרים ל%2$@, %3$@, ועוד %1$d…</string>
+			<key>one</key>
+			<string>מתקשרים ל%2$@, %3$@, ועוד %1$d…</string>
 			<key>other</key>
+			<string>מתקשרים ל%2$@, %3$@, ועוד %1$d…</string>
+			<key>two</key>
 			<string>מתקשרים ל%2$@, %3$@, ועוד %1$d…</string>
 		</dict>
 	</dict>
@@ -762,13 +762,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>אדם %1$ld נמצא בשיחה זו</string>
-			<key>two</key>
-			<string>%1$ld אנשים נמצאים בשיחה זו</string>
 			<key>many</key>
 			<string>%1$ld אנשים נמצאים בשיחה זו</string>
+			<key>one</key>
+			<string>אדם %1$ld נמצא בשיחה זו</string>
 			<key>other</key>
+			<string>%1$ld אנשים נמצאים בשיחה זו</string>
+			<key>two</key>
 			<string>%1$ld אנשים נמצאים בשיחה זו</string>
 		</dict>
 	</dict>
@@ -782,13 +782,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@, %3$@, ועוד %1$d נמצאים בשיחה זו</string>
-			<key>two</key>
-			<string>%2$@, %3$@, ועוד %1$d נמצאים בשיחה זו</string>
 			<key>many</key>
 			<string>%2$@, %3$@, ועוד %1$d נמצאים בשיחה זו</string>
+			<key>one</key>
+			<string>%2$@, %3$@, ועוד %1$d נמצאים בשיחה זו</string>
 			<key>other</key>
+			<string>%2$@, %3$@, ועוד %1$d נמצאים בשיחה זו</string>
+			<key>two</key>
 			<string>%2$@, %3$@, ועוד %1$d נמצאים בשיחה זו</string>
 		</dict>
 	</dict>
@@ -802,13 +802,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>+עוד %1$ld</string>
-			<key>two</key>
-			<string>+עוד %1$ld</string>
 			<key>many</key>
 			<string>+עוד %1$ld</string>
+			<key>one</key>
+			<string>+עוד %1$ld</string>
 			<key>other</key>
+			<string>+עוד %1$ld</string>
+			<key>two</key>
 			<string>+עוד %1$ld</string>
 		</dict>
 	</dict>
@@ -822,13 +822,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@, %3$@, ועוד %1$d הצטרפו לשיחה</string>
-			<key>two</key>
-			<string>%2$@, %3$@, ועוד %1$d הצטרפו לשיחה</string>
 			<key>many</key>
 			<string>%2$@, %3$@, ועוד %1$d הצטרפו לשיחה</string>
+			<key>one</key>
+			<string>%2$@, %3$@, ועוד %1$d הצטרפו לשיחה</string>
 			<key>other</key>
+			<string>%2$@, %3$@, ועוד %1$d הצטרפו לשיחה</string>
+			<key>two</key>
 			<string>%2$@, %3$@, ועוד %1$d הצטרפו לשיחה</string>
 		</dict>
 	</dict>
@@ -842,13 +842,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@, %3$@, ועוד %1$d עזבו את השיחה</string>
-			<key>two</key>
-			<string>%2$@, %3$@, ועוד %1$d עזבו את השיחה</string>
 			<key>many</key>
 			<string>%2$@, %3$@, ועוד %1$d עזבו את השיחה</string>
+			<key>one</key>
+			<string>%2$@, %3$@, ועוד %1$d עזבו את השיחה</string>
 			<key>other</key>
+			<string>%2$@, %3$@, ועוד %1$d עזבו את השיחה</string>
+			<key>two</key>
 			<string>%2$@, %3$@, ועוד %1$d עזבו את השיחה</string>
 		</dict>
 	</dict>
@@ -862,13 +862,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>%2$@ ועוד אדם %1$ld נמצאים בשיחה זו</string>
-			<key>two</key>
-			<string>%2$@ ועוד %1$ld אנשים נמצאים בשיחה זו</string>
 			<key>many</key>
 			<string>%2$@ ועוד %1$ld אנשים נמצאים בשיחה זו</string>
+			<key>one</key>
+			<string>%2$@ ועוד אדם %1$ld נמצאים בשיחה זו</string>
 			<key>other</key>
+			<string>%2$@ ועוד %1$ld אנשים נמצאים בשיחה זו</string>
+			<key>two</key>
 			<string>%2$@ ועוד %1$ld אנשים נמצאים בשיחה זו</string>
 		</dict>
 	</dict>
@@ -882,13 +882,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@, %3$@, ועוד %1$d יקבלו התראה</string>
-			<key>two</key>
-			<string>%2$@, %3$@, ועוד %1$d יקבלו התראה</string>
 			<key>many</key>
 			<string>%2$@, %3$@, ועוד %1$d יקבלו התראה</string>
+			<key>one</key>
+			<string>%2$@, %3$@, ועוד %1$d יקבלו התראה</string>
 			<key>other</key>
+			<string>%2$@, %3$@, ועוד %1$d יקבלו התראה</string>
+			<key>two</key>
 			<string>%2$@, %3$@, ועוד %1$d יקבלו התראה</string>
 		</dict>
 	</dict>
@@ -902,14 +902,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Signal תתקשר ל%2$@, %3$@, ועוד %1$d</string>
-			<key>two</key>
-			<string>Signal תתקשר ל%2$@, %3$@, ועוד %1$d</string>
 			<key>many</key>
-			<string>Signal תתקשר ל%2$@, %3$@, ועוד %1$d</string>
+			<string>B&A תתקשר ל%2$@, %3$@, ועוד %1$d</string>
+			<key>one</key>
+			<string>B&A תתקשר ל%2$@, %3$@, ועוד %1$d</string>
 			<key>other</key>
-			<string>Signal תתקשר ל%2$@, %3$@, ועוד %1$d</string>
+			<string>B&A תתקשר ל%2$@, %3$@, ועוד %1$d</string>
+			<key>two</key>
+			<string>B&A תתקשר ל%2$@, %3$@, ועוד %1$d</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -922,13 +922,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>הזמנה נשלחה</string>
-			<key>two</key>
-			<string>%1$d הזמנות נשלחו</string>
 			<key>many</key>
 			<string>%1$d הזמנות נשלחו</string>
+			<key>one</key>
+			<string>הזמנה נשלחה</string>
 			<key>other</key>
+			<string>%1$d הזמנות נשלחו</string>
+			<key>two</key>
 			<string>%1$d הזמנות נשלחו</string>
 		</dict>
 	</dict>
@@ -942,13 +942,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>לחבר/ת קבוצה %1$d יש אותו שם.</string>
-			<key>two</key>
-			<string>ל–%1$d חברי קבוצה יש אותו שם.</string>
 			<key>many</key>
 			<string>ל–%1$d חברי קבוצה יש אותו שם.</string>
+			<key>one</key>
+			<string>לחבר/ת קבוצה %1$d יש אותו שם.</string>
 			<key>other</key>
+			<string>ל–%1$d חברי קבוצה יש אותו שם.</string>
+			<key>two</key>
 			<string>ל–%1$d חברי קבוצה יש אותו שם.</string>
 		</dict>
 	</dict>
@@ -962,13 +962,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>התנגשות שם %1$d נמצאה בקבוצה זו.</string>
-			<key>two</key>
-			<string>%1$d התנגשויות שם נמצאו בקבוצה זו.</string>
 			<key>many</key>
 			<string>%1$d התנגשויות שם נמצאו בקבוצה זו.</string>
+			<key>one</key>
+			<string>התנגשות שם %1$d נמצאה בקבוצה זו.</string>
 			<key>other</key>
+			<string>%1$d התנגשויות שם נמצאו בקבוצה זו.</string>
+			<key>two</key>
 			<string>%1$d התנגשויות שם נמצאו בקבוצה זו.</string>
 		</dict>
 	</dict>
@@ -982,13 +982,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>חבר/ה %1$d</string>
-			<key>two</key>
-			<string>%1$d חברים</string>
 			<key>many</key>
 			<string>%1$d חברים</string>
+			<key>one</key>
+			<string>חבר/ה %1$d</string>
 			<key>other</key>
+			<string>%1$d חברים</string>
+			<key>two</key>
 			<string>%1$d חברים</string>
 		</dict>
 	</dict>
@@ -1002,13 +1002,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>התנגשות שם %1$d נמצאה בקבוצה זו. אפשר לסקור את כל החברים למטה או לבחור לנקוט בפעולה.</string>
-			<key>two</key>
-			<string>%1$d התנגשויות שם נמצאו בקבוצה זו. אפשר לסקור את כל החברים למטה או לבחור לנקוט בפעולה.</string>
 			<key>many</key>
 			<string>%1$d התנגשויות שם נמצאו בקבוצה זו. אפשר לסקור את כל החברים למטה או לבחור לנקוט בפעולה.</string>
+			<key>one</key>
+			<string>התנגשות שם %1$d נמצאה בקבוצה זו. אפשר לסקור את כל החברים למטה או לבחור לנקוט בפעולה.</string>
 			<key>other</key>
+			<string>%1$d התנגשויות שם נמצאו בקבוצה זו. אפשר לסקור את כל החברים למטה או לבחור לנקוט בפעולה.</string>
+			<key>two</key>
 			<string>%1$d התנגשויות שם נמצאו בקבוצה זו. אפשר לסקור את כל החברים למטה או לבחור לנקוט בפעולה.</string>
 		</dict>
 	</dict>
@@ -1022,13 +1022,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>לחבר/ת קבוצה %1$d יש שם זהה. אפשר לסקור את החבר/ה למטה או לבחור לנקוט בפעולה.</string>
-			<key>two</key>
-			<string>ל–%1$d חברי קבוצה יש שם זהה. אפשר לסקור את החברים למטה או לבחור לנקוט בפעולה.</string>
 			<key>many</key>
 			<string>ל–%1$d חברי קבוצה יש שם זהה. אפשר לסקור את החברים למטה או לבחור לנקוט בפעולה.</string>
+			<key>one</key>
+			<string>לחבר/ת קבוצה %1$d יש שם זהה. אפשר לסקור את החבר/ה למטה או לבחור לנקוט בפעולה.</string>
 			<key>other</key>
+			<string>ל–%1$d חברי קבוצה יש שם זהה. אפשר לסקור את החברים למטה או לבחור לנקוט בפעולה.</string>
+			<key>two</key>
 			<string>ל–%1$d חברי קבוצה יש שם זהה. אפשר לסקור את החברים למטה או לבחור לנקוט בפעולה.</string>
 		</dict>
 	</dict>
@@ -1042,13 +1042,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>חבר/ה %1$d</string>
-			<key>two</key>
-			<string>%1$d חברים</string>
 			<key>many</key>
 			<string>%1$d חברים</string>
+			<key>one</key>
+			<string>חבר/ה %1$d</string>
 			<key>other</key>
+			<string>%1$d חברים</string>
+			<key>two</key>
 			<string>%1$d חברים</string>
 		</dict>
 	</dict>
@@ -1062,13 +1062,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>חבר/ה %1$d</string>
-			<key>two</key>
-			<string>%1$d חברים</string>
 			<key>many</key>
 			<string>%1$d חברים</string>
+			<key>one</key>
+			<string>חבר/ה %1$d</string>
 			<key>other</key>
+			<string>%1$d חברים</string>
+			<key>two</key>
 			<string>%1$d חברים</string>
 		</dict>
 	</dict>
@@ -1082,13 +1082,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>אדם %1$d הוזמן לקבוצה.</string>
-			<key>two</key>
-			<string>%1$d אנשים הוזמנו לקבוצה.</string>
 			<key>many</key>
 			<string>%1$d אנשים הוזמנו לקבוצה.</string>
+			<key>one</key>
+			<string>אדם %1$d הוזמן לקבוצה.</string>
 			<key>other</key>
+			<string>%1$d אנשים הוזמנו לקבוצה.</string>
+			<key>two</key>
 			<string>%1$d אנשים הוזמנו לקבוצה.</string>
 		</dict>
 	</dict>
@@ -1102,13 +1102,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@ הזמין/ה אדם %1$d לקבוצה.</string>
-			<key>two</key>
-			<string>%2$@ הזמין/ה %1$d אנשים לקבוצה.</string>
 			<key>many</key>
 			<string>%2$@ הזמין/ה %1$d אנשים לקבוצה.</string>
+			<key>one</key>
+			<string>%2$@ הזמין/ה אדם %1$d לקבוצה.</string>
 			<key>other</key>
+			<string>%2$@ הזמין/ה %1$d אנשים לקבוצה.</string>
+			<key>two</key>
 			<string>%2$@ הזמין/ה %1$d אנשים לקבוצה.</string>
 		</dict>
 	</dict>
@@ -1122,13 +1122,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>הזמנה לקבוצה בוטלה עבור אדם %1$d.</string>
-			<key>two</key>
-			<string>הזמנות לקבוצה בוטלו עבור %1$d אנשים.</string>
 			<key>many</key>
 			<string>הזמנות לקבוצה בוטלו עבור %1$d אנשים.</string>
+			<key>one</key>
+			<string>הזמנה לקבוצה בוטלה עבור אדם %1$d.</string>
 			<key>other</key>
+			<string>הזמנות לקבוצה בוטלו עבור %1$d אנשים.</string>
+			<key>two</key>
 			<string>הזמנות לקבוצה בוטלו עבור %1$d אנשים.</string>
 		</dict>
 	</dict>
@@ -1142,13 +1142,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@ ביטל/ה הזמנה לקבוצה עבור אדם %1$d.</string>
-			<key>two</key>
-			<string>%2$@ ביטל/ה הזמנה לקבוצה עבור %1$d אנשים.</string>
 			<key>many</key>
 			<string>%2$@ ביטל/ה הזמנה לקבוצה עבור %1$d אנשים.</string>
+			<key>one</key>
+			<string>%2$@ ביטל/ה הזמנה לקבוצה עבור אדם %1$d.</string>
 			<key>other</key>
+			<string>%2$@ ביטל/ה הזמנה לקבוצה עבור %1$d אנשים.</string>
+			<key>two</key>
 			<string>%2$@ ביטל/ה הזמנה לקבוצה עבור %1$d אנשים.</string>
 		</dict>
 	</dict>
@@ -1162,13 +1162,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@ ביקש/ה וביטל/ה את הבקשה להצטרף דרך הלינק הקבוצתי.</string>
-			<key>two</key>
-			<string>%2$@ ביקשו וביטלו %1$d בקשות להצטרף דרך הלינק הקבוצתי.</string>
 			<key>many</key>
 			<string>%2$@ ביקשו וביטלו %1$d בקשות להצטרף דרך הלינק הקבוצתי.</string>
+			<key>one</key>
+			<string>%2$@ ביקש/ה וביטל/ה את הבקשה להצטרף דרך הלינק הקבוצתי.</string>
 			<key>other</key>
+			<string>%2$@ ביקשו וביטלו %1$d בקשות להצטרף דרך הלינק הקבוצתי.</string>
+			<key>two</key>
 			<string>%2$@ ביקשו וביטלו %1$d בקשות להצטרף דרך הלינק הקבוצתי.</string>
 		</dict>
 	</dict>
@@ -1182,13 +1182,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>סטורי קבוצתי · צופה %1$d</string>
-			<key>two</key>
-			<string>סטורי קבוצתי · %1$d צופים</string>
 			<key>many</key>
 			<string>סטורי קבוצתי · %1$d צופים</string>
+			<key>one</key>
+			<string>סטורי קבוצתי · צופה %1$d</string>
 			<key>other</key>
+			<string>סטורי קבוצתי · %1$d צופים</string>
+			<key>two</key>
 			<string>סטורי קבוצתי · %1$d צופים</string>
 		</dict>
 	</dict>
@@ -1202,13 +1202,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>חבר/ה לא יכל/ה להתווסף לקבוצה החדשה והוסר/ה.</string>
-			<key>two</key>
-			<string>%1$d חברים לא יכלו להתווסף לקבוצה החדשה והוסרו.</string>
 			<key>many</key>
 			<string>%1$d חברים לא יכלו להתווסף לקבוצה החדשה והוסרו.</string>
+			<key>one</key>
+			<string>חבר/ה לא יכל/ה להתווסף לקבוצה החדשה והוסר/ה.</string>
 			<key>other</key>
+			<string>%1$d חברים לא יכלו להתווסף לקבוצה החדשה והוסרו.</string>
+			<key>two</key>
 			<string>%1$d חברים לא יכלו להתווסף לקבוצה החדשה והוסרו.</string>
 		</dict>
 	</dict>
@@ -1222,13 +1222,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>חבר/ה לא יכל/ה להתווסף לקבוצה החדשה והוזמן/ה להצטרף.</string>
-			<key>two</key>
-			<string>%1$d חברים לא יכלו להתווסף לקבוצה החדשה והוזמנו להצטרף.</string>
 			<key>many</key>
 			<string>%1$d חברים לא יכלו להתווסף לקבוצה החדשה והוזמנו להצטרף.</string>
+			<key>one</key>
+			<string>חבר/ה לא יכל/ה להתווסף לקבוצה החדשה והוזמן/ה להצטרף.</string>
 			<key>other</key>
+			<string>%1$d חברים לא יכלו להתווסף לקבוצה החדשה והוזמנו להצטרף.</string>
+			<key>two</key>
 			<string>%1$d חברים לא יכלו להתווסף לקבוצה החדשה והוזמנו להצטרף.</string>
 		</dict>
 	</dict>
@@ -1242,13 +1242,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>אין לך אפשרות לשתף יותר מפריט 1.</string>
-			<key>two</key>
-			<string>אין לך אפשרות לשתף יותר מ–%1$d פריטים.</string>
 			<key>many</key>
 			<string>אין לך אפשרות לשתף יותר מ–%1$d פריטים.</string>
+			<key>one</key>
+			<string>אין לך אפשרות לשתף יותר מפריט 1.</string>
 			<key>other</key>
+			<string>אין לך אפשרות לשתף יותר מ–%1$d פריטים.</string>
+			<key>two</key>
 			<string>אין לך אפשרות לשתף יותר מ–%1$d פריטים.</string>
 		</dict>
 	</dict>
@@ -1262,14 +1262,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את Signal במכשיר הזה תוך יום אחד.</string>
-			<key>two</key>
-			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את Signal במכשיר הזה תוך יומיים.</string>
 			<key>many</key>
-			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את Signal במכשיר הזה תוך %1$d ימים.</string>
+			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את B&A במכשיר הזה תוך %1$d ימים.</string>
+			<key>one</key>
+			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את B&A במכשיר הזה תוך יום אחד.</string>
 			<key>other</key>
-			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את Signal במכשיר הזה תוך %1$d ימים.</string>
+			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את B&A במכשיר הזה תוך %1$d ימים.</string>
+			<key>two</key>
+			<string>כדי להשאיר את ״%2$@״ מחובר, צריך לפתוח את B&A במכשיר הזה תוך יומיים.</string>
 		</dict>
 	</dict>
 	<key>LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE_%d</key>
@@ -1282,14 +1282,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>העברת כל הודעות הטקסט שלך, והעברת המדיה מהיום האחרון</string>
-			<key>two</key>
-			<string>העברת כל הודעות הטקסט שלך, והעברת המדיה מהיומיים האחרונים</string>
 			<key>many</key>
 			<string>העברת כל הודעות הטקסט שלך, והעברת המדיה מ–%1$d הימים האחרונים</string>
+			<key>one</key>
+			<string>העברת כל הודעות הטקסט שלך, והעברת המדיה מהיום האחרון</string>
 			<key>other</key>
 			<string>העברת כל הודעות הטקסט שלך, והעברת המדיה מ–%1$d הימים האחרונים</string>
+			<key>two</key>
+			<string>העברת כל הודעות הטקסט שלך, והעברת המדיה מהיומיים האחרונים</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1302,13 +1302,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>קבוצה %1$d במשותף</string>
-			<key>two</key>
-			<string>%1$d קבוצות במשותף</string>
 			<key>many</key>
 			<string>%1$d קבוצות במשותף</string>
+			<key>one</key>
+			<string>קבוצה %1$d במשותף</string>
 			<key>other</key>
+			<string>%1$d קבוצות במשותף</string>
+			<key>two</key>
 			<string>%1$d קבוצות במשותף</string>
 		</dict>
 	</dict>
@@ -1322,13 +1322,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>למחוק פריט %1$d?</string>
-			<key>two</key>
-			<string>למחוק %1$d פריטים?</string>
 			<key>many</key>
 			<string>למחוק %1$d פריטים?</string>
+			<key>one</key>
+			<string>למחוק פריט %1$d?</string>
 			<key>other</key>
+			<string>למחוק %1$d פריטים?</string>
+			<key>two</key>
 			<string>למחוק %1$d פריטים?</string>
 		</dict>
 	</dict>
@@ -1342,13 +1342,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>פריט אחד נמחק</string>
-			<key>two</key>
-			<string>%1$d פריטים נמחקו</string>
 			<key>many</key>
 			<string>%1$d פריטים נמחקו</string>
+			<key>one</key>
+			<string>פריט אחד נמחק</string>
 			<key>other</key>
+			<string>%1$d פריטים נמחקו</string>
+			<key>two</key>
 			<string>%1$d פריטים נמחקו</string>
 		</dict>
 	</dict>
@@ -1362,13 +1362,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>תמונה %1$d</string>
-			<key>two</key>
-			<string>%1$d תמונות</string>
 			<key>many</key>
 			<string>%1$d תמונות</string>
+			<key>one</key>
+			<string>תמונה %1$d</string>
 			<key>other</key>
+			<string>%1$d תמונות</string>
+			<key>two</key>
 			<string>%1$d תמונות</string>
 		</dict>
 	</dict>
@@ -1382,13 +1382,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>פריט %1$d</string>
-			<key>two</key>
-			<string>%1$d פריטים</string>
 			<key>many</key>
 			<string>%1$d פריטים</string>
+			<key>one</key>
+			<string>פריט %1$d</string>
 			<key>other</key>
+			<string>%1$d פריטים</string>
+			<key>two</key>
 			<string>%1$d פריטים</string>
 		</dict>
 	</dict>
@@ -1402,13 +1402,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>העברת %1$d</string>
-			<key>two</key>
-			<string>העברת %1$d</string>
 			<key>many</key>
 			<string>העברת %1$d</string>
+			<key>one</key>
+			<string>העברת %1$d</string>
 			<key>other</key>
+			<string>העברת %1$d</string>
+			<key>two</key>
 			<string>העברת %1$d</string>
 		</dict>
 	</dict>
@@ -1422,13 +1422,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d נבחרה</string>
-			<key>two</key>
-			<string>%1$d נבחרו</string>
 			<key>many</key>
 			<string>%1$d נבחרו</string>
+			<key>one</key>
+			<string>%1$d נבחרה</string>
 			<key>other</key>
+			<string>%1$d נבחרו</string>
+			<key>two</key>
 			<string>%1$d נבחרו</string>
 		</dict>
 	</dict>
@@ -1442,13 +1442,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>תגובה %1$d עם %2$@.</string>
-			<key>two</key>
-			<string>%1$d תגובות עם %2$@.</string>
 			<key>many</key>
 			<string>%1$d תגובות עם %2$@.</string>
+			<key>one</key>
+			<string>תגובה %1$d עם %2$@.</string>
 			<key>other</key>
+			<string>%1$d תגובות עם %2$@.</string>
+			<key>two</key>
 			<string>%1$d תגובות עם %2$@.</string>
 		</dict>
 	</dict>
@@ -1462,13 +1462,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>מוסתר מאדם %1$d</string>
-			<key>two</key>
-			<string>מוסתר מ–%1$d אנשים</string>
 			<key>many</key>
 			<string>מוסתר מ–%1$d אנשים</string>
+			<key>one</key>
+			<string>מוסתר מאדם %1$d</string>
 			<key>other</key>
+			<string>מוסתר מ–%1$d אנשים</string>
+			<key>two</key>
 			<string>מוסתר מ–%1$d אנשים</string>
 		</dict>
 	</dict>
@@ -1482,13 +1482,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>צופה %1$d</string>
-			<key>two</key>
-			<string>%1$d צופים</string>
 			<key>many</key>
 			<string>%1$d צופים</string>
+			<key>one</key>
+			<string>צופה %1$d</string>
 			<key>other</key>
+			<string>%1$d צופים</string>
+			<key>two</key>
 			<string>%1$d צופים</string>
 		</dict>
 	</dict>
@@ -1502,13 +1502,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>צופה %1$d</string>
-			<key>two</key>
-			<string>%1$d צופים</string>
 			<key>many</key>
 			<string>%1$d צופים</string>
+			<key>one</key>
+			<string>צופה %1$d</string>
 			<key>other</key>
+			<string>%1$d צופים</string>
+			<key>two</key>
 			<string>%1$d צופים</string>
 		</dict>
 	</dict>
@@ -1522,14 +1522,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>כל חברי ה–Signal · צופה %1$d</string>
-			<key>two</key>
-			<string>כל חברי ה–Signal · %1$d צופים</string>
 			<key>many</key>
-			<string>כל חברי ה–Signal · %1$d צופים</string>
+			<string>כל חברי ה–B&A · %1$d צופים</string>
+			<key>one</key>
+			<string>כל חברי ה–B&A · צופה %1$d</string>
 			<key>other</key>
-			<string>כל חברי ה–Signal · %1$d צופים</string>
+			<string>כל חברי ה–B&A · %1$d צופים</string>
+			<key>two</key>
+			<string>כל חברי ה–B&A · %1$d צופים</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1542,14 +1542,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>כל חברי ה–Signal · מוסתר מאדם %1$d</string>
-			<key>two</key>
-			<string>כל חברי ה–Signal · מוסתר מ–%1$d אנשים</string>
 			<key>many</key>
-			<string>כל חברי ה–Signal · מוסתר מ–%1$d אנשים</string>
+			<string>כל חברי ה–B&A · מוסתר מ–%1$d אנשים</string>
+			<key>one</key>
+			<string>כל חברי ה–B&A · מוסתר מאדם %1$d</string>
 			<key>other</key>
-			<string>כל חברי ה–Signal · מוסתר מ–%1$d אנשים</string>
+			<string>כל חברי ה–B&A · מוסתר מ–%1$d אנשים</string>
+			<key>two</key>
+			<string>כל חברי ה–B&A · מוסתר מ–%1$d אנשים</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1562,13 +1562,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>שיתוף רק עם · צופה %1$d</string>
-			<key>two</key>
-			<string>שיתוף רק עם · %1$d צופים</string>
 			<key>many</key>
 			<string>שיתוף רק עם · %1$d צופים</string>
+			<key>one</key>
+			<string>שיתוף רק עם · צופה %1$d</string>
 			<key>other</key>
+			<string>שיתוף רק עם · %1$d צופים</string>
+			<key>two</key>
 			<string>שיתוף רק עם · %1$d צופים</string>
 		</dict>
 	</dict>
@@ -1582,13 +1582,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>חבר/ה %1$d</string>
-			<key>two</key>
-			<string>%1$d חברים</string>
 			<key>many</key>
 			<string>%1$d חברים</string>
+			<key>one</key>
+			<string>חבר/ה %1$d</string>
 			<key>other</key>
+			<string>%1$d חברים</string>
+			<key>two</key>
 			<string>%1$d חברים</string>
 		</dict>
 	</dict>
@@ -1602,13 +1602,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>צופה %1$d</string>
-			<key>two</key>
-			<string>%1$d צופים</string>
 			<key>many</key>
 			<string>%1$d צופים</string>
+			<key>one</key>
+			<string>צופה %1$d</string>
 			<key>other</key>
+			<string>%1$d צופים</string>
+			<key>two</key>
 			<string>%1$d צופים</string>
 		</dict>
 	</dict>
@@ -1622,13 +1622,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>תגובה נוספת %1$d.</string>
-			<key>two</key>
-			<string>%1$d תגובות נוספות.</string>
 			<key>many</key>
 			<string>%1$d תגובות נוספות.</string>
+			<key>one</key>
+			<string>תגובה נוספת %1$d.</string>
 			<key>other</key>
+			<string>%1$d תגובות נוספות.</string>
+			<key>two</key>
 			<string>%1$d תגובות נוספות.</string>
 		</dict>
 	</dict>
@@ -1642,13 +1642,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%2$@ הזמין/ה אדם %1$d</string>
-			<key>two</key>
-			<string>%2$@ הזמין/ה %1$d אנשים</string>
 			<key>many</key>
 			<string>%2$@ הזמין/ה %1$d אנשים</string>
+			<key>one</key>
+			<string>%2$@ הזמין/ה אדם %1$d</string>
 			<key>other</key>
+			<string>%2$@ הזמין/ה %1$d אנשים</string>
+			<key>two</key>
 			<string>%2$@ הזמין/ה %1$d אנשים</string>
 		</dict>
 	</dict>
@@ -1662,13 +1662,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>בקשת הצטרפות %1$d ממתינה.</string>
-			<key>two</key>
-			<string>%1$d בקשות הצטרפות ממתינות.</string>
 			<key>many</key>
 			<string>%1$d בקשות הצטרפות ממתינות.</string>
+			<key>one</key>
+			<string>בקשת הצטרפות %1$d ממתינה.</string>
 			<key>other</key>
+			<string>%1$d בקשות הצטרפות ממתינות.</string>
+			<key>two</key>
 			<string>%1$d בקשות הצטרפות ממתינות.</string>
 		</dict>
 	</dict>
@@ -1682,13 +1682,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>ביטול הזמנה לא חוקית</string>
-			<key>two</key>
-			<string>ביטול %1$d הזמנות לא חוקיות</string>
 			<key>many</key>
 			<string>ביטול %1$d הזמנות לא חוקיות</string>
+			<key>one</key>
+			<string>ביטול הזמנה לא חוקית</string>
 			<key>other</key>
+			<string>ביטול %1$d הזמנות לא חוקיות</string>
+			<key>two</key>
 			<string>ביטול %1$d הזמנות לא חוקיות</string>
 		</dict>
 	</dict>
@@ -1702,13 +1702,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>שלול הזמנה</string>
-			<key>two</key>
-			<string>שלול הזמנות</string>
 			<key>many</key>
 			<string>שלול הזמנות</string>
+			<key>one</key>
+			<string>שלול הזמנה</string>
 			<key>other</key>
+			<string>שלול הזמנות</string>
+			<key>two</key>
 			<string>שלול הזמנות</string>
 		</dict>
 	</dict>
@@ -1722,13 +1722,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>לבטל הזמנה לקבוצה שנשלחה על ידי ”%2$@“?</string>
-			<key>two</key>
-			<string>לבטל %1$d הזמנות שנשלחו על ידי ”%2$@“?</string>
 			<key>many</key>
 			<string>לבטל %1$d הזמנות שנשלחו על ידי ”%2$@“?</string>
+			<key>one</key>
+			<string>לבטל הזמנה לקבוצה שנשלחה על ידי ”%2$@“?</string>
 			<key>other</key>
+			<string>לבטל %1$d הזמנות שנשלחו על ידי ”%2$@“?</string>
+			<key>two</key>
 			<string>לבטל %1$d הזמנות שנשלחו על ידי ”%2$@“?</string>
 		</dict>
 	</dict>
@@ -1742,13 +1742,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>הצבעה %1$d</string>
-			<key>two</key>
-			<string>%1$d הצבעות</string>
 			<key>many</key>
 			<string>%1$d הצבעות</string>
+			<key>one</key>
+			<string>הצבעה %1$d</string>
 			<key>other</key>
+			<string>%1$d הצבעות</string>
+			<key>two</key>
 			<string>%1$d הצבעות</string>
 		</dict>
 	</dict>
@@ -1762,13 +1762,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>סטורי מותאם אישית · צופה %1$d</string>
-			<key>two</key>
-			<string>סטורי מותאם אישית · %1$d צופים</string>
 			<key>many</key>
 			<string>סטורי מותאם אישית · %1$d צופים</string>
+			<key>one</key>
+			<string>סטורי מותאם אישית · צופה %1$d</string>
 			<key>other</key>
+			<string>סטורי מותאם אישית · %1$d צופים</string>
+			<key>two</key>
 			<string>סטורי מותאם אישית · %1$d צופים</string>
 		</dict>
 	</dict>
@@ -1782,13 +1782,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>%2$@ +%1$ld הרמתם יד</string>
-			<key>two</key>
-			<string>%2$@ +%1$ld הרמתם יד</string>
 			<key>many</key>
 			<string>%2$@ +%1$ld הרמתם יד</string>
+			<key>one</key>
+			<string>%2$@ +%1$ld הרמתם יד</string>
 			<key>other</key>
+			<string>%2$@ +%1$ld הרמתם יד</string>
+			<key>two</key>
 			<string>%2$@ +%1$ld הרמתם יד</string>
 		</dict>
 	</dict>
@@ -1802,13 +1802,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>נשאר לך ניסיון %1$d</string>
-			<key>two</key>
-			<string>נשארו לך %1$d ניסיונות</string>
 			<key>many</key>
 			<string>נשארו לך %1$d ניסיונות</string>
+			<key>one</key>
+			<string>נשאר לך ניסיון %1$d</string>
 			<key>other</key>
+			<string>נשארו לך %1$d ניסיונות</string>
+			<key>two</key>
 			<string>נשארו לך %1$d ניסיונות</string>
 		</dict>
 	</dict>
@@ -1822,13 +1822,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>תשובה &lt;bold&gt;%1$d&lt;/bold&gt;</string>
-			<key>two</key>
-			<string>&lt;bold&gt;%1$d&lt;/bold&gt; תשובות</string>
 			<key>many</key>
 			<string>&lt;bold&gt;%1$d&lt;/bold&gt; תשובות</string>
+			<key>one</key>
+			<string>תשובה &lt;bold&gt;%1$d&lt;/bold&gt;</string>
 			<key>other</key>
+			<string>&lt;bold&gt;%1$d&lt;/bold&gt; תשובות</string>
+			<key>two</key>
 			<string>&lt;bold&gt;%1$d&lt;/bold&gt; תשובות</string>
 		</dict>
 	</dict>
@@ -1842,13 +1842,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>צופה %1$d</string>
-			<key>two</key>
-			<string>%1$d צופים</string>
 			<key>many</key>
 			<string>%1$d צופים</string>
+			<key>one</key>
+			<string>צופה %1$d</string>
 			<key>other</key>
+			<string>%1$d צופים</string>
+			<key>two</key>
 			<string>%1$d צופים</string>
 		</dict>
 	</dict>
@@ -1862,13 +1862,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>מוסתר מאדם %1$d</string>
-			<key>two</key>
-			<string>מוסתר מ–%1$d אנשים</string>
 			<key>many</key>
 			<string>מוסתר מ–%1$d אנשים</string>
+			<key>one</key>
+			<string>מוסתר מאדם %1$d</string>
 			<key>other</key>
+			<string>מוסתר מ–%1$d אנשים</string>
+			<key>two</key>
 			<string>מוסתר מ–%1$d אנשים</string>
 		</dict>
 	</dict>
@@ -1882,13 +1882,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>שולחים…</string>
-			<key>two</key>
-			<string>שולחים %1$d…</string>
 			<key>many</key>
 			<string>שולחים %1$d…</string>
+			<key>one</key>
+			<string>שולחים…</string>
 			<key>other</key>
+			<string>שולחים %1$d…</string>
+			<key>two</key>
 			<string>שולחים %1$d…</string>
 		</dict>
 	</dict>
@@ -1902,13 +1902,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>צפייה %1$d</string>
-			<key>two</key>
-			<string>%1$d צפיות</string>
 			<key>many</key>
 			<string>%1$d צפיות</string>
+			<key>one</key>
+			<string>צפייה %1$d</string>
 			<key>other</key>
+			<string>%1$d צפיות</string>
+			<key>two</key>
 			<string>%1$d צפיות</string>
 		</dict>
 	</dict>
@@ -1922,13 +1922,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>צפייה &lt;bold&gt;%1$d&lt;/bold&gt;</string>
-			<key>two</key>
-			<string>&lt;bold&gt;%1$d&lt;/bold&gt; צפיות</string>
 			<key>many</key>
 			<string>&lt;bold&gt;%1$d&lt;/bold&gt; צפיות</string>
+			<key>one</key>
+			<string>צפייה &lt;bold&gt;%1$d&lt;/bold&gt;</string>
 			<key>other</key>
+			<string>&lt;bold&gt;%1$d&lt;/bold&gt; צפיות</string>
+			<key>two</key>
 			<string>&lt;bold&gt;%1$d&lt;/bold&gt; צפיות</string>
 		</dict>
 	</dict>
@@ -1942,13 +1942,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>חבר/ה ב%1$@, %2$@ וקבוצה 1 נוספת</string>
-			<key>two</key>
-			<string>חבר/ה ב%1$@, %2$@ ו–%3$ld קבוצות נוספות</string>
 			<key>many</key>
 			<string>חבר/ה ב%1$@, %2$@ ו–%3$ld קבוצות נוספות</string>
+			<key>one</key>
+			<string>חבר/ה ב%1$@, %2$@ וקבוצה 1 נוספת</string>
 			<key>other</key>
+			<string>חבר/ה ב%1$@, %2$@ ו–%3$ld קבוצות נוספות</string>
+			<key>two</key>
 			<string>חבר/ה ב%1$@, %2$@ ו–%3$ld קבוצות נוספות</string>
 		</dict>
 	</dict>
@@ -1962,13 +1962,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
-			<key>one</key>
-			<string>%1$ld אחר</string>
-			<key>two</key>
-			<string>%1$ld אחרים</string>
 			<key>many</key>
 			<string>%1$ld אחרים</string>
+			<key>one</key>
+			<string>%1$ld אחר</string>
 			<key>other</key>
+			<string>%1$ld אחרים</string>
+			<key>two</key>
 			<string>%1$ld אחרים</string>
 		</dict>
 	</dict>
@@ -1982,14 +1982,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>ההודעה הקולית הזו הזה לא הועברה מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיום %1$d בזמן קישור המכשיר.</string>
-			<key>two</key>
-			<string>ההודעה הקולית הזו לא הועברה מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיומיים בזמן קישור המכשיר.</string>
 			<key>many</key>
 			<string>ההודעה הקולית הזו לא הועברה מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מ–%1$d יום בזמן קישור המכשיר.</string>
+			<key>one</key>
+			<string>ההודעה הקולית הזו הזה לא הועברה מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיום %1$d בזמן קישור המכשיר.</string>
 			<key>other</key>
 			<string>ההודעה הקולית הזו לא הועברה מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מ–%1$d יום בזמן קישור המכשיר.</string>
+			<key>two</key>
+			<string>ההודעה הקולית הזו לא הועברה מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיומיים בזמן קישור המכשיר.</string>
 		</dict>
 	</dict>
 	<key>UNAVAILABLE_ATTACHMENT_FILE_SHEET_MESSAGE_%d</key>
@@ -2002,14 +2002,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>הקובץ הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיום %1$d בזמן קישור המכשיר.</string>
-			<key>two</key>
-			<string>הקובץ הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיומיים בזמן קישור המכשיר.</string>
 			<key>many</key>
 			<string>הקובץ הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מ–%1$d יום בזמן קישור המכשיר.</string>
+			<key>one</key>
+			<string>הקובץ הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיום %1$d בזמן קישור המכשיר.</string>
 			<key>other</key>
 			<string>הקובץ הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מ–%1$d יום בזמן קישור המכשיר.</string>
+			<key>two</key>
+			<string>הקובץ הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיומיים בזמן קישור המכשיר.</string>
 		</dict>
 	</dict>
 	<key>UNAVAILABLE_ATTACHMENT_OVERSIZE_TEXT_SHEET_MESSAGE_%d</key>
@@ -2022,14 +2022,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>הטקסט השלם בהודעה הזו הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיום %1$d בזמן קישור המכשיר.</string>
-			<key>two</key>
-			<string>הטקסט השלם בהודעה הזו הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיומיים בזמן קישור המכשיר.</string>
 			<key>many</key>
 			<string>הטקסט השלם בהודעה הזו הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מ–%1$d יום בזמן קישור המכשיר.</string>
+			<key>one</key>
+			<string>הטקסט השלם בהודעה הזו הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיום %1$d בזמן קישור המכשיר.</string>
 			<key>other</key>
 			<string>הטקסט השלם בהודעה הזו הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מ–%1$d יום בזמן קישור המכשיר.</string>
+			<key>two</key>
+			<string>הטקסט השלם בהודעה הזו הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיומיים בזמן קישור המכשיר.</string>
 		</dict>
 	</dict>
 	<key>UNAVAILABLE_ATTACHMENT_STICKER_SHEET_MESSAGE_%d</key>
@@ -2042,14 +2042,14 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>הסטיקר הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיום %1$d בזמן קישור המכשיר.</string>
-			<key>two</key>
-			<string>הסטיקר הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיומיים בזמן קישור המכשיר.</string>
 			<key>many</key>
 			<string>הסטיקר הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מ–%1$d יום בזמן קישור המכשיר.</string>
+			<key>one</key>
+			<string>הסטיקר הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיום %1$d בזמן קישור המכשיר.</string>
 			<key>other</key>
 			<string>הסטיקר הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מ–%1$d יום בזמן קישור המכשיר.</string>
+			<key>two</key>
+			<string>הסטיקר הזה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שהם בני יותר מיומיים בזמן קישור המכשיר.</string>
 		</dict>
 	</dict>
 	<key>USERNAME_SELECTION_TOO_SHORT_ERROR_MESSAGE_%d</key>
@@ -2062,13 +2062,13 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>שמות משתמש חייבים להכיל לפחות תו %1$d</string>
-			<key>two</key>
-			<string>שמות משתמש חייבים להכיל לפחות %1$d תווים</string>
 			<key>many</key>
 			<string>שמות משתמש חייבים להכיל לפחות %1$d תווים</string>
+			<key>one</key>
+			<string>שמות משתמש חייבים להכיל לפחות תו %1$d</string>
 			<key>other</key>
+			<string>שמות משתמש חייבים להכיל לפחות %1$d תווים</string>
+			<key>two</key>
 			<string>שמות משתמש חייבים להכיל לפחות %1$d תווים</string>
 		</dict>
 	</dict>

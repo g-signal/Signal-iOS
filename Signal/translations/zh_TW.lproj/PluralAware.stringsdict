@@ -493,7 +493,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Signal 群組在 %1$d 或更少的成員中表現最佳。 新增更多成員將導致延遲傳送和接收訊息。</string>
+			<string>B&A 群組在 %1$d 或更少的成員中表現最佳。 新增更多成員將導致延遲傳送和接收訊息。</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -633,7 +633,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Signal 將會撥號給 %2$@、%3$@ 和其他 %1$d 位使用者</string>
+			<string>B&A 將會撥號給 %2$@、%3$@ 和其他 %1$d 位使用者</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -885,7 +885,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>若要保留「 %2$@ 」的連結，請於 %1$d 天內在該裝置開啟 Signal。</string>
+			<string>若要保留「 %2$@ 」的連結，請於 %1$d 天內在該裝置開啟 B&A。</string>
 		</dict>
 	</dict>
 	<key>LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE_%d</key>
@@ -1067,7 +1067,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>所有 Signal 人脈 · %1$d 個瀏覽者</string>
+			<string>所有 B&A 人脈 · %1$d 個瀏覽者</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1081,7 +1081,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>所有 Signal 人脈 · 已排除 %1$d 人</string>
+			<string>所有 B&A 人脈 · 已排除 %1$d 人</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1207,7 +1207,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>要撤銷由&quot;%2$@&quot;傳送的%1$d個邀請嗎？</string>
+			<string>要撤銷由"%2$@"傳送的%1$d個邀請嗎？</string>
 		</dict>
 	</dict>
 	<key>POLL_VOTE_COUNT</key>

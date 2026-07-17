@@ -64,7 +64,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Tambah %1$d ahli kepada &quot;%2$@&quot;?</string>
+			<string>Tambah %1$d ahli kepada "%2$@"?</string>
 		</dict>
 	</dict>
 	<key>ADD_GROUP_MEMBERS_VIEW_CONFIRM_ALERT_TITLE_%d</key>
@@ -493,7 +493,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Kumpulan Signal berjalan dengan baik dengan %1$d ahli atau kurang. Menambah lebih banyak ahli akan menyebabkan kelewatan menghantar dan menerima mesej.</string>
+			<string>Kumpulan B&A berjalan dengan baik dengan %1$d ahli atau kurang. Menambah lebih banyak ahli akan menyebabkan kelewatan menghantar dan menerima mesej.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -633,7 +633,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Signal akan memanggil %2$@, %3$@ dan %1$d yang lain</string>
+			<string>B&A akan memanggil %2$@, %3$@ dan %1$d yang lain</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -885,7 +885,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Untuk memastikan &quot;%2$@&quot; dipautkan, buka Signal pada peranti dalam masa %1$d hari.</string>
+			<string>Untuk memastikan "%2$@" dipautkan, buka B&A pada peranti dalam masa %1$d hari.</string>
 		</dict>
 	</dict>
 	<key>LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE_%d</key>
@@ -1067,7 +1067,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Semua Hubungan Signal · %1$d Penonton</string>
+			<string>Semua Hubungan B&A · %1$d Penonton</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1081,7 +1081,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Semua Hubungan Signal · %1$d Dikecualikan</string>
+			<string>Semua Hubungan B&A · %1$d Dikecualikan</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1207,7 +1207,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Tarik balik %1$d jemputan yang dihantar oleh &quot;%2$@&quot;?</string>
+			<string>Tarik balik %1$d jemputan yang dihantar oleh "%2$@"?</string>
 		</dict>
 	</dict>
 	<key>POLL_VOTE_COUNT</key>

@@ -64,7 +64,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>멤버 %1$d명을 &quot;%2$@&quot;에 추가할까요?</string>
+			<string>멤버 %1$d명을 "%2$@"에 추가할까요?</string>
 		</dict>
 	</dict>
 	<key>ADD_GROUP_MEMBERS_VIEW_CONFIRM_ALERT_TITLE_%d</key>
@@ -493,7 +493,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Signal 그룹의 최적 인원은 %1$d명 이하입니다. 멤버를 더 추가하면 메시지 송수신 지연 등의 성능 저하가 발생합니다.</string>
+			<string>B&A 그룹의 최적 인원은 %1$d명 이하입니다. 멤버를 더 추가하면 메시지 송수신 지연 등의 성능 저하가 발생합니다.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -885,7 +885,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>&apos;%2$@&apos;의 연결 상태를 유지하려면 해당 기기에서 %1$d일 이내에 Signal을 여세요.</string>
+			<string>'%2$@'의 연결 상태를 유지하려면 해당 기기에서 %1$d일 이내에 B&A을 여세요.</string>
 		</dict>
 	</dict>
 	<key>LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE_%d</key>
@@ -1067,7 +1067,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>모든 Signal 커넥션 · 볼 수 있는 사람 %1$d명</string>
+			<string>모든 B&A 커넥션 · 볼 수 있는 사람 %1$d명</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1081,7 +1081,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>모든 Signal 커넥션 · %1$d명 제외</string>
+			<string>모든 B&A 커넥션 · %1$d명 제외</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1207,7 +1207,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>&quot;%2$@&quot; 님이 보낸 %1$d개 초대를 취소할까요?</string>
+			<string>"%2$@" 님이 보낸 %1$d개 초대를 취소할까요?</string>
 		</dict>
 	</dict>
 	<key>POLL_VOTE_COUNT</key>

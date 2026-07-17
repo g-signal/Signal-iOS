@@ -619,7 +619,7 @@ Support URL 链接指向 `about:blank`。
 
 ---
 
-## 40. `Signal/translations/`（43 个语言，每语言 2 个文件）
+## 40. `Signal/translations/`（45 个语言，每语言 3 个文件）
 
 **Localizable.strings**：品牌词替换
 
@@ -632,9 +632,11 @@ Support URL 链接指向 `about:blank`。
 | `Invite to Signal` | `Invite to B&A` |
 | `Signal Backups` | `B&A Backups` |
 
-注意：非品牌词（法语 `signaler`、瑞典语 `ringsignal` 等）保持不变。
+注意：非品牌词（法语 `Signaler`/`signaler`、瑞典语 `ringsignal`、丹麦语 `Nulstil signal`、"cellular signal" 手机信号强度等）保持不变。
 
-**InfoPlist.strings**：所有 NS*UsageDescription 中的 `Signal` 替换为 `B&A` / `BA Chat`（共 9 个权限字段）。
+**PluralAware.stringsdict**：所有复数形式字符串中的品牌词替换，规则同上。涉及词条：`Signal groups`、`Signal will ring`、`open Signal on that device`、`All Signal Connections` 等（各语言语法形式不同，如日语 `Signalグループ`、韩语 `Signal은` 等）。
+
+**InfoPlist.strings**：所有 NS*UsageDescription 中的 `Signal` 替换为 `B&A`（共 9 个权限字段，适用于所有 45 个语言）。
 
 ---
 
