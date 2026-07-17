@@ -130,7 +130,7 @@ public class BadgeAssets {
     }
 
     private func extractSpritesFromSpritesheetIfNecessary() throws {
-        guard Data.ows_isValidImage(atPath: fileUrlForSpritesheet().path) else {
+        guard (try? DataImageSource.forPath(fileUrlForSpritesheet().path))?.ows_isValidImage ?? false else {
             // If spritesheet is invalid (likely our empty placeholder), skip extraction
             Logger.warn("Badge sprite extraction skipped - spritesheet is empty placeholder")
             return
