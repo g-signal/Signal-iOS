@@ -1457,8 +1457,8 @@ CDN session 原本使用 `shouldUseSignalCertificate: true`，即用 `signal-mes
 
 **1. LibSignalClient 使用自己的 fork**
 ```ruby
-ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '94d879a51ba1e45a33efc6c0259cbb62bfc2393ea027756d57ac4b39a2db1c0b'
-pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.81.1-BA', testspecs: ["Tests"]
+ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '3b7529b01a7787ae8530d2d4aef2b6decc1937fda2e2a91b18417f988d3af439'
+pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.86.15-BA', testspecs: ["Tests"]
 ```
 上游用 `signalapp/libsignal` 官方 repo，我们必须切回 `g-signal/libsignal` fork，并更新对应的 checksum 和 tag。  
 > ⚠️ 每次 libsignal 版本升级时，需要先在 fork 上打好对应的 BA tag，再更新这里的 tag 和 checksum。
