@@ -43,12 +43,12 @@ public class FingerprintViewController: OWSViewController, OWSNavigationChildCon
                 comment: "Alert shown when the user needs to exchange messages to see the safety number.",
             ))
 
-            actionSheet.addAction(.init(title: CommonStrings.learnMore, style: .default, handler: { _ in
-                guard let vc = CurrentAppContext().frontmostViewController() else {
-                    return
-                }
-                Self.showLearnMoreUrl(from: vc)
-            }))
+//            actionSheet.addAction(.init(title: CommonStrings.learnMore, style: .default, handler: { _ in
+//                guard let vc = CurrentAppContext().frontmostViewController() else {
+//                    return
+//                }
+//                Self.showLearnMoreUrl(from: vc)
+//            }))
             actionSheet.addAction(OWSActionSheets.cancelAction)
 
             viewController.presentActionSheet(actionSheet)
@@ -151,7 +151,8 @@ public class FingerprintViewController: OWSViewController, OWSNavigationChildCon
             comment: "Instructions for verifying your safety number. Embeds {{contact's name}}",
         )
         // Link doesn't matter, we will override tap behavior.
-        let learnMoreString = CommonStrings.learnMore.styled(with: .link(URL(string: Constants.learnMoreUrl)!))
+//        let learnMoreString = CommonStrings.learnMore.styled(with: .link(URL(string: Constants.learnMoreUrl)!))
+        let learnMoreString = ""
         instructionsTextView.attributedText = NSAttributedString.composed(of: [
             String(format: instructionsFormat, fingerprint.theirName),
             " ",
@@ -381,8 +382,8 @@ public class FingerprintViewController: OWSViewController, OWSNavigationChildCon
     }
 
     fileprivate static func showLearnMoreUrl(from viewController: UIViewController) {
-        let safariVC = SFSafariViewController(url: URL.Support.safetyNumbers)
-        viewController.present(safariVC, animated: true)
+//        let safariVC = SFSafariViewController(url: URL.Support.safetyNumbers)
+//        viewController.present(safariVC, animated: true)
     }
 
     @objc
