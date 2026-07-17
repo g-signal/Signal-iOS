@@ -70,14 +70,14 @@ final class FullTextSearchOptimizer {
 
         let mergeResult = try await db.awaitableWrite { tx -> SqliteUtil.Fts5.MergeResult in
             return try SqliteUtil.Fts5.merge(
-                db: SDSDB.shimOnlyBridge(tx).database,
+                db: tx.database,
                 ftsTableName: FullTextSearchIndexer.ftsTableName,
                 numberOfPages: Constants.numberOfPagesToMergeAtATime,
-                isFirstBatch: isFirstBatch
+                isFirstBatch: isFirstBatch,
             )
         }
 
-        let formattedDuration = String(format: "%.1fms", (CACurrentMediaTime() - startTime)*1000)
+        let formattedDuration = String(format: "%.1fms", (CACurrentMediaTime() - startTime) * 1000)
         Logger.info("\(mergeResult) in \(formattedDuration)")
 
         return mergeResult == .workWasPerformed

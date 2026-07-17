@@ -11,9 +11,9 @@ import XCTest
 
 final class RecipientPickerViewControllerTests: XCTestCase {
     private struct MockContactDiscoveryManager: ContactDiscoveryManager {
-        var lookUpBlock: ((Set<String>) async throws -> Set<SignalRecipient>)?
+        var lookUpBlock: ((Set<String>) async throws -> [SignalRecipient])?
 
-        func lookUp(phoneNumbers: Set<String>, mode: ContactDiscoveryMode) async throws -> Set<SignalRecipient> {
+        func lookUp(phoneNumbers: Set<String>, mode: ContactDiscoveryMode) async throws -> [SignalRecipient] {
             return try await lookUpBlock?(phoneNumbers) ?? []
         }
     }
@@ -22,7 +22,7 @@ final class RecipientPickerViewControllerTests: XCTestCase {
         let finder = PhoneNumberFinder(
             localNumber: "+16505550100",
             contactDiscoveryManager: MockContactDiscoveryManager(),
-            phoneNumberUtil: PhoneNumberUtil()
+            phoneNumberUtil: PhoneNumberUtil(),
         )
         struct TestCase {
             var searchText: String
@@ -46,7 +46,7 @@ final class RecipientPickerViewControllerTests: XCTestCase {
 
             // test too many digits
             TestCase(searchText: "+ 12345 12345 12345 1234", searchResults: ["+1234512345123451234"]),
-            TestCase(searchText: "+ 12345 12345 12345 12345", searchResults: [])
+            TestCase(searchText: "+ 12345 12345 12345 12345", searchResults: []),
         ]
         for testCase in testCases {
             let searchResults = finder.parseResults(for: testCase.searchText).map { $0.maybeValidE164 }
@@ -64,7 +64,7 @@ final class RecipientPickerViewControllerTests: XCTestCase {
             TestCase(searchResult: .valid(validE164: "+16505550100"), isValid: true, isFound: true),
             TestCase(searchResult: .valid(validE164: "+16505550101"), isValid: true, isFound: false),
             TestCase(searchResult: .maybeValid(maybeValidE164: "+16505550102"), isValid: true, isFound: true),
-            TestCase(searchResult: .maybeValid(maybeValidE164: "+1650"), isValid: false, isFound: false)
+            TestCase(searchResult: .maybeValid(maybeValidE164: "+1650"), isValid: false, isFound: false),
         ]
         for testCase in testCases {
             let context = "searchResult: \(testCase.searchResult)"
@@ -72,15 +72,21 @@ final class RecipientPickerViewControllerTests: XCTestCase {
                 localNumber: "+16505550100",
                 contactDiscoveryManager: MockContactDiscoveryManager(lookUpBlock: { phoneNumbers in
                     XCTAssertTrue(testCase.isValid)
-                    return testCase.isFound ? [
-                        SignalRecipient(
-                            aci: Aci.randomForTesting(),
-                            pni: Pni.randomForTesting(),
-                            phoneNumber: E164(phoneNumbers.first)!
-                        )
-                    ] : []
+                    if testCase.isFound {
+                        let db = InMemoryDB()
+                        return db.write { tx in
+                            return [try! SignalRecipient.insertRecord(
+                                aci: Aci.randomForTesting(),
+                                phoneNumber: E164(phoneNumbers.first)!,
+                                pni: Pni.randomForTesting(),
+                                tx: tx,
+                            )]
+                        }
+                    } else {
+                        return []
+                    }
                 }),
-                phoneNumberUtil: PhoneNumberUtil()
+                phoneNumberUtil: PhoneNumberUtil(),
             )
             let lookupResult = try await finder.lookUp(phoneNumber: testCase.searchResult)
             switch lookupResult {

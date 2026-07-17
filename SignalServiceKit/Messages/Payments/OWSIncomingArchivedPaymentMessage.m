@@ -25,7 +25,26 @@ NS_ASSUME_NONNULL_BEGIN
     _archivedPaymentInfo = [[TSArchivedPaymentInfo alloc] initWithAmount:amount fee:fee note:note];
 
     return self;
-};
+}
+
+- (NSUInteger)hash
+{
+    NSUInteger result = [super hash];
+    result ^= self.archivedPaymentInfo.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
+    }
+    OWSIncomingArchivedPaymentMessage *typedOther = (OWSIncomingArchivedPaymentMessage *)other;
+    if (![NSObject isObject:self.archivedPaymentInfo equalToObject:typedOther.archivedPaymentInfo]) {
+        return NO;
+    }
+    return YES;
+}
 
 // --- CODE GENERATION MARKER
 

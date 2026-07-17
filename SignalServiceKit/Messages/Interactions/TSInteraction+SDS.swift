@@ -50,7 +50,7 @@ public struct InteractionRecord: SDSRecord {
     public let expireStartedAt: UInt64?
     public let expiresAt: UInt64?
     public let expiresInSeconds: UInt32?
-    public let groupMetaMessage: TSGroupMetaMessage?
+    public let groupMetaMessage: Int?
     public let hasLegacyMessageState: Bool?
     public let hasSyncedTranscript: Bool?
     public let wasNotCreatedLocally: Bool?
@@ -229,7 +229,7 @@ public extension InteractionRecord {
         expireStartedAt = row[20]
         expiresAt = row[21]
         expiresInSeconds = row[22]
-        groupMetaMessage = row[23].flatMap { TSGroupMetaMessage(rawValue: $0) }
+        groupMetaMessage = row[23]
         hasLegacyMessageState = row[24]
         hasSyncedTranscript = row[25]
         wasNotCreatedLocally = row[26]
@@ -318,11 +318,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -331,18 +331,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -350,14 +350,14 @@ extension TSInteraction {
             let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
             let customMessage: String? = record.customMessage
             let infoMessageUserInfoSerialized: Data? = record.infoMessageUserInfo
-            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try SDSDeserialization.optionalUnarchive(infoMessageUserInfoSerialized, name: "infoMessageUserInfo")
+            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try infoMessageUserInfoSerialized.map({ try SDSDeserialization.unarchivedInfoDictionary(from: $0) })
             guard let messageType: TSInfoMessageType = record.messageType else {
                throw SDSError.missingRequiredField()
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let serverGuid: String? = record.serverGuid
             let unregisteredAddressSerialized: Data? = record.unregisteredAddress
-            let unregisteredAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(unregisteredAddressSerialized, name: "unregisteredAddress")
+            let unregisteredAddress: SignalServiceAddress? = try unregisteredAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
 
             return OWSAddToContactsOfferMessage(grdbId: recordId,
                                                 uniqueId: uniqueId,
@@ -404,11 +404,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -417,18 +417,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -436,14 +436,14 @@ extension TSInteraction {
             let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
             let customMessage: String? = record.customMessage
             let infoMessageUserInfoSerialized: Data? = record.infoMessageUserInfo
-            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try SDSDeserialization.optionalUnarchive(infoMessageUserInfoSerialized, name: "infoMessageUserInfo")
+            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try infoMessageUserInfoSerialized.map({ try SDSDeserialization.unarchivedInfoDictionary(from: $0) })
             guard let messageType: TSInfoMessageType = record.messageType else {
                throw SDSError.missingRequiredField()
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let serverGuid: String? = record.serverGuid
             let unregisteredAddressSerialized: Data? = record.unregisteredAddress
-            let unregisteredAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(unregisteredAddressSerialized, name: "unregisteredAddress")
+            let unregisteredAddress: SignalServiceAddress? = try unregisteredAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
 
             return OWSAddToProfileWhitelistOfferMessage(grdbId: recordId,
                                                         uniqueId: uniqueId,
@@ -490,11 +490,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -503,18 +503,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -522,14 +522,14 @@ extension TSInteraction {
             let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
             let customMessage: String? = record.customMessage
             let infoMessageUserInfoSerialized: Data? = record.infoMessageUserInfo
-            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try SDSDeserialization.optionalUnarchive(infoMessageUserInfoSerialized, name: "infoMessageUserInfo")
+            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try infoMessageUserInfoSerialized.map({ try SDSDeserialization.unarchivedInfoDictionary(from: $0) })
             guard let messageType: TSInfoMessageType = record.messageType else {
                throw SDSError.missingRequiredField()
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let serverGuid: String? = record.serverGuid
             let unregisteredAddressSerialized: Data? = record.unregisteredAddress
-            let unregisteredAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(unregisteredAddressSerialized, name: "unregisteredAddress")
+            let unregisteredAddress: SignalServiceAddress? = try unregisteredAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let configurationDurationSeconds: UInt32 = try SDSDeserialization.required(record.configurationDurationSeconds, name: "configurationDurationSeconds")
             let configurationIsEnabled: Bool = try SDSDeserialization.required(record.configurationIsEnabled, name: "configurationIsEnabled")
             let createdByRemoteName: String? = record.createdByRemoteName
@@ -586,7 +586,7 @@ extension TSInteraction {
             let eraId: String? = record.eraId
             let hasEnded: Bool = try SDSDeserialization.required(record.hasEnded, name: "hasEnded")
             let joinedMemberUuidsSerialized: Data? = record.joinedMemberUuids
-            let joinedMemberUuids: [String]? = try SDSDeserialization.optionalUnarchive(joinedMemberUuidsSerialized, name: "joinedMemberUuids")
+            let joinedMemberUuids: [String]? = try joinedMemberUuidsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
 
             return OWSGroupCallMessage(grdbId: recordId,
@@ -610,11 +610,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -623,18 +623,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -649,8 +649,8 @@ extension TSInteraction {
             let serverTimestamp: NSNumber? = SDSDeserialization.optionalNumericAsNSNumber(record.serverTimestamp, name: "serverTimestamp", conversion: { NSNumber(value: $0) })
             let viewed: Bool = try SDSDeserialization.required(record.viewed, name: "viewed")
             let wasReceivedByUD: Bool = try SDSDeserialization.required(record.wasReceivedByUD, name: "wasReceivedByUD")
-            let archivedPaymentInfoSerialized: Data? = record.archivedPaymentInfo
-            let archivedPaymentInfo: TSArchivedPaymentInfo = try SDSDeserialization.unarchive(archivedPaymentInfoSerialized, name: "archivedPaymentInfo")
+            let archivedPaymentInfoSerialized: Data = try record.archivedPaymentInfo ?? { () -> Data in throw SDSError.missingRequiredField(fieldName: "archivedPaymentInfo") }()
+            let archivedPaymentInfo: TSArchivedPaymentInfo = try SDSDeserialization.unarchivedObject(ofClass: TSArchivedPaymentInfo.self, from: archivedPaymentInfoSerialized)
 
             return OWSIncomingArchivedPaymentMessage(grdbId: recordId,
                                                      uniqueId: uniqueId,
@@ -701,11 +701,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -714,18 +714,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -742,7 +742,7 @@ extension TSInteraction {
             let wasReceivedByUD: Bool = try SDSDeserialization.required(record.wasReceivedByUD, name: "wasReceivedByUD")
             let paymentCancellation: Data? = SDSDeserialization.optionalData(record.paymentCancellation, name: "paymentCancellation")
             let paymentNotificationSerialized: Data? = record.paymentNotification
-            let paymentNotification: TSPaymentNotification? = try SDSDeserialization.optionalUnarchive(paymentNotificationSerialized, name: "paymentNotification")
+            let paymentNotification: TSPaymentNotification? = try paymentNotificationSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSPaymentNotification.self, from: $0) })
             let paymentRequest: Data? = SDSDeserialization.optionalData(record.paymentRequest, name: "paymentRequest")
 
             return OWSIncomingPaymentMessage(grdbId: recordId,
@@ -796,11 +796,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -809,27 +809,25 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
             let storyTimestamp: NSNumber? = SDSDeserialization.optionalNumericAsNSNumber(record.storyTimestamp, name: "storyTimestamp", conversion: { NSNumber(value: $0) })
             let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
             let customMessage: String? = record.customMessage
-            guard let groupMetaMessage: TSGroupMetaMessage = record.groupMetaMessage else {
-               throw SDSError.missingRequiredField()
-            }
+            let groupMetaMessage: Int = try SDSDeserialization.required(record.groupMetaMessage, name: "groupMetaMessage")
             let hasLegacyMessageState: Bool = try SDSDeserialization.required(record.hasLegacyMessageState, name: "hasLegacyMessageState")
             let hasSyncedTranscript: Bool = try SDSDeserialization.required(record.hasSyncedTranscript, name: "hasSyncedTranscript")
             let isVoiceMessage: Bool = try SDSDeserialization.required(record.isVoiceMessage, name: "isVoiceMessage")
@@ -839,13 +837,13 @@ extension TSInteraction {
             let legacyWasDelivered: Bool = try SDSDeserialization.required(record.legacyWasDelivered, name: "legacyWasDelivered")
             let mostRecentFailureText: String? = record.mostRecentFailureText
             let recipientAddressStatesSerialized: Data? = record.recipientAddressStates
-            let recipientAddressStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]? = try SDSDeserialization.optionalUnarchive(recipientAddressStatesSerialized, name: "recipientAddressStates")
+            let recipientAddressStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]? = try recipientAddressStatesSerialized.map({ try SDSDeserialization.unarchivedDictionary(ofKeyClass: SignalServiceAddress.self, objectClass: TSOutgoingMessageRecipientState.self, from: $0) })
             guard let storedMessageState: TSOutgoingMessageState = record.storedMessageState else {
                throw SDSError.missingRequiredField()
             }
             let wasNotCreatedLocally: Bool = try SDSDeserialization.required(record.wasNotCreatedLocally, name: "wasNotCreatedLocally")
-            let archivedPaymentInfoSerialized: Data? = record.archivedPaymentInfo
-            let archivedPaymentInfo: TSArchivedPaymentInfo = try SDSDeserialization.unarchive(archivedPaymentInfoSerialized, name: "archivedPaymentInfo")
+            let archivedPaymentInfoSerialized: Data = try record.archivedPaymentInfo ?? { () -> Data in throw SDSError.missingRequiredField(fieldName: "archivedPaymentInfo") }()
+            let archivedPaymentInfo: TSArchivedPaymentInfo = try SDSDeserialization.unarchivedObject(ofClass: TSArchivedPaymentInfo.self, from: archivedPaymentInfoSerialized)
 
             return OWSOutgoingArchivedPaymentMessage(grdbId: recordId,
                                                      uniqueId: uniqueId,
@@ -898,11 +896,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -911,27 +909,25 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
             let storyTimestamp: NSNumber? = SDSDeserialization.optionalNumericAsNSNumber(record.storyTimestamp, name: "storyTimestamp", conversion: { NSNumber(value: $0) })
             let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
             let customMessage: String? = record.customMessage
-            guard let groupMetaMessage: TSGroupMetaMessage = record.groupMetaMessage else {
-               throw SDSError.missingRequiredField()
-            }
+            let groupMetaMessage: Int = try SDSDeserialization.required(record.groupMetaMessage, name: "groupMetaMessage")
             let hasLegacyMessageState: Bool = try SDSDeserialization.required(record.hasLegacyMessageState, name: "hasLegacyMessageState")
             let hasSyncedTranscript: Bool = try SDSDeserialization.required(record.hasSyncedTranscript, name: "hasSyncedTranscript")
             let isVoiceMessage: Bool = try SDSDeserialization.required(record.isVoiceMessage, name: "isVoiceMessage")
@@ -941,14 +937,14 @@ extension TSInteraction {
             let legacyWasDelivered: Bool = try SDSDeserialization.required(record.legacyWasDelivered, name: "legacyWasDelivered")
             let mostRecentFailureText: String? = record.mostRecentFailureText
             let recipientAddressStatesSerialized: Data? = record.recipientAddressStates
-            let recipientAddressStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]? = try SDSDeserialization.optionalUnarchive(recipientAddressStatesSerialized, name: "recipientAddressStates")
+            let recipientAddressStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]? = try recipientAddressStatesSerialized.map({ try SDSDeserialization.unarchivedDictionary(ofKeyClass: SignalServiceAddress.self, objectClass: TSOutgoingMessageRecipientState.self, from: $0) })
             guard let storedMessageState: TSOutgoingMessageState = record.storedMessageState else {
                throw SDSError.missingRequiredField()
             }
             let wasNotCreatedLocally: Bool = try SDSDeserialization.required(record.wasNotCreatedLocally, name: "wasNotCreatedLocally")
             let paymentCancellation: Data? = SDSDeserialization.optionalData(record.paymentCancellation, name: "paymentCancellation")
             let paymentNotificationSerialized: Data? = record.paymentNotification
-            let paymentNotification: TSPaymentNotification? = try SDSDeserialization.optionalUnarchive(paymentNotificationSerialized, name: "paymentNotification")
+            let paymentNotification: TSPaymentNotification? = try paymentNotificationSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSPaymentNotification.self, from: $0) })
             let paymentRequest: Data? = SDSDeserialization.optionalData(record.paymentRequest, name: "paymentRequest")
 
             return OWSOutgoingPaymentMessage(grdbId: recordId,
@@ -995,204 +991,6 @@ extension TSInteraction {
                                              paymentNotification: paymentNotification,
                                              paymentRequest: paymentRequest)
 
-        case .paymentActivationRequestFinishedMessage:
-
-            let uniqueId: String = record.uniqueId
-            let receivedAtTimestamp: UInt64 = record.receivedAtTimestamp
-            let sortId: UInt64 = UInt64(recordId)
-            let timestamp: UInt64 = record.timestamp
-            let uniqueThreadId: String = record.threadUniqueId
-            let body: String? = record.body
-            let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
-            let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
-            let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
-            guard let editState: TSEditState = record.editState else {
-               throw SDSError.missingRequiredField()
-            }
-            let expireStartedAt: UInt64 = try SDSDeserialization.required(record.expireStartedAt, name: "expireStartedAt")
-            let expireTimerVersion: NSNumber? = SDSDeserialization.optionalNumericAsNSNumber(record.expireTimerVersion, name: "expireTimerVersion", conversion: { NSNumber(value: $0) })
-            let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
-            let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
-            let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
-            let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
-            let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
-            let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
-            let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
-            let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
-            let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
-            let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
-            let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
-            let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
-            let storyAuthorUuidString: String? = record.storyAuthorUuidString
-            let storyReactionEmoji: String? = record.storyReactionEmoji
-            let storyTimestamp: NSNumber? = SDSDeserialization.optionalNumericAsNSNumber(record.storyTimestamp, name: "storyTimestamp", conversion: { NSNumber(value: $0) })
-            let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
-            let customMessage: String? = record.customMessage
-            guard let groupMetaMessage: TSGroupMetaMessage = record.groupMetaMessage else {
-               throw SDSError.missingRequiredField()
-            }
-            let hasLegacyMessageState: Bool = try SDSDeserialization.required(record.hasLegacyMessageState, name: "hasLegacyMessageState")
-            let hasSyncedTranscript: Bool = try SDSDeserialization.required(record.hasSyncedTranscript, name: "hasSyncedTranscript")
-            let isVoiceMessage: Bool = try SDSDeserialization.required(record.isVoiceMessage, name: "isVoiceMessage")
-            guard let legacyMessageState: TSOutgoingMessageState = record.legacyMessageState else {
-               throw SDSError.missingRequiredField()
-            }
-            let legacyWasDelivered: Bool = try SDSDeserialization.required(record.legacyWasDelivered, name: "legacyWasDelivered")
-            let mostRecentFailureText: String? = record.mostRecentFailureText
-            let recipientAddressStatesSerialized: Data? = record.recipientAddressStates
-            let recipientAddressStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]? = try SDSDeserialization.optionalUnarchive(recipientAddressStatesSerialized, name: "recipientAddressStates")
-            guard let storedMessageState: TSOutgoingMessageState = record.storedMessageState else {
-               throw SDSError.missingRequiredField()
-            }
-            let wasNotCreatedLocally: Bool = try SDSDeserialization.required(record.wasNotCreatedLocally, name: "wasNotCreatedLocally")
-
-            return OWSPaymentActivationRequestFinishedMessage(grdbId: recordId,
-                                                              uniqueId: uniqueId,
-                                                              receivedAtTimestamp: receivedAtTimestamp,
-                                                              sortId: sortId,
-                                                              timestamp: timestamp,
-                                                              uniqueThreadId: uniqueThreadId,
-                                                              body: body,
-                                                              bodyRanges: bodyRanges,
-                                                              contactShare: contactShare,
-                                                              deprecated_attachmentIds: deprecated_attachmentIds,
-                                                              editState: editState,
-                                                              expireStartedAt: expireStartedAt,
-                                                              expireTimerVersion: expireTimerVersion,
-                                                              expiresAt: expiresAt,
-                                                              expiresInSeconds: expiresInSeconds,
-                                                              giftBadge: giftBadge,
-                                                              isGroupStoryReply: isGroupStoryReply,
-                                                              isPoll: isPoll,
-                                                              isSmsMessageRestoredFromBackup: isSmsMessageRestoredFromBackup,
-                                                              isViewOnceComplete: isViewOnceComplete,
-                                                              isViewOnceMessage: isViewOnceMessage,
-                                                              linkPreview: linkPreview,
-                                                              messageSticker: messageSticker,
-                                                              quotedMessage: quotedMessage,
-                                                              storedShouldStartExpireTimer: storedShouldStartExpireTimer,
-                                                              storyAuthorUuidString: storyAuthorUuidString,
-                                                              storyReactionEmoji: storyReactionEmoji,
-                                                              storyTimestamp: storyTimestamp,
-                                                              wasRemotelyDeleted: wasRemotelyDeleted,
-                                                              customMessage: customMessage,
-                                                              groupMetaMessage: groupMetaMessage,
-                                                              hasLegacyMessageState: hasLegacyMessageState,
-                                                              hasSyncedTranscript: hasSyncedTranscript,
-                                                              isVoiceMessage: isVoiceMessage,
-                                                              legacyMessageState: legacyMessageState,
-                                                              legacyWasDelivered: legacyWasDelivered,
-                                                              mostRecentFailureText: mostRecentFailureText,
-                                                              recipientAddressStates: recipientAddressStates,
-                                                              storedMessageState: storedMessageState,
-                                                              wasNotCreatedLocally: wasNotCreatedLocally)
-
-        case .paymentActivationRequestMessage:
-
-            let uniqueId: String = record.uniqueId
-            let receivedAtTimestamp: UInt64 = record.receivedAtTimestamp
-            let sortId: UInt64 = UInt64(recordId)
-            let timestamp: UInt64 = record.timestamp
-            let uniqueThreadId: String = record.threadUniqueId
-            let body: String? = record.body
-            let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
-            let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
-            let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
-            guard let editState: TSEditState = record.editState else {
-               throw SDSError.missingRequiredField()
-            }
-            let expireStartedAt: UInt64 = try SDSDeserialization.required(record.expireStartedAt, name: "expireStartedAt")
-            let expireTimerVersion: NSNumber? = SDSDeserialization.optionalNumericAsNSNumber(record.expireTimerVersion, name: "expireTimerVersion", conversion: { NSNumber(value: $0) })
-            let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
-            let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
-            let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
-            let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
-            let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
-            let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
-            let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
-            let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
-            let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
-            let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
-            let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
-            let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
-            let storyAuthorUuidString: String? = record.storyAuthorUuidString
-            let storyReactionEmoji: String? = record.storyReactionEmoji
-            let storyTimestamp: NSNumber? = SDSDeserialization.optionalNumericAsNSNumber(record.storyTimestamp, name: "storyTimestamp", conversion: { NSNumber(value: $0) })
-            let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
-            let customMessage: String? = record.customMessage
-            guard let groupMetaMessage: TSGroupMetaMessage = record.groupMetaMessage else {
-               throw SDSError.missingRequiredField()
-            }
-            let hasLegacyMessageState: Bool = try SDSDeserialization.required(record.hasLegacyMessageState, name: "hasLegacyMessageState")
-            let hasSyncedTranscript: Bool = try SDSDeserialization.required(record.hasSyncedTranscript, name: "hasSyncedTranscript")
-            let isVoiceMessage: Bool = try SDSDeserialization.required(record.isVoiceMessage, name: "isVoiceMessage")
-            guard let legacyMessageState: TSOutgoingMessageState = record.legacyMessageState else {
-               throw SDSError.missingRequiredField()
-            }
-            let legacyWasDelivered: Bool = try SDSDeserialization.required(record.legacyWasDelivered, name: "legacyWasDelivered")
-            let mostRecentFailureText: String? = record.mostRecentFailureText
-            let recipientAddressStatesSerialized: Data? = record.recipientAddressStates
-            let recipientAddressStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]? = try SDSDeserialization.optionalUnarchive(recipientAddressStatesSerialized, name: "recipientAddressStates")
-            guard let storedMessageState: TSOutgoingMessageState = record.storedMessageState else {
-               throw SDSError.missingRequiredField()
-            }
-            let wasNotCreatedLocally: Bool = try SDSDeserialization.required(record.wasNotCreatedLocally, name: "wasNotCreatedLocally")
-
-            return OWSPaymentActivationRequestMessage(grdbId: recordId,
-                                                      uniqueId: uniqueId,
-                                                      receivedAtTimestamp: receivedAtTimestamp,
-                                                      sortId: sortId,
-                                                      timestamp: timestamp,
-                                                      uniqueThreadId: uniqueThreadId,
-                                                      body: body,
-                                                      bodyRanges: bodyRanges,
-                                                      contactShare: contactShare,
-                                                      deprecated_attachmentIds: deprecated_attachmentIds,
-                                                      editState: editState,
-                                                      expireStartedAt: expireStartedAt,
-                                                      expireTimerVersion: expireTimerVersion,
-                                                      expiresAt: expiresAt,
-                                                      expiresInSeconds: expiresInSeconds,
-                                                      giftBadge: giftBadge,
-                                                      isGroupStoryReply: isGroupStoryReply,
-                                                      isPoll: isPoll,
-                                                      isSmsMessageRestoredFromBackup: isSmsMessageRestoredFromBackup,
-                                                      isViewOnceComplete: isViewOnceComplete,
-                                                      isViewOnceMessage: isViewOnceMessage,
-                                                      linkPreview: linkPreview,
-                                                      messageSticker: messageSticker,
-                                                      quotedMessage: quotedMessage,
-                                                      storedShouldStartExpireTimer: storedShouldStartExpireTimer,
-                                                      storyAuthorUuidString: storyAuthorUuidString,
-                                                      storyReactionEmoji: storyReactionEmoji,
-                                                      storyTimestamp: storyTimestamp,
-                                                      wasRemotelyDeleted: wasRemotelyDeleted,
-                                                      customMessage: customMessage,
-                                                      groupMetaMessage: groupMetaMessage,
-                                                      hasLegacyMessageState: hasLegacyMessageState,
-                                                      hasSyncedTranscript: hasSyncedTranscript,
-                                                      isVoiceMessage: isVoiceMessage,
-                                                      legacyMessageState: legacyMessageState,
-                                                      legacyWasDelivered: legacyWasDelivered,
-                                                      mostRecentFailureText: mostRecentFailureText,
-                                                      recipientAddressStates: recipientAddressStates,
-                                                      storedMessageState: storedMessageState,
-                                                      wasNotCreatedLocally: wasNotCreatedLocally)
-
         case .recoverableDecryptionPlaceholder:
 
             let uniqueId: String = record.uniqueId
@@ -1202,11 +1000,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -1215,18 +1013,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -1237,9 +1035,9 @@ extension TSInteraction {
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let recipientAddressSerialized: Data? = record.recipientAddress
-            let recipientAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(recipientAddressSerialized, name: "recipientAddress")
+            let recipientAddress: SignalServiceAddress? = try recipientAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let senderSerialized: Data? = record.sender
-            let sender: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(senderSerialized, name: "sender")
+            let sender: SignalServiceAddress? = try senderSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let wasIdentityVerified: Bool = try SDSDeserialization.required(record.wasIdentityVerified, name: "wasIdentityVerified")
 
             return OWSRecoverableDecryptionPlaceholder(grdbId: recordId,
@@ -1286,11 +1084,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -1299,18 +1097,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -1321,9 +1119,9 @@ extension TSInteraction {
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let recipientAddressSerialized: Data? = record.recipientAddress
-            let recipientAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(recipientAddressSerialized, name: "recipientAddress")
+            let recipientAddress: SignalServiceAddress? = try recipientAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let senderSerialized: Data? = record.sender
-            let sender: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(senderSerialized, name: "sender")
+            let sender: SignalServiceAddress? = try senderSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let wasIdentityVerified: Bool = try SDSDeserialization.required(record.wasIdentityVerified, name: "wasIdentityVerified")
 
             return OWSUnknownContactBlockOfferMessage(grdbId: recordId,
@@ -1370,11 +1168,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -1383,18 +1181,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -1402,17 +1200,17 @@ extension TSInteraction {
             let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
             let customMessage: String? = record.customMessage
             let infoMessageUserInfoSerialized: Data? = record.infoMessageUserInfo
-            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try SDSDeserialization.optionalUnarchive(infoMessageUserInfoSerialized, name: "infoMessageUserInfo")
+            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try infoMessageUserInfoSerialized.map({ try SDSDeserialization.unarchivedInfoDictionary(from: $0) })
             guard let messageType: TSInfoMessageType = record.messageType else {
                throw SDSError.missingRequiredField()
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let serverGuid: String? = record.serverGuid
             let unregisteredAddressSerialized: Data? = record.unregisteredAddress
-            let unregisteredAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(unregisteredAddressSerialized, name: "unregisteredAddress")
+            let unregisteredAddress: SignalServiceAddress? = try unregisteredAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let protocolVersion: UInt = try SDSDeserialization.required(record.protocolVersion, name: "protocolVersion")
             let senderSerialized: Data? = record.sender
-            let sender: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(senderSerialized, name: "sender")
+            let sender: SignalServiceAddress? = try senderSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
 
             return OWSUnknownProtocolVersionMessage(grdbId: recordId,
                                                     uniqueId: uniqueId,
@@ -1461,11 +1259,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -1474,18 +1272,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -1493,17 +1291,17 @@ extension TSInteraction {
             let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
             let customMessage: String? = record.customMessage
             let infoMessageUserInfoSerialized: Data? = record.infoMessageUserInfo
-            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try SDSDeserialization.optionalUnarchive(infoMessageUserInfoSerialized, name: "infoMessageUserInfo")
+            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try infoMessageUserInfoSerialized.map({ try SDSDeserialization.unarchivedInfoDictionary(from: $0) })
             guard let messageType: TSInfoMessageType = record.messageType else {
                throw SDSError.missingRequiredField()
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let serverGuid: String? = record.serverGuid
             let unregisteredAddressSerialized: Data? = record.unregisteredAddress
-            let unregisteredAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(unregisteredAddressSerialized, name: "unregisteredAddress")
+            let unregisteredAddress: SignalServiceAddress? = try unregisteredAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let isLocalChange: Bool = try SDSDeserialization.required(record.isLocalChange, name: "isLocalChange")
-            let recipientAddressSerialized: Data? = record.recipientAddress
-            let recipientAddress: SignalServiceAddress = try SDSDeserialization.unarchive(recipientAddressSerialized, name: "recipientAddress")
+            let recipientAddressSerialized: Data = try record.recipientAddress ?? { () -> Data in throw SDSError.missingRequiredField(fieldName: "recipientAddress") }()
+            let recipientAddress: SignalServiceAddress = try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: recipientAddressSerialized)
             guard let verificationState: OWSVerificationState = record.verificationState else {
                throw SDSError.missingRequiredField()
             }
@@ -1581,11 +1379,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -1594,18 +1392,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -1616,9 +1414,9 @@ extension TSInteraction {
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let recipientAddressSerialized: Data? = record.recipientAddress
-            let recipientAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(recipientAddressSerialized, name: "recipientAddress")
+            let recipientAddress: SignalServiceAddress? = try recipientAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let senderSerialized: Data? = record.sender
-            let sender: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(senderSerialized, name: "sender")
+            let sender: SignalServiceAddress? = try senderSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let wasIdentityVerified: Bool = try SDSDeserialization.required(record.wasIdentityVerified, name: "wasIdentityVerified")
 
             return TSErrorMessage(grdbId: recordId,
@@ -1665,11 +1463,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -1678,18 +1476,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -1753,11 +1551,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -1766,18 +1564,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -1785,14 +1583,14 @@ extension TSInteraction {
             let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
             let customMessage: String? = record.customMessage
             let infoMessageUserInfoSerialized: Data? = record.infoMessageUserInfo
-            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try SDSDeserialization.optionalUnarchive(infoMessageUserInfoSerialized, name: "infoMessageUserInfo")
+            let infoMessageUserInfo: [InfoMessageUserInfoKey: AnyObject]? = try infoMessageUserInfoSerialized.map({ try SDSDeserialization.unarchivedInfoDictionary(from: $0) })
             guard let messageType: TSInfoMessageType = record.messageType else {
                throw SDSError.missingRequiredField()
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let serverGuid: String? = record.serverGuid
             let unregisteredAddressSerialized: Data? = record.unregisteredAddress
-            let unregisteredAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(unregisteredAddressSerialized, name: "unregisteredAddress")
+            let unregisteredAddress: SignalServiceAddress? = try unregisteredAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
 
             return TSInfoMessage(grdbId: recordId,
                                  uniqueId: uniqueId,
@@ -1854,11 +1652,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -1867,18 +1665,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -1889,9 +1687,9 @@ extension TSInteraction {
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let recipientAddressSerialized: Data? = record.recipientAddress
-            let recipientAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(recipientAddressSerialized, name: "recipientAddress")
+            let recipientAddress: SignalServiceAddress? = try recipientAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let senderSerialized: Data? = record.sender
-            let sender: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(senderSerialized, name: "sender")
+            let sender: SignalServiceAddress? = try senderSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let wasIdentityVerified: Bool = try SDSDeserialization.required(record.wasIdentityVerified, name: "wasIdentityVerified")
 
             return TSInvalidIdentityKeyErrorMessage(grdbId: recordId,
@@ -1938,11 +1736,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -1951,18 +1749,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -1973,9 +1771,9 @@ extension TSInteraction {
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let recipientAddressSerialized: Data? = record.recipientAddress
-            let recipientAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(recipientAddressSerialized, name: "recipientAddress")
+            let recipientAddress: SignalServiceAddress? = try recipientAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let senderSerialized: Data? = record.sender
-            let sender: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(senderSerialized, name: "sender")
+            let sender: SignalServiceAddress? = try senderSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let wasIdentityVerified: Bool = try SDSDeserialization.required(record.wasIdentityVerified, name: "wasIdentityVerified")
             let authorId: String = try SDSDeserialization.required(record.authorId, name: "authorId")
             let envelopeData: Data? = SDSDeserialization.optionalData(record.envelopeData, name: "envelopeData")
@@ -2026,11 +1824,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -2039,18 +1837,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -2061,9 +1859,9 @@ extension TSInteraction {
             }
             let read: Bool = try SDSDeserialization.required(record.read, name: "read")
             let recipientAddressSerialized: Data? = record.recipientAddress
-            let recipientAddress: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(recipientAddressSerialized, name: "recipientAddress")
+            let recipientAddress: SignalServiceAddress? = try recipientAddressSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let senderSerialized: Data? = record.sender
-            let sender: SignalServiceAddress? = try SDSDeserialization.optionalUnarchive(senderSerialized, name: "sender")
+            let sender: SignalServiceAddress? = try senderSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: SignalServiceAddress.self, from: $0) })
             let wasIdentityVerified: Bool = try SDSDeserialization.required(record.wasIdentityVerified, name: "wasIdentityVerified")
             let messageId: String = try SDSDeserialization.required(record.messageId, name: "messageId")
             let preKeyBundle: Data = try SDSDeserialization.required(record.preKeyBundle, name: "preKeyBundle")
@@ -2114,11 +1912,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -2127,18 +1925,18 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
@@ -2184,11 +1982,11 @@ extension TSInteraction {
             let uniqueThreadId: String = record.threadUniqueId
             let body: String? = record.body
             let bodyRangesSerialized: Data? = record.bodyRanges
-            let bodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(bodyRangesSerialized, name: "bodyRanges")
+            let bodyRanges: MessageBodyRanges? = try bodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let contactShareSerialized: Data? = record.contactShare
-            let contactShare: OWSContact? = try SDSDeserialization.optionalUnarchive(contactShareSerialized, name: "contactShare")
+            let contactShare: OWSContact? = try contactShareSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSContact.self, from: $0) })
             let deprecated_attachmentIdsSerialized: Data? = record.deprecated_attachmentIds
-            let deprecated_attachmentIds: [String]? = try SDSDeserialization.optionalUnarchive(deprecated_attachmentIdsSerialized, name: "deprecated_attachmentIds")
+            let deprecated_attachmentIds: [String]? = try deprecated_attachmentIdsSerialized.map({ try SDSDeserialization.unarchivedArrayOfObjects(ofClass: NSString.self, from: $0) as [String] })
             guard let editState: TSEditState = record.editState else {
                throw SDSError.missingRequiredField()
             }
@@ -2197,27 +1995,25 @@ extension TSInteraction {
             let expiresAt: UInt64 = try SDSDeserialization.required(record.expiresAt, name: "expiresAt")
             let expiresInSeconds: UInt32 = try SDSDeserialization.required(record.expiresInSeconds, name: "expiresInSeconds")
             let giftBadgeSerialized: Data? = record.giftBadge
-            let giftBadge: OWSGiftBadge? = try SDSDeserialization.optionalUnarchive(giftBadgeSerialized, name: "giftBadge")
+            let giftBadge: OWSGiftBadge? = try giftBadgeSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSGiftBadge.self, from: $0) })
             let isGroupStoryReply: Bool = try SDSDeserialization.required(record.isGroupStoryReply, name: "isGroupStoryReply")
             let isPoll: Bool = try SDSDeserialization.required(record.isPoll, name: "isPoll")
             let isSmsMessageRestoredFromBackup: Bool = try SDSDeserialization.required(record.isSmsMessageRestoredFromBackup, name: "isSmsMessageRestoredFromBackup")
             let isViewOnceComplete: Bool = try SDSDeserialization.required(record.isViewOnceComplete, name: "isViewOnceComplete")
             let isViewOnceMessage: Bool = try SDSDeserialization.required(record.isViewOnceMessage, name: "isViewOnceMessage")
             let linkPreviewSerialized: Data? = record.linkPreview
-            let linkPreview: OWSLinkPreview? = try SDSDeserialization.optionalUnarchive(linkPreviewSerialized, name: "linkPreview")
+            let linkPreview: OWSLinkPreview? = try linkPreviewSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: OWSLinkPreview.self, from: $0) })
             let messageStickerSerialized: Data? = record.messageSticker
-            let messageSticker: MessageSticker? = try SDSDeserialization.optionalUnarchive(messageStickerSerialized, name: "messageSticker")
+            let messageSticker: MessageSticker? = try messageStickerSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageSticker.self, from: $0) })
             let quotedMessageSerialized: Data? = record.quotedMessage
-            let quotedMessage: TSQuotedMessage? = try SDSDeserialization.optionalUnarchive(quotedMessageSerialized, name: "quotedMessage")
+            let quotedMessage: TSQuotedMessage? = try quotedMessageSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSQuotedMessage.self, from: $0) })
             let storedShouldStartExpireTimer: Bool = try SDSDeserialization.required(record.storedShouldStartExpireTimer, name: "storedShouldStartExpireTimer")
             let storyAuthorUuidString: String? = record.storyAuthorUuidString
             let storyReactionEmoji: String? = record.storyReactionEmoji
             let storyTimestamp: NSNumber? = SDSDeserialization.optionalNumericAsNSNumber(record.storyTimestamp, name: "storyTimestamp", conversion: { NSNumber(value: $0) })
             let wasRemotelyDeleted: Bool = try SDSDeserialization.required(record.wasRemotelyDeleted, name: "wasRemotelyDeleted")
             let customMessage: String? = record.customMessage
-            guard let groupMetaMessage: TSGroupMetaMessage = record.groupMetaMessage else {
-               throw SDSError.missingRequiredField()
-            }
+            let groupMetaMessage: Int = try SDSDeserialization.required(record.groupMetaMessage, name: "groupMetaMessage")
             let hasLegacyMessageState: Bool = try SDSDeserialization.required(record.hasLegacyMessageState, name: "hasLegacyMessageState")
             let hasSyncedTranscript: Bool = try SDSDeserialization.required(record.hasSyncedTranscript, name: "hasSyncedTranscript")
             let isVoiceMessage: Bool = try SDSDeserialization.required(record.isVoiceMessage, name: "isVoiceMessage")
@@ -2227,7 +2023,7 @@ extension TSInteraction {
             let legacyWasDelivered: Bool = try SDSDeserialization.required(record.legacyWasDelivered, name: "legacyWasDelivered")
             let mostRecentFailureText: String? = record.mostRecentFailureText
             let recipientAddressStatesSerialized: Data? = record.recipientAddressStates
-            let recipientAddressStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]? = try SDSDeserialization.optionalUnarchive(recipientAddressStatesSerialized, name: "recipientAddressStates")
+            let recipientAddressStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]? = try recipientAddressStatesSerialized.map({ try SDSDeserialization.unarchivedDictionary(ofKeyClass: SignalServiceAddress.self, objectClass: TSOutgoingMessageRecipientState.self, from: $0) })
             guard let storedMessageState: TSOutgoingMessageState = record.storedMessageState else {
                throw SDSError.missingRequiredField()
             }
@@ -2307,12 +2103,6 @@ extension TSInteraction: SDSModel {
         case let model as TSUnreadIndicatorInteraction:
             assert(type(of: model) == TSUnreadIndicatorInteraction.self)
             return TSUnreadIndicatorInteractionSerializer(model: model)
-        case let model as OWSPaymentActivationRequestMessage:
-            assert(type(of: model) == OWSPaymentActivationRequestMessage.self)
-            return OWSPaymentActivationRequestMessageSerializer(model: model)
-        case let model as OWSPaymentActivationRequestFinishedMessage:
-            assert(type(of: model) == OWSPaymentActivationRequestFinishedMessage.self)
-            return OWSPaymentActivationRequestFinishedMessageSerializer(model: model)
         case let model as OWSOutgoingPaymentMessage:
             assert(type(of: model) == OWSOutgoingPaymentMessage.self)
             return OWSOutgoingPaymentMessageSerializer(model: model)
@@ -2422,254 +2212,6 @@ extension TSInteraction: DeepCopyable {
                                                 uniqueThreadId: uniqueThreadId)
         }
 
-        if let modelToCopy = self as? OWSPaymentActivationRequestMessage {
-            assert(type(of: modelToCopy) == OWSPaymentActivationRequestMessage.self)
-            let uniqueId: String = modelToCopy.uniqueId
-            let receivedAtTimestamp: UInt64 = modelToCopy.receivedAtTimestamp
-            let sortId: UInt64 = modelToCopy.sortId
-            let timestamp: UInt64 = modelToCopy.timestamp
-            let uniqueThreadId: String = modelToCopy.uniqueThreadId
-            let body: String? = modelToCopy.body
-            let bodyRanges: MessageBodyRanges?
-            if let bodyRangesForCopy = modelToCopy.bodyRanges {
-               bodyRanges = try DeepCopies.deepCopy(bodyRangesForCopy)
-            } else {
-               bodyRanges = nil
-            }
-            let contactShare: OWSContact?
-            if let contactShareForCopy = modelToCopy.contactShare {
-               contactShare = try DeepCopies.deepCopy(contactShareForCopy)
-            } else {
-               contactShare = nil
-            }
-            let deprecated_attachmentIds: [String]?
-            if let deprecated_attachmentIdsForCopy = modelToCopy.deprecated_attachmentIds {
-               deprecated_attachmentIds = try DeepCopies.deepCopy(deprecated_attachmentIdsForCopy)
-            } else {
-               deprecated_attachmentIds = nil
-            }
-            let editState: TSEditState = modelToCopy.editState
-            let expireStartedAt: UInt64 = modelToCopy.expireStartedAt
-            let expireTimerVersion: NSNumber? = modelToCopy.expireTimerVersion
-            let expiresAt: UInt64 = modelToCopy.expiresAt
-            let expiresInSeconds: UInt32 = modelToCopy.expiresInSeconds
-            let giftBadge: OWSGiftBadge?
-            if let giftBadgeForCopy = modelToCopy.giftBadge {
-               giftBadge = try DeepCopies.deepCopy(giftBadgeForCopy)
-            } else {
-               giftBadge = nil
-            }
-            let isGroupStoryReply: Bool = modelToCopy.isGroupStoryReply
-            let isPoll: Bool = modelToCopy.isPoll
-            let isSmsMessageRestoredFromBackup: Bool = modelToCopy.isSmsMessageRestoredFromBackup
-            let isViewOnceComplete: Bool = modelToCopy.isViewOnceComplete
-            let isViewOnceMessage: Bool = modelToCopy.isViewOnceMessage
-            let linkPreview: OWSLinkPreview?
-            if let linkPreviewForCopy = modelToCopy.linkPreview {
-               linkPreview = try DeepCopies.deepCopy(linkPreviewForCopy)
-            } else {
-               linkPreview = nil
-            }
-            let messageSticker: MessageSticker?
-            if let messageStickerForCopy = modelToCopy.messageSticker {
-               messageSticker = try DeepCopies.deepCopy(messageStickerForCopy)
-            } else {
-               messageSticker = nil
-            }
-            let quotedMessage: TSQuotedMessage?
-            if let quotedMessageForCopy = modelToCopy.quotedMessage {
-               quotedMessage = try DeepCopies.deepCopy(quotedMessageForCopy)
-            } else {
-               quotedMessage = nil
-            }
-            let storedShouldStartExpireTimer: Bool = modelToCopy.storedShouldStartExpireTimer
-            let storyAuthorUuidString: String? = modelToCopy.storyAuthorUuidString
-            let storyReactionEmoji: String? = modelToCopy.storyReactionEmoji
-            let storyTimestamp: NSNumber? = modelToCopy.storyTimestamp
-            let wasRemotelyDeleted: Bool = modelToCopy.wasRemotelyDeleted
-            let customMessage: String? = modelToCopy.customMessage
-            let groupMetaMessage: TSGroupMetaMessage = modelToCopy.groupMetaMessage
-            let hasLegacyMessageState: Bool = modelToCopy.hasLegacyMessageState
-            let hasSyncedTranscript: Bool = modelToCopy.hasSyncedTranscript
-            let isVoiceMessage: Bool = modelToCopy.isVoiceMessage
-            let legacyMessageState: TSOutgoingMessageState = modelToCopy.legacyMessageState
-            let legacyWasDelivered: Bool = modelToCopy.legacyWasDelivered
-            let mostRecentFailureText: String? = modelToCopy.mostRecentFailureText
-            let recipientAddressStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]?
-            if let recipientAddressStatesForCopy = modelToCopy.recipientAddressStates {
-               recipientAddressStates = try DeepCopies.deepCopy(recipientAddressStatesForCopy)
-            } else {
-               recipientAddressStates = nil
-            }
-            let storedMessageState: TSOutgoingMessageState = modelToCopy.storedMessageState
-            let wasNotCreatedLocally: Bool = modelToCopy.wasNotCreatedLocally
-
-            return OWSPaymentActivationRequestMessage(grdbId: id,
-                                                      uniqueId: uniqueId,
-                                                      receivedAtTimestamp: receivedAtTimestamp,
-                                                      sortId: sortId,
-                                                      timestamp: timestamp,
-                                                      uniqueThreadId: uniqueThreadId,
-                                                      body: body,
-                                                      bodyRanges: bodyRanges,
-                                                      contactShare: contactShare,
-                                                      deprecated_attachmentIds: deprecated_attachmentIds,
-                                                      editState: editState,
-                                                      expireStartedAt: expireStartedAt,
-                                                      expireTimerVersion: expireTimerVersion,
-                                                      expiresAt: expiresAt,
-                                                      expiresInSeconds: expiresInSeconds,
-                                                      giftBadge: giftBadge,
-                                                      isGroupStoryReply: isGroupStoryReply,
-                                                      isPoll: isPoll,
-                                                      isSmsMessageRestoredFromBackup: isSmsMessageRestoredFromBackup,
-                                                      isViewOnceComplete: isViewOnceComplete,
-                                                      isViewOnceMessage: isViewOnceMessage,
-                                                      linkPreview: linkPreview,
-                                                      messageSticker: messageSticker,
-                                                      quotedMessage: quotedMessage,
-                                                      storedShouldStartExpireTimer: storedShouldStartExpireTimer,
-                                                      storyAuthorUuidString: storyAuthorUuidString,
-                                                      storyReactionEmoji: storyReactionEmoji,
-                                                      storyTimestamp: storyTimestamp,
-                                                      wasRemotelyDeleted: wasRemotelyDeleted,
-                                                      customMessage: customMessage,
-                                                      groupMetaMessage: groupMetaMessage,
-                                                      hasLegacyMessageState: hasLegacyMessageState,
-                                                      hasSyncedTranscript: hasSyncedTranscript,
-                                                      isVoiceMessage: isVoiceMessage,
-                                                      legacyMessageState: legacyMessageState,
-                                                      legacyWasDelivered: legacyWasDelivered,
-                                                      mostRecentFailureText: mostRecentFailureText,
-                                                      recipientAddressStates: recipientAddressStates,
-                                                      storedMessageState: storedMessageState,
-                                                      wasNotCreatedLocally: wasNotCreatedLocally)
-        }
-
-        if let modelToCopy = self as? OWSPaymentActivationRequestFinishedMessage {
-            assert(type(of: modelToCopy) == OWSPaymentActivationRequestFinishedMessage.self)
-            let uniqueId: String = modelToCopy.uniqueId
-            let receivedAtTimestamp: UInt64 = modelToCopy.receivedAtTimestamp
-            let sortId: UInt64 = modelToCopy.sortId
-            let timestamp: UInt64 = modelToCopy.timestamp
-            let uniqueThreadId: String = modelToCopy.uniqueThreadId
-            let body: String? = modelToCopy.body
-            let bodyRanges: MessageBodyRanges?
-            if let bodyRangesForCopy = modelToCopy.bodyRanges {
-               bodyRanges = try DeepCopies.deepCopy(bodyRangesForCopy)
-            } else {
-               bodyRanges = nil
-            }
-            let contactShare: OWSContact?
-            if let contactShareForCopy = modelToCopy.contactShare {
-               contactShare = try DeepCopies.deepCopy(contactShareForCopy)
-            } else {
-               contactShare = nil
-            }
-            let deprecated_attachmentIds: [String]?
-            if let deprecated_attachmentIdsForCopy = modelToCopy.deprecated_attachmentIds {
-               deprecated_attachmentIds = try DeepCopies.deepCopy(deprecated_attachmentIdsForCopy)
-            } else {
-               deprecated_attachmentIds = nil
-            }
-            let editState: TSEditState = modelToCopy.editState
-            let expireStartedAt: UInt64 = modelToCopy.expireStartedAt
-            let expireTimerVersion: NSNumber? = modelToCopy.expireTimerVersion
-            let expiresAt: UInt64 = modelToCopy.expiresAt
-            let expiresInSeconds: UInt32 = modelToCopy.expiresInSeconds
-            let giftBadge: OWSGiftBadge?
-            if let giftBadgeForCopy = modelToCopy.giftBadge {
-               giftBadge = try DeepCopies.deepCopy(giftBadgeForCopy)
-            } else {
-               giftBadge = nil
-            }
-            let isGroupStoryReply: Bool = modelToCopy.isGroupStoryReply
-            let isPoll: Bool = modelToCopy.isPoll
-            let isSmsMessageRestoredFromBackup: Bool = modelToCopy.isSmsMessageRestoredFromBackup
-            let isViewOnceComplete: Bool = modelToCopy.isViewOnceComplete
-            let isViewOnceMessage: Bool = modelToCopy.isViewOnceMessage
-            let linkPreview: OWSLinkPreview?
-            if let linkPreviewForCopy = modelToCopy.linkPreview {
-               linkPreview = try DeepCopies.deepCopy(linkPreviewForCopy)
-            } else {
-               linkPreview = nil
-            }
-            let messageSticker: MessageSticker?
-            if let messageStickerForCopy = modelToCopy.messageSticker {
-               messageSticker = try DeepCopies.deepCopy(messageStickerForCopy)
-            } else {
-               messageSticker = nil
-            }
-            let quotedMessage: TSQuotedMessage?
-            if let quotedMessageForCopy = modelToCopy.quotedMessage {
-               quotedMessage = try DeepCopies.deepCopy(quotedMessageForCopy)
-            } else {
-               quotedMessage = nil
-            }
-            let storedShouldStartExpireTimer: Bool = modelToCopy.storedShouldStartExpireTimer
-            let storyAuthorUuidString: String? = modelToCopy.storyAuthorUuidString
-            let storyReactionEmoji: String? = modelToCopy.storyReactionEmoji
-            let storyTimestamp: NSNumber? = modelToCopy.storyTimestamp
-            let wasRemotelyDeleted: Bool = modelToCopy.wasRemotelyDeleted
-            let customMessage: String? = modelToCopy.customMessage
-            let groupMetaMessage: TSGroupMetaMessage = modelToCopy.groupMetaMessage
-            let hasLegacyMessageState: Bool = modelToCopy.hasLegacyMessageState
-            let hasSyncedTranscript: Bool = modelToCopy.hasSyncedTranscript
-            let isVoiceMessage: Bool = modelToCopy.isVoiceMessage
-            let legacyMessageState: TSOutgoingMessageState = modelToCopy.legacyMessageState
-            let legacyWasDelivered: Bool = modelToCopy.legacyWasDelivered
-            let mostRecentFailureText: String? = modelToCopy.mostRecentFailureText
-            let recipientAddressStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]?
-            if let recipientAddressStatesForCopy = modelToCopy.recipientAddressStates {
-               recipientAddressStates = try DeepCopies.deepCopy(recipientAddressStatesForCopy)
-            } else {
-               recipientAddressStates = nil
-            }
-            let storedMessageState: TSOutgoingMessageState = modelToCopy.storedMessageState
-            let wasNotCreatedLocally: Bool = modelToCopy.wasNotCreatedLocally
-
-            return OWSPaymentActivationRequestFinishedMessage(grdbId: id,
-                                                              uniqueId: uniqueId,
-                                                              receivedAtTimestamp: receivedAtTimestamp,
-                                                              sortId: sortId,
-                                                              timestamp: timestamp,
-                                                              uniqueThreadId: uniqueThreadId,
-                                                              body: body,
-                                                              bodyRanges: bodyRanges,
-                                                              contactShare: contactShare,
-                                                              deprecated_attachmentIds: deprecated_attachmentIds,
-                                                              editState: editState,
-                                                              expireStartedAt: expireStartedAt,
-                                                              expireTimerVersion: expireTimerVersion,
-                                                              expiresAt: expiresAt,
-                                                              expiresInSeconds: expiresInSeconds,
-                                                              giftBadge: giftBadge,
-                                                              isGroupStoryReply: isGroupStoryReply,
-                                                              isPoll: isPoll,
-                                                              isSmsMessageRestoredFromBackup: isSmsMessageRestoredFromBackup,
-                                                              isViewOnceComplete: isViewOnceComplete,
-                                                              isViewOnceMessage: isViewOnceMessage,
-                                                              linkPreview: linkPreview,
-                                                              messageSticker: messageSticker,
-                                                              quotedMessage: quotedMessage,
-                                                              storedShouldStartExpireTimer: storedShouldStartExpireTimer,
-                                                              storyAuthorUuidString: storyAuthorUuidString,
-                                                              storyReactionEmoji: storyReactionEmoji,
-                                                              storyTimestamp: storyTimestamp,
-                                                              wasRemotelyDeleted: wasRemotelyDeleted,
-                                                              customMessage: customMessage,
-                                                              groupMetaMessage: groupMetaMessage,
-                                                              hasLegacyMessageState: hasLegacyMessageState,
-                                                              hasSyncedTranscript: hasSyncedTranscript,
-                                                              isVoiceMessage: isVoiceMessage,
-                                                              legacyMessageState: legacyMessageState,
-                                                              legacyWasDelivered: legacyWasDelivered,
-                                                              mostRecentFailureText: mostRecentFailureText,
-                                                              recipientAddressStates: recipientAddressStates,
-                                                              storedMessageState: storedMessageState,
-                                                              wasNotCreatedLocally: wasNotCreatedLocally)
-        }
-
         if let modelToCopy = self as? OWSOutgoingPaymentMessage {
             assert(type(of: modelToCopy) == OWSOutgoingPaymentMessage.self)
             let uniqueId: String = modelToCopy.uniqueId
@@ -2736,7 +2278,7 @@ extension TSInteraction: DeepCopyable {
             let storyTimestamp: NSNumber? = modelToCopy.storyTimestamp
             let wasRemotelyDeleted: Bool = modelToCopy.wasRemotelyDeleted
             let customMessage: String? = modelToCopy.customMessage
-            let groupMetaMessage: TSGroupMetaMessage = modelToCopy.groupMetaMessage
+            let groupMetaMessage: Int = modelToCopy.groupMetaMessage
             let hasLegacyMessageState: Bool = modelToCopy.hasLegacyMessageState
             let hasSyncedTranscript: Bool = modelToCopy.hasSyncedTranscript
             let isVoiceMessage: Bool = modelToCopy.isVoiceMessage
@@ -2871,7 +2413,7 @@ extension TSInteraction: DeepCopyable {
             let storyTimestamp: NSNumber? = modelToCopy.storyTimestamp
             let wasRemotelyDeleted: Bool = modelToCopy.wasRemotelyDeleted
             let customMessage: String? = modelToCopy.customMessage
-            let groupMetaMessage: TSGroupMetaMessage = modelToCopy.groupMetaMessage
+            let groupMetaMessage: Int = modelToCopy.groupMetaMessage
             let hasLegacyMessageState: Bool = modelToCopy.hasLegacyMessageState
             let hasSyncedTranscript: Bool = modelToCopy.hasSyncedTranscript
             let isVoiceMessage: Bool = modelToCopy.isVoiceMessage
@@ -2997,7 +2539,7 @@ extension TSInteraction: DeepCopyable {
             let storyTimestamp: NSNumber? = modelToCopy.storyTimestamp
             let wasRemotelyDeleted: Bool = modelToCopy.wasRemotelyDeleted
             let customMessage: String? = modelToCopy.customMessage
-            let groupMetaMessage: TSGroupMetaMessage = modelToCopy.groupMetaMessage
+            let groupMetaMessage: Int = modelToCopy.groupMetaMessage
             let hasLegacyMessageState: Bool = modelToCopy.hasLegacyMessageState
             let hasSyncedTranscript: Bool = modelToCopy.hasSyncedTranscript
             let isVoiceMessage: Bool = modelToCopy.isVoiceMessage
@@ -5060,7 +4602,7 @@ extension InteractionRecord {
                             expireStartedAt,
                             expiresAt,
                             expiresInSeconds,
-                            groupMetaMessage?.rawValue,
+                            groupMetaMessage,
                             hasLegacyMessageState,
                             hasSyncedTranscript,
                             wasNotCreatedLocally,
@@ -5153,7 +4695,7 @@ extension TSInteractionSerializer {
     static var expireStartedAtColumn: SDSColumnMetadata { SDSColumnMetadata(columnName: "expireStartedAt", columnType: .int64, isOptional: true) }
     static var expiresAtColumn: SDSColumnMetadata { SDSColumnMetadata(columnName: "expiresAt", columnType: .int64, isOptional: true) }
     static var expiresInSecondsColumn: SDSColumnMetadata { SDSColumnMetadata(columnName: "expiresInSeconds", columnType: .int64, isOptional: true) }
-    static var groupMetaMessageColumn: SDSColumnMetadata { SDSColumnMetadata(columnName: "groupMetaMessage", columnType: .int, isOptional: true) }
+    static var groupMetaMessageColumn: SDSColumnMetadata { SDSColumnMetadata(columnName: "groupMetaMessage", columnType: .int64, isOptional: true) }
     static var hasLegacyMessageStateColumn: SDSColumnMetadata { SDSColumnMetadata(columnName: "hasLegacyMessageState", columnType: .int, isOptional: true) }
     static var hasSyncedTranscriptColumn: SDSColumnMetadata { SDSColumnMetadata(columnName: "hasSyncedTranscript", columnType: .int, isOptional: true) }
     static var wasNotCreatedLocallyColumn: SDSColumnMetadata { SDSColumnMetadata(columnName: "wasNotCreatedLocally", columnType: .int, isOptional: true) }
@@ -5387,17 +4929,14 @@ public extension TSInteraction {
 @objc
 public class TSInteractionCursor: NSObject, SDSCursor {
     private let transaction: DBReadTransaction
-    private let cursor: RecordCursor<InteractionRecord>?
+    private let cursor: RecordCursor<InteractionRecord>
 
-    init(transaction: DBReadTransaction, cursor: RecordCursor<InteractionRecord>?) {
+    init(transaction: DBReadTransaction, cursor: RecordCursor<InteractionRecord>) {
         self.transaction = transaction
         self.cursor = cursor
     }
 
     public func next() throws -> TSInteraction? {
-        guard let cursor = cursor else {
-            return nil
-        }
         guard let record = try cursor.next() else {
             return nil
         }
@@ -5425,16 +4964,9 @@ public extension TSInteraction {
     @nonobjc
     class func grdbFetchCursor(transaction: DBReadTransaction) -> TSInteractionCursor {
         let database = transaction.database
-        do {
+        return failIfThrows {
             let cursor = try InteractionRecord.fetchCursor(database)
             return TSInteractionCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \(error)")
-            return TSInteractionCursor(transaction: transaction, cursor: nil)
         }
     }
 
@@ -5505,44 +5037,6 @@ public extension TSInteraction {
                             })
     }
 
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        anyEnumerateUniqueIds(transaction: transaction, batched: false, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batched: Bool = false,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        let batchSize = batched ? Batching.kDefaultBatchSize : 0
-        anyEnumerateUniqueIds(transaction: transaction, batchSize: batchSize, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    //
-    // If batchSize > 0, the enumeration is performed in autoreleased batches.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batchSize: UInt,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        grdbEnumerateUniqueIds(transaction: transaction,
-                                sql: """
-                SELECT \(interactionColumn: .uniqueId)
-                FROM \(InteractionRecord.databaseTableName)
-            """,
-            batchSize: batchSize,
-            block: block)
-    }
-
     // Does not order the results.
     class func anyFetchAll(transaction: DBReadTransaction) -> [TSInteraction] {
         var result = [TSInteraction]()
@@ -5552,36 +5046,8 @@ public extension TSInteraction {
         return result
     }
 
-    // Does not order the results.
-    class func anyAllUniqueIds(transaction: DBReadTransaction) -> [String] {
-        var result = [String]()
-        anyEnumerateUniqueIds(transaction: transaction) { (uniqueId, _) in
-            result.append(uniqueId)
-        }
-        return result
-    }
-
     class func anyCount(transaction: DBReadTransaction) -> UInt {
         return InteractionRecord.ows_fetchCount(transaction.database)
-    }
-
-    class func anyExists(
-        uniqueId: String,
-        transaction: DBReadTransaction
-    ) -> Bool {
-        assert(!uniqueId.isEmpty)
-
-        let sql = "SELECT EXISTS ( SELECT 1 FROM \(InteractionRecord.databaseTableName) WHERE \(interactionColumn: .uniqueId) = ? )"
-        let arguments: StatementArguments = [uniqueId]
-        do {
-            return try Bool.fetchOne(transaction.database, sql: sql, arguments: arguments) ?? false
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFail("Missing instance.")
-        }
     }
 }
 
@@ -5591,17 +5057,10 @@ public extension TSInteraction {
     class func grdbFetchCursor(sql: String,
                                arguments: StatementArguments = StatementArguments(),
                                transaction: DBReadTransaction) -> TSInteractionCursor {
-        do {
+        return failIfThrows {
             let sqlRequest = SQLRequest<Void>(sql: sql, arguments: arguments, cached: true)
             let cursor = try InteractionRecord.fetchCursor(transaction.database, sqlRequest)
             return TSInteractionCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \(error)")
-            return TSInteractionCursor(transaction: transaction, cursor: nil)
         }
     }
 
@@ -5666,7 +5125,7 @@ class TSInteractionSerializer: SDSSerializer {
         let expireStartedAt: UInt64? = nil
         let expiresAt: UInt64? = nil
         let expiresInSeconds: UInt32? = nil
-        let groupMetaMessage: TSGroupMetaMessage? = nil
+        let groupMetaMessage: Int? = nil
         let hasLegacyMessageState: Bool? = nil
         let hasSyncedTranscript: Bool? = nil
         let wasNotCreatedLocally: Bool? = nil

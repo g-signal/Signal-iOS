@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
-- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId NS_UNAVAILABLE;
 - (instancetype)initWithGrdbId:(int64_t)grdbId uniqueId:(NSString *)uniqueId NS_UNAVAILABLE;
 
@@ -155,7 +155,7 @@ NS_DESIGNATED_INITIALIZER NS_SWIFT_NAME(init(grdbId:uniqueId:addressUuidString:c
 
 #pragma mark -
 
-@interface MobileCoinPayment : MTLModel
+@interface MobileCoinPayment : NSObject <NSSecureCoding, NSCopying>
 
 // This property is only used for transfer in/out flows.
 @property (nonatomic, readonly, nullable) NSData *recipientPublicAddressData;

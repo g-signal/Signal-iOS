@@ -10,7 +10,7 @@ public struct StoryRecipientStore {
     public func insertRecipientId(
         _ recipientId: SignalRecipient.RowId,
         forStoryThreadId storyThreadId: TSPrivateStoryThread.RowId,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) throws {
         do {
             try StoryRecipient(threadId: storyThreadId, recipientId: recipientId).insert(tx.database)
@@ -24,7 +24,7 @@ public struct StoryRecipientStore {
     public func removeRecipientId(
         _ recipientId: SignalRecipient.RowId,
         forStoryThreadId storyThreadId: TSPrivateStoryThread.RowId,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) throws {
         do {
             try StoryRecipient(threadId: storyThreadId, recipientId: recipientId).delete(tx.database)
@@ -35,7 +35,7 @@ public struct StoryRecipientStore {
 
     public func removeRecipientIds(
         forStoryThreadId storyThreadId: TSPrivateStoryThread.RowId,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) throws {
         do {
             try StoryRecipient.filter(Column(StoryRecipient.CodingKeys.threadId) == storyThreadId).deleteAll(tx.database)
@@ -77,10 +77,10 @@ public struct StoryRecipientStore {
     }
 
     public func mergeRecipient(_ recipient: SignalRecipient, into targetRecipient: SignalRecipient, tx: DBWriteTransaction) throws {
-        let threadIds = try fetchStoryThreadIds(forRecipientId: recipient.id!, tx: tx)
+        let threadIds = try fetchStoryThreadIds(forRecipientId: recipient.id, tx: tx)
         for threadId in threadIds {
-            try removeRecipientId(recipient.id!, forStoryThreadId: threadId, tx: tx)
-            try insertRecipientId(targetRecipient.id!, forStoryThreadId: threadId, tx: tx)
+            try removeRecipientId(recipient.id, forStoryThreadId: threadId, tx: tx)
+            try insertRecipientId(targetRecipient.id, forStoryThreadId: threadId, tx: tx)
         }
     }
 }

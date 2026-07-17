@@ -52,17 +52,29 @@ class BackupSettingsStoreTests: XCTestCase {
 
     func testBackupUpdatesRefreshDate() throws {
         var lastBackupRefresh = db.read { tx in
-            backupSettingsStore.lastBackupRefreshDate(tx: tx)
+            CronStore(uniqueKey: .refreshBackup).mostRecentDate(tx: tx)
         }
-        XCTAssertNil(lastBackupRefresh, "Last backup should not be set")
+        XCTAssertEqual(lastBackupRefresh, .distantPast, "Last backup should not be set")
 
         db.write { tx in
             backupSettingsStore.setLastBackupDate(Date(), tx: tx)
         }
 
         lastBackupRefresh = db.read { tx in
-            backupSettingsStore.lastBackupRefreshDate(tx: tx)
+            CronStore(uniqueKey: .refreshBackup).mostRecentDate(tx: tx)
         }
-        XCTAssertNotNil(lastBackupRefresh, "Last backup should be set")
+        XCTAssertNotEqual(lastBackupRefresh, .distantPast, "Last backup should be set")
+    }
+}
+
+// MARK: -
+
+private extension BackupSettingsStore {
+    func lastBackupDate(tx: DBReadTransaction) -> Date? {
+        return lastBackupDetails(tx: tx)?.date
+    }
+
+    func setLastBackupDate(_ date: Date, tx: DBWriteTransaction) {
+        setLastBackupDetails(date: date, backupFileSizeBytes: 1, backupMediaSizeBytes: 1, tx: tx)
     }
 }

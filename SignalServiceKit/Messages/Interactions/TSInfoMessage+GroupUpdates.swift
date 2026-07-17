@@ -27,7 +27,7 @@ extension TSInfoMessage {
         timestamp: UInt64,
         spamReportingMetadata: GroupUpdateSpamReportingMetadata,
         groupThread: TSGroupThread,
-        updateItems: [PersistableGroupUpdateItem]
+        updateItems: [PersistableGroupUpdateItem],
     ) -> TSInfoMessage {
         owsPrecondition(!updateItems.isEmpty)
 
@@ -49,7 +49,9 @@ extension TSInfoMessage {
             timestamp: timestamp,
             serverGuid: spamReportingServerGuid,
             messageType: .typeGroupUpdate,
-            infoMessageUserInfo: userInfoForNewMessage
+            expireTimerVersion: nil,
+            expiresInSeconds: 0,
+            infoMessageUserInfo: userInfoForNewMessage,
         )
         return infoMessage
     }
@@ -58,6 +60,8 @@ extension TSInfoMessage {
         setInfoMessageValue(updateItemsWrapper, forKey: .groupUpdateItems)
     }
 }
+
+// MARK: -
 
 public extension TSInfoMessage {
     enum GroupUpdateMetadata {
@@ -86,12 +90,14 @@ public extension TSInfoMessage {
         case nonGroupUpdate
     }
 
-    private var groupUpdateItemBuilder: GroupUpdateItemBuilder {
+    private static var groupUpdateItemBuilder: GroupUpdateItemBuilder {
         return GroupUpdateItemBuilderImpl(
             contactsManager: SSKEnvironment.shared.contactManagerRef,
-            recipientDatabaseTable: DependenciesBridge.shared.recipientDatabaseTable
+            recipientDatabaseTable: DependenciesBridge.shared.recipientDatabaseTable,
         )
     }
+
+    // MARK: -
 
     @objc
     func groupUpdateDescription(transaction tx: DBReadTransaction) -> NSAttributedString {
@@ -115,17 +121,19 @@ public extension TSInfoMessage {
             return NSAttributedString(string: string)
 
         case .newGroup, .modelDiff, .precomputed:
-            guard let persistableItems = persistableGroupUpdateItems(
-                localIdentifiers: localIdentifiers,
-                tx: tx,
-            ) else {
+            guard
+                let persistableItems = computedGroupUpdateItems(
+                    localIdentifiers: localIdentifiers,
+                    tx: tx,
+                )
+            else {
                 return fallback
             }
 
-            updateItems = groupUpdateItemBuilder.displayableUpdateItemsForPrecomputed(
+            updateItems = Self.groupUpdateItemBuilder.displayableUpdateItemsForPrecomputed(
                 precomputedUpdateItems: persistableItems,
                 localIdentifiers: localIdentifiers,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -135,7 +143,7 @@ public extension TSInfoMessage {
         }
 
         let initialString = NSMutableAttributedString(
-            attributedString: firstUpdateItem.localizedText
+            attributedString: firstUpdateItem.localizedText,
         )
 
         return updateItems.dropFirst().reduce(initialString) { partialResult, updateItem in
@@ -145,37 +153,29 @@ public extension TSInfoMessage {
         }
     }
 
-    func computedGroupUpdateItems(
-        localIdentifiers: LocalIdentifiers,
-        tx: DBReadTransaction
-    ) -> [PersistableGroupUpdateItem]? {
-        return persistableGroupUpdateItems(
-            localIdentifiers: localIdentifiers,
-            tx: tx,
-        )
-    }
-
     func displayableGroupUpdateItems(
         localIdentifiers: LocalIdentifiers,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> [DisplayableGroupUpdateItem]? {
         switch groupUpdateMetadata(localIdentifiers: localIdentifiers) {
         case .legacyRawString, .nonGroupUpdate:
             return nil
 
         case .newGroup, .modelDiff, .precomputed:
-            guard let localIdentifiers = DependenciesBridge.shared.tsAccountManager.localIdentifiers(
-                tx: tx
-            ) else {
+            guard
+                let localIdentifiers = DependenciesBridge.shared.tsAccountManager.localIdentifiers(
+                    tx: tx,
+                )
+            else {
                 owsFailDebug("Missing local identifiers!")
                 return nil
             }
 
-            return persistableGroupUpdateItems(
+            return computedGroupUpdateItems(
                 localIdentifiers: localIdentifiers,
                 tx: tx,
             ).map {
-                groupUpdateItemBuilder.displayableUpdateItemsForPrecomputed(
+                Self.groupUpdateItemBuilder.displayableUpdateItemsForPrecomputed(
                     precomputedUpdateItems: $0,
                     localIdentifiers: localIdentifiers,
                     tx: tx,
@@ -184,64 +184,31 @@ public extension TSInfoMessage {
         }
     }
 
-    func groupUpdateMetadata(localIdentifiers: LocalIdentifiers) -> GroupUpdateMetadata {
-        if let precomputed = infoMessageUserInfo?[.groupUpdateItems] as? PersistableGroupUpdateItemsWrapper {
-            return .precomputed(precomputed)
-        } else if let legacyPrecomputed = infoMessageUserInfo?[.legacyGroupUpdateItems] as? LegacyPersistableGroupUpdateItemsWrapper {
-            let source = self.persistedLegacyUpdateSource
+    // MARK: -
 
-            // Convert the legacy items into new items.
-            let mappedItems: [PersistableGroupUpdateItem] = legacyPrecomputed
-                .updateItems
-                .compactMap { legacyItem in
-                    return legacyItem.toNewItem(
-                        updater: source,
-                        oldGroupModel: infoMessageUserInfo?[.oldGroupModel] as? TSGroupModel,
-                        localIdentifiers: localIdentifiers
-                    )
-                }
-            return .precomputed(.init(mappedItems))
-        } else if
-            let newGroupModel: TSGroupModel = infoMessageValue(forKey: .newGroupModel)
-        {
-            let source = self.persistedLegacyUpdateSource
-
-            if let oldGroupModel: TSGroupModel = infoMessageValue(forKey: .oldGroupModel) {
-                return .modelDiff(
-                    old: .init(
-                        groupModel: oldGroupModel,
-                        dmToken: infoMessageValue(forKey: .oldDisappearingMessageToken)
-                    ),
-                    new: .init(
-                        groupModel: newGroupModel,
-                        dmToken: infoMessageValue(forKey: .newDisappearingMessageToken)
-                    ),
-                    source: source,
-                )
-            } else {
-                return .newGroup(
-                    .init(
-                        groupModel: newGroupModel,
-                        dmToken: infoMessageValue(forKey: .newDisappearingMessageToken)
-                    ),
-                    source: source,
-                )
-            }
-        } else if let customMessage {
-            return .legacyRawString(customMessage)
-        } else {
-            if messageType == .typeGroupUpdate {
-                owsFailDebug("Group update should contain some metadata!")
-            }
-            return .nonGroupUpdate
-        }
-    }
-
-    private func persistableGroupUpdateItems(
+    func computedGroupUpdateItems(
         localIdentifiers: LocalIdentifiers,
         tx: DBReadTransaction,
     ) -> [PersistableGroupUpdateItem]? {
-        switch groupUpdateMetadata(localIdentifiers: localIdentifiers) {
+        return Self.computedGroupUpdateItems(
+            infoMessageUserInfo: infoMessageUserInfo,
+            customMessage: customMessage,
+            localIdentifiers: localIdentifiers,
+            tx: tx,
+        )
+    }
+
+    static func computedGroupUpdateItems(
+        infoMessageUserInfo: [InfoMessageUserInfoKey: Any]?,
+        customMessage: String?,
+        localIdentifiers: LocalIdentifiers,
+        tx: DBReadTransaction,
+    ) -> [PersistableGroupUpdateItem]? {
+        switch groupUpdateMetadata(
+            infoMessageUserInfo: infoMessageUserInfo,
+            customMessage: customMessage,
+            localIdentifiers: localIdentifiers,
+        ) {
         case .nonGroupUpdate, .legacyRawString:
             return nil
 
@@ -254,7 +221,7 @@ public extension TSInfoMessage {
                 newDisappearingMessageToken: newGroupModel.dmToken,
                 localIdentifiers: localIdentifiers,
                 groupUpdateSource: source,
-                tx: tx
+                tx: tx,
             )
 
         case let .modelDiff(oldGroupModel, newGroupModel, source):
@@ -265,14 +232,81 @@ public extension TSInfoMessage {
                 newDisappearingMessageToken: newGroupModel.dmToken,
                 localIdentifiers: localIdentifiers,
                 groupUpdateSource: source,
-                tx: tx
+                tx: tx,
             )
         }
     }
 
-    /// We only stored this legacy data before we persisted the new ``TSInfoMessage.PersistableGroupUpdateItem``,
-    /// so it lives either alongside a model diff or alongside ``TSInfoMessage.LegacyPersistableGroupUpdateItem``.
-    private var persistedLegacyUpdateSource: GroupUpdateSource {
+    // MARK: -
+
+    func groupUpdateMetadata(localIdentifiers: LocalIdentifiers) -> GroupUpdateMetadata {
+        return Self.groupUpdateMetadata(
+            infoMessageUserInfo: infoMessageUserInfo,
+            customMessage: customMessage,
+            localIdentifiers: localIdentifiers,
+        )
+    }
+
+    private static func groupUpdateMetadata(
+        infoMessageUserInfo: [InfoMessageUserInfoKey: Any]?,
+        customMessage: String?,
+        localIdentifiers: LocalIdentifiers,
+    ) -> GroupUpdateMetadata {
+        if let precomputed = infoMessageUserInfo?[.groupUpdateItems] as? PersistableGroupUpdateItemsWrapper {
+            return .precomputed(precomputed)
+        } else if let legacyPrecomputed = infoMessageUserInfo?[.legacyGroupUpdateItems] as? LegacyPersistableGroupUpdateItemsWrapper {
+            let source = persistedLegacyUpdateSource(infoMessageUserInfo: infoMessageUserInfo)
+
+            // Convert the legacy items into new items.
+            let mappedItems: [PersistableGroupUpdateItem] = legacyPrecomputed
+                .updateItems
+                .compactMap { legacyItem in
+                    return legacyItem.toNewItem(
+                        updater: source,
+                        oldGroupModel: infoMessageUserInfo?[.oldGroupModel] as? TSGroupModel,
+                        localIdentifiers: localIdentifiers,
+                    )
+                }
+            return .precomputed(.init(mappedItems))
+        } else if
+            let newGroupModel = infoMessageUserInfo?[.newGroupModel] as? TSGroupModel
+        {
+            let source = persistedLegacyUpdateSource(infoMessageUserInfo: infoMessageUserInfo)
+
+            if let oldGroupModel = infoMessageUserInfo?[.oldGroupModel] as? TSGroupModel {
+                return .modelDiff(
+                    old: GroupUpdateMetadata.GroupModel(
+                        groupModel: oldGroupModel,
+                        dmToken: infoMessageUserInfo?[.oldDisappearingMessageToken] as? DisappearingMessageToken,
+                    ),
+                    new: GroupUpdateMetadata.GroupModel(
+                        groupModel: newGroupModel,
+                        dmToken: infoMessageUserInfo?[.newDisappearingMessageToken] as? DisappearingMessageToken,
+                    ),
+                    source: source,
+                )
+            } else {
+                return .newGroup(
+                    GroupUpdateMetadata.GroupModel(
+                        groupModel: newGroupModel,
+                        dmToken: infoMessageUserInfo?[.newDisappearingMessageToken] as? DisappearingMessageToken,
+                    ),
+                    source: source,
+                )
+            }
+        } else if let customMessage {
+            return .legacyRawString(customMessage)
+        } else {
+            return .nonGroupUpdate
+        }
+    }
+
+    /// Prior to ``TSInfoMessage/PersistableGroupUpdateItem``, which embeds the
+    /// group update source, said source lived alongside a model diff or a
+    /// ``TSInfoMessage/LegacyPersistableGroupUpdateItem``.
+    private static func persistedLegacyUpdateSource(
+        infoMessageUserInfo: [InfoMessageUserInfoKey: Any]?,
+    ) -> GroupUpdateSource {
         guard let infoMessageUserInfoDict = infoMessageUserInfo else {
             return .unknown
         }
@@ -286,7 +320,7 @@ public extension TSInfoMessage {
             // Check for legacy persisted enum state.
             if
                 let legacyPrecomputed = infoMessageUserInfoDict[.legacyGroupUpdateItems]
-                    as? LegacyPersistableGroupUpdateItemsWrapper,
+                as? LegacyPersistableGroupUpdateItemsWrapper,
                 case let .inviteRemoved(_, wasLocalUser) = legacyPrecomputed.updateItems.first
             {
                 return wasLocalUser

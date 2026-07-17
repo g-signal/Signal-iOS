@@ -19,7 +19,7 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
     public static func from(
         sentProto: SSKProtoSyncMessageSent,
         serverTimestamp: UInt64,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> OWSIncomingSentMessageTranscript? {
         let isEdit = sentProto.editMessage?.dataMessage != nil
         guard let dataMessage = sentProto.message ?? sentProto.editMessage?.dataMessage else {
@@ -47,13 +47,15 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
 
             groupId = contextInfo.groupId
             recipientAddress = nil
-        } else if
-            sentProto.destinationServiceID != nil
-            || sentProto.destinationE164 != nil
-        {
-            let destinationAddress = SignalServiceAddress.legacyAddress(
+        } else if sentProto.hasDestinationServiceID || sentProto.hasDestinationServiceIDBinary || sentProto.destinationE164 != nil {
+            let serviceId = ServiceId.parseFrom(
+                serviceIdBinary: sentProto.destinationServiceIDBinary,
                 serviceIdString: sentProto.destinationServiceID,
-                phoneNumber: sentProto.destinationE164?.nilIfEmpty
+            )
+            let destinationAddress = SignalServiceAddress(
+                serviceId: serviceId,
+                legacyPhoneNumber: sentProto.destinationE164?.nilIfEmpty,
+                cache: SSKEnvironment.shared.signalServiceAddressCacheRef,
             )
             guard destinationAddress.isValid else {
                 owsFailDebug("Invalid destinationAddress.")
@@ -75,7 +77,7 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
         }
 
         let type: SentMessageTranscriptType
-        if sentProto.isRecipientUpdate && !isEdit {
+        if sentProto.isRecipientUpdate, !isEdit {
             guard
                 let groupId,
                 let groupThread = TSGroupThread.fetch(forGroupId: groupId, tx: tx)
@@ -85,12 +87,14 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
             }
             type = .recipientUpdate(groupThread)
         } else if isExpirationTimerUpdate {
-            guard let target = getTarget(
-                recipientAddress: recipientAddress,
-                groupId: groupId,
-                dataMessage: dataMessage,
-                tx: tx
-            ) else {
+            guard
+                let target = getTarget(
+                    recipientAddress: recipientAddress,
+                    groupId: groupId,
+                    dataMessage: dataMessage,
+                    tx: tx,
+                )
+            else {
                 return nil
             }
             type = .expirationTimerUpdate(target)
@@ -101,12 +105,14 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
             }
             type = .endSessionUpdate(TSContactThread.getOrCreateThread(contactAddress: recipientAddress))
         } else if dataMessage.payment != nil {
-            guard let target = getTarget(
-                recipientAddress: recipientAddress,
-                groupId: groupId,
-                dataMessage: dataMessage,
-                tx: tx
-            ) else {
+            guard
+                let target = getTarget(
+                    recipientAddress: recipientAddress,
+                    groupId: groupId,
+                    dataMessage: dataMessage,
+                    tx: tx,
+                )
+            else {
                 return nil
             }
             guard let paymentModels = TSPaymentModels.parsePaymentProtos(dataMessage: dataMessage, thread: target.thread) else {
@@ -124,25 +130,29 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
             let paymentNotification = SentMessageTranscriptType.PaymentNotification(
                 target: target,
                 serverTimestamp: paymentServerTimestamp,
-                notification: paymentModels.notification
+                notification: paymentModels.notification,
             )
             type = .paymentNotification(paymentNotification)
         } else {
-            guard let target = getTarget(
-                recipientAddress: recipientAddress,
-                groupId: groupId,
-                dataMessage: dataMessage,
-                tx: tx
-            ) else {
+            guard
+                let target = getTarget(
+                    recipientAddress: recipientAddress,
+                    groupId: groupId,
+                    dataMessage: dataMessage,
+                    tx: tx,
+                )
+            else {
                 return nil
             }
-            guard let messageParams = try? self.parseMessageParams(
-                sentProto: sentProto,
-                serverTimestamp: serverTimestamp,
-                dataMessage: dataMessage,
-                target: target,
-                tx: tx
-            ) else {
+            guard
+                let messageParams = self.parseMessageParams(
+                    sentProto: sentProto,
+                    serverTimestamp: serverTimestamp,
+                    dataMessage: dataMessage,
+                    target: target,
+                    tx: tx,
+                )
+            else {
                 return nil
             }
             type = .message(messageParams)
@@ -151,8 +161,10 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
         var recipientStates = [SignalServiceAddress: TSOutgoingMessageRecipientState]()
         for statusProto in sentProto.unidentifiedStatus {
             guard
-                let serviceIdString = statusProto.destinationServiceID,
-                let serviceId = try? ServiceId.parseFrom(serviceIdString: serviceIdString),
+                let serviceId = ServiceId.parseFrom(
+                    serviceIdBinary: statusProto.destinationServiceIDBinary,
+                    serviceIdString: statusProto.destinationServiceID,
+                ),
                 statusProto.hasUnidentified
             else {
                 owsFailDebug("Delivery status proto is missing value.")
@@ -163,7 +175,7 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
                 status: .sent,
                 statusTimestamp: sentProto.timestamp,
                 wasSentByUD: statusProto.unidentified,
-                errorCode: nil
+                errorCode: nil,
             )
             recipientStates[SignalServiceAddress(serviceId)] = recipientState
         }
@@ -175,14 +187,14 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
         return .init(
             type: type,
             timestamp: sentProto.timestamp,
-            recipientStates: recipientStates
+            recipientStates: recipientStates,
         )
     }
 
     private static func validateTimestampsMatch(
         type: SentMessageTranscriptType,
         sentProto: SSKProtoSyncMessageSent,
-        dataMessage: SSKProtoDataMessage
+        dataMessage: SSKProtoDataMessage,
     ) -> Bool {
         switch type {
         case .message, .expirationTimerUpdate, .paymentNotification, .archivedPayment:
@@ -205,82 +217,98 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
         serverTimestamp: UInt64,
         dataMessage: SSKProtoDataMessage,
         target: SentMessageTranscriptTarget,
-        tx: DBWriteTransaction
-    ) throws -> SentMessageTranscriptType.Message? {
+        tx: DBWriteTransaction,
+    ) -> SentMessageTranscriptType.Message? {
         let isViewOnceMessage = dataMessage.hasIsViewOnce && dataMessage.isViewOnce
 
         let bodyRanges = dataMessage.bodyRanges.isEmpty ? MessageBodyRanges.empty : MessageBodyRanges(protos: dataMessage.bodyRanges)
-        let body = dataMessage.body.map {
+        var body = dataMessage.body.map {
             DependenciesBridge.shared.attachmentContentValidator.truncatedMessageBodyForInlining(
                 MessageBody(text: $0, ranges: bodyRanges),
-                tx: tx
+                tx: tx,
             )
         }
 
-        let makeContactBuilder = { [dataMessage] tx in
-            try dataMessage.contact.first.map {
-                try DependenciesBridge.shared.contactShareManager.validateAndBuild(
-                    for: $0,
-                    tx: tx
-                )
-            }
+        let validatedContactShare: ValidatedContactShareProto?
+        if let contactShareProto = dataMessage.contact.first {
+            let contactShareManager = DependenciesBridge.shared.contactShareManager
+            validatedContactShare = contactShareManager.validateAndBuild(for: contactShareProto)
+        } else {
+            validatedContactShare = nil
         }
 
-        let makeLinkPreviewBuilder = { [dataMessage] tx -> OwnedAttachmentBuilder<OWSLinkPreview>? in
-            if let linkPreview = dataMessage.preview.first {
-                do {
-                    return try DependenciesBridge.shared.linkPreviewManager.validateAndBuildLinkPreview(
-                        from: linkPreview,
-                        dataMessage: dataMessage,
-                        tx: tx
-                    )
-                } catch let error as LinkPreviewError {
-                    switch error {
-                    case .invalidPreview:
-                        // Just drop the link preview, but keep the message
-                        Logger.info("Dropping invalid link preview; keeping message")
-                       return nil
-                    case .noPreview, .fetchFailure, .featureDisabled:
-                        owsFailDebug("Invalid link preview error on incoming proto")
-                        return nil
-                    }
-                } catch let error {
-                    throw error
-                }
-            } else {
+        let validatedLinkPreview: ValidatedLinkPreviewProto?
+        if let linkPreviewProto = dataMessage.preview.first {
+            do {
+                let linkPreviewManager = DependenciesBridge.shared.linkPreviewManager
+                validatedLinkPreview = try linkPreviewManager.validateAndBuildLinkPreview(
+                    from: linkPreviewProto,
+                    dataMessage: dataMessage,
+                )
+            } catch LinkPreviewError.invalidPreview {
+                // Just drop the link preview, but keep the message
+                Logger.warn("Dropping invalid link preview; keeping message")
+                validatedLinkPreview = nil
+            } catch {
+                owsFailDebug("Unexpected error for incoming synced link preview proto! \(error)")
                 return nil
             }
+        } else {
+            validatedLinkPreview = nil
+        }
+
+        let validatedMessageSticker: ValidatedMessageStickerProto?
+        if let stickerProto = dataMessage.sticker {
+            let messageStickerManager = DependenciesBridge.shared.messageStickerManager
+            do {
+                validatedMessageSticker = try messageStickerManager.buildValidatedMessageSticker(from: stickerProto)
+            } catch {
+                owsFailDebug("Unexpected error for incoming message sticker! \(error)")
+                return nil
+            }
+        } else {
+            validatedMessageSticker = nil
         }
 
         let giftBadge = OWSGiftBadge.maybeBuild(from: dataMessage)
         if giftBadge != nil, target.thread.isGroupThread {
-            throw OWSAssertionError("Ignoring gift sent to group")
+            owsFailDebug("Ignoring gift sent to group")
+            return nil
         }
 
-        let makeMessageStickerBuilder = { [dataMessage] tx in
-            try dataMessage.sticker.map { stickerProto in
-                return try DependenciesBridge.shared.messageStickerManager.buildValidatedMessageSticker(
-                    from: stickerProto,
-                    tx: tx
+        let validatedQuotedReply: ValidatedQuotedReply?
+        if let quoteProto = dataMessage.quote {
+            let quotedReplyManager = DependenciesBridge.shared.quotedReplyManager
+            do {
+                validatedQuotedReply = try quotedReplyManager.validateAndBuildQuotedReply(
+                    from: quoteProto,
+                    threadUniqueId: target.thread.uniqueId,
+                    tx: tx,
                 )
+            } catch {
+                owsFailDebug("Unexpected error for incoming quote reply! \(error)")
+                return nil
             }
+        } else {
+            validatedQuotedReply = nil
         }
 
-        let threadUniqueId = target.thread.uniqueId
-        let makeQuotedMessageBuilder = { [dataMessage, threadUniqueId] (tx: DBWriteTransaction) in
-            guard
-                let thread = DependenciesBridge.shared.threadStore.fetchThread(
-                    uniqueId: threadUniqueId,
-                    tx: tx
+        let validatedPollCreate: ValidatedIncomingPollCreate?
+        if let pollCreateProto = dataMessage.pollCreate {
+            let pollMessageManager = DependenciesBridge.shared.pollMessageManager
+            do {
+                validatedPollCreate = try pollMessageManager.validateIncomingPollCreate(
+                    pollCreateProto: pollCreateProto,
+                    tx: tx,
                 )
-            else {
-                throw OWSAssertionError("Missing thread!")
+            } catch {
+                owsFailDebug("Unexpected error for incoming poll create! \(error)")
+                return nil
             }
-            return DependenciesBridge.shared.quotedReplyManager.quotedMessage(
-                for: dataMessage,
-                thread: thread,
-                tx: tx
-            )
+
+            body = validatedPollCreate!.messageBody
+        } else {
+            validatedPollCreate = nil
         }
 
         let storyTimestamp: UInt64?
@@ -288,30 +316,35 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
         if
             let storyContext = dataMessage.storyContext,
             storyContext.hasSentTimestamp,
-            let authorAci = storyContext.authorAci
+            storyContext.hasAuthorAci || storyContext.hasAuthorAciBinary
         {
             storyTimestamp = storyContext.sentTimestamp
-            storyAuthorAci = try Aci.parseFrom(serviceIdString: authorAci)
+            storyAuthorAci = Aci.parseFrom(serviceIdBinary: storyContext.authorAciBinary, serviceIdString: storyContext.authorAci)
+            guard storyAuthorAci != nil else {
+                owsFailDebug("Couldn't parse story author")
+                return nil
+            }
         } else {
             storyTimestamp = nil
             storyAuthorAci = nil
         }
 
-        return .init(
+        return SentMessageTranscriptType.Message(
             target: target,
             body: body,
             attachmentPointerProtos: dataMessage.attachments,
-            makeQuotedMessageBuilder: makeQuotedMessageBuilder,
-            makeContactBuilder: makeContactBuilder,
-            makeLinkPreviewBuilder: makeLinkPreviewBuilder,
+            validatedContactShare: validatedContactShare,
+            validatedQuotedReply: validatedQuotedReply,
+            validatedLinkPreview: validatedLinkPreview,
+            validatedMessageSticker: validatedMessageSticker,
+            validatedPollCreate: validatedPollCreate,
             giftBadge: giftBadge,
-            makeMessageStickerBuilder: makeMessageStickerBuilder,
             isViewOnceMessage: isViewOnceMessage,
             expirationStartedAt: sentProto.expirationStartTimestamp,
             expirationDurationSeconds: dataMessage.expireTimer,
             expireTimerVersion: dataMessage.expireTimerVersion,
             storyTimestamp: storyTimestamp,
-            storyAuthorAci: storyAuthorAci
+            storyAuthorAci: storyAuthorAci,
         )
     }
 
@@ -319,7 +352,7 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
         recipientAddress: SignalServiceAddress?,
         groupId: GroupIdentifier?,
         dataMessage: SSKProtoDataMessage,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> SentMessageTranscriptTarget? {
         if let groupId {
             guard let groupThread = TSGroupThread.fetch(forGroupId: groupId, tx: tx) else {
@@ -352,14 +385,14 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
         } else if let recipientAddress {
             let thread = TSContactThread.getOrCreateThread(
                 withContactAddress: recipientAddress,
-                transaction: SDSDB.shimOnlyBridge(tx)
+                transaction: tx,
             )
             return .contact(
                 thread,
                 .token(
                     forProtoExpireTimerSeconds: dataMessage.expireTimer,
-                    version: dataMessage.expireTimerVersion
-                )
+                    version: dataMessage.expireTimerVersion,
+                ),
             )
         } else {
             return nil
@@ -370,7 +403,7 @@ public class OWSIncomingSentMessageTranscript: SentMessageTranscript {
         type: SentMessageTranscriptType,
         requiredProtocolVersion: UInt32? = nil,
         timestamp: UInt64,
-        recipientStates: [SignalServiceAddress: TSOutgoingMessageRecipientState]
+        recipientStates: [SignalServiceAddress: TSOutgoingMessageRecipientState],
     ) {
         self.type = type
         self.requiredProtocolVersion = requiredProtocolVersion

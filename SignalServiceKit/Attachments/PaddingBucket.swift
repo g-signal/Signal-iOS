@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-import Foundation
 import CommonCrypto
+import Foundation
 
 /// Computes (and un-computes) attachment padding.
 ///
@@ -28,29 +28,40 @@ struct PaddingBucket {
 
     let bucketNumber: Int
 
-    init(bucketNumber: Int) {
-        self.bucketNumber = max(bucketNumber, Constants.smallestBucketNumber)
-    }
-
     /// The plaintext size with padding.
-    var plaintextSize: UInt64 {
-        return UInt64(floor(pow(Constants.paddingMultiplier, Double(bucketNumber))))
-    }
+    let plaintextSize: UInt64
 
     /// The encrypted size with padding & encryption overhead.
-    var encryptedSize: UInt64 {
-        return Self.addingEncryptionOverhead(to: self.plaintextSize)
+    let encryptedSize: UInt64
+
+    init?(bucketNumber: Int) {
+        self.bucketNumber = max(bucketNumber, Constants.smallestBucketNumber)
+        let plaintextSize = UInt64(exactly: floor(pow(Constants.paddingMultiplier, Double(self.bucketNumber))))
+        guard let plaintextSize else {
+            return nil
+        }
+        self.plaintextSize = plaintextSize
+        let encryptedSize = Self.addingEncryptionOverhead(to: plaintextSize)
+        guard let encryptedSize else {
+            return nil
+        }
+        self.encryptedSize = encryptedSize
     }
 
-    static func addingEncryptionOverhead(to paddedValue: UInt64) -> UInt64 {
-        var result = paddedValue
-        result += Constants.blockLength - result % Constants.blockLength
-        result += Constants.ivLength
-        result += Constants.hmacLength
-        return result
+    static func addingEncryptionOverhead(to paddedValue: UInt64) -> UInt64? {
+        let result = paddedValue.addingReportingOverflow(
+            Constants.ivLength
+                + Constants.blockLength
+                - paddedValue % Constants.blockLength
+                + Constants.hmacLength,
+        )
+        if result.overflow {
+            return nil
+        }
+        return result.partialValue
     }
 
-    static func forUnpaddedPlaintextSize(_ unpaddedPlaintextSize: UInt64) -> PaddingBucket {
+    static func forUnpaddedPlaintextSize(_ unpaddedPlaintextSize: UInt64) -> PaddingBucket? {
         let bucketNumber: Int
         if unpaddedPlaintextSize == 0 {
             bucketNumber = 0
@@ -63,14 +74,14 @@ struct PaddingBucket {
     static func forEncryptedSizeLimit(_ encryptedSize: UInt64) -> PaddingBucket {
         let worstCasePlaintextLimit = encryptedSize.subtractingReportingOverflow(
             Constants.ivLength
-            // When computing the `encryptedSize`, we add 1 to 16 bytes of
-            // `blockLength` padding. We always subtract 16 here (as a worst case) and
-            // then check the next bucket to handle values near the boundary.
-            + Constants.blockLength
-            + Constants.hmacLength
+                // When computing the `encryptedSize`, we add 1 to 16 bytes of
+                // `blockLength` padding. We always subtract 16 here (as a worst case) and
+                // then check the next bucket to handle values near the boundary.
+                + Constants.blockLength
+                + Constants.hmacLength,
         )
         if worstCasePlaintextLimit.overflow || worstCasePlaintextLimit.partialValue == 0 {
-            return PaddingBucket(bucketNumber: 0)
+            return PaddingBucket(bucketNumber: 0)!
         }
         // Taking the `floor(...)` here may cause us to pick a bucket one smaller
         // than we should when `encryptedSize` is exactly the size of a bucket.
@@ -81,9 +92,10 @@ struct PaddingBucket {
         // We check one optimistic bucket because the minimum spacing is 27 bytes
         // (which is larger than the 15 + 1 worst-case bytes mentioned above).
         let optimisticPaddingBucket = PaddingBucket(bucketNumber: Int(worstCaseBucketNumber) + 1)
-        if optimisticPaddingBucket.encryptedSize <= encryptedSize {
+        if let optimisticPaddingBucket, optimisticPaddingBucket.encryptedSize <= encryptedSize {
             return optimisticPaddingBucket
         }
-        return PaddingBucket(bucketNumber: Int(worstCaseBucketNumber))
+        // By definition, this bucket can't overflow the encrypted size limit.
+        return PaddingBucket(bucketNumber: Int(worstCaseBucketNumber))!
     }
 }

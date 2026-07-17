@@ -37,7 +37,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
     // TODO: Rewrite call message routing to be able to synchronously report calls
     private static let calloutQueue = DispatchQueue(
         label: "org.signal.push-registration",
-        autoreleaseFrequency: .workItem
+        autoreleaseFrequency: .workItem,
     )
     private var calloutQueue: DispatchQueue { Self.calloutQueue }
 
@@ -68,16 +68,16 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
     @MainActor
     public func requestPushTokens(
         forceRotation: Bool,
-        timeOutEventually: Bool = false
+        timeOutEventually: Bool = false,
     ) async throws -> ApnRegistrationId {
         Logger.info("")
         await self.registerUserNotificationSettings()
 
-        #if targetEnvironment(simulator)
+#if targetEnvironment(simulator)
         if TSConstants.isUsingProductionService {
             throw PushRegistrationError.pushNotSupported(description: "Production APNs isn't supported on simulators.")
         }
-        #endif
+#endif
 
         let vanillaPushToken = try await registerForVanillaPushToken(forceRotation: forceRotation, timeOutEventually: timeOutEventually)
 
@@ -174,7 +174,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
             guarantee.timeout(
                 on: DispatchQueue.global(qos: .userInitiated),
                 seconds: 5,
-                substituteValue: ()
+                substituteValue: (),
             ).wait()
             Logger.info("Returning back to PushKit. Good luck! \(callRelayPayload)")
             return
@@ -263,7 +263,6 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
      */
     @MainActor
     private func isSusceptibleToFailedPushRegistration() async -> Bool {
-
         // Only affects users who have disabled both: background refresh *and* notifications
         guard UIApplication.shared.backgroundRefreshStatus == .denied else {
             Logger.info("has backgroundRefreshStatus != .denied, not susceptible to push registration failure")
@@ -273,7 +272,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
         let notificationSettings = await UNUserNotificationCenter.current().notificationSettings()
 
         // This was ported from UIApplication.shared.currentUserNotificationSettings.types == [] so it only looks at these three settings.
-        guard notificationSettings.alertSetting != .enabled && notificationSettings.badgeSetting != .enabled && notificationSettings.soundSetting != .enabled else {
+        guard notificationSettings.alertSetting != .enabled, notificationSettings.badgeSetting != .enabled, notificationSettings.soundSetting != .enabled else {
             Logger.info("notificationSettings was not empty, not susceptible to push registration failure.")
             return false
         }
@@ -285,7 +284,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
     @MainActor
     private func registerForVanillaPushToken(
         forceRotation: Bool,
-        timeOutEventually: Bool
+        timeOutEventually: Bool,
     ) async throws -> String {
         Logger.info("")
 
@@ -326,7 +325,7 @@ public class PushRegistrationManager: NSObject, PKPushRegistryDelegate {
                 return try await promise.awaitable()
             })
         } catch is UncooperativeTimeoutError {
-            if await self.isSusceptibleToFailedPushRegistration() {
+            if await self.isSusceptibleToFailedPushRegistration() || Platform.isSimulator {
                 // If we've timed out on a device known to be susceptible to failures, quit trying
                 // so the user doesn't remain indefinitely hung for no good reason.
                 throw PushRegistrationError.pushNotSupported(description: "Device configuration disallows push notifications")

@@ -9,22 +9,13 @@ extension BackupArchive {
 
     /// A `Bencher` specialized for measuring Backup archiving.
     class ArchiveBencher: Bencher {
-        override init(
-            dateProviderMonotonic: @escaping DateProviderMonotonic,
-            memorySampler: any MemorySampler
-        ) {
-            super.init(
-                dateProviderMonotonic: dateProviderMonotonic,
-                memorySampler: memorySampler
-            )
-        }
 
         /// Given a block that does an enumeration over db objects, wraps that enumeration to instead take
         /// a closure with a FrameBencher that also measures the time spent enumerating.
         func wrapEnumeration<EnumeratedInput, Output>(
             _ enumerationFunc: (DBReadTransaction, (EnumeratedInput) throws -> Output) throws -> Void,
             tx: DBReadTransaction,
-            enumerationBlock: @escaping (EnumeratedInput, FrameBencher) throws -> Output
+            enumerationBlock: @escaping (EnumeratedInput, FrameBencher) throws -> Output,
         ) rethrows {
             var enumerationStepStartDate = dateProvider()
             try enumerationFunc(tx) { enumeratedInput throws in
@@ -37,7 +28,7 @@ extension BackupArchive {
                 let frameBencher = FrameBencher(
                     bencher: self,
                     dateProvider: dateProvider,
-                    enumerationStepStartDate: enumerationStepStartDate
+                    enumerationStepStartDate: enumerationStepStartDate,
                 )
 
                 return try enumerationBlock(enumeratedInput, frameBencher)
@@ -49,7 +40,7 @@ extension BackupArchive {
         func wrapEnumeration<EnumeratedInput, Output>(
             _ enumerationFunc: (DBReadTransaction, (EnumeratedInput) -> Output) throws -> Void,
             tx: DBReadTransaction,
-            enumerationBlock: @escaping (EnumeratedInput, FrameBencher) -> Output
+            enumerationBlock: @escaping (EnumeratedInput, FrameBencher) -> Output,
         ) rethrows {
             var enumerationStepStartDate = dateProvider()
             try enumerationFunc(tx) { enumeratedInput in
@@ -62,7 +53,7 @@ extension BackupArchive {
                 let frameBencher = FrameBencher(
                     bencher: self,
                     dateProvider: dateProvider,
-                    enumerationStepStartDate: enumerationStepStartDate
+                    enumerationStepStartDate: enumerationStepStartDate,
                 )
 
                 return enumerationBlock(enumeratedInput, frameBencher)
@@ -87,43 +78,8 @@ extension BackupArchive {
             case RecreateInteractionIndexes
         }
 
-        private let dbFileSizeBencher: DBFileSizeBencher?
-
         private var preFrameRestoreMetrics = [PreFrameRestoreAction: Metrics]()
         private var postFrameRestoreMetrics = [PostFrameRestoreAction: Metrics]()
-
-        init(
-            dateProviderMonotonic: @escaping DateProviderMonotonic,
-            dbFileSizeProvider: any DBFileSizeProvider,
-            memorySampler: any MemorySampler
-        ) {
-            self.dbFileSizeBencher = if FeatureFlags.Backups.detailedBenchLogging {
-                DBFileSizeBencher(dateProvider: dateProviderMonotonic, dbFileSizeProvider: dbFileSizeProvider)
-            } else {
-                nil
-            }
-
-            super.init(
-                dateProviderMonotonic: dateProviderMonotonic,
-                memorySampler: memorySampler
-            )
-        }
-
-        override fileprivate func frameBencherDidProcessFrame(
-            _ frameBencher: BackupArchive.Bencher.FrameBencher,
-            frame: BackupProto_Frame,
-            frameProcessingDurationNanos: UInt64,
-            enumerationStepDurationNanos: UInt64?
-        ) {
-            super.frameBencherDidProcessFrame(
-                frameBencher,
-                frame: frame,
-                frameProcessingDurationNanos: frameProcessingDurationNanos,
-                enumerationStepDurationNanos: enumerationStepDurationNanos,
-            )
-
-            dbFileSizeBencher?.logIfNecessary(totalFramesProcessed: totalFramesProcessed)
-        }
 
         override func logResults() {
             logger.info("Pre-Frame Restore Metrics:")
@@ -139,8 +95,6 @@ extension BackupArchive {
             }
         }
 
-        // MARK: -
-
         func benchPreFrameRestoreAction<T>(_ action: PreFrameRestoreAction, _ block: () throws -> T) rethrows -> T {
             return try benchAction(action, actionMetricsKeyPath: \.preFrameRestoreMetrics, block: block)
         }
@@ -153,7 +107,7 @@ extension BackupArchive {
         private func benchAction<Action: Hashable, T>(
             _ action: Action,
             actionMetricsKeyPath: ReferenceWritableKeyPath<RestoreBencher, [Action: Metrics]>,
-            block: () throws -> T
+            block: () throws -> T,
         ) rethrows -> T {
             let startDate = dateProvider()
             let result = try block()
@@ -166,49 +120,6 @@ extension BackupArchive {
             self[keyPath: actionMetricsKeyPath][action] = metrics
 
             return result
-        }
-
-        class DBFileSizeBencher {
-            private let dateProvider: DateProviderMonotonic
-            private let dbFileSizeProvider: DBFileSizeProvider
-            private let logger: PrefixedLogger
-
-#if DEBUG
-            private let secondsBetweenLogs: TimeInterval = 2
-#else
-            private let secondsBetweenLogs: TimeInterval = 15
-#endif
-
-            /// The last time we logged.
-            private var lastLogDate: MonotonicDate?
-            /// The number of total frames the last time we logged.
-            private var lastTotalFramesProcessed: UInt64?
-
-            init(
-                dateProvider: @escaping DateProviderMonotonic,
-                dbFileSizeProvider: DBFileSizeProvider
-            ) {
-                self.dateProvider = dateProvider
-                self.dbFileSizeProvider = dbFileSizeProvider
-                self.logger = PrefixedLogger(prefix: "[Backups]")
-            }
-
-            func logIfNecessary(totalFramesProcessed: UInt64) {
-                if
-                    let lastLogDate,
-                    dateProvider() - lastLogDate < MonotonicDuration(clampingSeconds: secondsBetweenLogs)
-                {
-                    // Bail if we logged recently.
-                    return
-                }
-
-                let dbFileSize = dbFileSizeProvider.getDatabaseFileSize()
-                let walFileSize = dbFileSizeProvider.getDatabaseWALFileSize()
-                logger.info("{DB:\(dbFileSize), WAL:\(walFileSize), frames:\(totalFramesProcessed), framesDelta:\(totalFramesProcessed - (lastTotalFramesProcessed ?? 0))}")
-
-                lastLogDate = dateProvider()
-                lastTotalFramesProcessed = totalFramesProcessed
-            }
         }
     }
 
@@ -225,9 +136,9 @@ extension BackupArchive {
         fileprivate var totalFramesProcessed: UInt64 = 0
         fileprivate var frameProcessingMetrics = [FrameType: Metrics]()
 
-        fileprivate init(
+        init(
             dateProviderMonotonic: @escaping DateProviderMonotonic,
-            memorySampler: MemorySampler
+            memorySampler: MemorySampler,
         ) {
             self.dateProvider = dateProviderMonotonic
             self.logger = PrefixedLogger(prefix: "[Backups]")
@@ -240,7 +151,7 @@ extension BackupArchive {
             _ frameBencher: FrameBencher,
             frame: BackupProto_Frame,
             frameProcessingDurationNanos: UInt64,
-            enumerationStepDurationNanos: UInt64?
+            enumerationStepDurationNanos: UInt64?,
         ) {
             memorySampler.sample()
 
@@ -268,7 +179,7 @@ extension BackupArchive {
             let frameBencher = FrameBencher(
                 bencher: self,
                 dateProvider: dateProvider,
-                enumerationStepStartDate: nil
+                enumerationStepStartDate: nil,
             )
 
             return try block(frameBencher)
@@ -294,7 +205,7 @@ extension BackupArchive {
             fileprivate init(
                 bencher: Bencher,
                 dateProvider: @escaping DateProviderMonotonic,
-                enumerationStepStartDate: MonotonicDate?
+                enumerationStepStartDate: MonotonicDate?,
             ) {
                 self.bencher = bencher
                 self.dateProvider = dateProvider
@@ -307,7 +218,7 @@ extension BackupArchive {
                     self,
                     frame: frame,
                     frameProcessingDurationNanos: (dateProvider() - startDate).nanoseconds,
-                    enumerationStepDurationNanos: enumerationStepStartDate.map { (startDate - $0).nanoseconds }
+                    enumerationStepDurationNanos: enumerationStepStartDate.map { (startDate - $0).nanoseconds },
                 )
             }
         }
@@ -338,7 +249,7 @@ extension BackupArchive {
         }
 
         private func loggableCountString(_ number: UInt64) -> String {
-            if FeatureFlags.Backups.detailedBenchLogging {
+            if BuildFlags.Backups.detailedBenchLogging {
                 return "\(number)"
             }
 
@@ -397,11 +308,14 @@ extension BackupArchive {
             case ChatItem_ChatUpdateMessage_LearnedProfileChange
             case ChatItem_ChatUpdateMessage_IndividualCall
             case ChatItem_ChatUpdateMessage_GroupCall
+            case ChatItem_ChatUpdateMessage_PollTerminate
+            case ChatItem_ChatUpdateMessage_PinMessage
 
             case ChatItem_PaymentNotification
             case ChatItem_GiftBadge
             case ChatItem_ViewOnceMessage
             case ChatItem_DirectStoryReplyMessage
+            case ChatItem_Poll
 
             case StickerPack
 
@@ -427,7 +341,6 @@ extension BackupArchive {
                     self = .ChatFolder
                 case nil:
                     return nil
-
                 case .recipient(let recipient):
                     switch recipient.destination {
                     case .contact:
@@ -445,7 +358,6 @@ extension BackupArchive {
                     case nil:
                         return nil
                     }
-
                 case .chatItem(let chatItem):
                     switch chatItem.item {
                     case .contactMessage:
@@ -462,9 +374,10 @@ extension BackupArchive {
                         self = .ChatItem_ViewOnceMessage
                     case .directStoryReplyMessage:
                         self = .ChatItem_DirectStoryReplyMessage
+                    case .poll:
+                        self = .ChatItem_Poll
                     case nil:
                         return nil
-
                     case .standardMessage(let standardMessage):
                         if standardMessage.hasQuote {
                             self = .ChatItem_StandardMessage_Quote
@@ -477,7 +390,6 @@ extension BackupArchive {
                         } else {
                             self = .ChatItem_StandardMessage
                         }
-
                     case .updateMessage(let updateMessage):
                         switch updateMessage.update {
                         case .simpleUpdate:
@@ -498,6 +410,10 @@ extension BackupArchive {
                             self = .ChatItem_ChatUpdateMessage_GroupCall
                         case .individualCall:
                             self = .ChatItem_ChatUpdateMessage_IndividualCall
+                        case .pollTerminate:
+                            self = .ChatItem_ChatUpdateMessage_PollTerminate
+                        case .pinMessage:
+                            self = .ChatItem_ChatUpdateMessage_PinMessage
                         case nil:
                             return nil
                         }

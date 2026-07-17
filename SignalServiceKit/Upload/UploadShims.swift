@@ -34,7 +34,9 @@ public protocol _Upload_FileSystemShim {
 
     func deleteFile(url: URL) throws
 
-    func createTempFileSlice(url: URL, start: Int) throws -> (URL, Int)
+    func maxFileChunkSizeBytes() -> Int
+
+    func readMemoryMappedFileData(url: URL) throws -> Data
 }
 
 public protocol _Upload_SleepTimerShim {
@@ -66,8 +68,12 @@ public struct _Upload_FileSystemWrapper: Upload.Shims.FileSystem {
         try OWSFileSystem.deleteFile(url: url)
     }
 
-    public func createTempFileSlice(url: URL, start: Int) throws -> (URL, Int) {
-        return try OWSFileSystem.createTempFileSlice(url: url, start: start)
+    public func maxFileChunkSizeBytes() -> Int {
+        return 32 * 1024 * 1024
+    }
+
+    public func readMemoryMappedFileData(url: URL) throws -> Data {
+        return try Data(contentsOf: url, options: [.mappedIfSafe, .uncached])
     }
 }
 

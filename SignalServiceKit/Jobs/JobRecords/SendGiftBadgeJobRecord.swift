@@ -41,7 +41,7 @@ public final class SendGiftBadgeJobRecord: JobRecord, FactoryInitializableFromRe
         threadId: String,
         messageText: String,
         failureCount: UInt = 0,
-        status: Status = .ready
+        status: Status = .ready,
     ) {
         self.paymentProcessor = paymentProcessor
         self.receiptCredentialRequestContext = receiptCredentialRequestContext
@@ -62,7 +62,7 @@ public final class SendGiftBadgeJobRecord: JobRecord, FactoryInitializableFromRe
 
         super.init(
             failureCount: failureCount,
-            status: status
+            status: status,
         )
     }
 
@@ -74,8 +74,8 @@ public final class SendGiftBadgeJobRecord: JobRecord, FactoryInitializableFromRe
         receiptCredentialRequest = try container.decode(Data.self, forKey: .receiptCredentialRequest)
         amount = try LegacySDSSerializer().deserializeLegacySDSData(
             try container.decode(Data.self, forKey: .amount),
-            propertyName: "amount"
-        )
+            ofClass: NSDecimalNumber.self,
+        ) as Decimal
         currencyCode = try container.decode(String.self, forKey: .currencyCode)
 
         paymentIntentClientSecret = try container.decodeIfPresent(String.self, forKey: .paymentIntentClientSecret)
@@ -92,7 +92,7 @@ public final class SendGiftBadgeJobRecord: JobRecord, FactoryInitializableFromRe
         try super.init(baseClassDuringFactoryInitializationFrom: container.superDecoder())
     }
 
-    public override func encode(to encoder: Encoder) throws {
+    override public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try super.encode(to: container.superEncoder())
@@ -100,7 +100,7 @@ public final class SendGiftBadgeJobRecord: JobRecord, FactoryInitializableFromRe
         try container.encode(paymentProcessor, forKey: .paymentProcessor)
         try container.encode(receiptCredentialRequestContext, forKey: .receiptCredentialRequestContext)
         try container.encode(receiptCredentialRequest, forKey: .receiptCredentialRequest)
-        try container.encode(LegacySDSSerializer().serializeAsLegacySDSData(property: amount), forKey: .amount)
+        try container.encode(LegacySDSSerializer().serializeAsLegacySDSData(amount as NSDecimalNumber), forKey: .amount)
         try container.encode(currencyCode, forKey: .currencyCode)
 
         try container.encodeIfPresent(paymentIntentClientSecret, forKey: .paymentIntentClientSecret)

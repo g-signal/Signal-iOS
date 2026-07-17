@@ -8,24 +8,28 @@ public import SignalServiceKit
 
 extension ConversationViewController {
 
-    fileprivate var scrollDownButton: ConversationScrollButton { viewState.scrollDownButton }
-    fileprivate var scrollToNextMentionButton: ConversationScrollButton { viewState.scrollToNextMentionButton }
-    fileprivate var isHidingScrollDownButton: Bool {
+    private var scrollDownButton: ConversationScrollButton { viewState.scrollDownButton }
+    private var scrollToNextMentionButton: ConversationScrollButton { viewState.scrollToNextMentionButton }
+    private var isHidingScrollDownButton: Bool {
         get { viewState.isHidingScrollDownButton }
         set { viewState.isHidingScrollDownButton = newValue }
     }
-    fileprivate var isHidingScrollToNextMentionButton: Bool {
+
+    private var isHidingScrollToNextMentionButton: Bool {
         get { viewState.isHidingScrollToNextMentionButton }
         set { viewState.isHidingScrollToNextMentionButton = newValue }
     }
+
     public var scrollUpdateTimer: Timer? {
         get { viewState.scrollUpdateTimer }
         set { viewState.scrollUpdateTimer = newValue }
     }
+
     public var isWaitingForDeceleration: Bool {
         get { viewState.isWaitingForDeceleration }
         set { viewState.isWaitingForDeceleration = newValue }
     }
+
     public var userHasScrolled: Bool {
         get { viewState.userHasScrolled }
         set {
@@ -48,10 +52,14 @@ extension ConversationViewController {
             return
         }
 
-        let scrollSpaceToBottom = (safeContentHeight + collectionView.contentInset.bottom
-                                    - (collectionView.contentOffset.y + collectionView.frame.height))
-        let pageHeight = (collectionView.frame.height
-                            - (collectionView.contentInset.top + collectionView.contentInset.bottom))
+        let scrollSpaceToBottom = (
+            safeContentHeight + collectionView.contentInset.bottom
+                - (collectionView.contentOffset.y + collectionView.frame.height),
+        )
+        let pageHeight = (
+            collectionView.frame.height
+                - (collectionView.contentInset.top + collectionView.contentInset.bottom),
+        )
         let isScrolledUpOnePage = scrollSpaceToBottom > pageHeight * 1.0
 
         let hasLaterMessageOffscreen = (lastSortIdInLoadedWindow > lastVisibleSortId) || canLoadNewerItems
@@ -121,8 +129,10 @@ extension ConversationViewController {
         scrollToNextMentionButton.layer.removeAllAnimations()
 
         if shouldAnimateChanges {
-            UIView.animate(withDuration: 0.2,
-                           animations: alphaBlock) { finished in
+            UIView.animate(
+                withDuration: 0.2,
+                animations: alphaBlock,
+            ) { finished in
                 if finished {
                     completionBlock()
                 }
@@ -283,7 +293,7 @@ extension ConversationViewController {
         view.addSubview(scrollDownButton)
         scrollDownButton.accessibilityIdentifier = "scrollDownButton"
 
-        scrollDownButton.autoPinEdge(.bottom, to: .top, of: bottomBar, withOffset: -24)
+        scrollDownButton.autoPinEdge(.bottom, to: .top, of: bottomBarContainer, withOffset: -24)
         scrollDownButton.autoPinEdge(toSuperviewSafeArea: .trailing, withInset: 15)
 
         scrollToNextMentionButton.addTarget(self, action: #selector(scrollToNextMentionButtonTapped), for: .touchUpInside)

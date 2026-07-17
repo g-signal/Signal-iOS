@@ -50,8 +50,8 @@ public class PaymentsImpl: NSObject, PaymentsSwift {
     }
 
     // NOTE: This k-v store is shared by PaymentsHelperImpl and PaymentsImpl.
-    fileprivate static var keyValueStore: KeyValueStore { SSKEnvironment.shared.paymentsHelperRef.keyValueStore}
-    fileprivate var keyValueStore: KeyValueStore { SSKEnvironment.shared.paymentsHelperRef.keyValueStore}
+    fileprivate static var keyValueStore: KeyValueStore { SSKEnvironment.shared.paymentsHelperRef.keyValueStore }
+    fileprivate var keyValueStore: KeyValueStore { SSKEnvironment.shared.paymentsHelperRef.keyValueStore }
 
     private func updateLastKnownLocalPaymentAddressProtoDataIfNecessary() {
         guard DependenciesBridge.shared.tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegistered else {
@@ -111,8 +111,10 @@ public class PaymentsImpl: NSObject, PaymentsSwift {
     private func getOrBuildCurrentApi(paymentsEntropy: Data) async throws -> MobileCoinAPI {
         func getCurrentApi() -> MobileCoinAPI? {
             return Self.unfairLock.withLock { () -> MobileCoinAPI? in
-                if let handle = self.currentApiHandle,
-                   !handle.hasExpired {
+                if
+                    let handle = self.currentApiHandle,
+                    !handle.hasExpired
+                {
                     return handle.api
                 }
                 return nil
@@ -174,7 +176,7 @@ public class PaymentsImpl: NSObject, PaymentsSwift {
     }
 
     public var passphrase: PaymentsPassphrase? {
-        guard let paymentsEntropy = paymentsEntropy else {
+        guard let paymentsEntropy else {
             owsFailDebug("Missing paymentsEntropy.")
             return nil
         }
@@ -234,8 +236,10 @@ public class PaymentsImpl: NSObject, PaymentsSwift {
 
         paymentBalanceCache.set(balance)
 
-        if let oldAmount = oldBalance?.amount,
-           oldAmount != amount {
+        if
+            let oldAmount = oldBalance?.amount,
+            oldAmount != amount
+        {
             // When the balance changes, there might be new transactions
             // that aren't accounted for in the database yet. Perform
             // reconciliation to ensure we're up-to-date.
@@ -309,14 +313,18 @@ public class PaymentsImpl: NSObject, PaymentsSwift {
 
     // MARK: -
 
-    public func findPaymentModels(withMCLedgerBlockIndex mcLedgerBlockIndex: UInt64,
-                                  mcIncomingTransactionPublicKey: Data,
-                                  transaction: DBReadTransaction) -> [TSPaymentModel] {
-        PaymentFinder.paymentModels(forMcLedgerBlockIndex: mcLedgerBlockIndex,
-                                    transaction: transaction).filter {
-                                        let publicKeys = $0.mobileCoin?.incomingTransactionPublicKeys ?? []
-                                        return publicKeys.contains(mcIncomingTransactionPublicKey)
-                                    }
+    public func findPaymentModels(
+        withMCLedgerBlockIndex mcLedgerBlockIndex: UInt64,
+        mcIncomingTransactionPublicKey: Data,
+        transaction: DBReadTransaction,
+    ) -> [TSPaymentModel] {
+        PaymentFinder.paymentModels(
+            forMcLedgerBlockIndex: mcLedgerBlockIndex,
+            transaction: transaction,
+        ).filter {
+            let publicKeys = $0.mobileCoin?.incomingTransactionPublicKeys ?? []
+            return publicKeys.contains(mcIncomingTransactionPublicKey)
+        }
     }
 }
 
@@ -357,7 +365,7 @@ public extension PaymentsImpl {
         memoMessage: String?,
         transaction: MobileCoin.Transaction,
         receipt: MobileCoin.Receipt,
-        isOutgoingTransfer: Bool
+        isOutgoingTransfer: Bool,
     ) async throws -> TSPaymentModel {
         guard !isKillSwitchActive else {
             throw PaymentsError.killSwitch
@@ -434,7 +442,7 @@ public extension PaymentsImpl {
 
     // Only valid for the recipient
     func unmaskReceiptAmount(data: Data?) -> Amount? {
-        guard let data = data else { return nil }
+        guard let data else { return nil }
         let account = localMobileCoinAccount(paymentsState: self.paymentsState)
         guard let accountKey = account?.accountKey else { return nil }
         guard let receipt = Receipt(serializedData: data) else { return nil }
@@ -526,7 +534,7 @@ public extension PaymentsImpl {
         paymentAmount: TSPaymentAmount,
         memoMessage: String?,
         isOutgoingTransfer: Bool,
-        canDefragment: Bool
+        canDefragment: Bool,
     ) async throws -> PreparedPayment {
         guard !isKillSwitchActive else {
             throw PaymentsError.killSwitch
@@ -553,7 +561,7 @@ public extension PaymentsImpl {
                 paymentAmount: paymentAmount,
                 memoMessage: memoMessage,
                 isOutgoingTransfer: isOutgoingTransfer,
-                canDefragment: canDefragment
+                canDefragment: canDefragment,
             )
         case .publicAddress(let recipientPublicAddress):
             return try await prepareOutgoingPayment(
@@ -562,7 +570,7 @@ public extension PaymentsImpl {
                 paymentAmount: paymentAmount,
                 memoMessage: memoMessage,
                 isOutgoingTransfer: isOutgoingTransfer,
-                canDefragment: canDefragment
+                canDefragment: canDefragment,
             )
         }
     }
@@ -573,7 +581,7 @@ public extension PaymentsImpl {
         paymentAmount: TSPaymentAmount,
         memoMessage: String?,
         isOutgoingTransfer: Bool,
-        canDefragment: Bool
+        canDefragment: Bool,
     ) async throws -> PreparedPayment {
         guard !isKillSwitchActive else {
             throw PaymentsError.killSwitch
@@ -606,7 +614,7 @@ public extension PaymentsImpl {
             paymentAmount: paymentAmount,
             memoMessage: memoMessage,
             isOutgoingTransfer: isOutgoingTransfer,
-            preparedTransaction: preparedTransaction
+            preparedTransaction: preparedTransaction,
         )
     }
 
@@ -707,7 +715,7 @@ public extension PaymentsImpl {
             memoMessage: preparedPayment.memoMessage,
             transaction: preparedTransaction.transaction,
             receipt: preparedTransaction.receipt,
-            isOutgoingTransfer: preparedPayment.isOutgoingTransfer
+            isOutgoingTransfer: preparedPayment.isOutgoingTransfer,
         )
     }
 
@@ -743,23 +751,23 @@ public extension PaymentsImpl {
 
             switch paymentModel.paymentState {
             case .outgoingUnsubmitted,
-                    .outgoingUnverified:
+                 .outgoingUnverified:
                 // Not yet verified, wait then try again.
                 try await Task.sleep(nanoseconds: 50_000_000)
-                // loop by not returning
+            // loop by not returning
             case .outgoingVerified,
-                    .outgoingSending,
-                    .outgoingSent,
-                    .outgoingComplete:
+                 .outgoingSending,
+                 .outgoingSent,
+                 .outgoingComplete:
                 // Success: Verified.
                 return true
             case .outgoingFailed:
                 // Success: Failed.
                 return false
             case .incomingUnverified,
-                    .incomingVerified,
-                    .incomingComplete,
-                    .incomingFailed:
+                 .incomingVerified,
+                 .incomingComplete,
+                 .incomingFailed:
                 owsFailDebug("Unexpected paymentState: \(paymentModel.descriptionForLogs)")
                 throw PaymentsError.invalidModel
             @unknown default:
@@ -769,34 +777,44 @@ public extension PaymentsImpl {
         }
     }
 
-    class func sendDefragmentationSyncMessage(paymentModel: TSPaymentModel,
-                                              transaction: DBWriteTransaction) {
+    class func sendDefragmentationSyncMessage(
+        paymentModel: TSPaymentModel,
+        transaction: DBWriteTransaction,
+    ) {
         guard paymentModel.isDefragmentation else {
             owsFailDebug("Invalid paymentType.")
             return
         }
-        guard let paymentAmount = paymentModel.paymentAmount,
-              paymentAmount.currency == .mobileCoin,
-              paymentAmount.isValidAmount(canBeEmpty: true),
-              paymentAmount.picoMob == 0 else {
+        guard
+            let paymentAmount = paymentModel.paymentAmount,
+            paymentAmount.currency == .mobileCoin,
+            paymentAmount.isValidAmount(canBeEmpty: true),
+            paymentAmount.picoMob == 0
+        else {
             owsFailDebug("Missing or invalid paymentAmount.")
             return
         }
-        guard let feeAmount = paymentModel.mobileCoin?.feeAmount,
-              feeAmount.currency == .mobileCoin,
-              feeAmount.isValidAmount(canBeEmpty: false) else {
+        guard
+            let feeAmount = paymentModel.mobileCoin?.feeAmount,
+            feeAmount.currency == .mobileCoin,
+            feeAmount.isValidAmount(canBeEmpty: false)
+        else {
             owsFailDebug("Missing or invalid feeAmount.")
             return
         }
-        guard let mcTransactionData = paymentModel.mcTransactionData,
-              !mcTransactionData.isEmpty,
-              let mcTransaction = MobileCoin.Transaction(serializedData: mcTransactionData) else {
+        guard
+            let mcTransactionData = paymentModel.mcTransactionData,
+            !mcTransactionData.isEmpty,
+            let mcTransaction = MobileCoin.Transaction(serializedData: mcTransactionData)
+        else {
             owsFailDebug("Missing or invalid mcTransactionData.")
             return
         }
-        guard let mcReceiptData = paymentModel.mcReceiptData,
-              !mcReceiptData.isEmpty,
-              nil != MobileCoin.Receipt(serializedData: mcReceiptData) else {
+        guard
+            let mcReceiptData = paymentModel.mcReceiptData,
+            !mcReceiptData.isEmpty,
+            nil != MobileCoin.Receipt(serializedData: mcReceiptData)
+        else {
             owsFailDebug("Missing or invalid mcReceiptData.")
             return
         }
@@ -811,24 +829,26 @@ public extension PaymentsImpl {
             return
         }
 
-        _ = sendOutgoingPaymentSyncMessage(recipientAci: nil,
-                                           recipientAddress: nil,
-                                           paymentAmount: paymentAmount,
-                                           feeAmount: feeAmount,
-                                           mcLedgerBlockTimestamp: paymentModel.mcLedgerBlockTimestamp,
-                                           mcLedgerBlockIndex: paymentModel.mcLedgerBlockIndex,
-                                           memoMessage: nil,
-                                           mcSpentKeyImages: mcSpentKeyImages,
-                                           mcOutputPublicKeys: mcOutputPublicKeys,
-                                           mcReceiptData: mcReceiptData,
-                                           isDefragmentation: true,
-                                           transaction: transaction)
+        _ = sendOutgoingPaymentSyncMessage(
+            recipientAci: nil,
+            recipientAddress: nil,
+            paymentAmount: paymentAmount,
+            feeAmount: feeAmount,
+            mcLedgerBlockTimestamp: paymentModel.mcLedgerBlockTimestamp,
+            mcLedgerBlockIndex: paymentModel.mcLedgerBlockIndex,
+            memoMessage: nil,
+            mcSpentKeyImages: mcSpentKeyImages,
+            mcOutputPublicKeys: mcOutputPublicKeys,
+            mcReceiptData: mcReceiptData,
+            isDefragmentation: true,
+            transaction: transaction,
+        )
     }
 
     class func sendPaymentNotificationMessage(
         paymentModel: TSPaymentModel,
         messageBody: ValidatedMessageBody?,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) throws -> OWSOutgoingPaymentMessage {
         guard paymentModel.paymentType == .outgoingPayment else {
             owsFailDebug("Invalid paymentType.")
@@ -854,13 +874,17 @@ public extension PaymentsImpl {
             owsFailDebug("Invalid recipientAci.")
             throw PaymentsError.invalidModel
         }
-        guard let mcTransactionData = paymentModel.mcTransactionData,
-              mcTransactionData.count > 0 else {
+        guard
+            let mcTransactionData = paymentModel.mcTransactionData,
+            mcTransactionData.count > 0
+        else {
             owsFailDebug("Missing mcTransactionData.")
             throw PaymentsError.invalidModel
         }
-        guard let mcReceiptData = paymentModel.mcReceiptData,
-              mcReceiptData.count > 0 else {
+        guard
+            let mcReceiptData = paymentModel.mcReceiptData,
+            mcReceiptData.count > 0
+        else {
             owsFailDebug("Missing mcReceiptData.")
             throw PaymentsError.invalidModel
         }
@@ -870,13 +894,15 @@ public extension PaymentsImpl {
             recipientAci: recipientAci,
             messageBody: messageBody,
             mcReceiptData: mcReceiptData,
-            transaction: transaction
+            transaction: transaction,
         )
         return message
     }
 
-    class func sendOutgoingPaymentSyncMessage(paymentModel: TSPaymentModel,
-                                              transaction: DBWriteTransaction) {
+    class func sendOutgoingPaymentSyncMessage(
+        paymentModel: TSPaymentModel,
+        transaction: DBWriteTransaction,
+    ) {
 
         guard let recipientAci = paymentModel.senderOrRecipientAci else {
             owsFailDebug("Missing recipientAci.")
@@ -890,27 +916,35 @@ public extension PaymentsImpl {
             owsFailDebug("Invalid paymentType.")
             return
         }
-        guard let paymentAmount = paymentModel.paymentAmount,
-              paymentAmount.currency == .mobileCoin,
-              paymentAmount.isValidAmount(canBeEmpty: false) else {
+        guard
+            let paymentAmount = paymentModel.paymentAmount,
+            paymentAmount.currency == .mobileCoin,
+            paymentAmount.isValidAmount(canBeEmpty: false)
+        else {
             owsFailDebug("Missing or invalid paymentAmount.")
             return
         }
-        guard let feeAmount = paymentModel.mobileCoin?.feeAmount,
-              feeAmount.currency == .mobileCoin,
-              feeAmount.isValidAmount(canBeEmpty: false) else {
+        guard
+            let feeAmount = paymentModel.mobileCoin?.feeAmount,
+            feeAmount.currency == .mobileCoin,
+            feeAmount.isValidAmount(canBeEmpty: false)
+        else {
             owsFailDebug("Missing or invalid feeAmount.")
             return
         }
-        guard let mcReceiptData = paymentModel.mcReceiptData,
-              !mcReceiptData.isEmpty,
-              nil != MobileCoin.Receipt(serializedData: mcReceiptData) else {
+        guard
+            let mcReceiptData = paymentModel.mcReceiptData,
+            !mcReceiptData.isEmpty,
+            nil != MobileCoin.Receipt(serializedData: mcReceiptData)
+        else {
             owsFailDebug("Missing mcReceiptData.")
             return
         }
-        guard let mcTransactionData = paymentModel.mcTransactionData,
-              !mcTransactionData.isEmpty,
-              let mcTransaction = MobileCoin.Transaction(serializedData: mcTransactionData) else {
+        guard
+            let mcTransactionData = paymentModel.mcTransactionData,
+            !mcTransactionData.isEmpty,
+            let mcTransaction = MobileCoin.Transaction(serializedData: mcTransactionData)
+        else {
             owsFailDebug("Missing or invalid mcTransactionData.")
             return
         }
@@ -924,18 +958,20 @@ public extension PaymentsImpl {
             owsFailDebug("Missing or invalid mcOutputPublicKeys.")
             return
         }
-        _ = sendOutgoingPaymentSyncMessage(recipientAci: recipientAci.wrappedAciValue,
-                                           recipientAddress: recipientAddress,
-                                           paymentAmount: paymentAmount,
-                                           feeAmount: feeAmount,
-                                           mcLedgerBlockTimestamp: paymentModel.mcLedgerBlockTimestamp,
-                                           mcLedgerBlockIndex: paymentModel.mcLedgerBlockIndex,
-                                           memoMessage: paymentModel.memoMessage,
-                                           mcSpentKeyImages: mcSpentKeyImages,
-                                           mcOutputPublicKeys: mcOutputPublicKeys,
-                                           mcReceiptData: mcReceiptData,
-                                           isDefragmentation: false,
-                                           transaction: transaction)
+        _ = sendOutgoingPaymentSyncMessage(
+            recipientAci: recipientAci.wrappedAciValue,
+            recipientAddress: recipientAddress,
+            paymentAmount: paymentAmount,
+            feeAmount: feeAmount,
+            mcLedgerBlockTimestamp: paymentModel.mcLedgerBlockTimestamp,
+            mcLedgerBlockIndex: paymentModel.mcLedgerBlockIndex,
+            memoMessage: paymentModel.memoMessage,
+            mcSpentKeyImages: mcSpentKeyImages,
+            mcOutputPublicKeys: mcOutputPublicKeys,
+            mcReceiptData: mcReceiptData,
+            isDefragmentation: false,
+            transaction: transaction,
+        )
 
     }
 }
@@ -948,7 +984,7 @@ public extension PaymentsImpl {
         recipientAci: Aci,
         messageBody: ValidatedMessageBody?,
         mcReceiptData: Data,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) -> OWSOutgoingPaymentMessage {
 
         if
@@ -968,11 +1004,11 @@ public extension PaymentsImpl {
 
         let thread = TSContactThread.getOrCreateThread(
             withContactAddress: SignalServiceAddress(recipientAci),
-            transaction: transaction
+            transaction: transaction,
         )
         let paymentNotification = TSPaymentNotification(
             memoMessage: paymentModel.memoMessage,
-            mcReceiptData: mcReceiptData
+            mcReceiptData: mcReceiptData,
         )
         let dmConfigurationStore = DependenciesBridge.shared.disappearingMessagesConfigurationStore
         let dmConfig = dmConfigurationStore.fetchOrBuildDefault(for: .thread(thread), tx: transaction)
@@ -983,7 +1019,7 @@ public extension PaymentsImpl {
             paymentNotification: paymentNotification,
             expiresInSeconds: dmConfig.durationSeconds,
             expireTimerVersion: dmConfig.timerVersion,
-            tx: transaction
+            tx: transaction,
         )
 
         paymentModel.update(withInteractionUniqueId: message.uniqueId, transaction: transaction)
@@ -995,31 +1031,33 @@ public extension PaymentsImpl {
 
         ThreadUtil.enqueueMessage(
             unpreparedMessage,
-            thread: thread
+            thread: thread,
         )
 
         return message
     }
 
-    class func sendOutgoingPaymentSyncMessage(recipientAci: Aci?,
-                                              recipientAddress: Data?,
-                                              paymentAmount: TSPaymentAmount,
-                                              feeAmount: TSPaymentAmount,
-                                              mcLedgerBlockTimestamp: UInt64?,
-                                              mcLedgerBlockIndex: UInt64?,
-                                              memoMessage: String?,
-                                              mcSpentKeyImages: [Data],
-                                              mcOutputPublicKeys: [Data],
-                                              mcReceiptData: Data,
-                                              isDefragmentation: Bool,
-                                              transaction: DBWriteTransaction) -> TSOutgoingMessage? {
+    class func sendOutgoingPaymentSyncMessage(
+        recipientAci: Aci?,
+        recipientAddress: Data?,
+        paymentAmount: TSPaymentAmount,
+        feeAmount: TSPaymentAmount,
+        mcLedgerBlockTimestamp: UInt64?,
+        mcLedgerBlockIndex: UInt64?,
+        memoMessage: String?,
+        mcSpentKeyImages: [Data],
+        mcOutputPublicKeys: [Data],
+        mcReceiptData: Data,
+        isDefragmentation: Bool,
+        transaction: DBWriteTransaction,
+    ) -> TSOutgoingMessage? {
 
         guard let thread = TSContactThread.getOrCreateLocalThread(transaction: transaction) else {
             owsFailDebug("Missing local thread.")
             return nil
         }
         let mobileCoin = OutgoingPaymentMobileCoin(
-            recipientAci: recipientAci.map { AciObjC($0) },
+            recipientAci: recipientAci,
             recipientAddress: recipientAddress,
             amountPicoMob: paymentAmount.picoMob,
             feePicoMob: feeAmount.picoMob,
@@ -1029,15 +1067,15 @@ public extension PaymentsImpl {
             spentKeyImages: mcSpentKeyImages,
             outputPublicKeys: mcOutputPublicKeys,
             receiptData: mcReceiptData,
-            isDefragmentation: isDefragmentation
+            isDefragmentation: isDefragmentation,
         )
         let message = OutgoingPaymentSyncMessage(
             localThread: thread,
             mobileCoin: mobileCoin,
-            transaction: transaction
+            tx: transaction,
         )
         let preparedMessage = PreparedOutgoingMessage.preprepared(
-            transientMessageWithoutAttachments: message
+            transientMessageWithoutAttachments: message,
         )
         SSKEnvironment.shared.messageSenderJobQueueRef.add(message: preparedMessage, transaction: transaction)
         return message
@@ -1083,10 +1121,14 @@ public extension PaymentsImpl {
         paymentsReconciliation.scheduleReconciliationNow(transaction: transaction)
     }
 
-    func replaceAsUnidentified(paymentModel oldPaymentModel: TSPaymentModel,
-                               transaction: DBWriteTransaction) {
-        paymentsReconciliation.replaceAsUnidentified(paymentModel: oldPaymentModel,
-                                                     transaction: transaction)
+    func replaceAsUnidentified(
+        paymentModel oldPaymentModel: TSPaymentModel,
+        transaction: DBWriteTransaction,
+    ) {
+        paymentsReconciliation.replaceAsUnidentified(
+            paymentModel: oldPaymentModel,
+            transaction: transaction,
+        )
     }
 
     // MARK: - URLs
@@ -1143,7 +1185,7 @@ extension Amount {
     public var tsPaymentAmount: TSPaymentAmount? {
         TSPaymentAmount(
             currency: self.tokenId == .MOB ? .mobileCoin : .unknown,
-            picoMob: self.value
+            picoMob: self.value,
         )
     }
 }

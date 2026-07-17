@@ -52,16 +52,21 @@ public enum TSRegistrationState {
     case transferred
 }
 
+public enum DeregistrationState {
+    case deregistered
+    case delinked
+}
+
 extension TSRegistrationState {
 
     public var isRegistered: Bool {
         switch self {
         case
-                .unregistered, .reregistering, .relinking,
-                .deregistered, .delinked,
-                .transferringPrimaryOutgoing, .transferringLinkedOutgoing,
-                .transferringIncoming,
-                .transferred:
+            .unregistered, .reregistering, .relinking,
+            .deregistered, .delinked,
+            .transferringPrimaryOutgoing, .transferringLinkedOutgoing,
+            .transferringIncoming,
+            .transferred:
             return false
         case .registered, .provisioned:
             return true
@@ -73,11 +78,11 @@ extension TSRegistrationState {
         case .unregistered, .transferringIncoming:
             return false
         case
-                .registered, .provisioned,
-                .reregistering, .relinking,
-                .deregistered, .delinked,
-                .transferringPrimaryOutgoing, .transferringLinkedOutgoing,
-                .transferred:
+            .registered, .provisioned,
+            .reregistering, .relinking,
+            .deregistered, .delinked,
+            .transferringPrimaryOutgoing, .transferringLinkedOutgoing,
+            .transferred:
             return true
         }
     }
@@ -103,29 +108,35 @@ extension TSRegistrationState {
         case .registered:
             return true
         case
-                .unregistered,
-                .provisioned,
-                .reregistering,
-                .relinking,
-                .deregistered, .delinked,
-                .transferringPrimaryOutgoing, .transferringLinkedOutgoing,
-                .transferringIncoming,
-                .transferred:
+            .unregistered,
+            .provisioned,
+            .reregistering,
+            .relinking,
+            .deregistered, .delinked,
+            .transferringPrimaryOutgoing, .transferringLinkedOutgoing,
+            .transferringIncoming,
+            .transferred:
             return false
         }
     }
 
     public var isDeregistered: Bool {
+        return self.deregistrationState != nil
+    }
+
+    public var deregistrationState: DeregistrationState? {
         switch self {
         case
-                .unregistered, .reregistering, .relinking,
-                .registered, .provisioned,
-                .transferringPrimaryOutgoing, .transferringLinkedOutgoing,
-                .transferringIncoming,
-                .transferred:
-            return false
-        case .deregistered, .delinked:
-            return true
+            .unregistered, .reregistering, .relinking,
+            .registered, .provisioned,
+            .transferringPrimaryOutgoing, .transferringLinkedOutgoing,
+            .transferringIncoming,
+            .transferred:
+            return nil
+        case .deregistered:
+            return .deregistered
+        case .delinked:
+            return .delinked
         }
     }
 

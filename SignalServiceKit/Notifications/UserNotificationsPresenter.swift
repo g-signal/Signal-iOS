@@ -20,10 +20,10 @@ public class UserNotificationConfig {
 
     class func notificationCategory(_ category: AppNotificationCategory) -> UNNotificationCategory {
         return UNNotificationCategory(
-            identifier: category.identifier,
+            identifier: category.rawValue,
             actions: notificationActions(for: category),
             intentIdentifiers: [],
-            options: []
+            options: [],
         )
     }
 
@@ -34,13 +34,13 @@ public class UserNotificationConfig {
                 identifier: action.rawValue,
                 title: CallStrings.callBackButtonTitle,
                 options: .foreground,
-                icon: UNNotificationActionIcon(systemImageName: "phone")
+                icon: UNNotificationActionIcon(systemImageName: "phone"),
             )
         case .markAsRead:
             return UNNotificationAction(
                 identifier: action.rawValue,
                 title: MessageStrings.markAsReadNotificationAction,
-                icon: UNNotificationActionIcon(systemImageName: "message")
+                icon: UNNotificationActionIcon(systemImageName: "message"),
             )
         case .reply:
             return UNTextInputNotificationAction(
@@ -48,19 +48,19 @@ public class UserNotificationConfig {
                 title: MessageStrings.replyNotificationAction,
                 icon: UNNotificationActionIcon(systemImageName: "arrowshape.turn.up.left"),
                 textInputButtonTitle: MessageStrings.sendButton,
-                textInputPlaceholder: ""
+                textInputPlaceholder: "",
             )
         case .showThread:
             return UNNotificationAction(
                 identifier: action.rawValue,
                 title: CallStrings.showThreadButtonTitle,
-                icon: UNNotificationActionIcon(systemImageName: "bubble.left.and.bubble.right")
+                icon: UNNotificationActionIcon(systemImageName: "bubble.left.and.bubble.right"),
             )
         case .reactWithThumbsUp:
             return UNNotificationAction(
                 identifier: action.rawValue,
                 title: MessageStrings.reactWithThumbsUpNotificationAction,
-                icon: UNNotificationActionIcon(systemImageName: "hand.thumbsup")
+                icon: UNNotificationActionIcon(systemImageName: "hand.thumbsup"),
             )
         }
     }
@@ -109,7 +109,7 @@ public class UserNotificationPresenter {
         replacingIdentifier: String? = nil,
         forceBeforeRegistered: Bool = false,
         isMainAppAndActive: Bool,
-        notificationSuppressionRule: NotificationSuppressionRule
+        notificationSuppressionRule: NotificationSuppressionRule,
     ) async {
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
         // TODO: It might make sense to have the callers check this instead. Further investigation is required.
@@ -123,7 +123,7 @@ public class UserNotificationPresenter {
         }
 
         let content = UNMutableNotificationContent()
-        content.categoryIdentifier = category.identifier
+        content.categoryIdentifier = category.rawValue
         content.userInfo = userInfo.build()
         if let sound, sound != .standard(.none) {
             content.sound = sound.notificationSound(isQuiet: isMainAppAndActive)
@@ -139,10 +139,10 @@ public class UserNotificationPresenter {
         let trigger: UNNotificationTrigger?
         let checkForCancel = (
             category == .incomingMessageWithActions_CanReply
-            || category == .incomingMessageWithActions_CannotReply
-            || category == .incomingMessageWithoutActions
-            || category == .incomingReactionWithActions_CanReply
-            || category == .incomingReactionWithActions_CannotReply
+                || category == .incomingMessageWithActions_CannotReply
+                || category == .incomingMessageWithoutActions
+                || category == .incomingReactionWithActions_CanReply
+                || category == .incomingReactionWithActions_CannotReply,
         )
         if checkForCancel, !isMainAppAndActive, hasReceivedSyncMessageRecentlyWithSneakyTransaction {
             assert(userInfo.threadId != nil)
@@ -180,7 +180,7 @@ public class UserNotificationPresenter {
             // Play sound and vibrate, but without a `body` no banner will show.
         }
 
-        if let threadIdentifier = threadIdentifier {
+        if let threadIdentifier {
             content.threadIdentifier = threadIdentifier
         }
 
@@ -213,7 +213,7 @@ public class UserNotificationPresenter {
     private func shouldPresentNotification(
         category: AppNotificationCategory,
         userInfo: AppNotificationUserInfo,
-        notificationSuppressionRule: NotificationSuppressionRule
+        notificationSuppressionRule: NotificationSuppressionRule,
     ) -> Bool {
         switch category {
         case .incomingMessageFromNoLongerVerifiedIdentity,
@@ -223,11 +223,12 @@ public class UserNotificationPresenter {
              .transferRelaunch,
              .deregistration,
              .newDeviceLinked,
-             .backupsEnabled:
+             .backupsEnabled,
+             .backupsMediaTierQuotaConsumed:
             // Always show these notifications
             return true
 
-        case .internalError:
+        case .internalError, .listMediaIntegrityCheckFailure:
             // Only show errors alerts on builds run by a test population (beta, internal, etc.)
             return DebugFlags.testPopulationErrorAlerts
 
@@ -237,7 +238,8 @@ public class UserNotificationPresenter {
              .incomingReactionWithActions_CanReply,
              .incomingReactionWithActions_CannotReply,
              .infoOrErrorMessage,
-             .pollEndNotification:
+             .pollEndNotification,
+             .pollVoteNotification:
             // Don't show these notifications when the thread is visible.
             if
                 let notificationThreadUniqueId = userInfo.threadId,
@@ -274,7 +276,7 @@ public class UserNotificationPresenter {
     func replaceNotification(messageId: String) async -> Bool {
         return self.cancelSync(
             notificationRequests: await getNotificationsRequests(),
-            matching: .messageIds([messageId])
+            matching: .messageIds([messageId]),
         )
     }
 
@@ -300,6 +302,18 @@ public class UserNotificationPresenter {
         await cancel(cancellation: .storyMessage(storyMessageUniqueId))
     }
 
+    func cancelPendingNotificationsForBackupsEnabled() async {
+        let backupsEnabledRequests = await Self.notificationCenter
+            .pendingNotificationRequests()
+            .filter {
+                $0.content.categoryIdentifier == AppNotificationCategory.backupsEnabled.rawValue
+            }
+
+        Self.notificationCenter.removePendingNotificationRequests(
+            withIdentifiers: backupsEnabledRequests.map(\.identifier),
+        )
+    }
+
     public func clearAllNotifications() {
         Logger.info("Clearing all notifications")
 
@@ -307,36 +321,42 @@ public class UserNotificationPresenter {
         Self.notificationCenter.removeAllDeliveredNotifications()
     }
 
-    public func clearAllNonScheduledNotifications() {
-        Logger.info("Clearing all notifications except scheduled notifications")
+    public func clearNotificationsForAppActivate() {
+        Logger.info("Clearing notifications for app activate.")
 
         Task {
-            let scheduledNotifications: Set = [
-                AppNotificationCategory.newDeviceLinked.identifier,
-                AppNotificationCategory.backupsEnabled.identifier
-            ]
-            let pendingNotificationIDs = await Self.notificationCenter.pendingNotificationRequests()
-                .filter { notificationRequest in
-                    scheduledNotifications.contains(notificationRequest.content.categoryIdentifier) == false
+            let shouldRemoveNotificationRequestPredicate: (UNNotificationRequest) -> Bool = { request in
+                guard
+                    let appNotificationCategory = AppNotificationCategory(
+                        rawValue: request.content.categoryIdentifier,
+                    )
+                else {
+                    return true
                 }
+
+                return appNotificationCategory.shouldClearOnAppActivate
+            }
+
+            let pendingNotificationIDsToRemove = await Self.notificationCenter.pendingNotificationRequests()
+                .filter { shouldRemoveNotificationRequestPredicate($0) }
                 .map(\.identifier)
-            let deliveredNotificationIDs = await Self.notificationCenter.deliveredNotifications()
-                .filter { notification in
-                    scheduledNotifications.contains(notification.request.content.categoryIdentifier) == false
-                }
+
+            let deliveredNotificationIDsToRemove = await Self.notificationCenter.deliveredNotifications()
+                .filter { shouldRemoveNotificationRequestPredicate($0.request) }
                 .map(\.request.identifier)
 
-            Self.notificationCenter.removePendingNotificationRequests(withIdentifiers: pendingNotificationIDs)
-            Self.notificationCenter.removeDeliveredNotifications(withIdentifiers: deliveredNotificationIDs)
+            Self.notificationCenter.removePendingNotificationRequests(withIdentifiers: pendingNotificationIDsToRemove)
+            Self.notificationCenter.removeDeliveredNotifications(withIdentifiers: deliveredNotificationIDsToRemove)
         }
     }
 
     public func clearDeliveredNewLinkedDevicesNotifications() {
         Logger.info("Clearing delivered new linked device notifications")
+
         Task {
             let pendingNotificationRequestIDs = await Self.notificationCenter.deliveredNotifications()
                 .filter { notification in
-                    notification.request.content.categoryIdentifier == AppNotificationCategory.newDeviceLinked.identifier
+                    notification.request.content.categoryIdentifier == AppNotificationCategory.newDeviceLinked.rawValue
                 }
                 .map(\.request.identifier)
 
@@ -355,7 +375,7 @@ public class UserNotificationPresenter {
     private func getNotificationsRequests() async -> [UNNotificationRequest] {
         return await (
             Self.notificationCenter.deliveredNotifications().map({ $0.request })
-            + Self.notificationCenter.pendingNotificationRequests()
+                + Self.notificationCenter.pendingNotificationRequests()
         )
     }
 
@@ -363,10 +383,26 @@ public class UserNotificationPresenter {
         self.cancelSync(notificationRequests: await getNotificationsRequests(), matching: cancellation)
     }
 
+    func existingPollVoteNotification(author: Data, pollId: String) async -> Bool {
+        let notificationRequests = await getNotificationsRequests()
+        for request in notificationRequests {
+            let userInfo = AppNotificationUserInfo(request.content.userInfo)
+            if
+                let requestPollAuthor = userInfo.voteAuthorServiceIdBinary,
+                let requestPollId = userInfo.messageId,
+                requestPollAuthor == author,
+                requestPollId == pollId
+            {
+                return true
+            }
+        }
+        return false
+    }
+
     @discardableResult
     private func cancelSync(
         notificationRequests: [UNNotificationRequest],
-        matching cancellationType: CancellationType
+        matching cancellationType: CancellationType,
     ) -> Bool {
         let requestMatchesPredicate: (UNNotificationRequest) -> Bool = { request in
             let userInfo = AppNotificationUserInfo(request.content.userInfo)
@@ -447,8 +483,8 @@ extension Sound {
             return UNNotificationSound.default
         }
         if
-            !FileManager.default.fileExists(atPath: (Sounds.soundsDirectory as NSString).appendingPathComponent(filename))
-            && !FileManager.default.fileExists(atPath: (Bundle.main.bundlePath as NSString).appendingPathComponent(filename))
+            !FileManager.default.fileExists(atPath: (Sounds.soundsDirectory as NSString).appendingPathComponent(filename)),
+            !FileManager.default.fileExists(atPath: (Bundle.main.bundlePath as NSString).appendingPathComponent(filename))
         {
             Logger.info("[Notification Sounds] sound file doesn't exist!")
         }

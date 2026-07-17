@@ -36,7 +36,7 @@ extension AttachmentThumbnailQuality {
         let factor = 1 / UIScreen.main.scale
         return CGSize(
             width: pixelSize.width * factor,
-            height: pixelSize.height * factor
+            height: pixelSize.height * factor,
         )
     }
 
@@ -53,7 +53,10 @@ extension AttachmentThumbnailQuality {
     }
 
     public static let backupThumbnailDimensionPixels: CGFloat = 256
+    public static let backupThumbnailMinPixelSize: CGFloat = 32
+
     public static let backupThumbnailMaxSizeBytes: UInt32 = 8192
+    public static let backupThumbnailMinSizeBytes: UInt32 = 64
 
     private static func thumbnailDimensionPointsBackupThumbnail() -> CGFloat {
         let screenScale = UIScreen.main.scale
@@ -77,17 +80,17 @@ extension AttachmentThumbnailQuality {
 
     public static func thumbnailCacheFileUrl(
         for attachmentStream: AttachmentStream,
-        at quality: AttachmentThumbnailQuality
+        at quality: AttachmentThumbnailQuality,
     ) -> URL {
         return thumbnailCacheFileUrl(
             attachmentLocalRelativeFilePath: attachmentStream.localRelativeFilePath,
-            at: quality
+            at: quality,
         )
     }
 
     public static func thumbnailCacheFileUrl(
         attachmentLocalRelativeFilePath: String,
-        at quality: AttachmentThumbnailQuality
+        at quality: AttachmentThumbnailQuality,
     ) -> URL {
         let originalFilename = (attachmentLocalRelativeFilePath as NSString).lastPathComponent
         // Its not SUPER important that this breaks if someone changes the description.

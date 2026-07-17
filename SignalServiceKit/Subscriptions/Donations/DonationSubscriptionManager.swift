@@ -154,7 +154,7 @@ public enum DonationSubscriptionManager {
         forSubscriberId subscriberId: Data,
         paymentType: RecurringSubscriptionPaymentType,
         subscription: DonationSubscriptionLevel,
-        currencyCode: Currency.Code
+        currencyCode: Currency.Code,
     ) async throws -> Subscription {
         Logger.info("[Donations] Setting default payment method on service")
 
@@ -162,17 +162,17 @@ public enum DonationSubscriptionManager {
         case let .ideal(setupIntentId):
             try await setDefaultIDEALPaymentMethod(
                 for: subscriberId,
-                setupIntentId: setupIntentId
+                setupIntentId: setupIntentId,
             )
         case
-                .applePay(let paymentMethodId),
-                .creditOrDebitCard(let paymentMethodId),
-                .paypal(let paymentMethodId),
-                .sepa(let paymentMethodId):
+            .applePay(let paymentMethodId),
+            .creditOrDebitCard(let paymentMethodId),
+            .paypal(let paymentMethodId),
+            .sepa(let paymentMethodId):
             try await setDefaultPaymentMethod(
                 for: subscriberId,
                 using: paymentType.paymentProcessor,
-                paymentMethodId: paymentMethodId
+                paymentMethodId: paymentMethodId,
             )
         }
 
@@ -181,7 +181,7 @@ public enum DonationSubscriptionManager {
         await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { transaction in
             setMostRecentSubscriptionPaymentMethod(
                 paymentMethod: paymentType.paymentMethod,
-                transaction: transaction
+                transaction: transaction,
             )
         }
 
@@ -192,14 +192,14 @@ public enum DonationSubscriptionManager {
     public static func updateSubscriptionLevel(
         for subscriberID: Data,
         to subscription: DonationSubscriptionLevel,
-        currencyCode: Currency.Code
+        currencyCode: Currency.Code,
     ) async throws -> Subscription {
         Logger.info("[Donations] Updating subscription level")
 
         return try await setSubscription(
             for: subscriberID,
             subscription: subscription,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
         )
     }
 
@@ -256,12 +256,12 @@ public enum DonationSubscriptionManager {
     private static func setDefaultPaymentMethod(
         for subscriberId: Data,
         using processor: DonationPaymentProcessor,
-        paymentMethodId: String
+        paymentMethodId: String,
     ) async throws {
         let request = OWSRequestFactory.subscriptionSetDefaultPaymentMethod(
             subscriberId: subscriberId,
             processor: processor.rawValue,
-            paymentMethodId: paymentMethodId
+            paymentMethodId: paymentMethodId,
         )
         let response = try await SSKEnvironment.shared.networkManagerRef
             .asyncRequest(request, retryPolicy: .hopefullyRecoverable)
@@ -273,11 +273,11 @@ public enum DonationSubscriptionManager {
 
     private static func setDefaultIDEALPaymentMethod(
         for subscriberId: Data,
-        setupIntentId: String
+        setupIntentId: String,
     ) async throws {
         let request = OWSRequestFactory.subscriptionSetDefaultIDEALPaymentMethod(
             subscriberId: subscriberId,
-            setupIntentId: setupIntentId
+            setupIntentId: setupIntentId,
         )
 
         let response = try await SSKEnvironment.shared.networkManagerRef
@@ -295,7 +295,7 @@ public enum DonationSubscriptionManager {
     private static func setSubscription(
         for subscriberID: Data,
         subscription: DonationSubscriptionLevel,
-        currencyCode: Currency.Code
+        currencyCode: Currency.Code,
     ) async throws -> Subscription {
         let databaseStorage = SSKEnvironment.shared.databaseStorageRef
         let networkManager = SSKEnvironment.shared.networkManagerRef
@@ -306,7 +306,7 @@ public enum DonationSubscriptionManager {
             subscriberID: subscriberID,
             level: subscription.level,
             currency: currencyCode,
-            idempotencyKey: key
+            idempotencyKey: key,
         )
         let response = try await networkManager.asyncRequest(request, retryPolicy: .hopefullyRecoverable)
         let statusCode = response.responseStatusCode
@@ -317,9 +317,9 @@ public enum DonationSubscriptionManager {
         guard
             let subscription = try await SubscriptionFetcher(
                 networkManager: networkManager,
-                retryPolicy: .hopefullyRecoverable
+                retryPolicy: .hopefullyRecoverable,
             )
-                .fetch(subscriberID: subscriberID)
+            .fetch(subscriberID: subscriberID)
         else {
             throw OWSAssertionError("Failed to fetch valid subscription object after setSubscription")
         }
@@ -341,14 +341,14 @@ public enum DonationSubscriptionManager {
         priorSubscriptionLevel: UInt?,
         paymentProcessor: DonationPaymentProcessor,
         paymentMethod: DonationPaymentMethod?,
-        isNewSubscription: Bool
+        isNewSubscription: Bool,
     ) async throws {
         let db = DependenciesBridge.shared.db
 
         let (
             receiptCredentialRequestContext,
-            receiptCredentialRequest
-        ) = generateReceiptRequest()
+            receiptCredentialRequest,
+        ) = ReceiptCredentialManager.generateReceiptRequest()
 
         let redemptionJobRecord = await db.awaitableWrite { tx in
             return receiptCredentialRedemptionJobQueue.saveSubscriptionRedemptionJob(
@@ -360,12 +360,12 @@ public enum DonationSubscriptionManager {
                 targetSubscriptionLevel: subscriptionLevel,
                 priorSubscriptionLevel: priorSubscriptionLevel,
                 isNewSubscription: isNewSubscription,
-                tx: tx
+                tx: tx,
             )
         }
 
         try await receiptCredentialRedemptionJobQueue.runRedemptionJob(
-            jobRecord: redemptionJobRecord
+            jobRecord: redemptionJobRecord,
         )
     }
 
@@ -373,14 +373,14 @@ public enum DonationSubscriptionManager {
         boostPaymentIntentId: String,
         amount: FiatMoney,
         paymentProcessor: DonationPaymentProcessor,
-        paymentMethod: DonationPaymentMethod
+        paymentMethod: DonationPaymentMethod,
     ) async throws {
         let db = DependenciesBridge.shared.db
 
         let (
             receiptCredentialRequestContext,
-            receiptCredentialRequest
-        ) = generateReceiptRequest()
+            receiptCredentialRequest,
+        ) = ReceiptCredentialManager.generateReceiptRequest()
 
         let redemptionJobRecord = await db.awaitableWrite { tx in
             return receiptCredentialRedemptionJobQueue.saveBoostRedemptionJob(
@@ -390,208 +390,17 @@ public enum DonationSubscriptionManager {
                 receiptCredentialRequestContext: receiptCredentialRequestContext,
                 receiptCredentialRequest: receiptCredentialRequest,
                 boostPaymentIntentID: boostPaymentIntentId,
-                tx: tx
+                tx: tx,
             )
         }
 
         try await receiptCredentialRedemptionJobQueue.runRedemptionJob(
-            jobRecord: redemptionJobRecord
+            jobRecord: redemptionJobRecord,
         )
-    }
-
-    public static func generateReceiptRequest() -> (context: ReceiptCredentialRequestContext, request: ReceiptCredentialRequest) {
-        do {
-            let clientOperations = clientZKReceiptOperations()
-            let receiptSerial = try generateReceiptSerial()
-
-            let receiptCredentialRequestContext = try clientOperations.createReceiptCredentialRequestContext(receiptSerial: receiptSerial)
-            let receiptCredentialRequest = try receiptCredentialRequestContext.getRequest()
-            return (receiptCredentialRequestContext, receiptCredentialRequest)
-        } catch {
-            // This operation happens entirely on-device and is unlikely to fail.
-            // If it does, a full crash is probably desirable.
-            owsFail("Could not generate receipt request: \(error)")
-        }
-    }
-
-    /// Represents a known error received during a receipt credential request.
-    ///
-    /// Not to be confused with ``DonationReceiptCredentialRequestError``.
-    public struct KnownReceiptCredentialRequestError: Error {
-        /// A code describing this error.
-        public let errorCode: DonationReceiptCredentialRequestError.ErrorCode
-
-        /// If this error represents a payment failure, contains a string from
-        /// the payment processor describing the payment failure.
-        public let chargeFailureCodeIfPaymentFailed: String?
-
-        fileprivate init(
-            errorCode: DonationReceiptCredentialRequestError.ErrorCode,
-            chargeFailureCodeIfPaymentFailed: String? = nil
-        ) {
-            owsPrecondition(
-                chargeFailureCodeIfPaymentFailed == nil || errorCode == .paymentFailed,
-                "Must only provide a charge failure if payment failed!"
-            )
-
-            self.errorCode = errorCode
-            self.chargeFailureCodeIfPaymentFailed = chargeFailureCodeIfPaymentFailed
-        }
-    }
-
-    public static func requestReceiptCredential(
-        subscriberId: Data,
-        isValidReceiptLevelPredicate: @escaping (UInt64) -> Bool,
-        context: ReceiptCredentialRequestContext,
-        request: ReceiptCredentialRequest,
-        networkManager: NetworkManager = SSKEnvironment.shared.networkManagerRef,
-        logger: PrefixedLogger
-    ) async throws -> ReceiptCredential {
-        do {
-            let networkRequest = OWSRequestFactory.subscriptionReceiptCredentialsRequest(
-                subscriberID: subscriberId,
-                request: request.serialize()
-            )
-            let response = try await networkManager.asyncRequest(networkRequest)
-            return try self.parseReceiptCredentialResponse(
-                httpResponse: response,
-                receiptCredentialRequestContext: context,
-                isValidReceiptLevelPredicate: isValidReceiptLevelPredicate,
-                logger: logger
-            )
-        } catch {
-            throw parseReceiptCredentialPresentationError(error: error)
-        }
-    }
-
-    public static func requestReceiptCredential(
-        boostPaymentIntentId: String,
-        expectedBadgeLevel: OneTimeBadgeLevel,
-        paymentProcessor: DonationPaymentProcessor,
-        context: ReceiptCredentialRequestContext,
-        request: ReceiptCredentialRequest,
-        logger: PrefixedLogger
-    ) async throws -> ReceiptCredential {
-        do {
-            let networkRequest = OWSRequestFactory.boostReceiptCredentials(
-                with: boostPaymentIntentId,
-                for: paymentProcessor.rawValue,
-                request: request.serialize()
-            )
-            let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(networkRequest)
-            return try self.parseReceiptCredentialResponse(
-                httpResponse: response,
-                receiptCredentialRequestContext: context,
-                isValidReceiptLevelPredicate: { receiptLevel in
-                    return receiptLevel == expectedBadgeLevel.rawValue
-                },
-                logger: logger
-            )
-        } catch {
-            throw parseReceiptCredentialPresentationError(error: error)
-        }
-    }
-
-    public static func generateReceiptCredentialPresentation(
-        receiptCredential: ReceiptCredential
-    ) throws -> ReceiptCredentialPresentation {
-        return try clientZKReceiptOperations().createReceiptCredentialPresentation(
-            receiptCredential: receiptCredential
-        )
-    }
-
-    private static func parseReceiptCredentialResponse(
-        httpResponse: HTTPResponse,
-        receiptCredentialRequestContext: ReceiptCredentialRequestContext,
-        isValidReceiptLevelPredicate: (UInt64) -> Bool,
-        logger: PrefixedLogger
-    ) throws -> ReceiptCredential {
-        let clientOperations = clientZKReceiptOperations()
-
-        let httpStatusCode = httpResponse.responseStatusCode
-        switch httpStatusCode {
-        case 200:
-            logger.info("Got valid receipt response.")
-        case 204:
-            logger.info("No receipt yet, payment processing.")
-            throw KnownReceiptCredentialRequestError(
-                errorCode: .paymentStillProcessing
-            )
-        default:
-            throw OWSAssertionError(
-                "Unexpected success status code: \(httpStatusCode)",
-                logger: logger
-            )
-        }
-
-        func failValidation(_ message: String) -> Error {
-            owsFailDebug(message, logger: logger)
-            return KnownReceiptCredentialRequestError(errorCode: .localValidationFailed)
-        }
-
-        guard
-            let json = httpResponse.responseBodyJson,
-            let parser = ParamParser(responseObject: json),
-            let receiptCredentialResponseData = Data(
-                base64Encoded: (try parser.required(key: "receiptCredentialResponse") as String)
-            )
-        else {
-            throw failValidation("Failed to parse receipt credential response into data!")
-        }
-
-        let receiptCredentialResponse = try ReceiptCredentialResponse(
-            contents: receiptCredentialResponseData
-        )
-        let receiptCredential = try clientOperations.receiveReceiptCredential(
-            receiptCredentialRequestContext: receiptCredentialRequestContext,
-            receiptCredentialResponse: receiptCredentialResponse
-        )
-
-        let receiptLevel = try receiptCredential.getReceiptLevel()
-        guard isValidReceiptLevelPredicate(receiptLevel) else {
-            throw failValidation("Unexpected receipt credential level! \(receiptLevel)")
-        }
-
-        // Validate receipt credential expiration % 86400 == 0, per server spec
-        let expiration = try receiptCredential.getReceiptExpirationTime()
-        guard expiration % 86400 == 0 else {
-            throw failValidation("Invalid receipt credential expiration! \(expiration)")
-        }
-
-        // Validate expiration is less than 90 days from now
-        let maximumValidExpirationDate = Date().timeIntervalSince1970 + (90 * 24 * 60 * 60)
-        guard TimeInterval(expiration) < maximumValidExpirationDate else {
-            throw failValidation("Invalid receipt credential expiration!")
-        }
-
-        return receiptCredential
-    }
-
-    private static func parseReceiptCredentialPresentationError(
-        error: Error
-    ) -> Error {
-        guard
-            let httpStatusCode = error.httpStatusCode,
-            let errorCode = DonationReceiptCredentialRequestError.ErrorCode(rawValue: httpStatusCode)
-        else { return error }
-
-        if
-            case .paymentFailed = errorCode,
-            let parser = ParamParser(responseObject: error.httpResponseJson),
-            let chargeFailureDict: [String: Any] = try? parser.optional(key: "chargeFailure"),
-            let chargeFailureCode = chargeFailureDict["code"] as? String
-        {
-            return KnownReceiptCredentialRequestError(
-                errorCode: errorCode,
-                chargeFailureCodeIfPaymentFailed: chargeFailureCode
-            )
-        }
-
-        return KnownReceiptCredentialRequestError(errorCode: errorCode)
     }
 
     public static func redeemReceiptCredentialPresentation(
-        receiptCredentialPresentation: ReceiptCredentialPresentation
+        receiptCredentialPresentation: ReceiptCredentialPresentation,
     ) async throws {
         let expiresAtForLogging: String = {
             guard let result = try? receiptCredentialPresentation.getReceiptExpirationTime() else { return "UNKNOWN" }
@@ -608,21 +417,9 @@ public enum DonationSubscriptionManager {
         let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(request)
         let statusCode = response.responseStatusCode
         if statusCode != 200 {
-            Logger.warn("[Donations] Receipt credential presentation request failed with status code \(statusCode)")
-            throw OWSRetryableSubscriptionError()
+            throw OWSAssertionError("[Donations] Receipt credential presentation request failed with status code \(statusCode)")
         }
         _ = try await SSKEnvironment.shared.profileManagerImplRef.fetchLocalUsersProfile(authedAccount: .implicit())
-    }
-
-    private static func generateReceiptSerial() throws -> ReceiptSerial {
-        let count = ReceiptSerial.SIZE
-        let bytes = Randomness.generateRandomBytes(UInt(count))
-        return try ReceiptSerial(contents: bytes)
-    }
-
-    private static func clientZKReceiptOperations() -> ClientZkReceiptOperations {
-        let params = GroupsV2Protos.serverPublicParams()
-        return ClientZkReceiptOperations(serverPublicParams: params)
     }
 
     // MARK: Heartbeat
@@ -632,7 +429,7 @@ public enum DonationSubscriptionManager {
             let donationSubscriptionManager: DonationSubscriptionManager.Type
 
             func subscriberId(tx: DBReadTransaction) -> Data? {
-                return donationSubscriptionManager.getSubscriberID(transaction: SDSDB.shimOnlyBridge(tx))
+                return donationSubscriptionManager.getSubscriberID(transaction: tx)
             }
 
             func getLastRedemptionNecessaryCheck(tx: DBReadTransaction) -> Date? {
@@ -647,14 +444,14 @@ public enum DonationSubscriptionManager {
         let logger = PrefixedLogger(prefix: "[Donations]")
 
         let subscriptionRedemptionNecessityChecker = SubscriptionRedemptionNecessityChecker<
-            DonationReceiptCredentialRedemptionJobRecord
+            DonationReceiptCredentialRedemptionJobRecord,
         >(
             checkerStore: CheckerStore(donationSubscriptionManager: self),
             dateProvider: { Date() },
             db: DependenciesBridge.shared.db,
             logger: logger,
             networkManager: SSKEnvironment.shared.networkManagerRef,
-            tsAccountManager: DependenciesBridge.shared.tsAccountManager
+            tsAccountManager: DependenciesBridge.shared.tsAccountManager,
         )
 
         _ = try await subscriptionRedemptionNecessityChecker.redeemSubscriptionIfNecessary(
@@ -684,10 +481,12 @@ public enum DonationSubscriptionManager {
                 return subscriptionBadgeEntitlements.map(\.expirationSeconds).max()
             },
             saveRedemptionJobBlock: { subscriberId, subscription, tx -> DonationReceiptCredentialRedemptionJobRecord? in
-                if receiptCredentialRedemptionJobQueue.subscriptionJobExists(
-                    subscriberID: subscriberId,
-                    tx: tx
-                ) {
+                if
+                    receiptCredentialRedemptionJobQueue.subscriptionJobExists(
+                        subscriberID: subscriberId,
+                        tx: tx,
+                    )
+                {
                     // A redemption job is already enqueued for this subscription!
                     // This can happen if a previously-enqueued job hasn't
                     // finished but the NecessityChecker decided it should run,
@@ -707,14 +506,14 @@ public enum DonationSubscriptionManager {
                 guard let donationPaymentProcessor = subscription.donationPaymentProcessor else {
                     throw OWSAssertionError(
                         "Unexpectedly missing donation payment processor while redeeming donation subscription!",
-                        logger: logger
+                        logger: logger,
                     )
                 }
 
                 let (
                     receiptCredentialRequestContext,
-                    receiptCredentialRequest
-                ) = generateReceiptRequest()
+                    receiptCredentialRequest,
+                ) = ReceiptCredentialManager.generateReceiptRequest()
 
                 return receiptCredentialRedemptionJobQueue.saveSubscriptionRedemptionJob(
                     paymentProcessor: donationPaymentProcessor,
@@ -725,12 +524,12 @@ public enum DonationSubscriptionManager {
                     targetSubscriptionLevel: subscription.level,
                     priorSubscriptionLevel: nil,
                     isNewSubscription: false,
-                    tx: tx
+                    tx: tx,
                 )
             },
             startRedemptionJobBlock: { jobRecord async throws in
                 try await receiptCredentialRedemptionJobQueue.runRedemptionJob(jobRecord: jobRecord)
-            }
+            },
         )
     }
 }
@@ -740,27 +539,33 @@ public enum DonationSubscriptionManager {
 extension DonationSubscriptionManager {
 
     public static func getSubscriberID(transaction: DBReadTransaction) -> Data? {
-        guard let subscriberID = subscriptionKVS.getObject(
-            subscriberIDKey,
-            ofClass: NSData.self,
-            transaction: transaction
-        ) as Data? else {
+        guard
+            let subscriberID = subscriptionKVS.getObject(
+                subscriberIDKey,
+                ofClass: NSData.self,
+                transaction: transaction,
+            ) as Data?
+        else {
             return nil
         }
         return subscriberID
     }
 
     public static func setSubscriberID(_ subscriberID: Data?, transaction: DBWriteTransaction) {
-        subscriptionKVS.setObject(subscriberID,
-                                  key: subscriberIDKey,
-                                  transaction: transaction)
+        subscriptionKVS.setObject(
+            subscriberID as NSData?,
+            key: subscriberIDKey,
+            transaction: transaction,
+        )
     }
 
     public static func getSubscriberCurrencyCode(transaction: DBReadTransaction) -> String? {
-        guard let subscriberCurrencyCode = subscriptionKVS.getString(
-            subscriberCurrencyCodeKey,
-            transaction: transaction
-        ) else {
+        guard
+            let subscriberCurrencyCode = subscriptionKVS.getString(
+                subscriberCurrencyCodeKey,
+                transaction: transaction,
+            )
+        else {
             return nil
         }
         return subscriberCurrencyCode
@@ -768,11 +573,13 @@ extension DonationSubscriptionManager {
 
     public static func setSubscriberCurrencyCode(
         _ currencyCode: Currency.Code?,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) {
-        subscriptionKVS.setObject(currencyCode,
-                                  key: subscriberCurrencyCodeKey,
-                                  transaction: transaction)
+        subscriptionKVS.setString(
+            currencyCode,
+            key: subscriberCurrencyCodeKey,
+            transaction: transaction,
+        )
     }
 
     public static func userManuallyCancelledSubscription(transaction: DBReadTransaction) -> Bool {
@@ -804,7 +611,7 @@ extension DonationSubscriptionManager {
     // MARK: -
 
     fileprivate static func setKnownUserSubscriptionBadgeIDs(badgeIDs: [String], transaction: DBWriteTransaction) {
-        subscriptionKVS.setObject(badgeIDs, key: knownUserSubscriptionBadgeIDsKey, transaction: transaction)
+        subscriptionKVS.setStringArray(badgeIDs, key: knownUserSubscriptionBadgeIDsKey, transaction: transaction)
     }
 
     fileprivate static func knownUserSubscriptionBadgeIDs(transaction: DBReadTransaction) -> [String] {
@@ -812,7 +619,7 @@ extension DonationSubscriptionManager {
     }
 
     fileprivate static func setKnownUserBoostBadgeIDs(badgeIDs: [String], transaction: DBWriteTransaction) {
-        subscriptionKVS.setObject(badgeIDs, key: knownUserBoostBadgeIDsKey, transaction: transaction)
+        subscriptionKVS.setStringArray(badgeIDs, key: knownUserBoostBadgeIDsKey, transaction: transaction)
     }
 
     fileprivate static func knownUserBoostBadgeIDs(transaction: DBReadTransaction) -> [String] {
@@ -820,7 +627,7 @@ extension DonationSubscriptionManager {
     }
 
     fileprivate static func setKnownUserGiftBadgeIDs(badgeIDs: [String], transaction: DBWriteTransaction) {
-        subscriptionKVS.setObject(badgeIDs, key: knownUserGiftBadgeIDsKey, transaction: transaction)
+        subscriptionKVS.setStringArray(badgeIDs, key: knownUserGiftBadgeIDsKey, transaction: transaction)
     }
 
     fileprivate static func knownUserGiftBadgeIDs(transaction: DBReadTransaction) -> [String] {
@@ -828,7 +635,7 @@ extension DonationSubscriptionManager {
     }
 
     fileprivate static func setMostRecentlyExpiredBadgeID(badgeID: String?, transaction: DBWriteTransaction) {
-        guard let badgeID = badgeID else {
+        guard let badgeID else {
             subscriptionKVS.removeValue(forKey: mostRecentlyExpiredBadgeIDKey, transaction: transaction)
             return
         }
@@ -848,7 +655,7 @@ extension DonationSubscriptionManager {
     }
 
     fileprivate static func setMostRecentlyExpiredGiftBadgeID(badgeID: String?, transaction: DBWriteTransaction) {
-        if let badgeID = badgeID {
+        if let badgeID {
             subscriptionKVS.setString(badgeID, key: mostRecentlyExpiredGiftBadgeIDKey, transaction: transaction)
         } else {
             subscriptionKVS.removeValue(forKey: mostRecentlyExpiredGiftBadgeIDKey, transaction: transaction)
@@ -878,7 +685,7 @@ extension DonationSubscriptionManager {
 
     public static func setMostRecentSubscriptionPaymentMethod(
         paymentMethod: DonationPaymentMethod?,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) {
         subscriptionKVS.setString(paymentMethod?.rawValue, key: mostRecentSubscriptionPaymentMethodKey, transaction: transaction)
     }
@@ -898,10 +705,6 @@ extension DonationSubscriptionManager {
 }
 
 // MARK: -
-
-public class OWSRetryableSubscriptionError: CustomNSError, IsRetryableProvider {
-    public var isRetryableProvider: Bool { true }
-}
 
 extension DonationSubscriptionManager {
 
@@ -943,13 +746,20 @@ extension DonationSubscriptionManager {
 
     public static func getSubscriptionBadge(subscriptionLevel levelRawValue: UInt) async throws -> ProfileBadge {
         let donationConfiguration = try await fetchDonationConfiguration()
-        guard let matchingLevel = donationConfiguration.subscription.levels.first(where: {
-            $0.level == levelRawValue
-        }) else {
+        guard
+            let matchingLevel = donationConfiguration.subscription.levels.first(where: {
+                $0.level == levelRawValue
+            })
+        else {
             throw OWSAssertionError("Missing requested subscription level!")
         }
 
         return matchingLevel.badge
+    }
+
+    public static func fetchDonationConfiguration() async throws -> DonationSubscriptionConfiguration {
+        let subscriptionConfigManager = DependenciesBridge.shared.subscriptionConfigManager
+        return try await subscriptionConfigManager.donationConfiguration()
     }
 }
 
@@ -958,7 +768,7 @@ extension DonationSubscriptionManager {
 extension DonationSubscriptionManager {
     public static func reconcileBadgeStates(
         currentLocalUserProfile: OWSUserProfile,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) {
         let currentBadges = currentLocalUserProfile.badges
 
@@ -1039,7 +849,7 @@ extension DonationSubscriptionManager {
         }
 
         if let persistedBadgeId = persistedBoostBadgeIDs.first, currentBoostBadgeIDs.isEmpty {
-            if (expiringBadgeId == nil || BoostBadgeIds.contains(expiringBadgeId!)) && newExpiringBadgeId == nil {
+            if expiringBadgeId == nil || BoostBadgeIds.contains(expiringBadgeId!), newExpiringBadgeId == nil {
                 Logger.info("Last boost badge id expired \(persistedBadgeId)")
                 newExpiringBadgeId = persistedBadgeId
             } else {
@@ -1047,7 +857,7 @@ extension DonationSubscriptionManager {
             }
         }
 
-        if let newExpiringBadgeId = newExpiringBadgeId, newExpiringBadgeId != expiringBadgeId {
+        if let newExpiringBadgeId, newExpiringBadgeId != expiringBadgeId {
             Logger.info("Recording new expired badge id to show on home screen \(newExpiringBadgeId)")
             expiringBadgeId = newExpiringBadgeId
             showExpiryOnHomeScreen = true

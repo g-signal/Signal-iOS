@@ -1,1 +1,3 @@
-• Chúng tôi đã sửa lỗi thỉnh thoảng camera hiển thị hình ảnh trống trong quá trình liên kết thiết bị mới.
+• Giúp dễ dàng tham khảo thông tin quan trọng với tính năng ghim tin nhắn. Những câu hỏi thường gặp nhất, đặt chỗ bữa tối và lịch trình kỳ nghỉ là các thông tin cần "ghim" trong đầu. Nay bạn cũng có thể ghim tin nhắn trong cuộc trò chuyện.
+
+

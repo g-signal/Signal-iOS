@@ -11,17 +11,18 @@ import XCTest
 final class PreKeyTaskTests: SSKBaseTest {
 
     private var mockTSAccountManager: MockTSAccountManager!
-    private var mockIdentityManager: PreKey.Mocks.IdentityManager!
-    private var mockIdentityKeyMismatchManager: PreKey.Mocks.IdentityKeyMismatchManager!
-    private var mockAPIClient: PreKey.Mocks.APIClient!
-    private var mockDateProvider: PreKey.Mocks.DateProvider!
+    private var mockIdentityManager: MockIdentityManager!
+    private var mockIdentityKeyMismatchManager: PreKeyTaskManager.Mocks.IdentityKeyMismatchManager!
+    private var mockAPIClient: PreKeyTaskManager.Mocks.APIClient!
+    private var mockDateProvider: PreKeyTaskManager.Mocks.DateProvider!
     private var mockDb: InMemoryDB!
 
     private var taskManager: PreKeyTaskManager!
 
-    private var mockAciProtocolStore: MockSignalProtocolStore!
-    private var mockPniProtocolStore: MockSignalProtocolStore!
+    private var mockAciProtocolStore: SignalProtocolStore!
+    private var mockPniProtocolStore: SignalProtocolStore!
     private var mockProtocolStoreManager: SignalProtocolStoreManager!
+    private var mockPreKeyStore: SignalServiceKit.PreKeyStore!
 
     override func setUp() {
         super.setUp()
@@ -29,18 +30,43 @@ final class PreKeyTaskTests: SSKBaseTest {
         let testContext = (CurrentAppContext() as! TestAppContext)
         testContext.shouldProcessIncomingMessages = false
 
+        let recipientDbTable = RecipientDatabaseTable()
+        let recipientFetcher = RecipientFetcher(
+            recipientDatabaseTable: recipientDbTable,
+            searchableNameIndexer: MockSearchableNameIndexer(),
+        )
+        let recipientIdFinder = RecipientIdFinder(
+            recipientDatabaseTable: recipientDbTable,
+            recipientFetcher: recipientFetcher,
+        )
+        mockIdentityManager = .init(recipientIdFinder: recipientIdFinder)
         mockTSAccountManager = .init()
-        mockIdentityManager = .init()
         mockIdentityKeyMismatchManager = .init()
         mockAPIClient = .init()
         mockDateProvider = .init()
         mockDb = InMemoryDB()
+        let sessionStore = SignalServiceKit.SessionStore()
 
-        mockAciProtocolStore = .init(identity: .aci)
-        mockPniProtocolStore = .init(identity: .pni)
-        mockProtocolStoreManager = SignalProtocolStoreManagerImpl(
+        mockPreKeyStore = PreKeyStore()
+        mockAciProtocolStore = .build(
+            dateProvider: mockDateProvider.targetDate,
+            identity: .aci,
+            preKeyStore: mockPreKeyStore,
+            recipientIdFinder: recipientIdFinder,
+            sessionStore: sessionStore,
+        )
+        mockPniProtocolStore = .build(
+            dateProvider: mockDateProvider.targetDate,
+            identity: .pni,
+            preKeyStore: mockPreKeyStore,
+            recipientIdFinder: recipientIdFinder,
+            sessionStore: sessionStore,
+        )
+        mockProtocolStoreManager = SignalProtocolStoreManager(
             aciProtocolStore: mockAciProtocolStore,
-            pniProtocolStore: mockPniProtocolStore
+            pniProtocolStore: mockPniProtocolStore,
+            preKeyStore: mockPreKeyStore,
+            sessionStore: sessionStore,
         )
 
         taskManager = PreKeyTaskManager(
@@ -52,7 +78,7 @@ final class PreKeyTaskTests: SSKBaseTest {
             messageProcessor: SSKEnvironment.shared.messageProcessorRef,
             protocolStoreManager: mockProtocolStoreManager,
             remoteConfigProvider: MockRemoteConfigProvider(),
-            tsAccountManager: mockTSAccountManager
+            tsAccountManager: mockTSAccountManager,
         )
     }
 
@@ -63,37 +89,38 @@ final class PreKeyTaskTests: SSKBaseTest {
 
     private func aciPreKeyCount() -> Int {
         return mockDb.read { tx in
-            return mockAciProtocolStore.mockPreKeyStore.count(tx: tx)
+            return try! mockPreKeyStore.aciStore.fetchCount(in: .oneTime, isOneTime: true, tx: tx)
         }
     }
 
     private func aciSignedPreKeyCount() -> Int {
         return mockDb.read { tx in
-            return mockAciProtocolStore.mockSignedPreKeyStore.count(tx: tx)
+            return try! mockPreKeyStore.aciStore.fetchCount(in: .signed, isOneTime: false, tx: tx)
         }
     }
 
     private func aciKyberOneTimePreKeyCount() -> Int {
         return mockDb.read { tx in
-            return mockAciProtocolStore.mockKyberPreKeyStore.count(isLastResort: false, tx: tx)
+            return try! mockPreKeyStore.aciStore.fetchCount(in: .kyber, isOneTime: true, tx: tx)
         }
     }
 
     private func aciKyberLastResortPreKeyCount() -> Int {
         return mockDb.read { tx in
-            return mockAciProtocolStore.mockKyberPreKeyStore.count(isLastResort: true, tx: tx)
+            return try! mockPreKeyStore.aciStore.fetchCount(in: .kyber, isOneTime: false, tx: tx)
         }
     }
 
     //
     //
     // MARK: - Create PreKey Tests
+
     //
     //
 
     func testCreateAll() async throws {
         mockAPIClient.setPreKeysResult = .value(())
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
 
         _ = try await taskManager.refresh(identity: .aci, targets: .all, force: true, auth: .implicit())
 
@@ -107,7 +134,7 @@ final class PreKeyTaskTests: SSKBaseTest {
 
     func testCreateSignedPreKeyOnly() async throws {
         mockAPIClient.setPreKeysResult = .value(())
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
 
         // Pre-validate
         XCTAssertEqual(aciPreKeyCount(), 0)
@@ -127,7 +154,7 @@ final class PreKeyTaskTests: SSKBaseTest {
 
     func testCreatePreKeyOnly() async throws {
         mockAPIClient.setPreKeysResult = .value(())
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
 
         // Pre-validate
         XCTAssertEqual(aciPreKeyCount(), 0)
@@ -149,7 +176,7 @@ final class PreKeyTaskTests: SSKBaseTest {
     // Test that the IdentityMananger keypair makes it through to the
     // service client
     func testMockPreKeyTaskCreateWithExistingIdentityKey() async throws {
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
         mockAPIClient.setPreKeysResult = .value(())
 
         XCTAssertEqual(aciPreKeyCount(), 0)
@@ -164,7 +191,7 @@ final class PreKeyTaskTests: SSKBaseTest {
     }
 
     func testMockCreatePreKeyOnlyWithExisting() async throws {
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
         mockAPIClient.setPreKeysResult = .value(())
 
         mockAPIClient.currentPreKeyCount = 100
@@ -181,7 +208,7 @@ final class PreKeyTaskTests: SSKBaseTest {
 
     func testCreatePqKeysOnly() async throws {
         mockAPIClient.setPreKeysResult = .value(())
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
 
         // Pre-validate
         XCTAssertEqual(aciKyberOneTimePreKeyCount(), 0)
@@ -191,7 +218,7 @@ final class PreKeyTaskTests: SSKBaseTest {
             identity: .aci,
             targets: [.lastResortPqPreKey, .oneTimePqPreKey],
             force: true,
-            auth: .implicit()
+            auth: .implicit(),
         )
 
         // Validate
@@ -207,20 +234,17 @@ final class PreKeyTaskTests: SSKBaseTest {
     //
     //
     // MARK: - Refresh Tests
+
     //
     //
 
     func testMockPreKeyTaskUpdate() async throws {
         let aciKeyPair = ECKeyPair.generateKeyPair()
-        mockIdentityManager.aciKeyPair = aciKeyPair
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
 
-        let originalSignedPreKey = SignedPreKeyStoreImpl.generateSignedPreKey(signedBy: aciKeyPair)
+        let originalSignedPreKey = SignedPreKeyStoreImpl.generateSignedPreKey(keyId: PreKeyId.random(), signedBy: aciKeyPair.keyPair.privateKey)
         mockDb.write { tx in
-            mockAciProtocolStore.mockSignedPreKeyStore.storeSignedPreKey(
-                originalSignedPreKey.id,
-                signedPreKeyRecord: originalSignedPreKey,
-                tx: tx
-            )
+            mockAciProtocolStore.signedPreKeyStore.storeSignedPreKey(originalSignedPreKey, tx: tx)
         }
 
         mockAPIClient.setPreKeysResult = .value(())
@@ -236,12 +260,13 @@ final class PreKeyTaskTests: SSKBaseTest {
     }
 
     func testMockPreKeyTaskNoUpdate() async throws {
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
         mockAPIClient.setPreKeysResult = .value(())
 
         let records = mockDb.write { tx in
-            let records = mockAciProtocolStore.mockPreKeyStore.generatePreKeyRecords(tx: tx)
-            mockAciProtocolStore.mockPreKeyStore.storePreKeyRecords(records, tx: tx)
+            let preKeyIds = mockAciProtocolStore.preKeyStore.allocatePreKeyIds(tx: tx)
+            let records = PreKeyStoreImpl.generatePreKeyRecords(forPreKeyIds: preKeyIds)
+            mockAciProtocolStore.preKeyStore.storePreKeyRecords(records, tx: tx)
             return records
         }
 
@@ -254,7 +279,7 @@ final class PreKeyTaskTests: SSKBaseTest {
         XCTAssertEqual(aciPreKeyCount(), 100)
         mockDb.read { tx in
             for record in records {
-                XCTAssertNotNil(mockAciProtocolStore.mockPreKeyStore.loadPreKey(record.id, transaction: tx))
+                XCTAssertNotNil(mockPreKeyStore.aciStore.fetchPreKey(in: .oneTime, for: record.id, tx: tx))
             }
         }
         XCTAssertNil(mockAPIClient.preKeyRecords)
@@ -271,7 +296,7 @@ final class PreKeyTaskTests: SSKBaseTest {
         } catch let error {
             switch error {
             case PreKeyTaskManager.Error.noIdentityKey:
-                XCTAssertNil(self.mockIdentityManager.aciKeyPair)
+                XCTAssertNil(self.mockIdentityManager.identityKeyPairs[.aci])
             default:
                 XCTFail("Unexpected error")
             }
@@ -282,7 +307,7 @@ final class PreKeyTaskTests: SSKBaseTest {
     }
 
     func testMockUpdateSkipSignedPreKey() async throws {
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
         mockAPIClient.setPreKeysResult = .value(())
 
         mockAPIClient.currentPreKeyCount = 50
@@ -298,19 +323,20 @@ final class PreKeyTaskTests: SSKBaseTest {
     //
     //
     // MARK: - Force Refresh Tests
+
     //
     //
 
     func testRefreshNoUpdatesNeeded() async throws {
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
         mockAPIClient.setPreKeysResult = .value(())
 
         mockAPIClient.currentPreKeyCount = 100
         mockAPIClient.currentPqPreKeyCount = 100
         mockDb.write { tx in
-            mockAciProtocolStore.mockSignedPreKeyStore.setLastSuccessfulRotationDate(
+            mockAciProtocolStore.signedPreKeyStore.setLastSuccessfulRotationDate(
                 mockDateProvider.currentDate,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -326,14 +352,14 @@ final class PreKeyTaskTests: SSKBaseTest {
     }
 
     func testForceRefreshAll() async throws {
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
         mockAPIClient.setPreKeysResult = .value(())
 
         mockAPIClient.currentPreKeyCount = 100
         mockDb.write { tx in
-            mockAciProtocolStore.mockSignedPreKeyStore.setLastSuccessfulRotationDate(
+            mockAciProtocolStore.signedPreKeyStore.setLastSuccessfulRotationDate(
                 mockDateProvider.currentDate,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -349,7 +375,7 @@ final class PreKeyTaskTests: SSKBaseTest {
     }
 
     func testForceRefreshOnlyPreKeys() async throws {
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
         mockAPIClient.setPreKeysResult = .value(())
 
         mockAPIClient.currentPreKeyCount = 100
@@ -370,12 +396,12 @@ final class PreKeyTaskTests: SSKBaseTest {
 
     func test422WhileSettingKeysReportsSuspectedPniIdentityKeyIssue() async {
         mockTSAccountManager.registrationStateMock = { .provisioned }
-        mockIdentityManager.pniKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.pni] = ECKeyPair.generateKeyPair()
         mockAPIClient.setPreKeysResult = .error(OWSHTTPError.serviceResponse(.init(
             requestUrl: URL(string: "https://example.com")!,
             responseStatus: 422,
             responseHeaders: HttpHeaders(),
-            responseData: nil
+            responseData: nil,
         )))
         var didValidateIdentityKey = false
         mockIdentityKeyMismatchManager.validateIdentityKeyMock = { _ in
@@ -393,7 +419,7 @@ final class PreKeyTaskTests: SSKBaseTest {
     //
 
     func testSignedPreKeyExpired() async throws {
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
         mockAPIClient.setPreKeysResult = .value(())
 
         mockDateProvider.currentDate = Date().addingTimeInterval(PreKeyTaskManager.Constants.SignedPreKeyRotationTime + 1)
@@ -405,7 +431,7 @@ final class PreKeyTaskTests: SSKBaseTest {
     }
 
     func testRefreshOnlyPreKeysBasedOnCount() async throws {
-        mockIdentityManager.aciKeyPair = ECKeyPair.generateKeyPair()
+        mockIdentityManager.identityKeyPairs[.aci] = ECKeyPair.generateKeyPair()
         mockAPIClient.setPreKeysResult = .value(())
 
         mockAPIClient.currentPreKeyCount = 9

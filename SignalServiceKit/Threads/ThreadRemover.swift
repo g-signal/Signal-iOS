@@ -40,7 +40,7 @@ class ThreadRemoverImpl: ThreadRemover {
         threadReplyInfoStore: ThreadReplyInfoStore,
         threadSoftDeleteManager: ThreadSoftDeleteManager,
         threadStore: ThreadStore,
-        wallpaperStore: WallpaperStore
+        wallpaperStore: WallpaperStore,
     ) {
         self.chatColorSettingStore = chatColorSettingStore
         self.databaseStorage = databaseStorage
@@ -96,8 +96,9 @@ class _ThreadRemoverImpl_ThreadReadCacheWrapper: _ThreadRemoverImpl_ThreadReadCa
     init(_ threadReadCache: ThreadReadCache) {
         self.threadReadCache = threadReadCache
     }
+
     func didRemove(thread: TSThread, tx: DBWriteTransaction) {
-        threadReadCache.didRemove(thread: thread, transaction: SDSDB.shimOnlyBridge(tx))
+        threadReadCache.didRemove(thread: thread, transaction: tx)
     }
 }
 
@@ -110,8 +111,9 @@ class _ThreadRemoverImpl_DatabaseStorageWrapper: _ThreadRemoverImpl_DatabaseStor
     init(_ databaseStorage: SDSDatabaseStorage) {
         self.databaseStorage = databaseStorage
     }
+
     func updateIdMapping(thread: TSThread, tx: DBWriteTransaction) {
-        databaseStorage.updateIdMapping(thread: thread, transaction: SDSDB.shimOnlyBridge(tx))
+        databaseStorage.updateIdMapping(thread: thread, transaction: tx)
     }
 }
 

@@ -22,8 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId NS_UNAVAILABLE;
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
-
 - (instancetype)initWithContactUUID:(nullable NSString *)contactUUID
                  contactPhoneNumber:(nullable NSString *)contactPhoneNumber NS_DESIGNATED_INITIALIZER;
 
@@ -87,21 +85,8 @@ NS_DESIGNATED_INITIALIZER NS_SWIFT_NAME(init(grdbId:uniqueId:conversationColorNa
 @property (nonatomic, readonly) SignalServiceAddress *contactAddress;
 @property (nonatomic) BOOL hasDismissedOffers; // deprecated
 
-+ (instancetype)getOrCreateThreadWithContactAddress:(SignalServiceAddress *)contactAddress
-    NS_SWIFT_NAME(getOrCreateThread(contactAddress:));
-
-+ (instancetype)getOrCreateThreadWithContactAddress:(SignalServiceAddress *)contactAddress
-                                        transaction:(DBWriteTransaction *)transaction;
-
-// Unlike getOrCreateThreadWithContactAddress, this will _NOT_ create a thread if one does not already exist.
-+ (nullable instancetype)getThreadWithContactAddress:(SignalServiceAddress *)contactAddress
-                                         transaction:(DBReadTransaction *)transaction;
-
 + (nullable SignalServiceAddress *)contactAddressFromThreadId:(NSString *)threadId
                                                   transaction:(DBReadTransaction *)transaction;
-
-// This is only ever used from migration from a pre-UUID world to a UUID world
-+ (nullable NSString *)legacyContactPhoneNumberFromThreadId:(NSString *)threadId;
 
 @end
 

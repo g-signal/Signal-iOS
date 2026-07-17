@@ -17,12 +17,12 @@ class AllMediaViewController: OWSViewController {
     init(
         thread: TSThread,
         spoilerState: SpoilerRenderState,
-        name: String?
+        name: String?,
     ) {
         tileViewController = MediaTileViewController(
             thread: thread,
             accessoriesHelper: accessoriesHelper,
-            spoilerState: spoilerState
+            spoilerState: spoilerState,
         )
         super.init()
         navigationItem.title = name
@@ -30,6 +30,7 @@ class AllMediaViewController: OWSViewController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         addChild(tileViewController)
         view.addSubview(tileViewController.view)
         tileViewController.view.autoPinEdgesToSuperviewEdges()
@@ -48,10 +49,6 @@ extension AllMediaViewController: MediaPresentationContextProvider {
 
     func mediaPresentationContext(item: Media, in coordinateSpace: UICoordinateSpace) -> MediaPresentationContext? {
         return tileViewController.mediaPresentationContext(item: item, in: coordinateSpace)
-    }
-
-    func snapshotOverlayView(in coordinateSpace: UICoordinateSpace) -> (UIView, CGRect)? {
-        return tileViewController.snapshotOverlayView(in: coordinateSpace)
     }
 }
 

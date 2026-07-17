@@ -3,18 +3,20 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import LibSignalClient
+
 protocol PreKeyTaskAPIClient {
     func getAvailablePreKeys(
-        for identity: OWSIdentity
+        for identity: OWSIdentity,
     ) async throws -> (ecCount: Int, pqCount: Int)
 
     func registerPreKeys(
         for identity: OWSIdentity,
-        signedPreKeyRecord: SignalServiceKit.SignedPreKeyRecord?,
-        preKeyRecords: [SignalServiceKit.PreKeyRecord]?,
-        pqLastResortPreKeyRecord: KyberPreKeyRecord?,
-        pqPreKeyRecords: [KyberPreKeyRecord]?,
-        auth: ChatServiceAuth
+        signedPreKeyRecord: LibSignalClient.SignedPreKeyRecord?,
+        preKeyRecords: [LibSignalClient.PreKeyRecord]?,
+        pqLastResortPreKeyRecord: LibSignalClient.KyberPreKeyRecord?,
+        pqPreKeyRecords: [LibSignalClient.KyberPreKeyRecord]?,
+        auth: ChatServiceAuth,
     ) async throws
 }
 
@@ -26,16 +28,13 @@ struct PreKeyTaskAPIClientImpl: PreKeyTaskAPIClient {
     }
 
     func getAvailablePreKeys(
-        for identity: OWSIdentity
+        for identity: OWSIdentity,
     ) async throws -> (ecCount: Int, pqCount: Int) {
         let request = OWSRequestFactory.availablePreKeysCountRequest(for: identity)
         let response = try await networkManager.asyncRequest(request)
 
-        guard let json = response.responseBodyJson else {
+        guard let params = response.responseBodyParamParser else {
             throw OWSAssertionError("Missing or invalid JSON.")
-        }
-        guard let params = ParamParser(responseObject: json) else {
-            throw OWSAssertionError("Missing or invalid response.")
         }
 
         let ecCount: Int = try params.required(key: "count")
@@ -46,11 +45,11 @@ struct PreKeyTaskAPIClientImpl: PreKeyTaskAPIClient {
 
     func registerPreKeys(
         for identity: OWSIdentity,
-        signedPreKeyRecord: SignalServiceKit.SignedPreKeyRecord?,
-        preKeyRecords: [SignalServiceKit.PreKeyRecord]?,
-        pqLastResortPreKeyRecord: KyberPreKeyRecord?,
-        pqPreKeyRecords: [KyberPreKeyRecord]?,
-        auth: ChatServiceAuth
+        signedPreKeyRecord: LibSignalClient.SignedPreKeyRecord?,
+        preKeyRecords: [LibSignalClient.PreKeyRecord]?,
+        pqLastResortPreKeyRecord: LibSignalClient.KyberPreKeyRecord?,
+        pqPreKeyRecords: [LibSignalClient.KyberPreKeyRecord]?,
+        auth: ChatServiceAuth,
     ) async throws {
         let request = OWSRequestFactory.registerPrekeysRequest(
             identity: identity,
@@ -58,7 +57,7 @@ struct PreKeyTaskAPIClientImpl: PreKeyTaskAPIClient {
             prekeyRecords: preKeyRecords,
             pqLastResortPreKeyRecord: pqLastResortPreKeyRecord,
             pqPreKeyRecords: pqPreKeyRecords,
-            auth: auth
+            auth: auth,
         )
 
         _ = try await networkManager.asyncRequest(request)

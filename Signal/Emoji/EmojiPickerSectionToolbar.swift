@@ -14,12 +14,12 @@ protocol EmojiPickerSectionToolbarDelegate: AnyObject {
 class EmojiPickerSectionToolbar: UIView, UICollectionViewDelegate {
     private var buttons = [UIButton]()
 
-    private let forceDarkTheme: Bool
     private weak var delegate: EmojiPickerSectionToolbarDelegate?
 
     private enum Section {
         case main
     }
+
     private var dataSource: UICollectionViewDiffableDataSource<Section, ThemeIcon>!
     private var collectionView: UICollectionView!
 
@@ -73,7 +73,7 @@ class EmojiPickerSectionToolbar: UIView, UICollectionViewDelegate {
                 imageView.widthAnchor.constraint(equalToConstant: EmojiSectionCellContentView.imageSize),
                 imageView.heightAnchor.constraint(equalToConstant: EmojiSectionCellContentView.imageSize),
                 imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-                imageView.centerYAnchor.constraint(equalTo: centerYAnchor)
+                imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             ])
 
             configure()
@@ -98,7 +98,7 @@ class EmojiPickerSectionToolbar: UIView, UICollectionViewDelegate {
             }
             backgroundView.isHidden = !configuration.displayBackgroundView
             imageView.image = Theme.iconImage(configuration.emojiSectionIcon)
-            if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+            if #available(iOS 26, *) {
                 imageView.tintColor = UIColor.Signal.label
             } else {
                 imageView.tintColor = UIColor.Signal.secondaryLabel
@@ -108,16 +108,10 @@ class EmojiPickerSectionToolbar: UIView, UICollectionViewDelegate {
 
     init(
         delegate: EmojiPickerSectionToolbarDelegate,
-        forceDarkTheme: Bool = false
     ) {
         self.delegate = delegate
-        self.forceDarkTheme = forceDarkTheme
 
         super.init(frame: .zero)
-
-        if forceDarkTheme {
-            overrideUserInterfaceStyle = .dark
-        }
 
         // Prepare icons.
         var emojiSectionIcons: [ThemeIcon] = [
@@ -128,7 +122,7 @@ class EmojiPickerSectionToolbar: UIView, UICollectionViewDelegate {
             .emojiTravel,
             .emojiObject,
             .emojiSymbol,
-            .emojiFlag
+            .emojiFlag,
         ]
         if delegate.emojiPickerSectionToolbarShouldShowRecentsSection(self) == true {
             emojiSectionIcons.insert(.emojiRecent, at: 0)
@@ -146,10 +140,10 @@ class EmojiPickerSectionToolbar: UIView, UICollectionViewDelegate {
         collectionView.addConstraint(collectionView.heightAnchor.constraint(equalToConstant: collectionViewHeight))
 
         // Prepare background.
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        var backgroundConfigured = false
+        if #available(iOS 26, *) {
             // Floating glass panel that encapsulates emoji category strip.
             // Insets are carefully configured for best on-screen appearance.
-#if compiler(>=6.2)
             let glassEffectView = UIVisualEffectView(effect: UIGlassEffect(style: .regular))
             glassEffectView.translatesAutoresizingMaskIntoConstraints = false
             glassEffectView.cornerConfiguration = .capsule()
@@ -162,24 +156,32 @@ class EmojiPickerSectionToolbar: UIView, UICollectionViewDelegate {
             ])
 
             glassEffectView.clipsToBounds = true
-            glassEffectView.layoutMargins = UIEdgeInsets(top: 0, leading: 1, bottom: 0, trailing: -4)
             glassEffectView.contentView.addSubview(collectionView)
             NSLayoutConstraint.activate([
-                collectionView.leadingAnchor.constraint(equalTo: glassEffectView.layoutMarginsGuide.leadingAnchor),
-                collectionView.trailingAnchor.constraint(equalTo: glassEffectView.layoutMarginsGuide.trailingAnchor),
-                collectionView.topAnchor.constraint(equalTo: glassEffectView.layoutMarginsGuide.topAnchor),
-                collectionView.bottomAnchor.constraint(equalTo: glassEffectView.layoutMarginsGuide.bottomAnchor),
+                collectionView.leadingAnchor.constraint(equalTo: glassEffectView.leadingAnchor),
+                collectionView.trailingAnchor.constraint(equalTo: glassEffectView.trailingAnchor),
+                collectionView.topAnchor.constraint(equalTo: glassEffectView.topAnchor),
+                collectionView.bottomAnchor.constraint(equalTo: glassEffectView.bottomAnchor),
             ])
-#endif
-        } else {
-            // Container extends to the vertical edges and to the bottom of the view.
-            // Collection view is pinned to the top edge and leading, trailing and bottom margins.
-            let collectionViewContainer: UIView
+            backgroundConfigured = true
+        }
+        if !backgroundConfigured {
+            // Background stretches 500 dp below bottom edge of the screen so that there's no gap where bottom safe area is.
             if UIAccessibility.isReduceTransparencyEnabled {
-                backgroundColor = UIColor.Signal.background
-                collectionViewContainer = self
+                let backgroundView = UIView()
+                backgroundView.backgroundColor = UIColor.Signal.background
+                addSubview(backgroundView)
+                backgroundView.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    backgroundView.topAnchor.constraint(equalTo: topAnchor),
+                    backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                    backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 500),
+                    backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                ])
+
+                addSubview(collectionView)
             } else {
-                let blurEffect = forceDarkTheme ? Theme.darkThemeBarBlurEffect : Theme.barBlurEffect
+                let blurEffect = UIBlurEffect(style: .regular)
                 let blurEffectView = UIVisualEffectView(effect: blurEffect)
                 addSubview(blurEffectView)
                 blurEffectView.translatesAutoresizingMaskIntoConstraints = false
@@ -187,26 +189,24 @@ class EmojiPickerSectionToolbar: UIView, UICollectionViewDelegate {
                     blurEffectView.leadingAnchor.constraint(equalTo: leadingAnchor),
                     blurEffectView.trailingAnchor.constraint(equalTo: trailingAnchor),
                     blurEffectView.topAnchor.constraint(equalTo: topAnchor),
-                    blurEffectView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                    blurEffectView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 500),
                 ])
-
-                collectionViewContainer = blurEffectView.contentView
+                blurEffectView.contentView.addSubview(collectionView)
             }
 
-            collectionViewContainer.addSubview(collectionView)
             NSLayoutConstraint.activate([
-                collectionView.leadingAnchor.constraint(equalTo: collectionViewContainer.layoutMarginsGuide.leadingAnchor),
-                collectionView.trailingAnchor.constraint(equalTo: collectionViewContainer.layoutMarginsGuide.trailingAnchor),
-                collectionView.topAnchor.constraint(equalTo: collectionViewContainer.topAnchor),
-                collectionView.bottomAnchor.constraint(equalTo: collectionViewContainer.safeAreaLayoutGuide.bottomAnchor)
+                collectionView.topAnchor.constraint(equalTo: topAnchor),
+                collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             ])
         }
 
         // Configure data source.
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         dataSource = UICollectionViewDiffableDataSource<Section, ThemeIcon>(
-            collectionView: collectionView
-        ) { (collectionView, indexPath, itemIdentifier) -> UICollectionViewCell? in
+            collectionView: collectionView,
+        ) { collectionView, indexPath, itemIdentifier -> UICollectionViewCell? in
 
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
             cell.automaticallyUpdatesContentConfiguration = true
@@ -233,25 +233,53 @@ class EmojiPickerSectionToolbar: UIView, UICollectionViewDelegate {
     private class func buildCollectionViewLayout(numberOfItems: Int) -> UICollectionViewLayout {
         let cellSize = EmojiSectionCellContentView.viewSize
 
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(cellSize),
-            heightDimension: .absolute(cellSize)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let layout = UICollectionViewCompositionalLayout { _, environment in
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(cellSize),
+                heightDimension: .absolute(cellSize),
+            )
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1 / CGFloat(numberOfItems)),
-            heightDimension: .absolute(cellSize)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            let availableWidth = environment.container.effectiveContentSize.width - (collectionViewSectionMargin * 2)
 
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(margin: collectionViewSectionMargin)
-        return UICollectionViewCompositionalLayout(section: section)
+            let totalSpacing = collectionViewSectionMargin * CGFloat(numberOfItems - 1)
+            let minimumWidth = CGFloat(numberOfItems) * cellSize + totalSpacing
+
+            if minimumWidth <= availableWidth {
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(cellSize),
+                )
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: numberOfItems)
+                group.interItemSpacing = .fixed(collectionViewSectionMargin)
+
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .none
+                section.contentInsets = NSDirectionalEdgeInsets(margin: collectionViewSectionMargin)
+                return section
+            } else {
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .absolute(cellSize),
+                    heightDimension: .absolute(cellSize),
+                )
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .continuous
+                section.interGroupSpacing = collectionViewSectionMargin
+                section.contentInsets = .init(
+                    hMargin: collectionViewSectionMargin * 2,
+                    vMargin: collectionViewSectionMargin,
+                )
+                return section
+            }
+        }
+
+        return layout
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         delegate?.emojiPickerSectionToolbar(self, didSelectSection: indexPath.item)
     }
 
@@ -261,7 +289,7 @@ class EmojiPickerSectionToolbar: UIView, UICollectionViewDelegate {
         collectionView.selectItem(
             at: IndexPath(item: section, section: 0),
             animated: true,
-            scrollPosition: .centeredHorizontally
+            scrollPosition: .centeredHorizontally,
         )
     }
 }

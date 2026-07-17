@@ -63,12 +63,14 @@ public class PaymentModelCell: UITableViewCell {
         nameLabel.textColor = Theme.primaryTextColor
 
         statusLabel.font = .dynamicTypeSubheadlineClamped
-        statusLabel.textColor = Theme.ternaryTextColor
+        statusLabel.textColor = .Signal.tertiaryLabel
 
         amountLabel.font = .dynamicTypeBodyClamped
-        amountLabel.textColor = (paymentItem.isIncoming
-                                    ? UIColor.ows_accentGreen
-                                    : Theme.primaryTextColor)
+        amountLabel.textColor = (
+            paymentItem.isIncoming
+                ? UIColor.ows_accentGreen
+                : Theme.primaryTextColor,
+        )
 
         var avatarView: UIView
         if let address = paymentItem.address {
@@ -85,7 +87,7 @@ public class PaymentModelCell: UITableViewCell {
             avatarWrapper.addSubview(avatarView)
             avatarView.autoPinEdgesToSuperviewEdges()
             avatarView = avatarWrapper
-            PaymentsViewUtils.addUnreadBadge(toView: avatarView)
+            avatarView.addCircleBadge(color: .Signal.accent)
         }
         arrangedSubviews.append(avatarView)
 
@@ -107,7 +109,7 @@ public class PaymentModelCell: UITableViewCell {
         accessoryType = .disclosureIndicator
     }
 
-    public override func prepareForReuse() {
+    override public func prepareForReuse() {
         super.prepareForReuse()
 
         contactAvatarView.reset()

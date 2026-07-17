@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-import SignalUI
 import SignalServiceKit
+import SignalUI
 public import UIKit
 
 public class ConversationScrollButton: UIButton {
@@ -23,14 +23,12 @@ public class ConversationScrollButton: UIButton {
         super.init(frame: .zero)
 
         var configuration: UIButton.Configuration?
-#if compiler(>=6.2)
         if #available(iOS 26, *) {
             configuration = .glass()
             configuration?.imageColorTransformer = UIConfigurationColorTransformer { _ in
                 return .Signal.label
             }
         }
-#endif
         if configuration == nil {
             configuration = .gray()
             configuration?.imageColorTransformer = UIConfigurationColorTransformer { _ in
@@ -61,7 +59,7 @@ public class ConversationScrollButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override var intrinsicContentSize: CGSize {
+    override public var intrinsicContentSize: CGSize {
         .square(ConversationScrollButton.circleDiameter)
     }
 

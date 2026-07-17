@@ -22,16 +22,16 @@ final class BackupArchiveProfileChangeChatUpdateArchiver {
     func archive(
         infoMessage: TSInfoMessage,
         threadInfo: BackupArchive.ChatArchivingContext.CachedThreadInfo,
-        context: BackupArchive.ChatArchivingContext
+        context: BackupArchive.ChatArchivingContext,
     ) -> ArchiveChatUpdateMessageResult {
         func messageFailure(
             _ errorType: ArchiveFrameError.ErrorType,
-            line: UInt = #line
+            line: UInt = #line,
         ) -> ArchiveChatUpdateMessageResult {
             return .messageFailure([.archiveFrameError(
                 errorType,
                 infoMessage.uniqueInteractionId,
-                line: line
+                line: line,
             )])
         }
 
@@ -64,7 +64,8 @@ final class BackupArchiveProfileChangeChatUpdateArchiver {
             chatItemType: .updateMessage(chatUpdateMessage),
             isSmsPreviouslyRestoredFromBackup: false,
             threadInfo: threadInfo,
-            context: context.recipientContext
+            pinMessageDetails: nil,
+            context: context.recipientContext,
         )
     }
 
@@ -74,7 +75,7 @@ final class BackupArchiveProfileChangeChatUpdateArchiver {
         _ profileChangeChatUpdateProto: BackupProto_ProfileChangeChatUpdate,
         chatItem: BackupProto_ChatItem,
         chatThread: BackupArchive.ChatThread,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) -> RestoreChatUpdateMessageResult {
         let oldName = profileChangeChatUpdateProto.previousName
         let newName = profileChangeChatUpdateProto.newName
@@ -85,7 +86,7 @@ final class BackupArchiveProfileChangeChatUpdateArchiver {
         else {
             return .messageFailure([.restoreFrameError(
                 .invalidProtoData(.profileChangeUpdateNotFromContact),
-                chatItem.id
+                chatItem.id,
             )])
         }
 
@@ -95,23 +96,16 @@ final class BackupArchiveProfileChangeChatUpdateArchiver {
             profileChanges: ProfileChanges(
                 address: profileChangeAuthorContactAddress.asInteropAddress(),
                 oldNameLiteral: oldName,
-                newNameLiteral: newName
-            )
+                newNameLiteral: newName,
+            ),
         )
-
-        guard let directionalDetails = chatItem.directionalDetails else {
-            return .unrecognizedEnum(BackupArchive.UnrecognizedEnumError(
-                enumType: BackupProto_ChatItem.OneOf_DirectionalDetails.self
-            ))
-        }
 
         do {
             try interactionStore.insert(
                 profileChangeInfoMessage,
                 in: chatThread,
                 chatId: chatItem.typedChatId,
-                directionalDetails: directionalDetails,
-                context: context
+                context: context,
             )
         } catch let error {
             return .messageFailure([.restoreFrameError(.databaseInsertionFailed(error), chatItem.id)])

@@ -4,7 +4,6 @@
 //
 
 #import "OWSVerificationStateChangeMessage.h"
-#import "OWSDisappearingMessagesConfiguration.h"
 #import <SignalServiceKit/SignalServiceKit-Swift.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -23,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
                        timestamp:timestamp
                       serverGuid:nil
                      messageType:TSInfoMessageVerificationStateChange
+              expireTimerVersion:nil
+                expiresInSeconds:0
              infoMessageUserInfo:nil];
     if (!self) {
         return self;
@@ -35,17 +36,31 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    self = [super initWithCoder:coder];
-    if (self) {
-        if (_recipientAddress == nil) {
-            NSString *_Nullable phoneNumber = [coder decodeObjectForKey:@"recipientId"];
-            _recipientAddress = [SignalServiceAddress legacyAddressWithServiceIdString:nil phoneNumber:phoneNumber];
-            OWSAssertDebug(_recipientAddress.isValid);
-        }
+    NSUInteger result = [super hash];
+    result ^= self.isLocalChange;
+    result ^= self.recipientAddress.hash;
+    result ^= self.verificationState;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
     }
-    return self;
+    OWSVerificationStateChangeMessage *typedOther = (OWSVerificationStateChangeMessage *)other;
+    if (self.isLocalChange != typedOther.isLocalChange) {
+        return NO;
+    }
+    if (![NSObject isObject:self.recipientAddress equalToObject:typedOther.recipientAddress]) {
+        return NO;
+    }
+    if (self.verificationState != typedOther.verificationState) {
+        return NO;
+    }
+    return YES;
 }
 
 - (bool)isVerified

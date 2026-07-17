@@ -6,7 +6,7 @@
 import SignalServiceKit
 import SignalUI
 
-class RegistrationLoadingViewController: OWSViewController {
+class RegistrationLoadingViewController: OWSViewController, OWSNavigationChildController {
     enum RegistrationLoadingMode {
         case generic
         case submittingPhoneNumber(e164: String)
@@ -14,7 +14,7 @@ class RegistrationLoadingViewController: OWSViewController {
         case restoringBackup(BackupProgressModal)
     }
 
-    public init(mode: RegistrationLoadingMode) {
+    init(mode: RegistrationLoadingMode) {
         spinnerView = AnimatedProgressView(loadingText: {
             switch mode {
             case .generic:
@@ -22,13 +22,13 @@ class RegistrationLoadingViewController: OWSViewController {
             case let .submittingPhoneNumber(e164):
                 let format = OWSLocalizedString(
                     "REGISTRATION_VIEW_PHONE_NUMBER_SPINNER_LABEL_FORMAT",
-                    comment: "Label for the progress spinner shown during phone number registration. Embeds {{phone number}}."
+                    comment: "Label for the progress spinner shown during phone number registration. Embeds {{phone number}}.",
                 )
                 return String(format: format, e164.e164FormattedAsPhoneNumberWithoutBreaks)
             case .submittingVerificationCode:
                 return OWSLocalizedString(
                     "ONBOARDING_VERIFICATION_CODE_VALIDATION_PROGRESS_LABEL",
-                    comment: "Label for a progress spinner currently validating code"
+                    comment: "Label for a progress spinner currently validating code",
                 )
             case .restoringBackup:
                 // TODO: [Backups] localize
@@ -38,46 +38,45 @@ class RegistrationLoadingViewController: OWSViewController {
         }())
 
         super.init()
+
+        navigationItem.hidesBackButton = true
     }
 
     @available(*, unavailable)
-    public override init() {
+    override init() {
         owsFail("This should not be called")
     }
+
+    // MARK: OWSNavigationChildController
+
+    var preferredNavigationBarStyle: OWSNavigationBarStyle { .solid }
+
+    var navbarBackgroundColorOverride: UIColor? { .clear }
+
+    var prefersNavigationBarHidden: Bool { true }
 
     // MARK: - Rendering
 
     private let spinnerView: AnimatedProgressView
 
-    public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
-        initialRender()
+
+        view.backgroundColor = .Signal.background
+
+        spinnerView.alpha = 1
+        view.addSubview(spinnerView)
+        spinnerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            spinnerView.centerXAnchor.constraint(equalTo: contentLayoutGuide.centerXAnchor),
+            spinnerView.centerYAnchor.constraint(equalTo: contentLayoutGuide.centerYAnchor),
+        ])
     }
 
-    public override func viewWillAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if spinnerView.isAnimating.negated {
             spinnerView.startAnimating()
         }
-    }
-
-    public override func themeDidChange() {
-        super.themeDidChange()
-        render()
-    }
-
-    private func initialRender() {
-        navigationItem.setHidesBackButton(true, animated: false)
-
-        spinnerView.alpha = 1
-
-        view.addSubview(spinnerView)
-        spinnerView.autoCenterInSuperviewMargins()
-
-        render()
-    }
-
-    private func render() {
-        view.backgroundColor = Theme.backgroundColor
     }
 }

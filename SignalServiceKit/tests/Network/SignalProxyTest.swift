@@ -3,16 +3,16 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-import XCTest
 import SignalServiceKit
+import XCTest
 
 class SignalProxyTest: XCTestCase {
     func testIsValidProxyLink() throws {
         let validHrefs: [String] = [
             "https://signal.tube/#example.com",
-            "baxs://signal.tube/#example.com",
-            "baxs://signal.tube/extrapath?extra=query#example.com",
-            "HTTPS://SIGNAL.TUBE/#EXAMPLE.COM"
+            "sgnl://signal.tube/#example.com",
+            "sgnl://signal.tube/extrapath?extra=query#example.com",
+            "HTTPS://SIGNAL.TUBE/#EXAMPLE.COM",
         ]
         for href in validHrefs {
             let url = URL(string: href)!
@@ -36,7 +36,7 @@ class SignalProxyTest: XCTestCase {
             "https://signal.tube/#example.com.",
             "https://signal.tube/#example.com/",
             "https://signal.tube/#\(String(repeating: "x", count: 9999)).example.com",
-            "https://signal.tube/#https://example.com"
+            "https://signal.tube/#https://example.com",
         ]
         for href in invalidHrefs {
             let url = URL(string: href)!

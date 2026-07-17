@@ -3,49 +3,53 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-/// Represents an object that can perform archive/restore actions on a single
-/// instance, in isolation, of a ``TSMessage`` subclass. The instance may either
-/// be the latest or a prior revision in its edit history.
-///
-/// - SeeAlso
-/// ``BackupArchiveTSMessageEditHistoryArchiver``
-///
-/// - Note
-/// At the time of writing, implementations exist for ``TSIncomingMessage`` and
-/// ``TSOutgoingMessage``, which are the only types that can have an edit
-/// history in practice.
-protocol BackupArchiveTSMessageEditHistoryBuilder<EditHistoryMessageType>: AnyObject {
-    associatedtype EditHistoryMessageType: TSMessage
+extension BackupArchive {
+    enum TSMessageEditHistory {
+        enum RevisionType<MessageType: TSMessage> {
+            case latestRevision(hasPastRevisions: Bool)
+            case pastRevision(latestRevisionMessage: MessageType)
+        }
 
-    typealias Details = BackupArchive.InteractionArchiveDetails
+        /// Represents an object that can perform archive/restore actions on a single
+        /// instance, in isolation, of a ``TSMessage`` subclass. The instance may either
+        /// be the latest or a prior revision in its edit history.
+        ///
+        /// - SeeAlso
+        /// ``BackupArchiveTSMessageEditHistoryArchiver``
+        ///
+        /// - Note
+        /// At the time of writing, implementations exist for ``TSIncomingMessage`` and
+        /// ``TSOutgoingMessage``, which are the only types that can have an edit
+        /// history in practice.
+        protocol Builder<MessageType>: AnyObject {
+            associatedtype MessageType: TSMessage
 
-    /// Build archive details for the given message.
-    ///
-    /// - Parameter editRecord
-    /// If the given message is a prior revision, this should contain the edit
-    /// record corresponding to that revision.
-    func buildMessageArchiveDetails(
-        message: EditHistoryMessageType,
-        editRecord: EditRecord?,
-        threadInfo: BackupArchive.ChatArchivingContext.CachedThreadInfo,
-        context: BackupArchive.ChatArchivingContext
-    ) -> BackupArchive.ArchiveInteractionResult<Details>
+            typealias Details = BackupArchive.InteractionArchiveDetails
 
-    /// Restore a message from the given chat item.
-    ///
-    /// - Parameter isPastRevision
-    /// Whether this chat item is known to be a past revision. If this is true,
-    /// `hasPastRevisions` will always be `false`.
-    /// - Parameter hasPastRevisions
-    /// Whether this chat item has past revisions. If this is true,
-    /// `isPastRevision` will always be `false`.
-    func restoreMessage(
-        _ chatItem: BackupProto_ChatItem,
-        isPastRevision: Bool,
-        hasPastRevisions: Bool,
-        chatThread: BackupArchive.ChatThread,
-        context: BackupArchive.ChatItemRestoringContext
-    ) -> BackupArchive.RestoreInteractionResult<EditHistoryMessageType>
+            /// Build archive details for the given message.
+            ///
+            /// - Parameter editRecord
+            /// If the given message is a prior revision, this should contain the edit
+            /// record corresponding to that revision.
+            func buildMessageArchiveDetails(
+                message: MessageType,
+                editRecord: EditRecord?,
+                threadInfo: BackupArchive.ChatArchivingContext.CachedThreadInfo,
+                context: BackupArchive.ChatArchivingContext,
+            ) -> BackupArchive.ArchiveInteractionResult<Details>
+
+            /// Restore a message from the given chat item.
+            ///
+            /// - Parameter revisionType
+            /// The type of revision being restored.
+            func restoreMessage(
+                _ chatItem: BackupProto_ChatItem,
+                revisionType: RevisionType<MessageType>,
+                chatThread: BackupArchive.ChatThread,
+                context: BackupArchive.ChatItemRestoringContext,
+            ) -> BackupArchive.RestoreInteractionResult<MessageType>
+        }
+    }
 }
 
 /// An object that can perform archive/restore actions on an instance of a
@@ -53,17 +57,16 @@ protocol BackupArchiveTSMessageEditHistoryBuilder<EditHistoryMessageType>: AnyOb
 /// responsible for managing the edit history itself, and delegates the "heavy
 /// lifting" of performing archive/restore actions on the ``TSMessage``s in the
 /// edit history to a ``BackupArchiveTSMessageEditHistoryBuilder``.
-final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
-{
+final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage> {
     typealias Details = BackupArchive.InteractionArchiveDetails
 
     private typealias ArchiveFrameError = BackupArchive.ArchiveFrameError<BackupArchive.InteractionUniqueId>
     private typealias RestoreFrameError = BackupArchive.RestoreFrameError<BackupArchive.ChatItemId>
 
-    private let editMessageStore: any EditMessageStore
+    private let editMessageStore: EditMessageStore
 
     init(
-        editMessageStore: any EditMessageStore
+        editMessageStore: EditMessageStore,
     ) {
         self.editMessageStore = editMessageStore
     }
@@ -88,14 +91,13 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
     /// An object responsible for actually building archive details on the
     /// passed message, and those in its edit history.
     func archiveMessageAndEditHistory<
-        Builder: BackupArchiveTSMessageEditHistoryBuilder<MessageType>
+        Builder: BackupArchive.TSMessageEditHistory.Builder<MessageType>,
     >(
         _ message: MessageType,
         threadInfo: BackupArchive.ChatArchivingContext.CachedThreadInfo,
         context: BackupArchive.ChatArchivingContext,
-        builder: Builder
-    ) -> BackupArchive.ArchiveInteractionResult<Details>
-    {
+        builder: Builder,
+    ) -> BackupArchive.ArchiveInteractionResult<Details> {
         var partialErrors = [ArchiveFrameError]()
 
         let shouldArchiveEditHistory: Bool
@@ -116,7 +118,7 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
             message: message,
             editRecord: nil,
             threadInfo: threadInfo,
-            context: context
+            context: context,
         ).bubbleUp(Details.self, partialErrors: &partialErrors) {
         case .continue(let _messageDetails):
             messageDetails = _messageDetails
@@ -130,7 +132,7 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
                 latestRevisionMessage: message,
                 threadInfo: threadInfo,
                 context: context,
-                builder: builder
+                builder: builder,
             ).bubbleUp(Details.self, partialErrors: &partialErrors) {
             case .continue:
                 break
@@ -150,15 +152,30 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
     /// message, and add those prior-revision archive details to the given
     /// archive details for the latest revision.
     private func addEditHistoryArchiveDetails<
-        Builder: BackupArchiveTSMessageEditHistoryBuilder<MessageType>
+        Builder: BackupArchive.TSMessageEditHistory.Builder<MessageType>,
     >(
         toLatestRevisionArchiveDetails latestRevisionDetails: inout Details,
         latestRevisionMessage: MessageType,
         threadInfo: BackupArchive.ChatArchivingContext.CachedThreadInfo,
         context: BackupArchive.ChatArchivingContext,
-        builder: Builder
+        builder: Builder,
     ) -> BackupArchive.ArchiveInteractionResult<Void> {
-        let unexpectedRevisionsMessageType: ArchiveFrameError.ErrorType.UnexpectedRevisionsMessageType?
+        /// Returns `nil` if the given `Details` are allowed to have or be a
+        /// past revision, or an error type if not.
+        func areRevisionsLegal(_ details: Details) -> ArchiveFrameError.ErrorType.UnexpectedRevisionsMessageType? {
+            return switch details.chatItemType {
+            case .standardMessage, .directStoryReplyMessage: nil
+            case .remoteDeletedMessage: .remoteDeletedMessage
+            case .contactMessage: .contactMessage
+            case .stickerMessage: .stickerMessage
+            case .updateMessage: .updateMessage
+            case .paymentNotification: .paymentNotification
+            case .giftBadge: .giftBadge
+            case .viewOnceMessage: .viewOnceMessage
+            case .poll: .poll
+            }
+        }
+
         switch latestRevisionDetails.chatItemType {
         case .remoteDeletedMessage:
             // Remote-deleted messages with edit history delete the contents of
@@ -166,28 +183,15 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
             // placeholders. We don't want to archive those, nor do we need to
             // produce an error, so we bail early.
             return .success(())
-        case .standardMessage, .directStoryReplyMessage:
-            // These message types are the only ones expected/allowed to have
-            // edit history we want to archive. If we unexpectedly find it on
-            // another message type, we'll drop it and record an error.
-            unexpectedRevisionsMessageType = nil
-        case .contactMessage:
-            unexpectedRevisionsMessageType = .contactMessgae
-        case .stickerMessage:
-            unexpectedRevisionsMessageType = .stickerMessage
-        case .updateMessage:
-            unexpectedRevisionsMessageType = .updateMessage
-        case .paymentNotification:
-            unexpectedRevisionsMessageType = .paymentNotification
-        case .giftBadge:
-            unexpectedRevisionsMessageType = .giftBadge
-        case .viewOnceMessage:
-            unexpectedRevisionsMessageType = .viewOnceMessage
+        default:
+            break
         }
-        if let unexpectedRevisionsMessageType {
+
+        // Short-circuit if this message type shouldn't have edit history.
+        if let illegalRevisionType = areRevisionsLegal(latestRevisionDetails) {
             return .partialFailure((), [.archiveFrameError(
-                .unexpectedRevisionsOnMessage(unexpectedRevisionsMessageType),
-                latestRevisionMessage.uniqueInteractionId
+                .revisionsPresentOnUnexpectedMessage(illegalRevisionType),
+                latestRevisionMessage.uniqueInteractionId,
             )])
         }
 
@@ -200,12 +204,12 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
         do {
             editHistory = try editMessageStore.findEditHistory(
                 forMostRecentRevision: latestRevisionMessage,
-                tx: context.tx
+                tx: context.tx,
             ).reversed()
         } catch {
             return .messageFailure([.archiveFrameError(
                 .editHistoryFailedToFetch,
-                latestRevisionMessage.uniqueInteractionId
+                latestRevisionMessage.uniqueInteractionId,
             )])
         }
 
@@ -223,7 +227,7 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
                 message: pastRevisionMessage,
                 editRecord: editRecord,
                 threadInfo: threadInfo,
-                context: context
+                context: context,
             ) {
             case .success(let _pastRevisionDetails):
                 pastRevisionDetails = _pastRevisionDetails
@@ -240,10 +244,18 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
                 continue
             }
 
-            /// We're iterating the edit history from oldest to newest, so the
-            /// past revision details stored on `latestRevisionDetails` will
-            /// also be ordered oldest to newest.
-            latestRevisionDetails.addPastRevision(pastRevisionDetails)
+            // We have a past revision that's not of a legal type. Skip it.
+            if let illegalRevisionType = areRevisionsLegal(pastRevisionDetails) {
+                partialErrors.append(.archiveFrameError(
+                    .revisionWasUnexpectedMessage(illegalRevisionType),
+                    pastRevisionMessage.uniqueInteractionId,
+                ))
+            } else {
+                /// We're iterating the edit history from oldest to newest, so
+                /// the past revision details stored on `latestRevisionDetails`
+                /// will also be ordered oldest to newest.
+                latestRevisionDetails.addPastRevision(pastRevisionDetails)
+            }
         }
 
         if partialErrors.isEmpty {
@@ -267,12 +279,12 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
     /// An object responsible for actually restoring a message from the
     /// top-level `ChatItem`, and its contained prior revisions (if any).
     func restoreMessageAndEditHistory<
-        Builder: BackupArchiveTSMessageEditHistoryBuilder<MessageType>
+        Builder: BackupArchive.TSMessageEditHistory.Builder<MessageType>,
     >(
         _ topLevelChatItem: BackupProto_ChatItem,
         chatThread: BackupArchive.ChatThread,
         context: BackupArchive.ChatItemRestoringContext,
-        builder: Builder
+        builder: Builder,
     ) -> BackupArchive.RestoreInteractionResult<Void> {
         var partialErrors = [RestoreFrameError]()
 
@@ -280,10 +292,9 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
         switch builder
             .restoreMessage(
                 topLevelChatItem,
-                isPastRevision: false,
-                hasPastRevisions: topLevelChatItem.revisions.count > 0,
+                revisionType: .latestRevision(hasPastRevisions: topLevelChatItem.revisions.count > 0),
                 chatThread: chatThread,
-                context: context
+                context: context,
             )
             .bubbleUp(Void.self, partialErrors: &partialErrors)
         {
@@ -293,63 +304,26 @@ final class BackupArchiveTSMessageEditHistoryArchiver<MessageType: TSMessage>
             return error
         }
 
-        var earlierRevisionMessages = [MessageType]()
-
         /// `ChatItem.revisions` is ordered oldest -> newest, which aligns with
         /// how we want to insert them. Older revisions should be inserted
         /// before newer ones.
         for revisionChatItem in topLevelChatItem.revisions {
-            let earlierRevisionMessage: MessageType
             switch builder
-                 .restoreMessage(
+                .restoreMessage(
                     revisionChatItem,
-                    isPastRevision: true,
-                    hasPastRevisions: false, // Past revisions can't have their own past revisions!
+                    revisionType: .pastRevision(latestRevisionMessage: latestRevisionMessage),
                     chatThread: chatThread,
-                    context: context
+                    context: context,
                 )
-                 .bubbleUp(Void.self, partialErrors: &partialErrors)
+                .bubbleUp(Void.self, partialErrors: &partialErrors)
             {
-            case .continue(let component):
-                earlierRevisionMessage = component
+            case .continue:
+                break
             case .bubbleUpError(let error):
                 /// This means we won't attempt to restore any later revisions,
                 /// but we can't be confident they would have restored
                 /// successfully anyway.
                 return error
-            }
-
-            earlierRevisionMessages.append(earlierRevisionMessage)
-        }
-
-        for earlierRevisionMessage in earlierRevisionMessages {
-            let wasRead: Bool
-            switch earlierRevisionMessage
-                .wasRead()
-                .bubbleUp(Void.self, partialErrors: &partialErrors)
-            {
-            case .continue(let component):
-                wasRead = component
-            case .bubbleUpError(let error):
-                return error
-            }
-
-            let editRecord = EditRecord(
-                latestRevisionId: latestRevisionMessage.sqliteRowId!,
-                pastRevisionId: earlierRevisionMessage.sqliteRowId!,
-                read: wasRead
-            )
-
-            do {
-                try editMessageStore.insert(editRecord, tx: context.tx)
-            } catch {
-                return .partialRestore(
-                    (),
-                    [.restoreFrameError(
-                        .databaseInsertionFailed(error),
-                        topLevelChatItem.id
-                    )] + partialErrors
-                )
             }
         }
 
@@ -387,7 +361,7 @@ private extension TSMessage {
 
         return .messageFailure([.restoreFrameError(
             .developerError(OWSAssertionError("Unexpected TSMessage type instantiated during restore: \(type(of: self))")),
-            chatItemId
+            chatItemId,
         )])
     }
 }

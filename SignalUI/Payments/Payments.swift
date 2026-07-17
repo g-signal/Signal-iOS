@@ -19,12 +19,16 @@ public protocol Payments: AnyObject {
 
     func scheduleReconciliationNow(transaction: DBWriteTransaction)
 
-    func replaceAsUnidentified(paymentModel oldPaymentModel: TSPaymentModel,
-                               transaction: DBWriteTransaction)
+    func replaceAsUnidentified(
+        paymentModel oldPaymentModel: TSPaymentModel,
+        transaction: DBWriteTransaction,
+    )
 
-    func findPaymentModels(withMCLedgerBlockIndex mcLedgerBlockIndex: UInt64,
-                           mcIncomingTransactionPublicKey: Data,
-                           transaction: DBReadTransaction) -> [TSPaymentModel]
+    func findPaymentModels(
+        withMCLedgerBlockIndex mcLedgerBlockIndex: UInt64,
+        mcIncomingTransactionPublicKey: Data,
+        transaction: DBReadTransaction,
+    ) -> [TSPaymentModel]
 
     func didReceiveMCAuthError()
 
@@ -50,7 +54,7 @@ public protocol PaymentsSwift: Payments {
         paymentAmount: TSPaymentAmount,
         memoMessage: String?,
         isOutgoingTransfer: Bool,
-        canDefragment: Bool
+        canDefragment: Bool,
     ) async throws -> PreparedPayment
 
     func initiateOutgoingPayment(preparedPayment: PreparedPayment) async throws -> TSPaymentModel
@@ -73,8 +77,10 @@ public protocol PaymentsSwift: Payments {
 
 extension PaymentsPassphrase {
 
-    public static func parse(passphrase: String,
-                             validateWords: Bool) throws -> PaymentsPassphrase {
+    public static func parse(
+        passphrase: String,
+        validateWords: Bool,
+    ) throws -> PaymentsPassphrase {
         let words = Array(passphrase.lowercased().stripped.components(separatedBy: " ").compactMap { $0.nilIfEmpty })
         guard words.count == PaymentsConstants.passphraseWordCount else {
             Logger.warn("words.count \(words.count) != \(PaymentsConstants.passphraseWordCount)")
@@ -176,7 +182,7 @@ extension MockPayments: PaymentsSwift {
         paymentAmount: TSPaymentAmount,
         memoMessage: String?,
         isOutgoingTransfer: Bool,
-        canDefragment: Bool
+        canDefragment: Bool,
     ) async throws -> PreparedPayment {
         owsFail("Not implemented.")
     }
@@ -194,14 +200,18 @@ extension MockPayments: PaymentsSwift {
         owsFail("Not implemented.")
     }
 
-    public func replaceAsUnidentified(paymentModel oldPaymentModel: TSPaymentModel,
-                                      transaction: DBWriteTransaction) {
+    public func replaceAsUnidentified(
+        paymentModel oldPaymentModel: TSPaymentModel,
+        transaction: DBWriteTransaction,
+    ) {
         owsFail("Not implemented.")
     }
 
-    public func findPaymentModels(withMCLedgerBlockIndex mcLedgerBlockIndex: UInt64,
-                                  mcIncomingTransactionPublicKey: Data,
-                                  transaction: DBReadTransaction) -> [TSPaymentModel] {
+    public func findPaymentModels(
+        withMCLedgerBlockIndex mcLedgerBlockIndex: UInt64,
+        mcIncomingTransactionPublicKey: Data,
+        transaction: DBReadTransaction,
+    ) -> [TSPaymentModel] {
         owsFail("Not implemented.")
     }
 

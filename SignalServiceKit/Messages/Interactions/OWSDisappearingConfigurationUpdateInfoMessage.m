@@ -4,7 +4,6 @@
 //
 
 #import "OWSDisappearingConfigurationUpdateInfoMessage.h"
-#import "OWSDisappearingMessagesConfiguration.h"
 #import <SignalServiceKit/SignalServiceKit-Swift.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -24,9 +23,35 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation OWSDisappearingConfigurationUpdateInfoMessage
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    return [super initWithCoder:coder];
+    NSUInteger result = [super hash];
+    result ^= self.configurationDurationSeconds;
+    result ^= self.configurationIsEnabled;
+    result ^= self.createdByRemoteName.hash;
+    result ^= self.createdInExistingGroup;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
+    }
+    OWSDisappearingConfigurationUpdateInfoMessage *typedOther = (OWSDisappearingConfigurationUpdateInfoMessage *)other;
+    if (self.configurationDurationSeconds != typedOther.configurationDurationSeconds) {
+        return NO;
+    }
+    if (self.configurationIsEnabled != typedOther.configurationIsEnabled) {
+        return NO;
+    }
+    if (![NSObject isObject:self.createdByRemoteName equalToObject:typedOther.createdByRemoteName]) {
+        return NO;
+    }
+    if (self.createdInExistingGroup != typedOther.createdInExistingGroup) {
+        return NO;
+    }
+    return YES;
 }
 
 - (instancetype)initWithContactThread:(TSContactThread *)contactThread
@@ -39,6 +64,8 @@ NS_ASSUME_NONNULL_BEGIN
                        timestamp:timestamp
                       serverGuid:nil
                      messageType:TSInfoMessageTypeDisappearingMessagesUpdate
+              expireTimerVersion:nil
+                expiresInSeconds:0
              infoMessageUserInfo:nil];
     if (!self) {
         return self;

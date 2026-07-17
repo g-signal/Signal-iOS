@@ -16,17 +16,20 @@ public import SDWebImage
 public class ViewOnceContent {
 
     public enum ContentType {
-        case stillImage, animatedImage, video, loopingVideo
+        case stillImage
+        case animatedImage
+        case video
+        case loopingVideo
     }
 
     public let messageId: String
     public let type: ContentType
 
     /// File URL to a copy of the encrypted file used for display purposes.
-    fileprivate let fileUrl: URL
-    fileprivate let encryptionKey: Data
-    fileprivate let plaintextLength: UInt32
-    fileprivate let mimeType: String
+    private let fileUrl: URL
+    private let encryptionKey: Data
+    private let plaintextLength: UInt32
+    private let mimeType: String
 
     init(
         messageId: String,
@@ -34,7 +37,7 @@ public class ViewOnceContent {
         fileUrl: URL,
         encryptionKey: Data,
         plaintextLength: UInt32,
-        mimeType: String
+        mimeType: String,
     ) {
         self.messageId = messageId
         self.type = type
@@ -54,9 +57,9 @@ public class ViewOnceContent {
     public func loadImage() throws -> UIImage {
         return try UIImage.fromEncryptedFile(
             at: fileUrl,
-            encryptionKey: encryptionKey,
+            attachmentKey: AttachmentKey(combinedKey: encryptionKey),
             plaintextLength: plaintextLength,
-            mimeType: mimeType
+            mimeType: mimeType,
         )
     }
 
@@ -64,10 +67,10 @@ public class ViewOnceContent {
         // hmac and digest are validated at download time; no need to revalidate every read.
         let data = try Cryptography.decryptFileWithoutValidating(
             at: fileUrl,
-            metadata: .init(
-                key: encryptionKey,
-                plaintextLength: Int(plaintextLength)
-            )
+            metadata: DecryptionMetadata(
+                key: AttachmentKey(combinedKey: encryptionKey),
+                plaintextLength: UInt64(safeCast: plaintextLength),
+            ),
         )
         guard let image = SDAnimatedImage(data: data) else {
             throw OWSAssertionError("Couldn't load image")
@@ -78,9 +81,9 @@ public class ViewOnceContent {
     public func loadAVAsset() throws -> AVAsset {
         return try AVAsset.fromEncryptedFile(
             at: fileUrl,
-            encryptionKey: encryptionKey,
+            attachmentKey: AttachmentKey(combinedKey: encryptionKey),
             plaintextLength: plaintextLength,
-            mimeType: mimeType
+            mimeType: mimeType,
         )
     }
 }

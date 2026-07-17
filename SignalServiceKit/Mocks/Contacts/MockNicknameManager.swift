@@ -11,13 +11,13 @@ public class MockNicknameManager: NicknameManager {
     private var mockNicknames: [Int64: NicknameRecord] = [:]
 
     public func fetchNickname(for recipient: SignalRecipient, tx: DBReadTransaction) -> NicknameRecord? {
-        recipient.id.flatMap { mockNicknames[$0] }
+        return mockNicknames[recipient.id]
     }
 
     public func createOrUpdate(
         nicknameRecord: NicknameRecord,
         updateStorageServiceFor recipientUniqueId: RecipientUniqueId?,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         self.insert(nicknameRecord, tx: tx)
     }
@@ -29,7 +29,7 @@ public class MockNicknameManager: NicknameManager {
     public func deleteNickname(
         recipientRowID: Int64,
         updateStorageServiceFor recipientUniqueId: RecipientUniqueId?,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         mockNicknames.removeValue(forKey: recipientRowID)
     }

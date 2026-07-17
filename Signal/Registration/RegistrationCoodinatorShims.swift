@@ -13,35 +13,30 @@ extension RegistrationCoordinatorImpl {
     public enum Shims {
         public typealias ContactsManager = _RegistrationCoordinator_ContactsManagerShim
         public typealias ContactsStore = _RegistrationCoordinator_CNContactsStoreShim
-        typealias DeviceTransferService = _RegistrationCoordinator_DeviceTransferServiceShim
         public typealias ExperienceManager = _RegistrationCoordinator_ExperienceManagerShim
-        public typealias FeatureFlags = _RegistrationCoordinator_FeatureFlagsShim
         public typealias IdentityManager = _RegistrationCoordinator_IdentityManagerShim
         public typealias MessagePipelineSupervisor = _RegistrationCoordinator_MessagePipelineSupervisorShim
         public typealias MessageProcessor = _RegistrationCoordinator_MessageProcessorShim
         public typealias OWS2FAManager = _RegistrationCoordinator_OWS2FAManagerShim
         public typealias ProfileManager = _RegistrationCoordinator_ProfileManagerShim
         public typealias PushRegistrationManager = _RegistrationCoordinator_PushRegistrationManagerShim
-        typealias QuickRestoreManager = _RegistrationCoordinator_QuickRestoreManagerShim
         public typealias ReceiptManager = _RegistrationCoordinator_ReceiptManagerShim
         public typealias StorageServiceManager = _RegistrationCoordinator_StorageServiceManagerShim
         public typealias TimeoutProvider = _RegistrationCoordinator_TimeoutProviderShim
         public typealias UDManager = _RegistrationCoordinator_UDManagerShim
         public typealias UsernameApiClient = _RegistrationCoordinator_UsernameApiClientShim
     }
+
     public enum Wrappers {
         public typealias ContactsManager = _RegistrationCoordinator_ContactsManagerWrapper
         public typealias ContactsStore = _RegistrationCoordinator_CNContactsStoreWrapper
-        typealias DeviceTransferService = _RegistrationCoordinator_DeviceTransferServiceWrapper
         public typealias ExperienceManager = _RegistrationCoordinator_ExperienceManagerWrapper
-        public typealias FeatureFlags = _RegistrationCoordinator_FeatureFlagsWrapper
         public typealias IdentityManager = _RegistrationCoordinator_IdentityManagerWrapper
         public typealias MessagePipelineSupervisor = _RegistrationCoordinator_MessagePipelineSupervisorWrapper
         public typealias MessageProcessor = _RegistrationCoordinator_MessageProcessorWrapper
         public typealias OWS2FAManager = _RegistrationCoordinator_OWS2FAManagerWrapper
         public typealias ProfileManager = _RegistrationCoordinator_ProfileManagerWrapper
         public typealias PushRegistrationManager = _RegistrationCoordinator_PushRegistrationManagerWrapper
-        typealias QuickRestoreManager = _RegistrationCoordinator_QuickRestoreManagerWrapper
         public typealias ReceiptManager = _RegistrationCoordinator_ReceiptManagerWrapper
         public typealias StorageServiceManager = _RegistrationCoordinator_StorageServiceManagerWrapper
         public typealias TimeoutProvider = _RegistrationCoordinator_TimeoutProviderWrapper
@@ -86,7 +81,7 @@ public class _RegistrationCoordinator_CNContactsStoreWrapper: _RegistrationCoord
 
     public func requestContactsAuthorization() async {
         await withCheckedContinuation { continuation in
-            CNContactStore().requestAccess(for: CNEntityType.contacts) { (granted, error) -> Void in
+            CNContactStore().requestAccess(for: CNEntityType.contacts) { granted, error -> Void in
                 if granted {
                     Logger.info("User granted contacts permission")
                 } else {
@@ -97,43 +92,6 @@ public class _RegistrationCoordinator_CNContactsStoreWrapper: _RegistrationCoord
                 continuation.resume()
             }
         }
-    }
-}
-
-// MARK: - DeviceTransferService
-
-protocol _RegistrationCoordinator_DeviceTransferServiceShim {
-    func startAcceptingTransfersFromOldDevices(mode: DeviceTransferService.TransferMode) throws -> URL
-    func addObserver(_ observer: DeviceTransferServiceObserver)
-    func removeObserver(_ observer: DeviceTransferServiceObserver)
-    func stopAcceptingTransfersFromOldDevices()
-    func cancelTransferFromOldDevice()
-}
-
-class _RegistrationCoordinator_DeviceTransferServiceWrapper: _RegistrationCoordinator_DeviceTransferServiceShim {
-
-    private let deviceTransferService: DeviceTransferService
-    public init(_ deviceTransferService: DeviceTransferService) {
-        self.deviceTransferService = deviceTransferService
-    }
-
-    func startAcceptingTransfersFromOldDevices(mode: DeviceTransferService.TransferMode) throws -> URL {
-        return try deviceTransferService.startAcceptingTransfersFromOldDevices(mode: mode)
-    }
-
-    func addObserver(_ observer: DeviceTransferServiceObserver) {
-        deviceTransferService.addObserver(observer)
-    }
-    func removeObserver(_ observer: DeviceTransferServiceObserver) {
-        deviceTransferService.removeObserver(observer)
-    }
-
-    func stopAcceptingTransfersFromOldDevices() {
-        deviceTransferService.stopAcceptingTransfersFromOldDevices()
-    }
-
-    func cancelTransferFromOldDevice() {
-        deviceTransferService.cancelTransferFromOldDevice()
     }
 }
 
@@ -151,27 +109,15 @@ public class _RegistrationCoordinator_ExperienceManagerWrapper: _RegistrationCoo
     public init() {}
 
     public func clearIntroducingPinsExperience(_ tx: DBWriteTransaction) {
-        ExperienceUpgradeManager.clearExperienceUpgrade(.introducingPins, transaction: SDSDB.shimOnlyBridge(tx))
+        ExperienceUpgradeManager.clearExperienceUpgrade(.introducingPins, transaction: tx)
     }
 
     public func enableAllGetStartedCards(_ tx: DBWriteTransaction) {
-        GetStartedBannerViewController.enableAllCards(writeTx: SDSDB.shimOnlyBridge(tx))
+        GetStartedBannerViewController.enableAllCards(writeTx: tx)
     }
 }
 
-// MARK: - FeatureFlags
-
-public protocol _RegistrationCoordinator_FeatureFlagsShim {
-
-    var backupSupported: Bool { get }
-}
-
-public class _RegistrationCoordinator_FeatureFlagsWrapper: _RegistrationCoordinator_FeatureFlagsShim {
-
-    public init() {}
-
-    public var backupSupported: Bool { FeatureFlags.Backups.supported }
-}
+// MARK: - IdentityManager
 
 public protocol _RegistrationCoordinator_IdentityManagerShim {
     func setIdentityKeyPair(_ keyPair: ECKeyPair?, for identity: OWSIdentity, tx: DBWriteTransaction)
@@ -249,9 +195,9 @@ public protocol _RegistrationCoordinator_OWS2FAManagerShim {
 
     func isReglockEnabled(_ tx: DBReadTransaction) -> Bool
 
-    func markPinEnabled(_ pin: String, _ tx: DBWriteTransaction)
+    func markPinEnabled(pin: String, resetReminderInterval: Bool, tx: DBWriteTransaction)
 
-    func markRegistrationLockEnabled(_  tx: DBWriteTransaction)
+    func markRegistrationLockEnabled(_ tx: DBWriteTransaction)
 }
 
 public class _RegistrationCoordinator_OWS2FAManagerWrapper: _RegistrationCoordinator_OWS2FAManagerShim {
@@ -260,23 +206,27 @@ public class _RegistrationCoordinator_OWS2FAManagerWrapper: _RegistrationCoordin
     public init(_ manager: OWS2FAManager) { self.manager = manager }
 
     public func pinCode(_ tx: DBReadTransaction) -> String? {
-        return manager.pinCode(transaction: SDSDB.shimOnlyBridge(tx))
+        return manager.pinCode(transaction: tx)
     }
 
     public func clearLocalPinCode(_ tx: DBWriteTransaction) {
-        return manager.clearLocalPinCode(transaction: SDSDB.shimOnlyBridge(tx))
+        return manager.clearLocalPinCode(transaction: tx)
     }
 
     public func isReglockEnabled(_ tx: DBReadTransaction) -> Bool {
-        return manager.isRegistrationLockV2Enabled(transaction: SDSDB.shimOnlyBridge(tx))
+        return manager.isRegistrationLockV2Enabled(transaction: tx)
     }
 
-    public func markPinEnabled(_ pin: String, _ tx: DBWriteTransaction) {
-        manager.markEnabled(pin: pin, transaction: SDSDB.shimOnlyBridge(tx))
+    public func markPinEnabled(pin: String, resetReminderInterval: Bool, tx: DBWriteTransaction) {
+        manager.markEnabled(
+            pin: pin,
+            resetReminderInterval: resetReminderInterval,
+            transaction: tx,
+        )
     }
 
     public func markRegistrationLockEnabled(_ tx: DBWriteTransaction) {
-        manager.markRegistrationLockV2Enabled(transaction: SDSDB.shimOnlyBridge(tx))
+        manager.markRegistrationLockV2Enabled(transaction: tx)
     }
 }
 
@@ -294,7 +244,7 @@ public protocol _RegistrationCoordinator_ProfileManagerShim {
         familyName: OWSUserProfile.NameComponent?,
         avatarData: Data?,
         authedAccount: AuthedAccount,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> Promise<Void>
 
     func scheduleReuploadLocalProfile(authedAccount: AuthedAccount)
@@ -306,7 +256,7 @@ public class _RegistrationCoordinator_ProfileManagerWrapper: _RegistrationCoordi
     public init(_ manager: ProfileManager) { self.manager = manager }
 
     public func localUserProfile(tx: DBReadTransaction) -> OWSUserProfile? {
-        return manager.localUserProfile(tx: SDSDB.shimOnlyBridge(tx))
+        return manager.localUserProfile(tx: tx)
     }
 
     public func updateLocalProfile(
@@ -314,7 +264,7 @@ public class _RegistrationCoordinator_ProfileManagerWrapper: _RegistrationCoordi
         familyName: OWSUserProfile.NameComponent?,
         avatarData: Data?,
         authedAccount: AuthedAccount,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> Promise<Void> {
         return manager.updateLocalProfile(
             profileGivenName: .setTo(givenName),
@@ -326,7 +276,7 @@ public class _RegistrationCoordinator_ProfileManagerWrapper: _RegistrationCoordi
             unsavedRotatedProfileKey: nil,
             userProfileWriter: .registration,
             authedAccount: authedAccount,
-            tx: SDSDB.shimOnlyBridge(tx)
+            tx: tx,
         )
     }
 
@@ -337,7 +287,7 @@ public class _RegistrationCoordinator_ProfileManagerWrapper: _RegistrationCoordi
                     unsavedRotatedProfileKey: nil,
                     mustReuploadAvatar: true,
                     authedAccount: authedAccount,
-                    tx: tx
+                    tx: tx,
                 )
             }
         }
@@ -424,38 +374,16 @@ public class _RegistrationCoordinator_ReceiptManagerWrapper: _RegistrationCoordi
     public init(_ manager: OWSReceiptManager) { self.manager = manager }
 
     public func setAreReadReceiptsEnabled(_ areEnabled: Bool, _ tx: DBWriteTransaction) {
-        manager.setAreReadReceiptsEnabled(areEnabled, transaction: SDSDB.shimOnlyBridge(tx))
+        manager.setAreReadReceiptsEnabled(areEnabled, transaction: tx)
     }
 
     public func setAreStoryViewedReceiptsEnabled(_ areEnabled: Bool, _ tx: DBWriteTransaction) {
-        StoryManager.setAreViewReceiptsEnabled(areEnabled, transaction: SDSDB.shimOnlyBridge(tx))
-    }
-}
-
-// MARK: - QuickRestoreManager
-
-protocol _RegistrationCoordinator_QuickRestoreManagerShim {
-    func reportRestoreMethodChoice(
-        method: QuickRestoreManager.RestoreMethodType,
-        restoreMethodToken: QuickRestoreManager.RestoreMethodToken
-    ) async throws
-}
-
-class _RegistrationCoordinator_QuickRestoreManagerWrapper: _RegistrationCoordinator_QuickRestoreManagerShim {
-    private let quickRestoreManager: QuickRestoreManager
-    public init(_ quickRestoreManager: QuickRestoreManager) {
-        self.quickRestoreManager = quickRestoreManager
-    }
-
-    func reportRestoreMethodChoice(
-        method: QuickRestoreManager.RestoreMethodType,
-        restoreMethodToken: QuickRestoreManager.RestoreMethodToken
-    ) async throws {
-        try await quickRestoreManager.reportRestoreMethodChoice(method: method, restoreMethodToken: restoreMethodToken)
+        StoryManager.setAreViewReceiptsEnabled(areEnabled, transaction: tx)
     }
 }
 
 // MARK: - StorageService
+
 public protocol _RegistrationCoordinator_StorageServiceManagerShim {
     func rotateManifest(mode: StorageServiceManagerManifestRotationMode, authedDevice: AuthedDevice) async throws
     func restoreOrCreateManifestIfNecessary(authedDevice: AuthedDevice, masterKeySource: StorageService.MasterKeySource) -> Promise<Void>
@@ -469,14 +397,14 @@ public class _RegistrationCoordinator_StorageServiceManagerWrapper: _Registratio
 
     public func rotateManifest(
         mode: StorageServiceManagerManifestRotationMode,
-        authedDevice: AuthedDevice
+        authedDevice: AuthedDevice,
     ) async throws {
         try await self.manager.rotateManifest(mode: mode, authedDevice: authedDevice)
     }
 
     public func restoreOrCreateManifestIfNecessary(
         authedDevice: AuthedDevice,
-        masterKeySource: StorageService.MasterKeySource
+        masterKeySource: StorageService.MasterKeySource,
     ) -> Promise<Void> {
         manager.restoreOrCreateManifestIfNecessary(authedDevice: authedDevice, masterKeySource: masterKeySource)
     }
@@ -524,7 +452,7 @@ public class _RegistrationCoordinator_UDManagerWrapper: _RegistrationCoordinator
     public init(_ manager: OWSUDManager) { self.manager = manager }
 
     public func shouldAllowUnrestrictedAccessLocal(transaction: DBReadTransaction) -> Bool {
-        return manager.shouldAllowUnrestrictedAccessLocal(transaction: SDSDB.shimOnlyBridge(transaction))
+        return manager.shouldAllowUnrestrictedAccessLocal(transaction: transaction)
     }
 }
 

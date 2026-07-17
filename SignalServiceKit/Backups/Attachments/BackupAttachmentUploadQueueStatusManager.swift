@@ -12,6 +12,9 @@ public enum BackupAttachmentUploadQueueStatus {
     /// The queue is running, and attachment are uploading.
     case running
 
+    /// The queue was paused by the user.
+    case suspended
+
     /// There's nothing to upload.
     case empty
 
@@ -27,6 +30,8 @@ public enum BackupAttachmentUploadQueueStatus {
     case lowPowerMode
     /// The app is running in the background.
     case appBackgrounded
+    /// Out of space on media tier; uploads suspended until we can free space.
+    case hasConsumedMediaTierCapacity
 }
 
 public extension Notification.Name {
@@ -46,6 +51,8 @@ public extension Notification.Name {
 /// consolidated inputs.
 ///
 /// `@MainActor`-isolated because most of the inputs are themselves isolated.
+///
+/// - SeeAlso `BackupAttachmentUploadTracker`
 @MainActor
 public protocol BackupAttachmentUploadQueueStatusReporter {
     func currentStatus(for mode: BackupAttachmentUploadQueueMode) -> BackupAttachmentUploadQueueStatus
@@ -101,7 +108,7 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
         case .thumbnail:
             state.isThumbnailQueueEmpty = true
         }
-        if state.isFullsizeQueueEmpty == true && state.isThumbnailQueueEmpty == true {
+        if state.isFullsizeQueueEmpty == true, state.isThumbnailQueueEmpty == true {
             stopObservingDeviceAndLocalStates()
         }
     }
@@ -134,7 +141,7 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
         deviceBatteryLevelManager: (any DeviceBatteryLevelManager)?,
         reachabilityManager: SSKReachabilityManager,
         remoteConfigManager: RemoteConfigManager,
-        tsAccountManager: TSAccountManager
+        tsAccountManager: TSAccountManager,
     ) {
         self.appContext = appContext
         self.appReadiness = appReadiness
@@ -154,12 +161,14 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
             isAppReady: false,
             isRegistered: nil,
             backupPlan: nil,
+            hasConsumedMediaTierCapacity: nil,
             shouldAllowBackupUploadsOnCellular: nil,
             isWifiReachable: nil,
             isReachable: nil,
             batteryLevel: nil,
             isLowPowerMode: nil,
             isMainAppAndActive: appContext.isMainAppAndActive,
+            areUploadsSuspended: false,
         )
 
         appReadiness.runNowOrWhenMainAppDidBecomeReadyAsync { [weak self] in
@@ -179,9 +188,12 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
 
         var backupPlan: BackupPlan?
 
+        var hasConsumedMediaTierCapacity: Bool?
+
         var shouldAllowBackupUploadsOnCellular: Bool?
         var isWifiReachable: Bool?
         var isReachable: Bool?
+        var areUploadsSuspended: Bool?
 
         // Value from 0 to 1
         var batteryLevel: Float?
@@ -197,12 +209,14 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
             isAppReady: Bool,
             isRegistered: Bool?,
             backupPlan: BackupPlan?,
+            hasConsumedMediaTierCapacity: Bool?,
             shouldAllowBackupUploadsOnCellular: Bool?,
             isWifiReachable: Bool?,
             isReachable: Bool?,
             batteryLevel: Float?,
             isLowPowerMode: Bool?,
-            isMainAppAndActive: Bool
+            isMainAppAndActive: Bool,
+            areUploadsSuspended: Bool?,
         ) {
             self.isFullsizeQueueEmpty = isFullsizeQueueEmpty
             self.isThumbnailQueueEmpty = isThumbnailQueueEmpty
@@ -210,12 +224,14 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
             self.isAppReady = isAppReady
             self.isRegistered = isRegistered
             self.backupPlan = backupPlan
+            self.hasConsumedMediaTierCapacity = hasConsumedMediaTierCapacity
             self.shouldAllowBackupUploadsOnCellular = shouldAllowBackupUploadsOnCellular
             self.isWifiReachable = isWifiReachable
             self.isReachable = isReachable
             self.batteryLevel = batteryLevel
             self.isLowPowerMode = isLowPowerMode
             self.isMainAppAndActive = isMainAppAndActive
+            self.areUploadsSuspended = areUploadsSuspended
         }
 
         func asQueueStatus(for mode: BackupAttachmentUploadQueueMode) -> BackupAttachmentUploadQueueStatus {
@@ -245,6 +261,14 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
                 return .notRegisteredAndReady
             }
 
+            if hasConsumedMediaTierCapacity == true {
+                return .hasConsumedMediaTierCapacity
+            }
+
+            if areUploadsSuspended == true {
+                return .suspended
+            }
+
             if
                 shouldAllowBackupUploadsOnCellular != true,
                 isWifiReachable != true
@@ -264,7 +288,7 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
                 return .lowPowerMode
             }
 
-            if !isMainAppAndActive && !isMainAppAndActiveOverride {
+            if !isMainAppAndActive, !isMainAppAndActiveOverride {
                 return .appBackgrounded
             }
 
@@ -299,8 +323,8 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
 
         let (isFullsizeQueueEmpty, isThumbnailQueueEmpty) = db.read { tx in
             return (
-                ((try? backupAttachmentUploadStore.fetchNextUploads(count: 1, isFullsize: true, tx: tx)) ?? []).isEmpty,
-                ((try? backupAttachmentUploadStore.fetchNextUploads(count: 1, isFullsize: false, tx: tx)) ?? []).isEmpty
+                backupAttachmentUploadStore.fetchNextUploads(count: 1, isFullsize: true, tx: tx).isEmpty,
+                backupAttachmentUploadStore.fetchNextUploads(count: 1, isFullsize: false, tx: tx).isEmpty,
             )
         }
         state.isFullsizeQueueEmpty = isFullsizeQueueEmpty
@@ -317,18 +341,27 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
     }
 
     private func observeDeviceAndLocalStates() {
-        let (backupPlan, shouldAllowBackupUploadsOnCellular) = db.read { tx in
+        let (
+            backupPlan,
+            hasConsumedMediaTierCapacity,
+            shouldAllowBackupUploadsOnCellular,
+            areUploadsSuspended,
+        ) = db.read { tx in
             (
                 backupSettingsStore.backupPlan(tx: tx),
-                backupSettingsStore.shouldAllowBackupUploadsOnCellular(tx: tx)
+                backupSettingsStore.hasConsumedMediaTierCapacity(tx: tx),
+                backupSettingsStore.shouldAllowBackupUploadsOnCellular(tx: tx),
+                backupSettingsStore.isBackupAttachmentUploadQueueSuspended(tx: tx),
             )
         }
 
         let notificationsToObserve: [(Notification.Name, Selector)] = [
             (.registrationStateDidChange, #selector(registrationStateDidChange)),
             (.backupPlanChanged, #selector(backupPlanDidChange)),
+            (.hasConsumedMediaTierCapacityStatusDidChange, #selector(hasConsumedMediaTierCapacityDidChange)),
             (.shouldAllowBackupUploadsOnCellularChanged, #selector(shouldAllowBackupUploadsOnCellularDidChange)),
             (.reachabilityChanged, #selector(reachabilityDidChange)),
+            (.backupAttachmentUploadQueueSuspensionStatusDidChange, #selector(suspensionStatusDidChange)),
             (.batteryLevelChanged, #selector(batteryLevelDidChange)),
             (.batteryLowPowerModeChanged, #selector(lowPowerModeDidChange)),
             (.OWSApplicationDidEnterBackground, #selector(isMainAppAndActiveDidChange)),
@@ -339,7 +372,7 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
                 self,
                 selector: selector,
                 name: name,
-                object: nil
+                object: nil,
             )
         }
 
@@ -351,12 +384,14 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
             isAppReady: appReadiness.isAppReady,
             isRegistered: tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegistered,
             backupPlan: backupPlan,
+            hasConsumedMediaTierCapacity: hasConsumedMediaTierCapacity,
             shouldAllowBackupUploadsOnCellular: shouldAllowBackupUploadsOnCellular,
             isWifiReachable: reachabilityManager.isReachable(via: .wifi),
             isReachable: reachabilityManager.isReachable(via: .any),
             batteryLevel: batteryLevelMonitor?.batteryLevel,
             isLowPowerMode: deviceBatteryLevelManager?.isLowPowerModeEnabled,
-            isMainAppAndActive: appContext.isMainAppAndActive
+            isMainAppAndActive: appContext.isMainAppAndActive,
+            areUploadsSuspended: areUploadsSuspended,
         )
     }
 
@@ -386,6 +421,13 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
     }
 
     @objc
+    private func hasConsumedMediaTierCapacityDidChange() {
+        state.hasConsumedMediaTierCapacity = db.read { tx in
+            backupSettingsStore.hasConsumedMediaTierCapacity(tx: tx)
+        }
+    }
+
+    @objc
     private func shouldAllowBackupUploadsOnCellularDidChange() {
         state.shouldAllowBackupUploadsOnCellular = db.read { tx in
             backupSettingsStore.shouldAllowBackupUploadsOnCellular(tx: tx)
@@ -411,5 +453,12 @@ public class BackupAttachmentUploadQueueStatusManagerImpl: BackupAttachmentUploa
     @objc
     private func isMainAppAndActiveDidChange() {
         self.state.isMainAppAndActive = appContext.isMainAppAndActive
+    }
+
+    @objc
+    public func suspensionStatusDidChange() {
+        self.state.areUploadsSuspended = db.read { tx in
+            backupSettingsStore.isBackupAttachmentUploadQueueSuspended(tx: tx)
+        }
     }
 }

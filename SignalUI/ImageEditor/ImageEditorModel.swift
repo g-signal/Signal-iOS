@@ -28,8 +28,10 @@ private class ImageEditorOperation: NSObject {
 protocol ImageEditorModelObserver: AnyObject {
     // Used for large changes to the model, when the entire
     // model should be reloaded.
-    func imageEditorModelDidChange(before: ImageEditorContents,
-                                   after: ImageEditorContents)
+    func imageEditorModelDidChange(
+        before: ImageEditorContents,
+        after: ImageEditorContents,
+    )
 
     // Used for small narrow changes to the model, usually
     // to a single item.
@@ -38,11 +40,12 @@ protocol ImageEditorModelObserver: AnyObject {
 
 // MARK: -
 
+// Should be @MainActor.
 class ImageEditorModel: NSObject {
 
-    let srcImagePath: String
-
+    let srcImage: NormalizedImage
     let srcImageSizePixels: CGSize
+    let srcImageMetadata: ImageMetadata
 
     private var contents: ImageEditorContents
 
@@ -58,28 +61,15 @@ class ImageEditorModel: NSObject {
 
     var color = ColorPickerBarColor.defaultColor()
 
-    // We don't want to allow editing of images if:
-    //
-    // * They are invalid.
-    // * We can't determine their size / aspect-ratio.
-    init(srcImagePath: String) throws {
-        self.srcImagePath = srcImagePath
-
-        let srcFileName = (srcImagePath as NSString).lastPathComponent
-        let srcFileExtension = (srcFileName as NSString).pathExtension
-        guard let mimeType = MimeTypeUtil.mimeTypeForFileExtension(srcFileExtension) else {
-            Logger.error("Couldn't determine MIME type for file.")
+    init(normalizedImage: NormalizedImage) throws {
+        self.srcImage = normalizedImage
+        let srcImageMetadata = try normalizedImage.dataSource.imageSource().imageMetadata()
+        guard let srcImageMetadata else {
             throw ImageEditorError.invalidInput
         }
-        guard MimeTypeUtil.isSupportedImageMimeType(mimeType),
-              !MimeTypeUtil.isSupportedDefinitelyAnimatedMimeType(mimeType) else {
-            Logger.error("Invalid MIME type: \(mimeType).")
-            throw ImageEditorError.invalidInput
-        }
-
-        let srcImageSizePixels = Data.imageSize(forFilePath: srcImagePath, mimeType: mimeType)
+        self.srcImageMetadata = srcImageMetadata
+        let srcImageSizePixels = srcImageMetadata.pixelSize
         guard srcImageSizePixels.width > 0, srcImageSizePixels.height > 0 else {
-            Logger.error("Couldn't determine image size.")
             throw ImageEditorError.invalidInput
         }
         self.srcImageSizePixels = srcImageSizePixels
@@ -90,6 +80,7 @@ class ImageEditorModel: NSObject {
         super.init()
     }
 
+    @MainActor
     func renderOutput() -> UIImage? {
         return ImageEditorCanvasView.renderForOutput(model: self, transform: currentTransform())
     }
@@ -148,15 +139,19 @@ class ImageEditorModel: NSObject {
         observers.append(Weak(value: observer))
     }
 
-    private func fireModelDidChange(before: ImageEditorContents,
-                                    after: ImageEditorContents) {
+    private func fireModelDidChange(
+        before: ImageEditorContents,
+        after: ImageEditorContents,
+    ) {
         // We could diff here and yield a more narrow change event.
         for weakObserver in observers {
             guard let observer = weakObserver.value else {
                 continue
             }
-            observer.imageEditorModelDidChange(before: before,
-                                               after: after)
+            observer.imageEditorModelDidChange(
+                before: before,
+                after: after,
+            )
         }
     }
 
@@ -205,25 +200,30 @@ class ImageEditorModel: NSObject {
     }
 
     func append(item: ImageEditorItem) {
-        performAction({ (oldContents) in
+        performAction({ oldContents in
             let newContents = oldContents.clone()
             newContents.append(item: item)
             return newContents
         }, changedItemIds: [item.itemId])
     }
 
-    func replace(item: ImageEditorItem,
-                 suppressUndo: Bool = false) {
-        performAction({ (oldContents) in
-            let newContents = oldContents.clone()
-            newContents.replace(item: item)
-            return newContents
-        }, changedItemIds: [item.itemId],
-                      suppressUndo: suppressUndo)
+    func replace(
+        item: ImageEditorItem,
+        suppressUndo: Bool = false,
+    ) {
+        performAction(
+            { oldContents in
+                let newContents = oldContents.clone()
+                newContents.replace(item: item)
+                return newContents
+            },
+            changedItemIds: [item.itemId],
+            suppressUndo: suppressUndo,
+        )
     }
 
     func remove(item: ImageEditorItem) {
-        performAction({ (oldContents) in
+        performAction({ oldContents in
             let newContents = oldContents.clone()
             newContents.remove(item: item)
             return newContents
@@ -266,9 +266,11 @@ class ImageEditorModel: NSObject {
         }
     }
 
-    private func performAction(_ action: (ImageEditorContents) -> ImageEditorContents,
-                               changedItemIds: [String]?,
-                               suppressUndo: Bool = false) {
+    private func performAction(
+        _ action: (ImageEditorContents) -> ImageEditorContents,
+        changedItemIds: [String]?,
+        suppressUndo: Bool = false,
+    ) {
         if !suppressUndo {
             let undoOperation = ImageEditorOperation(contents: contents)
             undoStack.append(undoOperation)
@@ -279,67 +281,13 @@ class ImageEditorModel: NSObject {
         let newContents = action(oldContents)
         contents = newContents
 
-        if let changedItemIds = changedItemIds {
+        if let changedItemIds {
             fireModelDidChange(changedItemIds: changedItemIds)
         } else {
-            fireModelDidChange(before: oldContents,
-                               after: self.contents)
+            fireModelDidChange(
+                before: oldContents,
+                after: self.contents,
+            )
         }
-    }
-
-    // MARK: - Utilities
-
-    // Returns nil on error.
-    private class func crop(imagePath: String,
-                            unitCropRect: CGRect) -> UIImage? {
-        // TODO: Do we want to render off the main thread?
-        AssertIsOnMainThread()
-
-        guard let srcImage = UIImage(contentsOfFile: imagePath) else {
-            owsFailDebug("Could not load image")
-            return nil
-        }
-        let srcImageSize = srcImage.size
-        // Convert from unit coordinates to src image coordinates.
-        let cropRect = CGRect(x: round(unitCropRect.origin.x * srcImageSize.width),
-                              y: round(unitCropRect.origin.y * srcImageSize.height),
-                              width: round(unitCropRect.size.width * srcImageSize.width),
-                              height: round(unitCropRect.size.height * srcImageSize.height))
-
-        guard cropRect.origin.x >= 0,
-              cropRect.origin.y >= 0,
-              cropRect.origin.x + cropRect.size.width <= srcImageSize.width,
-              cropRect.origin.y + cropRect.size.height <= srcImageSize.height else {
-            owsFailDebug("Invalid crop rectangle.")
-            return nil
-        }
-        guard cropRect.size.width > 0,
-              cropRect.size.height > 0 else {
-            // Not an error; indicates that the user tapped rather
-            // than dragged.
-            Logger.warn("Empty crop rectangle.")
-            return nil
-        }
-
-        let hasAlpha = Data.hasAlpha(forValidImageFilePath: imagePath)
-
-        UIGraphicsBeginImageContextWithOptions(cropRect.size, !hasAlpha, srcImage.scale)
-        defer { UIGraphicsEndImageContext() }
-
-        guard let context = UIGraphicsGetCurrentContext() else {
-            owsFailDebug("context was unexpectedly nil")
-            return nil
-        }
-        context.interpolationQuality = .high
-
-        // Draw source image.
-        let dstFrame = CGRect(origin: CGPoint.invert(cropRect.origin), size: srcImageSize)
-        srcImage.draw(in: dstFrame)
-
-        let dstImage = UIGraphicsGetImageFromCurrentImageContext()
-        if dstImage == nil {
-            owsFailDebug("could not generate dst image.")
-        }
-        return dstImage
     }
 }

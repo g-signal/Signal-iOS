@@ -43,27 +43,30 @@ private extension CVComponentState {
         let contextInfo = try GroupV2ContextInfo.deriveFrom(masterKeyData: groupInviteLinkInfo.masterKey)
         let avatarData = try await SSKEnvironment.shared.groupsV2Ref.fetchGroupInviteLinkAvatar(
             avatarUrlPath: avatarUrlPath,
-            groupSecretParams: contextInfo.groupSecretParams
+            groupSecretParams: contextInfo.groupSecretParams,
         )
 
-        let imageMetadata = avatarData.imageMetadata(withPath: nil, mimeType: nil)
-        let cacheFileUrl = OWSFileSystem.temporaryFileUrl(fileExtension: imageMetadata.fileExtension, isAvailableWhileDeviceLocked: true)
-        guard imageMetadata.isValid else {
+        let imageMetadata = DataImageSource(avatarData).imageMetadata()
+        guard let imageMetadata else {
             let cachedAvatar = GroupInviteLinkCachedAvatar(
-                cacheFileUrl: cacheFileUrl,
-                imageSizePixels: imageMetadata.pixelSize,
-                isValid: false
+                cacheFileUrl: OWSFileSystem.temporaryFileUrl(isAvailableWhileDeviceLocked: true),
+                imageSizePixels: .zero,
+                isValid: false,
             )
             groupLinkState.update {
                 $0.groupInviteLinkAvatarCache[avatarUrlPath] = cachedAvatar
             }
             throw OWSAssertionError("Invalid group avatar.")
         }
+        let cacheFileUrl = OWSFileSystem.temporaryFileUrl(
+            fileExtension: imageMetadata.imageFormat.fileExtension,
+            isAvailableWhileDeviceLocked: true,
+        )
         try avatarData.write(to: cacheFileUrl)
         let cachedAvatar = GroupInviteLinkCachedAvatar(
             cacheFileUrl: cacheFileUrl,
             imageSizePixels: imageMetadata.pixelSize,
-            isValid: true
+            isValid: true,
         )
         groupLinkState.update {
             $0.groupInviteLinkAvatarCache[avatarUrlPath] = cachedAvatar
@@ -80,7 +83,7 @@ extension CVComponentState {
     static func configureGroupInviteLink(
         _ url: URL,
         message: TSMessage,
-        groupInviteLinkInfo: GroupInviteLinkInfo
+        groupInviteLinkInfo: GroupInviteLinkInfo,
     ) -> GroupInviteLinkViewModel {
 
         let touchMessage = { () async -> Void in
@@ -98,7 +101,7 @@ extension CVComponentState {
                     let groupContextInfo = try GroupV2ContextInfo.deriveFrom(masterKeyData: groupInviteLinkInfo.masterKey)
                     _ = try await SSKEnvironment.shared.groupsV2Ref.fetchGroupInviteLinkPreview(
                         inviteLinkPassword: groupInviteLinkInfo.inviteLinkPassword,
-                        groupSecretParams: groupContextInfo.groupSecretParams
+                        groupSecretParams: groupContextInfo.groupSecretParams,
                     )
                     _ = Self.updateExpirationList(url: url, isExpired: false)
                     await touchMessage()
@@ -119,7 +122,7 @@ extension CVComponentState {
                 url: url,
                 groupInviteLinkPreview: nil,
                 avatar: nil,
-                isExpired: Self.isGroupInviteLinkExpired(url)
+                isExpired: Self.isGroupInviteLinkExpired(url),
             )
         }
 
@@ -129,7 +132,7 @@ extension CVComponentState {
                 url: url,
                 groupInviteLinkPreview: groupInviteLinkPreview,
                 avatar: nil,
-                isExpired: false
+                isExpired: false,
             )
         }
 
@@ -150,7 +153,7 @@ extension CVComponentState {
                 url: url,
                 groupInviteLinkPreview: groupInviteLinkPreview,
                 avatar: nil,
-                isExpired: false
+                isExpired: false,
             )
         }
 
@@ -158,7 +161,7 @@ extension CVComponentState {
             url: url,
             groupInviteLinkPreview: groupInviteLinkPreview,
             avatar: avatar,
-            isExpired: false
+            isExpired: false,
         )
     }
 }

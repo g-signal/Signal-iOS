@@ -3,11 +3,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+public import LibSignalClient
 public import SignalServiceKit
 
 public protocol TextApprovalViewControllerDelegate: AnyObject {
 
-    func textApproval(_ textApproval: TextApprovalViewController, didApproveMessage messageBody: MessageBody?, linkPreviewDraft: OWSLinkPreviewDraft?)
+    func textApproval(_ textApproval: TextApprovalViewController, didApproveMessage messageBody: MessageBody, linkPreviewDraft: OWSLinkPreviewDraft?)
 
     func textApprovalDidCancel(_ textApproval: TextApprovalViewController)
 
@@ -33,7 +34,7 @@ public class TextApprovalViewController: OWSViewController, BodyRangesTextViewDe
     private let footerView = ApprovalFooterView()
 
     private var approvalMode: ApprovalMode {
-        guard let delegate = delegate else {
+        guard let delegate else {
             return .send
         }
         return delegate.textApprovalMode(self)
@@ -46,7 +47,7 @@ public class TextApprovalViewController: OWSViewController, BodyRangesTextViewDe
         self.linkPreviewFetchState = LinkPreviewFetchState(
             db: DependenciesBridge.shared.db,
             linkPreviewFetcher: SUIEnvironment.shared.linkPreviewFetcher,
-            linkPreviewSettingStore: DependenciesBridge.shared.linkPreviewSettingStore
+            linkPreviewSettingStore: DependenciesBridge.shared.linkPreviewSettingStore,
         )
 
         super.init()
@@ -62,8 +63,10 @@ public class TextApprovalViewController: OWSViewController, BodyRangesTextViewDe
         if let title = delegate?.textApprovalCustomTitle(self) {
             self.navigationItem.title = title
         } else {
-            self.navigationItem.title = OWSLocalizedString("MESSAGE_APPROVAL_DIALOG_TITLE",
-                                                          comment: "Title for the 'message approval' dialog.")
+            self.navigationItem.title = OWSLocalizedString(
+                "MESSAGE_APPROVAL_DIALOG_TITLE",
+                comment: "Title for the 'message approval' dialog.",
+            )
         }
 
         self.navigationItem.leftBarButtonItem = .cancelButton { [weak self] in
@@ -131,7 +134,7 @@ public class TextApprovalViewController: OWSViewController, BodyRangesTextViewDe
 
     // MARK: - Create Views
 
-    public override func loadView() {
+    override public func loadView() {
 
         self.view = UIView.container()
         self.view.backgroundColor = Theme.backgroundColor
@@ -176,7 +179,7 @@ public class TextApprovalViewController: OWSViewController, BodyRangesTextViewDe
         return nil
     }
 
-    public func textViewMentionPickerPossibleAddresses(_ textView: BodyRangesTextView, tx: DBReadTransaction) -> [SignalServiceAddress] {
+    public func textViewMentionPickerPossibleAcis(_ textView: BodyRangesTextView, tx: DBReadTransaction) -> [Aci] {
         return []
     }
 

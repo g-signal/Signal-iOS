@@ -19,33 +19,32 @@ public class ProvisioningCoordinatorTest: XCTestCase {
     private var chatConnectionManagerMock: ChatConnectionManagerMock!
     private var identityManagerMock: MockIdentityManager!
     private var accountKeyStore: AccountKeyStore!
-    private var messageFactoryMock: Mocks.MessageFactory!
     private var networkManagerMock: MockNetworkManager!
     private var prekeyManagerMock: MockPreKeyManager!
-    private var profileManagerMock: Mocks.ProfileManager!
+    private var profileManagerMock: OWSFakeProfileManager!
     private var pushRegistrationManagerMock: Mocks.PushRegistrationManager!
     private var receiptManagerMock: Mocks.ReceiptManager!
     private var registrationStateChangeManagerMock: MockRegistrationStateChangeManager!
     private var signalServiceMock: OWSSignalServiceMock!
     private var storageServiceManagerMock: FakeStorageServiceManager!
     private var svrMock: SecureValueRecoveryMock!
-    private var syncManagerMock: Mocks.SyncManager!
+    private var syncManagerMock: OWSMockSyncManager!
     private var threadStoreMock: MockThreadStore!
     private var tsAccountManagerMock: MockTSAccountManager!
-    private var udManagerMock: Mocks.UDManager!
+    private var udManagerMock: OWSMockUDManager!
 
-    public override func setUp() async throws {
+    override public func setUp() async throws {
 
         let mockDb = InMemoryDB()
 
         let recipientDbTable = RecipientDatabaseTable()
-        let recipientFetcher = RecipientFetcherImpl(
+        let recipientFetcher = RecipientFetcher(
             recipientDatabaseTable: recipientDbTable,
             searchableNameIndexer: MockSearchableNameIndexer(),
         )
         let recipientIdFinder = RecipientIdFinder(
             recipientDatabaseTable: recipientDbTable,
-            recipientFetcher: recipientFetcher
+            recipientFetcher: recipientFetcher,
         )
         self.identityManagerMock = .init(recipientIdFinder: recipientIdFinder)
 
@@ -53,7 +52,6 @@ public class ProvisioningCoordinatorTest: XCTestCase {
         self.accountKeyStore = .init(
             backupSettingsStore: BackupSettingsStore(),
         )
-        self.messageFactoryMock = .init()
         self.networkManagerMock = .init()
         self.prekeyManagerMock = .init()
         self.profileManagerMock = .init()
@@ -67,6 +65,8 @@ public class ProvisioningCoordinatorTest: XCTestCase {
         self.threadStoreMock = .init()
         self.tsAccountManagerMock = .init()
         self.udManagerMock = .init()
+        let preKeyStore = PreKeyStore()
+        let sessionStore = SignalServiceKit.SessionStore()
 
         self.provisioningCoordinator = ProvisioningCoordinatorImpl(
             chatConnectionManager: chatConnectionManagerMock,
@@ -74,7 +74,6 @@ public class ProvisioningCoordinatorTest: XCTestCase {
             identityManager: identityManagerMock,
             linkAndSyncManager: MockLinkAndSyncManager(),
             accountKeyStore: accountKeyStore,
-            messageFactory: messageFactoryMock,
             networkManager: networkManagerMock,
             preKeyManager: prekeyManagerMock,
             profileManager: profileManagerMock,
@@ -82,14 +81,19 @@ public class ProvisioningCoordinatorTest: XCTestCase {
             receiptManager: receiptManagerMock,
             registrationStateChangeManager: registrationStateChangeManagerMock,
             registrationWebSocketManager: MockRegistrationWebSocketManager(),
-            signalProtocolStoreManager: MockSignalProtocolStoreManager(),
+            signalProtocolStoreManager: SignalProtocolStoreManager(
+                aciProtocolStore: .mock(identity: .aci, preKeyStore: preKeyStore, recipientIdFinder: recipientIdFinder, sessionStore: sessionStore),
+                pniProtocolStore: .mock(identity: .pni, preKeyStore: preKeyStore, recipientIdFinder: recipientIdFinder, sessionStore: sessionStore),
+                preKeyStore: preKeyStore,
+                sessionStore: sessionStore,
+            ),
             signalService: signalServiceMock,
             storageServiceManager: storageServiceManagerMock,
             svr: svrMock,
             syncManager: syncManagerMock,
             threadStore: threadStoreMock,
             tsAccountManager: tsAccountManagerMock,
-            udManager: udManagerMock
+            udManager: udManagerMock,
         )
 
         tsAccountManagerMock.registrationStateMock = { .unregistered }
@@ -108,7 +112,7 @@ public class ProvisioningCoordinatorTest: XCTestCase {
             mrbk: MediaRootBackupKey(backupKey: .generateRandom()),
             ephemeralBackupKey: nil,
             areReadReceiptsEnabled: true,
-            provisioningCode: "1234"
+            provisioningCode: "1234",
         )
         let deviceName = "test device"
         let deviceId = DeviceId(validating: UInt32.random(in: 2...3))!
@@ -117,7 +121,7 @@ public class ProvisioningCoordinatorTest: XCTestCase {
 
         let verificationResponse = ProvisioningServiceResponses.VerifySecondaryDeviceResponse(
             pni: provisioningMessage.pni,
-            deviceId: deviceId
+            deviceId: deviceId,
         )
 
         mockSession.responder = { request in
@@ -129,17 +133,17 @@ public class ProvisioningCoordinatorTest: XCTestCase {
             }
         }
 
-        signalServiceMock.mockUrlSessionBuilder = { (signalServiceInfo, _, _) in
+        signalServiceMock.mockUrlSessionBuilder = { signalServiceInfo, _, _ in
             XCTAssertEqual(
                 signalServiceInfo.baseUrl,
-                SignalServiceType.mainSignalServiceIdentified.signalServiceInfo().baseUrl
+                SignalServiceType.mainSignalService.signalServiceInfo().baseUrl,
             )
             return mockSession
         }
 
         networkManagerMock.asyncRequestHandlers.append({ request, _ in
             if request.url.absoluteString.hasSuffix("v1/devices/capabilities") {
-                return HTTPResponseImpl(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: Data())
+                return HTTPResponse(requestUrl: request.url, status: 200, headers: HttpHeaders(), bodyData: Data())
             }
             throw OWSAssertionError("")
         })
@@ -158,22 +162,22 @@ public class ProvisioningCoordinatorTest: XCTestCase {
         try await provisioningCoordinator.completeProvisioning(
             provisionMessage: provisioningMessage,
             deviceName: deviceName,
-            progressViewModel: LinkAndSyncSecondaryProgressViewModel()
+            progressViewModel: LinkAndSyncSecondaryProgressViewModel(),
         )
 
         XCTAssert(didSetLocalIdentifiers)
         XCTAssert(prekeyManagerMock.didFinalizeRegistrationPrekeys)
         XCTAssertEqual(
-            profileManagerMock.localUserProfileMock?.profileKey,
-            provisioningMessage.profileKey
+            profileManagerMock.localProfileKey,
+            provisioningMessage.profileKey,
         )
         XCTAssertEqual(
             identityManagerMock.identityKeyPairs[.aci]?.publicKey,
-            provisioningMessage.aciIdentityKeyPair.asECKeyPair.publicKey
+            provisioningMessage.aciIdentityKeyPair.asECKeyPair.publicKey,
         )
         XCTAssertEqual(
             identityManagerMock.identityKeyPairs[.pni]?.publicKey,
-            provisioningMessage.pniIdentityKeyPair.asECKeyPair.publicKey
+            provisioningMessage.pniIdentityKeyPair.asECKeyPair.publicKey,
         )
         let masterKey = switch provisioningMessage.rootKey {
         case .accountEntropyPool(let accountEntropyPool):
@@ -196,13 +200,13 @@ extension ProvisioningCoordinatorTest {
 
         var responder: ((TSRequest) -> Data)?
 
-        override func performRequest(_ rawRequest: TSRequest) async throws -> any HTTPResponse {
+        override func performRequest(_ rawRequest: TSRequest) async throws -> HTTPResponse {
             let responseBody = responder!(rawRequest)
-            return HTTPResponseImpl(
+            return HTTPResponse(
                 requestUrl: rawRequest.url,
                 status: 200,
                 headers: HttpHeaders(),
-                bodyData: responseBody
+                bodyData: responseBody,
             )
         }
     }
@@ -223,7 +227,7 @@ private class MockLinkAndSyncManager: LinkAndSyncManager {
     func waitForLinkingAndUploadBackup(
         ephemeralBackupKey: MessageRootBackupKey,
         tokenId: DeviceProvisioningTokenId,
-        progress: OWSSequentialProgressRootSink<PrimaryLinkNSyncProgressPhase>
+        progress: OWSSequentialProgressRootSink<PrimaryLinkNSyncProgressPhase>,
     ) async throws(PrimaryLinkNSyncError) {
         return
     }
@@ -232,24 +236,8 @@ private class MockLinkAndSyncManager: LinkAndSyncManager {
         localIdentifiers: LocalIdentifiers,
         auth: ChatServiceAuth,
         ephemeralBackupKey: MessageRootBackupKey,
-        progress: OWSSequentialProgressRootSink<SecondaryLinkNSyncProgressPhase>
-    ) async throws(SecondaryLinkNSyncError) {
+        progress: OWSSequentialProgressRootSink<SecondaryLinkNSyncProgressPhase>,
+    ) async throws {
         return
     }
-}
-
-private class MockSignalProtocolStoreManager: SignalProtocolStoreManager {
-    private let aciProtocolStore = MockSignalProtocolStore(identity: .aci)
-    private let pniProtocolStore = MockSignalProtocolStore(identity: .pni)
-
-    init() {}
-
-    func signalProtocolStore(for identity: SignalServiceKit.OWSIdentity) -> any SignalServiceKit.SignalProtocolStore {
-        switch identity {
-        case .aci: aciProtocolStore
-        case .pni: pniProtocolStore
-        }
-    }
-
-    func removeAllKeys(tx: DBWriteTransaction) {}
 }

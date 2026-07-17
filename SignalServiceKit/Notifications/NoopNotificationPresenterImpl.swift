@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+public import LibSignalClient
+
 public class NoopNotificationPresenterImpl: NotificationPresenter {
     public func registerNotificationSettings() async {
         Logger.warn("")
@@ -15,7 +17,7 @@ public class NoopNotificationPresenterImpl: NotificationPresenter {
     public func notifyUser(
         forIncomingMessage incomingMessage: TSIncomingMessage,
         thread: TSThread,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) {
         Logger.warn("")
     }
@@ -24,7 +26,7 @@ public class NoopNotificationPresenterImpl: NotificationPresenter {
         forIncomingMessage incomingMessage: TSIncomingMessage,
         editTarget: TSIncomingMessage,
         thread: TSThread,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) {
         Logger.warn("")
     }
@@ -33,7 +35,7 @@ public class NoopNotificationPresenterImpl: NotificationPresenter {
         forReaction reaction: OWSReaction,
         onOutgoingMessage message: TSOutgoingMessage,
         thread: TSThread,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) {
         Logger.warn("")
     }
@@ -41,7 +43,7 @@ public class NoopNotificationPresenterImpl: NotificationPresenter {
     public func notifyUser(
         forErrorMessage errorMessage: TSErrorMessage,
         thread: TSThread,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) {
         Logger.warn("")
     }
@@ -50,7 +52,7 @@ public class NoopNotificationPresenterImpl: NotificationPresenter {
         forTSMessage message: TSMessage,
         thread: TSThread,
         wantsSound: Bool,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) {
         Logger.warn("")
     }
@@ -59,7 +61,7 @@ public class NoopNotificationPresenterImpl: NotificationPresenter {
         forPreviewableInteraction previewableInteraction: TSInteraction & OWSPreviewText,
         thread: TSThread,
         wantsSound: Bool,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) {
         Logger.warn("")
     }
@@ -67,7 +69,16 @@ public class NoopNotificationPresenterImpl: NotificationPresenter {
     public func notifyUserOfPollEnd(
         forMessage message: TSIncomingMessage,
         thread: TSThread,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
+    ) {
+        Logger.warn("")
+    }
+
+    public func notifyUserOfPollVote(
+        forMessage message: TSOutgoingMessage,
+        voteAuthor: Aci,
+        thread: TSThread,
+        transaction: DBWriteTransaction,
     ) {
         Logger.warn("")
     }
@@ -109,6 +120,14 @@ public class NoopNotificationPresenterImpl: NotificationPresenter {
         Logger.warn("")
     }
 
+    public func notifyUserOfMediaTierQuotaConsumed() {
+        Logger.warn("")
+    }
+
+    public func notifyUserOfListMediaIntegrityCheckFailure() {
+        Logger.warn("")
+    }
+
     public func notifyUserToRelaunchAfterTransfer(completion: @escaping () -> Void) {
         Logger.warn("")
     }
@@ -121,7 +140,7 @@ public class NoopNotificationPresenterImpl: NotificationPresenter {
         Logger.warn("")
     }
 
-    public func clearAllNonScheduledNotifications() {
+    public func clearNotificationsForAppActivate() {
         Logger.warn("")
     }
 

@@ -12,8 +12,8 @@ protocol RegistrationPhoneNumberInputViewDelegate: AnyObject {
     func didPressReturn()
 }
 
-class RegistrationPhoneNumberInputView: UIStackView {
-    public weak var delegate: RegistrationPhoneNumberInputViewDelegate?
+class RegistrationPhoneNumberInputView: UIView {
+    weak var delegate: RegistrationPhoneNumberInputViewDelegate?
 
     // We impose a limit on the number of digits. This is much higher than what a valid E164 allows
     // and is just here for safety.
@@ -24,24 +24,49 @@ class RegistrationPhoneNumberInputView: UIStackView {
 
         super.init(frame: .zero)
 
-        axis = .horizontal
-        distribution = .fillProportionally
-        spacing = 16
-        layoutMargins = .init(hMargin: 16, vMargin: 14)
-        isLayoutMarginsRelativeArrangement = true
-        autoSetDimension(.height, toSize: 50, relation: .greaterThanOrEqual)
+        layoutMargins = .init(hMargin: 16, vMargin: 9)
 
-        insertSubview(backgroundView, at: 0)
-        backgroundView.autoPinEdgesToSuperviewEdges()
+        // Background
+        let backgroundView = UIView()
+        if #available(iOS 26, *) {
+            backgroundView.cornerConfiguration = .capsule()
+        } else {
+            backgroundView.layer.cornerRadius = 10
+        }
+        backgroundView.backgroundColor = .Signal.secondaryBackground
+        addSubview(backgroundView)
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundView.topAnchor.constraint(equalTo: topAnchor),
+            backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
 
-        addArrangedSubview(countryCodeView)
+        // Content view (horizontal stack).
+        let dividerView = UIView()
+        dividerView.backgroundColor = .Signal.secondaryLabel
 
-        addArrangedSubview(dividerView)
+        let stackView = UIStackView(arrangedSubviews: [countryCodeView, dividerView, nationalNumberView])
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        stackView.spacing = 16
+        addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            dividerView.widthAnchor.constraint(equalToConstant: .hairlineWidth),
+            dividerView.heightAnchor.constraint(equalTo: stackView.heightAnchor),
+
+            stackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 32),
+            stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+            stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+        ])
 
         nationalNumberView.text = formatNationalNumber(input: initialPhoneNumber.nationalNumber)
-        addArrangedSubview(nationalNumberView)
-
-        render()
+        update()
     }
 
     @available(*, unavailable, message: "use other constructor")
@@ -51,101 +76,94 @@ class RegistrationPhoneNumberInputView: UIStackView {
 
     // MARK: - Data
 
-    public private(set) var country: PhoneNumberCountry {
-        didSet { render() }
+    private(set) var country: PhoneNumberCountry {
+        didSet { update() }
     }
 
-    public var nationalNumber: String { nationalNumberView.text?.asciiDigitsOnly ?? "" }
+    var nationalNumber: String { nationalNumberView.text?.asciiDigitsOnly ?? "" }
 
-    public var phoneNumber: RegistrationPhoneNumber {
+    var phoneNumber: RegistrationPhoneNumber {
         return RegistrationPhoneNumber(country: country, nationalNumber: nationalNumber)
     }
 
-    public var isEnabled: Bool = true {
+    var isEnabled: Bool = true {
         didSet {
             if !isEnabled {
                 nationalNumberView.resignFirstResponder()
             }
-            render()
+            update()
         }
     }
 
     // MARK: - Rendering
 
-    private let backgroundView: UIView = {
-        let result = UIView()
-        result.layer.cornerRadius = 10
-        return result
-    }()
-
     private lazy var countryCodeLabel: UILabel = {
         let result = UILabel()
-        result.font = .dynamicTypeBody
+        result.font = .dynamicTypeBodyClamped
         result.textAlignment = .center
+        result.textColor = .Signal.label
         result.setCompressionResistanceHigh()
         result.setContentHuggingHorizontalHigh()
-        return result
-    }()
-
-    private lazy var countryCodeChevron: UIImageView = {
-        let result = UIImageView(image: UIImage(imageLiteralResourceName: "chevron-down-extra-small"))
-        result.autoSetDimensions(to: .square(12))
-        result.setCompressionResistanceHigh()
         return result
     }()
 
     private lazy var countryCodeView: UIView = {
-        let result = UIStackView(arrangedSubviews: [countryCodeLabel, countryCodeChevron])
-        result.distribution = .fill
-        result.alignment = .center
-        result.spacing = 9
-        result.setCompressionResistanceHigh()
-        result.setContentHuggingHorizontalHigh()
-        result.accessibilityIdentifier = "registration.phonenumber.countryCode"
+        let container = UIView.container()
 
-        result.isUserInteractionEnabled = true
-        result.addGestureRecognizer(UITapGestureRecognizer(
+        container.addSubview(countryCodeLabel)
+        countryCodeLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        var chevronIcon = UIImageView(image: UIImage(imageLiteralResourceName: "chevron-down-extra-small"))
+        chevronIcon.tintColor = .Signal.secondaryLabel
+        container.addSubview(chevronIcon)
+        chevronIcon.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            countryCodeLabel.topAnchor.constraint(greaterThanOrEqualTo: container.topAnchor),
+            countryCodeLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 4),
+            countryCodeLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+
+            chevronIcon.widthAnchor.constraint(equalToConstant: 12),
+            chevronIcon.heightAnchor.constraint(equalToConstant: 12),
+            chevronIcon.leadingAnchor.constraint(equalTo: countryCodeLabel.trailingAnchor, constant: 9),
+            chevronIcon.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            chevronIcon.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+        ])
+        container.isUserInteractionEnabled = true
+        container.addGestureRecognizer(UITapGestureRecognizer(
             target: self,
-            action: #selector(didTapCountryCode)
+            action: #selector(didTapCountryCode),
         ))
 
-        return result
-    }()
+        container.isAccessibilityElement = true
+        container.accessibilityTraits = .button
+        container.accessibilityIdentifier = "registration.phonenumber.countryCode"
+        container.accessibilityLabel = OWSLocalizedString(
+            "REGISTRATION_DEFAULT_COUNTRY_NAME",
+            comment: "Label for the country code field",
+        )
 
-    private let dividerView: UIView = {
-        let result = UIView()
-        result.autoSetDimension(.width, toSize: .hairlineWidth)
-        result.setContentHuggingHorizontalHigh()
-        return result
+        return container
     }()
 
     private lazy var nationalNumberView: UITextField = {
         let result = UITextField()
-        result.font = UIFont.dynamicTypeBodyClamped
+        result.font = .dynamicTypeBodyClamped
         result.textAlignment = .left
+        result.textColor = .Signal.label
         result.textContentType = .telephoneNumber
         result.keyboardType = .phonePad
         result.placeholder = OWSLocalizedString(
             "ONBOARDING_PHONE_NUMBER_PLACEHOLDER",
-            comment: "Placeholder string for phone number field during registration"
+            comment: "Placeholder string for phone number field during registration",
         )
-
         result.delegate = self
-
-        result.addTarget(delegate, action: #selector(didChange), for: .valueChanged)
-
         return result
     }()
 
-    public func render() {
-        backgroundView.backgroundColor = Theme.secondaryBackgroundColor
-
-        countryCodeLabel.textColor = Theme.primaryTextColor
-        countryCodeChevron.tintColor = Theme.primaryIconColor
-        dividerView.backgroundColor = Theme.primaryIconColor
-        nationalNumberView.textColor = Theme.primaryTextColor
-
+    private func update() {
         countryCodeLabel.text = country.plusPrefixedCallingCode
+        countryCodeView.accessibilityValue = countryCodeLabel.text
         nationalNumberView.isEnabled = isEnabled
     }
 
@@ -163,15 +181,15 @@ class RegistrationPhoneNumberInputView: UIStackView {
 
     // MARK: - Responder pass-through
 
-    public override var isFirstResponder: Bool { nationalNumberView.isFirstResponder }
+    override var isFirstResponder: Bool { nationalNumberView.isFirstResponder }
 
-    public override var canBecomeFirstResponder: Bool { nationalNumberView.canBecomeFirstResponder }
-
-    @discardableResult
-    public override func becomeFirstResponder() -> Bool { nationalNumberView.becomeFirstResponder() }
+    override var canBecomeFirstResponder: Bool { nationalNumberView.canBecomeFirstResponder }
 
     @discardableResult
-    public override func resignFirstResponder() -> Bool { nationalNumberView.resignFirstResponder() }
+    override func becomeFirstResponder() -> Bool { nationalNumberView.becomeFirstResponder() }
+
+    @discardableResult
+    override func resignFirstResponder() -> Bool { nationalNumberView.resignFirstResponder() }
 }
 
 // MARK: - UITextFieldDelegate
@@ -180,7 +198,7 @@ extension RegistrationPhoneNumberInputView: UITextFieldDelegate {
     func textField(
         _ textField: UITextField,
         shouldChangeCharactersIn range: NSRange,
-        replacementString: String
+        replacementString: String,
     ) -> Bool {
         let wasEmpty = textField.text.isEmptyOrNil
         var replacementString = replacementString
@@ -196,13 +214,15 @@ extension RegistrationPhoneNumberInputView: UITextFieldDelegate {
             replacementString = phoneNumber.nationalNumber
         }
 
+        let oldValue = textField.text!
+
         let result = FormattedNumberField.textField(
             textField,
             shouldChangeCharactersIn: range,
             replacementString: replacementString,
             allowedCharacters: .numbers,
             maxCharacters: maxNationalNumberDigits,
-            format: formatNationalNumber
+            format: formatNationalNumber,
         )
 
         if wasEmpty {
@@ -210,9 +230,15 @@ extension RegistrationPhoneNumberInputView: UITextFieldDelegate {
                 // Move the cursor back to the end.
                 textField.selectedTextRange = textField.textRange(
                     from: textField.endOfDocument,
-                    to: textField.endOfDocument
+                    to: textField.endOfDocument,
                 )
             }
+        }
+
+        let newValue = textField.text!
+
+        if newValue != oldValue {
+            delegate?.didChange()
         }
 
         return result
@@ -233,7 +259,7 @@ extension RegistrationPhoneNumberInputView: UITextFieldDelegate {
 extension RegistrationPhoneNumberInputView: CountryCodeViewControllerDelegate {
     func countryCodeViewController(
         _ vc: CountryCodeViewController,
-        didSelectCountry country: PhoneNumberCountry
+        didSelectCountry country: PhoneNumberCountry,
     ) {
         self.country = country
 

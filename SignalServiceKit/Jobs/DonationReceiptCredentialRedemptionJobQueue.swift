@@ -42,7 +42,7 @@ import LibSignalClient
 public class DonationReceiptCredentialRedemptionJobQueue {
     private let jobQueueRunner: JobQueueRunner<
         JobRecordFinderImpl<DonationReceiptCredentialRedemptionJobRecord>,
-        DonationReceiptCredentialRedemptionJobRunnerFactory
+        DonationReceiptCredentialRedemptionJobRunnerFactory,
     >
     private let jobRunnerFactory: DonationReceiptCredentialRedemptionJobRunnerFactory
     private let logger: PrefixedLogger
@@ -69,7 +69,7 @@ public class DonationReceiptCredentialRedemptionJobQueue {
             canExecuteJobsConcurrently: true,
             db: db,
             jobFinder: JobRecordFinderImpl(db: db),
-            jobRunnerFactory: self.jobRunnerFactory
+            jobRunnerFactory: self.jobRunnerFactory,
         )
         self.logger = .donations
 
@@ -94,7 +94,7 @@ public class DonationReceiptCredentialRedemptionJobQueue {
         receiptCredentialRequestContext: ReceiptCredentialRequestContext,
         receiptCredentialRequest: ReceiptCredentialRequest,
         boostPaymentIntentID: String,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> DonationReceiptCredentialRedemptionJobRecord {
         logger.info("Adding a boost redemption job.")
 
@@ -110,10 +110,10 @@ public class DonationReceiptCredentialRedemptionJobQueue {
             isBoost: true,
             amount: amount.value,
             currencyCode: amount.currencyCode,
-            boostPaymentIntentID: boostPaymentIntentID
+            boostPaymentIntentID: boostPaymentIntentID,
         )
 
-        jobRecord.anyInsert(transaction: SDSDB.shimOnlyBridge(tx))
+        jobRecord.anyInsert(transaction: tx)
 
         return jobRecord
     }
@@ -141,7 +141,7 @@ public class DonationReceiptCredentialRedemptionJobQueue {
         targetSubscriptionLevel: UInt,
         priorSubscriptionLevel: UInt?,
         isNewSubscription: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> DonationReceiptCredentialRedemptionJobRecord {
         logger.info("Adding a subscription redemption job.")
 
@@ -157,23 +157,23 @@ public class DonationReceiptCredentialRedemptionJobQueue {
             isBoost: false,
             amount: nil,
             currencyCode: nil,
-            boostPaymentIntentID: String() // Unused
+            boostPaymentIntentID: String(), // Unused
         )
 
-        jobRecord.anyInsert(transaction: SDSDB.shimOnlyBridge(tx))
+        jobRecord.anyInsert(transaction: tx)
 
         return jobRecord
     }
 
     public func runRedemptionJob(
-        jobRecord: DonationReceiptCredentialRedemptionJobRecord
+        jobRecord: DonationReceiptCredentialRedemptionJobRecord,
     ) async throws {
         logger.info("Running redemption job.")
 
         try await withCheckedThrowingContinuation { continuation in
             self.jobQueueRunner.addPersistedJob(
                 jobRecord,
-                runner: self.jobRunnerFactory.buildRunner(continuation: continuation)
+                runner: self.jobRunnerFactory.buildRunner(continuation: continuation),
             )
         }
     }
@@ -207,17 +207,11 @@ struct DonationReceiptCredentialRedemptionJobFinder {
         """
         let arguments: StatementArguments = [
             SDSRecordType.receiptCredentialRedemptionJobRecord.rawValue,
-            subscriberID
+            subscriberID,
         ]
 
-        do {
+        return failIfThrows {
             return try Bool.fetchOne(tx.database, sql: sql, arguments: arguments) ?? false
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFail("Unable to find job: \(error.grdbErrorForLogging)")
         }
     }
 }
@@ -276,6 +270,7 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
     private let donationReceiptCredentialResultStore: DonationReceiptCredentialResultStore
     private let networkManager: NetworkManager
     private let profileManager: ProfileManager
+    private let receiptCredentialManager: ReceiptCredentialManager
     private let tsAccountManager: TSAccountManager
 
     private var logger: PrefixedLogger = .donations
@@ -297,6 +292,11 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
         self.donationReceiptCredentialResultStore = donationReceiptCredentialResultStore
         self.networkManager = networkManager
         self.profileManager = profileManager
+        self.receiptCredentialManager = ReceiptCredentialManager(
+            dateProvider: dateProvider,
+            logger: logger,
+            networkManager: networkManager,
+        )
         self.tsAccountManager = tsAccountManager
     }
 
@@ -311,7 +311,7 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
             subscriberId: Data,
             targetSubscriptionLevel: UInt,
             priorSubscriptionLevel: UInt,
-            isNewSubscription: Bool
+            isNewSubscription: Bool,
         )
 
         var receiptCredentialResultMode: DonationReceiptCredentialResultStore.Mode {
@@ -354,7 +354,7 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
 
     private func retryModeIfStillProcessing(
         paymentType: PaymentType,
-        paymentMethod: DonationPaymentMethod?
+        paymentMethod: DonationPaymentMethod?,
     ) -> RetryMode {
         switch paymentMethod {
         case nil, .applePay, .creditOrDebitCard, .paypal:
@@ -378,18 +378,14 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
 
         return OWSOperation.retryIntervalForExponentialBackoff(
             failureCount: transientFailureCount,
-            maxAverageBackoff: .day
+            maxAverageBackoff: .day,
         )
-    }
-
-    private func timeIntervalSince(_ timestampMs: UInt64) -> TimeInterval {
-        return Date().timeIntervalSince(Date(millisecondsSince1970: timestampMs))
     }
 
     private func sepaRetryDelay(configuration: Configuration) -> TimeInterval? {
         switch retryModeIfStillProcessing(
             paymentType: configuration.paymentType,
-            paymentMethod: configuration.paymentMethod
+            paymentMethod: configuration.paymentMethod,
         ) {
         case .exponential:
             return nil
@@ -400,19 +396,22 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
         let priorError = db.read(block: { tx -> DonationReceiptCredentialRequestError? in
             return donationReceiptCredentialResultStore.getRequestError(
                 errorMode: configuration.paymentType.receiptCredentialResultMode,
-                tx: tx
+                tx: tx,
             )
         })
         guard let priorError, priorError.errorCode == .paymentStillProcessing else {
             return nil
         }
-        let delay = Constants.sepaRetryInterval - timeIntervalSince(priorError.timestampMs)
+
+        let nextAttemptDate = priorError.creationDate.addingTimeInterval(Constants.sepaRetryInterval)
+        let delay = nextAttemptDate.timeIntervalSince(dateProvider())
         guard delay > 0 else {
             return nil
         }
+
         owsAssertDebug(
             priorError.paymentMethod == .sepa || priorError.paymentMethod == .ideal,
-            logger: logger
+            logger: logger,
         )
         return delay
     }
@@ -441,10 +440,10 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
         }
 
         let receiptCredentialRequestContext = try ReceiptCredentialRequestContext(
-            contents: jobRecord.receiptCredentialRequestContext
+            contents: jobRecord.receiptCredentialRequestContext,
         )
         let receiptCredentialRequest = try ReceiptCredentialRequest(
-            contents: jobRecord.receiptCredentialRequest
+            contents: jobRecord.receiptCredentialRequest,
         )
 
         let paymentType: PaymentType
@@ -457,14 +456,14 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
             }
             paymentType = .oneTimeBoost(
                 paymentIntentId: jobRecord.boostPaymentIntentID,
-                amount: FiatMoney(currencyCode: currencyCode, value: value)
+                amount: FiatMoney(currencyCode: currencyCode, value: value),
             )
         } else {
             paymentType = .recurringSubscription(
                 subscriberId: jobRecord.subscriberID,
                 targetSubscriptionLevel: jobRecord.targetSubscriptionLevel,
                 priorSubscriptionLevel: jobRecord.priorSubscriptionLevel,
-                isNewSubscription: jobRecord.isNewSubscription
+                isNewSubscription: jobRecord.isNewSubscription,
             )
         }
 
@@ -474,13 +473,13 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
             paymentType: paymentType,
             receiptCredentialRequest: receiptCredentialRequest,
             receiptCredentialRequestContext: receiptCredentialRequestContext,
-            receiptCredentialPresentation: try jobRecord.getReceiptCredentialPresentation()
+            receiptCredentialPresentation: try jobRecord.getReceiptCredentialPresentation(),
         )
     }
 
     // MARK: - Running
 
-    func runJobAttempt(_ jobRecord: DonationReceiptCredentialRedemptionJobRecord) async -> JobAttemptResult {
+    func runJobAttempt(_ jobRecord: DonationReceiptCredentialRedemptionJobRecord) async -> JobAttemptResult<Void> {
         do {
             return try await _runJobAttempt(jobRecord)
         } catch {
@@ -488,7 +487,7 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
                 // In practice, the only retryable errors are network failures.
                 owsAssertDebug(
                     error.isNetworkFailureOrTimeout,
-                    logger: logger
+                    logger: logger,
                 )
                 return .retryAfter(incrementExponentialRetryDelay())
             }
@@ -500,7 +499,7 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
         }
     }
 
-    func didFinishJob(_ jobRecordId: JobRecord.RowId, result: JobResult) async {
+    func didFinishJob(_ jobRecordId: JobRecord.RowId, result: JobResult<Void>) async {
         switch result.ranSuccessfullyOrError {
         case .success:
             logger.info("Redemption job succeeded")
@@ -512,7 +511,7 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
         }
     }
 
-    private func _runJobAttempt(_ jobRecord: DonationReceiptCredentialRedemptionJobRecord) async throws -> JobAttemptResult {
+    private func _runJobAttempt(_ jobRecord: DonationReceiptCredentialRedemptionJobRecord) async throws -> JobAttemptResult<Void> {
         // First, load a bunch of state that *could* fail. If it does, the
         // operation can't ever succeed, so we throw it away.
         let configuration = try parseJobRecord(jobRecord)
@@ -520,20 +519,11 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
         // Now that we know what type of job we are, suffix the logger.
         logger = logger.suffixed(with: "[\(configuration.paymentType)]")
 
-        let (
-            registrationState,
-            badgesSnapshotBeforeJob,
-        ) = db.read { tx in
-            return (
-                tsAccountManager.registrationState(tx: tx),
-                // In order to properly show the "you have a new badge" UI after this job
-                // succeeds, we need to know what badges we had beforehand.
-                ProfileBadgesSnapshot.forLocalProfile(profileManager: profileManager, tx: tx),
-            )
-        }
-
-        guard registrationState.isRegistered else {
-            throw OWSAssertionError("Attempting to redeem a donation, but not registered!")
+        _ = try tsAccountManager.registeredStateWithMaybeSneakyTransaction()
+        let badgesSnapshotBeforeJob = db.read { tx in
+            // In order to properly show the "you have a new badge" UI after this job
+            // succeeds, we need to know what badges we had beforehand.
+            return ProfileBadgesSnapshot.forLocalProfile(profileManager: profileManager, tx: tx)
         }
 
         logger.info("Running job.")
@@ -573,9 +563,9 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
                     jobRecord: jobRecord,
                     configuration: configuration,
                     badge: badge,
-                    amount: amount
+                    amount: amount,
                 )
-            } catch let error as DonationSubscriptionManager.KnownReceiptCredentialRequestError {
+            } catch let error as ReceiptCredentialRequestError {
                 let errorCode = error.errorCode
                 let chargeFailureCodeIfPaymentFailed = error.chargeFailureCodeIfPaymentFailed
                 let paymentMethod = configuration.paymentMethod
@@ -597,7 +587,7 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
                         configuration: configuration,
                         badge: badge,
                         amount: amount,
-                        tx: tx
+                        tx: tx,
                     )
 
                     switch errorCode {
@@ -606,7 +596,7 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
 
                         switch retryModeIfStillProcessing(
                             paymentType: paymentType,
-                            paymentMethod: paymentMethod
+                            paymentMethod: paymentMethod,
                         ) {
                         case .exponential:
                             return .retryAfter(incrementExponentialRetryDelay())
@@ -614,10 +604,10 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
                             return .retryAfter(Constants.sepaRetryInterval, canRetryEarly: false)
                         }
                     case .paymentFailed,
-                            .localValidationFailed,
-                            .serverValidationFailed,
-                            .paymentNotFound,
-                            .paymentIntentRedeemed:
+                         .localValidationFailed,
+                         .serverValidationFailed,
+                         .paymentNotFound,
+                         .paymentIntentRedeemed:
                         logger.warn("Couldn't fetch credential; aborting: \(errorCode)")
                         jobRecord.anyRemove(transaction: tx)
                         return .finished(.failure(error))
@@ -627,7 +617,7 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
         }
 
         try await DonationSubscriptionManager.redeemReceiptCredentialPresentation(
-            receiptCredentialPresentation: receiptCredentialPresentation
+            receiptCredentialPresentation: receiptCredentialPresentation,
         )
 
         return await db.awaitableWrite { tx in
@@ -653,22 +643,22 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
 
             self.donationReceiptCredentialResultStore.clearRequestError(
                 errorMode: configuration.paymentType.receiptCredentialResultMode,
-                tx: tx
+                tx: tx,
             )
             self.donationReceiptCredentialResultStore.setRedemptionSuccess(
                 success: DonationReceiptCredentialRedemptionSuccess(
                     badgesSnapshotBeforeJob: badgesSnapshotBeforeJob,
                     badge: badge,
-                    paymentMethod: configuration.paymentMethod
+                    paymentMethod: configuration.paymentMethod,
                 ),
                 successMode: configuration.paymentType.receiptCredentialResultMode,
-                tx: tx
+                tx: tx,
             )
 
             DonationReceipt(
                 receiptType: configuration.paymentType.donationReceiptType,
                 timestamp: Date(),
-                amount: amount
+                amount: amount,
             ).anyInsert(transaction: tx)
 
             jobRecord.anyRemove(transaction: tx)
@@ -708,25 +698,31 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
         jobRecord: DonationReceiptCredentialRedemptionJobRecord,
         configuration: Configuration,
         badge: ProfileBadge,
-        amount: FiatMoney
+        amount: FiatMoney,
     ) async throws -> ReceiptCredentialPresentation {
         let receiptCredential: ReceiptCredential
         switch configuration.paymentType {
         case let .oneTimeBoost(paymentIntentId: paymentIntentId, amount: _):
             logger.info("Durable job requesting receipt for boost")
-            receiptCredential = try await DonationSubscriptionManager.requestReceiptCredential(
-                boostPaymentIntentId: paymentIntentId,
-                expectedBadgeLevel: .boostBadge,
-                paymentProcessor: configuration.paymentProcessor,
+            receiptCredential = try await receiptCredentialManager.requestReceiptCredential(
+                via: OWSRequestFactory.boostReceiptCredentials(
+                    paymentIntentID: paymentIntentId,
+                    paymentProcessor: configuration.paymentProcessor,
+                    receiptCredentialRequest: configuration.receiptCredentialRequest,
+                ),
+                isValidReceiptLevelPredicate: { receiptLevel in
+                    return receiptLevel == OneTimeBadgeLevel.boostBadge.rawValue
+                },
                 context: configuration.receiptCredentialRequestContext,
-                request: configuration.receiptCredentialRequest,
-                logger: logger
             )
 
         case let .recurringSubscription(subscriberId, targetSubscriptionLevel, priorSubscriptionLevel, _):
             logger.info("Durable job requesting receipt for subscription")
-            receiptCredential = try await DonationSubscriptionManager.requestReceiptCredential(
-                subscriberId: subscriberId,
+            receiptCredential = try await receiptCredentialManager.requestReceiptCredential(
+                via: OWSRequestFactory.subscriptionReceiptCredentialsRequest(
+                    subscriberID: subscriberId,
+                    receiptCredentialRequest: configuration.receiptCredentialRequest,
+                ),
                 isValidReceiptLevelPredicate: { receiptLevel -> Bool in
                     // Validate that receipt credential level matches requested
                     // level, or prior subscription level.
@@ -739,8 +735,6 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
                     return false
                 },
                 context: configuration.receiptCredentialRequestContext,
-                request: configuration.receiptCredentialRequest,
-                logger: logger
             )
         }
 
@@ -748,38 +742,32 @@ private class DonationReceiptCredentialRedemptionJobRunner: JobRunner {
             jobRecord.setReceiptCredential(receiptCredential, tx: tx)
         }
 
-        return try DonationSubscriptionManager.generateReceiptCredentialPresentation(
-            receiptCredential: receiptCredential
+        return try ReceiptCredentialManager.generateReceiptCredentialPresentation(
+            receiptCredential: receiptCredential,
         )
     }
 
     private func persistErrorCode(
-        errorCode: DonationReceiptCredentialRequestError.ErrorCode,
+        errorCode: ReceiptCredentialRequestError.ErrorCode,
         chargeFailureCodeIfPaymentFailed: String?,
         configuration: Configuration,
         badge: ProfileBadge,
         amount: FiatMoney,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
-        let receiptCredentialRequestError: DonationReceiptCredentialRequestError = {
-            if let paymentMethod = configuration.paymentMethod {
-                return DonationReceiptCredentialRequestError(
-                    errorCode: errorCode,
-                    chargeFailureCodeIfPaymentFailed: chargeFailureCodeIfPaymentFailed,
-                    badge: badge,
-                    amount: amount,
-                    paymentMethod: paymentMethod
-                )
-            } else {
-                logger.warn("Building legacy error, job record missing fields!")
-                return DonationReceiptCredentialRequestError(legacyErrorCode: errorCode)
-            }
-        }()
+        let receiptCredentialRequestError = DonationReceiptCredentialRequestError(
+            errorCode: errorCode,
+            chargeFailureCodeIfPaymentFailed: chargeFailureCodeIfPaymentFailed,
+            badge: badge,
+            amount: amount,
+            paymentMethod: configuration.paymentMethod,
+            now: dateProvider(),
+        )
 
         donationReceiptCredentialResultStore.setRequestError(
             error: receiptCredentialRequestError,
             errorMode: configuration.paymentType.receiptCredentialResultMode,
-            tx: tx
+            tx: tx,
         )
     }
 }

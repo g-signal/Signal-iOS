@@ -10,8 +10,14 @@ extension ChatListViewController: CameraFirstCaptureDelegate {
 
     @objc
     func showCameraView() {
+        presentCameraView()
+    }
+
+    func presentCameraView(completion: ((UINavigationController) -> Void)? = nil) {
         // Dismiss any message actions if they're presented
         conversationSplitViewController?.selectedConversationViewController?.dismissMessageContextMenu(animated: true)
+
+        let attachmentLimits = OutgoingAttachmentLimits.currentLimits()
 
         ows_askForCameraPermissions { cameraAccessGranted in
             guard cameraAccessGranted else {
@@ -25,7 +31,11 @@ extension ChatListViewController: CameraFirstCaptureDelegate {
                     Logger.warn("Proceeding with no microphone access.")
                 }
 
-                let cameraModal = CameraFirstCaptureNavigationController.cameraFirstModal(hasQuotedReplyDraft: false, delegate: self)
+                let cameraModal = CameraFirstCaptureNavigationController.cameraFirstModal(
+                    hasQuotedReplyDraft: false,
+                    attachmentLimits: attachmentLimits,
+                    delegate: self,
+                )
                 cameraModal.modalPresentationStyle = .overFullScreen
 
                 // Defer hiding status bar until modal is fully onscreen
@@ -39,6 +49,7 @@ extension ChatListViewController: CameraFirstCaptureDelegate {
                         cameraModal.modalPresentationCapturesStatusBarAppearance = true
                         cameraModal.setNeedsStatusBarAppearanceUpdate()
                     }
+                    completion?(cameraModal)
                 })
             }
         }

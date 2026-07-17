@@ -7,15 +7,31 @@ extension BackupArchive {
     public struct InteractionUniqueId: BackupArchive.LoggableId, Hashable {
         let value: String
         let timestamp: UInt64
+        let isPoll: Bool
 
         public init(interaction: TSInteraction) {
             self.value = interaction.uniqueId
             self.timestamp = interaction.timestamp
+            self.isPoll = (interaction as? TSMessage)?.isPoll ?? false
+        }
+
+        /// Constructs an ID for an `InteractionRecord` from which constructing
+        /// a `TSInteraction` fails.
+        public init(invalidInteractionRecord: InteractionRecord) {
+            self.value = invalidInteractionRecord.uniqueId
+            self.timestamp = invalidInteractionRecord.timestamp
+            self.isPoll = invalidInteractionRecord.isPoll ?? false
         }
 
         // MARK: BackupArchive.LoggableId
 
-        public var typeLogString: String { "TSInteraction" }
+        public var typeLogString: String {
+            if isPoll {
+                return "TSInteraction_Poll"
+            }
+            return "TSInteraction"
+        }
+
         public var idLogString: String { "\(value):\(timestamp)" }
     }
 }
@@ -63,6 +79,8 @@ extension BackupArchive {
             pastRevisions.append(pastRevision)
         }
 
+        private(set) var pinMessageDetails: PinMessageDetails?
+
         // MARK: -
 
         /// Returns whether the `chatItemType` of the latest or any prior
@@ -85,7 +103,7 @@ extension BackupArchive {
 
         // MARK: - Construction
 
-        public enum AuthorAddress {
+        enum AuthorAddress {
             case localUser
             case contact(BackupArchive.ContactAddress)
         }
@@ -99,7 +117,8 @@ extension BackupArchive {
             isSealedSender: Bool,
             chatItemType: ChatItemType,
             isSmsPreviouslyRestoredFromBackup: Bool,
-            pastRevisions: [InteractionArchiveDetails]
+            pastRevisions: [InteractionArchiveDetails],
+            pinMessageDetails: PinMessageDetails?,
         ) {
             self.author = author
             self.directionalDetails = directionalDetails
@@ -110,6 +129,7 @@ extension BackupArchive {
             self.chatItemType = chatItemType
             self.isSmsPreviouslyRestoredFromBackup = isSmsPreviouslyRestoredFromBackup
             self.pastRevisions = pastRevisions
+            self.pinMessageDetails = pinMessageDetails
         }
 
         static func validateAndBuild(
@@ -124,7 +144,8 @@ extension BackupArchive {
             isSmsPreviouslyRestoredFromBackup: Bool,
             pastRevisions: [InteractionArchiveDetails] = [],
             threadInfo: BackupArchive.ChatArchivingContext.CachedThreadInfo,
-            context: BackupArchive.RecipientArchivingContext
+            pinMessageDetails: PinMessageDetails?,
+            context: BackupArchive.RecipientArchivingContext,
         ) -> BackupArchive.ArchiveInteractionResult<Self> {
             var authorRecipientId: RecipientId
             var author = author
@@ -135,7 +156,7 @@ extension BackupArchive {
                 guard let recipientId = context[.contact(contactAddress)] else {
                     return .messageFailure([.archiveFrameError(
                         .referencedRecipientIdMissing(.contact(contactAddress)),
-                        interactionUniqueId
+                        interactionUniqueId,
                     )])
                 }
                 authorRecipientId = recipientId
@@ -176,7 +197,7 @@ extension BackupArchive {
                     // Add a partial error so we log these.
                     partialErrors.append(.archiveFrameError(
                         .messageFromOtherRecipientInContactThread,
-                        interactionUniqueId
+                        interactionUniqueId,
                     ))
                 }
             }
@@ -200,7 +221,8 @@ extension BackupArchive {
                 isSealedSender: isSealedSender,
                 chatItemType: chatItemType,
                 isSmsPreviouslyRestoredFromBackup: isSmsPreviouslyRestoredFromBackup,
-                pastRevisions: pastRevisions
+                pastRevisions: pastRevisions,
+                pinMessageDetails: pinMessageDetails,
             )
             if partialErrors.isEmpty {
                 return .success(details)
@@ -318,6 +340,9 @@ extension BackupArchive {
         /// own stories; these replies would go into the Note To Self thread.
         /// We just drop these on export as they're meant to be impossible.
         case directStoryReplyInNoteToSelf
+
+        // TODO: remove once pinned messages are implemented in backups
+        case pinnedMessage
     }
 
     enum ArchiveInteractionResult<Component> {
@@ -394,7 +419,7 @@ extension BackupArchive.ArchiveInteractionResult {
     /// }
     func bubbleUp<ErrorComponentType>(
         _ errorComponentType: ErrorComponentType.Type = Component.self,
-        partialErrors: inout [BackupArchive.ArchiveFrameError<BackupArchive.InteractionUniqueId>]
+        partialErrors: inout [BackupArchive.ArchiveFrameError<BackupArchive.InteractionUniqueId>],
     ) -> BubbleUp<Component, ErrorComponentType> {
         switch self {
         case .success(let value):
@@ -408,6 +433,7 @@ extension BackupArchive.ArchiveInteractionResult {
         // These types are just bubbled up as-is
         case .skippableInteraction(let skippableInteraction):
             return .bubbleUpError(.skippableInteraction(skippableInteraction))
+
         case .completeFailure(let error):
             return .bubbleUpError(.completeFailure(error))
 
@@ -457,7 +483,7 @@ extension BackupArchive.RestoreInteractionResult {
     /// }
     func bubbleUp<ErrorComponentType>(
         _ errorComponentType: ErrorComponentType.Type = Component.self,
-        partialErrors: inout [BackupArchive.RestoreFrameError<BackupArchive.ChatItemId>]
+        partialErrors: inout [BackupArchive.RestoreFrameError<BackupArchive.ChatItemId>],
     ) -> BubbleUp<Component, ErrorComponentType> {
         switch self {
         case .success(let component):

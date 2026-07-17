@@ -15,27 +15,26 @@ public class NewStoryHeaderView: UIStackView {
     public init(
         title: String,
         showsNewStoryButton: Bool = true,
-        delegate: NewStoryHeaderDelegate
+        delegate: NewStoryHeaderDelegate,
     ) {
         self.delegate = delegate
 
         super.init(frame: .zero)
 
-        addBackgroundView(withBackgroundColor: delegate.tableBackgroundColor)
         axis = .horizontal
         isLayoutMarginsRelativeArrangement = true
         layoutMargins = .init(
-            top: (delegate.defaultSpacingBetweenSections ?? 0) + 12,
+            top: 11,
             leading: OWSTableViewController2.cellHInnerMargin * 0.5,
-            bottom: 10,
-            trailing: 0
+            bottom: 14,
+            trailing: 0,
         )
         layoutMargins.left += delegate.tableView.safeAreaInsets.left
         layoutMargins.right += delegate.tableView.safeAreaInsets.right
 
-        let textView = LinkingTextView()
-        textView.textColor = Theme.isDarkThemeEnabled ? UIColor.ows_gray05 : UIColor.ows_gray90
-        textView.font = UIFont.dynamicTypeBodyClamped.semibold()
+        let textView = UILabel()
+        textView.textColor = UIColor.Signal.label
+        textView.font = UIFont.dynamicTypeHeadlineClamped
         textView.text = title
 
         addArrangedSubview(textView)
@@ -45,16 +44,16 @@ public class NewStoryHeaderView: UIStackView {
         let newStoryButton = OWSFlatButton.button(
             title: OWSLocalizedString(
                 "NEW_STORY_HEADER_VIEW_ADD_NEW_STORY_BUTTON",
-                comment: "table section header button to add a new story"
+                comment: "table section header button to add a new story",
             ),
             font: UIFont.dynamicTypeFootnoteClamped.semibold(),
             titleColor: Theme.isDarkThemeEnabled ? UIColor.ows_gray05 : UIColor.ows_gray90,
             backgroundColor: delegate.cellBackgroundColor,
             target: self,
-            selector: #selector(didTapNewStory)
+            selector: #selector(didTapNewStory),
         )
         newStoryButton.setImage(UIImage(imageLiteralResourceName: "plus-extra-small"))
-        newStoryButton.contentEdgeInsets = UIEdgeInsets(top: 5, leading: 12, bottom: 5, trailing: 18)
+        newStoryButton.contentEdgeInsets = UIEdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 18)
         newStoryButton.titleEdgeInsets = UIEdgeInsets(top: 0, leading: 6, bottom: 0, trailing: -6)
         newStoryButton.tintColor = Theme.primaryIconColor
         newStoryButton.clipsToBounds = true
@@ -78,7 +77,7 @@ public class NewStoryHeaderView: UIStackView {
     @objc
     private func didTapNewStory() {
         let vc = NewStorySheet { [weak self] items in
-            guard let self = self else { return }
+            guard let self else { return }
             self.delegate.newStoryHeaderView(self, didCreateNewStoryItems: items)
         }
         delegate.present(vc, animated: true)

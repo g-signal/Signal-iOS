@@ -70,16 +70,18 @@ public enum ThemeIcon: UInt {
     case checkCircleFill
     case xCircle
     case xBold
+    case x26
     case checkmark
     case checkmarkBold
     case circle
     case arrowDown
     case arrowUp
+    case arrowUp30
     case arrowRight
     case chevronUp
     case chevronDown
-    case maximize
-    case minimize
+    case maximize16
+    case minimize16
     case refresh
     case spam
     case official
@@ -87,6 +89,7 @@ public enum ThemeIcon: UInt {
     case qrCodeLight
     case threadCompact
     case info
+    case ellipse
 
     case buttonCamera
     case buttonMicrophone
@@ -185,6 +188,13 @@ public enum ThemeIcon: UInt {
     case raiseHand
 
     case pollStop
+    case pollStopLight
+    case poll
+
+    case pin
+    case unpin
+
+    case memberLabel
 }
 
 // MARK: -
@@ -211,7 +221,7 @@ public extension Theme {
 
     class func iconName(_ icon: ThemeIcon, isDarkThemeEnabled: Bool) -> String {
         switch icon {
-            // App Settings
+        // App Settings
         case .settingsAccount:
             return "person-circle"
         case .settingsLinkedDevices:
@@ -240,8 +250,7 @@ public extension Theme {
             return "invite"
         case .settingsAdvanced:
             return "internal"
-
-            // Donate
+        // Donate
         case .donateManageSubscription:
             return "person"
         case .donateBadges:
@@ -250,8 +259,7 @@ public extension Theme {
             return "gift"
         case .donateReceipts:
             return "receipt"
-
-            // Profile
+        // Profile
         case .profileName:
             return "person"
         case .profileUsername:
@@ -260,8 +268,7 @@ public extension Theme {
             return "edit"
         case .profileBadges:
             return "badge-multi"
-
-            // Group & Contact Info
+        // Group & Contact Info
         case .chatSettingsTimerOn:
             return "timer"
         case .chatSettingsTimerOff:
@@ -324,8 +331,7 @@ public extension Theme {
             return "key-slash"
         case .groupMemberAddToGroup:
             return "plus-circle"
-
-            // Generic
+        // Generic
         case .genericGroup:
             return "group"
         case .genericStories:
@@ -340,6 +346,8 @@ public extension Theme {
             return "x-circle"
         case .xBold:
             return "x-bold"
+        case .x26:
+            return "x-26"
         case .checkmark:
             return "check"
         case .checkmarkBold:
@@ -350,22 +358,24 @@ public extension Theme {
             return "arrow-down"
         case .arrowUp:
             return "arrow-up"
+        case .arrowUp30:
+            return "arrow-up-30"
         case .arrowRight:
             return "arrow-right"
         case .chevronUp:
             return "chevron-up"
         case .chevronDown:
             return "chevron-down"
-        case .maximize:
-            return "maximize"
-        case .minimize:
-            return "minimize"
+        case .maximize16:
+            return "maximize-compact"
+        case .minimize16:
+            return "minimize-compact"
         case .refresh:
             return "refresh"
         case .spam:
             return "spam"
         case .official:
-            return isDarkThemeEnabled ? "official-dark" : "official"
+            return "official"
         case .qrCode:
             return "qr_code"
         case .qrCodeLight:
@@ -374,8 +384,9 @@ public extension Theme {
             return isDarkThemeEnabled ? "thread-compact-fill" : "thread-compact"
         case .info:
             return "info"
-
-            // Buttons (24 dp)
+        case .ellipse:
+            return "ellipse-94"
+        // Buttons (24 dp)
         case .buttonCamera:
             return "camera"
         case .buttonMicrophone:
@@ -418,8 +429,7 @@ public extension Theme {
             return "refresh"
         case .buttonLink:
             return "link"
-
-            // Context Menus (light version of icons)
+        // Context Menus (light version of icons)
         case .contextMenuSave:
             return "save-light"
         case .contextMenuDelete:
@@ -458,8 +468,7 @@ public extension Theme {
             return "video-light"
         case .contextMenuMessage:
             return "chat-light"
-
-            // Empty chat list
+        // Empty chat list
         case .composeNewGroupLarge:
             return "group-resizable"
         case .composeFindByUsernameLarge:
@@ -468,12 +477,10 @@ public extension Theme {
             return "number-resizable"
         case .composeInviteLarge:
             return "invite-resizable"
-
-            // Error icon
+        // Error icon
         case .errorCircle:
             return "error-circle"
-
-            // Compact 16 dp icons
+        // Compact 16 dp icons
         case .check16:
             return "check-compact"
         case .compose16:
@@ -495,7 +502,7 @@ public extension Theme {
         case .memberDeclined16:
             return "person-x-compact"
         case .memberRemove16:
-            return  "person-minus-compact"
+            return "person-minus-compact"
         case .photo16:
             return "photo-compact"
         case .phone16:
@@ -520,7 +527,6 @@ public extension Theme {
             return "merge-compact"
         case .link16:
             return "link-compact"
-
         case .transfer:
             return "transfer-\(UIDevice.current.isIPad ? "ipad" : "phone")-outline-60-\(isDarkThemeEnabled ? "dark" : "light")"
         case .register:
@@ -529,7 +535,6 @@ public extension Theme {
             return "backup"
         case .noDevice:
             return "device-phone-slash"
-
         case .emojiActivity:
             return "emoji-activity"
         case .emojiAnimal:
@@ -550,21 +555,27 @@ public extension Theme {
             return "recent-20"
         case .emojiSettings:
             return "settings"
-
         case .sealedSenderIndicator:
             return "unidentified-delivery-outline-20"
         case .empty:
             return "empty-24"
-
         case .profilePlaceholder:
             return isDarkThemeEnabled ? "profile-placeholder-dark-56" : "profile-placeholder-56"
-
         case .raiseHand:
             return "raise_hand"
-
-            // Polls
+        // Polls
         case .pollStop:
             return "pollstop"
+        case .pollStopLight:
+            return "pollStop-light"
+        case .poll:
+            return "poll"
+        case .pin:
+            return "pin"
+        case .unpin:
+            return "pin-slash"
+        case .memberLabel:
+            return "tag"
         }
     }
 }

@@ -14,9 +14,10 @@ class MyStoriesViewController: OWSViewController, FailedStorySendDisplayControll
     private var items = OrderedDictionary<String, [OutgoingStoryItem]>() {
         didSet { emptyStateLabel.isHidden = items.orderedKeys.count > 0 }
     }
+
     private lazy var emptyStateLabel: UILabel = {
         let label = UILabel()
-        label.textColor = Theme.secondaryTextAndIconColor
+        label.textColor = .Signal.secondaryLabel
         label.font = .dynamicTypeBody
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -31,28 +32,36 @@ class MyStoriesViewController: OWSViewController, FailedStorySendDisplayControll
 
     private let spoilerState: SpoilerRenderState
 
-    public init(spoilerState: SpoilerRenderState) {
+    init(spoilerState: SpoilerRenderState) {
         self.spoilerState = spoilerState
         super.init()
         hidesBottomBarWhenPushed = true
         DependenciesBridge.shared.databaseChangeObserver.appendDatabaseChangeDelegate(self)
     }
 
-    override func loadView() {
-        view = tableView
-        tableView.delegate = self
-        tableView.dataSource = self
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .Signal.background
+        tableView.backgroundColor = .Signal.background
+
         title = OWSLocalizedString("MY_STORIES_TITLE", comment: "Title for the 'My Stories' view")
 
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.register(SentStoryCell.self, forCellReuseIdentifier: SentStoryCell.reuseIdentifier)
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 116
+        tableView.backgroundColor = .Signal.background
+        view.addSubview(tableView)
+        tableView.autoPinHeight(toHeightOf: view)
+        tableViewHorizontalEdgeConstraints = [
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+        ]
+        NSLayoutConstraint.activate(tableViewHorizontalEdgeConstraints)
+        updateTableViewPaddingIfNeeded()
 
         reloadStories()
 
@@ -60,29 +69,46 @@ class MyStoriesViewController: OWSViewController, FailedStorySendDisplayControll
             title: OWSLocalizedString("STORY_PRIVACY_SETTINGS", comment: "Button to access the story privacy settings menu"),
             style: .plain,
             target: self,
-            action: #selector(showPrivacySettings)
+            action: #selector(showPrivacySettings),
         )
-
-        applyTheme()
     }
 
-    override func themeDidChange() {
-        super.themeDidChange()
-        applyTheme()
-    }
-
-    private func applyTheme() {
-        emptyStateLabel.textColor = Theme.secondaryTextAndIconColor
-
-        tableView.reloadData()
-
-        view.backgroundColor = Theme.backgroundColor
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateTableViewPaddingIfNeeded()
     }
 
     @objc
     private func showPrivacySettings() {
         let vc = StoryPrivacySettingsViewController()
         presentFormSheet(OWSNavigationController(rootViewController: vc), animated: true)
+    }
+
+    /// Set to `true` when list is displayed in split view controller's "sidebar" on iOS 26 and later.
+    /// Setting this to `true` would add an extra padding on both sides of the table view.
+    /// This value is also passed down to table view cells that make their own layout choices based on the value.
+    private var useSidebarStoryListCellAppearance = false {
+        didSet {
+            guard oldValue != useSidebarStoryListCellAppearance else { return }
+            tableViewHorizontalEdgeConstraints.forEach {
+                $0.constant = useSidebarStoryListCellAppearance ? 16 : 0
+            }
+            tableView.reloadData()
+        }
+    }
+
+    private var tableViewHorizontalEdgeConstraints: [NSLayoutConstraint] = []
+
+    /// iOS 26+: checks if this VC is displayed in the collapsed split view controller and updates `useSidebarCallListCellAppearance` accordingly.
+    /// Does nothing on prior iOS versions.
+    private func updateTableViewPaddingIfNeeded() {
+        guard #available(iOS 26, *) else { return }
+
+        if let splitViewController, !splitViewController.isCollapsed {
+            useSidebarStoryListCellAppearance = true
+        } else {
+            useSidebarStoryListCellAppearance = false
+        }
     }
 
     private func reloadStories() {
@@ -103,7 +129,7 @@ class MyStoriesViewController: OWSViewController, FailedStorySendDisplayControll
             if (rhs as? TSPrivateStoryThread)?.isMyStory == true { return false }
             if lhs.lastSentStoryTimestamp == rhs.lastSentStoryTimestamp {
                 return StoryManager.storyName(for: lhs).localizedCaseInsensitiveCompare(
-                    StoryManager.storyName(for: rhs)
+                    StoryManager.storyName(for: rhs),
                 ) == .orderedAscending
             }
             return (lhs.lastSentStoryTimestamp?.uint64Value ?? 0) > (rhs.lastSentStoryTimestamp?.uint64Value ?? 0)
@@ -145,7 +171,7 @@ extension MyStoriesViewController: UITableViewDelegate {
             spoilerState: spoilerState,
             viewableContexts: items.orderedKeys.compactMap { items[$0]?.first?.thread.storyContext },
             loadMessage: item.message,
-            onlyRenderMyStories: true
+            onlyRenderMyStories: true,
         )
         vc.contextDataSource = self
         present(vc, animated: true)
@@ -170,7 +196,7 @@ extension MyStoriesViewController: UITableViewDelegate {
             let item = item(for: indexPath),
             let action = contextMenuGenerator.deleteTableRowContextualAction(
                 for: item.message,
-                thread: item.thread
+                thread: item.thread,
             )
         else {
             return nil
@@ -195,7 +221,7 @@ extension MyStoriesViewController: UITableViewDelegate {
                 },
                 hideSaveAction: true,
                 onlyRenderMyStories: true,
-                transaction: transaction
+                transaction: transaction,
             )
         }
 
@@ -233,16 +259,17 @@ extension MyStoriesViewController: UITableViewDataSource {
                         // refetch the cell in case it changes out from underneath us.
                         return self?.tableView.dequeueReusableCell(withIdentifier: SentStoryCell.reuseIdentifier, for: indexPath)
                     },
-                    transaction: tx
+                    transaction: tx,
                 )
             }
         }()
 
+        cell.useSidebarAppearance = useSidebarStoryListCellAppearance
         cell.configure(
             with: item,
             spoilerState: spoilerState,
             contextMenuActions: contextMenuActions,
-            indexPath: indexPath
+            indexPath: indexPath,
         )
         return cell
     }
@@ -255,7 +282,7 @@ extension MyStoriesViewController: UITableViewDataSource {
 
         let textView = LinkingTextView()
         textView.textColor = Theme.isDarkThemeEnabled ? UIColor.ows_gray05 : UIColor.ows_gray90
-        textView.font = UIFont.dynamicTypeBodyClamped.semibold()
+        textView.font = UIFont.dynamicTypeHeadlineClamped
         textView.text = StoryManager.storyName(for: thread)
 
         var textContainerInset = OWSTableViewController2.cellOuterInsets(in: tableView)
@@ -289,17 +316,19 @@ extension MyStoriesViewController: DatabaseChangeDelegate {
 }
 
 extension MyStoriesViewController: ForwardMessageDelegate {
-    public func forwardMessageFlowDidComplete(items: [ForwardMessageItem], recipientThreads: [TSThread]) {
+    func forwardMessageFlowDidComplete(items: [ForwardMessageItem], recipientThreads: [TSThread]) {
         AssertIsOnMainThread()
 
         dismiss(animated: true) {
-            ForwardMessageViewController.finalizeForward(items: items,
-                                                         recipientThreads: recipientThreads,
-                                                         fromViewController: self)
+            ForwardMessageViewController.finalizeForward(
+                items: items,
+                recipientThreads: recipientThreads,
+                fromViewController: self,
+            )
         }
     }
 
-    public func forwardMessageFlowDidCancel() {
+    func forwardMessageFlowDidCancel() {
         dismiss(animated: true)
     }
 }
@@ -307,7 +336,7 @@ extension MyStoriesViewController: ForwardMessageDelegate {
 extension MyStoriesViewController: StoryPageViewControllerDataSource {
     func storyPageViewControllerAvailableContexts(
         _ storyPageViewController: StoryPageViewController,
-        hiddenStoryFilter: Bool?
+        hiddenStoryFilter: Bool?,
     ) -> [StoryContext] {
         return items.orderedValues.compactMap(\.first?.thread.storyContext)
     }
@@ -323,7 +352,7 @@ private struct OutgoingStoryItem {
             .init(
                 message: message,
                 attachment: .from(message, transaction: transaction),
-                thread: $0
+                thread: $0,
             )
         }
     }
@@ -332,80 +361,114 @@ private struct OutgoingStoryItem {
 class SentStoryCell: UITableViewCell {
     static let reuseIdentifier = "SentStoryCell"
 
-    private class ContextButtonContainer: UIView {
-        func setContextButton(_ contextButton: ContextMenuButton) {
-            removeAllSubviews()
-
-            addSubview(contextButton)
-            contextButton.autoPinEdgesToSuperviewEdges()
-            contextButton.layer.cornerRadius = 16
-            contextButton.clipsToBounds = true
-        }
-    }
-
     let attachmentThumbnail = UIView()
 
-    fileprivate let contentHStackView = UIStackView()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .Signal.label
+        label.font = .dynamicTypeHeadline
+        return label
+    }()
 
-    private let titleLabel = UILabel()
-    private let subtitleLabel = UILabel()
-    private let saveButton = OWSButton()
-    private let contextButtonContainer = ContextButtonContainer()
+    private let subtitleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .Signal.secondaryLabel
+        label.font = .dynamicTypeSubheadline
+        return label
+    }()
 
-    private let failedIconContainer = UIView()
-    private let failedIconView = UIImageView()
+    private lazy var saveButton: UIButton = {
+        let button = UIButton(
+            configuration: .gray(),
+            primaryAction: UIAction { [weak self] _ in
+                self?.saveAttachmentBlock()
+            },
+        )
+        button.configuration?.image = UIImage(imageLiteralResourceName: "save-20")
+        button.configuration?.contentInsets = .init(margin: 6)
+        button.configuration?.baseForegroundColor = .Signal.label
+        button.configuration?.baseBackgroundColor = .Signal.secondaryBackground
+        button.configuration?.cornerStyle = .capsule
+        return button
+    }()
+
+    private let contextButton: ContextMenuButton = {
+        let button = ContextMenuButton(empty: ())
+        button.configuration = .gray()
+        button.configuration?.image = UIImage(imageLiteralResourceName: "more-compact")
+        button.configuration?.contentInsets = .init(margin: 8)
+        button.configuration?.baseForegroundColor = .Signal.label
+        button.configuration?.baseBackgroundColor = .Signal.secondaryBackground
+        button.configuration?.cornerStyle = .capsule
+        // ContextMenuButton overrides `intrinsicContentSize` so manually specify size.
+        button.addConstraints([
+            button.widthAnchor.constraint(equalToConstant: 32),
+            button.heightAnchor.constraint(equalToConstant: 32),
+        ])
+        return button
+    }()
+
+    private lazy var failedIconContainer: UIView = {
+        let imageView = UIImageView(image: Theme.iconImage(.error16))
+        imageView.tintColor = .Signal.red
+        imageView.contentMode = .scaleAspectFit
+
+        let view = UIView()
+        view.addSubview(imageView)
+        imageView.autoPinHeightToSuperview()
+        imageView.autoPinEdge(toSuperviewEdge: .leading)
+        imageView.autoSetDimension(.width, toSize: 16)
+        view.autoSetDimension(.width, toSize: 28)
+        return view
+    }()
+
+    /// If set to `true` background in `selected` state would have rounded corners.
+    var useSidebarAppearance = false
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        backgroundColor = .clear
+        automaticallyUpdatesBackgroundConfiguration = false
 
+        let vStackView = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
+        vStackView.axis = .vertical
+        vStackView.alignment = .leading
+
+        let contentHStackView = UIStackView(
+            arrangedSubviews: [
+                attachmentThumbnail,
+                .spacer(withWidth: 16),
+                failedIconContainer,
+                vStackView,
+                .hStretchingSpacer(),
+                saveButton,
+                .spacer(withWidth: 20),
+                contextButton,
+            ],
+        )
         contentHStackView.axis = .horizontal
         contentHStackView.alignment = .center
         contentView.addSubview(contentHStackView)
         contentHStackView.autoPinEdgesToSuperviewMargins()
 
         attachmentThumbnail.autoSetDimensions(to: CGSize(width: 56, height: 84))
-        contentHStackView.addArrangedSubview(attachmentThumbnail)
-
-        contentHStackView.addArrangedSubview(.spacer(withWidth: 16))
-
-        contentHStackView.addArrangedSubview(failedIconContainer)
-        failedIconContainer.autoSetDimension(.width, toSize: 28)
-        failedIconContainer.addSubview(failedIconView)
-        failedIconView.autoPinHeightToSuperview()
-        failedIconView.autoPinEdge(toSuperviewEdge: .leading)
-        failedIconView.autoSetDimension(.width, toSize: 16)
-        failedIconView.contentMode = .scaleAspectFit
-        failedIconView.tintColor = .ows_accentRed
-
-        let vStackView = UIStackView()
-        vStackView.axis = .vertical
-        vStackView.alignment = .leading
-        contentHStackView.addArrangedSubview(vStackView)
-
-        titleLabel.font = .dynamicTypeHeadline
-
-        vStackView.addArrangedSubview(titleLabel)
-
-        subtitleLabel.font = .dynamicTypeSubheadline
-        vStackView.addArrangedSubview(subtitleLabel)
-
-        contentHStackView.addArrangedSubview(.hStretchingSpacer())
-
-        saveButton.autoSetDimensions(to: CGSize(square: 32))
-        saveButton.layer.cornerRadius = 16
-        saveButton.clipsToBounds = true
-        contentHStackView.addArrangedSubview(saveButton)
-
-        contentHStackView.addArrangedSubview(.spacer(withWidth: 20))
-
-        contextButtonContainer.autoSetDimensions(to: CGSize(square: 32))
-        contentHStackView.addArrangedSubview(contextButtonContainer)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func updateConfiguration(using state: UICellConfigurationState) {
+        var configuration = UIBackgroundConfiguration.clear()
+        if state.isSelected || state.isHighlighted {
+            configuration.backgroundColor = Theme.tableCell2SelectedBackgroundColor
+            if useSidebarAppearance {
+                configuration.cornerRadius = 24
+            }
+        } else {
+            configuration.backgroundColor = .Signal.background
+        }
+        backgroundConfiguration = configuration
     }
 
     private var attachment: StoryThumbnailView.Attachment?
@@ -414,22 +477,19 @@ class SentStoryCell: UITableViewCell {
         with item: OutgoingStoryItem,
         spoilerState: SpoilerRenderState,
         contextMenuActions: [UIAction],
-        indexPath: IndexPath
+        indexPath: IndexPath,
     ) {
         if self.attachment != item.attachment {
             self.attachment = item.attachment
             let thumbnailView = StoryThumbnailView(
                 attachment: item.attachment,
                 interactionIdentifier: .fromStoryMessage(item.message),
-                spoilerState: spoilerState
+                spoilerState: spoilerState,
             )
             attachmentThumbnail.removeAllSubviews()
             attachmentThumbnail.addSubview(thumbnailView)
             thumbnailView.autoPinEdgesToSuperviewEdges()
         }
-
-        titleLabel.textColor = Theme.primaryTextColor
-        subtitleLabel.textColor = Theme.isDarkThemeEnabled ? Theme.secondaryTextAndIconColor : .ows_gray45
 
         switch item.message.sendingState {
         case .pending, .sending:
@@ -437,7 +497,6 @@ class SentStoryCell: UITableViewCell {
             subtitleLabel.text = ""
             failedIconContainer.isHiddenInStackView = true
         case .failed:
-            failedIconView.image = Theme.iconImage(.error16)
             failedIconContainer.isHiddenInStackView = false
             titleLabel.text = item.message.hasSentToAnyRecipients
                 ? OWSLocalizedString("STORY_SEND_PARTIALLY_FAILED", comment: "Text indicating that the story send has partially failed")
@@ -446,14 +505,15 @@ class SentStoryCell: UITableViewCell {
         case .sent:
             if StoryManager.areViewReceiptsEnabled {
                 let format = OWSLocalizedString(
-                    "STORY_VIEWS_%d", tableName: "PluralAware",
-                    comment: "Text explaining how many views a story has. Embeds {{ %d number of views }}"
+                    "STORY_VIEWS_%d",
+                    tableName: "PluralAware",
+                    comment: "Text explaining how many views a story has. Embeds {{ %d number of views }}",
                 )
                 titleLabel.text = String.localizedStringWithFormat(format, item.message.remoteViewCount(in: item.thread.storyContext))
             } else {
                 titleLabel.text = OWSLocalizedString(
                     "STORY_VIEWS_OFF",
-                    comment: "Text indicating that the user has views turned off"
+                    comment: "Text indicating that the user has views turned off",
                 )
             }
             subtitleLabel.text = DateUtil.formatTimestampRelatively(item.message.timestamp)
@@ -462,29 +522,20 @@ class SentStoryCell: UITableViewCell {
             owsFailDebug("Unexpected legacy sending state")
         }
 
-        saveButton.tintColor = Theme.primaryIconColor
-        saveButton.setImage(UIImage(imageLiteralResourceName: "save-20"), for: .normal)
-        saveButton.setBackgroundImage(UIImage.image(color: Theme.secondaryBackgroundColor), for: .normal)
-
         if item.attachment.isSaveable {
             saveButton.isHiddenInStackView = false
-            saveButton.block = { item.attachment.save(
+            saveAttachmentBlock = { item.attachment.save(
                 interactionIdentifier: .fromStoryMessage(item.message),
-                spoilerState: spoilerState
+                spoilerState: spoilerState,
             ) }
         } else {
             saveButton.isHiddenInStackView = true
-            saveButton.block = {}
+            saveAttachmentBlock = {}
         }
 
-        let contextButton = ContextMenuButton(actions: contextMenuActions)
-        contextButton.tintColor = Theme.primaryIconColor
-        contextButton.setImage(UIImage(imageLiteralResourceName: "more-compact"), for: .normal)
-        contextButton.setBackgroundImage(UIImage.image(color: Theme.secondaryBackgroundColor), for: .normal)
-        contextButtonContainer.setContextButton(contextButton)
+        contextButton.setActions(actions: contextMenuActions)
 
-        let selectedBackgroundView = UIView()
-        selectedBackgroundView.backgroundColor = Theme.tableCell2SelectedBackgroundColor
-        self.selectedBackgroundView = selectedBackgroundView
     }
+
+    private var saveAttachmentBlock: () -> Void = {}
 }

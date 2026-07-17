@@ -19,7 +19,12 @@ public struct SignalList<Content: View>: View {
         let horizontalPadding: CGFloat = UIDevice.current.isIPad ? 32 : 0
 
         List {
-            content
+            if #available(iOS 16.0, *) {
+                content
+                    .listRowBackground(Color.Signal.secondaryGroupedBackground)
+            } else {
+                content
+            }
         }
         .readScrollOffset()
         .listStyle(.insetGrouped)
@@ -53,27 +58,27 @@ public struct SignalSection<Content: View, Header: View, Footer: View>: View {
     public init(
         @ViewBuilder content: () -> Content,
         @ViewBuilder header: () -> Header,
-        @ViewBuilder footer: () -> Footer
+        @ViewBuilder footer: () -> Footer,
     ) {
         components = .contentHeaderFooter(content(), header(), footer())
     }
 
     public init(
         @ViewBuilder content: () -> Content,
-        @ViewBuilder header: () -> Header
+        @ViewBuilder header: () -> Header,
     ) where Footer == EmptyView {
         components = .contentHeader(content(), header())
     }
 
     public init(
         @ViewBuilder content: () -> Content,
-        @ViewBuilder footer: () -> Footer
+        @ViewBuilder footer: () -> Footer,
     ) where Header == EmptyView {
         components = .contentFooter(content(), footer())
     }
 
     public init(
-        @ViewBuilder content: () -> Content
+        @ViewBuilder content: () -> Content,
     ) where Footer == EmptyView, Header == EmptyView {
         components = .content(content())
     }
@@ -128,8 +133,8 @@ public struct SignalSection<Content: View, Header: View, Footer: View>: View {
 
         var body: some View {
             content
-            // The table cells have a top margin of 12, so the top of
-            // the cell is 12 points above the top of the content.
+                // The table cells have a top margin of 12, so the top of
+                // the cell is 12 points above the top of the content.
                 .provideScrollAnchor(correction: -12)
         }
     }
@@ -174,5 +179,7 @@ public struct SignalSection<Content: View, Header: View, Footer: View>: View {
         } footer: {
             Text(verbatim: "Esse aperiam eius neque. Incidunt facere alias quibusdam qui magnam. Ut et quae quo soluta.")
         }
+
+        Text(verbatim: "Not in a section")
     }
 }

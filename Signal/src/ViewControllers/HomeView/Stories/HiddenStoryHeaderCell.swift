@@ -16,8 +16,6 @@ class HiddenStoryHeaderCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        backgroundView = UIView()
-        backgroundView?.backgroundColor = .clear
         selectionStyle = .none
 
         contentView.addSubview(label)
@@ -25,12 +23,14 @@ class HiddenStoryHeaderCell: UITableViewCell {
 
         label.text = OWSLocalizedString(
             "STORIES_HIDDEN_SECTION_HEADER",
-            comment: "Header for the hidden stories section of the stories list"
+            comment: "Header for the hidden stories section of the stories list",
         )
+        label.textColor = .Signal.label
         label.font = UIFont.dynamicTypeHeadline
         label.autoPinEdge(toSuperviewMargin: .leading)
         label.autoVCenterInSuperview()
 
+        iconView.tintColor = .Signal.label
         iconView.autoPinEdge(toSuperviewMargin: .trailing)
         iconView.autoVCenterInSuperview()
     }
@@ -43,25 +43,19 @@ class HiddenStoryHeaderCell: UITableViewCell {
     private var isCollapsed: Bool = true
 
     func configure(isCollapsed: Bool, animated: Bool = true) {
-
-        self.backgroundColor = .clear
-
-        label.textColor = Theme.primaryTextColor
-        iconView.tintColor = Theme.primaryIconColor
-
         iconView.image = UIImage(imageLiteralResourceName: "chevron-right-20")
 
         // Rotate the chevron down when not collapsed
         let applyIconRotation = {
-            let expandedRotationAngle: CGFloat = CurrentAppContext().isRTL ? -.pi/2 : .pi/2
-            self.iconView.transform = CGAffineTransform.init(
-                rotationAngle: isCollapsed ? 0 : expandedRotationAngle
+            let expandedRotationAngle: CGFloat = CurrentAppContext().isRTL ? -.pi / 2 : .pi / 2
+            self.iconView.transform = CGAffineTransform(
+                rotationAngle: isCollapsed ? 0 : expandedRotationAngle,
             )
         }
         defer {
             self.isCollapsed = isCollapsed
         }
-        guard animated && isCollapsed != self.isCollapsed else {
+        guard animated, isCollapsed != self.isCollapsed else {
             applyIconRotation()
             return
         }

@@ -14,6 +14,7 @@ public struct NewMember {
 // MARK: -
 
 public protocol NewMembersBarDelegate: NewMemberCellDelegate {
+    func newMembersBarHeightDidChange(to height: CGFloat)
 }
 
 // MARK: -
@@ -53,6 +54,7 @@ public class NewMembersBar: UIView {
 
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.clipsToBounds = false
 
         collectionView.register(NewMemberCell.self, forCellWithReuseIdentifier: NewMemberCell.reuseIdentifier)
         collectionView.backgroundColor = .clear
@@ -71,7 +73,7 @@ public class NewMembersBar: UIView {
     }
 
     func updateHeightConstraint() {
-        guard let heightConstraint = heightConstraint else {
+        guard let heightConstraint else {
             owsFailDebug("Missing heightConstraint.")
             return
         }
@@ -80,9 +82,9 @@ public class NewMembersBar: UIView {
             superview?.layoutIfNeeded()
             collectionView.alpha = desiredHeight == 0 ? 1 : 0
             heightConstraint.constant = desiredHeight
-            UIView.animate(withDuration: 0.25) { [weak self] in
-                self?.collectionView.alpha = desiredHeight == 0 ? 0 : 1
-                self?.superview?.layoutIfNeeded()
+            self.delegate?.newMembersBarHeightDidChange(to: desiredHeight)
+            UIView.animate(withDuration: 0.25) {
+                self.collectionView.alpha = desiredHeight == 0 ? 0 : 1
             }
         }
     }
@@ -97,9 +99,11 @@ public class NewMembersBar: UIView {
             owsFailDebug("Missing member.")
             return
         }
-        collectionView.scrollToItem(at: IndexPath(item: index, section: 0),
-                                    at: .centeredHorizontally,
-                                    animated: true)
+        collectionView.scrollToItem(
+            at: IndexPath(item: index, section: 0),
+            at: .centeredHorizontally,
+            animated: true,
+        )
     }
 }
 
@@ -132,11 +136,11 @@ extension NewMembersBar: UICollectionViewDataSource {
         cell.configure(member: member)
         assert(self.delegate != nil)
         cell.delegate = self.delegate
-        #if DEBUG
+#if DEBUG
         // These accessibilityIdentifiers won't be stable, but they
         // should work for the purposes of our automated testing.
         cell.accessibilityIdentifier = UIView.accessibilityIdentifier(in: self, name: "new-group-member-bar-\(indexPath.row)")
-        #endif
+#endif
     }
 }
 
@@ -165,8 +169,6 @@ private class NewMemberCell: UICollectionViewCell {
 
     static let avatarSizeClass = ConversationAvatarView.Configuration.SizeClass.customDiameter(32)
     static let vMargin: CGFloat = 6
-    static let removeButtonXSize: CGFloat = 12
-    static let removeButtonInset: CGFloat = 5
     // Don't use dynamic type in these cells.
     static var nameFont = UIFont.regularFont(ofSize: 15)
 
@@ -175,39 +177,39 @@ private class NewMemberCell: UICollectionViewCell {
 
         self.layoutMargins = .zero
         contentView.layoutMargins = .zero
-        contentView.backgroundColor = Theme.isDarkThemeEnabled ? .ows_gray65 : .ows_gray15
+
+        if #available(iOS 26, *) {
+            let glassView = UIVisualEffectView(effect: UIGlassEffect(style: .regular))
+            glassView.cornerConfiguration = .capsule()
+            backgroundView = glassView
+        } else {
+            contentView.backgroundColor = Theme.isDarkThemeEnabled ? .ows_gray65 : .ows_gray15
+        }
 
         textLabel.font = NewMemberCell.nameFont
         textLabel.textColor = Theme.primaryTextColor
         textLabel.numberOfLines = 1
         textLabel.lineBreakMode = .byTruncatingTail
 
-        let removeButton = UIButton(type: .custom)
-        removeButton.setTemplateImage(Theme.iconImage(.buttonX), tintColor: Theme.primaryTextColor)
-        // Extend the hot area of the remove button.
-        removeButton.ows_imageEdgeInsets = UIEdgeInsets(
-            top: Self.removeButtonInset,
-            left: Self.removeButtonInset,
-            bottom: Self.removeButtonInset,
-            right: Self.removeButtonInset
-        )
+        let removeButton = UIButton()
+        removeButton.setImage(UIImage(named: "x-compact"), for: .normal)
+        removeButton.tintColor = .Signal.label
         removeButton.addTarget(self, action: #selector(removeButtonWasPressed), for: .touchUpInside)
-        let buttonSize = Self.removeButtonXSize + 2 * Self.removeButtonInset
-        removeButton.autoSetDimensions(to: CGSize(square: buttonSize))
-        removeButton.setContentHuggingHigh()
 
         contentView.addSubview(avatarView)
         avatarView.autoPinEdge(toSuperviewEdge: .leading)
         avatarView.autoPinEdge(toSuperviewMargin: .top, relation: .greaterThanOrEqual)
         avatarView.autoPinEdge(toSuperviewMargin: .bottom, relation: .greaterThanOrEqual)
+        avatarView.autoVCenterInSuperview()
 
         let stackView = UIStackView(arrangedSubviews: [
             textLabel,
-            removeButton
+            removeButton,
         ])
         stackView.axis = .horizontal
+        stackView.spacing = 8
         stackView.alignment = .center
-        stackView.layoutMargins = UIEdgeInsets(top: Self.vMargin, leading: 4, bottom: Self.vMargin, trailing: 2)
+        stackView.layoutMargins = UIEdgeInsets(top: Self.vMargin, leading: 4, bottom: Self.vMargin, trailing: 8)
         stackView.isLayoutMarginsRelativeArrangement = true
         contentView.addSubview(stackView)
         stackView.autoPinLeading(toTrailingEdgeOf: avatarView)
@@ -216,7 +218,7 @@ private class NewMemberCell: UICollectionViewCell {
         stackView.setCompressionResistanceHorizontalLow()
     }
 
-    override public func layoutSubviews() {
+    override func layoutSubviews() {
         super.layoutSubviews()
         contentView.layer.cornerRadius = contentView.height / 2
     }
@@ -282,7 +284,7 @@ private class NewMembersBarLayout: UICollectionViewLayout {
 
     // MARK: Initializers and Factory Methods
 
-    public override init() {
+    override init() {
         super.init()
     }
 
@@ -311,7 +313,7 @@ private class NewMembersBarLayout: UICollectionViewLayout {
     override func prepare() {
         super.prepare()
 
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             owsFailDebug("Missing collectionView.")
             contentSize = .zero
             return
@@ -423,7 +425,7 @@ private class NewMembersBarLayout: UICollectionViewLayout {
     }
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return false
         }
         return collectionView.width != newBounds.size.width

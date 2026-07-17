@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
                              skippedRecipients:(NSArray<ServiceIdObjC *> *)skippedRecipients
                                    transaction:(DBReadTransaction *)transaction NS_UNAVAILABLE;
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
+- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)initWithGrdbId:(int64_t)grdbId
                           uniqueId:(NSString *)uniqueId
@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
                     storyTimestamp:(nullable NSNumber *)storyTimestamp
                 wasRemotelyDeleted:(BOOL)wasRemotelyDeleted
                      customMessage:(nullable NSString *)customMessage
-                  groupMetaMessage:(TSGroupMetaMessage)groupMetaMessage
+                  groupMetaMessage:(NSInteger)groupMetaMessage
              hasLegacyMessageState:(BOOL)hasLegacyMessageState
                hasSyncedTranscript:(BOOL)hasSyncedTranscript
                     isVoiceMessage:(BOOL)isVoiceMessage
@@ -111,7 +111,7 @@ NS_ASSUME_NONNULL_BEGIN
                   storyTimestamp:(nullable NSNumber *)storyTimestamp
               wasRemotelyDeleted:(BOOL)wasRemotelyDeleted
                    customMessage:(nullable NSString *)customMessage
-                groupMetaMessage:(TSGroupMetaMessage)groupMetaMessage
+                groupMetaMessage:(NSInteger)groupMetaMessage
            hasLegacyMessageState:(BOOL)hasLegacyMessageState
              hasSyncedTranscript:(BOOL)hasSyncedTranscript
                   isVoiceMessage:(BOOL)isVoiceMessage

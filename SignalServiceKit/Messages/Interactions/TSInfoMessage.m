@@ -36,14 +36,12 @@ const InfoMessageUserInfoKey InfoMessageUserInfoKeyPhoneNumberDisplayNameBeforeL
     = @"InfoMessageUserInfoKeyPhoneNumberDisplayNameBeforeLearningProfileName";
 const InfoMessageUserInfoKey InfoMessageUserInfoKeyUsernameDisplayNameBeforeLearningProfileName
     = @"InfoMessageUserInfoKeyUsernameDisplayNameBeforeLearningProfileName";
-
-NSUInteger TSInfoMessageSchemaVersion = 2;
+const InfoMessageUserInfoKey InfoMessageUserInfoKeyEndPoll = @"InfoMessageUserInfoKeyEndPoll";
+const InfoMessageUserInfoKey InfoMessageUserInfoKeyPinnedMessage = @"InfoMessageUserInfoKeyPinnedMessage";
 
 @interface TSInfoMessage ()
 
 @property (nonatomic, getter=wasRead) BOOL read;
-
-@property (nonatomic, readonly) NSUInteger infoMessageSchemaVersion;
 
 @end
 
@@ -51,37 +49,69 @@ NSUInteger TSInfoMessageSchemaVersion = 2;
 
 @implementation TSInfoMessage
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
++ (NSArray<Class> *)infoMessageUserInfoObjectClasses
 {
-    self = [super initWithCoder:coder];
-    if (!self) {
-        return self;
+    return @[
+        [DisappearingMessageToken class],
+        [NSDictionary class],
+        [NSNull class],
+        [NSNumber class],
+        [NSString class],
+        [PersistableEndPollItem class],
+        [PersistablePinnedMessageItem class],
+        [ProfileChanges class],
+        [SignalServiceAddress class],
+        [TSGroupModel class],
+        [TSInfoMessageUpdateMessages class],
+        [TSInfoMessageUpdateMessagesV2 class]
+    ];
+}
+
+- (NSUInteger)hash
+{
+    NSUInteger result = [super hash];
+    result ^= self.customMessage.hash;
+    result ^= self.infoMessageUserInfo.hash;
+    result ^= (NSUInteger)self.messageType;
+    result ^= self.read;
+    result ^= self.serverGuid.hash;
+    result ^= self.unregisteredAddress.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
     }
-
-    if (self.infoMessageSchemaVersion < 1) {
-        _read = YES;
+    TSInfoMessage *typedOther = (TSInfoMessage *)other;
+    if (![NSObject isObject:self.customMessage equalToObject:typedOther.customMessage]) {
+        return NO;
     }
-
-    if (self.infoMessageSchemaVersion < 2) {
-        NSString *_Nullable phoneNumber = [coder decodeObjectForKey:@"unregisteredRecipientId"];
-        if (phoneNumber) {
-            _unregisteredAddress = [SignalServiceAddress legacyAddressWithServiceIdString:nil phoneNumber:phoneNumber];
-        }
+    if (![NSObject isObject:self.infoMessageUserInfo equalToObject:typedOther.infoMessageUserInfo]) {
+        return NO;
     }
-
-    _infoMessageSchemaVersion = TSInfoMessageSchemaVersion;
-
-    if (self.isDynamicInteraction) {
-        self.read = YES;
+    if (self.messageType != typedOther.messageType) {
+        return NO;
     }
-
-    return self;
+    if (self.read != typedOther.read) {
+        return NO;
+    }
+    if (![NSObject isObject:self.serverGuid equalToObject:typedOther.serverGuid]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.unregisteredAddress equalToObject:typedOther.unregisteredAddress]) {
+        return NO;
+    }
+    return YES;
 }
 
 - (instancetype)initWithThread:(TSThread *)thread
                      timestamp:(uint64_t)timestamp
                     serverGuid:(nullable NSString *)serverGuid
                    messageType:(TSInfoMessageType)messageType
+            expireTimerVersion:(nullable NSNumber *)expireTimerVersion
+              expiresInSeconds:(unsigned int)expiresInSeconds
            infoMessageUserInfo:(nullable NSDictionary<InfoMessageUserInfoKey, id> *)infoMessageUserInfo
 {
     TSMessageBuilder *builder;
@@ -90,6 +120,12 @@ NSUInteger TSInfoMessageSchemaVersion = 2;
     } else {
         builder = [TSMessageBuilder messageBuilderWithThread:thread];
     }
+
+    if (expiresInSeconds > 0 && expireTimerVersion != nil) {
+        builder.expiresInSeconds = expiresInSeconds;
+        builder.expireTimerVersion = expireTimerVersion;
+    }
+
     self = [super initMessageWithBuilder:builder];
     if (!self) {
         return self;
@@ -98,7 +134,6 @@ NSUInteger TSInfoMessageSchemaVersion = 2;
     _serverGuid = serverGuid;
     _messageType = messageType;
     _infoMessageUserInfo = infoMessageUserInfo;
-    _infoMessageSchemaVersion = TSInfoMessageSchemaVersion;
 
     if (self.isDynamicInteraction) {
         self.read = YES;
@@ -271,7 +306,10 @@ NSUInteger TSInfoMessageSchemaVersion = 2;
             NSString *format = OWSLocalizedString(@"INFO_MESSAGE_USER_JOINED_SIGNAL_BODY_FORMAT",
                 @"Shown in inbox and conversation when a user joins Signal, embeds the new user's {{contact "
                 @"name}}");
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
             return [NSString stringWithFormat:format, recipientName];
+#pragma clang diagnostic pop
         }
         case TSInfoMessageSyncedThread:
             return @"";
@@ -289,7 +327,10 @@ NSUInteger TSInfoMessageSchemaVersion = 2;
 
             NSString *format = OWSLocalizedString(@"INFO_MESSAGE_USER_CHANGED_PHONE_NUMBER_FORMAT",
                 @"Indicates that another user has changed their phone number. Embeds: {{ the user's name}}".);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
             return [NSString stringWithFormat:format, userName];
+#pragma clang diagnostic pop
         }
         case TSInfoMessageRecipientHidden: {
             /// This does not control whether to show the info message in the chat
@@ -335,6 +376,11 @@ NSUInteger TSInfoMessageSchemaVersion = 2;
             return OWSLocalizedString(@"INFO_MESSAGE_ACCEPTED_MESSAGE_REQUEST",
                 @"An info message inserted into the chat when you accept a message request, in a 1:1 or group "
                 @"chat.");
+        case TSInfoMessageTypeEndPoll: {
+            return [self endPollDescriptionWithTransaction:transaction];
+        }
+        case TSInfoMessageTypePinnedMessage:
+            return [self pinnedMessageDescriptionWithTransaction:transaction];
     }
 
     OWSFailDebug(@"Unknown info message type");
@@ -342,11 +388,6 @@ NSUInteger TSInfoMessageSchemaVersion = 2;
 }
 
 #pragma mark - OWSReadTracking
-
-- (uint64_t)expireStartedAt
-{
-    return 0;
-}
 
 - (void)markAsReadAtTimestamp:(uint64_t)readTimestamp
                        thread:(TSThread *)thread

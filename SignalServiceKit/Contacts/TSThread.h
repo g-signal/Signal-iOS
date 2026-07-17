@@ -11,7 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 @class DBWriteTransaction;
 @class MessageBody;
 @class MessageBodyRanges;
-@class OWSDisappearingMessagesConfiguration;
 @class SignalServiceAddress;
 @class TSInteraction;
 @class TSInvalidIdentityKeyReceivingErrorMessage;
@@ -79,9 +78,9 @@ typedef NS_CLOSED_ENUM(NSUInteger, TSThreadStoryViewMode) {
 
 @property (nonatomic) TSThreadMentionNotificationMode mentionNotificationMode;
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithGrdbId:(int64_t)grdbId uniqueId:(NSString *)uniqueId NS_UNAVAILABLE;
+- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
 
 // --- CODE GENERATION MARKER
 
@@ -131,8 +130,9 @@ NS_DESIGNATED_INITIALIZER NS_SWIFT_NAME(init(grdbId:uniqueId:conversationColorNa
 
 - (BOOL)hasSafetyNumbers;
 
-- (nullable TSInteraction *)lastInteractionForInboxWithTransaction:(DBReadTransaction *)transaction
-    NS_SWIFT_NAME(lastInteractionForInbox(transaction:));
+- (nullable TSInteraction *)lastInteractionForInboxForChatListSorting:(BOOL)isForSorting
+                                                          transaction:(DBReadTransaction *)transaction
+    NS_SWIFT_NAME(lastInteractionForInbox(forChatListSorting:transaction:));
 
 - (nullable TSInteraction *)firstInteractionAtOrAroundSortId:(uint64_t)sortId
                                                  transaction:(DBReadTransaction *)transaction

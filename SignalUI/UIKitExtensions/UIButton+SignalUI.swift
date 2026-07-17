@@ -5,6 +5,23 @@
 
 import SignalServiceKit
 
+// MARK: - NSDirectionalEdgeInsets
+
+private extension NSDirectionalEdgeInsets {
+    static var largeButtonContentInsets: NSDirectionalEdgeInsets {
+        NSDirectionalEdgeInsets(hMargin: 16, vMargin: 15)
+    }
+
+    static var mediumButtonContentInsets: NSDirectionalEdgeInsets {
+        NSDirectionalEdgeInsets(hMargin: 16, vMargin: 12)
+    }
+
+    static var smallButtonContentInsets: NSDirectionalEdgeInsets {
+        NSDirectionalEdgeInsets(hMargin: 12, vMargin: 8)
+    }
+
+}
+
 // MARK: - UIButton
 
 public extension UIButton {
@@ -19,26 +36,26 @@ public extension UIButton {
                 top: ows_contentEdgeInsets.top,
                 left: padding,
                 bottom: ows_contentEdgeInsets.bottom,
-                right: ows_contentEdgeInsets.right
+                right: ows_contentEdgeInsets.right,
             )
             ows_titleEdgeInsets = .init(
                 top: ows_titleEdgeInsets.top,
                 left: -padding,
                 bottom: ows_titleEdgeInsets.bottom,
-                right: padding
+                right: padding,
             )
         } else {
             ows_contentEdgeInsets = .init(
                 top: ows_contentEdgeInsets.top,
                 left: ows_contentEdgeInsets.left,
                 bottom: ows_contentEdgeInsets.bottom,
-                right: padding
+                right: padding,
             )
             ows_titleEdgeInsets = .init(
                 top: ows_titleEdgeInsets.top,
                 left: padding,
                 bottom: ows_titleEdgeInsets.bottom,
-                right: -padding
+                right: -padding,
             )
         }
     }
@@ -85,9 +102,34 @@ public extension UIButton {
             self.setImage(image, for: .normal)
         }
     }
+
+    func enableMultilineLabel() {
+        guard let titleLabel else { return }
+
+        configuration?.titleAlignment = .center
+        configuration?.titleLineBreakMode = .byWordWrapping
+
+        titleLabel.numberOfLines = 0
+        titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.textAlignment = .center
+
+        configurationUpdateHandler = { button in
+            button.titleLabel?.numberOfLines = 0
+            button.titleLabel?.lineBreakMode = .byWordWrapping
+        }
+    }
+
+    func enclosedInVerticalStackView(isFullWidthButton: Bool) -> UIStackView {
+        return [self].enclosedInVerticalStackView(isFullWidthButtons: isFullWidthButton)
+    }
 }
 
-// MARK: - UIButton.Configuration
+public extension Array where Element == UIButton {
+
+    func enclosedInVerticalStackView(isFullWidthButtons: Bool) -> UIStackView {
+        return UIStackView.verticalButtonStack(buttons: self, isFullWidthButtons: isFullWidthButtons)
+    }
+}
 
 extension UIConfigurationTextAttributesTransformer {
     /// Assign to a text attributes transformer (e.g., `UIButton.Configuration.titleTextAttributesTransformer`)
@@ -106,6 +148,112 @@ extension UIConfigurationTextAttributesTransformer {
     }
 }
 
+public extension UIButton.Configuration {
+
+    private mutating func applyCorners() {
+        if #available(iOS 26, *) {
+            cornerStyle = .capsule
+            return
+        }
+        cornerStyle = .fixed
+        background.cornerRadius = 14
+    }
+
+    private static func basePrimary() -> Self {
+        var configuration: UIButton.Configuration
+        if #available(iOS 26, *) {
+            configuration = .prominentGlass()
+        } else {
+            configuration = .borderedProminent()
+        }
+        configuration.titleAlignment = .center
+        configuration.titleTextAttributesTransformer = .defaultFont(.dynamicTypeHeadlineClamped)
+        configuration.baseBackgroundColor = .Signal.accent
+        configuration.applyCorners()
+        return configuration
+    }
+
+    private static func baseSecondary() -> Self {
+        var configuration: UIButton.Configuration
+        if #available(iOS 26, *) {
+            configuration = .prominentGlass()
+            configuration.baseForegroundColor = .Signal.label
+        } else {
+            configuration = .plain()
+            configuration.baseForegroundColor = .Signal.accent
+        }
+        configuration.titleAlignment = .center
+        configuration.titleTextAttributesTransformer = .defaultFont(.dynamicTypeHeadlineClamped)
+        configuration.baseBackgroundColor = .clear
+        configuration.applyCorners()
+        return configuration
+    }
+
+    static func largePrimary(title: String) -> Self {
+        var configuration = basePrimary()
+        configuration.title = title
+        configuration.contentInsets = .largeButtonContentInsets
+        return configuration
+    }
+
+    static func largeSecondary(title: String) -> Self {
+        var configuration = baseSecondary()
+        configuration.title = title
+        configuration.contentInsets = .largeButtonContentInsets
+        if #unavailable(iOS 26) {
+            // Smaller height when button doesn't have visible shape looks better.
+            configuration.contentInsets.top = 8
+            configuration.contentInsets.bottom = 8
+        }
+        return configuration
+    }
+
+    static func mediumSecondary(title: String) -> Self {
+        var configuration = baseSecondary()
+        configuration.title = title
+        configuration.contentInsets = .mediumButtonContentInsets
+        if #unavailable(iOS 26) {
+            // Smaller height when button doesn't have visible shape looks better.
+            configuration.contentInsets.top = 8
+            configuration.contentInsets.bottom = 8
+        }
+        return configuration
+    }
+
+    static func mediumBorderless(title: String) -> Self {
+        var configuration = UIButton.Configuration.borderless()
+        configuration.title = title
+        configuration.titleAlignment = .center
+        configuration.titleTextAttributesTransformer = .defaultFont(.dynamicTypeHeadlineClamped)
+        configuration.contentInsets = .mediumButtonContentInsets
+        configuration.baseForegroundColor = .Signal.accent
+        configuration.baseBackgroundColor = .clear
+        return configuration
+    }
+
+    static func smallBorderless(title: String) -> Self {
+        var configuration = UIButton.Configuration.borderless()
+        configuration.title = title
+        configuration.titleAlignment = .center
+        configuration.titleTextAttributesTransformer = .defaultFont(.dynamicTypeSubheadlineClamped.semibold())
+        configuration.contentInsets = .smallButtonContentInsets
+        configuration.baseForegroundColor = .Signal.accent
+        configuration.baseBackgroundColor = .clear
+        return configuration
+    }
+
+    static func smallSecondary(title: String) -> Self {
+        var configuration = UIButton.Configuration.gray()
+        configuration.title = title
+        configuration.titleAlignment = .center
+        configuration.titleTextAttributesTransformer = .defaultFont(.dynamicTypeSubheadlineClamped.medium())
+        configuration.contentInsets = .smallButtonContentInsets
+        configuration.baseForegroundColor = .Signal.label
+        configuration.background.backgroundColor = .Signal.secondaryFill
+        return configuration
+    }
+}
+
 // MARK: - UIBarButtonItem
 
 public extension UIBarButtonItem {
@@ -115,7 +263,7 @@ public extension UIBarButtonItem {
         style: UIBarButtonItem.Style,
         target: Any?,
         action: Selector?,
-        accessibilityIdentifier: String
+        accessibilityIdentifier: String,
     ) {
         self.init(image: image, style: style, target: target, action: action)
         self.accessibilityIdentifier = accessibilityIdentifier
@@ -127,7 +275,7 @@ public extension UIBarButtonItem {
         style: UIBarButtonItem.Style,
         target: Any?,
         action: Selector?,
-        accessibilityIdentifier: String
+        accessibilityIdentifier: String,
     ) {
         self.init(image: image, landscapeImagePhone: landscapeImagePhone, style: style, target: target, action: action)
         self.accessibilityIdentifier = accessibilityIdentifier
@@ -138,7 +286,7 @@ public extension UIBarButtonItem {
         style: UIBarButtonItem.Style,
         target: Any?,
         action: Selector?,
-        accessibilityIdentifier: String
+        accessibilityIdentifier: String,
     ) {
         self.init(title: title, style: style, target: target, action: action)
         self.accessibilityIdentifier = accessibilityIdentifier
@@ -148,7 +296,7 @@ public extension UIBarButtonItem {
         barButtonSystemItem systemItem: UIBarButtonItem.SystemItem,
         target: Any?,
         action: Selector?,
-        accessibilityIdentifier: String
+        accessibilityIdentifier: String,
     ) {
         self.init(barButtonSystemItem: systemItem, target: target, action: action)
         self.accessibilityIdentifier = accessibilityIdentifier
@@ -165,6 +313,7 @@ public extension UIBarButtonItem {
             init(actionClosure: @escaping () -> Void) {
                 self.actionClosure = actionClosure
             }
+
             @objc
             func action() {
                 actionClosure()
@@ -175,7 +324,7 @@ public extension UIBarButtonItem {
 
         convenience init(
             systemItem: UIBarButtonItem.SystemItem,
-            action: @escaping () -> Void
+            action: @escaping () -> Void,
         ) {
             let handler = Handler(actionClosure: action)
             // The `Handler` type exists because we can't
@@ -188,7 +337,7 @@ public extension UIBarButtonItem {
         convenience init(
             title: String,
             style: UIBarButtonItem.Style,
-            action: @escaping () -> Void
+            action: @escaping () -> Void,
         ) {
             let handler = Handler(actionClosure: action)
             self.init(title: title, style: style, target: handler, action: #selector(handler.action))
@@ -198,7 +347,7 @@ public extension UIBarButtonItem {
         convenience init(
             image: UIImage,
             style: UIBarButtonItem.Style,
-            action: @escaping () -> Void
+            action: @escaping () -> Void,
         ) {
             let handler = Handler(actionClosure: action)
             self.init(image: image, style: style, target: handler, action: #selector(handler.action))
@@ -210,7 +359,7 @@ public extension UIBarButtonItem {
     static func button(
         title: String,
         style: UIBarButtonItem.Style,
-        action: @escaping () -> Void
+        action: @escaping () -> Void,
     ) -> UIBarButtonItem {
         ClosureBarButtonItem(title: title, style: style, action: action)
     }
@@ -219,9 +368,18 @@ public extension UIBarButtonItem {
     static func button(
         icon: ThemeIcon,
         style: UIBarButtonItem.Style,
-        action: @escaping () -> Void
+        action: @escaping () -> Void,
     ) -> UIBarButtonItem {
         ClosureBarButtonItem(image: Theme.iconImage(icon), style: style, action: action)
+    }
+
+    /// Creates a bar button with the given image that performs the action in the provided closure.
+    static func button(
+        image: UIImage,
+        style: UIBarButtonItem.Style,
+        action: @escaping () -> Void,
+    ) -> UIBarButtonItem {
+        ClosureBarButtonItem(image: image, style: style, action: action)
     }
 
     // Keep this static function public instead of exposing ClosureBarButtonItem
@@ -235,7 +393,7 @@ public extension UIBarButtonItem {
     /// - Returns: A new `UIBarButtonItem`.
     static func systemItem(
         _ systemItem: UIBarButtonItem.SystemItem,
-        action: @escaping () -> Void
+        action: @escaping () -> Void,
     ) -> UIBarButtonItem {
         ClosureBarButtonItem(systemItem: systemItem, action: action)
     }
@@ -254,7 +412,7 @@ public extension UIBarButtonItem {
     static func cancelButton(
         dismissingFrom viewController: UIViewController?,
         animated: Bool = true,
-        completion: (() -> Void)? = nil
+        completion: (() -> Void)? = nil,
     ) -> UIBarButtonItem {
         Self.cancelButton { [weak viewController] in
             viewController?.dismiss(animated: animated, completion: completion)
@@ -274,7 +432,7 @@ public extension UIBarButtonItem {
         dismissingFrom viewController: UIViewController?,
         hasUnsavedChanges: @escaping () -> Bool?,
         animated: Bool = true,
-        completion: (() -> Void)? = nil
+        completion: (() -> Void)? = nil,
     ) -> UIBarButtonItem {
         Self.cancelButton { [weak viewController] in
             if hasUnsavedChanges() == true {
@@ -294,7 +452,7 @@ public extension UIBarButtonItem {
     /// - Returns: A new `UIBarButtonItem`.
     static func cancelButton(
         poppingFrom navigationController: UINavigationController?,
-        animated: Bool = true
+        animated: Bool = true,
     ) -> UIBarButtonItem {
         Self.cancelButton { [weak navigationController] in
             navigationController?.popViewController(animated: animated)
@@ -315,15 +473,29 @@ public extension UIBarButtonItem {
     static func doneButton(
         dismissingFrom viewController: UIViewController?,
         animated: Bool = true,
-        completion: (() -> Void)? = nil
+        completion: (() -> Void)? = nil,
     ) -> UIBarButtonItem {
-        let systemItem: SystemItem = if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        let systemItem: SystemItem = if #available(iOS 26, *) {
             .close
         } else {
             .done
         }
         return Self.systemItem(systemItem) { [weak viewController] in
             viewController?.dismiss(animated: animated, completion: completion)
+        }
+    }
+
+    static func setButton(action: @escaping () -> Void) -> UIBarButtonItem {
+        if #available(iOS 26, *) {
+            // iOS 26 done buttons appear as a big blue checkmark
+            return .systemItem(.done, action: action)
+        } else {
+            // For iOS 18 and older, we want to use the text "Set"
+            return .button(
+                title: CommonStrings.setButton,
+                style: .done,
+                action: action,
+            )
         }
     }
 

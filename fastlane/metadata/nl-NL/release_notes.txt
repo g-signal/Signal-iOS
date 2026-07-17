@@ -1,1 +1,3 @@
-• We hebben een bug opgelost waarbij de camera een zwart scherm gaf wanneer je een nieuw apparaat probeerde te koppelen.
+• Zorg voor gemakkelijke toegang tot belangrijke informatie met vastgezette berichten. Je meestgestelde vragen, restaurantreserveringen en vakantieplannen staan al bovenaan je prioriteitenlijst. Ze kunnen nu ook bovenaan een chat staan.
+
+

@@ -12,10 +12,10 @@ public class MockTSAccountManager: TSAccountManager {
 
     public init() {}
 
-    public var warmCachesMock: (() -> Void)?
+    public var warmCachesMock: ((DBReadTransaction) -> Void)?
 
-    open func warmCaches() {
-        warmCachesMock?()
+    open func warmCaches(tx: DBReadTransaction) {
+        warmCachesMock?(tx)
     }
 
     // MARK: - Local Identifiers
@@ -24,7 +24,7 @@ public class MockTSAccountManager: TSAccountManager {
         return LocalIdentifiers(
             aci: .randomForTesting(),
             pni: .randomForTesting(),
-            e164: .init("+15555555555")!
+            e164: .init("+15555555555")!,
         )
     }
 
@@ -127,7 +127,7 @@ public class MockTSAccountManager: TSAccountManager {
     }
 
     public lazy var setIsManualMessageFetchEnabledMock: (
-        Bool
+        Bool,
     ) -> Void = { [weak self] isManualMessageFetchEnabled in
         self?.isManualMessageFetchEnabledMock = { isManualMessageFetchEnabled }
     }

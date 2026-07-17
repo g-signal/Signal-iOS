@@ -18,15 +18,20 @@ final class ContactOutputStream {
         aci: Aci?,
         phoneNumber: E164?,
         signalAccount: SignalAccount?,
-        disappearingMessagesConfiguration: OWSDisappearingMessagesConfiguration?,
-        inboxPosition: Int?
+        disappearingMessagesConfiguration: DisappearingMessagesConfigurationRecord?,
+        inboxPosition: Int?,
     ) throws {
         let contactBuilder = SSKProtoContactDetails.builder()
         if let phoneNumber {
             contactBuilder.setContactE164(phoneNumber.stringValue)
         }
         if let aci {
-            contactBuilder.setAci(aci.serviceIdString)
+            if BuildFlags.serviceIdStrings {
+                contactBuilder.setAci(aci.serviceIdString)
+            }
+            if BuildFlags.serviceIdBinaryVariableOverhead {
+                contactBuilder.setAciBinary(aci.serviceIdBinary)
+            }
         }
 
         // TODO: this should be removed after a 90-day timer from when Desktop stops

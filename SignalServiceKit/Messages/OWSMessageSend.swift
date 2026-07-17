@@ -8,16 +8,16 @@ import LibSignalClient
 
 /// Provides parameters required for assembling a Sealed Sender message.
 final class SealedSenderParameters {
-    let message: TSOutgoingMessage
+    let message: any SendableMessage
     let senderCertificate: SenderCertificate
     let accessKey: OWSUDAccess?
     let endorsement: GroupSendFullTokenBuilder?
 
     init?(
-        message: TSOutgoingMessage,
+        message: any SendableMessage,
         senderCertificate: SenderCertificate,
         accessKey: OWSUDAccess?,
-        endorsement: GroupSendFullTokenBuilder?
+        endorsement: GroupSendFullTokenBuilder?,
     ) {
         self.message = message
         self.senderCertificate = senderCertificate
@@ -28,7 +28,7 @@ final class SealedSenderParameters {
         self.endorsement = endorsement
     }
 
-    /// Indicates desired behavior on the case of decryption error.
+    /// Indicates desired behavior if decryption fails.
     var contentHint: SealedSenderContentHint {
         return message.contentHint
     }
@@ -36,7 +36,7 @@ final class SealedSenderParameters {
     /// Fetches a group ID to attache to the message envelope, to assist error
     /// handling in the case of decryption error.
     func envelopeGroupId(tx: DBReadTransaction) -> Data? {
-        return message.envelopeGroupIdWithTransaction(SDSDB.shimOnlyBridge(tx))
+        return message.envelopeGroupIdWithTransaction(tx)
     }
 }
 
@@ -45,20 +45,20 @@ final class SealedSenderParameters {
 // to multiple recipients and therefore require multiple instances of
 // OWSMessageSend.
 final class OWSMessageSend {
-    public let message: TSOutgoingMessage
-    public let plaintextContent: Data
-    public let plaintextPayloadId: Int64?
-    public let thread: TSThread
-    public let serviceId: ServiceId
-    public let localIdentifiers: LocalIdentifiers
+    let message: any SendableMessage
+    let plaintextContent: Data
+    let plaintextPayloadId: Int64?
+    let thread: TSThread
+    let serviceId: ServiceId
+    let localIdentifiers: LocalIdentifiers
 
     init(
-        message: TSOutgoingMessage,
+        message: any SendableMessage,
         plaintextContent: Data,
         plaintextPayloadId: Int64?,
         thread: TSThread,
         serviceId: ServiceId,
-        localIdentifiers: LocalIdentifiers
+        localIdentifiers: LocalIdentifiers,
     ) {
         self.message = message
         self.plaintextContent = plaintextContent

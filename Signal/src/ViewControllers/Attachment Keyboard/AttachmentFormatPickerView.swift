@@ -42,7 +42,7 @@ class AttachmentFormatPickerView: UIView {
                 UIAction(handler: { [weak self] _ in
                     self?.didTapAttachmentButton(attachmentType: attachmentType)
                 }),
-                for: .touchUpInside
+                for: .touchUpInside,
             )
             return subview
         }
@@ -97,7 +97,7 @@ class AttachmentFormatPickerView: UIView {
             contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
         ])
     }
 
@@ -118,12 +118,12 @@ class AttachmentFormatPickerView: UIView {
     override var intrinsicContentSize: CGSize {
         let isVerticallyCompact = traitCollection.verticalSizeClass == .compact
         let height: CGFloat =
-        switch (isVerticallyCompact, shouldLeaveSpaceForPermissions) {
-        case (false, false): 122
-        case (false, true): 100
-        case (true, false): 86
-        case (true, true): 76
-        }
+            switch (isVerticallyCompact, shouldLeaveSpaceForPermissions) {
+            case (false, false): 122
+            case (false, true): 100
+            case (true, false): 86
+            case (true, true): 76
+            }
         return CGSize(width: UIView.noIntrinsicMetric, height: height)
     }
 
@@ -188,19 +188,16 @@ class AttachmentFormatPickerView: UIView {
         case payment
 
         private static var contactCases: [AttachmentType] {
-            var casesToExclude: [AttachmentType] = []
-            if !SUIEnvironment.shared.paymentsRef.shouldShowPaymentsUI {
+            var casesToExclude: [AttachmentType] = [.poll]
+            if !SSKEnvironment.shared.paymentsHelperRef.arePaymentsEnabled {
                 casesToExclude.append(.payment)
-            }
-            if !FeatureFlags.pollSend {
-                casesToExclude.append(.poll)
             }
 
             return cases(except: casesToExclude)
         }
 
         private static var groupCases: [AttachmentType] {
-            if !FeatureFlags.pollSend {
+            if !RemoteConfig.current.pollCreate {
                 return cases(except: [.payment, .poll])
             }
             return cases(except: [.payment])
@@ -209,7 +206,7 @@ class AttachmentFormatPickerView: UIView {
         private static func cases(except: [AttachmentType]) -> [AttachmentType] {
             let showGifSearch = RemoteConfig.current.enableGifSearch
             return allCases.filter { (value: AttachmentType) in
-                if value == .gif && showGifSearch.negated { return false }
+                if value == .gif, showGifSearch.negated { return false }
                 return except.contains(value).negated
             }
         }
@@ -269,26 +266,21 @@ class AttachmentFormatPickerView: UIView {
 
         let button: UIButton = {
             let button: UIButton
-            if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
-#if compiler(>=6.2)
+            if #available(iOS 26, *) {
                 button = UIButton(configuration: .glass())
-#else
-                button = UIButton(configuration: .plain())
-#endif
             } else {
                 button = ShrinkingOnTapButton(configuration: .gray())
                 button.configuration?.background.backgroundColorTransformer = UIConfigurationColorTransformer { [weak button] _ in
+                    let baseColor = UIColor.Signal.secondaryFill
                     guard let button, button.isHighlighted else {
-                        return .Signal.secondaryFill
+                        return baseColor
                     }
                     // Tinted color for "highlighted" state.
                     let tintColor = button.traitCollection.userInterfaceStyle == .dark ? UIColor.white : UIColor.black
-                    return .Signal.secondaryFill.blended(with: tintColor, alpha: 0.1)
+                    return baseColor.blended(with: tintColor, alpha: 0.1)
                 }
             }
-            button.configuration?.imageColorTransformer = UIConfigurationColorTransformer { _ in
-                return .Signal.label
-            }
+            button.configuration?.baseForegroundColor = .Signal.label
             button.configuration?.cornerStyle = .capsule
             return button
         }()
@@ -308,7 +300,11 @@ class AttachmentFormatPickerView: UIView {
         private let textLabel: UILabel = {
             let label = UILabel()
             label.font = .dynamicTypeFootnoteClamped.medium()
-            label.textColor = .Signal.secondaryLabel
+            if #available(iOS 26, *) {
+                label.textColor = .Signal.label
+            } else {
+                label.textColor = .Signal.secondaryLabel
+            }
             label.textAlignment = .center
             label.numberOfLines = 2
             label.adjustsFontSizeToFitWidth = true
@@ -326,7 +322,7 @@ class AttachmentFormatPickerView: UIView {
             addSubview(button)
             NSLayoutConstraint.activate([
                 button.widthAnchor.constraint(equalToConstant: 76),
-                buttonHeightConstraint
+                buttonHeightConstraint,
             ])
             button.autoPinEdges(toSuperviewEdgesExcludingEdge: .bottom)
 
@@ -338,7 +334,7 @@ class AttachmentFormatPickerView: UIView {
         }
 
         @available(*, unavailable, message: "Unimplemented")
-        required public init?(coder aDecoder: NSCoder) {
+        required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
 

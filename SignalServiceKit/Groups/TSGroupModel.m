@@ -8,8 +8,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-const NSUInteger kMaxEncryptedAvatarSize = 3 * 1024 * 1024;
-const NSUInteger kMaxAvatarSize = (kMaxEncryptedAvatarSize
+const uint64_t kMaxEncryptedAvatarSize = 3 * 1024 * 1024;
+const uint64_t kMaxAvatarSize = (kMaxEncryptedAvatarSize
     /* The length of the padding. See GroupSecretParams:encrypt_blob_with_padding in LibSignal. */
     - sizeof(uint32_t)
     /* Overhead from GroupAttributeBlob (protobuf) via GroupV2Params.encryptGroupAvatar(_:). */
@@ -23,7 +23,6 @@ const NSUInteger kMaxAvatarSize = (kMaxEncryptedAvatarSize
     - 12
     /* Reserved byte. See GroupSecretParams:encrypt_blob in LibSignal. */
     - 1);
-const CGFloat kMaxAvatarDimension = 1024;
 const NSUInteger kGroupIdLengthV1 = 16;
 const NSUInteger kGroupIdLengthV2 = 32;
 
@@ -73,20 +72,66 @@ NSUInteger const TSGroupModelSchemaVersion = 2;
     return self;
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wobjc-designated-initializers"
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    SignalServiceAddress *addedByAddress = self.addedByAddress;
+    if (addedByAddress != nil) {
+        [coder encodeObject:addedByAddress forKey:@"addedByAddress"];
+    }
+    NSString *avatarHash = self.avatarHash;
+    if (avatarHash != nil) {
+        [coder encodeObject:avatarHash forKey:@"avatarHash"];
+    }
+    NSData *groupId = self.groupId;
+    if (groupId != nil) {
+        [coder encodeObject:groupId forKey:@"groupId"];
+    }
+    if (![self isKindOfClass:[TSGroupModelV2 class]]) {
+        NSArray *groupMembers = self.groupMembers;
+        if (groupMembers != nil) {
+            [coder encodeObject:groupMembers forKey:@"groupMembers"];
+        }
+    }
+    [coder encodeObject:[self valueForKey:@"groupModelSchemaVersion"] forKey:@"groupModelSchemaVersion"];
+    NSString *groupName = self.groupName;
+    if (groupName != nil) {
+        [coder encodeObject:groupName forKey:@"groupName"];
+    }
+    NSData *legacyAvatarData = self.legacyAvatarData;
+    if (legacyAvatarData != nil) {
+        [coder encodeObject:legacyAvatarData forKey:@"legacyAvatarData"];
+    }
+}
+
 - (nullable instancetype)initWithCoder:(NSCoder *)coder
 {
-    self = [super initWithCoder:coder];
-#pragma clang diagnostic pop
+    self = [super init];
     if (!self) {
         return self;
     }
+    self->_addedByAddress = [coder decodeObjectOfClass:[SignalServiceAddress class] forKey:@"addedByAddress"];
+    self->_avatarHash = [coder decodeObjectOfClass:[NSString class] forKey:@"avatarHash"];
+    self->_groupId = [coder decodeObjectOfClass:[NSData class] forKey:@"groupId"];
+    self->_groupMembers =
+        [coder decodeObjectOfClasses:[NSSet setWithArray:@[ [NSArray class], [SignalServiceAddress class] ]]
+                              forKey:@"groupMembers"];
+    self->_groupModelSchemaVersion =
+        [(NSNumber *)[coder decodeObjectOfClass:[NSNumber class]
+                                         forKey:@"groupModelSchemaVersion"] unsignedIntegerValue];
+    self->_groupName = [coder decodeObjectOfClass:[NSString class] forKey:@"groupName"];
+    self->_legacyAvatarData = [coder decodeObjectOfClass:[NSData class] forKey:@"legacyAvatarData"];
 
     OWSAssertDebug([GroupManager isValidGroupId:self.groupId groupsVersion:self.groupsVersion]);
 
     if (_groupModelSchemaVersion < 1) {
-        NSArray<NSString *> *_Nullable memberE164s = [coder decodeObjectForKey:@"groupMemberIds"];
+        NSArray<NSString *> *_Nullable memberE164s =
+            [coder decodeObjectOfClasses:[NSSet setWithArray:@[ [NSArray class], [NSString class] ]]
+                                  forKey:@"groupMemberIds"];
         if (memberE164s) {
             NSMutableArray<SignalServiceAddress *> *memberAddresses = [NSMutableArray new];
             for (NSString *phoneNumber in memberE164s) {
@@ -100,12 +145,68 @@ NSUInteger const TSGroupModelSchemaVersion = 2;
     }
 
     if (_groupModelSchemaVersion < 2) {
-        _legacyAvatarData = [coder decodeObjectForKey:@"groupAvatarData"];
+        _legacyAvatarData = [coder decodeObjectOfClass:[NSData class] forKey:@"groupAvatarData"];
     }
 
     _groupModelSchemaVersion = TSGroupModelSchemaVersion;
 
     return self;
+}
+
+- (NSUInteger)hash
+{
+    NSUInteger result = 0;
+    result ^= self.addedByAddress.hash;
+    result ^= self.avatarHash.hash;
+    result ^= self.groupId.hash;
+    result ^= self.groupMembers.hash;
+    result ^= self.groupModelSchemaVersion;
+    result ^= self.groupName.hash;
+    result ^= self.legacyAvatarData.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![other isMemberOfClass:self.class]) {
+        return NO;
+    }
+    TSGroupModel *typedOther = (TSGroupModel *)other;
+    if (![NSObject isObject:self.addedByAddress equalToObject:typedOther.addedByAddress]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.avatarHash equalToObject:typedOther.avatarHash]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.groupId equalToObject:typedOther.groupId]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.groupMembers equalToObject:typedOther.groupMembers]) {
+        return NO;
+    }
+    if (self.groupModelSchemaVersion != typedOther.groupModelSchemaVersion) {
+        return NO;
+    }
+    if (![NSObject isObject:self.groupName equalToObject:typedOther.groupName]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.legacyAvatarData equalToObject:typedOther.legacyAvatarData]) {
+        return NO;
+    }
+    return YES;
+}
+
+- (id)copyWithZone:(nullable NSZone *)zone
+{
+    TSGroupModel *result = [[[self class] allocWithZone:zone] init];
+    result->_addedByAddress = self.addedByAddress;
+    result->_avatarHash = self.avatarHash;
+    result->_groupId = self.groupId;
+    result->_groupMembers = self.groupMembers;
+    result->_groupModelSchemaVersion = self.groupModelSchemaVersion;
+    result->_groupName = self.groupName;
+    result->_legacyAvatarData = self.legacyAvatarData;
+    return result;
 }
 
 - (GroupsVersion)groupsVersion
@@ -116,59 +217,6 @@ NSUInteger const TSGroupModelSchemaVersion = 2;
 - (GroupMembership *)groupMembership
 {
     return [[GroupMembership alloc] initWithV1Members:self.groupMembers];
-}
-
-+ (BOOL)isValidGroupAvatarData:(nullable NSData *)imageData
-{
-    ImageMetadata *metadata = [imageData imageMetadataWithPath:nil mimeType:nil];
-
-    BOOL isValid = YES;
-    isValid = isValid && metadata.isValid;
-    isValid = isValid && metadata.pixelSize.height <= kMaxAvatarDimension;
-    isValid = isValid && metadata.pixelSize.width <= kMaxAvatarDimension;
-    isValid = isValid && imageData.length <= kMaxAvatarSize;
-    return isValid;
-}
-
-+ (nullable NSData *)dataForGroupAvatar:(nullable UIImage *)image
-{
-    if (image == nil) {
-        return nil;
-    }
-
-    // First, resize the image if necessary
-    if ((CGFloat)image.pixelWidth > kMaxAvatarDimension || (CGFloat)image.pixelHeight > kMaxAvatarDimension) {
-        CGFloat thumbnailSizePixels = MIN((CGFloat)kMaxAvatarDimension, (CGFloat)MIN(image.pixelWidth, image.pixelHeight));
-        image = [image resizedImageToFillPixelSize:CGSizeMake(thumbnailSizePixels, thumbnailSizePixels)];
-    }
-    if ((CGFloat)image.pixelWidth > kMaxAvatarDimension || (CGFloat)image.pixelHeight > kMaxAvatarDimension) {
-        OWSFailDebug(@"Could not resize group avatar.");
-        return nil;
-    }
-
-    // Then, convert the image to jpeg. Try to use 0.6 compression quality, but we'll ratchet down if the
-    // image is still too large.
-    const CGFloat kMaxQuality = 0.6;
-    NSData *_Nullable imageData = nil;
-    for (CGFloat targetQuality = kMaxQuality; targetQuality >= 0 && imageData == nil; targetQuality -= 0.1) {
-        NSData *data = UIImageJPEGRepresentation(image, targetQuality);
-
-        if (data.length >= 0 && data.length <= kMaxAvatarSize) {
-            imageData = data;
-        } else if (data.length > kMaxAvatarSize) {
-            OWSLogInfo(@"Jpeg representation with quality %f is too large.", targetQuality);
-        } else {
-            OWSFailDebug(@"Failed to generate jpeg representation with quality %f", targetQuality);
-            return nil;
-        }
-    }
-
-    // Double check the image is still valid after we converted.
-    if (![self isValidGroupAvatarData:imageData]) {
-        OWSFailDebug(@"Invalid image");
-        return nil;
-    }
-    return imageData;
 }
 
 #endif

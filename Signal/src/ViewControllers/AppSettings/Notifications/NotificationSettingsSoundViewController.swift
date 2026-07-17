@@ -33,8 +33,16 @@ class NotificationSettingsSoundViewController: OWSTableViewController2 {
 
         title = OWSLocalizedString(
             "SETTINGS_ITEM_NOTIFICATION_SOUND",
-            comment: "Label for settings view that allows user to change the notification sound."
+            comment: "Label for settings view that allows user to change the notification sound.",
         )
+
+        navigationItem.leftBarButtonItem = .cancelButton { [weak self] in
+            self?.didTapCancel()
+        }
+
+        navigationItem.rightBarButtonItem = .setButton { [weak self] in
+            self?.didTapDone()
+        }
 
         updateTableContents()
         updateNavigation()
@@ -43,6 +51,7 @@ class NotificationSettingsSoundViewController: OWSTableViewController2 {
     private var hasUnsavedChanges: Bool {
         notificationSound != originalNotificationSound
     }
+
     // Don't allow interactive dismiss when there are unsaved changes.
     override var isModalInPresentation: Bool {
         get { hasUnsavedChanges }
@@ -50,21 +59,7 @@ class NotificationSettingsSoundViewController: OWSTableViewController2 {
     }
 
     private func updateNavigation() {
-        navigationItem.leftBarButtonItem = .cancelButton { [weak self] in
-            self?.didTapCancel()
-        }
-
-        if hasUnsavedChanges {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: CommonStrings.setButton,
-                style: .done,
-                target: self,
-                action: #selector(didTapDone),
-                accessibilityIdentifier: "set_button"
-            )
-        } else {
-            navigationItem.rightBarButtonItem = nil
-        }
+        navigationItem.rightBarButtonItem?.isEnabled = hasUnsavedChanges
     }
 
     func updateTableContents() {
@@ -78,9 +73,9 @@ class NotificationSettingsSoundViewController: OWSTableViewController2 {
                 soundName = String(
                     format: OWSLocalizedString(
                         "SETTINGS_AUDIO_DEFAULT_TONE_LABEL_FORMAT",
-                        comment: "Format string for the default 'Note' sound. Embeds the system {{sound name}}."
+                        comment: "Format string for the default 'Note' sound. Embeds the system {{sound name}}.",
                     ),
-                    sound.displayName
+                    sound.displayName,
                 )
             } else {
                 soundName = sound.displayName
@@ -91,17 +86,17 @@ class NotificationSettingsSoundViewController: OWSTableViewController2 {
                 actionBlock: { [weak self] in
                     self?.soundWasSelected(sound)
                 },
-                accessoryType: sound == notificationSound ? .checkmark : .none
+                accessoryType: sound == notificationSound ? .checkmark : .none,
             ))
         }
 
         section.add(.disclosureItem(
             withText: OWSLocalizedString(
                 "NOTIFICATIONS_SECTION_SOUNDS_ADD_CUSTOM_SOUND",
-                comment: "Label for settings UI that allows user to add a new notification sound."
+                comment: "Label for settings UI that allows user to add a new notification sound.",
             ),
             actionBlock: { [weak self] in
-                guard let self = self else { return }
+                guard let self else { return }
                 var contentTypes: [UTType] = [.wav, .aiff, .mp3]
                 for additionalUti in [
                     "public.aifc-audio",
@@ -115,7 +110,7 @@ class NotificationSettingsSoundViewController: OWSTableViewController2 {
                 let picker = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes, asCopy: true)
                 picker.delegate = self
                 self.present(picker, animated: true)
-            }
+            },
         ))
 
         contents.add(section)
@@ -154,7 +149,6 @@ class NotificationSettingsSoundViewController: OWSTableViewController2 {
         })
     }
 
-    @objc
     private func didTapDone() {
         if let thread {
             Sounds.setNotificationSound(notificationSound, forThread: thread)

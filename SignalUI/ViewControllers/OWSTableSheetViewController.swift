@@ -8,9 +8,9 @@ import UIKit
 
 open class OWSTableSheetViewController: InteractiveSheetViewController {
     open var tableViewController = OWSTableViewController2()
-    open override var interactiveScrollViews: [UIScrollView] { [tableViewController.tableView] }
+    override open var interactiveScrollViews: [UIScrollView] { [tableViewController.tableView] }
 
-    open override var sheetBackgroundColor: UIColor {
+    override open var sheetBackgroundColor: UIColor {
         OWSTableViewController2.tableBackgroundColor(isUsingPresentedStyle: true, forceDarkMode: tableViewController.forceDarkMode)
     }
 
@@ -36,12 +36,12 @@ open class OWSTableSheetViewController: InteractiveSheetViewController {
         // `maximumHeight` prevents the view's height from extending into top safe area.)
         return tableView.contentSize.height
             + tableView.contentInset.totalHeight
-            + footerStack.frame.height
+            + (tableViewController.bottomFooter?.height ?? 0)
             + bottomSafeAreaContentPadding
     }
 
-    public init() {
-        super.init()
+    override public init(visualEffect: UIVisualEffect? = nil) {
+        super.init(visualEffect: visualEffect)
 
         tableViewController.shouldDeferInitialLoad = false
 
@@ -52,54 +52,39 @@ open class OWSTableSheetViewController: InteractiveSheetViewController {
         self.minimizedHeight = self.contentSizeHeight
     }
 
-    open var footerStack: UIStackView = {
-        let view = UIStackView()
-        view.axis = .vertical
-        view.distribution = .fill
-        view.alignment = .center
-        view.preservesSuperviewLayoutMargins = true
-        return view
-    }()
-
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         addChild(tableViewController)
         contentView.addSubview(tableViewController.view)
-        contentView.addSubview(footerStack)
+        tableViewController.didMove(toParent: self)
 
-        tableViewController.view.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .bottom)
-        footerStack.autoPinEdgesToSuperviewEdges(with: .zero, excludingEdge: .top)
-        tableViewController.view.autoPinEdge(.bottom, to: .top, of: footerStack)
+        tableViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableViewController.view.topAnchor.constraint(equalTo: contentView.topAnchor),
+            tableViewController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            tableViewController.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            tableViewController.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
 
-        updateViewState()
+        updateTableContents(shouldReload: true)
     }
 
-    public override func viewDidLayoutSubviews() {
+    override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        updateViewState()
-    }
-
-    private var previousMinimizedHeight: CGFloat?
-    private var previousSafeAreaInsets: UIEdgeInsets?
-    public func updateViewState() {
-        if previousSafeAreaInsets != tableViewController.view.safeAreaInsets {
-            updateTableContents()
-            previousSafeAreaInsets = tableViewController.view.safeAreaInsets
-        }
         // The table view might not have its final size when this method is called.
         // Run a layout pass so that we compute the correct height constraints.
         self.tableViewController.tableView.layoutIfNeeded()
         self.updateMinimizedHeight()
     }
 
-    public override func themeDidChange() {
-        super.themeDidChange()
-        updateTableContents()
+    public func updateTableContents(shouldReload: Bool = true) {
+        tableViewController.setContents(tableContents(), shouldReload: shouldReload)
+        updateMinimizedHeight()
     }
 
-    open func updateTableContents(shouldReload: Bool = true) {
-
+    open func tableContents() -> OWSTableContents {
+        return OWSTableContents()
     }
 }

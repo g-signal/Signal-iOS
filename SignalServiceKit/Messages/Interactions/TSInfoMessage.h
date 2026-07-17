@@ -54,6 +54,8 @@ typedef NS_CLOSED_ENUM(NSInteger, TSInfoMessageType) {
     /// Represents that the remote user ended a 1:1 encryption session.
     /// - SeeAlso: ``TSInfoMessageTypeLocalUserEndedSession``
     TSInfoMessageTypeRemoteUserEndedSession,
+    TSInfoMessageTypeEndPoll,
+    TSInfoMessageTypePinnedMessage,
 };
 
 typedef NSString *InfoMessageUserInfoKey NS_STRING_ENUM;
@@ -76,12 +78,15 @@ extern InfoMessageUserInfoKey const InfoMessageUserInfoKeyThreadMergePhoneNumber
 extern InfoMessageUserInfoKey const InfoMessageUserInfoKeySessionSwitchoverPhoneNumber;
 extern InfoMessageUserInfoKey const InfoMessageUserInfoKeyPhoneNumberDisplayNameBeforeLearningProfileName;
 extern InfoMessageUserInfoKey const InfoMessageUserInfoKeyUsernameDisplayNameBeforeLearningProfileName;
+extern InfoMessageUserInfoKey const InfoMessageUserInfoKeyEndPoll;
+extern InfoMessageUserInfoKey const InfoMessageUserInfoKeyPinnedMessage;
 
 @property (nonatomic, readonly) TSInfoMessageType messageType;
 @property (nonatomic, readonly, nullable) NSString *customMessage;
 @property (nonatomic, readonly, nullable) SignalServiceAddress *unregisteredAddress;
 @property (nonatomic, readonly, nullable) NSString *serverGuid;
 
++ (NSArray<Class> *)infoMessageUserInfoObjectClasses;
 @property (nonatomic, nullable) NSDictionary<InfoMessageUserInfoKey, id> *infoMessageUserInfo;
 
 - (instancetype)initMessageWithBuilder:(TSMessageBuilder *)messageBuilder NS_UNAVAILABLE;
@@ -116,12 +121,14 @@ extern InfoMessageUserInfoKey const InfoMessageUserInfoKeyUsernameDisplayNameBef
                     storyTimestamp:(nullable NSNumber *)storyTimestamp
                 wasRemotelyDeleted:(BOOL)wasRemotelyDeleted NS_UNAVAILABLE;
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
 
 - (instancetype)initWithThread:(TSThread *)thread
                      timestamp:(uint64_t)timestamp
                     serverGuid:(nullable NSString *)serverGuid
                    messageType:(TSInfoMessageType)messageType
+            expireTimerVersion:(nullable NSNumber *)expireTimerVersion
+              expiresInSeconds:(unsigned int)expiresInSeconds
            infoMessageUserInfo:(nullable NSDictionary<InfoMessageUserInfoKey, id> *)infoMessageUserInfo
     NS_DESIGNATED_INITIALIZER;
 

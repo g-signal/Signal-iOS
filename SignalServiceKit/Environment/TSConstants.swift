@@ -11,17 +11,19 @@ public import LibSignalClient
 public class TSConstants {
 
     private enum Environment {
-        case production, staging
+        case production
+        case staging
     }
+
     private static let environment: Environment = {
-        // You can set "USE_STAGING=1" in your Xcode Scheme. This allows you to
-        // prepare a series of commits without accidentally committing the change
-        // to the environment.
-        #if DEBUG
+// You can set "USE_STAGING=1" in your Xcode Scheme. This allows you to
+// prepare a series of commits without accidentally committing the change
+// to the environment.
+#if DEBUG
         if ProcessInfo.processInfo.environment["USE_STAGING"] == "1" {
             return .staging
         }
-        #endif
+#endif
 
         // If you do want to make a build that will always connect to staging,
         // change this value. (Scheme environment variables are only set when
@@ -43,8 +45,7 @@ public class TSConstants {
     public static let donateUrl = URL(string: "https://signal.org/donate/")!
     public static let appStoreUrl = URL(string: "https://itunes.apple.com/us/app/b-a/id6754267880?mt=8")!
 
-    public static var mainServiceIdentifiedURL: String { shared.mainServiceIdentifiedURL }
-    public static var mainServiceUnidentifiedURL: String { shared.mainServiceUnidentifiedURL }
+    public static var mainServiceURL: String { shared.mainServiceURL }
 
     public static var textSecureCDN0ServerURL: String { shared.textSecureCDN0ServerURL }
     public static var textSecureCDN2ServerURL: String { shared.textSecureCDN2ServerURL }
@@ -100,8 +101,7 @@ public class TSConstants {
 // MARK: -
 
 public protocol TSConstantsProtocol: AnyObject {
-    var mainServiceIdentifiedURL: String { get }
-    var mainServiceUnidentifiedURL: String { get }
+    var mainServiceURL: String { get }
     var textSecureCDN0ServerURL: String { get }
     var textSecureCDN2ServerURL: String { get }
     var textSecureCDN3ServerURL: String { get }
@@ -147,7 +147,7 @@ public struct MrEnclave: Equatable {
         owsPrecondition(self.dataValue.count == 32)
     }
 
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.dataValue == rhs.dataValue
     }
 }
@@ -158,8 +158,7 @@ public class TSConstantsProduction: TSConstantsProtocol {
 
     public init() {}
 
-    public let mainServiceIdentifiedURL = "https://chat.ba-chat.com"
-    public let mainServiceUnidentifiedURL = "https://chat.ba-chat.com"
+    public let mainServiceURL = "https://chat.ba-chat.com"
     public let textSecureCDN0ServerURL = "https://cdn.ba-chat.com"
     public let textSecureCDN2ServerURL = "https://cdn2.ba-chat.com"
     public let textSecureCDN3ServerURL = "https://cdn3.ba-chat.com"
@@ -190,7 +189,7 @@ public class TSConstantsProduction: TSConstantsProtocol {
     // newest to oldest, so we check the latest enclaves for backups before
     // checking earlier enclaves.
     public let svr2PreviousEnclaves: [MrEnclave] = [
-        MrEnclave("b49a2d7aa6a92623713541be3342cc2432cbb4052a9ab83b50aef3375651e68f")
+        MrEnclave("b49a2d7aa6a92623713541be3342cc2432cbb4052a9ab83b50aef3375651e68f"),
     ]
 
     public let applicationGroup = "group." + Bundle.main.bundleIdPrefix + ".group"
@@ -211,8 +210,7 @@ public class TSConstantsStaging: TSConstantsProtocol {
 
     public init() {}
 
-    public let mainServiceIdentifiedURL = "https://chat.imba-test.com"
-    public let mainServiceUnidentifiedURL = "https://chat.imba-test.com"
+    public let mainServiceURL = "https://chat.imba-test.com"
     public let textSecureCDN0ServerURL = "http://cdn.imba-test.com"
     public let textSecureCDN2ServerURL = "https://cdn2.imba-test.com"
     public let textSecureCDN3ServerURL = "https://cdn3.imba-test.com"
@@ -245,7 +243,7 @@ public class TSConstantsStaging: TSConstantsProtocol {
     // newest to oldest, so we check the latest enclaves for backups before
     // checking earlier enclaves.
     public let svr2PreviousEnclaves: [MrEnclave] = [
-        MrEnclave("b49a2d7aa6a92623713541be3342cc2432cbb4052a9ab83b50aef3375651e68f")
+        MrEnclave("b49a2d7aa6a92623713541be3342cc2432cbb4052a9ab83b50aef3375651e68f"),
     ]
 
     public let applicationGroup = "group." + Bundle.main.bundleIdPrefix + ".group.staging"
@@ -269,9 +267,7 @@ public class TSConstantsMock: TSConstantsProtocol {
 
     private let defaultValues = TSConstantsProduction()
 
-    public lazy var mainServiceIdentifiedURL = defaultValues.mainServiceIdentifiedURL
-
-    public lazy var mainServiceUnidentifiedURL = defaultValues.mainServiceUnidentifiedURL
+    public lazy var mainServiceURL = defaultValues.mainServiceURL
 
     public lazy var textSecureCDN0ServerURL = defaultValues.textSecureCDN0ServerURL
 

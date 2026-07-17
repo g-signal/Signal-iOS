@@ -40,12 +40,12 @@ public class BaseOWSURLSessionMock: OWSURLSessionProtocol {
     // MARK: Initializers
 
     private let configuration: URLSessionConfiguration
-    private let maxResponseSize: Int?
+    private let maxResponseSize: UInt64?
 
     public required init(
         endpoint: OWSURLSessionEndpoint,
         configuration: URLSessionConfiguration,
-        maxResponseSize: Int?,
+        maxResponseSize: UInt64?,
         canUseSignalProxy: Bool,
         onFailureCallback: ((any Error) -> Void)?,
     ) {
@@ -64,11 +64,11 @@ public class BaseOWSURLSessionMock: OWSURLSessionProtocol {
                 baseUrl: nil,
                 frontingInfo: nil,
                 securityPolicy: .systemDefault,
-                extraHeaders: [:]
+                extraHeaders: [:],
             ),
             configuration: .default,
             maxResponseSize: nil,
-            canUseSignalProxy: false
+            canUseSignalProxy: false,
         )
     }
 
@@ -78,19 +78,19 @@ public class BaseOWSURLSessionMock: OWSURLSessionProtocol {
         _ urlString: String,
         method: HTTPMethod,
         headers: [String: String]?,
-        body: Data?
+        body: Data?,
     ) throws -> URLRequest {
         // Want different behavior? Write a custom mock class
         return URLRequest(url: URL(string: urlString)!)
     }
 
-    public func performRequest(_ rawRequest: TSRequest) async throws -> any HTTPResponse {
+    public func performRequest(_ rawRequest: TSRequest) async throws -> HTTPResponse {
         // Want different behavior? Write a custom mock class
-        return HTTPResponseImpl(
+        return HTTPResponse(
             requestUrl: rawRequest.url,
             status: 200,
             headers: HttpHeaders(),
-            bodyData: nil
+            bodyData: nil,
         )
     }
 
@@ -99,14 +99,14 @@ public class BaseOWSURLSessionMock: OWSURLSessionProtocol {
     public func performUpload(
         request: URLRequest,
         requestData: Data,
-        progress: OWSProgressSource?
-    ) async throws -> any HTTPResponse {
+        progress: OWSProgressSource?,
+    ) async throws -> HTTPResponse {
         // Want different behavior? Write a custom mock class
-        return HTTPResponseImpl(
+        return HTTPResponse(
             requestUrl: request.url!,
             status: 200,
             headers: HttpHeaders(),
-            bodyData: nil
+            bodyData: nil,
         )
     }
 
@@ -114,54 +114,54 @@ public class BaseOWSURLSessionMock: OWSURLSessionProtocol {
         request: URLRequest,
         fileUrl: URL,
         ignoreAppExpiry: Bool,
-        progress: OWSProgressSource?
-    ) async throws -> any HTTPResponse {
+        progress: OWSProgressSource?,
+    ) async throws -> HTTPResponse {
         // Want different behavior? Write a custom mock class
-        return HTTPResponseImpl(
+        return HTTPResponse(
             requestUrl: request.url!,
             status: 200,
             headers: HttpHeaders(),
-            bodyData: nil
+            bodyData: nil,
         )
     }
 
-    public func performRequest(request: URLRequest, ignoreAppExpiry: Bool) async throws -> any HTTPResponse {
+    public func performRequest(request: URLRequest, ignoreAppExpiry: Bool) async throws -> HTTPResponse {
         // Want different behavior? Write a custom mock class
-        return HTTPResponseImpl(
+        return HTTPResponse(
             requestUrl: request.url!,
             status: 200,
             headers: HttpHeaders(),
-            bodyData: nil
+            bodyData: nil,
         )
     }
 
     public func performDownload(
         request: URLRequest,
-        progress: OWSProgressSource?
+        progress: OWSProgressSource?,
     ) async throws -> OWSUrlDownloadResponse {
         // Want different behavior? Write a custom mock class
         return OWSUrlDownloadResponse(
             httpUrlResponse: HTTPURLResponse(),
-            downloadUrl: URL(fileURLWithPath: request.url!.lastPathComponent)
+            downloadUrl: URL(fileURLWithPath: request.url!.lastPathComponent),
         )
     }
 
     public func performDownload(
         requestUrl: URL,
         resumeData: Data,
-        progress: OWSProgressSource?
+        progress: OWSProgressSource?,
     ) async throws -> OWSUrlDownloadResponse {
         // Want different behavior? Write a custom mock class
         return OWSUrlDownloadResponse(
             httpUrlResponse: HTTPURLResponse(),
-            downloadUrl: URL(fileURLWithPath: requestUrl.lastPathComponent)
+            downloadUrl: URL(fileURLWithPath: requestUrl.lastPathComponent),
         )
     }
 
     public func webSocketTask(
         requestUrl: URL,
         didOpenBlock: @escaping (String?) -> Void,
-        didCloseBlock: @escaping (Error) -> Void
+        didCloseBlock: @escaping (Error) -> Void,
     ) -> URLSessionWebSocketTask {
         // Want different behavior? Write a custom mock class
         fatalError("Not implemented.")

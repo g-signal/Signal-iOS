@@ -37,41 +37,26 @@ class BackupBGProcessingTaskRunner: BGProcessingTaskRunner {
 
     // MARK: - BGProcessingTaskRunner
 
-    public static let taskIdentifier = "BackupBGProcessingTaskRunner"
-
-    public static let requiresNetworkConnectivity = true
-    public static let requiresExternalPower = true
+    static let taskIdentifier = "BackupBGProcessingTaskRunner"
+    static let logPrefix: String? = "[Backups][ExportJob]"
+    static let requiresNetworkConnectivity = true
+    static let requiresExternalPower = true
 
     func run() async throws {
         try await runWithChatConnection(
             backgroundMessageFetcherFactory: backgroundMessageFetcherFactory(),
             operation: {
-                do throws(BackupExportJobError) {
-                    try await exportJob().exportAndUploadBackup(mode: .bgProcessingTask)
-                } catch {
-                    switch error {
-                    case .cancellationError:
-                        // Unwrap to a CancellationError so that the generic
-                        // BGProcessingTask host reschedules the job.
-                        throw CancellationError()
-                    default:
-                        throw error
-                    }
-                }
+                try await exportJob().exportAndUploadBackup(mode: .bgProcessingTask)
 
                 await db.awaitableWrite { tx in
                     kvStore.setDate(dateProvider(), key: StoreKeys.lastCompletionDate, transaction: tx)
                 }
-            }
+            },
         )
     }
 
-    public func startCondition() -> BGProcessingTaskStartCondition {
-        guard FeatureFlags.Backups.supported else {
-            return .never
-        }
-
-        return db.read { (tx) -> BGProcessingTaskStartCondition in
+    func startCondition() -> BGProcessingTaskStartCondition {
+        return db.read { tx -> BGProcessingTaskStartCondition in
             guard tsAccountManager().registrationState(tx: tx).isRegisteredPrimaryDevice else {
                 return .never
             }
@@ -99,7 +84,7 @@ class BackupBGProcessingTaskRunner: BGProcessingTaskRunner {
             let targetStartDate = calendar.nextDate(
                 after: Date(),
                 matching: DateComponents(hour: 3),
-                matchingPolicy: .nextTime
+                matchingPolicy: .nextTime,
             )
             if let targetStartDate {
                 return .after(targetStartDate)

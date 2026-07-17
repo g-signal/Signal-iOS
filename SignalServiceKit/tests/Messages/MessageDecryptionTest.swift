@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import LibSignalClient
 import XCTest
 @testable import SignalServiceKit
-import LibSignalClient
 
 class MessageDecryptionTest: SSKBaseTest {
     let localE164Identifier = "+13235551234"
@@ -39,9 +39,9 @@ class MessageDecryptionTest: SSKBaseTest {
                 localIdentifiers: .init(
                     aci: .init(fromUUID: localAci),
                     pni: .init(fromUUID: localPni),
-                    e164: .init(localE164Identifier)!
+                    e164: .init(localE164Identifier)!,
                 ),
-                tx: tx
+                tx: tx,
             )
 
             DependenciesBridge.shared.tsAccountManager.setRegistrationId(RegistrationIdGenerator.generate(), for: .aci, tx: tx)
@@ -60,33 +60,39 @@ class MessageDecryptionTest: SSKBaseTest {
         type: SSKProtoEnvelopeType,
         destinationIdentity: OWSIdentity,
         destinationServiceId: ServiceId? = nil,
-        prepareForDecryption: (SignalProtocolStore, DBWriteTransaction) -> Void = { _, _ in },
-        handleResult: (Result<DecryptedIncomingEnvelope, Error>, SSKProtoEnvelope) -> Void
+        hasSignedPreKey: Bool = true,
+        hasOneTimePreKey: Bool = true,
+        handleResult: (Result<DecryptedIncomingEnvelope, Error>, SSKProtoEnvelope) -> Void,
     ) {
         write { transaction in
             let localClient: TestSignalClient
             let localDestinationServiceId: ServiceId
-            let localProtocolStore: SignalProtocolStore
             switch destinationIdentity {
             case .aci:
                 localClient = self.localClient
                 localDestinationServiceId = Aci(fromUUID: localAci)
-                localProtocolStore = self.localClient.protocolStore
             case .pni:
                 localClient = self.localPniClient
                 localDestinationServiceId = Pni(fromUUID: localPni)
-                localProtocolStore = self.localPniClient.protocolStore
             }
 
             switch type {
             case .ciphertext:
-                try! runner.initialize(senderClient: remoteClient,
-                                       recipientClient: localClient,
-                                       transaction: transaction)
+                try! runner.initialize(
+                    senderClient: remoteClient,
+                    recipientClient: localClient,
+                    hasSignedPreKey: hasSignedPreKey,
+                    hasOneTimePreKey: hasOneTimePreKey,
+                    transaction: transaction,
+                )
             case .prekeyBundle, .unidentifiedSender:
-                try! runner.initializePreKeys(senderClient: remoteClient,
-                                              recipientClient: localClient,
-                                              transaction: transaction)
+                try! runner.initializePreKeys(
+                    senderClient: remoteClient,
+                    recipientClient: localClient,
+                    hasSignedPreKey: hasSignedPreKey,
+                    hasOneTimePreKey: hasOneTimePreKey,
+                    transaction: transaction,
+                )
             default:
                 XCTFail("unsupported envelope type for this test: \(type)")
                 return
@@ -98,14 +104,16 @@ class MessageDecryptionTest: SSKBaseTest {
             contentProto.dataMessage.timestamp = timestamp
             contentProto.dataMessage.body = message
 
-            let ciphertext = try! runner.encrypt(try! contentProto.serializedData().paddedMessageBody,
-                                                 senderClient: remoteClient,
-                                                 recipient: localClient.protocolAddress,
-                                                 context: transaction)
+            let ciphertext = try! runner.encrypt(
+                try! contentProto.serializedData().paddedMessageBody,
+                senderClient: remoteClient,
+                recipient: localClient.protocolAddress,
+                context: transaction,
+            )
 
             let envelopeBuilder = SSKProtoEnvelope.builder(timestamp: timestamp)
             envelopeBuilder.setType(type)
-            envelopeBuilder.setDestinationServiceID((destinationServiceId ?? localDestinationServiceId).serviceIdString)
+            envelopeBuilder.setDestinationServiceIDBinary((destinationServiceId ?? localDestinationServiceId).serviceIdBinary)
             envelopeBuilder.setServerTimestamp(Date.ows_millisecondTimestamp())
 
             if type == .unidentifiedSender {
@@ -114,14 +122,17 @@ class MessageDecryptionTest: SSKBaseTest {
                     senderAddress: try! SealedSenderAddress(
                         e164: remoteClient.e164Identifier,
                         aci: remoteClient.serviceId as! Aci,
-                        deviceId: remoteClient.deviceId
+                        deviceId: remoteClient.deviceId,
                     ),
                     identityKey: remoteClient.identityKeyPair.identityKeyPair.publicKey,
-                    expirationTimestamp: 13337)
-                let usmc = try! UnidentifiedSenderMessageContent(ciphertext,
-                                                                 from: senderCert,
-                                                                 contentHint: .default,
-                                                                 groupId: [])
+                    expirationTimestamp: 13337,
+                )
+                let usmc = try! UnidentifiedSenderMessageContent(
+                    ciphertext,
+                    from: senderCert,
+                    contentHint: .default,
+                    groupId: [],
+                )
                 envelopeBuilder.setContent(try! sealedSenderEncrypt(
                     usmc,
                     for: localClient.protocolAddress,
@@ -130,14 +141,12 @@ class MessageDecryptionTest: SSKBaseTest {
                 ))
                 envelopeBuilder.setServerTimestamp(13336)
             } else {
-                envelopeBuilder.setSourceServiceID(remoteClient.serviceId.serviceIdString)
+                envelopeBuilder.setSourceServiceIDBinary(remoteClient.serviceId.serviceIdBinary)
                 envelopeBuilder.setSourceDevice(remoteClient.deviceId)
                 envelopeBuilder.setContent(ciphertext.serialize())
             }
 
             let envelope = try! envelopeBuilder.build()
-
-            prepareForDecryption(localProtocolStore, transaction)
 
             let localIdentifiers = DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: transaction)!
             let decryptedEnvelope: Result<DecryptedIncomingEnvelope, Error> = Result {
@@ -150,14 +159,14 @@ class MessageDecryptionTest: SSKBaseTest {
                         validatedEnvelope,
                         localIdentifiers: localIdentifiers,
                         localDeviceId: DependenciesBridge.shared.tsAccountManager.storedDeviceId(tx: transaction),
-                        tx: transaction
+                        tx: transaction,
                     )
                 case .identifiedSender(let cipherType):
                     return try SSKEnvironment.shared.messageDecrypterRef.decryptIdentifiedEnvelope(
                         validatedEnvelope,
                         cipherType: cipherType,
                         localIdentifiers: localIdentifiers,
-                        tx: transaction
+                        tx: transaction,
                     )
                 }
             }
@@ -179,16 +188,20 @@ class MessageDecryptionTest: SSKBaseTest {
         }
     }
 
-    private func expectDecryptionFailure(type: SSKProtoEnvelopeType,
-                                         destinationIdentity: OWSIdentity,
-                                         destinationServiceId: ServiceId? = nil,
-                                         prepareForDecryption: (SignalProtocolStore, DBWriteTransaction) -> Void = { _, _ in },
-                                         isExpectedError: (Error) -> Bool) {
+    private func expectDecryptionFailure(
+        type: SSKProtoEnvelopeType,
+        destinationIdentity: OWSIdentity,
+        destinationServiceId: ServiceId? = nil,
+        hasSignedPreKey: Bool = true,
+        hasOneTimePreKey: Bool = true,
+        isExpectedError: (Error) -> Bool,
+    ) {
         generateAndDecrypt(
             type: type,
             destinationIdentity: destinationIdentity,
             destinationServiceId: destinationServiceId,
-            prepareForDecryption: prepareForDecryption
+            hasSignedPreKey: hasSignedPreKey,
+            hasOneTimePreKey: hasOneTimePreKey,
         ) { result, _ in
             switch result {
             case .success:
@@ -221,12 +234,14 @@ class MessageDecryptionTest: SSKBaseTest {
     }
 
     func testDecryptPreKeyPniWithAciDestinationUuid() {
-        expectDecryptionFailure(type: .prekeyBundle,
-                                destinationIdentity: .pni,
-                                destinationServiceId: localClient.serviceId) { error in
+        expectDecryptionFailure(
+            type: .prekeyBundle,
+            destinationIdentity: .pni,
+            destinationServiceId: localClient.serviceId,
+        ) { error in
             if let error = error as? OWSError {
                 let underlyingError = error.errorUserInfo[NSUnderlyingErrorKey]
-                if case SignedPreKeyStoreImpl.Error.noPreKeyWithId(_)? = underlyingError {
+                if case SignalServiceKit.PreKeyStore.Error.noPreKeyWithId(_)? = underlyingError {
                     return true
                 }
             }
@@ -235,9 +250,11 @@ class MessageDecryptionTest: SSKBaseTest {
     }
 
     func testDecryptPreKeyPniWithWrongDestinationUuid() {
-        expectDecryptionFailure(type: .prekeyBundle,
-                                destinationIdentity: .pni,
-                                destinationServiceId: Pni.randomForTesting()) { error in
+        expectDecryptionFailure(
+            type: .prekeyBundle,
+            destinationIdentity: .pni,
+            destinationServiceId: Pni.randomForTesting(),
+        ) { error in
             if case MessageProcessingError.wrongDestinationUuid = error {
                 return true
             }
@@ -259,7 +276,7 @@ class MessageDecryptionTest: SSKBaseTest {
 
         fakeMessageSender.stubbedFailingErrors = [nil]
         fakeMessageSender.sendMessageWasCalledBlock = { message in
-            guard let resendRequest = message as? OWSOutgoingResendRequest else {
+            guard let resendRequest = message as? OutgoingResendRequest else {
                 return
             }
             self.fakeMessageSender.sendMessageWasCalledBlock = nil
@@ -275,8 +292,12 @@ class MessageDecryptionTest: SSKBaseTest {
     }
 
     private func checkRemoteRatchetKey(expected: PublicKey) {
-        guard let session = try! remoteClient.sessionStore.loadSession(for: localClient.protocolAddress,
-                                                                       context: NullContext()) else {
+        guard
+            let session = try! remoteClient.sessionStore.loadSession(
+                for: localClient.protocolAddress,
+                context: NullContext(),
+            )
+        else {
             XCTFail("no session established")
             return
         }
@@ -288,14 +309,14 @@ class MessageDecryptionTest: SSKBaseTest {
 
         let requestRatchetKey = waitForResendRequestRatchetKey()
 
-        expectDecryptionFailure(type: .prekeyBundle,
-                                destinationIdentity: .aci,
-                                prepareForDecryption: { protocolStore, transaction in
-                protocolStore.signedPreKeyStore.removeAll(tx: transaction)
-        }) { error in
+        expectDecryptionFailure(
+            type: .prekeyBundle,
+            destinationIdentity: .aci,
+            hasSignedPreKey: false,
+        ) { error in
             if let error = error as? OWSError {
                 let underlyingError = error.errorUserInfo[NSUnderlyingErrorKey]
-                if case SignedPreKeyStoreImpl.Error.noPreKeyWithId(_)? = underlyingError {
+                if case SignalServiceKit.PreKeyStore.Error.noPreKeyWithId(_)? = underlyingError {
                     return true
                 }
             }
@@ -306,14 +327,14 @@ class MessageDecryptionTest: SSKBaseTest {
 
         let sealedSenderResendRequestRatchetKey = waitForResendRequestRatchetKey()
 
-        expectDecryptionFailure(type: .unidentifiedSender,
-                                destinationIdentity: .aci,
-                                prepareForDecryption: { protocolStore, transaction in
-            protocolStore.signedPreKeyStore.removeAll(tx: transaction)
-        }) { error in
+        expectDecryptionFailure(
+            type: .unidentifiedSender,
+            destinationIdentity: .aci,
+            hasSignedPreKey: false,
+        ) { error in
             if let error = error as? OWSError {
                 let underlyingError = error.errorUserInfo[NSUnderlyingErrorKey]
-                if case SignedPreKeyStoreImpl.Error.noPreKeyWithId(_)? = underlyingError {
+                if case SignalServiceKit.PreKeyStore.Error.noPreKeyWithId(_)? = underlyingError {
                     return true
                 }
             }
@@ -328,14 +349,14 @@ class MessageDecryptionTest: SSKBaseTest {
 
         let requestRatchetKey = waitForResendRequestRatchetKey()
 
-        expectDecryptionFailure(type: .prekeyBundle,
-                                destinationIdentity: .aci,
-                                prepareForDecryption: { protocolStore, transaction in
-            protocolStore.preKeyStore.removeAll(tx: transaction)
-        }) { error in
+        expectDecryptionFailure(
+            type: .prekeyBundle,
+            destinationIdentity: .aci,
+            hasOneTimePreKey: false,
+        ) { error in
             if let error = error as? OWSError {
                 let underlyingError = error.errorUserInfo[NSUnderlyingErrorKey]
-                if case PreKeyStoreImpl.Error.noPreKeyWithId(_)? = underlyingError {
+                if case SignalServiceKit.PreKeyStore.Error.noPreKeyWithId(_)? = underlyingError {
                     return true
                 }
             }
@@ -346,14 +367,14 @@ class MessageDecryptionTest: SSKBaseTest {
 
         let sealedSenderResendRequestRatchetKey = waitForResendRequestRatchetKey()
 
-        expectDecryptionFailure(type: .unidentifiedSender,
-                                destinationIdentity: .aci,
-                                prepareForDecryption: { protocolStore, transaction in
-            protocolStore.preKeyStore.removeAll(tx: transaction)
-        }) { error in
+        expectDecryptionFailure(
+            type: .unidentifiedSender,
+            destinationIdentity: .aci,
+            hasOneTimePreKey: false,
+        ) { error in
             if let error = error as? OWSError {
                 let underlyingError = error.errorUserInfo[NSUnderlyingErrorKey]
-                if case PreKeyStoreImpl.Error.noPreKeyWithId(_)? = underlyingError {
+                if case SignalServiceKit.PreKeyStore.Error.noPreKeyWithId(_)? = underlyingError {
                     return true
                 }
             }

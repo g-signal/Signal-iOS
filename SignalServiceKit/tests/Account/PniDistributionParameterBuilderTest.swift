@@ -22,14 +22,15 @@ class PniDistributionParameterBuilderTest: XCTestCase {
         dateProvider = { Date() }
         db = InMemoryDB()
         messageSenderMock = .init(db: db)
-        pniKyberPreKeyStoreMock = KyberPreKeyStoreImpl(for: .pni, dateProvider: dateProvider)
+        let preKeyStore = SignalServiceKit.PreKeyStore()
+        pniKyberPreKeyStoreMock = KyberPreKeyStoreImpl(for: .pni, dateProvider: dateProvider, preKeyStore: preKeyStore)
         registrationIdGeneratorMock = .init()
 
         pniDistributionParameterBuilder = PniDistributionParameterBuilderImpl(
             db: db,
             messageSender: messageSenderMock,
             pniKyberPreKeyStore: pniKyberPreKeyStoreMock,
-            registrationIdGenerator: registrationIdGeneratorMock
+            registrationIdGenerator: registrationIdGeneratorMock,
         )
     }
 
@@ -38,16 +39,16 @@ class PniDistributionParameterBuilderTest: XCTestCase {
             type: .ciphertext,
             destinationDeviceId: deviceId,
             destinationRegistrationId: registrationId,
-            content: Data()
+            content: Data(),
         )
     }
 
     func testBuildParametersHappyPath() async throws {
         let pniKeyPair = ECKeyPair.generateKeyPair()
-        let localSignedPreKey = SignedPreKeyStoreImpl.generateSignedPreKey(signedBy: pniKeyPair)
+        let localSignedPreKey = SignedPreKeyStoreImpl.generateSignedPreKey(keyId: PreKeyId.random(), signedBy: pniKeyPair.keyPair.privateKey)
         let localRegistrationId = registrationIdGeneratorMock.generate()
         let localPqLastResortPreKey = db.write { tx in
-            self.pniKyberPreKeyStoreMock.generateLastResortKyberPreKey(signedBy: pniKeyPair, tx: tx)
+            self.pniKyberPreKeyStoreMock.generateLastResortKyberPreKeyForChangeNumber(signedBy: pniKeyPair.keyPair.privateKey)
         }
 
         messageSenderMock.deviceMessagesMocks.update {
@@ -61,18 +62,17 @@ class PniDistributionParameterBuilderTest: XCTestCase {
             localPniIdentityKeyPair: pniKeyPair,
             localDevicePniSignedPreKey: localSignedPreKey,
             localDevicePniPqLastResortPreKey: localPqLastResortPreKey,
-            localDevicePniRegistrationId: localRegistrationId
+            localDevicePniRegistrationId: localRegistrationId,
         )
 
         XCTAssertEqual(parameters.pniIdentityKey, pniKeyPair.keyPair.identityKey)
 
-        XCTAssertEqual(Set(parameters.devicePniSignedPreKeys.values.map { $0.keyPair.publicKey }).count, 2)
-
-        XCTAssertEqual(Set(parameters.devicePniPqLastResortPreKeys.values.map { $0.keyPair.publicKey.serialize() }).count, 2)
+        XCTAssertEqual(parameters.devicePniSignedPreKeys.values.count, 2)
+        XCTAssertEqual(parameters.devicePniPqLastResortPreKeys.values.count, 2)
 
         XCTAssertEqual(
-            Set(parameters.pniRegistrationIds.values),
-            Set(registrationIdGeneratorMock.generatedRegistrationIds)
+            parameters.pniRegistrationIds.values.sorted(),
+            registrationIdGeneratorMock.generatedRegistrationIds.sorted(),
         )
 
         XCTAssertEqual(parameters.deviceMessages.count, 1)
@@ -84,10 +84,10 @@ class PniDistributionParameterBuilderTest: XCTestCase {
 
     func testBuildParametersWithError() async {
         let pniKeyPair = ECKeyPair.generateKeyPair()
-        let localSignedPreKey = SignedPreKeyStoreImpl.generateSignedPreKey(signedBy: pniKeyPair)
+        let localSignedPreKey = SignedPreKeyStoreImpl.generateSignedPreKey(keyId: PreKeyId.random(), signedBy: pniKeyPair.keyPair.privateKey)
         let localRegistrationId = registrationIdGeneratorMock.generate()
         let localPqLastResortPreKey = db.write { tx in
-            self.pniKyberPreKeyStoreMock.generateLastResortKyberPreKey(signedBy: pniKeyPair, tx: tx)
+            self.pniKyberPreKeyStoreMock.generateLastResortKyberPreKeyForChangeNumber(signedBy: pniKeyPair.keyPair.privateKey)
         }
 
         messageSenderMock.deviceMessagesMocks.update {
@@ -100,7 +100,7 @@ class PniDistributionParameterBuilderTest: XCTestCase {
                 localPniIdentityKeyPair: pniKeyPair,
                 localDevicePniSignedPreKey: localSignedPreKey,
                 localDevicePniPqLastResortPreKey: localPqLastResortPreKey,
-                localDevicePniRegistrationId: localRegistrationId
+                localDevicePniRegistrationId: localRegistrationId,
             )
         }
 
@@ -114,9 +114,9 @@ class PniDistributionParameterBuilderTest: XCTestCase {
     private func build(
         localDeviceId: DeviceId,
         localPniIdentityKeyPair: ECKeyPair,
-        localDevicePniSignedPreKey: SignalServiceKit.SignedPreKeyRecord,
-        localDevicePniPqLastResortPreKey: SignalServiceKit.KyberPreKeyRecord,
-        localDevicePniRegistrationId: UInt32
+        localDevicePniSignedPreKey: LibSignalClient.SignedPreKeyRecord,
+        localDevicePniPqLastResortPreKey: LibSignalClient.KyberPreKeyRecord,
+        localDevicePniRegistrationId: UInt32,
     ) async throws -> PniDistribution.Parameters {
         let aci = Aci.randomForTesting()
         let e164 = E164("+17735550199")!
@@ -128,7 +128,7 @@ class PniDistributionParameterBuilderTest: XCTestCase {
             localE164: e164,
             localDevicePniSignedPreKey: localDevicePniSignedPreKey,
             localDevicePniPqLastResortPreKey: localDevicePniPqLastResortPreKey,
-            localDevicePniRegistrationId: localDevicePniRegistrationId
+            localDevicePniRegistrationId: localDevicePniRegistrationId,
         )
     }
 }
@@ -152,7 +152,7 @@ private class MessageSenderMock: PniDistributionParameterBuilderImpl.Shims.Messa
         encryptionStyle: EncryptionStyle,
         buildPlaintextContent: (DeviceId, DBWriteTransaction) throws -> Data,
         isTransient: Bool,
-        sealedSenderParameters: SealedSenderParameters?
+        sealedSenderParameters: SealedSenderParameters?,
     ) async throws -> [DeviceMessage] {
         let nextResult = deviceMessagesMocks.update { $0.removeFirst() }
         let result = try nextResult.get()

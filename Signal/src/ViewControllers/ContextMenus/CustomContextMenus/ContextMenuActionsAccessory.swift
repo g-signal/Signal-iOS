@@ -20,11 +20,14 @@ public class ContextMenuActionsAccessory: ContextMenuTargetedPreviewAccessory, C
     public init(
         menu: ContextMenu,
         accessoryAlignment: AccessoryAlignment,
-        forceDarkTheme: Bool = false
+        forceDarkTheme: Bool = false,
     ) {
         self.menu = menu
 
-        menuView = ContextMenuActionsView(menu: menu, forceDarkTheme: forceDarkTheme)
+        menuView = ContextMenuActionsView(menu: menu)
+        if forceDarkTheme {
+            menuView.overrideUserInterfaceStyle = .dark
+        }
         menuView.isHidden = true
         super.init(accessoryView: menuView, accessoryAlignment: accessoryAlignment)
         menuView.delegate = self
@@ -34,7 +37,7 @@ public class ContextMenuActionsAccessory: ContextMenuTargetedPreviewAccessory, C
     override func animateIn(
         duration: TimeInterval,
         previewWillShift: Bool,
-        completion: @escaping () -> Void
+        completion: @escaping () -> Void,
     ) {
 
         setMenuLayerAnchorPoint()
@@ -50,7 +53,7 @@ public class ContextMenuActionsAccessory: ContextMenuTargetedPreviewAccessory, C
             animations: {
                 self.menuView.transform = CGAffineTransform.identity
             },
-            completion: nil
+            completion: nil,
         )
 
         let opacityAnimation = CABasicAnimation(keyPath: "opacity")
@@ -64,7 +67,7 @@ public class ContextMenuActionsAccessory: ContextMenuTargetedPreviewAccessory, C
     override func animateOut(
         duration: TimeInterval,
         previewWillShift: Bool,
-        completion: @escaping () -> Void
+        completion: @escaping () -> Void,
     ) {
 
         setMenuLayerAnchorPoint()
@@ -77,7 +80,7 @@ public class ContextMenuActionsAccessory: ContextMenuTargetedPreviewAccessory, C
             },
             completion: { _ in
                 completion()
-            }
+            },
         )
 
         let opacityAnimation = CABasicAnimation(keyPath: "opacity")
@@ -124,13 +127,13 @@ public class ContextMenuActionsAccessory: ContextMenuTargetedPreviewAccessory, C
     }
 
     override func touchLocationInViewDidChange(
-        locationInView: CGPoint
+        locationInView: CGPoint,
     ) {
         menuView.handleGestureChanged(locationInView: locationInView)
     }
 
     override func touchLocationInViewDidEnd(
-        locationInView: CGPoint
+        locationInView: CGPoint,
     ) -> Bool {
         return menuView.handleGestureEnded(locationInView: locationInView)
     }
@@ -150,12 +153,9 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
 
     private class ContextMenuActionRow: UIView {
         let attributes: ContextMenuAction.Attributes
-        let hostEffect: UIBlurEffect
-        let forceDarkTheme: Bool
-        let visualEffectView: UIVisualEffectView
         let titleLabel: UILabel
         let iconView: UIImageView
-        let separatorView: UIView
+        var separatorView: UIView?
         var highlightedView: UIView?
         var isHighlighted: Bool {
             didSet {
@@ -163,10 +163,15 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
                     if isHighlighted {
                         if highlightedView == nil {
                             let view = UIView()
-                            view.frame = bounds
-                            view.backgroundColor = forceDarkTheme || Theme.isDarkThemeEnabled
-                                ? UIColor(rgbHex: 0x787880).withAlphaComponent(0.32)
-                                : UIColor(rgbHex: 0x787880).withAlphaComponent(0.16)
+
+                            if #available(iOS 26, *) {
+                                view.frame = bounds.insetBy(dx: 10, dy: 1)
+                                view.cornerConfiguration = .capsule()
+                            } else {
+                                view.frame = bounds
+                            }
+
+                            view.backgroundColor = .Signal.secondaryFill
                             view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                             highlightedView = view
                         }
@@ -182,17 +187,27 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
         }
 
         var maxWidth: CGFloat = 250
-        let margin: CGFloat = 16
+        let margin: CGFloat = if #available(iOS 26, *) {
+            24
+        } else {
+            16
+        }
+
+        let iconSpacing: CGFloat = 12
         let verticalPadding: CGFloat = 23
-        let iconSize: CGFloat = 20
+        let iconSize: CGFloat = if #available(iOS 26, *) {
+            24
+        } else {
+            20
+        }
+
         let titleMaxLines = 2
 
-        public init(
+        init(
             title: String,
             icon: UIImage?,
             attributes: ContextMenuAction.Attributes,
-            hostBlurEffect: UIBlurEffect,
-            forceDarkTheme: Bool
+            hostBlurEffect: UIBlurEffect?,
         ) {
             titleLabel = UILabel(frame: CGRect.zero)
             titleLabel.text = title
@@ -200,8 +215,6 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
             titleLabel.numberOfLines = titleMaxLines
 
             self.attributes = attributes
-            hostEffect = hostBlurEffect
-            self.forceDarkTheme = forceDarkTheme
 
             /// when made a child of a UIVisualEffectView, UILabel text color is overridden, but a vibrancy effect is added.
             /// When we aren't using a color anyway, we want the vibrancy effect so we add it as a subview of the visual effect.
@@ -211,10 +224,10 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
                 titleLabel.textColor = UIColor.Signal.red
                 makeLabelSubviewOfVisualEffectsView = false
             } else if attributes.contains(.disabled) {
-                titleLabel.textColor = forceDarkTheme ? Theme.darkThemeSecondaryTextAndIconColor : Theme.secondaryTextAndIconColor
+                titleLabel.textColor = .Signal.secondaryLabel
                 makeLabelSubviewOfVisualEffectsView = false
             } else {
-                titleLabel.textColor = forceDarkTheme ? Theme.darkThemePrimaryColor : Theme.primaryTextColor
+                titleLabel.textColor = .Signal.label
                 makeLabelSubviewOfVisualEffectsView = true
             }
 
@@ -222,26 +235,32 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
             iconView.contentMode = .scaleAspectFit
             iconView.tintColor = titleLabel.textColor
 
-            separatorView = UIView()
-            separatorView.backgroundColor = forceDarkTheme || Theme.isDarkThemeEnabled
-                ? UIColor(rgbHex: 0x545458).withAlphaComponent(0.6)
-                : UIColor(rgbHex: 0x3c3c43).withAlphaComponent(0.3)
-            separatorView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             isHighlighted = false
 
-            visualEffectView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: hostBlurEffect, style: .label))
             super.init(frame: .zero)
 
-            addSubview(visualEffectView)
-            if makeLabelSubviewOfVisualEffectsView {
-                visualEffectView.contentView.addSubview(titleLabel)
+            if let hostBlurEffect {
+                let visualEffectView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: hostBlurEffect, style: .label))
+                addSubview(visualEffectView)
+                if makeLabelSubviewOfVisualEffectsView {
+                    visualEffectView.contentView.addSubview(titleLabel)
+                } else {
+                    addSubview(titleLabel)
+                }
+
+                let separatorView = UIView()
+                separatorView.backgroundColor = .Signal.transparentSeparator
+                separatorView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                self.separatorView = separatorView
+
+                visualEffectView.contentView.addSubview(iconView)
+                visualEffectView.contentView.addSubview(separatorView)
+
+                visualEffectView.autoPinEdgesToSuperviewEdges()
             } else {
                 addSubview(titleLabel)
+                addSubview(iconView)
             }
-            visualEffectView.contentView.addSubview(iconView)
-            visualEffectView.contentView.addSubview(separatorView)
-
-            visualEffectView.autoPinEdgesToSuperviewEdges()
 
             isAccessibilityElement = true
             accessibilityLabel = titleLabel.text
@@ -252,7 +271,7 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
             fatalError("init(coder:) has not been implemented")
         }
 
-        public override func layoutSubviews() {
+        override func layoutSubviews() {
             super.layoutSubviews()
 
             let isRTL = CurrentAppContext().isRTL
@@ -263,16 +282,16 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
             titleFrame.y = ceil((bounds.height - titleFrame.height) / 2)
             iconViewFrame.y = max(0, (bounds.height - iconViewFrame.height) / 2)
 
-            let titleWidth = bounds.width - iconViewFrame.width - 3 * margin
+            let titleWidth = bounds.width - iconViewFrame.width - (2 * margin) - iconSpacing
             if titleWidth < titleFrame.width {
                 // Give it more height for a second line.
                 let originalHeight = titleLabel.textRect(forBounds: CGRect.infinite, limitedToNumberOfLines: 1).height
                 let multiLineHeight = titleLabel.textRect(
                     forBounds: CGRect(
                         origin: .zero,
-                        size: .init(width: titleWidth, height: .infinity)
+                        size: .init(width: titleWidth, height: .infinity),
                     ),
-                    limitedToNumberOfLines: titleMaxLines
+                    limitedToNumberOfLines: titleMaxLines,
                 ).height
                 let extraHeight = multiLineHeight - originalHeight
                 titleFrame.origin.y -= extraHeight / 2
@@ -280,34 +299,41 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
             }
             titleFrame.width = titleWidth
 
-            if !isRTL {
+            let iconIsToTheRightOfText = if #available(iOS 26, *) {
+                isRTL
+            } else {
+                !isRTL
+            }
+
+            if iconIsToTheRightOfText {
                 titleFrame.x = margin
-                iconViewFrame.x = titleFrame.maxX + margin
+                iconViewFrame.x = titleFrame.maxX + iconSpacing
             } else {
                 iconViewFrame.x = margin
-                titleFrame.x = iconViewFrame.maxX + margin
+                titleFrame.x = iconViewFrame.maxX + iconSpacing
             }
 
             titleLabel.frame = titleFrame
             iconView.frame = iconViewFrame
 
-            var separatorFrame = bounds
-            separatorFrame.height = 1.0 / UIScreen.main.scale
-            separatorFrame.y = bounds.maxY - separatorFrame.height
-            separatorView.frame = separatorFrame
+            if let separatorView {
+                var separatorFrame = bounds
+                separatorFrame.height = 1.0 / UIScreen.main.scale
+                separatorFrame.y = bounds.maxY - separatorFrame.height
+                separatorView.frame = separatorFrame
+            }
         }
 
-        public override func sizeThatFits(
-            _ size: CGSize
+        override func sizeThatFits(
+            _ size: CGSize,
         ) -> CGSize {
-            let height = ceil(titleLabel.sizeThatFits(CGSize(width: maxWidth - 3 * margin - iconSize, height: 0)).height) + verticalPadding
+            let height = ceil(titleLabel.sizeThatFits(CGSize(width: maxWidth - (2 * margin) - iconSpacing - iconSize, height: 0)).height) + verticalPadding
             return CGSize(width: maxWidth, height: height)
         }
     }
 
     weak var delegate: ContextMenuActionsViewDelegate?
-    public let menu: ContextMenu
-    public let forceDarkTheme: Bool
+    let menu: ContextMenu
 
     private let actionViews: [ContextMenuActionRow]
     private let scrollView: UIScrollView
@@ -316,9 +342,9 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
     private var tapGestureRecognizer: UILongPressGestureRecognizer?
     private var highlightHoverGestureRecognizer: UIGestureRecognizer?
 
-    public var isScrolling: Bool {
+    var isScrolling: Bool {
         didSet {
-            if isScrolling && oldValue != isScrolling {
+            if isScrolling, oldValue != isScrolling {
                 for actionRow in actionViews {
                     actionRow.isHighlighted = false
                 }
@@ -326,25 +352,43 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
         }
     }
 
-    let cornerRadius: CGFloat = 12
+    let cornerRadius: CGFloat = if #available(iOS 26, *) {
+        33
+    } else {
+        12
+    }
 
-    public init(
-        menu: ContextMenu,
-        forceDarkTheme: Bool = false
-    ) {
+    let vMargin: CGFloat = if #available(iOS 26, *) {
+        10
+    } else {
+        0
+    }
+
+    init(menu: ContextMenu) {
         self.menu = menu
-        self.forceDarkTheme = forceDarkTheme
 
         scrollView = UIScrollView(frame: CGRect.zero)
-        let effect: UIBlurEffect = .init(style: .systemThinMaterial)
-        backdropView = UIVisualEffectView(effect: effect)
-        backdropView.backgroundColor = Theme.isDarkThemeEnabled || forceDarkTheme
-            ? .ows_blackAlpha80
-            : .ows_whiteAlpha40
+        scrollView.verticalScrollIndicatorInsets = .init(hMargin: 0, vMargin: cornerRadius)
+
+        let blurEffect: UIBlurEffect?
+        if #available(iOS 26, *) {
+            let effect = UIGlassEffect(style: .regular)
+            effect.isInteractive = true
+            backdropView = UIVisualEffectView(effect: effect)
+            blurEffect = nil
+        } else {
+            blurEffect = UIBlurEffect(style: .systemMaterial)
+            backdropView = UIVisualEffectView(effect: blurEffect)
+        }
 
         var actionViews: [ContextMenuActionRow] = []
         for action in menu.children {
-            let actionView = ContextMenuActionRow(title: action.title, icon: action.image, attributes: action.attributes, hostBlurEffect: effect, forceDarkTheme: forceDarkTheme)
+            let actionView = ContextMenuActionRow(
+                title: action.title,
+                icon: action.image,
+                attributes: action.attributes,
+                hostBlurEffect: blurEffect,
+            )
             actionViews.append(actionView)
         }
 
@@ -365,11 +409,13 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
         addGestureRecognizer(highlightHoverGestureRecognizer)
         self.highlightHoverGestureRecognizer = highlightHoverGestureRecognizer
 
-        layer.cornerRadius = cornerRadius
-        layer.shadowRadius = 64
-        layer.shadowOffset = CGSize(width: 0, height: 32)
-        layer.shadowColor = UIColor.ows_black.cgColor
-        layer.shadowOpacity = 0.2
+        if #unavailable(iOS 26) {
+            layer.cornerRadius = cornerRadius
+            layer.shadowRadius = 64
+            layer.shadowOffset = CGSize(width: 0, height: 32)
+            layer.shadowColor = UIColor.ows_black.cgColor
+            layer.shadowOpacity = 0.2
+        }
 
         backdropView.layer.cornerRadius = cornerRadius
         backdropView.layer.masksToBounds = true
@@ -382,7 +428,7 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
 
         scrollView.delegate = self
 
-        actionViews.last?.separatorView.isHidden = true
+        actionViews.last?.separatorView?.isHidden = true
     }
 
     required init?(coder: NSCoder) {
@@ -391,12 +437,12 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
 
     // MARK: UIView
 
-    public override func layoutSubviews() {
+    override func layoutSubviews() {
         super.layoutSubviews()
 
         backdropView.frame = bounds
         scrollView.frame = bounds
-        var yOffset: CGFloat = 0
+        var yOffset: CGFloat = vMargin
         var maxY: CGFloat = 0
         var width: CGFloat = 0.0
         for actionView in actionViews {
@@ -406,15 +452,16 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
             yOffset += size.height
             maxY = max(maxY, actionView.frame.maxY)
         }
+        maxY += vMargin
 
         scrollView.contentSize = CGSize(width: width, height: maxY)
     }
 
-    public override func sizeThatFits(
-        _ size: CGSize
+    override func sizeThatFits(
+        _ size: CGSize,
     ) -> CGSize {
         // every entry may have a different height
-        var height = 0.0
+        var height = vMargin * 2
         var width = 0.0
         for actionView in actionViews {
             let size = actionView.sizeThatFits(size)
@@ -425,6 +472,7 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
     }
 
     // MARK: Gestures
+
     @objc
     private func tapGestureRecognized(sender: UIGestureRecognizer) {
         if sender.state == .began || sender.state == .changed {
@@ -475,7 +523,7 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
 
         var index: Int = NSNotFound
         for (rowIndex, actionRow) in actionViews.enumerated() {
-            if actionRow.isHighlighted && index == NSNotFound {
+            if actionRow.isHighlighted, index == NSNotFound {
                 index = rowIndex
             }
             actionRow.isHighlighted = false
@@ -491,23 +539,24 @@ private class ContextMenuActionsView: UIView, UIGestureRecognizerDelegate, UIScr
     }
 
     // MARK: UIGestureRecognizerDelegate
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 
     // MARK: UIScrollViewDelegate
 
-    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isScrolling = true
     }
 
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
             isScrolling = false
         }
     }
 
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         isScrolling = false
     }
 

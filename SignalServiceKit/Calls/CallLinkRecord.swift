@@ -14,14 +14,14 @@ public struct CallLinkRecord: Codable, PersistableRecord, FetchableRecord {
     public let roomId: Data
     public let rootKey: CallLinkRootKey
     public var adminPasskey: Data?
-    private(set) public var adminDeletedAtTimestampMs: UInt64?
+    public private(set) var adminDeletedAtTimestampMs: UInt64?
     public var activeCallId: UInt64?
-    private(set) public var pendingFetchCounter: Int64
-    private(set) public var isUpcoming: Bool?
-    private(set) public var name: String?
-    private(set) public var restrictions: Restrictions?
-    private(set) public var revoked: Bool?
-    private(set) public var expiration: Int64?
+    public private(set) var pendingFetchCounter: Int64
+    public private(set) var isUpcoming: Bool?
+    public private(set) var name: String?
+    public private(set) var restrictions: Restrictions?
+    public private(set) var revoked: Bool?
+    public private(set) var expiration: Int64?
 
     init(
         id: Int64,
@@ -35,7 +35,7 @@ public struct CallLinkRecord: Codable, PersistableRecord, FetchableRecord {
         name: String?,
         restrictions: Restrictions?,
         revoked: Bool?,
-        expiration: Int64?
+        expiration: Int64?,
     ) {
         self.id = id
         self.roomId = roomId
@@ -110,7 +110,7 @@ public struct CallLinkRecord: Codable, PersistableRecord, FetchableRecord {
                 sql: """
                 INSERT INTO "CallLink" ("roomId", "rootKey") VALUES (?, ?) RETURNING *
                 """,
-                arguments: [rootKey.deriveRoomId(), rootKey.bytes]
+                arguments: [rootKey.deriveRoomId(), rootKey.bytes],
             )!
         } catch {
             throw error.grdbErrorForLogging
@@ -120,12 +120,14 @@ public struct CallLinkRecord: Codable, PersistableRecord, FetchableRecord {
     static func insertFromBackup(
         rootKey: CallLinkRootKey,
         adminPasskey: Data?,
-        name: String,
-        restrictions: CallLinkRecord.Restrictions,
-        expiration: UInt64,
-        isUpcoming: Bool,
-        tx: DBWriteTransaction
+        name: String?,
+        restrictions: CallLinkRecord.Restrictions?,
+        revoked: Bool?,
+        expiration: Int64?,
+        isUpcoming: Bool?,
+        tx: DBWriteTransaction,
     ) throws -> CallLinkRecord {
+        owsPrecondition(isUpcoming != true || adminPasskey != nil)
         do {
             return try CallLinkRecord.fetchOne(
                 tx.database,
@@ -136,19 +138,21 @@ public struct CallLinkRecord: Codable, PersistableRecord, FetchableRecord {
                     \(CallLinkRecord.CodingKeys.adminPasskey.rawValue),
                     \(CallLinkRecord.CodingKeys.name.rawValue),
                     \(CallLinkRecord.CodingKeys.restrictions.rawValue),
+                    \(CallLinkRecord.CodingKeys.revoked.rawValue),
                     \(CallLinkRecord.CodingKeys.expiration.rawValue),
                     \(CallLinkRecord.CodingKeys.isUpcoming.rawValue)
-                ) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *
                 """,
                 arguments: [
                     rootKey.deriveRoomId(),
                     rootKey.bytes,
                     adminPasskey,
                     name,
-                    restrictions.rawValue,
+                    restrictions?.rawValue,
+                    revoked,
                     expiration,
-                    isUpcoming
-                ]
+                    isUpcoming,
+                ],
             )!
         } catch {
             throw error.grdbErrorForLogging
@@ -199,7 +203,7 @@ public struct CallLinkRecord: Codable, PersistableRecord, FetchableRecord {
                 name: self.name,
                 restrictions: restrictions.asRingRtcValue,
                 revoked: revoked,
-                expiration: Date(timeIntervalSince1970: TimeInterval(expiration))
+                expiration: Date(timeIntervalSince1970: TimeInterval(expiration)),
             )
         }
         return nil

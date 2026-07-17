@@ -14,25 +14,16 @@ public import UIKit
 enum PhotoCaptureError: Error {
     case assertionError(description: String)
     case initializationFailed
-    case captureFailed
-    case invalidVideo
-    case videoTooLarge
 }
+
+struct VideoCaptureFailedError: Error {}
 
 extension PhotoCaptureError: LocalizedError, UserErrorDescriptionProvider {
     var localizedDescription: String {
         switch self {
         case .initializationFailed:
             return OWSLocalizedString("PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA", comment: "alert title")
-        case .captureFailed:
-            return OWSLocalizedString("PHOTO_CAPTURE_UNABLE_TO_CAPTURE_IMAGE", comment: "alert title")
-        case .videoTooLarge:
-            return OWSLocalizedString(
-                "PHOTO_CAPTURE_VIDEO_SIZE_ERROR",
-                comment: "alert title, generic error preventing user from capturing a video that is too long"
-            )
-
-        case .assertionError, .invalidVideo:
+        case .assertionError:
             return OWSLocalizedString("PHOTO_CAPTURE_GENERIC_ERROR", comment: "alert title, generic error preventing user from capturing a photo")
         }
     }
@@ -41,7 +32,7 @@ extension PhotoCaptureError: LocalizedError, UserErrorDescriptionProvider {
 protocol CameraCaptureSessionDelegate: AnyObject {
 
     func cameraCaptureSessionDidStart(_ session: CameraCaptureSession)
-    func cameraCaptureSession(_ session: CameraCaptureSession, didFinishProcessing attachment: SignalAttachment)
+    func cameraCaptureSession(_ session: CameraCaptureSession, didFinishProcessing attachment: PreviewableAttachment)
     func cameraCaptureSession(_ session: CameraCaptureSession, didFailWith error: Error)
 
     // MARK: Video
@@ -70,6 +61,7 @@ protocol CameraCaptureSessionDelegate: AnyObject {
 class CameraCaptureSession: NSObject {
 
     private weak var delegate: CameraCaptureSessionDelegate?
+    private let attachmentLimits: OutgoingAttachmentLimits
 
     // There can only ever be one `CapturePreviewView` per AVCaptureSession
     lazy var previewView = CapturePreviewView(session: avCaptureSession)
@@ -93,10 +85,15 @@ class CameraCaptureSession: NSObject {
 
     init(
         delegate: CameraCaptureSessionDelegate,
-        qrCodeSampleBufferScanner: QRCodeSampleBufferScanner
+        attachmentLimits: OutgoingAttachmentLimits,
+        qrCodeSampleBufferScanner: QRCodeSampleBufferScanner,
     ) {
         self.delegate = delegate
-        self.videoCapture = VideoCapture(qrCodeSampleBufferScanner: qrCodeSampleBufferScanner)
+        self.attachmentLimits = attachmentLimits
+        self.videoCapture = VideoCapture(
+            attachmentLimits: attachmentLimits,
+            qrCodeSampleBufferScanner: qrCodeSampleBufferScanner,
+        )
 
         super.init()
 
@@ -217,9 +214,9 @@ class CameraCaptureSession: NSObject {
         }
         focusObservation = newInput.observe(
             \.device.isAdjustingFocus,
-             options: [.old, .new]
+            options: [.old, .new],
         ) { [weak self] _, change in
-            guard let self = self else { return }
+            guard let self else { return }
 
             guard let oldValue = change.oldValue else {
                 return
@@ -229,7 +226,7 @@ class CameraCaptureSession: NSObject {
                 return
             }
 
-            if oldValue == true && newValue == false {
+            if oldValue == true, newValue == false {
                 self.didCompleteFocusing()
             }
         }
@@ -274,37 +271,38 @@ class CameraCaptureSession: NSObject {
         with focusMode: AVCaptureDevice.FocusMode,
         exposureMode: AVCaptureDevice.ExposureMode,
         at devicePoint: CGPoint,
-        monitorSubjectAreaChange: Bool) {
-            sessionQueue.async {
-                Logger.debug("focusMode: \(focusMode), exposureMode: \(exposureMode), devicePoint: \(devicePoint), monitorSubjectAreaChange:\(monitorSubjectAreaChange)")
-                guard let device = self.videoCaptureDevice else {
-                    if !Platform.isSimulator {
-                        owsFailDebug("device was unexpectedly nil")
-                    }
-                    return
+        monitorSubjectAreaChange: Bool,
+    ) {
+        sessionQueue.async {
+            Logger.debug("focusMode: \(focusMode), exposureMode: \(exposureMode), devicePoint: \(devicePoint), monitorSubjectAreaChange:\(monitorSubjectAreaChange)")
+            guard let device = self.videoCaptureDevice else {
+                if !Platform.isSimulator {
+                    owsFailDebug("device was unexpectedly nil")
                 }
-                do {
-                    try device.lockForConfiguration()
+                return
+            }
+            do {
+                try device.lockForConfiguration()
 
-                    // Setting (focus/exposure)PointOfInterest alone does not initiate a (focus/exposure) operation.
-                    // Call set(Focus/Exposure)Mode() to apply the new point of interest.
-                    if device.isFocusPointOfInterestSupported && device.isFocusModeSupported(focusMode) {
-                        device.focusPointOfInterest = devicePoint
-                        device.focusMode = focusMode
-                    }
-
-                    if device.isExposurePointOfInterestSupported && device.isExposureModeSupported(exposureMode) {
-                        device.exposurePointOfInterest = devicePoint
-                        device.exposureMode = exposureMode
-                    }
-
-                    device.isSubjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange
-                    device.unlockForConfiguration()
-                } catch {
-                    owsFailDebug("error: \(error)")
+                // Setting (focus/exposure)PointOfInterest alone does not initiate a (focus/exposure) operation.
+                // Call set(Focus/Exposure)Mode() to apply the new point of interest.
+                if device.isFocusPointOfInterestSupported, device.isFocusModeSupported(focusMode) {
+                    device.focusPointOfInterest = devicePoint
+                    device.focusMode = focusMode
                 }
+
+                if device.isExposurePointOfInterestSupported, device.isExposureModeSupported(exposureMode) {
+                    device.exposurePointOfInterest = devicePoint
+                    device.exposureMode = exposureMode
+                }
+
+                device.isSubjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange
+                device.unlockForConfiguration()
+            } catch {
+                owsFailDebug("error: \(error)")
             }
         }
+    }
 
     func resetFocusAndExposure() {
         let devicePoint = CGPoint(x: 0.5, y: 0.5)
@@ -380,10 +378,10 @@ class CameraCaptureSession: NSObject {
             withHandler: { [weak self] accelerometerData, error in
                 if let orientation = accelerometerData?.acceleration.deviceOrientation {
                     self?.updateOrientation(orientation)
-                } else if let error = error {
+                } else if let error {
                     Logger.debug("Photo capture accelerometer error: \(error)")
                 }
-            }
+            },
         )
 
         return initialOrientation
@@ -415,8 +413,8 @@ class CameraCaptureSession: NSObject {
     }()
 
     private class func availableVideoCaptureDevices(forPosition position: AVCaptureDevice.Position) -> [AVCaptureDevice.DeviceType: AVCaptureDevice] {
-        var queryDeviceTypes: [AVCaptureDevice.DeviceType] = [ .builtInWideAngleCamera, .builtInTelephotoCamera, .builtInDualCamera ]
-        queryDeviceTypes.append(contentsOf: [ .builtInUltraWideCamera, .builtInDualWideCamera, .builtInTripleCamera ])
+        var queryDeviceTypes: [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera, .builtInTelephotoCamera, .builtInDualCamera]
+        queryDeviceTypes.append(contentsOf: [.builtInUltraWideCamera, .builtInDualWideCamera, .builtInTripleCamera])
         let session = AVCaptureDevice.DiscoverySession(deviceTypes: queryDeviceTypes, mediaType: .video, position: position)
         let deviceMap = session.devices.reduce(into: [AVCaptureDevice.DeviceType: AVCaptureDevice]()) { deviceMap, device in
             deviceMap[device.deviceType] = device
@@ -457,10 +455,10 @@ class CameraCaptureSession: NSObject {
     }
 
     enum CameraSystem {
-        case wide       // Single-camera devices.
-        case dual       // W + T
-        case dualWide   // UW + W
-        case triple     // UW + W + T
+        case wide // Single-camera devices.
+        case dual // W + T
+        case dualWide // UW + W
+        case triple // UW + W + T
     }
 
     private func availableCameras(forPosition position: AVCaptureDevice.Position) -> Set<CameraType> {
@@ -484,19 +482,20 @@ class CameraCaptureSession: NSObject {
     }
 
     private func defaultVideoCaptureDevice(forPosition position: AVCaptureDevice.Position) -> AVCaptureDevice? {
-        guard let devices: [AVCaptureDevice.DeviceType: AVCaptureDevice] = {
-            switch position {
-            case .front, .unspecified:
-                return availableFrontVideoCaptureDeviceMap
+        guard
+            let devices: [AVCaptureDevice.DeviceType: AVCaptureDevice] = {
+                switch position {
+                case .front, .unspecified:
+                    return availableFrontVideoCaptureDeviceMap
 
-            case .back:
-                return availableRearVideoCaptureDeviceMap
+                case .back:
+                    return availableRearVideoCaptureDeviceMap
 
-            @unknown default:
-                owsFailDebug("Unknown AVCaptureDevice.Position: [\(position)]")
-                return nil
-            }
-        }() else { return nil }
+                @unknown default:
+                    owsFailDebug("Unknown AVCaptureDevice.Position: [\(position)]")
+                    return nil
+                }
+            }() else { return nil }
 
         if let device = devices[.builtInTripleCamera] {
             return device
@@ -526,7 +525,7 @@ class CameraCaptureSession: NSObject {
         desiredPosition = newPosition
 
         return sessionQueue.async(.promise) { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
 
             self.avCaptureSession.beginConfiguration()
             defer { self.avCaptureSession.commitConfiguration() }
@@ -711,7 +710,7 @@ class CameraCaptureSession: NSObject {
 
             let visibleZoomFactor = clampedZoomFactor * zoomFactorMultiplier
             DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+                guard let self else { return }
                 self.delegate?.cameraCaptureSession(self, didChangeZoomFactor: visibleZoomFactor, forCameraPosition: devicePosition)
             }
         } catch {
@@ -749,6 +748,7 @@ class CameraCaptureSession: NSObject {
         case stopping
         case canceling
     }
+
     private var _videoRecordingState: VideoRecordingState = .ready
     private var videoRecordingState: VideoRecordingState {
         get {
@@ -772,7 +772,7 @@ class CameraCaptureSession: NSObject {
         } else {
             screenAspect = size.width / size.height
         }
-        return screenAspect.clamp(9/16, 3/4)
+        return screenAspect.clamp(9 / 16, 3 / 4)
     }
 
     private func startVideoRecording() {
@@ -783,7 +783,7 @@ class CameraCaptureSession: NSObject {
             return
         }
 
-        guard let delegate = delegate else { return }
+        guard let delegate else { return }
         guard delegate.cameraCaptureSessionCanCaptureMoreItems(self) else {
             delegate.photoCaptureDidTryToCaptureTooMany(self)
             return
@@ -802,7 +802,7 @@ class CameraCaptureSession: NSObject {
             do {
                 try videoCapture.beginRecording(
                     aspectRatio: aspectRatio,
-                    includeAudio: audioCaptureStarted
+                    includeAudio: audioCaptureStarted,
                 )
             } catch {
                 DispatchQueue.main.async {
@@ -834,39 +834,19 @@ class CameraCaptureSession: NSObject {
         videoCapture.stopRecording()
     }
 
-    private func handleVideoRecording(at outputUrl: URL) {
+    private func handleVideoRecording(at outputUrl: URL) throws {
         AssertIsOnMainThread()
-
-        guard let delegate else { return }
-
-        // TODO: showing an error here feels bad; maybe break the
-        // video up into segments like we do for stories. For now
-        // this is better than the old behavior (fail silently).
-        guard OWSMediaUtils.isVideoOfValidSize(path: outputUrl.path) else {
-            return handleVideoCaptureError(PhotoCaptureError.videoTooLarge)
-        }
-
-        guard OWSMediaUtils.isValidVideo(path: outputUrl.path) else {
-            return handleVideoCaptureError(PhotoCaptureError.invalidVideo)
-        }
-        guard let dataSource = try? DataSourcePath(fileUrl: outputUrl, shouldDeleteOnDeallocation: true) else {
-            return handleVideoCaptureError(PhotoCaptureError.captureFailed)
-        }
-
-        let attachment = SignalAttachment.attachment(dataSource: dataSource, dataUTI: UTType.mpeg4Movie.identifier)
-        delegate.cameraCaptureSession(self, didFinishProcessing: attachment)
+        let dataSource = DataSourcePath(fileUrl: outputUrl, ownership: .owned)
+        let attachment = try PreviewableAttachment.videoAttachment(
+            dataSource: dataSource,
+            dataUTI: UTType.mpeg4Movie.identifier,
+            attachmentLimits: self.attachmentLimits,
+        )
+        delegate?.cameraCaptureSession(self, didFinishProcessing: attachment)
     }
 
     private func handleVideoCaptureError(_ error: Error) {
         AssertIsOnMainThread()
-
-        switch error {
-        case PhotoCaptureError.invalidVideo, PhotoCaptureError.videoTooLarge:
-            Logger.warn("Error: \(error)")
-        default:
-            owsFailDebug("Error: \(error)")
-        }
-
         delegate?.cameraCaptureSession(self, didFailWith: error)
     }
 
@@ -951,23 +931,24 @@ class CameraCaptureSession: NSObject {
 
     private var volumeButtonObservation: AVVolumeButtonObservation?
 
-    public func beginObservingVolumeButtons() {
+    func beginObservingVolumeButtons() {
         let volumeButtonObservation =
             self.volumeButtonObservation
-            ?? AVVolumeButtonObservation(
-                observer: self,
-                capturePreviewView: previewView
-            )
+                ?? AVVolumeButtonObservation(
+                    observer: self,
+                    capturePreviewView: previewView,
+                )
         self.volumeButtonObservation = volumeButtonObservation
         volumeButtonObservation.isEnabled = true
     }
 
-    public func stopObservingVolumeButtons() {
+    func stopObservingVolumeButtons() {
         volumeButtonObservation?.isEnabled = false
     }
 }
 
 // MARK: -
+
 extension CameraCaptureSession: VideoCaptureDelegate {
 
     fileprivate func videoCaptureDidStartRecording(_ videoCapture: VideoCapture) {
@@ -991,13 +972,12 @@ extension CameraCaptureSession: VideoCaptureDelegate {
     fileprivate func videoCapture(_ videoCapture: VideoCapture, didFinishWith result: Result<URL, Error>) {
         AssertIsOnMainThread()
 
-        switch result {
-        case .success(let outputURL):
+        do {
+            let outputUrl = try result.get()
             if videoRecordingState != .canceling {
-                handleVideoRecording(at: outputURL)
+                try handleVideoRecording(at: outputUrl)
             }
-
-        case .failure(let error):
+        } catch {
             handleVideoCaptureError(error)
         }
 
@@ -1011,18 +991,16 @@ extension CameraCaptureSession: VideoCaptureDelegate {
 
 extension CameraCaptureSession: PhotoCaptureDelegate {
 
-    fileprivate func photoCaptureDidProduce(result: Result<Data, Error>) {
+    fileprivate func photoCaptureDidProduce(result: Result<UIImage, Error>) {
         AssertIsOnMainThread()
-        guard let delegate = delegate else { return }
+        guard let delegate else { return }
 
-        switch result {
-        case .failure(let error):
+        do {
+            let normalizedImage = try NormalizedImage.forImage(result.get())
+            let previewableAttachment = PreviewableAttachment.imageAttachmentForNormalizedImage(normalizedImage)
+            delegate.cameraCaptureSession(self, didFinishProcessing: previewableAttachment)
+        } catch {
             delegate.cameraCaptureSession(self, didFailWith: error)
-        case .success(let photoData):
-            let dataSource = DataSourceValue(photoData, utiType: UTType.jpeg.identifier)
-
-            let attachment = SignalAttachment.attachment(dataSource: dataSource, dataUTI: UTType.jpeg.identifier)
-            delegate.cameraCaptureSession(self, didFinishProcessing: attachment)
         }
     }
 }
@@ -1162,9 +1140,15 @@ private protocol VideoCaptureDelegate: AnyObject {
     func videoCapture(_ videoCapture: VideoCapture, didFinishWith result: Result<URL, Error>)
 }
 
+private enum VideoCaptureError: Error {
+    /// We stopped recording because we were close to the recording limit.
+    case fileWouldBeTooLarge
+}
+
 private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
 
-    private var qrCodeSampleBufferScanner: QRCodeSampleBufferScanner
+    private let attachmentLimits: OutgoingAttachmentLimits
+    private let qrCodeSampleBufferScanner: QRCodeSampleBufferScanner
 
     let videoDataOutput = AVCaptureVideoDataOutput()
     let audioDataOutput = AVCaptureAudioDataOutput()
@@ -1181,16 +1165,27 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
     private var isAssetWriterSessionStarted = false
     private var isAssetWriterAcceptingSampleBuffers = false
     private var needsFinishAssetWriterSession = false
-    private var errorSheetPromise: Promise<Void>?
 
     weak var delegate: VideoCaptureDelegate?
 
-    private let videoSampleTimeLock = UnfairLock()
-    private var timeOfFirstAppendedVideoSampleBuffer = CMTime.invalid
-    private var timeOfLastAppendedVideoSampleBuffer = CMTime.invalid
+    private let videoSampleState = AtomicValue(SampleState(), lock: .init())
+    private struct SampleState {
+        var timeOfFirstAppendedVideoSampleBuffer = CMTime.invalid
+        var timeOfLastAppendedVideoSampleBuffer = CMTime.invalid
+        var timeOfMostRecentFileSizeCheck = CMTime.invalid
 
-    init(qrCodeSampleBufferScanner: QRCodeSampleBufferScanner) {
+        func durationSince(startTime: KeyPath<Self, CMTime>) -> CMTime {
+            guard timeOfLastAppendedVideoSampleBuffer.isValid, self[keyPath: startTime].isValid else {
+                return .zero
+            }
+            return CMTimeSubtract(timeOfLastAppendedVideoSampleBuffer, self[keyPath: startTime])
+        }
+    }
+
+    init(attachmentLimits: OutgoingAttachmentLimits, qrCodeSampleBufferScanner: QRCodeSampleBufferScanner) {
+        self.attachmentLimits = attachmentLimits
         self.qrCodeSampleBufferScanner = qrCodeSampleBufferScanner
+
         super.init()
 
         videoDataOutput.alwaysDiscardsLateVideoFrames = false
@@ -1203,10 +1198,12 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
         let outputURL = OWSFileSystem.temporaryFileUrl(fileExtension: "mp4")
         let assetWriter = try AVAssetWriter(outputURL: outputURL, fileType: .mp4)
 
-        guard var videoSettings = videoDataOutput.recommendedVideoSettings(
-            forVideoCodecType: .h264,
-            assetWriterOutputFileType: .mp4
-        ) else {
+        guard
+            var videoSettings = videoDataOutput.recommendedVideoSettings(
+                forVideoCodecType: .h264,
+                assetWriterOutputFileType: assetWriter.outputFileType,
+            )
+        else {
             throw OWSAssertionError("videoSettings was unexpectedly nil")
         }
         guard
@@ -1227,8 +1224,8 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
             AVVideoCompressionPropertiesKey: [
                 AVVideoAverageBitRateKey: 2000000,
                 AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline41,
-                AVVideoMaxKeyFrameIntervalKey: 90
-            ] as [String: Any]
+                AVVideoMaxKeyFrameIntervalKey: 90,
+            ] as [String: Any],
         ]
         videoSettings.merge(customSettings) { $1 }
 
@@ -1241,7 +1238,7 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
         let videoWriterInput = AVAssetWriterInput(
             mediaType: .video,
             outputSettings: videoSettings,
-            sourceFormatHint: nil
+            sourceFormatHint: nil,
         )
         videoWriterInput.expectsMediaDataInRealTime = true
         guard assetWriter.canAdd(videoWriterInput) else {
@@ -1252,7 +1249,7 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
 
         if includeAudio {
             guard
-                let audioSettings = audioDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: .mp4),
+                let audioSettings = audioDataOutput.recommendedAudioSettingsForAssetWriter(writingTo: assetWriter.outputFileType),
                 assetWriter.canApply(outputSettings: audioSettings, forMediaType: .audio)
             else {
                 throw PhotoCaptureError.initializationFailed
@@ -1283,28 +1280,15 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
         AssertIsOnMainThread()
 
         // Make video recording at least 1 second long.
-        let duration = durationOfCurrentRecording
-        let recordedDurationSeconds: TimeInterval = duration.isValid ? duration.seconds : 0
-        let timeExtension: TimeInterval = max(0, 1 - recordedDurationSeconds)
+        let duration = self.videoSampleState.get().durationSince(startTime: \.timeOfFirstAppendedVideoSampleBuffer)
+        let timeExtension: TimeInterval = max(0, 1 - duration.seconds)
         recordingQueue.asyncAfter(deadline: .now() + timeExtension) {
             self.needsFinishAssetWriterSession = true
         }
     }
 
-    var durationOfCurrentRecording: CMTime {
-        videoSampleTimeLock.lock()
-        let timeOfFirstAppendedVideoSampleBuffer = timeOfFirstAppendedVideoSampleBuffer
-        let timeOfLastAppendedVideoSampleBuffer = timeOfLastAppendedVideoSampleBuffer
-        videoSampleTimeLock.unlock()
-
-        guard timeOfFirstAppendedVideoSampleBuffer.isValid, timeOfLastAppendedVideoSampleBuffer.isValid else {
-            return .zero
-        }
-        return CMTimeSubtract(timeOfLastAppendedVideoSampleBuffer, timeOfFirstAppendedVideoSampleBuffer)
-    }
-
     // `recordingQueue`
-    private func finishAssetWriterSession() {
+    private func finishAssetWriterSession(captureError: (any Error)?) {
         guard let assetWriter else {
             owsFailBeta("assetWriter is nil")
             return
@@ -1312,9 +1296,7 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
 
         isAssetWriterAcceptingSampleBuffers = false
 
-        videoSampleTimeLock.lock()
-        let timeOfLastAppendedVideoSampleBuffer = timeOfLastAppendedVideoSampleBuffer
-        videoSampleTimeLock.unlock()
+        let timeOfLastAppendedVideoSampleBuffer = self.videoSampleState.get().timeOfLastAppendedVideoSampleBuffer
 
         // Prevent assetWriter.startSession() from being called if for some reason it wasn't called yet.
         isAssetWriterSessionStarted = true
@@ -1328,19 +1310,27 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
         assetWriter.finishWriting {
             self.recordingQueue.async {
                 let result: Result<URL, Error>
-                if assetWriter.status == .completed && assetWriter.error == nil {
+                if assetWriter.status == .completed, assetWriter.error == nil {
                     result = .success(assetWriter.outputURL)
                 } else {
-                    result = .failure(PhotoCaptureError.invalidVideo)
+                    result = .failure(VideoCaptureFailedError())
                 }
-                if let errorSheetPromise = self.errorSheetPromise {
-                    errorSheetPromise.ensure(on: DispatchQueue.main) {
-                        DispatchQueue.main.async {
-                            self.delegate?.videoCapture(self, didFinishWith: result)
-                        }
-                    }.cauterize()
-                } else {
-                    DispatchQueue.main.async {
+
+                DispatchQueue.main.async {
+                    switch captureError {
+                    case .some(VideoCaptureError.fileWouldBeTooLarge):
+                        OWSActionSheets.showActionSheet(
+                            message: OWSLocalizedString(
+                                "MAX_VIDEO_RECORDING_LENGTH_ALERT",
+                                comment: "Title for error sheet shown when the max video length is recorded with the in-app camera",
+                            ),
+                            buttonAction: { _ in
+                                // Pass through the result even though we hit an "error".
+                                self.delegate?.videoCapture(self, didFinishWith: result)
+                            },
+                        )
+                    case .none, .some:
+                        // Pass through the result even if we hit an "error".
                         self.delegate?.videoCapture(self, didFinishWith: result)
                     }
                 }
@@ -1352,9 +1342,9 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
 
     func setVideoOrientation(_ videoOrientation: AVCaptureVideoOrientation) {
         guard let videoConnection = videoDataOutput.connection(with: .video) else {
-            #if !targetEnvironment(simulator)
+#if !targetEnvironment(simulator)
             owsFailBeta("videoConnection was unexpectedly nil")
-            #endif
+#endif
             return
         }
         Logger.info("set videoOrientation: \(videoOrientation)")
@@ -1370,7 +1360,7 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
 
         let presentationTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
 
-        if !isAssetWriterSessionStarted && assetWriterInput == videoWriterInput {
+        if !isAssetWriterSessionStarted, assetWriterInput == videoWriterInput {
             assetWriter.startSession(atSourceTime: presentationTime)
             isAssetWriterSessionStarted = true
             DispatchQueue.main.async {
@@ -1378,7 +1368,7 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
             }
         }
 
-        guard isAssetWriterAcceptingSampleBuffers && isAssetWriterSessionStarted else {
+        guard isAssetWriterAcceptingSampleBuffers, isAssetWriterSessionStarted else {
             return
         }
         guard assetWriterInput.isReadyForMoreMediaData else {
@@ -1391,38 +1381,42 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
             return
         }
 
-        if
-            let fileSize = OWSFileSystem.fileSize(of: assetWriter.outputURL)?.uintValue,
-            fileSize >= UInt(Double(OWSMediaUtils.kMaxFileSizeVideo) * 0.95)
-        {
-            Logger.warn("Stopping recording before hitting max file size")
-            needsFinishAssetWriterSession = true
-            let (promise, future) = Promise<Void>.pending()
-            self.errorSheetPromise = promise
-            DispatchQueue.main.async {
-                OWSActionSheets.showActionSheet(
-                    message: OWSLocalizedString(
-                        "MAX_VIDEO_RECORDING_LENGTH_ALERT",
-                        comment: "Title for error sheet shown when the max video length is recorded with the in-app camera"
-                    ),
-                    buttonAction: { _ in
-                        future.resolve(())
-                    }
-                )
-            }
-        }
+        var captureError: (any Error)?
 
         if assetWriterInput == videoWriterInput {
-            videoSampleTimeLock.lock()
-            timeOfLastAppendedVideoSampleBuffer = presentationTime
-            if !timeOfFirstAppendedVideoSampleBuffer.isValid {
-                timeOfFirstAppendedVideoSampleBuffer = presentationTime
+            let (recordingDuration, shouldCheckFileSize) = self.videoSampleState.update {
+                $0.timeOfLastAppendedVideoSampleBuffer = presentationTime
+                if !$0.timeOfFirstAppendedVideoSampleBuffer.isValid {
+                    $0.timeOfFirstAppendedVideoSampleBuffer = presentationTime
+                }
+                if !$0.timeOfMostRecentFileSizeCheck.isValid {
+                    $0.timeOfMostRecentFileSizeCheck = presentationTime
+                }
+                let recordingDuration = $0.durationSince(startTime: \.timeOfFirstAppendedVideoSampleBuffer)
+                let shouldCheckFileSize = $0.durationSince(startTime: \.timeOfMostRecentFileSizeCheck).seconds >= 1
+                if shouldCheckFileSize {
+                    $0.timeOfMostRecentFileSizeCheck = presentationTime
+                }
+                return (recordingDuration, shouldCheckFileSize)
             }
-            videoSampleTimeLock.unlock()
 
-            let recordingDuration = self.durationOfCurrentRecording.seconds
             DispatchQueue.main.async {
-                self.delegate?.videoCapture(self, didUpdateRecordingDuration: recordingDuration)
+                self.delegate?.videoCapture(self, didUpdateRecordingDuration: recordingDuration.seconds)
+            }
+
+            // We target 0.25 MB per second, so we'd expect 3.75 MB to stop recording
+            // roughly 15 seconds before the limit. This number is arbitrary, but it
+            // seems to be smaller than the typical increase per second combined with
+            // the overhead from the call to `finishWriting`.
+            let estimatedTeardownOverhead: UInt64 = 3_750_000
+            if
+                shouldCheckFileSize,
+                let fileSize = (try? OWSFileSystem.fileSize(of: assetWriter.outputURL)),
+                (fileSize + estimatedTeardownOverhead) >= self.attachmentLimits.maxPlaintextVideoBytes
+            {
+                Logger.warn("stopping recording before hitting max file size")
+                needsFinishAssetWriterSession = true
+                captureError = VideoCaptureError.fileWouldBeTooLarge
             }
         }
 
@@ -1430,7 +1424,7 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
             DispatchQueue.main.async {
                 self.delegate?.videoCaptureWillStopRecording(self)
             }
-            finishAssetWriterSession()
+            finishAssetWriterSession(captureError: captureError)
             needsFinishAssetWriterSession = false
             return
         }
@@ -1467,10 +1461,7 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
         videoWriterInput = nil
         audioWriterInput = nil
         isAssetWriterSessionStarted = false
-        videoSampleTimeLock.lock()
-        timeOfFirstAppendedVideoSampleBuffer = .invalid
-        timeOfLastAppendedVideoSampleBuffer = .invalid
-        videoSampleTimeLock.unlock()
+        videoSampleState.set(SampleState())
     }
 }
 
@@ -1478,7 +1469,7 @@ private class VideoCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelega
 
 private protocol PhotoCaptureDelegate: AnyObject {
 
-    func photoCaptureDidProduce(result: Result<Data, Error>)
+    func photoCaptureDidProduce(result: Result<UIImage, Error>)
 }
 
 private class PhotoCapture {
@@ -1528,19 +1519,19 @@ private class PhotoCapture {
         func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
             defer { completion() }
 
-            guard let delegate = delegate else { return }
+            guard let delegate else { return }
 
-            let result: Result<Data, Error>
+            let result: Result<UIImage, Error>
             do {
                 if let error {
                     throw error
                 }
-                guard let rawData = photo.fileDataRepresentation()  else {
+                guard let photoData = photo.fileDataRepresentation() else {
                     throw OWSAssertionError("photo data was unexpectedly empty")
                 }
 
-                let resizedData = try crop(photoData: rawData, to: captureRect)
-                result = .success(resizedData)
+                let resizedImage = try crop(photoData: photoData, to: captureRect)
+                result = .success(resizedImage)
             } catch {
                 result = .failure(error)
             }
@@ -1550,12 +1541,9 @@ private class PhotoCapture {
             }
         }
 
-        private func crop(photoData: Data, to outputRect: CGRect) throws -> Data {
-            guard
-                let originalImage = UIImage(data: photoData),
-                let cgImage = originalImage.cgImage
-            else {
-                throw OWSAssertionError("originalImage was unexpectedly nil")
+        private func crop(photoData: Data, to outputRect: CGRect) throws -> UIImage {
+            guard let image = UIImage(data: photoData), let cgImage = image.cgImage else {
+                throw OWSAssertionError("couldn't parse photo data")
             }
 
             guard outputRect.width > 0, outputRect.height > 0 else {
@@ -1564,16 +1552,14 @@ private class PhotoCapture {
 
             let width = CGFloat(cgImage.width)
             let height = CGFloat(cgImage.height)
-            let cropRect = CGRect(x: outputRect.origin.x * width,
-                                  y: outputRect.origin.y * height,
-                                  width: outputRect.size.width * width,
-                                  height: outputRect.size.height * height)
+            let cropRect = CGRect(
+                x: outputRect.origin.x * width,
+                y: outputRect.origin.y * height,
+                width: outputRect.size.width * width,
+                height: outputRect.size.height * height,
+            )
             let croppedCGImage = cgImage.cropping(to: cropRect)!
-            let croppedUIImage = UIImage(cgImage: croppedCGImage, scale: 1, orientation: originalImage.imageOrientation)
-            guard let croppedData = croppedUIImage.jpegData(compressionQuality: 0.9) else {
-                throw OWSAssertionError("croppedData was unexpectedly nil")
-            }
-            return croppedData
+            return UIImage(cgImage: croppedCGImage, scale: 1, orientation: image.imageOrientation)
         }
     }
 }
@@ -1728,11 +1714,7 @@ extension CGSize {
     }
 
     fileprivate func cropped(toAspectRatio aspectRatio: CGFloat) -> CGSize {
-        guard aspectRatio > 0, aspectRatio <= 1 else {
-            owsFailDebug("invalid aspectRatio: \(aspectRatio)")
-            return self
-        }
-
+        owsPrecondition(aspectRatio > 0 && aspectRatio <= 1)
         if width > height {
             return CGSize(width: width, height: width * aspectRatio)
         } else {

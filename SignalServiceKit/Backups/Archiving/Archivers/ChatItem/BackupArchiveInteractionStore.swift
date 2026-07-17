@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-import LibSignalClient
 import GRDB
+import LibSignalClient
 
 public final class BackupArchiveInteractionStore {
 
@@ -14,25 +14,6 @@ public final class BackupArchiveInteractionStore {
         self.interactionStore = interactionStore
     }
 
-    /// Enumerate all interactions.
-    ///
-    /// - Parameter block
-    /// A block executed for each enumerated interaction. Returns `true` if
-    /// enumeration should continue, and `false` otherwise.
-    func enumerateAllInteractions(
-        tx: DBReadTransaction,
-        block: (TSInteraction) throws -> Bool
-    ) throws {
-        let cursor = try InteractionRecord
-            .fetchCursor(tx.database)
-            .map { try TSInteraction.fromRecord($0) }
-
-        while
-            let interaction = try cursor.next(),
-            try block(interaction)
-        {}
-    }
-
     // MARK: Per type inserts
 
     func insert(
@@ -40,19 +21,16 @@ public final class BackupArchiveInteractionStore {
         in thread: BackupArchive.ChatThread,
         chatId: BackupArchive.ChatId,
         senderAci: Aci?,
-        directionalDetails: BackupProto_ChatItem.IncomingMessageDetails,
-        context: BackupArchive.ChatItemRestoringContext
+        wasRead: Bool,
+        context: BackupArchive.ChatItemRestoringContext,
     ) throws {
-        let wasRead = BackupProto_ChatItem.OneOf_DirectionalDetails
-            .incoming(directionalDetails).wasRead
-        interaction.wasRead = wasRead
         try insert(
             interaction: interaction,
             in: thread,
             chatId: chatId,
             senderAci: senderAci,
             wasRead: wasRead,
-            context: context
+            context: context,
         )
     }
 
@@ -60,19 +38,17 @@ public final class BackupArchiveInteractionStore {
         _ interaction: TSOutgoingMessage,
         in thread: BackupArchive.ChatThread,
         chatId: BackupArchive.ChatId,
-        directionalDetails: BackupProto_ChatItem.OutgoingMessageDetails,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) throws {
-        let wasRead = BackupProto_ChatItem.OneOf_DirectionalDetails
-            .outgoing(directionalDetails).wasRead
         try insert(
             interaction: interaction,
             in: thread,
             chatId: chatId,
             // Outgoing messages are sent by local aci
             senderAci: context.recipientContext.localIdentifiers.aci,
-            wasRead: wasRead,
-            context: context
+            // Outgoing messages are implicitly read.
+            wasRead: true,
+            context: context,
         )
     }
 
@@ -80,11 +56,13 @@ public final class BackupArchiveInteractionStore {
         _ interaction: TSInfoMessage,
         in thread: BackupArchive.ChatThread,
         chatId: BackupArchive.ChatId,
-        directionalDetails: BackupProto_ChatItem.OneOf_DirectionalDetails,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) throws {
-        let wasRead = directionalDetails.wasRead
+        // Info messages are always "directionless", and consequently their
+        // "read" is not backed up. Treat them as read.
+        let wasRead = true
         interaction.wasRead = wasRead
+
         try insert(
             interaction: interaction,
             in: thread,
@@ -92,7 +70,7 @@ public final class BackupArchiveInteractionStore {
             // No sender for info messages
             senderAci: nil,
             wasRead: wasRead,
-            context: context
+            context: context,
         )
     }
 
@@ -100,11 +78,13 @@ public final class BackupArchiveInteractionStore {
         _ interaction: TSErrorMessage,
         in thread: BackupArchive.ChatThread,
         chatId: BackupArchive.ChatId,
-        directionalDetails: BackupProto_ChatItem.OneOf_DirectionalDetails,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) throws {
-        let wasRead = directionalDetails.wasRead
+        // Error messages are always "directionless", and consequently their
+        // "read" state is not backed up. Treat them as read.
+        let wasRead = true
         interaction.wasRead = wasRead
+
         try insert(
             interaction: interaction,
             in: thread,
@@ -112,7 +92,7 @@ public final class BackupArchiveInteractionStore {
             // No sender for error messages
             senderAci: nil,
             wasRead: wasRead,
-            context: context
+            context: context,
         )
     }
 
@@ -124,16 +104,15 @@ public final class BackupArchiveInteractionStore {
         chatId: BackupArchive.ChatId,
         callerAci: Aci?,
         wasRead: Bool,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) throws {
-        interaction.wasRead = wasRead
         try insert(
             interaction: interaction,
             in: thread,
             chatId: chatId,
             senderAci: callerAci,
             wasRead: wasRead,
-            context: context
+            context: context,
         )
     }
 
@@ -144,16 +123,15 @@ public final class BackupArchiveInteractionStore {
         chatId: BackupArchive.ChatId,
         startedCallAci: Aci?,
         wasRead: Bool,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) throws {
-        interaction.wasRead = wasRead
         try insert(
             interaction: interaction,
             in: thread,
             chatId: chatId,
             senderAci: startedCallAci,
             wasRead: wasRead,
-            context: context
+            context: context,
         )
     }
 
@@ -165,7 +143,7 @@ public final class BackupArchiveInteractionStore {
         chatId: BackupArchive.ChatId,
         senderAci: Aci?,
         wasRead: Bool,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) throws {
         guard interaction.shouldBeSaved else {
             owsFailDebug("Unsaveable interaction in a backup?")
@@ -174,23 +152,20 @@ public final class BackupArchiveInteractionStore {
         if let message = interaction as? TSOutgoingMessage {
             message.updateStoredMessageState()
         }
-        if let message = interaction as? TSMessage {
-            message.updateStoredShouldStartExpireTimer()
-        }
 
         let shouldAppearInInbox = interaction.shouldAppearInInbox(
             groupUpdateItemsBuilder: { infoMessage in
                 // In a backups context, _all_ info message group updates are precomputed.
                 // We can assume this in this builder override.
                 switch infoMessage.groupUpdateMetadata(
-                    localIdentifiers: context.recipientContext.localIdentifiers
+                    localIdentifiers: context.recipientContext.localIdentifiers,
                 ) {
                 case .precomputed(let wrapper):
                     return wrapper.updateItems
                 default:
                     return nil
                 }
-            }
+            },
         )
 
         // Note: We do not insert restored messages into the MessageSendLog.
@@ -209,7 +184,7 @@ public final class BackupArchiveInteractionStore {
             context.chatContext.updateLastVisibleInteractionRowId(
                 interactionRowId: interactionRowId,
                 wasRead: wasRead,
-                chatId: chatId
+                chatId: chatId,
             )
         }
 
@@ -227,7 +202,7 @@ public final class BackupArchiveInteractionStore {
                     groupThread: groupThread,
                     chatId: chatId,
                     senderAci: senderAci,
-                    timestamp: interaction.timestamp
+                    timestamp: interaction.timestamp,
                 )
             }
         }
@@ -259,7 +234,7 @@ public final class BackupArchiveInteractionStore {
     /// over hundreds of thousands of interaction inserts during a restore are.
     private func insertInteractionWithDirectSQLiteCalls(
         _ interaction: TSInteraction,
-        database: GRDB.Database
+        database: GRDB.Database,
     ) throws {
         guard let sqliteConnection = database.sqliteConnection else {
             throw OWSAssertionError("Missing SQLite connection!")
@@ -276,7 +251,7 @@ public final class BackupArchiveInteractionStore {
         /// statement pointer in a package-level cache, from which we can
         /// retrieve it.
         let cachedSqliteStatement: GRDB.SQLiteStatement = try database.cachedStatement(
-            sql: insertInteractionSQL
+            sql: insertInteractionSQL,
         ).sqliteStatement
 
         /// The compiled "insert interaction" SQLite statement contains `?`
@@ -330,25 +305,6 @@ public final class BackupArchiveInteractionStore {
                 let errmsg = String(cString: sqlite3_errmsg(sqliteConnection)!)
                 throw OWSAssertionError("Unexpected SQLite return code \(code) while executing interaction insert statement! \(errmsg)")
             }
-        }
-    }
-}
-
-// MARK: -
-
-extension BackupProto_ChatItem.OneOf_DirectionalDetails {
-
-    var wasRead: Bool {
-        switch self {
-        case .incoming(let incomingMessageDetails):
-            return incomingMessageDetails.read
-        case .outgoing:
-            // Outgoing messages are always implicitly read
-            return true
-        case .directionless:
-            // Since we don't track read state for directionless
-            // messages, just treat them as read.
-            return true
         }
     }
 }

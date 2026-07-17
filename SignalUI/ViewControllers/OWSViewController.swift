@@ -109,10 +109,12 @@ open class OWSViewController: UIViewController {
         // Do nothing; just a hook for subclasses
     }
 
-    open override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
 
         self.lifecycle = .notAppeared
+
+        installContentLayouGuide()
 
         if #unavailable(iOS 16) {
             let layoutGuide = UILayoutGuide()
@@ -133,11 +135,11 @@ open class OWSViewController: UIViewController {
             self,
             selector: #selector(themeDidChange),
             name: .themeDidChange,
-            object: nil
+            object: nil,
         )
     }
 
-    open override func viewWillAppear(_ animated: Bool) {
+    override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         self.lifecycle = .willAppear
@@ -145,29 +147,29 @@ open class OWSViewController: UIViewController {
         observeKeyboardNotificationsIfNeeded()
     }
 
-    open override func viewDidAppear(_ animated: Bool) {
+    override open func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         self.lifecycle = .appeared
 
-        #if DEBUG
+#if DEBUG
         ensureNavbarAccessibilityIds()
-        #endif
+#endif
     }
 
-    open override func viewWillDisappear(_ animated: Bool) {
+    override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         self.lifecycle = .willDisappear
     }
 
-    open override func viewDidDisappear(_ animated: Bool) {
+    override open func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
         self.lifecycle = .notAppeared
     }
 
-    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override open func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
         // Whatever keyboard frame we knew about is now invalidated.
@@ -175,13 +177,13 @@ open class OWSViewController: UIViewController {
         lastKnownKeyboardFrame = nil
     }
 
-    open override func viewSafeAreaInsetsDidChange() {
+    override open func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
 
         updateiOS15KeyboardLayoutGuide()
     }
 
-    #if DEBUG
+#if DEBUG
     func ensureNavbarAccessibilityIds() {
         guard let navigationBar = navigationController?.navigationBar else {
             return
@@ -205,7 +207,7 @@ open class OWSViewController: UIViewController {
             }
         }
     }
-    #endif
+#endif
 
     // MARK: - Activation
 
@@ -214,31 +216,31 @@ open class OWSViewController: UIViewController {
             self,
             selector: #selector(appWillEnterForeground),
             name: UIApplication.willEnterForegroundNotification,
-            object: nil
+            object: nil,
         )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(appDidBecomeActive),
             name: UIApplication.didBecomeActiveNotification,
-            object: nil
+            object: nil,
         )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(appWillResignActive),
             name: UIApplication.willResignActiveNotification,
-            object: nil
+            object: nil,
         )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(appDidEnterBackground),
             name: UIApplication.didEnterBackgroundNotification,
-            object: nil
+            object: nil,
         )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(contentSizeCategoryDidChange),
             name: UIContentSizeCategory.didChangeNotification,
-            object: nil
+            object: nil,
         )
     }
 
@@ -247,9 +249,129 @@ open class OWSViewController: UIViewController {
         setNeedsStatusBarAppearanceUpdate()
     }
 
+    // MARK: - Content Layout Guide
+
+    /// Defines an area for static content to be laid in.
+    ///
+    /// `contentLayoutGuide` is meant to provide subclasses with a unified area for static content.
+    /// This layout guide is designed to be used across all devices and interface orientations.
+    ///
+    ///
+    /// These are the margins `contentLayoutGuide` defines relative to root view's edges:
+    /// * iPhone portrait (vertical regular, horizontal compact)
+    ///   * Top
+    ///     * Notch/Dymamic island iPhones: same as safe area.
+    ///     * Home button iPhones: same as status bar area (20 pt).
+    ///   * Leading/trailing
+    ///     * Plus/Max/Air iPhones: 20 pt.
+    ///     * Other iPhones: 16 pt.
+    ///   * Bottom
+    ///     * Notch/Dymamic island iPhones: same as safe area.
+    ///     * Home button iPhones: manual 20 pt to match top margin.
+    ///
+    /// * iPhone Landscape (vertical compact, horizontal regular on Plus/Max iPhones)
+    ///   * Top
+    ///    * Same as safe area, which is mostly 20 pt but can be zero
+    ///      on smaller phones running older iOS versions.
+    ///   * Leading/trailing
+    ///     * Notch/Dymamic island iPhones: safe area + 16 pts, more if content width is capped at 640 pts.
+    ///     * Home button iPhones: 20 pt.
+    ///   * Bottom
+    ///     * All iPhones: 20 pt.
+    ///
+    /// * iPad
+    ///   * Usable margins (20 or 10 pt) on all sides.
+    ///
+    public final var contentLayoutGuide = UILayoutGuide()
+
+    private var currentContentLayoutGuideConstraints: [NSLayoutConstraint] = []
+
+    private func installContentLayouGuide() {
+        contentLayoutGuide.identifier = "Static Content Layout Guide"
+        view.addLayoutGuide(contentLayoutGuide)
+
+        // Permanent constraints.
+        NSLayoutConstraint.activate([
+            contentLayoutGuide.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
+        ])
+
+        // Flexible constraints.
+        updateContentLayoutGuideConstraints()
+    }
+
+    private func contentLayoutConstraintsForCurrentTraitCollection() -> [NSLayoutConstraint] {
+        var constraints = [NSLayoutConstraint]()
+
+        let isVerticalCompact = traitCollection.verticalSizeClass == .compact
+        let isHorizontalCompact = traitCollection.horizontalSizeClass == .compact
+        let isiPad = traitCollection.userInterfaceIdiom == .pad
+
+        Logger.debug("Vertical compact: [\(isVerticalCompact ? "Y" : "N")]")
+        Logger.debug("Horizontal compact: [\(isHorizontalCompact ? "Y" : "N")]")
+        Logger.debug("Layout margins: [\(view.layoutMarginsGuide.layoutFrame)]")
+
+        // Vertical
+        if isVerticalCompact {
+            // Whole available height.
+            constraints += [
+                contentLayoutGuide.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+                contentLayoutGuide.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
+            ]
+        } else {
+            var bottomMargin: CGFloat = 0
+            // iPhones with home button have zero bottom layout margin for some reason. No bueno!
+            if !isiPad, !UIDevice.current.hasIPhoneXNotch {
+                bottomMargin = 20
+            }
+            constraints += [
+                contentLayoutGuide.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+                contentLayoutGuide.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -bottomMargin),
+            ]
+        }
+
+        // Horizontal
+        if isiPad, !isHorizontalCompact {
+            // No wider than 628 pts, centered.
+            // 628 is the minimum width of `layoutMarginsGuide.frame` when horizonal size class is regular.
+            constraints.append({
+                let constraint = contentLayoutGuide.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor)
+                constraint.priority = .init(UILayoutPriority.required.rawValue - 10)
+                return constraint
+            }())
+            constraints += [
+                contentLayoutGuide.leadingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
+                contentLayoutGuide.widthAnchor.constraint(lessThanOrEqualToConstant: 628),
+            ]
+        } else {
+            // Whole available width.
+            constraints += [
+                contentLayoutGuide.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            ]
+        }
+
+        return constraints
+    }
+
+    private func updateContentLayoutGuideConstraints() {
+        NSLayoutConstraint.deactivate(currentContentLayoutGuideConstraints)
+        currentContentLayoutGuideConstraints = contentLayoutConstraintsForCurrentTraitCollection()
+        NSLayoutConstraint.activate(currentContentLayoutGuideConstraints)
+    }
+
+    override open func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if
+            previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass ||
+            previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
+        {
+            updateContentLayoutGuideConstraints()
+        }
+    }
+
     // MARK: - Orientation
 
-    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIDevice.current.defaultSupportedOrientations
     }
 
@@ -258,7 +380,7 @@ open class OWSViewController: UIViewController {
     // On iOS 15 provides access to last known keyboard frame.
     // On newer iOS versions this is a proxy for `view.keyboardLayoutGuide`.
     @available(iOS, deprecated: 16.0)
-    final public var keyboardLayoutGuide: UILayoutGuide {
+    public final var keyboardLayoutGuide: UILayoutGuide {
         return iOS15KeyboardLayoutGuide ?? view.keyboardLayoutGuide
     }
 
@@ -281,7 +403,7 @@ open class OWSViewController: UIViewController {
         UIResponder.keyboardWillHideNotification,
         UIResponder.keyboardDidHideNotification,
         UIResponder.keyboardWillChangeFrameNotification,
-        UIResponder.keyboardDidChangeFrameNotification
+        UIResponder.keyboardDidChangeFrameNotification,
     ]
 
     @available(iOS, deprecated: 16.0)
@@ -296,7 +418,7 @@ open class OWSViewController: UIViewController {
                 self,
                 selector: #selector(handleKeyboardNotificationBase(_:)),
                 name: $0,
-                object: nil
+                object: nil,
             )
         }
     }
@@ -348,5 +470,87 @@ private class PassthroughTouchSpacerView: SpacerView {
             return nil
         }
         return view
+    }
+}
+
+public extension OWSViewController {
+
+    /// Add provided views to view controller's view hierarchy in a vertical stack.
+    ///
+    /// Use this method for adding vertically aligned static content to the view controller's view.
+    ///
+    /// - Parameters:
+    ///   - arrangedSubviews: Views to add to the view hierarchy.
+    ///   - isScrollable: If set to `true`, stack view will be embedded in a vertical scroll view. Use this if there's a chance that content won't fit screen height.
+    ///   - shouldAvoidKeyboard: If set to `true`, bottom edge of the stack view will be pinned to top of the keyboard.
+    ///
+    /// - Returns:
+    ///   A vertical stack view that has been configured using default parameters and added to view controller's view along with necessary auto layout constraints.
+    @discardableResult
+    func addStaticContentStackView(
+        arrangedSubviews: [UIView],
+        isScrollable: Bool = false,
+        shouldAvoidKeyboard: Bool = false,
+    ) -> UIStackView {
+
+        let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
+        stackView.axis = .vertical
+        stackView.spacing = 12
+        stackView.distribution = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+
+        if isScrollable {
+            let scrollView = UIScrollView()
+            scrollView.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(scrollView)
+            scrollView.addSubview(stackView)
+            NSLayoutConstraint.activate([
+                // Scroll view's top is constrained to `contentLayoutGuide`.
+                scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor),
+                // Scroll view's bottom is constrained either to `contentLayouGuide` or to `keyboardLayoutGuide`.
+                {
+                    if shouldAvoidKeyboard {
+                        scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: keyboardLayoutGuide.topAnchor)
+                    } else {
+                        scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor)
+                    }
+
+                }(),
+
+                // Scroll view is horizontally constrained to root view's safe area.
+                // This is done so that scroll view's indicator isn't too close to the content.
+                scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+
+                // Stack view is vertically constrained to scroll view's `contentLayoutGuide`.
+                stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+                stackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+
+                // Stack view is stretched vertically to fill scroll view's height.
+                stackView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.frameLayoutGuide.heightAnchor),
+
+                // Stack view is horizontally constrained to `contentLayoutGuide`.
+                stackView.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor),
+                stackView.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor),
+            ])
+        } else {
+            view.addSubview(stackView)
+            NSLayoutConstraint.activate([
+                // Stack view is constrained to `contentLayoutGuide` in all but one directions.
+                stackView.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor),
+                stackView.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor),
+                stackView.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor),
+                // Stack view's bottom is constrained either to `contentLayouGuide` or to `keyboardLayoutGuide`.
+                {
+                    if shouldAvoidKeyboard {
+                        stackView.bottomAnchor.constraint(equalTo: keyboardLayoutGuide.topAnchor)
+                    } else {
+                        stackView.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor)
+                    }
+                }(),
+            ])
+        }
+
+        return stackView
     }
 }

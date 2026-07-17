@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-import UIKit
-import SignalUI
 import SignalServiceKit
+import SignalUI
+import UIKit
 
 // MARK: - ContactAboutSheet
 
@@ -20,7 +20,7 @@ class ContactAboutSheet: StackSheetViewController {
             contactManager: SSKEnvironment.shared.contactManagerRef,
             identityManager: DependenciesBridge.shared.identityManager,
             recipientDatabaseTable: DependenciesBridge.shared.recipientDatabaseTable,
-            nicknameManager: DependenciesBridge.shared.nicknameManager
+            nicknameManager: DependenciesBridge.shared.nicknameManager,
         )
     }
 
@@ -28,16 +28,22 @@ class ContactAboutSheet: StackSheetViewController {
     private let isLocalUser: Bool
     private let spoilerState: SpoilerRenderState
     private let context: Context
+    private let memberLabel: MemberLabel?
+    private let groupViewHelper: GroupViewHelper?
 
     init(
         thread: TSContactThread,
         spoilerState: SpoilerRenderState,
-        context: Context = .default
+        context: Context = .default,
+        memberLabel: MemberLabel? = nil,
+        groupViewHelper: GroupViewHelper? = nil,
     ) {
         self.thread = thread
         self.isLocalUser = thread.isNoteToSelf
         self.spoilerState = spoilerState
         self.context = context
+        self.memberLabel = memberLabel
+        self.groupViewHelper = groupViewHelper
         super.init()
         DependenciesBridge.shared.databaseChangeObserver.appendDatabaseChangeDelegate(self)
     }
@@ -46,7 +52,7 @@ class ContactAboutSheet: StackSheetViewController {
 
     func present(
         from viewController: UIViewController,
-        dismissalDelegate: (any SheetDismissalDelegate)? = nil
+        dismissalDelegate: (any SheetDismissalDelegate)? = nil,
     ) {
         self.fromViewController = viewController
         self.dismissalDelegate = dismissalDelegate
@@ -61,7 +67,7 @@ class ContactAboutSheet: StackSheetViewController {
         let avatarView = ConversationAvatarView(
             sizeClass: .customDiameter(240),
             localUserDisplayMode: .asUser,
-            badged: false
+            badged: false,
         )
         avatarView.updateWithSneakyTransactionIfNecessary { config in
             config.dataSource = .thread(thread)
@@ -106,7 +112,7 @@ class ContactAboutSheet: StackSheetViewController {
             top: 24,
             leading: hMargin,
             bottom: 20,
-            trailing: hMargin
+            trailing: hMargin,
         )
     }
 
@@ -114,6 +120,7 @@ class ContactAboutSheet: StackSheetViewController {
     override var sheetBackgroundColor: UIColor {
         UIColor.Signal.secondaryBackground
     }
+
     override var handleBackgroundColor: UIColor {
         UIColor.Signal.transparentSeparator
     }
@@ -150,7 +157,7 @@ class ContactAboutSheet: StackSheetViewController {
         } else {
             titleLabel.text = OWSLocalizedString(
                 "CONTACT_ABOUT_SHEET_TITLE",
-                comment: "The title for a contact 'about' sheet."
+                comment: "The title for a contact 'about' sheet.",
             )
         }
         stackView.addArrangedSubview(titleLabel)
@@ -158,7 +165,7 @@ class ContactAboutSheet: StackSheetViewController {
 
         let nameLabel = ProfileDetailLabel.profile(
             displayName: self.displayName,
-            secondaryName: self.secondaryName
+            secondaryName: self.secondaryName,
         ) { [weak self] in
             guard
                 let self,
@@ -169,11 +176,11 @@ class ContactAboutSheet: StackSheetViewController {
                 message: String(
                     format: OWSLocalizedString(
                         "CONTACT_ABOUT_SHEET_SECONDARY_NAME_TOOLTIP_MESSAGE",
-                        comment: "Message for a tooltip that appears above a parenthesized name for another user, indicating that that name is the name the other user set for themself. Embeds {{name}}"
+                        comment: "Message for a tooltip that appears above a parenthesized name for another user, indicating that that name is the name the other user set for themself. Embeds {{name}}",
                     ),
-                    secondaryName
+                    secondaryName,
                 ),
-                shouldShowCloseButton: false
+                shouldShowCloseButton: false,
             ).present(from: self, sourceView: nameLabel, arrowDirections: .down)
         }
         self.nameLabel = nameLabel
@@ -190,6 +197,11 @@ class ContactAboutSheet: StackSheetViewController {
             stackView.addArrangedSubview(label)
         }
 
+        let canEditMemberLabel = groupViewHelper?.canEditConversationAttributes ?? false
+        if BuildFlags.MemberLabel.send, isLocalUser, canEditMemberLabel {
+            stackView.addArrangedSubview(ProfileDetailLabel.memberLabel(memberLabel?.label))
+        }
+
         if isVerified {
             stackView.addArrangedSubview(ProfileDetailLabel.verified())
         }
@@ -203,7 +215,7 @@ class ContactAboutSheet: StackSheetViewController {
             stackView.addArrangedSubview(ProfileDetailLabel.signalConnectionLink(
                 shouldDismissOnNavigation: true,
                 presentEducationFrom: fromViewController,
-                dismissalDelegate: dismissalDelegate
+                dismissalDelegate: dismissalDelegate,
             ))
         case .blocked:
             stackView.addArrangedSubview(ProfileDetailLabel.blocked(name: self.shortDisplayName))
@@ -236,7 +248,7 @@ class ContactAboutSheet: StackSheetViewController {
                 shouldLineWrap: false,
                 tapAction: { [weak self] in
                     self?.didTapNote()
-                }
+                },
             )
             stackView.addArrangedSubview(noteLabel)
         }
@@ -267,11 +279,11 @@ class ContactAboutSheet: StackSheetViewController {
         }
 
         switch displayName {
-        case .nickname:
+        case .nickname, .systemContactName:
             guard
                 let profile = SSKEnvironment.shared.profileManagerRef.fetchUserProfiles(
                     for: [thread.contactAddress],
-                    tx: tx
+                    tx: tx,
                 ).first,
                 let profileName = profile?.nameComponents
                     .map(DisplayName.profileName(_:))?
@@ -281,7 +293,7 @@ class ContactAboutSheet: StackSheetViewController {
                 fallthrough
             }
             self.secondaryName = profileName
-        case .systemContactName, .profileName, .phoneNumber, .username, .deletedAccount, .unknown:
+        case .profileName, .phoneNumber, .username, .deletedAccount, .unknown:
             self.secondaryName = nil
         }
     }
@@ -294,8 +306,8 @@ class ContactAboutSheet: StackSheetViewController {
                 context: .init(
                     db: DependenciesBridge.shared.db,
                     recipientDatabaseTable: self.context.recipientDatabaseTable,
-                    nicknameManager: self.context.nicknameManager
-                )
+                    nicknameManager: self.context.nicknameManager,
+                ),
             )
             noteSheet.present(from: fromViewController)
         }
@@ -363,9 +375,9 @@ class ContactAboutSheet: StackSheetViewController {
 
         mutualGroupThreads = TSGroupThread.groupThreads(
             with: self.thread.contactAddress,
-            transaction: tx
+            transaction: tx,
         )
-        .filter(\.isLocalUserFullMember)
+        .filter(\.groupModel.groupMembership.isLocalUserFullMember)
         .filter(\.shouldThreadBeVisible)
         // We don't want to show "no groups in common",
         // so return nil instead of an empty array.
@@ -376,10 +388,12 @@ class ContactAboutSheet: StackSheetViewController {
 
     private var note: String?
     private func updateNote(tx: DBReadTransaction) {
-        guard let recipient = context.recipientDatabaseTable.fetchRecipient(
-            address: thread.contactAddress,
-            tx: tx
-        ) else {
+        guard
+            let recipient = context.recipientDatabaseTable.fetchRecipient(
+                address: thread.contactAddress,
+                tx: tx,
+            )
+        else {
             self.note = nil
             return
         }
@@ -415,7 +429,7 @@ extension ContactAboutSheet: ConversationAvatarViewDelegate {
     func presentStoryViewController() {
         let vc = StoryPageViewController(
             context: self.thread.storyContext,
-            spoilerState: self.spoilerState
+            spoilerState: self.spoilerState,
         )
         present(vc, animated: true)
     }
@@ -427,7 +441,7 @@ extension ContactAboutSheet: ConversationAvatarViewDelegate {
                 AvatarViewController(
                     thread: self.thread,
                     renderLocalUserAsNoteToSelf: false,
-                    readTx: tx
+                    readTx: tx,
                 )
             })
         else {

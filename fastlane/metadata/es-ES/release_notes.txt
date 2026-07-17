@@ -1,1 +1,1 @@
-• Hemos corregido un error que, al intentar vincular un nuevo dispositivo, hacía que el visor de la cámara no mostrase nada. Ahora solo se verá así si estás intentando vincular un nuevo dispositivo en una habitación a oscuras.
+• Mantén la información importante siempre accesible con los mensajes fijados. ¿Tu lista de pendientes de la semana o los planes de vacaciones ya son lo primero en lo que piensas? Ahora también pueden ser lo primero que aparezca en tus chats.

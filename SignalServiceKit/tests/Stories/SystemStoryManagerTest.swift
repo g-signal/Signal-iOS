@@ -24,14 +24,14 @@ class SystemStoryManagerTest: SSKBaseTest {
         SSKEnvironment.shared.databaseStorageRef.write { tx in
             (DependenciesBridge.shared.registrationStateChangeManager as! RegistrationStateChangeManagerImpl).registerForTests(
                 localIdentifiers: .forUnitTests,
-                tx: tx
+                tx: tx,
             )
         }
         manager = SystemStoryManager(
             appReadiness: AppReadinessMock(),
             fileSystem: OnboardingStoryManagerFilesystemMock.self,
             messageProcessor: MockMessageProcessor(),
-            storyMessageFactory: OnboardingStoryManagerStoryMessageFactoryMock.self
+            storyMessageFactory: OnboardingStoryManagerStoryMessageFactoryMock.self,
         )
     }
 
@@ -54,11 +54,11 @@ class SystemStoryManagerTest: SSKBaseTest {
                     throw OWSAssertionError("")
                 }
                 if url.path.hasSuffix(SystemStoryManager.Constants.manifestPath) {
-                    return HTTPResponseImpl(
+                    return HTTPResponse(
                         requestUrl: url,
                         status: 200,
                         headers: .init(),
-                        bodyData: Self.manifestJSON
+                        bodyData: Self.manifestJSON,
                     )
                 } else {
                     XCTFail("Got invalid download task url")
@@ -72,18 +72,19 @@ class SystemStoryManagerTest: SSKBaseTest {
                     XCTFail("Downloading more than once")
                     throw OWSAssertionError("")
                 }
-                XCTAssert(Self.imageNames
-                    .map { $0 + SystemStoryManager.Constants.imageExtension }
-                    .contains(url.lastPathComponent)
+                XCTAssert(
+                    Self.imageNames
+                        .map { $0 + SystemStoryManager.Constants.imageExtension }
+                        .contains(url.lastPathComponent),
                 )
                 return OWSUrlDownloadResponse(
                     httpUrlResponse: HTTPURLResponse(
                         url: url,
                         statusCode: 200,
                         httpVersion: nil,
-                        headerFields: nil
+                        headerFields: nil,
                     )!,
-                    downloadUrl: URL(fileURLWithPath: url.lastPathComponent)
+                    downloadUrl: URL(fileURLWithPath: url.lastPathComponent),
                 )
             }
             return mockSession
@@ -119,11 +120,11 @@ class SystemStoryManagerTest: SSKBaseTest {
                     }
                 }
                 if url.path.hasSuffix(SystemStoryManager.Constants.manifestPath) {
-                    return HTTPResponseImpl(
+                    return HTTPResponse(
                         requestUrl: url,
                         status: 200,
                         headers: .init(),
-                        bodyData: Self.manifestJSON
+                        bodyData: Self.manifestJSON,
                     )
                 } else {
                     XCTFail("Got invalid download task url")
@@ -136,18 +137,19 @@ class SystemStoryManagerTest: SSKBaseTest {
                     XCTFail("Downloading more than once")
                     throw OWSAssertionError("")
                 }
-                XCTAssert(Self.imageNames
-                    .map { $0 + SystemStoryManager.Constants.imageExtension }
-                    .contains(url.lastPathComponent)
+                XCTAssert(
+                    Self.imageNames
+                        .map { $0 + SystemStoryManager.Constants.imageExtension }
+                        .contains(url.lastPathComponent),
                 )
                 return OWSUrlDownloadResponse(
                     httpUrlResponse: HTTPURLResponse(
                         url: url,
                         statusCode: 200,
                         httpVersion: nil,
-                        headerFields: nil
+                        headerFields: nil,
                     )!,
-                    downloadUrl: URL(fileURLWithPath: url.lastPathComponent)
+                    downloadUrl: URL(fileURLWithPath: url.lastPathComponent),
                 )
             }
             return mockSession
@@ -195,11 +197,11 @@ class SystemStoryManagerTest: SSKBaseTest {
                     throw OWSAssertionError("")
                 }
                 if url.path.hasSuffix(SystemStoryManager.Constants.manifestPath) {
-                    return HTTPResponseImpl(
+                    return HTTPResponse(
                         requestUrl: url,
                         status: 200,
                         headers: .init(),
-                        bodyData: Self.manifestJSON
+                        bodyData: Self.manifestJSON,
                     )
                 } else {
                     XCTFail("Got invalid download task url")
@@ -213,18 +215,19 @@ class SystemStoryManagerTest: SSKBaseTest {
                     XCTFail("Downloading more than once")
                     throw OWSAssertionError("")
                 }
-                XCTAssert(Self.imageNames
-                    .map { $0 + SystemStoryManager.Constants.imageExtension }
-                    .contains(url.lastPathComponent)
+                XCTAssert(
+                    Self.imageNames
+                        .map { $0 + SystemStoryManager.Constants.imageExtension }
+                        .contains(url.lastPathComponent),
                 )
                 return OWSUrlDownloadResponse(
                     httpUrlResponse: HTTPURLResponse(
                         url: url,
                         statusCode: 200,
                         httpVersion: nil,
-                        headerFields: nil
+                        headerFields: nil,
                     )!,
-                    downloadUrl: URL(fileURLWithPath: url.lastPathComponent)
+                    downloadUrl: URL(fileURLWithPath: url.lastPathComponent),
                 )
             }
             return mockSession
@@ -247,7 +250,7 @@ class SystemStoryManagerTest: SSKBaseTest {
                 story.markAsViewed(
                     at: viewedDate.ows_millisecondsSince1970,
                     circumstance: .onThisDevice,
-                    transaction: transaction
+                    transaction: transaction,
                 )
             }
         }
@@ -263,9 +266,9 @@ class SystemStoryManagerTest: SSKBaseTest {
             try manager.setHasViewedOnboardingStory(
                 source: .local(
                     timestamp: viewedDate.ows_millisecondsSince1970,
-                    shouldUpdateStorageService: false
+                    shouldUpdateStorageService: false,
                 ),
-                transaction: $0
+                transaction: $0,
             )
         }
 
@@ -324,11 +327,11 @@ class SystemStoryManagerTest: SSKBaseTest {
                     throw OWSAssertionError("")
                 }
                 if url.path.hasSuffix(SystemStoryManager.Constants.manifestPath) {
-                    return HTTPResponseImpl(
+                    return HTTPResponse(
                         requestUrl: url,
                         status: 200,
                         headers: .init(),
-                        bodyData: Self.manifestJSON
+                        bodyData: Self.manifestJSON,
                     )
                 } else {
                     XCTFail("Got invalid download task url")
@@ -342,18 +345,19 @@ class SystemStoryManagerTest: SSKBaseTest {
                     XCTFail("Downloading more than once")
                     throw OWSAssertionError("")
                 }
-                XCTAssert(Self.imageNames
-                    .map { $0 + SystemStoryManager.Constants.imageExtension }
-                    .contains(url.lastPathComponent)
+                XCTAssert(
+                    Self.imageNames
+                        .map { $0 + SystemStoryManager.Constants.imageExtension }
+                        .contains(url.lastPathComponent),
                 )
                 return OWSUrlDownloadResponse(
                     httpUrlResponse: HTTPURLResponse(
                         url: url,
                         statusCode: 200,
                         httpVersion: nil,
-                        headerFields: nil
+                        headerFields: nil,
                     )!,
-                    downloadUrl: URL(fileURLWithPath: url.lastPathComponent)
+                    downloadUrl: URL(fileURLWithPath: url.lastPathComponent),
                 )
             }
             return mockSession
@@ -376,7 +380,7 @@ class SystemStoryManagerTest: SSKBaseTest {
                 story.markAsViewed(
                     at: viewedDate.ows_millisecondsSince1970,
                     circumstance: .onThisDevice,
-                    transaction: transaction
+                    transaction: transaction,
                 )
             }
         }
@@ -409,7 +413,7 @@ class SystemStoryManagerTest: SSKBaseTest {
     static let imageNames = ["abc", "xyz"]
 
     static var manifestJSON: Data {
-        let imageNamesString = "[\(imageNames.map({ "\"\($0)\""}).joined(separator: ","))]"
+        let imageNamesString = "[\(imageNames.map({ "\"\($0)\"" }).joined(separator: ","))]"
         let string = """
         {
             "\(SystemStoryManager.Constants.manifestVersionKey)": "1234",
@@ -427,9 +431,9 @@ class SystemStoryManagerTest: SSKBaseTest {
 
 private class MockDownloadSession: BaseOWSURLSessionMock {
 
-    var performRequestSource: ((URL) async throws -> any HTTPResponse)?
+    var performRequestSource: ((URL) async throws -> HTTPResponse)?
 
-    override func performRequest(request: URLRequest, ignoreAppExpiry: Bool) async throws -> any HTTPResponse {
+    override func performRequest(request: URLRequest, ignoreAppExpiry: Bool) async throws -> HTTPResponse {
         return try await performRequestSource!(request.url!)
     }
 

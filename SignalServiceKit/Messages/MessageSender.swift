@@ -8,22 +8,12 @@ import LibSignalClient
 
 // MARK: - Message "isXYZ" properties
 
-private extension TSOutgoingMessage {
-    var isTransientSKDM: Bool {
-        (self as? OWSOutgoingSenderKeyDistributionMessage)?.isSentOnBehalfOfOnlineMessage ?? false
-    }
-
-    var isResendRequest: Bool {
-        self is OWSOutgoingResendRequest
-    }
-
-    var isSyncMessage: Bool { self is OWSOutgoingSyncMessage }
-
+extension TSOutgoingMessage {
     var canSendToLocalAddress: Bool {
-        return (isSyncMessage ||
-                self is OWSOutgoingCallMessage ||
-                self is OWSOutgoingResendRequest ||
-                self is OWSOutgoingResendResponse)
+        return self is OutgoingSyncMessage ||
+            self is OutgoingCallMessage ||
+            self is OutgoingResendRequest ||
+            self is OWSOutgoingResendResponse
     }
 }
 
@@ -38,7 +28,7 @@ public class MessageSender {
 
     init(
         accountChecker: AccountChecker,
-        groupSendEndorsementStore: any GroupSendEndorsementStore
+        groupSendEndorsementStore: any GroupSendEndorsementStore,
     ) {
         self.accountChecker = accountChecker
         self.groupSendEndorsementStore = groupSendEndorsementStore
@@ -48,10 +38,10 @@ public class MessageSender {
 
     // MARK: - Creating Signal Protocol Sessions
 
-    private func validSession(for serviceId: ServiceId, deviceId: DeviceId, tx: DBReadTransaction) throws -> SessionRecord? {
+    private func validSession(for serviceId: ServiceId, deviceId: DeviceId, tx: DBReadTransaction) throws -> LibSignalClient.SessionRecord? {
         let sessionStore = DependenciesBridge.shared.signalProtocolStoreManager.signalProtocolStore(for: .aci).sessionStore
         do {
-            guard let session = try sessionStore.loadSession(for: serviceId, deviceId: deviceId, tx: tx) else {
+            guard let session = try sessionStore.loadSession(forServiceId: serviceId, deviceId: deviceId, tx: tx) else {
                 return nil
             }
             guard session.hasCurrentState else {
@@ -72,12 +62,12 @@ public class MessageSender {
     private func createSession(
         serviceId: ServiceId,
         deviceId: PreKeyDevice,
-        sealedSenderParameters: SealedSenderParameters?
+        sealedSenderParameters: SealedSenderParameters?,
     ) async throws {
         var preKeyBundle = try await makePreKeyRequest(
             serviceId: serviceId,
             deviceId: deviceId,
-            sealedSenderParameters: sealedSenderParameters
+            sealedSenderParameters: sealedSenderParameters,
         )
 
         try await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
@@ -86,7 +76,7 @@ public class MessageSender {
                 self.updateDevices(
                     serviceId: serviceId,
                     deviceIds: preKeyBundle.devices.map(\.deviceId),
-                    tx: tx
+                    tx: tx,
                 )
             case .specific(let deviceId):
                 owsAssertDebug(preKeyBundle.devices.map(\.deviceId) == [deviceId], "Server returned unexpected device bundles.")
@@ -107,7 +97,7 @@ public class MessageSender {
     private func makePreKeyRequest(
         serviceId: ServiceId,
         deviceId: PreKeyDevice,
-        sealedSenderParameters: SealedSenderParameters?
+        sealedSenderParameters: SealedSenderParameters?,
     ) async throws -> SignalServiceKit.PreKeyBundle {
         // As an optimization, skip the request if an error is guaranteed.
         if willDefinitelyHaveUntrustedIdentityError(for: serviceId) {
@@ -140,7 +130,7 @@ public class MessageSender {
             accessKey: sealedSenderParameters?.accessKey,
             endorsement: sealedSenderParameters?.endorsement,
             authedAccount: .implicit(),
-            options: requestOptions
+            options: requestOptions,
         )
 
         let deviceIdParam: String
@@ -165,7 +155,7 @@ public class MessageSender {
     private func _createSessions(
         for preKeyBundle: SignalServiceKit.PreKeyBundle,
         serviceId: ServiceId,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) throws {
         assert(!Thread.isMainThread)
 
@@ -178,7 +168,7 @@ public class MessageSender {
         for deviceBundle: SignalServiceKit.PreKeyBundle.PreKeyDeviceBundle,
         serviceId: ServiceId,
         identityKey: IdentityKey,
-        tx transaction: DBWriteTransaction
+        tx transaction: DBWriteTransaction,
     ) throws {
         let deviceId = deviceBundle.deviceId
 
@@ -202,7 +192,7 @@ public class MessageSender {
                 identity: identityKey,
                 kyberPrekeyId: deviceBundle.pqPreKey.keyId,
                 kyberPrekey: deviceBundle.pqPreKey.publicKey,
-                kyberPrekeySignature: deviceBundle.pqPreKey.signature
+                kyberPrekeySignature: deviceBundle.pqPreKey.signature,
             )
         } else {
             bundle = try LibSignalClient.PreKeyBundle(
@@ -214,7 +204,7 @@ public class MessageSender {
                 identity: identityKey,
                 kyberPrekeyId: deviceBundle.pqPreKey.keyId,
                 kyberPrekey: deviceBundle.pqPreKey.publicKey,
-                kyberPrekeySignature: deviceBundle.pqPreKey.signature
+                kyberPrekeySignature: deviceBundle.pqPreKey.signature,
             )
         }
 
@@ -227,14 +217,13 @@ public class MessageSender {
                 sessionStore: DependenciesBridge.shared.signalProtocolStoreManager.signalProtocolStore(for: .aci).sessionStore,
                 identityStore: identityManager.libSignalStore(for: .aci, tx: transaction),
                 context: transaction,
-                usePqRatchet: RemoteConfig.current.usePqRatchet
             )
         } catch SignalError.untrustedIdentity(_), IdentityManagerError.identityKeyMismatchForOutgoingMessage {
             Logger.warn("Found untrusted identity for \(serviceId)")
             handleUntrustedIdentityKeyError(
                 serviceId: serviceId,
                 identityKey: identityKey,
-                transaction: transaction
+                transaction: transaction,
             )
             throw UntrustedIdentityError(serviceId: serviceId)
         } catch SignalError.invalidSignature(_) {
@@ -258,7 +247,7 @@ public class MessageSender {
     private func handleUntrustedIdentityKeyError(
         serviceId: ServiceId,
         identityKey: IdentityKey,
-        transaction tx: DBWriteTransaction
+        transaction tx: DBWriteTransaction,
     ) {
         let identityManager = DependenciesBridge.shared.identityManager
         identityManager.saveIdentityKey(identityKey, for: serviceId, tx: tx)
@@ -289,7 +278,7 @@ public class MessageSender {
             return identityManager.untrustedIdentityForSending(
                 to: SignalServiceAddress(serviceId),
                 untrustedThreshold: nil,
-                tx: tx
+                tx: tx,
             ) != nil
         }
     }
@@ -301,6 +290,7 @@ public class MessageSender {
         let lastErrorDate: Date
         let errorCount: UInt32
     }
+
     private let invalidKeySignatureCache = AtomicValue(InvalidSignatureCache(), lock: .init())
 
     private func hadInvalidKeySignatureError(for serviceId: ServiceId) {
@@ -312,7 +302,7 @@ public class MessageSender {
 
             cache[serviceId] = InvalidSignatureCacheItem(
                 lastErrorDate: Date(),
-                errorCount: errorCount
+                errorCount: errorCount,
             )
         }
     }
@@ -357,17 +347,44 @@ public class MessageSender {
 
     // MARK: - Constructing Message Sends
 
-    public func sendMessage(_ preparedOutgoingMessage: PreparedOutgoingMessage) async throws {
-        do {
-            Logger.info("Sending \(preparedOutgoingMessage)")
-            try await _sendMessage(preparedOutgoingMessage)
-        } catch {
-            Logger.warn("Couldn't send \(preparedOutgoingMessage); there may also be individual send failures, but the overall failure is: \(error)")
-            throw error
-        }
+    enum SendResult {
+        case success
+
+        /// Something happened before[^1] we branched based on ServiceIds, so the
+        /// same Error applies to the entire attempt to send the message.
+        ///
+        /// [^1]: If we try to send to a group and every group member is
+        /// unregistered, this is treated as an overall failure. There is an
+        /// argument that this shouldn't be an error at all or should be
+        /// per-recipient "recipients don't exist" errors.
+        case overallFailure(any Error)
+
+        /// We reached a point where we may have a different error for every
+        /// recipient. It will often be the case that many recipients encounter the
+        /// "same" error. (For example, we may use the multi-recipient endpoint and
+        /// then copy the same Error object for every recipient, but we also may fan
+        /// out to individual recipients, and they all may encounter their own
+        /// equivalent network failure error.)
+        case recipientsFailure(SendMessageFailure)
     }
 
-    private func _sendMessage(_ preparedOutgoingMessage: PreparedOutgoingMessage) async throws {
+    func sendMessage(_ preparedOutgoingMessage: PreparedOutgoingMessage) async -> SendResult {
+        let sendFailure: SendMessageFailure?
+        do {
+            Logger.info("Sending \(preparedOutgoingMessage)")
+            sendFailure = try await _sendMessage(preparedOutgoingMessage)
+        } catch {
+            Logger.warn("Couldn't send \(preparedOutgoingMessage); the overall failure is: \(error)")
+            return .overallFailure(error)
+        }
+        if let sendFailure {
+            Logger.warn("Couldn't send \(preparedOutgoingMessage); up to 3 per-recipient failures: \(sendFailure.recipientErrors.prefix(3))")
+            return .recipientsFailure(sendFailure)
+        }
+        return .success
+    }
+
+    private func _sendMessage(_ preparedOutgoingMessage: PreparedOutgoingMessage) async throws -> SendMessageFailure? {
         await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
             preparedOutgoingMessage.updateAllUnsentRecipientsAsSending(tx: tx)
         }
@@ -384,7 +401,7 @@ public class MessageSender {
             try await taskGroup.waitForAll()
         }
 
-        try await preparedOutgoingMessage.send(self.sendPreparedMessage(_:))
+        return try await preparedOutgoingMessage.send(self.sendPreparedMessage(_:))
     }
 
     private func waitForPreKeyRotationIfNeeded() async throws {
@@ -415,7 +432,7 @@ public class MessageSender {
                         // If this succeeds, or if we hit an error, allow another attempt.
                         self.pendingPreKeyRotation.set(nil)
                     }
-                    try await self.preKeyManager.rotateSignedPreKeysIfNeeded().value
+                    try await self.preKeyManager.rotateSignedPreKeysIfNeeded()
                 }
             }
             return nil
@@ -429,9 +446,9 @@ public class MessageSender {
     // * A recipient is unregistered.
     // * A recipient does not have the required capability.
     private func markSkippedRecipients(
-        of message: TSOutgoingMessage,
+        of message: any SendableMessage,
         sendingRecipients: [ServiceId],
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         let skippedRecipients = Set(message.sendingRecipientAddresses())
             .subtracting(sendingRecipients.lazy.map { SignalServiceAddress($0) })
@@ -439,12 +456,12 @@ public class MessageSender {
     }
 
     private func unsentRecipients(
-        of message: TSOutgoingMessage,
+        of message: any SendableMessage,
         in thread: TSThread,
         localIdentifiers: LocalIdentifiers,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) throws -> [SignalServiceAddress] {
-        if message.isSyncMessage {
+        if message is OutgoingSyncMessage {
             return [localIdentifiers.aciAddress]
         }
 
@@ -475,6 +492,9 @@ public class MessageSender {
                 currentValidRecipients.formUnion(groupMembership.invitedMembers)
             }
             currentValidRecipients.remove(localIdentifiers.aciAddress)
+            if let localPni = localIdentifiers.pni {
+                currentValidRecipients.remove(SignalServiceAddress(localPni))
+            }
             recipientAddresses.formIntersection(currentValidRecipients)
 
             let blockedAddresses = SSKEnvironment.shared.blockingManagerRef.blockedAddresses(transaction: tx)
@@ -515,8 +535,9 @@ public class MessageSender {
             let blockedAddresses = SSKEnvironment.shared.blockingManagerRef.blockedAddresses(transaction: tx)
             recipientAddresses.subtract(blockedAddresses)
 
-            if recipientAddresses.contains(localIdentifiers.aciAddress) {
-                owsFailDebug("Message send recipients should not include self.")
+            recipientAddresses.remove(localIdentifiers.aciAddress)
+            if let localPni = localIdentifiers.pni {
+                recipientAddresses.remove(SignalServiceAddress(localPni))
             }
 
             return Array(recipientAddresses)
@@ -543,40 +564,16 @@ public class MessageSender {
     private func lookUpPhoneNumbers(_ phoneNumbers: [E164]) async throws {
         _ = try await SSKEnvironment.shared.contactDiscoveryManagerRef.lookUp(
             phoneNumbers: Set(phoneNumbers.lazy.map { $0.stringValue }),
-            mode: .outgoingMessage
+            mode: .outgoingMessage,
         )
     }
 
-    private func areAttachmentsUploadedWithSneakyTransaction(for message: TSOutgoingMessage) -> Bool {
-        if message.shouldBeSaved == false {
-            // Unsaved attachments come in two types:
-            // * no attachments
-            // * contact sync, already-uploaded attachment required on init
-            // So checking for upload state for unsaved attachments is pointless
-            // (and will, in fact, fail, because of foreign key constraints).
-            return true
-        }
-        return SSKEnvironment.shared.databaseStorageRef.read { tx in
-            for attachment in message.allAttachments(transaction: tx) {
-                guard attachment.isUploadedToTransitTier else {
-                    return false
-                }
-            }
-            return true
-        }
-    }
-
-    private func sendPreparedMessage(_ message: TSOutgoingMessage) async throws {
-        if !areAttachmentsUploadedWithSneakyTransaction(for: message) {
-            throw OWSUnretryableMessageSenderError()
-        }
+    private func sendPreparedMessage(_ message: any SendableMessage) async throws -> SendMessageFailure? {
         if DependenciesBridge.shared.appExpiry.isExpired(now: Date()) {
             throw AppExpiredError()
         }
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
-        if !tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegistered {
-            throw NotRegisteredError()
-        }
+        _ = try tsAccountManager.registeredStateWithMaybeSneakyTransaction()
         if message.shouldBeSaved {
             let latestCopy = SSKEnvironment.shared.databaseStorageRef.read { tx in
                 TSInteraction.anyFetch(uniqueId: message.uniqueId, transaction: tx) as? TSOutgoingMessage
@@ -586,26 +583,37 @@ public class MessageSender {
             }
         }
         if DebugFlags.messageSendsFail.get() {
-            throw OWSUnretryableMessageSenderError()
+            throw OWSGenericError("failure toggle is enabled")
         }
-        do {
-            try await waitForPreKeyRotationIfNeeded()
-            let senderCertificates = try await SSKEnvironment.shared.udManagerRef.fetchSenderCertificates(certificateExpirationPolicy: .permissive)
-            try await sendPreparedMessage(
+        try await waitForPreKeyRotationIfNeeded()
+        let udManager = SSKEnvironment.shared.udManagerRef
+        let senderCertificates = try await udManager.fetchSenderCertificates()
+        let registeredState = try tsAccountManager.registeredStateWithMaybeSneakyTransaction()
+        // Send the message.
+        let sendResult = await Result(catching: {
+            return try await sendPreparedMessage(
                 message,
                 recoveryState: OuterRecoveryState(),
-                senderCertificates: senderCertificates
+                senderCertificates: senderCertificates,
+                localIdentifiers: registeredState.localIdentifiers,
             )
-        } catch {
-            if message.wasSentToAnyRecipient {
-                // Always ignore the sync error...
-                try? await handleMessageSentLocally(message)
-            }
-            // ...so that we can throw the original error for the caller. (Note that we
-            // throw this error even if the sync message is sent successfully.)
-            throw error
+        })
+        // Send the sync message if it succeeded overall or for any recipient.
+        let syncResult: Result<Void, any Error>?
+        if sendResult.isSuccess || message.wasSentToAnyRecipient {
+            syncResult = await Result(catching: {
+                try await handleMessageSentLocally(message, localIdentifiers: registeredState.localIdentifiers)
+            })
+        } else {
+            syncResult = nil
         }
-        try await handleMessageSentLocally(message)
+        // If we encountered an error when sending, return that.
+        if let sendFailure = try sendResult.get() {
+            return sendFailure
+        }
+        // Otherwise, if only the sync message failed, return that.
+        try syncResult?.get()
+        return nil
     }
 
     private enum SendMessageNextAction {
@@ -651,26 +659,28 @@ public class MessageSender {
     }
 
     private func sendPreparedMessage(
-        _ message: TSOutgoingMessage,
+        _ message: any SendableMessage,
         recoveryState: OuterRecoveryState,
-        senderCertificates: SenderCertificates
-    ) async throws {
-        let nextAction = try await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx -> SendMessageNextAction? in
+        senderCertificates: SenderCertificates,
+        localIdentifiers: LocalIdentifiers,
+    ) async throws -> SendMessageFailure? {
+        let databaseStorage = SSKEnvironment.shared.databaseStorageRef
+        let nextAction = try await databaseStorage.awaitableWrite { tx -> SendMessageNextAction? in
             guard let thread = message.thread(tx: tx) else {
                 throw MessageSenderError.threadMissing
             }
 
             let canSendToThread: Bool = {
-                if message is OWSOutgoingReactionMessage {
+                if message is OutgoingReactionMessage {
                     return thread.canSendReactionToThread
                 }
                 let isChatMessage = (
                     (
                         message.shouldBeSaved
-                        && message.insertedMessageHasRenderableContent(rowId: message.sqliteRowId!, tx: tx)
+                            && message.insertedMessageHasRenderableContent(rowId: message.sqliteRowId!, tx: tx)
                     )
-                    || message is OutgoingGroupCallUpdateMessage
-                    || message is OWSOutgoingCallMessage
+                        || message is OutgoingGroupCallUpdateMessage
+                        || message is OutgoingCallMessage,
                 )
                 return isChatMessage ? thread.canSendChatMessagesToThread() : thread.canSendNonChatMessagesToThread
             }()
@@ -680,11 +690,6 @@ public class MessageSender {
                 }
                 // Pretend to succeed for non-visible messages like read receipts, etc.
                 return nil
-            }
-
-            let tsAccountManager = DependenciesBridge.shared.tsAccountManager
-            guard let localIdentifiers = tsAccountManager.localIdentifiers(tx: tx) else {
-                throw OWSAssertionError("Not registered.")
             }
 
             let proposedAddresses = try self.unsentRecipients(of: message, in: thread, localIdentifiers: localIdentifiers, tx: tx)
@@ -719,9 +724,7 @@ public class MessageSender {
                 return nil
             }
 
-            guard let serializedMessage = self.buildAndRecordMessage(message, in: thread, tx: tx) else {
-                throw OWSAssertionError("Couldn't build message.")
-            }
+            let serializedMessage = try self.buildAndRecordMessage(message, in: thread, tx: tx)
 
             let senderCertificate: SenderCertificate = {
                 switch SSKEnvironment.shared.udManagerRef.phoneNumberSharingMode(tx: tx).orDefault {
@@ -734,10 +737,9 @@ public class MessageSender {
 
             let udAccessMap = self.fetchSealedSenderAccess(
                 for: serviceIds.compactMap { $0 as? Aci },
-                message: message,
                 senderCertificate: senderCertificate,
                 localIdentifiers: localIdentifiers,
-                tx: tx
+                tx: tx,
             )
 
             let endorsements: GroupSendEndorsements?
@@ -776,7 +778,7 @@ public class MessageSender {
                         udAccessMap: udAccessMap,
                         senderCertificate: senderCertificate,
                         localIdentifiers: localIdentifiers,
-                        tx: tx
+                        tx: tx,
                     )
                 } catch {
                     senderKeyRecipients = []
@@ -798,7 +800,7 @@ public class MessageSender {
                 senderCertificate: senderCertificate,
                 udAccess: udAccessMap,
                 endorsements: endorsements,
-                localIdentifiers: localIdentifiers
+                localIdentifiers: localIdentifiers,
             ))
         }
 
@@ -806,7 +808,7 @@ public class MessageSender {
 
         switch nextAction {
         case .none:
-            return
+            return nil
         case .lookUpPhoneNumbersAndTryAgain(let phoneNumbers):
             try await lookUpPhoneNumbers(phoneNumbers)
             retryRecoveryState = recoveryState.mutated({ $0.canLookUpPhoneNumbers = false })
@@ -835,36 +837,45 @@ public class MessageSender {
                 senderCertificate: state.senderCertificate,
                 udAccess: state.udAccess,
                 endorsements: state.endorsements,
-                localIdentifiers: state.localIdentifiers
+                localIdentifiers: state.localIdentifiers,
             )
-            let recipientErrors = MessageSenderRecipientErrors(recipientErrors: perRecipientErrors)
-            if recipientErrors.containsAny(of: .invalidAuthHeader) {
-                retryRecoveryState = recoveryState.mutated({ $0.canUseMultiRecipientSealedSender = false })
-                break
+            let sendMessageFailure: SendMessageFailure?
+            if perRecipientErrors.isEmpty {
+                sendMessageFailure = nil
+            } else {
+                sendMessageFailure = try await handleSendFailure(
+                    message: message,
+                    thread: state.thread,
+                    perRecipientErrors: perRecipientErrors,
+                )
             }
-            if recoveryState.canHandleMultiRecipientMismatchedDevices, recipientErrors.containsAny(of: .deviceUpdate) {
-                retryRecoveryState = recoveryState.mutated({ $0.canHandleMultiRecipientMismatchedDevices = false })
-                break
+            if let sendMessageFailure {
+                if sendMessageFailure.containsAny(of: .invalidAuthHeader) {
+                    retryRecoveryState = recoveryState.mutated({ $0.canUseMultiRecipientSealedSender = false })
+                    break
+                }
+                if recoveryState.canHandleMultiRecipientMismatchedDevices, sendMessageFailure.containsAny(of: .deviceUpdate) {
+                    retryRecoveryState = recoveryState.mutated({ $0.canHandleMultiRecipientMismatchedDevices = false })
+                    break
+                }
+                if recoveryState.canHandleMultiRecipientStaleDevices, sendMessageFailure.containsAny(of: .staleDevices) {
+                    retryRecoveryState = recoveryState.mutated({ $0.canHandleMultiRecipientStaleDevices = false })
+                    break
+                }
             }
-            if recoveryState.canHandleMultiRecipientStaleDevices, recipientErrors.containsAny(of: .staleDevices) {
-                retryRecoveryState = recoveryState.mutated({ $0.canHandleMultiRecipientStaleDevices = false })
-                break
-            }
-            if !perRecipientErrors.isEmpty {
-                try await handleSendFailure(message: message, thread: state.thread, perRecipientErrors: perRecipientErrors)
-            }
-            return
+            return sendMessageFailure
         }
 
-        try await sendPreparedMessage(
+        return try await sendPreparedMessage(
             message,
             recoveryState: retryRecoveryState,
-            senderCertificates: senderCertificates
+            senderCertificates: senderCertificates,
+            localIdentifiers: localIdentifiers,
         )
     }
 
     private func sendPreparedMessage(
-        message: TSOutgoingMessage,
+        message: any SendableMessage,
         serializedMessage: SerializedMessage,
         in thread: TSThread,
         viaFanoutTo fanoutRecipients: Set<ServiceId>,
@@ -872,14 +883,14 @@ public class MessageSender {
         senderCertificate: SenderCertificate,
         udAccess sendingAccessMap: [ServiceId: OWSUDAccess],
         endorsements: GroupSendEndorsements?,
-        localIdentifiers: LocalIdentifiers
+        localIdentifiers: LocalIdentifiers,
     ) async -> [(ServiceId, any Error)] {
         // Both types are Arrays because Sender Key Tasks may return N errors when
         // sending to N participants. (Fanout Tasks always send to one recipient
         // and will therefore return either no error or exactly one error.)
         return await withTaskGroup(
             of: [(ServiceId, any Error)].self,
-            returning: [(ServiceId, any Error)].self
+            returning: [(ServiceId, any Error)].self,
         ) { taskGroup in
             if let sendViaSenderKey {
                 taskGroup.addTask(operation: sendViaSenderKey)
@@ -893,13 +904,13 @@ public class MessageSender {
                     plaintextPayloadId: serializedMessage.payloadId,
                     thread: thread,
                     serviceId: serviceId,
-                    localIdentifiers: localIdentifiers
+                    localIdentifiers: localIdentifiers,
                 )
                 var sealedSenderParameters = SealedSenderParameters(
                     message: message,
                     senderCertificate: senderCertificate,
                     accessKey: sendingAccessMap[serviceId],
-                    endorsement: endorsements?.tokenBuilder(forServiceId: serviceId)
+                    endorsement: endorsements?.tokenBuilder(forServiceId: serviceId),
                 )
                 if localIdentifiers.contains(serviceId: serviceId) {
                     owsAssertDebug(sealedSenderParameters == nil, "Can't use Sealed Sender for ourselves.")
@@ -921,10 +932,9 @@ public class MessageSender {
 
     private func fetchSealedSenderAccess(
         for acis: [Aci],
-        message: TSOutgoingMessage,
         senderCertificate: SenderCertificate,
         localIdentifiers: LocalIdentifiers,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> [Aci: OWSUDAccess] {
         var result = [Aci: OWSUDAccess]()
         for aci in acis {
@@ -959,15 +969,15 @@ public class MessageSender {
             secretParams: secretParams,
             expiration: combinedRecord.expiration,
             combined: combinedEndorsement,
-            individual: individualEndorsements
+            individual: individualEndorsements,
         )
     }
 
     private func handleSendFailure(
-        message: TSOutgoingMessage,
+        message: any SendableMessage,
         thread: TSThread,
-        perRecipientErrors allErrors: [(serviceId: ServiceId, error: any Error)]
-    ) async throws {
+        perRecipientErrors allErrors: [(serviceId: ServiceId, error: any Error)],
+    ) async throws -> SendMessageFailure? {
         var skippedRecipients = [ServiceId]()
         var filteredErrors = [(serviceId: ServiceId, error: any Error)]()
 
@@ -976,9 +986,16 @@ public class MessageSender {
             // mark them as "Skipped" rather than fail the entire operation.
             if !(thread is TSContactThread), error is MessageSenderNoSuchSignalRecipientError {
                 skippedRecipients.append(serviceId)
-            } else {
-                filteredErrors.append((serviceId, error))
+                continue
             }
+            // If we're deleting our account and run into a rate limit, we mark them as
+            // "Skipped" because the group update is best-effort and this mimics the
+            // behavior of a user-initiated manual retry for the account deletion.
+            if (message as? OutgoingGroupUpdateMessage)?.isDeletingAccount == true, error is AccountChecker.RateLimitError {
+                skippedRecipients.append(serviceId)
+                continue
+            }
+            filteredErrors.append((serviceId, error))
         }
 
         // Record the individual error for each "failed" recipient.
@@ -994,53 +1011,40 @@ public class MessageSender {
 
         // If we only received errors that we should ignore, consider this send a
         // success, unless the message could not be sent to any recipient.
-        guard let anyError = filteredErrors.first?.error else {
+        guard let sendMessageFailure = SendMessageFailure(recipientErrors: filteredErrors) else {
             if message.sentRecipientAddresses().count == 0 {
                 throw MessageSenderErrorNoValidRecipients()
             }
-            return
+            return nil
         }
 
-        // Some errors should never be retried, in order to avoid hitting rate
-        // limits, for example.  Unfortunately, since group send retry is
-        // all-or-nothing, we need to fail immediately even if some of the other
-        // recipients had retryable errors.
-        if let fatalError = filteredErrors.map({ $0.error }).first(where: { $0.isFatalError }) {
-            throw fatalError
-        }
-
-        // If any of the send errors are retryable, we want to retry. Therefore,
-        // prefer to propagate a retryable error.
-        if let retryableError = filteredErrors.map({ $0.error }).first(where: { Self.isRetryableError($0) }) {
-            throw retryableError
-        }
-
-        // Otherwise, if we have any error at all, propagate it.
-        throw anyError
+        return sendMessageFailure
     }
 
     static func isRetryableError(_ error: any Error) -> Bool {
-        return error.isRetryable || error.httpStatusCode == 429
+        return (error.isRetryable && error.httpStatusCode != 508) || error.httpStatusCode == 429 || error is AccountChecker.RateLimitError
     }
 
     private func normalizeRecipientStatesIfNeeded(
-        message: TSOutgoingMessage,
+        message: any SendableMessage,
         recipientErrors: some Sequence<(serviceId: ServiceId, error: Error)>,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
-        guard recipientErrors.contains(where: {
-            switch $0.error {
-            case RecipientIdError.mustNotUsePniBecauseAciExists:
-                return true
-            default:
-                return false
-            }
-        }) else {
+        guard
+            recipientErrors.contains(where: {
+                switch $0.error {
+                case RecipientIdError.mustNotUsePniBecauseAciExists:
+                    return true
+                default:
+                    return false
+                }
+            })
+        else {
             return
         }
         let recipientStateMerger = RecipientStateMerger(
             recipientDatabaseTable: DependenciesBridge.shared.recipientDatabaseTable,
-            signalServiceAddressCache: SSKEnvironment.shared.signalServiceAddressCacheRef
+            signalServiceAddressCache: SSKEnvironment.shared.signalServiceAddressCacheRef,
         )
         message.anyUpdateOutgoingMessage(transaction: tx) { message in
             recipientStateMerger.normalize(&message.recipientAddressStates, tx: tx)
@@ -1055,7 +1059,7 @@ public class MessageSender {
     /// It is important to be conservative about which messages unhide a
     /// recipient. It is far better to not unhide when should than to
     /// unhide when we should not.
-    private func shouldMessageSendUnhideRecipient(_ message: TSOutgoingMessage, tx: DBReadTransaction) -> Bool {
+    private func shouldMessageSendUnhideRecipient(_ message: any SendableMessage, tx: DBReadTransaction) -> Bool {
         if
             message.shouldBeSaved,
             let rowId = message.sqliteRowId,
@@ -1064,35 +1068,37 @@ public class MessageSender {
         {
             return true
         }
-        if message is OWSOutgoingReactionMessage {
+        if message is OutgoingReactionMessage {
             return true
         }
         if
-            let message = message as? OWSOutgoingCallMessage,
+            let message = message as? OutgoingCallMessage,
             /// OWSOutgoingCallMessages include not only calling
             /// someone (ie, an "offer message"), but also sending
             /// hangup messages, busy messages, and other kinds of
             /// call-related "messages" that do not indicate the
             /// sender's intent to resume association with a recipient.
-            message.offerMessage != nil
+            case .offerMessage = message.messageType
         {
             return true
         }
         return false
     }
 
-    private func handleMessageSentLocally(_ message: TSOutgoingMessage) async throws {
-        try await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
+    private func handleMessageSentLocally(
+        _ message: any SendableMessage,
+        localIdentifiers: LocalIdentifiers,
+    ) async throws {
+        await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
             if
                 let thread = message.thread(tx: tx) as? TSContactThread,
                 self.shouldMessageSendUnhideRecipient(message, tx: tx),
-                let localAddress = DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: tx)?.aciAddress,
-                !localAddress.isEqualToAddress(thread.contactAddress)
+                !localIdentifiers.aciAddress.isEqualToAddress(thread.contactAddress)
             {
-                try DependenciesBridge.shared.recipientHidingManager.removeHiddenRecipient(
+                DependenciesBridge.shared.recipientHidingManager.removeHiddenRecipient(
                     thread.contactAddress,
                     wasLocallyInitiated: true,
-                    tx: tx
+                    tx: tx,
                 )
             }
             if message.shouldBeSaved {
@@ -1105,17 +1111,17 @@ public class MessageSender {
             }
         }
 
-        try await sendSyncTranscriptIfNeeded(for: message)
+        try await sendSyncTranscriptIfNeeded(forMessage: message, localIdentifiers: localIdentifiers)
 
         // Don't mark self-sent messages as read (or sent) until the sync
         // transcript is sent.
         //
         // NOTE: This only applies to the 'note to self' conversation.
-        if message.isSyncMessage {
+        if message is OutgoingSyncMessage {
             return
         }
         let thread = SSKEnvironment.shared.databaseStorageRef.read { tx in message.thread(tx: tx) }
-        guard let contactThread = thread as? TSContactThread, contactThread.contactAddress.isLocalAddress else {
+        guard let contactThread = thread as? TSContactThread, contactThread.contactAddress == localIdentifiers.aciAddress else {
             return
         }
         owsAssertDebug(message.recipientAddresses().count == 1)
@@ -1129,28 +1135,56 @@ public class MessageSender {
                     withReadRecipient: sendingAddress,
                     deviceId: deviceId,
                     readTimestamp: message.timestamp,
-                    tx: tx
+                    tx: tx,
                 )
                 if message.isVoiceMessage || message.isViewOnceMessage {
                     message.update(
                         withViewedRecipient: sendingAddress,
                         deviceId: deviceId,
                         viewedTimestamp: message.timestamp,
-                        tx: tx
+                        tx: tx,
                     )
                 }
             }
         }
     }
 
-    private func sendSyncTranscriptIfNeeded(for message: TSOutgoingMessage) async throws {
+    private func sendSyncTranscriptIfNeeded(
+        forMessage message: any SendableMessage,
+        localIdentifiers: LocalIdentifiers,
+    ) async throws {
         guard message.shouldSyncTranscript() else {
             return
         }
-        try await message.sendSyncTranscript()
-        await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
+        try await sendSyncTranscript(forMessage: message, localIdentifiers: localIdentifiers)
+        let databaseStorage = SSKEnvironment.shared.databaseStorageRef
+        await databaseStorage.awaitableWrite { tx in
             message.update(withHasSyncedTranscript: true, transaction: tx)
         }
+    }
+
+    private func sendSyncTranscript(
+        forMessage message: any SendableMessage,
+        localIdentifiers: LocalIdentifiers,
+    ) async throws {
+        let databaseStorage = SSKEnvironment.shared.databaseStorageRef
+        let messageSend = try await databaseStorage.awaitableWrite { tx in
+            let localThread = TSContactThread.getOrCreateThread(withContactAddress: localIdentifiers.aciAddress, transaction: tx)
+
+            let transcript = try message.buildSyncTranscriptMessage(localThread: localThread, tx: tx)
+
+            let serializedMessage = try buildAndRecordMessage(transcript, in: localThread, tx: tx)
+
+            return OWSMessageSend(
+                message: transcript,
+                plaintextContent: serializedMessage.plaintextData,
+                plaintextPayloadId: serializedMessage.payloadId,
+                thread: localThread,
+                serviceId: localIdentifiers.aci,
+                localIdentifiers: localIdentifiers,
+            )
+        }
+        try await performMessageSend(messageSend, sealedSenderParameters: nil)
     }
 
     // MARK: - Performing Message Sends
@@ -1161,13 +1195,11 @@ public class MessageSender {
     }
 
     func buildAndRecordMessage(
-        _ message: TSOutgoingMessage,
+        _ message: any SendableMessage,
         in thread: TSThread,
-        tx: DBWriteTransaction
-    ) -> SerializedMessage? {
-        guard let plaintextData = message.buildPlainTextData(thread, transaction: tx) else {
-            return nil
-        }
+        tx: DBWriteTransaction,
+    ) throws -> SerializedMessage {
+        let plaintextData = try message.buildPlaintextData(inThread: thread, tx: tx)
         let messageSendLog = SSKEnvironment.shared.messageSendLogRef
         let payloadId = messageSendLog.recordPayload(plaintextData, for: message, tx: tx)
         return SerializedMessage(plaintextData: plaintextData, payloadId: payloadId)
@@ -1185,18 +1217,26 @@ public class MessageSender {
         }
     }
 
+    private let sendQueues = KeyedConcurrentTaskQueue<ServiceId>(concurrentLimitPerKey: 1)
+
     @discardableResult
     func performMessageSend(
         _ messageSend: OWSMessageSend,
-        sealedSenderParameters: SealedSenderParameters?
+        sealedSenderParameters: SealedSenderParameters?,
     ) async throws -> [SentDeviceMessage] {
-        return try await performMessageSendAttempt(messageSend, recoveryState: InnerRecoveryState(), sealedSenderParameters: sealedSenderParameters)
+        return try await sendQueues.run(forKey: messageSend.serviceId) {
+            return try await performMessageSendAttempt(
+                messageSend,
+                recoveryState: InnerRecoveryState(),
+                sealedSenderParameters: sealedSenderParameters,
+            )
+        }
     }
 
     private func performMessageSendAttempt(
         _ messageSend: OWSMessageSend,
         recoveryState: InnerRecoveryState,
-        sealedSenderParameters: SealedSenderParameters?
+        sealedSenderParameters: SealedSenderParameters?,
     ) async throws -> [SentDeviceMessage] {
         let message = messageSend.message
         let serviceId = messageSend.serviceId
@@ -1206,18 +1246,18 @@ public class MessageSender {
         let retryRecoveryState: InnerRecoveryState
         do {
             if messageSend.isSelfSend {
-                owsAssertDebug(messageSend.message.canSendToLocalAddress)
+                owsAssertDebug(messageSend.message.canSendToLocalAddress, "Shouldn't send \(type(of: message)) to \(messageSend.serviceId)")
             }
 
             var deviceMessages = try await buildDeviceMessages(
                 messageSend: messageSend,
-                sealedSenderParameters: sealedSenderParameters
+                sealedSenderParameters: sealedSenderParameters,
             )
             if deviceMessages.isEmpty {
                 if messageSend.isSelfSend {
                     // This emulates the completion logic of an actual successful send (see below).
                     await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
-                        message.updateWithSkippedRecipients([messageSend.localIdentifiers.aciAddress], tx: tx)
+                        message.updateWithSkippedRecipients([SignalServiceAddress(messageSend.serviceId)], tx: tx)
                     }
                     return []
                 }
@@ -1227,7 +1267,7 @@ public class MessageSender {
                 try await checkIfAccountExists(serviceId: messageSend.serviceId)
                 deviceMessages = try await buildDeviceMessages(
                     messageSend: messageSend,
-                    sealedSenderParameters: sealedSenderParameters
+                    sealedSenderParameters: sealedSenderParameters,
                 )
             }
 
@@ -1243,15 +1283,14 @@ public class MessageSender {
                     }
                 }()
                 guard hasValidMessageType else {
-                    owsFailDebug("Invalid message type: \(deviceMessage.type)")
-                    throw OWSUnretryableMessageSenderError()
+                    throw OWSAssertionError("Invalid message type: \(deviceMessage.type)")
                 }
             }
 
             return try await sendDeviceMessages(
                 deviceMessages,
                 messageSend: messageSend,
-                sealedSenderParameters: sealedSenderParameters
+                sealedSenderParameters: sealedSenderParameters,
             )
         } catch RequestMakerUDAuthError.udAuthFailure {
             owsPrecondition(sealedSenderParameters != nil)
@@ -1259,7 +1298,7 @@ public class MessageSender {
             return try await performMessageSendAttempt(
                 messageSend,
                 recoveryState: recoveryState,
-                sealedSenderParameters: nil  // Retry as an unsealed send.
+                sealedSenderParameters: nil, // Retry as an unsealed send.
             )
         } catch DeviceMessagesError.mismatchedDevices where recoveryState.canHandleMismatchedDevices {
             retryRecoveryState = recoveryState.mutated({ $0.canHandleMismatchedDevices = false })
@@ -1271,7 +1310,7 @@ public class MessageSender {
         return try await performMessageSendAttempt(
             messageSend,
             recoveryState: retryRecoveryState,
-            sealedSenderParameters: sealedSenderParameters
+            sealedSenderParameters: sealedSenderParameters,
         )
     }
 
@@ -1299,18 +1338,15 @@ public class MessageSender {
 
     private func buildDeviceMessages(
         messageSend: OWSMessageSend,
-        sealedSenderParameters: SealedSenderParameters?
+        sealedSenderParameters: SealedSenderParameters?,
     ) async throws -> [DeviceMessage] {
-        guard messageSend.message.encryptionStyle == .whisper || messageSend.message.isResendRequest else {
-            throw OWSAssertionError("Unexpected message type")
-        }
         return try await buildDeviceMessages(
             serviceId: messageSend.serviceId,
             isSelfSend: messageSend.isSelfSend,
             encryptionStyle: messageSend.message.encryptionStyle,
             buildPlaintextContent: { _, _ in messageSend.plaintextContent },
-            isTransient: messageSend.message.isOnline || messageSend.message.isTransientSKDM,
-            sealedSenderParameters: sealedSenderParameters
+            isTransient: messageSend.message.isOnline || (messageSend.message as? OutgoingSenderKeyDistributionMessage)?.isSentOnBehalfOfOnlineMessage == true,
+            sealedSenderParameters: sealedSenderParameters,
         )
     }
 
@@ -1347,7 +1383,7 @@ public class MessageSender {
         encryptionStyle: EncryptionStyle,
         buildPlaintextContent: (DeviceId, DBWriteTransaction) throws -> Data,
         isTransient: Bool,
-        sealedSenderParameters: SealedSenderParameters?
+        sealedSenderParameters: SealedSenderParameters?,
     ) async throws -> [DeviceMessage] {
         let databaseStorage = SSKEnvironment.shared.databaseStorageRef
         let recipientDatabaseTable = DependenciesBridge.shared.recipientDatabaseTable
@@ -1380,7 +1416,7 @@ public class MessageSender {
                         encryptionStyle: encryptionStyle,
                         plaintextContent: plaintextContent,
                         sealedSenderParameters: sealedSenderParameters,
-                        tx: tx
+                        tx: tx,
                     ))
                 } catch SignalError.sessionNotFound(_) {
                     missingSessionPlaintextContent[deviceId] = plaintextContent
@@ -1407,7 +1443,7 @@ public class MessageSender {
                     try await createSession(
                         serviceId: serviceId,
                         deviceId: .all,
-                        sealedSenderParameters: sealedSenderParameters
+                        sealedSenderParameters: sealedSenderParameters,
                     )
                 } catch where error.httpStatusCode == 404 {
                     try await handle404(serviceId: serviceId, isSelfSend: isSelfSend)
@@ -1420,7 +1456,7 @@ public class MessageSender {
                                 try await self.createSession(
                                     serviceId: serviceId,
                                     deviceId: .specific(deviceId),
-                                    sealedSenderParameters: sealedSenderParameters
+                                    sealedSenderParameters: sealedSenderParameters,
                                 )
                             } catch where error.httpStatusCode == 404 {
                                 // If we have an invalid device exception, remove this device from the
@@ -1430,7 +1466,7 @@ public class MessageSender {
                                         serviceId: serviceId,
                                         devicesToAdd: [],
                                         devicesToRemove: [deviceId],
-                                        transaction: tx
+                                        transaction: tx,
                                     )
                                 }
                             }
@@ -1461,7 +1497,7 @@ public class MessageSender {
                             encryptionStyle: encryptionStyle,
                             plaintextContent: missingSessionPlaintextContent[$0] ?? buildPlaintextContent($0, tx),
                             sealedSenderParameters: sealedSenderParameters,
-                            tx: tx
+                            tx: tx,
                         )
                     } catch SignalError.sessionNotFound(_) {
                         // It's possible that we'll archive or delete a session we just created
@@ -1485,7 +1521,7 @@ public class MessageSender {
         encryptionStyle: EncryptionStyle,
         plaintextContent: Data,
         sealedSenderParameters: SealedSenderParameters?,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) throws -> DeviceMessage {
         do {
             switch encryptionStyle {
@@ -1495,7 +1531,7 @@ public class MessageSender {
                     serviceId: serviceId,
                     deviceId: deviceId,
                     sealedSenderParameters: sealedSenderParameters,
-                    transaction: tx
+                    transaction: tx,
                 )
             case .plaintext:
                 return try self.wrapPlaintextMessage(
@@ -1503,7 +1539,7 @@ public class MessageSender {
                     serviceId: serviceId,
                     deviceId: deviceId,
                     sealedSenderParameters: sealedSenderParameters,
-                    transaction: tx
+                    transaction: tx,
                 )
             @unknown default:
                 throw OWSAssertionError("Unrecognized encryption style")
@@ -1512,14 +1548,14 @@ public class MessageSender {
             Logger.warn("Found identity key mismatch on outgoing message to \(serviceId).\(deviceId). Archiving session before retrying...")
             let signalProtocolStoreManager = DependenciesBridge.shared.signalProtocolStoreManager
             let aciSessionStore = signalProtocolStoreManager.signalProtocolStore(for: .aci).sessionStore
-            aciSessionStore.archiveSession(for: serviceId, deviceId: deviceId, tx: tx)
+            aciSessionStore.archiveSession(forServiceId: serviceId, deviceId: deviceId, tx: tx)
             throw OWSRetryableMessageSenderError()
         } catch SignalError.untrustedIdentity {
             Logger.warn("Found untrusted identity on outgoing message to \(serviceId). Wrapping error and throwing...")
             throw UntrustedIdentityError(serviceId: serviceId)
         } catch {
             switch error {
-            case SignalError.sessionNotFound(_):
+            case SignalError.sessionNotFound:
                 // Callers expect this error & handle it. They will report any anomalous failures.
                 break
             default:
@@ -1539,9 +1575,9 @@ public class MessageSender {
     private func sendDeviceMessages(
         _ deviceMessages: [DeviceMessage],
         messageSend: OWSMessageSend,
-        sealedSenderParameters: SealedSenderParameters?
+        sealedSenderParameters: SealedSenderParameters?,
     ) async throws -> [SentDeviceMessage] {
-        let message: TSOutgoingMessage = messageSend.message
+        let message = messageSend.message
 
         let requestMaker = RequestMaker(
             label: "Message Send",
@@ -1550,7 +1586,7 @@ public class MessageSender {
             accessKey: sealedSenderParameters?.accessKey,
             endorsement: sealedSenderParameters?.endorsement,
             authedAccount: .implicit(),
-            options: []
+            options: [],
         )
 
         owsAssertDebug(!message.isStorySend || sealedSenderParameters != nil, "Story messages must use Sealed Sender.")
@@ -1563,19 +1599,19 @@ public class MessageSender {
                     timestamp: message.timestamp,
                     isOnline: message.isOnline,
                     isUrgent: message.isUrgent,
-                    auth: $0
+                    auth: $0,
                 )
             }
             return await messageSendDidSucceed(
                 messageSend,
                 deviceMessages: deviceMessages,
-                wasSentByUD: result.wasSentByUD
+                wasSentByUD: result.wasSentByUD,
             )
         } catch {
             return try await messageSendDidFail(
                 messageSend,
                 responseError: error,
-                sealedSenderParameters: sealedSenderParameters
+                sealedSenderParameters: sealedSenderParameters,
             )
         }
     }
@@ -1583,16 +1619,16 @@ public class MessageSender {
     private func messageSendDidSucceed(
         _ messageSend: OWSMessageSend,
         deviceMessages: [DeviceMessage],
-        wasSentByUD: Bool
+        wasSentByUD: Bool,
     ) async -> [SentDeviceMessage] {
-        let message: TSOutgoingMessage = messageSend.message
+        let message = messageSend.message
 
         Logger.info("Successfully sent message: \(type(of: message)), serviceId: \(messageSend.serviceId), timestamp: \(message.timestamp), wasSentByUD: \(wasSentByUD)")
 
         let sentDeviceMessages = deviceMessages.map {
             return SentDeviceMessage(
                 destinationDeviceId: $0.destinationDeviceId,
-                destinationRegistrationId: $0.destinationRegistrationId
+                destinationRegistrationId: $0.destinationRegistrationId,
             )
         }
 
@@ -1605,7 +1641,7 @@ public class MessageSender {
                         recipientAci: recipientAci,
                         recipientDeviceId: deviceMessage.destinationDeviceId,
                         message: message,
-                        tx: transaction
+                        tx: transaction,
                     )
                 }
             }
@@ -1619,7 +1655,7 @@ public class MessageSender {
             SSKEnvironment.shared.profileManagerRef.didSendOrReceiveMessage(
                 serviceId: messageSend.serviceId,
                 localIdentifiers: messageSend.localIdentifiers,
-                tx: transaction
+                tx: transaction,
             )
         }
 
@@ -1646,9 +1682,9 @@ public class MessageSender {
     private func messageSendDidFail(
         _ messageSend: OWSMessageSend,
         responseError: Error,
-        sealedSenderParameters: SealedSenderParameters?
+        sealedSenderParameters: SealedSenderParameters?,
     ) async throws -> [SentDeviceMessage] {
-        let message: TSOutgoingMessage = messageSend.message
+        let message = messageSend.message
 
         Logger.warn("\(type(of: message)) to \(messageSend.serviceId), timestamp: \(message.timestamp), error: \(responseError)")
 
@@ -1662,7 +1698,7 @@ public class MessageSender {
                     serviceId: messageSend.serviceId,
                     missingDevices: response.missingDevices,
                     extraDevices: response.extraDevices,
-                    tx: tx
+                    tx: tx,
                 )
             }
             throw DeviceMessagesError.mismatchedDevices
@@ -1677,7 +1713,7 @@ public class MessageSender {
             Logger.warn("Server requested user complete spam challenge.")
             try await SSKEnvironment.shared.spamChallengeResolverRef.tryToHandleSilently(
                 bodyData: responseError.httpResponseData,
-                retryAfter: responseError.httpRetryAfterDate
+                retryAfter: responseError.httpRetryAfterDate,
             )
             // The resolver has 10s to asynchronously resolve a challenge If it
             // resolves, great! We'll let MessageSender auto-retry. Otherwise, it'll be
@@ -1704,7 +1740,7 @@ public class MessageSender {
             serviceId: serviceId,
             devicesToAdd: missingDevices,
             devicesToRemove: extraDevices,
-            transaction: tx
+            transaction: tx,
         )
     }
 
@@ -1712,23 +1748,23 @@ public class MessageSender {
         Logger.warn("Stale devices for \(serviceId): \(staleDevices)")
         let sessionStore = DependenciesBridge.shared.signalProtocolStoreManager.signalProtocolStore(for: .aci).sessionStore
         for staleDeviceId in staleDevices {
-            sessionStore.archiveSession(for: serviceId, deviceId: staleDeviceId, tx: tx)
+            sessionStore.archiveSession(forServiceId: serviceId, deviceId: staleDeviceId, tx: tx)
         }
     }
 
     private func updateDevices(
         serviceId: ServiceId,
         deviceIds: [DeviceId],
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         let recipientFetcher = DependenciesBridge.shared.recipientFetcher
-        let recipient = recipientFetcher.fetchOrCreate(serviceId: serviceId, tx: tx)
+        var recipient = recipientFetcher.fetchOrCreate(serviceId: serviceId, tx: tx)
         self._updateDevices(
             serviceId: serviceId,
-            recipient: recipient,
+            recipient: &recipient,
             devicesToAdd: Array(Set(deviceIds).subtracting(recipient.deviceIds)),
             devicesToRemove: Array(Set(recipient.deviceIds).subtracting(deviceIds)),
-            tx: tx
+            tx: tx,
         )
     }
 
@@ -1736,37 +1772,37 @@ public class MessageSender {
         serviceId: ServiceId,
         devicesToAdd: [DeviceId],
         devicesToRemove: [DeviceId],
-        transaction tx: DBWriteTransaction
+        transaction tx: DBWriteTransaction,
     ) {
         let recipientFetcher = DependenciesBridge.shared.recipientFetcher
-        let recipient = recipientFetcher.fetchOrCreate(serviceId: serviceId, tx: tx)
-        self._updateDevices(serviceId: serviceId, recipient: recipient, devicesToAdd: devicesToAdd, devicesToRemove: devicesToRemove, tx: tx)
+        var recipient = recipientFetcher.fetchOrCreate(serviceId: serviceId, tx: tx)
+        self._updateDevices(serviceId: serviceId, recipient: &recipient, devicesToAdd: devicesToAdd, devicesToRemove: devicesToRemove, tx: tx)
     }
 
     private func _updateDevices(
         serviceId: ServiceId,
-        recipient: SignalRecipient,
+        recipient: inout SignalRecipient,
         devicesToAdd: [DeviceId],
         devicesToRemove: [DeviceId],
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         AssertNotOnMainThread()
         owsAssertDebug(Set(devicesToAdd).isDisjoint(with: devicesToRemove))
 
         let recipientManager = DependenciesBridge.shared.recipientManager
         recipientManager.modifyAndSave(
-            recipient,
+            &recipient,
             deviceIdsToAdd: devicesToAdd,
             deviceIdsToRemove: devicesToRemove,
             shouldUpdateStorageService: true,
-            tx: tx
+            tx: tx,
         )
 
         if !devicesToRemove.isEmpty {
             Logger.info("Archiving sessions for extra devices: \(devicesToRemove)")
             let sessionStore = DependenciesBridge.shared.signalProtocolStoreManager.signalProtocolStore(for: .aci).sessionStore
             for deviceId in devicesToRemove {
-                sessionStore.archiveSession(for: serviceId, deviceId: deviceId, tx: tx)
+                sessionStore.archiveSession(forServiceId: serviceId, deviceId: deviceId, tx: tx)
             }
         }
     }
@@ -1778,7 +1814,7 @@ public class MessageSender {
         serviceId: ServiceId,
         deviceId: DeviceId,
         sealedSenderParameters: SealedSenderParameters?,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) throws -> DeviceMessage {
         owsAssertDebug(!Thread.isMainThread)
 
@@ -1788,17 +1824,19 @@ public class MessageSender {
         let messageType: SSKProtoEnvelopeType
 
         let identityManager = DependenciesBridge.shared.identityManager
-        let signalProtocolStore = DependenciesBridge.shared.signalProtocolStoreManager.signalProtocolStore(for: .aci)
+        let signalProtocolStoreManager = DependenciesBridge.shared.signalProtocolStoreManager
+        let signalProtocolStore = signalProtocolStoreManager.signalProtocolStore(for: .aci)
+        let preKeyStore = signalProtocolStoreManager.preKeyStore.forIdentity(.aci)
         let protocolAddress = ProtocolAddress(serviceId, deviceId: deviceId)
 
         if let sealedSenderParameters {
             let secretCipher = SMKSecretSessionCipher(
                 sessionStore: signalProtocolStore.sessionStore,
-                preKeyStore: signalProtocolStore.preKeyStore,
-                signedPreKeyStore: signalProtocolStore.signedPreKeyStore,
-                kyberPreKeyStore: signalProtocolStore.kyberPreKeyStore,
+                preKeyStore: preKeyStore,
+                signedPreKeyStore: preKeyStore,
+                kyberPreKeyStore: preKeyStore,
                 identityStore: try identityManager.libSignalStore(for: .aci, tx: transaction),
-                senderKeyStore: SSKEnvironment.shared.senderKeyStoreRef
+                senderKeyStore: SSKEnvironment.shared.senderKeyStoreRef,
             )
 
             serializedMessage = try secretCipher.encryptMessage(
@@ -1808,7 +1846,7 @@ public class MessageSender {
                 contentHint: sealedSenderParameters.contentHint.signalClientHint,
                 groupId: sealedSenderParameters.envelopeGroupId(tx: transaction),
                 senderCertificate: sealedSenderParameters.senderCertificate,
-                protocolContext: transaction
+                protocolContext: transaction,
             )
 
             messageType = .unidentifiedSender
@@ -1819,7 +1857,7 @@ public class MessageSender {
                 for: protocolAddress,
                 sessionStore: signalProtocolStore.sessionStore,
                 identityStore: identityManager.libSignalStore(for: .aci, tx: transaction),
-                context: transaction
+                context: transaction,
             )
 
             switch result.messageType {
@@ -1840,14 +1878,14 @@ public class MessageSender {
         // We had better have a session after encrypting for this recipient!
         let session = try signalProtocolStore.sessionStore.loadSession(
             for: protocolAddress,
-            context: transaction
+            context: transaction,
         )!
 
         return DeviceMessage(
             type: messageType,
             destinationDeviceId: deviceId,
             destinationRegistrationId: try session.remoteRegistrationId(),
-            content: serializedMessage
+            content: serializedMessage,
         )
     }
 
@@ -1856,7 +1894,7 @@ public class MessageSender {
         serviceId: ServiceId,
         deviceId: DeviceId,
         sealedSenderParameters: SealedSenderParameters?,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) throws -> DeviceMessage {
         owsAssertDebug(!Thread.isMainThread)
 
@@ -1873,13 +1911,13 @@ public class MessageSender {
                 CiphertextMessage(plaintext),
                 from: sealedSenderParameters.senderCertificate,
                 contentHint: sealedSenderParameters.contentHint.signalClientHint,
-                groupId: sealedSenderParameters.envelopeGroupId(tx: transaction) ?? Data()
+                groupId: sealedSenderParameters.envelopeGroupId(tx: transaction) ?? Data(),
             )
             let outerBytes = try sealedSenderEncrypt(
                 usmc,
                 for: protocolAddress,
                 identityStore: identityManager.libSignalStore(for: .aci, tx: transaction),
-                context: transaction
+                context: transaction,
             )
 
             serializedMessage = outerBytes
@@ -1897,7 +1935,7 @@ public class MessageSender {
             type: messageType,
             destinationDeviceId: deviceId,
             destinationRegistrationId: try session.remoteRegistrationId(),
-            content: serializedMessage
+            content: serializedMessage,
         )
     }
 }

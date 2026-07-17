@@ -13,33 +13,37 @@ struct PollManagerTest {
     private let db = InMemoryDB()
     private let recipientDatabaseTable = RecipientDatabaseTable()
     private let pollMessageManager: PollMessageManager
-    private var contactThread: TSContactThread!
+    private let pollStore = PollStore()
+    private var groupThread: TSGroupThread!
     private var recipient: SignalRecipient!
-    var authorAci: Aci!
+    private let mockTSAccountManager = MockTSAccountManager()
+    private let pollAuthorAci = Aci.constantForTesting("00000000-0000-4000-8000-000000000000")
 
-    init() {
+    init() throws {
         pollMessageManager = PollMessageManager(
-            pollStore: PollStore(),
+            pollStore: pollStore,
             recipientDatabaseTable: RecipientDatabaseTable(),
-            interactionStore: InteractionStoreImpl()
+            interactionStore: InteractionStoreImpl(),
+            accountManager: mockTSAccountManager,
+            messageSenderJobQueue: MessageSenderJobQueue(appReadiness: AppReadinessMock()),
+            disappearingMessagesConfigurationStore: MockDisappearingMessagesConfigurationStore(),
+            attachmentContentValidator: AttachmentContentValidatorMock(),
+            db: db,
         )
-        let testPhone = E164("+16505550101")!
-        authorAci = Aci.constantForTesting("00000000-0000-4000-8000-000000000000")
-        let pni = Pni(fromUUID: UUID())
-        contactThread = TSContactThread(contactAddress: SignalServiceAddress(
-            serviceId: authorAci,
-            phoneNumber: testPhone.stringValue,
-            cache: SignalServiceAddressCache()
-        ))
-        recipient = SignalRecipient(aci: authorAci, pni: pni, phoneNumber: testPhone)
+        let pollAuthorPhoneNumber = E164("+16505550100")!
+        let pollAuthorPni = Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b0")
+        groupThread = TSGroupThread.randomForTesting()
+        recipient = db.write { tx in
+            return try! SignalRecipient.insertRecord(aci: pollAuthorAci, phoneNumber: pollAuthorPhoneNumber, pni: pollAuthorPni, tx: tx)
+        }
     }
 
     private func createIncomingMessage(
         with thread: TSThread,
-        customizeBlock: ((TSIncomingMessageBuilder) -> Void)
+        customizeBlock: (TSIncomingMessageBuilder) -> Void,
     ) -> TSIncomingMessage {
         let messageBuilder: TSIncomingMessageBuilder = .withDefaultValues(
-            thread: thread
+            thread: thread,
         )
         customizeBlock(messageBuilder)
         let targetMessage = messageBuilder.build()
@@ -49,13 +53,13 @@ struct PollManagerTest {
     private func insertIncomingPollMessage(question: String, timestamp: UInt64? = nil) -> TSIncomingMessage {
         db.write { tx in
             let db = tx.database
-            if try! contactThread.asRecord().exists(db) == false {
-                try! contactThread!.asRecord().insert(db)
+            if try! groupThread.asRecord().exists(db) == false {
+                try! groupThread!.asRecord().insert(db)
             }
 
-            let incomingMessage = createIncomingMessage(with: contactThread) { builder in
+            let incomingMessage = createIncomingMessage(with: groupThread) { builder in
                 builder.setMessageBody(AttachmentContentValidatorMock.mockValidatedBody(question))
-                builder.authorAci = authorAci
+                builder.authorAci = pollAuthorAci
                 builder.isPoll = true
                 if let timestamp {
                     builder.timestamp = timestamp
@@ -66,16 +70,22 @@ struct PollManagerTest {
         }
     }
 
+    private func insertOutgoingPollMessage(question: String) -> TSOutgoingMessage {
+        db.write { tx in
+            let db = tx.database
+            if try! groupThread.asRecord().exists(db) == false {
+                try! groupThread!.asRecord().insert(db)
+            }
+
+            let outgoingMessage = TSOutgoingMessage(in: groupThread, question: question)
+            try! outgoingMessage.asRecord().insert(db)
+            return outgoingMessage
+        }
+    }
+
     private func insertSignalRecipient(aci: Aci, pni: Pni, phoneNumber: E164) {
         db.write { tx in
-            recipientDatabaseTable.insertRecipient(
-                SignalRecipient(
-                    aci: aci,
-                    pni: pni,
-                    phoneNumber: phoneNumber
-                ),
-                transaction: tx
-            )
+            _ = try! SignalRecipient.insertRecord(aci: aci, phoneNumber: phoneNumber, pni: pni, tx: tx)
         }
     }
 
@@ -97,7 +107,7 @@ struct PollManagerTest {
         pollAuthor: Aci,
         targetSentTimestamp: UInt64,
         optionIndexes: [OWSPoll.OptionIndex],
-        voteCount: UInt32
+        voteCount: UInt32,
     ) -> SSKProtoDataMessagePollVote {
         let pollVoteBuilder = SSKProtoDataMessagePollVote.builder()
         pollVoteBuilder.setTargetAuthorAciBinary(pollAuthor.serviceIdBinary)
@@ -115,14 +125,14 @@ struct PollManagerTest {
         let pollCreateProto = buildPollCreateProto(
             question: question,
             options: ["pancakes", "waffles"],
-            allowMultiple: false
+            allowMultiple: false,
         )
 
         try db.write { tx in
             try pollMessageManager.processIncomingPollCreate(
                 interactionId: 1,
                 pollCreateProto: pollCreateProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
@@ -148,20 +158,20 @@ struct PollManagerTest {
     }
 
     @Test
-    func testPollTerminate() throws {
+    func testIncomingPollTerminate() throws {
         let question = "What should we have for breakfast?"
         let incomingMessage = insertIncomingPollMessage(question: question)
         let pollCreateProto = buildPollCreateProto(
             question: question,
             options: ["pancakes", "waffles"],
-            allowMultiple: false
+            allowMultiple: false,
         )
 
         try db.write { tx in
             try pollMessageManager.processIncomingPollCreate(
                 interactionId: 1,
                 pollCreateProto: pollCreateProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
@@ -172,11 +182,11 @@ struct PollManagerTest {
         insertSignalRecipient(
             aci: voterAci,
             pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b1"),
-            phoneNumber: E164("+16505550101")!
+            phoneNumber: E164("+16505550101")!,
         )
 
         try db.write { tx in
-            var vote1 = PollVoteRecord(optionId: 1, voteAuthorId: 1, voteCount: 1)
+            var vote1 = PollVoteRecord(optionId: 1, voteAuthorId: 1, voteCount: 1, voteState: .vote)
             try vote1.insert(tx.database)
         }
 
@@ -185,8 +195,8 @@ struct PollManagerTest {
         try db.write { tx in
             _ = try pollMessageManager.processIncomingPollTerminate(
                 pollTerminateProto: terminateProto,
-                terminateAuthor: authorAci,
-                transaction: tx
+                terminateAuthor: pollAuthorAci,
+                transaction: tx,
             )
         }
 
@@ -197,26 +207,178 @@ struct PollManagerTest {
             #expect(owsPoll!.sortedOptions()[1].text == "waffles")
             #expect(owsPoll!.allowsMultiSelect == false)
             #expect(owsPoll!.isEnded == true)
-            #expect(owsPoll!.totalVotes() == 1)
+            #expect(owsPoll!.totalVoters() == 1)
         }
     }
 
     @Test
-    func testPollVote_singleSelection() throws {
+    func testOutgoingPollTerminate() throws {
+        mockTSAccountManager.localIdentifiersMock = {
+            return LocalIdentifiers(
+                aci: pollAuthorAci,
+                pni: Pni(fromUUID: UUID()),
+                e164: E164("+16505550101")!,
+            )
+        }
+
+        let question = "What should we have for breakfast?"
+        let outgoingMessage = insertOutgoingPollMessage(question: question)
+        try db.write { tx in
+            try pollMessageManager.processOutgoingPollCreate(
+                interactionId: outgoingMessage.grdbId as! Int64,
+                pollOptions: ["pancakes", "waffles"],
+                allowsMultiSelect: false,
+                transaction: tx,
+            )
+        }
+
+        // Before voting, insert voter into Signal Recipient Table
+        // which is referenced by id in the vote table.
+        let voterAci = Aci.constantForTesting("00000000-0000-4000-8000-000000000001")
+
+        insertSignalRecipient(
+            aci: voterAci,
+            pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b1"),
+            phoneNumber: E164("+16505550101")!,
+        )
+
+        try db.write { tx in
+            var vote1 = PollVoteRecord(optionId: 1, voteAuthorId: 1, voteCount: 1, voteState: .vote)
+            try vote1.insert(tx.database)
+        }
+
+        let terminateProto = buildPollTerminateProto(targetSentTimestamp: outgoingMessage.timestamp)
+
+        try db.write { tx in
+            _ = try pollMessageManager.processIncomingPollTerminate(
+                pollTerminateProto: terminateProto,
+                terminateAuthor: pollAuthorAci,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.sortedOptions()[0].text == "pancakes")
+            #expect(owsPoll!.sortedOptions()[1].text == "waffles")
+            #expect(owsPoll!.allowsMultiSelect == false)
+            #expect(owsPoll!.isEnded == true)
+            #expect(owsPoll!.totalVoters() == 1)
+        }
+    }
+
+    @Test
+    func testIncomingPollVote() throws {
+        mockTSAccountManager.localIdentifiersMock = {
+            return LocalIdentifiers(
+                aci: pollAuthorAci,
+                pni: Pni(fromUUID: UUID()),
+                e164: E164("+16505550101")!,
+            )
+        }
+
+        let question = "What should we have for breakfast?"
+        let outgoingMessage = insertOutgoingPollMessage(question: question)
+
+        try db.write { tx in
+            try pollMessageManager.processOutgoingPollCreate(
+                interactionId: outgoingMessage.grdbId as! Int64,
+                pollOptions: ["pancakes", "waffles"],
+                allowsMultiSelect: false,
+                transaction: tx,
+            )
+        }
+
+        // Before voting, insert voter into Signal Recipient Table
+        // which is referenced by id in the vote table.
+        let voterAci = Aci.constantForTesting("00000000-0000-4000-8000-000000000002")
+
+        insertSignalRecipient(
+            aci: voterAci,
+            pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b1"),
+            phoneNumber: E164("+16505550101")!,
+        )
+
+        let pollWaffleVoteProto = buildPollVoteProto(
+            pollAuthor: pollAuthorAci,
+            targetSentTimestamp: outgoingMessage.timestamp,
+            optionIndexes: [1],
+            voteCount: 1,
+        )
+
+        _ = try db.write { tx in
+            try pollMessageManager.processIncomingPollVote(
+                voteAuthor: voterAci,
+                pollVoteProto: pollWaffleVoteProto,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.sortedOptions()[0].text == "pancakes")
+            #expect(owsPoll!.sortedOptions()[1].text == "waffles")
+            #expect(owsPoll!.allowsMultiSelect == false)
+            #expect(owsPoll!.isEnded == false)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let wafflesOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(wafflesOption!.acis.contains(voterAci))
+        }
+
+        // Revoke vote for waffle and send it to pancake
+        let pollVoteProtoRevoke = buildPollVoteProto(
+            pollAuthor: pollAuthorAci,
+            targetSentTimestamp: outgoingMessage.timestamp,
+            optionIndexes: [0],
+            voteCount: 2,
+        )
+
+        _ = try db.write { tx in
+            try pollMessageManager.processIncomingPollVote(
+                voteAuthor: voterAci,
+                pollVoteProto: pollVoteProtoRevoke,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            let wafflesOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(wafflesOption!.acis.isEmpty)
+
+            let pancakesOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakesOption!.acis.contains(voterAci))
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            let wafflesOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(wafflesOption!.acis.isEmpty)
+
+            let pancakesOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakesOption!.acis.contains(voterAci))
+        }
+    }
+
+    @Test
+    func testOutgoingPollVote() throws {
         let question = "What should we have for breakfast?"
         let incomingMessage = insertIncomingPollMessage(question: question)
 
         let pollCreateProto = buildPollCreateProto(
             question: question,
             options: ["pancakes", "waffles"],
-            allowMultiple: false
+            allowMultiple: false,
         )
 
         try db.write { tx in
             try pollMessageManager.processIncomingPollCreate(
                 interactionId: 1,
                 pollCreateProto: pollCreateProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
@@ -228,41 +390,41 @@ struct PollManagerTest {
         insertSignalRecipient(
             aci: waffleVoterAci,
             pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b1"),
-            phoneNumber: E164("+16505550101")!
+            phoneNumber: E164("+16505550101")!,
         )
         insertSignalRecipient(
             aci: pancakeVoterAci,
             pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b2"),
-            phoneNumber: E164("+16505550102")!
+            phoneNumber: E164("+16505550102")!,
         )
 
         let pollWaffleVoteProto = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage.timestamp,
             optionIndexes: [1],
-            voteCount: 1
+            voteCount: 1,
         )
 
         _ = try db.write { tx in
             try pollMessageManager.processIncomingPollVote(
                 voteAuthor: waffleVoterAci,
                 pollVoteProto: pollWaffleVoteProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
         let pollPancakesVoteProto = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage.timestamp,
             optionIndexes: [0],
-            voteCount: 1
+            voteCount: 1,
         )
 
         _ = try db.write { tx in
             try pollMessageManager.processIncomingPollVote(
                 voteAuthor: pancakeVoterAci,
                 pollVoteProto: pollPancakesVoteProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
@@ -273,7 +435,7 @@ struct PollManagerTest {
             #expect(owsPoll!.sortedOptions()[1].text == "waffles")
             #expect(owsPoll!.allowsMultiSelect == false)
             #expect(owsPoll!.isEnded == false)
-            #expect(owsPoll!.totalVotes() == 2)
+            #expect(owsPoll!.totalVoters() == 2)
 
             let pancakesOption = owsPoll!.optionForIndex(optionIndex: 0)
             #expect(pancakesOption!.acis.contains(pancakeVoterAci))
@@ -284,17 +446,17 @@ struct PollManagerTest {
 
         // Revoke vote for pancake and send it to waffle
         let pollVoteProtoRevoke = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage.timestamp,
             optionIndexes: [1],
-            voteCount: 2
+            voteCount: 2,
         )
 
         _ = try db.write { tx in
             try pollMessageManager.processIncomingPollVote(
                 voteAuthor: pancakeVoterAci,
                 pollVoteProto: pollVoteProtoRevoke,
-                transaction: tx
+                transaction: tx,
             )
         }
 
@@ -306,22 +468,6 @@ struct PollManagerTest {
             let wafflesOption = owsPoll!.optionForIndex(optionIndex: 1)
             #expect(wafflesOption!.acis.contains(waffleVoterAci))
             #expect(wafflesOption!.acis.contains(pancakeVoterAci))
-        }
-
-        // Voting with multiple options should fail to update votes
-        let pollVoteProtoMultiple = buildPollVoteProto(
-            pollAuthor: authorAci,
-            targetSentTimestamp: incomingMessage.timestamp,
-            optionIndexes: [0, 1],
-            voteCount: 2
-        )
-
-        _ = try db.write { tx in
-            try pollMessageManager.processIncomingPollVote(
-                voteAuthor: pancakeVoterAci,
-                pollVoteProto: pollVoteProtoMultiple,
-                transaction: tx
-            )
         }
 
         try db.read { tx in
@@ -343,14 +489,14 @@ struct PollManagerTest {
         let pollCreateProto = buildPollCreateProto(
             question: question,
             options: ["pancakes", "waffles"],
-            allowMultiple: true
+            allowMultiple: true,
         )
 
         try db.write { tx in
             try pollMessageManager.processIncomingPollCreate(
                 interactionId: 1,
                 pollCreateProto: pollCreateProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
@@ -361,21 +507,21 @@ struct PollManagerTest {
         insertSignalRecipient(
             aci: voterAci,
             pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b1"),
-            phoneNumber: E164("+16505550101")!
+            phoneNumber: E164("+16505550101")!,
         )
 
         let pollVoteProto = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage.timestamp,
             optionIndexes: [0, 1],
-            voteCount: 1
+            voteCount: 1,
         )
 
         _ = try db.write { tx in
             try pollMessageManager.processIncomingPollVote(
                 voteAuthor: voterAci,
                 pollVoteProto: pollVoteProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
@@ -386,7 +532,7 @@ struct PollManagerTest {
             #expect(owsPoll!.sortedOptions()[1].text == "waffles")
             #expect(owsPoll!.allowsMultiSelect == true)
             #expect(owsPoll!.isEnded == false)
-            #expect(owsPoll!.totalVotes() == 2)
+            #expect(owsPoll!.totalVoters() == 1)
 
             let pancakesOption = owsPoll!.optionForIndex(optionIndex: 0)
             #expect(pancakesOption!.acis.contains(voterAci))
@@ -397,23 +543,23 @@ struct PollManagerTest {
 
         // Revoke vote for waffle
         let pollVoteProtoRevoke = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage.timestamp,
             optionIndexes: [0],
-            voteCount: 2
+            voteCount: 2,
         )
 
         _ = try db.write { tx in
             try pollMessageManager.processIncomingPollVote(
                 voteAuthor: voterAci,
                 pollVoteProto: pollVoteProtoRevoke,
-                transaction: tx
+                transaction: tx,
             )
         }
 
         try db.read { tx in
             let owsPoll = try pollMessageManager.buildPoll(message: incomingMessage, transaction: tx)
-            #expect(owsPoll!.totalVotes() == 1)
+            #expect(owsPoll!.totalVoters() == 1)
 
             let pancakesOption = owsPoll!.optionForIndex(optionIndex: 0)
             #expect(pancakesOption!.acis.contains(voterAci))
@@ -431,14 +577,14 @@ struct PollManagerTest {
         let pollCreateProto = buildPollCreateProto(
             question: question,
             options: ["pancakes", "waffles"],
-            allowMultiple: true
+            allowMultiple: true,
         )
 
         try db.write { tx in
             try pollMessageManager.processIncomingPollCreate(
                 interactionId: 1,
                 pollCreateProto: pollCreateProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
@@ -449,46 +595,145 @@ struct PollManagerTest {
         insertSignalRecipient(
             aci: voterAci,
             pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b1"),
-            phoneNumber: E164("+16505550101")!
+            phoneNumber: E164("+16505550101")!,
         )
 
         let pollVoteProto = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage.timestamp,
             optionIndexes: [0], // pancakes
-            voteCount: 2
+            voteCount: 2,
         )
 
         _ = try db.write { tx in
             try pollMessageManager.processIncomingPollVote(
                 voteAuthor: voterAci,
                 pollVoteProto: pollVoteProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
         // Now send old voteCount with a different vote (waffles)
         let oldPollVoteProto = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage.timestamp,
             optionIndexes: [1],
-            voteCount: 1
+            voteCount: 1,
         )
 
         _ = try db.write { tx in
             try pollMessageManager.processIncomingPollVote(
                 voteAuthor: voterAci,
                 pollVoteProto: oldPollVoteProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
         try db.read { tx in
             let owsPoll = try pollMessageManager.buildPoll(message: incomingMessage, transaction: tx)
-            #expect(owsPoll!.totalVotes() == 1)
+            #expect(owsPoll!.totalVoters() == 1)
 
             let pancakesOption = owsPoll!.optionForIndex(optionIndex: 0)
             #expect(pancakesOption!.acis.contains(voterAci))
+
+            let wafflesOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(wafflesOption!.acis.isEmpty)
+        }
+    }
+
+    @Test
+    func testPollVote_dontOverwriteUnvoteWithOldVoteCount() throws {
+        let question = "What should we have for breakfast?"
+        let incomingMessage = insertIncomingPollMessage(question: question)
+
+        let pollCreateProto = buildPollCreateProto(
+            question: question,
+            options: ["pancakes", "waffles"],
+            allowMultiple: true,
+        )
+
+        try db.write { tx in
+            try pollMessageManager.processIncomingPollCreate(
+                interactionId: 1,
+                pollCreateProto: pollCreateProto,
+                transaction: tx,
+            )
+        }
+
+        // Before voting, insert voter into Signal Recipient Table
+        // which is referenced by id in the vote table.
+        let voterAci = Aci.constantForTesting("00000000-0000-4000-8000-000000000001")
+
+        insertSignalRecipient(
+            aci: voterAci,
+            pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b1"),
+            phoneNumber: E164("+16505550101")!,
+        )
+
+        let pollVoteProto = buildPollVoteProto(
+            pollAuthor: pollAuthorAci,
+            targetSentTimestamp: incomingMessage.timestamp,
+            optionIndexes: [0], // pancakes
+            voteCount: 2,
+        )
+
+        _ = try db.write { tx in
+            try pollMessageManager.processIncomingPollVote(
+                voteAuthor: voterAci,
+                pollVoteProto: pollVoteProto,
+                transaction: tx,
+            )
+        }
+
+        // Now send an unvote with a higher vote count
+        let pollUnVoteProto = buildPollVoteProto(
+            pollAuthor: pollAuthorAci,
+            targetSentTimestamp: incomingMessage.timestamp,
+            optionIndexes: [], // unvote for pancakes
+            voteCount: 4,
+        )
+
+        _ = try db.write { tx in
+            try pollMessageManager.processIncomingPollVote(
+                voteAuthor: voterAci,
+                pollVoteProto: pollUnVoteProto,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: incomingMessage, transaction: tx)
+            #expect(owsPoll!.totalVoters() == 0)
+
+            let pancakesOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakesOption!.acis.isEmpty)
+
+            let wafflesOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(wafflesOption!.acis.isEmpty)
+        }
+
+        // Now send old voteCount with a different vote (waffles)
+        let oldPollVoteProto = buildPollVoteProto(
+            pollAuthor: pollAuthorAci,
+            targetSentTimestamp: incomingMessage.timestamp,
+            optionIndexes: [1],
+            voteCount: 3,
+        )
+
+        _ = try db.write { tx in
+            try pollMessageManager.processIncomingPollVote(
+                voteAuthor: voterAci,
+                pollVoteProto: oldPollVoteProto,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: incomingMessage, transaction: tx)
+            #expect(owsPoll!.totalVoters() == 0)
+
+            let pancakesOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakesOption!.acis.isEmpty)
 
             let wafflesOption = owsPoll!.optionForIndex(optionIndex: 1)
             #expect(wafflesOption!.acis.isEmpty)
@@ -507,26 +752,26 @@ struct PollManagerTest {
         let poll1CreateProto = buildPollCreateProto(
             question: question1,
             options: ["pancakes", "waffles"],
-            allowMultiple: false
+            allowMultiple: false,
         )
 
         let poll2CreateProto = buildPollCreateProto(
             question: question2,
             options: ["dog", "cat"],
-            allowMultiple: false
+            allowMultiple: false,
         )
 
         try db.write { tx in
             try pollMessageManager.processIncomingPollCreate(
                 interactionId: 1,
                 pollCreateProto: poll1CreateProto,
-                transaction: tx
+                transaction: tx,
             )
 
             try pollMessageManager.processIncomingPollCreate(
                 interactionId: 2,
                 pollCreateProto: poll2CreateProto,
-                transaction: tx
+                transaction: tx,
             )
         }
 
@@ -538,69 +783,69 @@ struct PollManagerTest {
         insertSignalRecipient(
             aci: user1Aci,
             pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b1"),
-            phoneNumber: E164("+16505550101")!
+            phoneNumber: E164("+16505550101")!,
         )
         insertSignalRecipient(
             aci: user2Aci,
             pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b2"),
-            phoneNumber: E164("+16505550102")!
+            phoneNumber: E164("+16505550102")!,
         )
 
         // user1 is going to vote for pancakes, and dogs
         let user1VoteProto1 = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage1.timestamp,
             optionIndexes: [0], // pancakes
-            voteCount: 1
+            voteCount: 1,
         )
 
         let user1VoteProto2 = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage2.timestamp,
             optionIndexes: [0], // dog
-            voteCount: 1
+            voteCount: 1,
         )
 
         try db.write { tx in
             _ = try pollMessageManager.processIncomingPollVote(
                 voteAuthor: user1Aci,
                 pollVoteProto: user1VoteProto1,
-                transaction: tx
+                transaction: tx,
             )
 
             _ = try pollMessageManager.processIncomingPollVote(
                 voteAuthor: user1Aci,
                 pollVoteProto: user1VoteProto2,
-                transaction: tx
+                transaction: tx,
             )
         }
 
         // user2 is going to vote for waffles, and dogs
         let user2VoteProto1 = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage1.timestamp,
             optionIndexes: [1], // waffles
-            voteCount: 1
+            voteCount: 1,
         )
 
         let user2VoteProto2 = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage2.timestamp,
             optionIndexes: [0], // dog
-            voteCount: 1
+            voteCount: 1,
         )
 
         try db.write { tx in
             _ = try pollMessageManager.processIncomingPollVote(
                 voteAuthor: user2Aci,
                 pollVoteProto: user2VoteProto1,
-                transaction: tx
+                transaction: tx,
             )
 
             _ = try pollMessageManager.processIncomingPollVote(
                 voteAuthor: user2Aci,
                 pollVoteProto: user2VoteProto2,
-                transaction: tx
+                transaction: tx,
             )
         }
 
@@ -612,7 +857,7 @@ struct PollManagerTest {
             #expect(owsPoll1!.sortedOptions()[1].text == "waffles")
             #expect(owsPoll1!.allowsMultiSelect == false)
             #expect(owsPoll1!.isEnded == false)
-            #expect(owsPoll1!.totalVotes() == 2)
+            #expect(owsPoll1!.totalVoters() == 2)
 
             let pancakesOption = owsPoll1!.optionForIndex(optionIndex: 0)
             #expect(pancakesOption!.acis.contains(user1Aci))
@@ -627,7 +872,7 @@ struct PollManagerTest {
             #expect(owsPoll2!.sortedOptions()[1].text == "cat")
             #expect(owsPoll2!.allowsMultiSelect == false)
             #expect(owsPoll2!.isEnded == false)
-            #expect(owsPoll2!.totalVotes() == 2)
+            #expect(owsPoll2!.totalVoters() == 2)
 
             let dogOption = owsPoll2!.optionForIndex(optionIndex: 0)
             #expect(dogOption!.acis == [user1Aci, user2Aci])
@@ -661,29 +906,903 @@ struct PollManagerTest {
         insertSignalRecipient(
             aci: aci,
             pni: Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b1"),
-            phoneNumber: E164("+16505550101")!
+            phoneNumber: E164("+16505550101")!,
         )
 
         let proto = buildPollVoteProto(
-            pollAuthor: authorAci,
+            pollAuthor: pollAuthorAci,
             targetSentTimestamp: incomingMessage.timestamp,
             optionIndexes: [1],
-            voteCount: 1
+            voteCount: 1,
         )
 
-        _ = try db.write { tx in
-            try pollMessageManager.processIncomingPollVote(
-                voteAuthor: aci,
-                pollVoteProto: proto,
-                transaction: tx
-            )
+        #expect(throws: OWSGenericError.self) {
+            _ = try db.write { tx in
+                try pollMessageManager.processIncomingPollVote(
+                    voteAuthor: aci,
+                    pollVoteProto: proto,
+                    transaction: tx,
+                )
+            }
         }
 
         try db.read { tx in
             let owsPoll = try pollMessageManager.buildPoll(message: incomingMessage, transaction: tx)
             #expect(owsPoll!.question == question)
             #expect(owsPoll!.isEnded == true)
-            #expect(owsPoll!.totalVotes() == 0)
+            #expect(owsPoll!.totalVoters() == 0)
         }
+    }
+
+    @Test
+    func testPendingThenSentVote_singleSelect() throws {
+        let question = "What should we have for breakfast?"
+        let outgoingMessage = insertOutgoingPollMessage(question: question)
+
+        let pollCreateProto = buildPollCreateProto(
+            question: question,
+            options: ["pancakes", "waffles"],
+            allowMultiple: false,
+        )
+
+        try db.write { tx in
+            try pollMessageManager.processIncomingPollCreate(
+                interactionId: 1,
+                pollCreateProto: pollCreateProto,
+                transaction: tx,
+            )
+        }
+
+        let signalRecipient = db.read { tx in
+            recipientDatabaseTable.fetchRecipient(serviceId: pollAuthorAci, transaction: tx)
+        }
+
+        var voteCount = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        // Pending vote should not count as a vote.
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 0)
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(0)], // pancakes,
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount!),
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [pollAuthorAci])
+        }
+
+        // Unvote
+        voteCount = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: true,
+                transaction: tx,
+            )
+        }
+
+        // Since unvote is still pending, the vote is still valid.
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [pollAuthorAci])
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [], // unvote
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount!),
+                transaction: tx,
+            )
+        }
+
+        // Sent unvote should now be finalized.
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 0)
+        }
+    }
+
+    @Test
+    func testPendingThenSentVote_multiSelect() throws {
+        let question = "What should we have for breakfast?"
+        let outgoingMessage = insertOutgoingPollMessage(question: question)
+
+        let pollCreateProto = buildPollCreateProto(
+            question: question,
+            options: ["pancakes", "waffles"],
+            allowMultiple: true,
+        )
+
+        try db.write { tx in
+            try pollMessageManager.processIncomingPollCreate(
+                interactionId: 1,
+                pollCreateProto: pollCreateProto,
+                transaction: tx,
+            )
+        }
+
+        let signalRecipient = db.read { tx in
+            recipientDatabaseTable.fetchRecipient(serviceId: pollAuthorAci, transaction: tx)
+        }
+
+        var voteCount = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(0)], // pancakes
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount!),
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [pollAuthorAci])
+        }
+
+        // Vote for another option.
+        voteCount = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        // pending waffle vote should not affect pancakes vote.
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [pollAuthorAci])
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis.isEmpty)
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(1), OWSPoll.OptionIndex(0)],
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount!),
+                transaction: tx,
+            )
+        }
+
+        // Sent second vote should now be finalized.
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [pollAuthorAci])
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis == [pollAuthorAci])
+        }
+
+        // Unvote for pancakes
+        voteCount = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: true,
+                transaction: tx,
+            )
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(1)], // waffles only
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount!),
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis.isEmpty)
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis == [pollAuthorAci])
+        }
+    }
+
+    @Test
+    func testMultiplePendingBeforeSent_multi() throws {
+        let question = "What should we have for breakfast?"
+        let outgoingMessage = insertOutgoingPollMessage(question: question)
+
+        let pollCreateProto = buildPollCreateProto(
+            question: question,
+            options: ["pancakes", "waffles"],
+            allowMultiple: true,
+        )
+
+        try db.write { tx in
+            try pollMessageManager.processIncomingPollCreate(
+                interactionId: 1,
+                pollCreateProto: pollCreateProto,
+                transaction: tx,
+            )
+        }
+
+        let signalRecipient = db.read { tx in
+            recipientDatabaseTable.fetchRecipient(serviceId: pollAuthorAci, transaction: tx)
+        }
+
+        let voteCount1 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        let voteCount2 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 0)
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(0)], // pancakes
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount1!),
+                transaction: tx,
+            )
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(0), OWSPoll.OptionIndex(1)], // waffles + pancakes
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount2!),
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [pollAuthorAci])
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis == [pollAuthorAci])
+        }
+    }
+
+    @Test
+    func testOutOfOrderPendingAndSent() throws {
+        let question = "What should we have for breakfast?"
+        let outgoingMessage = insertOutgoingPollMessage(question: question)
+
+        let pollCreateProto = buildPollCreateProto(
+            question: question,
+            options: ["pancakes", "waffles"],
+            allowMultiple: true,
+        )
+
+        try db.write { tx in
+            try pollMessageManager.processIncomingPollCreate(
+                interactionId: 1,
+                pollCreateProto: pollCreateProto,
+                transaction: tx,
+            )
+        }
+
+        let signalRecipient = db.read { tx in
+            recipientDatabaseTable.fetchRecipient(serviceId: pollAuthorAci, transaction: tx)
+        }
+
+        let voteCount1 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        let voteCount2 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 0)
+        }
+
+        // Send vote count 2 first, state should be updated
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(0), OWSPoll.OptionIndex(1)], // waffles + pancakes
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount2!),
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [pollAuthorAci])
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis == [pollAuthorAci])
+        }
+
+        // Now send vote count 1 -> should be ignored.
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(0)], // pancakes
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount1!),
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [pollAuthorAci])
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis == [pollAuthorAci])
+        }
+    }
+
+    @Test
+    func testSendFails_singleSelect() throws {
+        let question = "What should we have for breakfast?"
+
+        var voteAuthorAci: Aci
+        let message = insertOutgoingPollMessage(question: question)
+        voteAuthorAci = pollAuthorAci
+
+        let pollCreateProto = buildPollCreateProto(
+            question: question,
+            options: ["pancakes", "waffles"],
+            allowMultiple: false,
+        )
+
+        try db.write { tx in
+            try pollMessageManager.processIncomingPollCreate(
+                interactionId: 1,
+                pollCreateProto: pollCreateProto,
+                transaction: tx,
+            )
+        }
+
+        let signalRecipient = db.read { tx in
+            recipientDatabaseTable.fetchRecipient(serviceId: voteAuthorAci, transaction: tx)
+        }
+
+        let voteCount1 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: message.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: message.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(0)], // pancakes
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount1!),
+                transaction: tx,
+            )
+        }
+
+        // send pending message for another, different vote
+        let voteCount2 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: message.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        // Simulate vote fail, and rollback to old state
+        try db.write { tx in
+            try pollStore.revertVoteCount(
+                voteCount: voteCount2!,
+                interactionId: message.grdbId!.int64Value,
+                voteAuthorId: signalRecipient!.id,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: message, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [voteAuthorAci])
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis.isEmpty)
+        }
+
+        // Now send successful vote
+        let voteCount3 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: message.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: message.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(1)], // waffles
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount3!),
+                transaction: tx,
+            )
+        }
+
+        // send pending message for unvote
+        let voteCount4 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: message.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: true,
+                transaction: tx,
+            )
+        }
+
+        // Simulate vote fail, and rollback to old state
+        try db.write { tx in
+            try pollStore.revertVoteCount(
+                voteCount: voteCount4!,
+                interactionId: message.grdbId!.int64Value,
+                voteAuthorId: signalRecipient!.id,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: message, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis.isEmpty)
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis == [voteAuthorAci])
+        }
+    }
+
+    @Test
+    func testSendFails_multiSelect() throws {
+        let question = "What should we have for breakfast?"
+
+        var voteAuthorAci: Aci
+        let message = insertOutgoingPollMessage(question: question)
+        voteAuthorAci = pollAuthorAci
+
+        let pollCreateProto = buildPollCreateProto(
+            question: question,
+            options: ["pancakes", "waffles"],
+            allowMultiple: true,
+        )
+
+        try db.write { tx in
+            try pollMessageManager.processIncomingPollCreate(
+                interactionId: 1,
+                pollCreateProto: pollCreateProto,
+                transaction: tx,
+            )
+        }
+
+        let signalRecipient = db.read { tx in
+            recipientDatabaseTable.fetchRecipient(serviceId: voteAuthorAci, transaction: tx)
+        }
+
+        let voteCount1 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: message.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: message.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(0)], // pancakes
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount1!),
+                transaction: tx,
+            )
+        }
+
+        // send pending message for another, different vote
+        let voteCount2 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: message.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        // Simulate vote fail, and rollback to old state
+        try db.write { tx in
+            try pollStore.revertVoteCount(
+                voteCount: voteCount2!,
+                interactionId: message.grdbId!.int64Value,
+                voteAuthorId: signalRecipient!.id,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: message, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [voteAuthorAci])
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis.isEmpty)
+        }
+
+        // Now send successful vote
+        let voteCount3 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: message.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: message.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(0), OWSPoll.OptionIndex(1)],
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount3!),
+                transaction: tx,
+            )
+        }
+
+        // send pending message for unvote
+        let voteCount4 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: message.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: true,
+                transaction: tx,
+            )
+        }
+
+        // Simulate vote fail, and rollback to old state
+        try db.write { tx in
+            try pollStore.revertVoteCount(
+                voteCount: voteCount4!,
+                interactionId: message.grdbId!.int64Value,
+                voteAuthorId: signalRecipient!.id,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: message, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [voteAuthorAci])
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis == [voteAuthorAci])
+        }
+    }
+
+    @Test
+    func testSendFailsButVoteCountHasMovedOn() throws {
+        let question = "What should we have for breakfast?"
+        let outgoingMessage = insertOutgoingPollMessage(question: question)
+
+        let pollCreateProto = buildPollCreateProto(
+            question: question,
+            options: ["pancakes", "waffles"],
+            allowMultiple: true,
+        )
+
+        try db.write { tx in
+            try pollMessageManager.processIncomingPollCreate(
+                interactionId: 1,
+                pollCreateProto: pollCreateProto,
+                transaction: tx,
+            )
+        }
+
+        let signalRecipient = db.read { tx in
+            recipientDatabaseTable.fetchRecipient(serviceId: pollAuthorAci, transaction: tx)
+        }
+
+        // Pending vote count 1
+        let voteCount1 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        // Successful vote count 2
+        let voteCount2 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(1)], // pancakes
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount2!),
+                transaction: tx,
+            )
+        }
+
+        // Simulate vote fail for voteCount 1 - should be ignored since
+        // vote count has moved on.
+        try db.write { tx in
+            try pollStore.revertVoteCount(
+                voteCount: voteCount1!,
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                voteAuthorId: signalRecipient!.id,
+                transaction: tx,
+            )
+        }
+
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis.isEmpty)
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis == [pollAuthorAci])
+        }
+    }
+
+    @Test
+    func testMultipleConflictingPendingStatesFail_singleSelect() async throws {
+        let question = "What should we have for breakfast?"
+
+        var voteAuthorAci: Aci
+        let outgoingMessage = insertOutgoingPollMessage(question: question)
+        voteAuthorAci = pollAuthorAci
+
+        let pollCreateProto = buildPollCreateProto(
+            question: question,
+            options: ["pancakes", "waffles"],
+            allowMultiple: false,
+        )
+
+        try db.write { tx in
+            try pollMessageManager.processIncomingPollCreate(
+                interactionId: 1,
+                pollCreateProto: pollCreateProto,
+                transaction: tx,
+            )
+        }
+
+        let signalRecipient = db.read { tx in
+            recipientDatabaseTable.fetchRecipient(serviceId: voteAuthorAci, transaction: tx)
+        }
+
+        let voteCount1 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(0), // pancakes
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        _ = try db.write { tx in
+            try pollStore.updatePollWithVotes(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                optionsVoted: [OWSPoll.OptionIndex(0)], // pancakes
+                voteAuthorId: signalRecipient!.id,
+                voteCount: UInt32(voteCount1!),
+                transaction: tx,
+            )
+        }
+
+        // send pending message for another, different vote
+        let voteCount2 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: false,
+                transaction: tx,
+            )
+        }
+
+        // send a second pending message with a conflicting vote value (aka an unvote)
+        let voteCount3 = try db.write { tx in
+            try pollStore.applyPendingVote(
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                localRecipientId: signalRecipient!.id,
+                optionIndex: OWSPoll.OptionIndex(1), // waffles
+                isUnvote: true,
+                transaction: tx,
+            )
+        }
+
+        // Now fail both.
+        try db.write { tx in
+            try pollStore.revertVoteCount(
+                voteCount: voteCount2!,
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                voteAuthorId: signalRecipient!.id,
+                transaction: tx,
+            )
+
+            try pollStore.revertVoteCount(
+                voteCount: voteCount3!,
+                interactionId: outgoingMessage.grdbId!.int64Value,
+                voteAuthorId: signalRecipient!.id,
+                transaction: tx,
+            )
+        }
+
+        // Should go back to original state of single vote for pancake.
+        try db.read { tx in
+            let owsPoll = try pollMessageManager.buildPoll(message: outgoingMessage, transaction: tx)
+            #expect(owsPoll!.question == question)
+            #expect(owsPoll!.totalVoters() == 1)
+
+            let pancakeOption = owsPoll!.optionForIndex(optionIndex: 0)
+            #expect(pancakeOption!.acis == [voteAuthorAci])
+
+            let waffleOption = owsPoll!.optionForIndex(optionIndex: 1)
+            #expect(waffleOption!.acis.isEmpty)
+        }
+    }
+}
+
+private extension TSOutgoingMessage {
+    convenience init(in thread: TSThread, question: String) {
+        let builder: TSOutgoingMessageBuilder = .withDefaultValues(
+            thread: thread,
+            messageBody: AttachmentContentValidatorMock.mockValidatedBody(question),
+            isPoll: true,
+        )
+        self.init(outgoingMessageWith: builder, recipientAddressStates: [:])
+    }
+}
+
+private extension TSGroupThread {
+    static func randomForTesting() -> TSGroupThread {
+        return .forUnitTest(groupId: 12)
     }
 }

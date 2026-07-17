@@ -5,6 +5,7 @@
 
 import AVFoundation
 import Foundation
+public import LibSignalClient
 public import SignalServiceKit
 public import SignalUI
 
@@ -12,14 +13,15 @@ extension ConversationViewController: AttachmentApprovalViewControllerDelegate {
 
     public func attachmentApproval(
         _ attachmentApproval: AttachmentApprovalViewController,
-        didApproveAttachments attachments: [SignalAttachment],
-        messageBody: MessageBody?
+        didApproveAttachments approvedAttachments: ApprovedAttachments,
+        messageBody: MessageBody?,
     ) {
         Task { @MainActor in
             await self.sendAttachments(
-                attachments,
+                approvedAttachments,
+                messageBody: messageBody,
                 from: attachmentApproval,
-                messageBody: messageBody
+                attachmentLimits: attachmentApproval.attachmentLimits,
             )
         }
     }
@@ -29,22 +31,23 @@ extension ConversationViewController: AttachmentApprovalViewControllerDelegate {
         self.popKeyBoard()
     }
 
-    public func attachmentApproval(_ attachmentApproval: AttachmentApprovalViewController,
-                                   didChangeMessageBody newMessageBody: MessageBody?) {
+    public func attachmentApproval(
+        _ attachmentApproval: AttachmentApprovalViewController,
+        didChangeMessageBody newMessageBody: MessageBody?,
+    ) {
         AssertIsOnMainThread()
 
         guard hasViewWillAppearEverBegun else {
             owsFailDebug("InputToolbar not yet ready.")
             return
         }
-        guard let inputToolbar = inputToolbar else {
-            owsFailDebug("Missing inputToolbar.")
+        guard let inputToolbar else {
             return
         }
         inputToolbar.setMessageBody(newMessageBody, animated: false)
     }
 
-    public func attachmentApproval(_ attachmentApproval: AttachmentApprovalViewController, didRemoveAttachment attachment: SignalAttachment) { }
+    public func attachmentApproval(_ attachmentApproval: AttachmentApprovalViewController, didRemoveAttachment attachmentApprovalItem: AttachmentApprovalItem) { }
 
     public func attachmentApprovalDidTapAddMore(_ attachmentApproval: AttachmentApprovalViewController) { }
 
@@ -60,8 +63,8 @@ extension ConversationViewController: AttachmentApprovalViewControllerDataSource
         return [displayName]
     }
 
-    public func attachmentApprovalMentionableAddresses(tx: DBReadTransaction) -> [SignalServiceAddress] {
-        supportsMentions ? thread.recipientAddresses(with: SDSDB.shimOnlyBridge(tx)) : []
+    public func attachmentApprovalMentionableAcis(tx: DBReadTransaction) -> [Aci] {
+        supportsMentions ? thread.recipientAddresses(with: tx).compactMap(\.aci) : []
     }
 
     public func attachmentApprovalMentionCacheInvalidationKey() -> String {
@@ -113,7 +116,7 @@ extension ConversationViewController: ContactPickerDelegate {
                 profileManager: SSKEnvironment.shared.profileManagerRef,
                 recipientManager: DependenciesBridge.shared.recipientManager,
                 tsAccountManager: DependenciesBridge.shared.tsAccountManager,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -141,8 +144,11 @@ extension ConversationViewController: ContactPickerDelegate {
 
 extension ConversationViewController: ContactShareViewControllerDelegate {
 
-    public func contactShareViewController(_ viewController: ContactShareViewController, didApproveContactShare contactShare:
-        ContactShareDraft) {
+    public func contactShareViewController(
+        _ viewController: ContactShareViewController,
+        didApproveContactShare contactShare:
+        ContactShareDraft,
+    ) {
         dismiss(animated: true) {
             self.send(contactShareDraft: contactShare)
         }
@@ -172,7 +178,7 @@ extension ConversationViewController: ContactShareViewControllerDelegate {
             let didAddToProfileWhitelist = ThreadUtil.addThreadToProfileWhitelistIfEmptyOrPendingRequest(
                 thread,
                 setDefaultTimerIfNecessary: true,
-                tx: transaction
+                tx: transaction,
             )
             transaction.addSyncCompletion {
                 Task { @MainActor in
@@ -191,7 +197,7 @@ extension ConversationViewController: ContactShareViewControllerDelegate {
 // MARK: -
 
 extension ConversationViewController: ConversationHeaderViewDelegate {
-    public func didTapConversationHeaderView(_ conversationHeaderView: ConversationHeaderView) {
+    func didTapConversationHeaderView(_ conversationHeaderView: ConversationHeaderView) {
         AssertIsOnMainThread()
 
         // robot 账号不跳转会话详情
@@ -205,13 +211,13 @@ extension ConversationViewController: ConversationHeaderViewDelegate {
         showConversationSettings()
     }
 
-    public func didTapConversationHeaderViewAvatar(_ conversationHeaderView: ConversationHeaderView) {
+    func didTapConversationHeaderViewAvatar(_ conversationHeaderView: ConversationHeaderView) {
         AssertIsOnMainThread()
 
         if conversationHeaderView.avatarView.configuration.hasStoriesToDisplay {
             let vc = StoryPageViewController(
                 context: thread.storyContext,
-                spoilerState: spoilerState
+                spoilerState: spoilerState,
             )
             present(vc, animated: true)
         } else {
@@ -224,27 +230,41 @@ extension ConversationViewController: ConversationHeaderViewDelegate {
 
 extension ConversationViewController: ConversationInputTextViewDelegate {
     public func didAttemptAttachmentPaste() {
+        let attachmentLimits = OutgoingAttachmentLimits.currentLimits()
+
         // If trying to paste a sticker, forego anything async since
         // the pasteboard will be cleared as soon as paste() exits.
-        if SignalAttachment.pasteboardHasStickerAttachment() {
-            let attachment: SignalAttachment? = SignalAttachment.stickerAttachmentFromPasteboard()
-            self.didPasteAttachments(attachment.map { [$0] })
+        if PasteboardAttachment.hasStickerAttachment() {
+            do {
+                self.didPasteAttachments(
+                    [try PasteboardAttachment.loadPreviewableStickerAttachment()].compacted(),
+                    attachmentLimits: attachmentLimits,
+                )
+            } catch {
+                self.showErrorAlert(attachmentError: error as? SignalAttachmentError)
+            }
             return
         }
 
-        ModalActivityIndicatorViewController.present(fromViewController: self) { modal in
-            let attachments: [SignalAttachment]? = await SignalAttachment.attachmentsFromPasteboard()
-
-            await MainActor.run {
+        ModalActivityIndicatorViewController.present(fromViewController: self, asyncBlock: { modal in
+            do {
+                let attachments = try await PasteboardAttachment.loadPreviewableAttachments(attachmentLimits: attachmentLimits)
                 modal.dismiss {
-                    // Note: attachment array might be nil or have an error at this point; that's fine.
-                    self.didPasteAttachments(attachments)
+                    // Note: attachment array might be nil at this point; that's fine.
+                    self.didPasteAttachments(attachments, attachmentLimits: attachmentLimits)
+                }
+            } catch {
+                modal.dismiss {
+                    self.showErrorAlert(attachmentError: error as? SignalAttachmentError)
                 }
             }
-        }
+        })
     }
 
-    func didPasteAttachments(_ attachments: [SignalAttachment]?) {
+    func didPasteAttachments(
+        _ attachments: [PreviewableAttachment]?,
+        attachmentLimits: OutgoingAttachmentLimits,
+    ) {
         AssertIsOnMainThread()
 
         guard let attachments, attachments.count > 0 else {
@@ -254,13 +274,18 @@ extension ConversationViewController: ConversationInputTextViewDelegate {
 
         // If the thing we pasted is sticker-like, send it immediately
         // and render it borderless.
-        if attachments.count == 1, let a = attachments.first, a.isBorderless {
+        if attachments.count == 1, let a = attachments.first, a.rawValue.isBorderless {
             Task {
-                await self.sendAttachments([a], from: self, messageBody: nil)
+                await self.sendAttachments(
+                    ApprovedAttachments(nonViewOnceAttachments: [a], imageQuality: .standard),
+                    messageBody: nil,
+                    from: self,
+                    attachmentLimits: attachmentLimits,
+                )
             }
         } else {
             dismissKeyBoard()
-            showApprovalDialog(forAttachments: attachments)
+            showApprovalDialog(forAttachments: attachments, attachmentLimits: attachmentLimits)
         }
     }
 
@@ -295,8 +320,10 @@ extension ConversationViewController: ConversationSearchControllerDelegate {
         }
     }
 
-    public func conversationSearchController(_ conversationSearchController: ConversationSearchController,
-                                             didUpdateSearchResults resultSet: ConversationScreenSearchResultSet?) {
+    public func conversationSearchController(
+        _ conversationSearchController: ConversationSearchController,
+        didUpdateSearchResults resultSet: ConversationScreenSearchResultSet?,
+    ) {
         AssertIsOnMainThread()
 
         self.lastSearchedText = resultSet?.searchText
@@ -305,7 +332,7 @@ extension ConversationViewController: ConversationSearchControllerDelegate {
 
     public func conversationSearchController(
         _ conversationSearchController: ConversationSearchController,
-        didSelectMessageId messageId: String
+        didSelectMessageId messageId: String,
     ) {
         AssertIsOnMainThread()
 
@@ -313,7 +340,7 @@ extension ConversationViewController: ConversationSearchControllerDelegate {
             messageId,
             onScreenPercentage: 1,
             alignment: .centerIfNotEntirelyOnScreen,
-            isAnimated: true
+            isAnimated: true,
         )
     }
 }
@@ -472,7 +499,7 @@ extension ConversationViewController {
         autoLoadMoreIfNecessary()
 
         performMessageHighlightAnimationIfNeeded()
-   }
+    }
 
     func resetForSizeOrOrientationChange() {
         AssertIsOnMainThread()

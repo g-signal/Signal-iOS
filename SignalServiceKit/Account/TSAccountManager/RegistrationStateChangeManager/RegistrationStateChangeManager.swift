@@ -18,7 +18,7 @@ public extension NSNotification.Name {
 @objcMembers
 public class RegistrationStateChangeNotifications: NSObject {
 
-    private override init() { super.init() }
+    override private init() { super.init() }
 
     public static var registrationStateDidChange: NSNotification.Name { .registrationStateDidChange }
 }
@@ -43,7 +43,7 @@ public protocol RegistrationStateChangeManager {
         aci: Aci,
         pni: Pni,
         authToken: String,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     /**
@@ -62,7 +62,7 @@ public protocol RegistrationStateChangeManager {
         pni: Pni,
         authToken: String,
         deviceId: DeviceId,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     /**
@@ -78,7 +78,7 @@ public protocol RegistrationStateChangeManager {
         _ e164: E164,
         aci: Aci,
         pni: Pni,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     /**
@@ -101,7 +101,7 @@ public protocol RegistrationStateChangeManager {
         localAci: Aci,
         discoverability: PhoneNumberDiscoverability?,
         wasPrimaryDevice: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     /**
@@ -127,7 +127,7 @@ public protocol RegistrationStateChangeManager {
      */
     func setIsTransferComplete(
         sendStateUpdateNotification: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     /**
@@ -158,11 +158,10 @@ public protocol RegistrationStateChangeManager {
      */
     func setIsDeregisteredOrDelinked(_ isDeregisteredOrDelinked: Bool, tx: DBWriteTransaction)
 
-    /**
-     * Unregisters with the server, resetting all app data after completion (if successful).
-     */
-    func unregisterFromService() async throws -> Never
+    /// Unregisters the local user's account from Signal entirely. (Must be the
+    /// primary device!)
+    func unregisterFromService() async throws
 
-    /// Unlinks the local device (must not be the primary device).
+    /// Unlinks the local device. (Must not be the primary device!)
     func unlinkLocalDevice(localDeviceId: LocalDeviceId, auth: ChatServiceAuth) async throws
 }

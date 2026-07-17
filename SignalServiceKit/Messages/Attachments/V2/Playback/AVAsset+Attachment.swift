@@ -9,28 +9,28 @@ import Foundation
 extension AVAsset {
 
     public static func from(
-        _ attachment: AttachmentStream
+        _ attachment: AttachmentStream,
     ) throws -> AVAsset {
         return try .fromEncryptedFile(
             at: attachment.fileURL,
-            encryptionKey: attachment.attachment.encryptionKey,
+            attachmentKey: AttachmentKey(combinedKey: attachment.attachment.encryptionKey),
             plaintextLength: attachment.info.unencryptedByteCount,
-            mimeType: attachment.mimeType
+            mimeType: attachment.mimeType,
         )
     }
 
-    public static func fromEncryptedFile(
+    static func fromEncryptedFile(
         at fileURL: URL,
-        encryptionKey: Data,
+        attachmentKey: AttachmentKey,
         plaintextLength: UInt32,
-        mimeType: String
+        mimeType: String,
     ) throws -> AVAsset {
         func createAsset(mimeTypeOverride: String? = nil) throws -> AVAsset {
             return try AVAsset._fromEncryptedFile(
                 at: fileURL,
-                encryptionKey: encryptionKey,
+                attachmentKey: attachmentKey,
                 plaintextLength: plaintextLength,
-                mimeType: mimeTypeOverride ?? mimeType
+                mimeType: mimeTypeOverride ?? mimeType,
             )
         }
 
@@ -51,14 +51,14 @@ extension AVAsset {
 
     private static func _fromEncryptedFile(
         at fileURL: URL,
-        encryptionKey: Data,
+        attachmentKey: AttachmentKey,
         plaintextLength: UInt32,
-        mimeType: String
+        mimeType: String,
     ) throws -> AVAsset {
         let fileHandle = try Cryptography.encryptedAttachmentFileHandle(
             at: fileURL,
-            plaintextLength: plaintextLength,
-            encryptionKey: encryptionKey
+            plaintextLength: UInt64(safeCast: plaintextLength),
+            attachmentKey: attachmentKey,
         )
 
         guard let utiType = MimeTypeUtil.utiTypeForMimeType(mimeType) else {
@@ -67,19 +67,32 @@ extension AVAsset {
 
         let resourceLoader = EncryptedFileResourceLoader(
             utiType: utiType,
-            fileHandle: fileHandle
+            fileHandle: fileHandle,
         )
 
-        // AVAsset cares about the file extension. It shouldn't, but it does.
-        // If we can map the mime type to a file extension, do so for the
-        // url we give the AVAsset so it reads things correctly.
+        // Prioritize audio extensions; note these mappings differ from the generic
+        // "fileExtensionForMimeType" because reasons.
+        let mimeTypeExtensionOverride: [String: String] = [
+            "audio/3gpp": "3gp",
+            "audio/3gpp2": "3g2",
+            "audio/aac": "m4a",
+            "audio/mp3": "mp3",
+            "audio/mp4": "mp4",
+            "audio/mpeg": "mp3",
+            "audio/x-m4a": "m4a",
+            "audio/x-m4b": "m4b",
+            "audio/x-m4p": "m4p",
+            "audio/x-mp3": "mp3",
+            "audio/x-mpeg": "mp3",
+            "audio/x-mpeg3": "mp3",
+        ]
+
+        // AVAsset cares about the file extension. It shouldn't, but it does. If we
+        // can map the mime type to a file extension, do so for the url we give the
+        // AVAsset so it reads things correctly.
+        let pathExtension = mimeTypeExtensionOverride[mimeType] ?? MimeTypeUtil.fileExtensionForMimeType(mimeType)
         let fileURLWithFakeExtension: URL
-        if
-            let pathExtension =
-                // Prioritize audio extensions; note these mappings differ from the
-                // generic "fileExtensionForMimeType" because reasons.
-                MimeTypeUtil.getSupportedExtensionFromAudioMimeType(mimeType)
-                ?? MimeTypeUtil.fileExtensionForMimeType(mimeType) {
+        if let pathExtension {
             fileURLWithFakeExtension = fileURL.appendingPathExtension(pathExtension)
         } else {
             fileURLWithFakeExtension = fileURL
@@ -116,7 +129,7 @@ extension AVAsset {
 
         func resourceLoader(
             _ resourceLoader: AVAssetResourceLoader,
-            shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest
+            shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest,
         ) -> Bool {
             if let _ = loadingRequest.contentInformationRequest {
                 return handleContentInfoRequest(for: loadingRequest)
@@ -140,7 +153,7 @@ extension AVAsset {
             return true
         }
 
-        private static let chunkSize: UInt32 = 4096
+        private static let chunkSize = 4096
 
         private func handleDataRequest(for loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
             guard
@@ -149,10 +162,10 @@ extension AVAsset {
                 return false
             }
 
-            let requestedOffset = UInt32(dataRequest.requestedOffset)
-            var requestedLength = UInt32(clamping: dataRequest.requestedLength)
+            let requestedOffset = UInt64(dataRequest.requestedOffset)
+            var requestedLength = dataRequest.requestedLength
             if dataRequest.requestsAllDataToEndOfResource {
-                requestedLength = fileHandle.plaintextLength - requestedOffset
+                requestedLength = Int(fileHandle.plaintextLength - requestedOffset)
             }
 
             do {
@@ -164,12 +177,12 @@ extension AVAsset {
                 return true
             }
 
-            var bytesReadSoFar: UInt32 = 0
+            var bytesReadSoFar = 0
             do {
                 while bytesReadSoFar < requestedLength {
                     let lengthToRead = min(Self.chunkSize, requestedLength - bytesReadSoFar)
                     let data = try fileHandle.read(upToCount: lengthToRead)
-                    bytesReadSoFar += UInt32(data.byteLength)
+                    bytesReadSoFar += data.count
                     dataRequest.respond(with: data)
                 }
             } catch let error {
@@ -189,7 +202,7 @@ private extension URL {
         guard
             var components = URLComponents(
                 url: self,
-                resolvingAgainstBaseURL: false
+                resolvingAgainstBaseURL: false,
             ),
             let scheme = components.scheme
         else {

@@ -14,7 +14,7 @@ protocol RegistrationPermissionsPresenter: AnyObject {
 
 struct RegistrationPermissionsView: View {
     var requestingContactsAuthorization: Bool
-    var permissionTask: (() async -> Void)
+    var permissionTask: () async -> Void
 
     @State private var hasAppeared = (notifications: false, contacts: false)
     @State private var requestPermissions: RequestPermissionsTask?
@@ -23,7 +23,6 @@ struct RegistrationPermissionsView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
 
-    @AccessibleLayoutMetric private var headerPadding = 16
     @AccessibleLayoutMetric private var headerSpacing = 12
     @AccessibleLayoutMetric(scale: 0.5) private var sectionSpacing = 64
 
@@ -31,29 +30,20 @@ struct RegistrationPermissionsView: View {
         horizontalSizeClass == .compact || verticalSizeClass == .compact
     }
 
-    private var layoutMargins: EdgeInsets {
-        if isCompactLayout {
-            EdgeInsets(.layoutMarginsForRegistration(UIUserInterfaceSizeClass(horizontalSizeClass)))
-        } else {
-            EdgeInsets()
-        }
-    }
-
     var body: some View {
         VStack {
             VStack(spacing: headerSpacing) {
-                if requestingContactsAuthorization {
-                    Color.clear.frame(height: 32)
-                }
-
-                Text(OWSLocalizedString("ONBOARDING_PERMISSIONS_TITLE", comment: "Title of the 'onboarding permissions' view."))
-                    .font(.title.weight(.semibold))
-                    .lineLimit(1)
+                Text(OWSLocalizedString(
+                    "ONBOARDING_PERMISSIONS_TITLE",
+                    comment: "Title of the 'onboarding permissions' view.",
+                ))
+                .font(.title.weight(.semibold))
+                .lineLimit(1)
+                .accessibilityAddTraits(.isHeader)
                 Text(OWSLocalizedString("ONBOARDING_PERMISSIONS_PREAMBLE", comment: "Preamble of the 'onboarding permissions' view."))
                     .dynamicTypeSize(...DynamicTypeSize.accessibility1)
             }
             .multilineTextAlignment(.center)
-            .padding(.horizontal, headerPadding)
 
             ScrollableWhenCompact {
                 VStack {
@@ -80,15 +70,13 @@ struct RegistrationPermissionsView: View {
                                     notificationsPermissionView
                                 }
 
-                                if requestingContactsAuthorization && hasAppeared.contacts {
+                                if requestingContactsAuthorization, hasAppeared.contacts {
                                     contactsPermissionView
                                 }
                             }
                             .transition(.offset(x: 0, y: -20).combined(with: .opacity))
                         }
                     }
-                    // Expand to available width when compact, otherwise horizontally center.
-                    .frame(maxWidth: isCompactLayout ? .infinity : nil, alignment: .leading)
 
                     Spacer(minLength: sectionSpacing)
                         .layoutPriority(-1)
@@ -98,11 +86,10 @@ struct RegistrationPermissionsView: View {
                             await permissionTask()
                         })
                     }
-                    .buttonStyle(Registration.UI.FilledButtonStyle())
+                    .buttonStyle(Registration.UI.LargePrimaryButtonStyle())
                     .dynamicTypeSize(...DynamicTypeSize.accessibility2)
-                    .frame(maxWidth: 400)
+                    .padding(EdgeInsets(NSDirectionalEdgeInsets.buttonContainerLayoutMargins))
                 }
-                .padding(layoutMargins)
             }
         }
         .onChange(of: appearanceTransitionState) { newValue in
@@ -128,7 +115,6 @@ struct RegistrationPermissionsView: View {
         }
         .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         .minimumScaleFactor(0.9)
-        .navigationBarBackButtonHidden()
         .task($requestPermissions.animation())
     }
 
@@ -173,28 +159,32 @@ private extension RegistrationPermissionsView {
                     HStack(spacing: 16) {
                         icon
                             .frame(width: 36)
+                            .accessibilityHidden(true)
                         title
                             .font(.headline)
                             .lineLimit(1)
                         Spacer()
                     }
                     description
-                        .font(.callout)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
+                .accessibilityElement(children: .combine)
             } else {
                 HStack(alignment: .top, spacing: 16) {
                     icon
+                        .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 4) {
                         title
                             .font(.headline)
                             .lineLimit(1)
                         description
-                            .font(.callout)
+                            .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .layoutPriority(1)
                     }
                 }
+                .accessibilityElement(children: .combine)
             }
         }
     }
@@ -216,7 +206,7 @@ private extension RegistrationPermissionsView {
 
     struct RequestPermissionsTask: AsyncViewTask {
         let id = UUID()
-        let task: (() async -> Void)
+        let task: () async -> Void
 
         func perform() async {
             await task()
@@ -228,12 +218,11 @@ final class RegistrationPermissionsViewController: OWSViewController, OWSNavigat
     let requestingContactsAuthorization: Bool
     weak var presenter: (any RegistrationPermissionsPresenter)?
 
-    var prefersNavigationBarHidden: Bool { true }
-
     init(requestingContactsAuthorization: Bool, presenter: any RegistrationPermissionsPresenter) {
         self.requestingContactsAuthorization = requestingContactsAuthorization
         self.presenter = presenter
         super.init()
+        self.navigationItem.hidesBackButton = true
     }
 
     override func viewDidLoad() {
@@ -245,12 +234,18 @@ final class RegistrationPermissionsViewController: OWSViewController, OWSNavigat
                 requestingContactsAuthorization: requestingContactsAuthorization,
                 permissionTask: { [weak self] in
                     await self?.presenter?.requestPermissions()
-                }
-            )
+                },
+            ),
         )
         addChild(hostingController)
         view.addSubview(hostingController.view)
-        hostingController.view.autoPinEdgesToSuperviewEdges()
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            hostingController.view.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor),
+            hostingController.view.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor),
+        ])
         hostingController.didMove(toParent: self)
     }
 
@@ -274,8 +269,8 @@ private let presenter = PreviewPermissionsPresenter()
         animateFirstAppearance: true,
         viewController: RegistrationPermissionsViewController(
             requestingContactsAuthorization: true,
-            presenter: presenter
-        )
+            presenter: presenter,
+        ),
     )
 }
 #endif

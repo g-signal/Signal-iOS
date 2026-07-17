@@ -34,7 +34,7 @@ extension DonationPaymentDetailsViewController {
             case formatted(
                 format: (String) -> String,
                 allowedCharacters: FormattedNumberField.AllowedCharacters,
-                maxDigits: Int
+                maxDigits: Int,
             )
             case plain(keyboardType: UIKeyboardType)
 
@@ -63,10 +63,10 @@ extension DonationPaymentDetailsViewController {
                 delegate: self,
                 editingChanged: { [weak self] in
                     self?.delegate?.didSomethingChange()
-                }
+                },
             )
 
-            result.textColor = Theme.primaryTextColor
+            result.textColor = .Signal.label
 
             return result
         }()
@@ -102,7 +102,7 @@ extension DonationPaymentDetailsViewController {
             placeholder: String,
             style: Style,
             textContentType: UITextContentType?,
-            delegate: CreditOrDebitCardDonationFormViewDelegate?
+            delegate: CreditOrDebitCardDonationFormViewDelegate?,
         ) {
             self.style = style
             self.delegate = delegate
@@ -151,7 +151,7 @@ extension DonationPaymentDetailsViewController {
         }
 
         func render(errorMessage: String?) {
-            textField.textColor = Theme.primaryTextColor
+            textField.textColor = .Signal.label
             errorLabel.text = errorMessage
         }
 
@@ -182,7 +182,7 @@ extension DonationPaymentDetailsViewController {
         func textField(
             _ textField: UITextField,
             shouldChangeCharactersIn range: NSRange,
-            replacementString: String
+            replacementString: String,
         ) -> Bool {
             defer {
                 delegate?.didSomethingChange()
@@ -196,7 +196,7 @@ extension DonationPaymentDetailsViewController {
                     replacementString: replacementString,
                     allowedCharacters: allowedCharacters,
                     maxCharacters: maxDigits,
-                    format: format
+                    format: format,
                 )
             case .plain:
                 return true

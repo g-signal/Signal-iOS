@@ -1,1 +1,1 @@
-• Ispravili smo programsku pogrešku zbog koje bi prilikom pokušaja povezivanja novog uređaja zaslon potpuno pocrnio.
+• Prikvačite poruke na vrh razgovora i omogućite jednostavan pristup važnim informacijama. Vaša najčešća pitanja, rezervacije restorana i planovi putovanja već su vam stalno na umu. Sada mogu biti i na samom vrhu razgovora.

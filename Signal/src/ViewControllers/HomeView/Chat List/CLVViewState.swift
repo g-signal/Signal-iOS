@@ -50,45 +50,67 @@ class CLVViewState {
     var unreadPaymentNotificationsCount: UInt = 0 {
         didSet { settingsButtonCreator.updateState(hasUnreadPaymentNotification: unreadPaymentNotificationsCount > 0) }
     }
+
     var firstUnreadPaymentModel: TSPaymentModel?
     var lastKnownTableViewContentOffset: CGPoint?
 
-    public struct BackupFailureBadgeType: OptionSet, CaseIterable {
-        let rawValue: Int
+    enum BackupFailureAlertType: CaseIterable {
+        case avatarBadge
+        case menuItemBadge
+        case menuItem
 
-        static let avatar = BackupFailureBadgeType(rawValue: 1 << 0)
-        static let menu = BackupFailureBadgeType(rawValue: 1 << 1)
-
-        public static var allCases: [CLVViewState.BackupFailureBadgeType] {[ .avatar, .menu ]}
-
-        var target: String {
+        var errorBadgeTarget: BackupSettingsStore.ErrorBadgeTarget? {
             return switch self {
-            case .avatar: "avatar"
-            case .menu: "menu"
-            default: "unknown"
+            case .avatarBadge: .chatListAvatar
+            case .menuItemBadge: .chatListMenuItem
+            case .menuItem: nil
             }
         }
     }
 
-    var hasBackupFailure: BackupFailureBadgeType? {
+    var backupFailureAlerts: Set<BackupFailureAlertType> = [] {
         didSet {
-            if let hasBackupFailure {
-                settingsButtonCreator.updateState(
-                    hasBackupError: true,
-                    showAvatarBackupBadge: hasBackupFailure.contains(.avatar),
-                    showMenuBackupBadge: hasBackupFailure.contains(.menu)
-                )
-            } else {
-                settingsButtonCreator.updateState(
-                    hasBackupError: false,
-                    showAvatarBackupBadge: false,
-                    showMenuBackupBadge: false
-                )
-            }
+            settingsButtonCreator.updateState(
+                showBackupsFailedAvatarBadge: backupFailureAlerts.contains(.avatarBadge),
+                showBackupsFailedMenuItemBadge: backupFailureAlerts.contains(.menuItemBadge),
+                showBackupsFailedMenuItem: backupFailureAlerts.contains(.menuItem),
+            )
         }
     }
 
-    let backupDownloadProgressViewState = CLVBackupDownloadProgressView.State()
+    enum BackupSubscriptionFailedToRedeemAlertType: CaseIterable {
+        case avatarBadge
+        case menuItem
+    }
+
+    var backupSubscriptionFailedToRedeemAlerts: Set<BackupSubscriptionFailedToRedeemAlertType> = [] {
+        didSet {
+            settingsButtonCreator.updateState(
+                showBackupsSubscriptionAlreadyRedeemedAvatarBadge: backupSubscriptionFailedToRedeemAlerts.contains(.avatarBadge),
+                showBackupsSubscriptionAlreadyRedeemedMenuItem: backupSubscriptionFailedToRedeemAlerts.contains(.menuItem),
+            )
+        }
+    }
+
+    enum BackupIAPNotFoundLocallyAlertType: CaseIterable {
+        case avatarBadge
+        case menuItem
+    }
+
+    var backupIAPNotFoundLocallyAlerts: Set<BackupIAPNotFoundLocallyAlertType> = [] {
+        didSet {
+            settingsButtonCreator.updateState(
+                showBackupsIAPNotFoundLocallyAvatarBadge: backupIAPNotFoundLocallyAlerts.contains(.avatarBadge),
+                showBackupsIAPNotFoundLocallyMenuItem: backupIAPNotFoundLocallyAlerts.contains(.menuItem),
+            )
+        }
+    }
+
+    var hasConsumedMediaTierCapacity: Bool? {
+        didSet {
+            settingsButtonCreator.updateState(hasConsumedMediaTierCapacity: hasConsumedMediaTierCapacity)
+        }
+    }
 
     // MARK: - Initializer
 
@@ -121,7 +143,7 @@ class CLVViewState {
         inboxFilter = viewInfo.inboxFilter
         settingsButtonCreator.updateState(
             hasInboxChats: viewInfo.inboxCount > 0,
-            hasArchivedChats: viewInfo.archiveCount > 0
+            hasArchivedChats: viewInfo.archiveCount > 0,
         )
     }
 }

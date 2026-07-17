@@ -4,20 +4,10 @@
 //
 
 import Foundation
+import GRDB
 public import LibSignalClient
 
-public protocol RecipientFetcher {
-    func fetchOrCreateImpl(serviceId: ServiceId, tx: DBWriteTransaction) -> (inserted: Bool, recipientAfterInsert: SignalRecipient)
-    func fetchOrCreate(phoneNumber: E164, tx: DBWriteTransaction) -> SignalRecipient
-}
-
-extension RecipientFetcher {
-    public func fetchOrCreate(serviceId: ServiceId, tx: DBWriteTransaction) -> SignalRecipient {
-        return fetchOrCreateImpl(serviceId: serviceId, tx: tx).recipientAfterInsert
-    }
-}
-
-public class RecipientFetcherImpl: RecipientFetcher {
+public struct RecipientFetcher {
     private let recipientDatabaseTable: RecipientDatabaseTable
     private let searchableNameIndexer: any SearchableNameIndexer
 
@@ -29,12 +19,17 @@ public class RecipientFetcherImpl: RecipientFetcher {
         self.searchableNameIndexer = searchableNameIndexer
     }
 
+    public func fetchOrCreate(serviceId: ServiceId, tx: DBWriteTransaction) -> SignalRecipient {
+        return fetchOrCreateImpl(serviceId: serviceId, tx: tx).recipientAfterInsert
+    }
+
     public func fetchOrCreateImpl(serviceId: ServiceId, tx: DBWriteTransaction) -> (inserted: Bool, recipientAfterInsert: SignalRecipient) {
         if let serviceIdRecipient = recipientDatabaseTable.fetchRecipient(serviceId: serviceId, transaction: tx) {
             return (inserted: false, serviceIdRecipient)
         }
-        let newInstance = SignalRecipient(aci: serviceId as? Aci, pni: serviceId as? Pni, phoneNumber: nil)
-        recipientDatabaseTable.insertRecipient(newInstance, transaction: tx)
+        let newInstance = failIfThrowsDatabaseError { () throws(GRDB.DatabaseError) in
+            return try SignalRecipient.insertRecord(aci: serviceId as? Aci, pni: serviceId as? Pni, tx: tx)
+        }
         return (inserted: true, newInstance)
     }
 
@@ -42,9 +37,20 @@ public class RecipientFetcherImpl: RecipientFetcher {
         if let result = recipientDatabaseTable.fetchRecipient(phoneNumber: phoneNumber.stringValue, transaction: tx) {
             return result
         }
-        let result = SignalRecipient(aci: nil, pni: nil, phoneNumber: phoneNumber)
-        recipientDatabaseTable.insertRecipient(result, transaction: tx)
+        let result = failIfThrowsDatabaseError { () throws(GRDB.DatabaseError) in
+            return try SignalRecipient.insertRecord(phoneNumber: phoneNumber, tx: tx)
+        }
         searchableNameIndexer.insert(result, tx: tx)
         return result
+    }
+
+    public func fetchOrCreate(address: SignalServiceAddress, tx: DBWriteTransaction) -> SignalRecipient? {
+        if let serviceId = address.serviceId {
+            return fetchOrCreate(serviceId: serviceId, tx: tx)
+        }
+        if let phoneNumber = address.e164 {
+            return fetchOrCreate(phoneNumber: phoneNumber, tx: tx)
+        }
+        return nil
     }
 }

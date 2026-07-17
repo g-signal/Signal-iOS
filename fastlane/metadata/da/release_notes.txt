@@ -1,1 +1,1 @@
-• Vi har rettet en fejl, der forårsagede, at kameraet blev vist tomt, når vi forsøgte at forbinde en ny enhed. Nu vil søgeren kun se sådan ud, hvis du prøver at forbinde en ny enhed i et meget mørkt rum.
+• Gør vigtige oplysninger nemme at finde med fastgjorte beskeder. Dine mest stillede spørgsmål, middagsreservationer og ferieplaner er allerede det, der er øverst på huskelisten. Nu kan de også ligge øverst i chatten.

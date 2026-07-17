@@ -9,11 +9,11 @@ import LibSignalClient
 @objc
 class MessageReceiptSet: NSObject, Codable {
     @objc
-    public private(set) var timestamps: Set<UInt64>
+    private(set) var timestamps: Set<UInt64>
     @objc
-    public private(set) var uniqueIds: Set<String>
+    private(set) var uniqueIds: Set<String>
 
-    convenience override init() {
+    override convenience init() {
         self.init(timestamps: Set(), uniqueIds: Set())
     }
 
@@ -76,7 +76,7 @@ public class ReceiptSender: NSObject {
                 forName: .identityStateDidChange,
                 object: self,
                 queue: nil,
-                using: { [weak self] _ in self?.sendPendingReceiptsIfNeeded() }
+                using: { [weak self] _ in self?.sendPendingReceiptsIfNeeded() },
             ))
         }
     }
@@ -90,14 +90,14 @@ public class ReceiptSender: NSObject {
     func enqueueDeliveryReceipt(
         for decryptedEnvelope: DecryptedIncomingEnvelope,
         messageUniqueId: String?,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         enqueueReceipt(
             for: decryptedEnvelope.sourceAci,
             timestamp: decryptedEnvelope.timestamp,
             messageUniqueId: messageUniqueId,
             receiptType: .delivery,
-            tx: tx
+            tx: tx,
         )
     }
 
@@ -105,14 +105,14 @@ public class ReceiptSender: NSObject {
         for aci: Aci,
         timestamp: UInt64,
         messageUniqueId: String?,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         enqueueReceipt(
             for: aci,
             timestamp: timestamp,
             messageUniqueId: messageUniqueId,
             receiptType: .read,
-            tx: tx
+            tx: tx,
         )
     }
 
@@ -120,14 +120,14 @@ public class ReceiptSender: NSObject {
         for aci: Aci,
         timestamp: UInt64,
         messageUniqueId: String?,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         enqueueReceipt(
             for: aci,
             timestamp: timestamp,
             messageUniqueId: messageUniqueId,
             receiptType: .viewed,
-            tx: tx
+            tx: tx,
         )
     }
 
@@ -136,7 +136,7 @@ public class ReceiptSender: NSObject {
         timestamp: UInt64,
         messageUniqueId: String?,
         receiptType: ReceiptType,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         guard timestamp >= 1 else {
             owsFailDebug("Invalid timestamp.")
@@ -235,7 +235,7 @@ public class ReceiptSender: NSObject {
     private func sendReceipts(
         receiptType: ReceiptType,
         to aci: Aci?,
-        receiptBatch: ReceiptBatch
+        receiptBatch: ReceiptBatch,
     ) async throws {
         var remainingTimestamps = receiptBatch.receiptSet.timestamps.sorted()[...]
         repeat {
@@ -285,29 +285,26 @@ public class ReceiptSender: NSObject {
                 // receipt message, so we include all of them to err on the safe side.
                 let batchToSend = MessageReceiptSet(
                     timestamps: Set(batchTimestamps),
-                    uniqueIds: receiptBatch.receiptSet.uniqueIds
+                    uniqueIds: receiptBatch.receiptSet.uniqueIds,
                 )
 
                 let thread = TSContactThread.getOrCreateThread(withContactAddress: SignalServiceAddress(aci), transaction: tx)
-                let message: OWSReceiptsForSenderMessage
-                switch receiptType {
-                case .delivery:
-                    message = .deliveryReceiptsForSenderMessage(with: thread, receiptSet: batchToSend, transaction: tx)
-                case .read:
-                    message = .readReceiptsForSenderMessage(with: thread, receiptSet: batchToSend, transaction: tx)
-                case .viewed:
-                    message = .viewedReceiptsForSenderMessage(with: thread, receiptSet: batchToSend, transaction: tx)
-                }
+                let message = ReceiptMessage(
+                    thread: thread,
+                    receiptSet: batchToSend,
+                    receiptType: receiptType.asProto,
+                    tx: tx,
+                )
 
                 let messageSenderJobQueue = SSKEnvironment.shared.messageSenderJobQueueRef
                 let preparedMessage = PreparedOutgoingMessage.preprepared(
-                    transientMessageWithoutAttachments: message
+                    transientMessageWithoutAttachments: message,
                 )
                 let sendPromise = messageSenderJobQueue.add(
                     .promise,
                     message: preparedMessage,
                     limitToCurrentProcessLifetime: true,
-                    transaction: tx
+                    transaction: tx,
                 )
                 return (sendPromise, batchEndIndex)
             }
@@ -335,7 +332,7 @@ public class ReceiptSender: NSObject {
 
                 let batchToDequeue = ReceiptBatch(
                     receiptSet: MessageReceiptSet(timestamps: Set(sentTimestamps), uniqueIds: uniqueIdsToDequeue),
-                    identifier: receiptBatch.identifier
+                    identifier: receiptBatch.identifier,
                 )
                 await self.dequeueReceipts(for: batchToDequeue, receiptType: receiptType)
             } catch let error as MessageSenderNoSuchSignalRecipientError {
@@ -354,6 +351,14 @@ public class ReceiptSender: NSObject {
         case delivery
         case read
         case viewed
+
+        var asProto: SSKProtoReceiptMessageType {
+            switch self {
+            case .delivery: .delivery
+            case .read: .read
+            case .viewed: .viewed
+            }
+        }
     }
 
     private func dequeueReceipts(for receiptBatch: ReceiptBatch, receiptType: ReceiptType) async {
@@ -399,7 +404,7 @@ public class ReceiptSender: NSObject {
     private func _fetchReceiptSet(
         receiptType: ReceiptType,
         identifier: String,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> MessageReceiptSet {
         let store = keyValueStore(for: receiptType)
         let result = MessageReceiptSet()

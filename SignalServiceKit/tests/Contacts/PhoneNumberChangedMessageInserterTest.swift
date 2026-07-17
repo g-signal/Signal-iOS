@@ -52,8 +52,9 @@ class PhoneNumberChangedMessageInserterTest: XCTestCase {
                         fullGroupMember: TSGroupMember(
                             address: NormalizedDatabaseRecordAddress(address: fullMemberAddress)!,
                             groupThreadId: thread.uniqueId,
-                            lastInteractionTimestamp: 0),
-                        tx: tx
+                            lastInteractionTimestamp: 0,
+                        ),
+                        tx: tx,
                     )
                 }
             }
@@ -68,7 +69,7 @@ class PhoneNumberChangedMessageInserterTest: XCTestCase {
             isArchived: true,
             isMarkedUnread: false,
             mutedUntilTimestamp: 0,
-            audioPlaybackRate: 1
+            audioPlaybackRate: 1,
         )
 
         let interactionStore = MockInteractionStore()
@@ -77,7 +78,7 @@ class PhoneNumberChangedMessageInserterTest: XCTestCase {
             groupMemberStore: groupMemberStore,
             interactionStore: interactionStore,
             threadAssociatedDataStore: threadAssociatedDataStore,
-            threadStore: threadStore
+            threadStore: threadStore,
         )
 
         // Alice changes her number.
@@ -88,9 +89,10 @@ class PhoneNumberChangedMessageInserterTest: XCTestCase {
                     aci: aliceAci,
                     oldPhoneNumber: alicePhoneNumber1,
                     newPhoneNumber: alicePhoneNumber2,
-                    isLocalRecipient: false
+                    isLocalRecipient: false,
+                    tx: tx,
                 ),
-                tx: tx
+                tx: tx,
             )
 
             let threadIds = interactionStore.insertedInteractions.map { $0.uniqueThreadId }
@@ -100,15 +102,18 @@ class PhoneNumberChangedMessageInserterTest: XCTestCase {
         // Bob acquires a number for the first time.
         interactionStore.insertedInteractions = []
         mockDB.write { tx in
-            mergeObserver.didLearnAssociation(
-                mergedRecipient: makeRecipient(
-                    aci: bobAci,
-                    oldPhoneNumber: bobPhoneNumber1,
-                    newPhoneNumber: bobPhoneNumber2,
-                    isLocalRecipient: false
-                ),
-                tx: tx
+            let mergedRecipient = makeRecipient(
+                aci: bobAci,
+                oldPhoneNumber: bobPhoneNumber1,
+                newPhoneNumber: bobPhoneNumber2,
+                isLocalRecipient: false,
+                tx: tx,
             )
+            mergeObserver.didLearnAssociation(
+                mergedRecipient: mergedRecipient,
+                tx: tx,
+            )
+            try! mergedRecipient.oldRecipient?.delete(tx.database)
 
             let threadIds = interactionStore.insertedInteractions.map { $0.uniqueThreadId }
             XCTAssertEqual(Set(threadIds), [])
@@ -122,9 +127,10 @@ class PhoneNumberChangedMessageInserterTest: XCTestCase {
                     aci: bobAci,
                     oldPhoneNumber: bobPhoneNumber2,
                     newPhoneNumber: bobPhoneNumber3,
-                    isLocalRecipient: false
+                    isLocalRecipient: false,
+                    tx: tx,
                 ),
-                tx: tx
+                tx: tx,
             )
 
             let threadIds = interactionStore.insertedInteractions.map { $0.uniqueThreadId }
@@ -139,9 +145,10 @@ class PhoneNumberChangedMessageInserterTest: XCTestCase {
                     aci: myAci,
                     oldPhoneNumber: myPhoneNumber1,
                     newPhoneNumber: myPhoneNumber2,
-                    isLocalRecipient: true
+                    isLocalRecipient: true,
+                    tx: tx,
                 ),
-                tx: tx
+                tx: tx,
             )
 
             let threadIds = interactionStore.insertedInteractions.map { $0.uniqueThreadId }
@@ -153,10 +160,11 @@ class PhoneNumberChangedMessageInserterTest: XCTestCase {
         aci: Aci,
         oldPhoneNumber: E164?,
         newPhoneNumber: E164,
-        isLocalRecipient: Bool
+        isLocalRecipient: Bool,
+        tx: DBWriteTransaction,
     ) -> MergedRecipient {
-        let oldRecipient = SignalRecipient(aci: aci, pni: nil, phoneNumber: oldPhoneNumber)
-        let newRecipient = oldRecipient.copyRecipient()
+        let oldRecipient = try! SignalRecipient.insertRecord(aci: aci, phoneNumber: oldPhoneNumber, tx: tx)
+        var newRecipient = oldRecipient
         newRecipient.phoneNumber = .init(stringValue: newPhoneNumber.stringValue, isDiscoverable: true)
         return MergedRecipient(isLocalRecipient: isLocalRecipient, oldRecipient: oldRecipient, newRecipient: newRecipient)
     }

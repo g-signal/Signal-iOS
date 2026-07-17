@@ -12,14 +12,14 @@ import Testing
 public class BackupListMediaManagerTests {
 
     let accountKeyStore: AccountKeyStore
-    let attachmentStore = AttachmentStoreImpl()
-    let backupAttachmentDownloadStore = BackupAttachmentDownloadStoreImpl()
+    let attachmentStore = AttachmentStore()
+    let backupAttachmentDownloadStore = BackupAttachmentDownloadStore()
     let backupAttachmentUploadScheduler = BackupAttachmentUploadSchedulerMock()
-    let backupAttachmentUploadStore = BackupAttachmentUploadStoreImpl()
-    fileprivate let backupRequestManager = BackupRequestManagerMock()
+    let backupAttachmentUploadStore = BackupAttachmentUploadStore()
+    private let backupRequestManager = BackupRequestManagerMock()
     let backupSettingsStore = BackupSettingsStore()
     let db = InMemoryDB()
-    let orphanedBackupAttachmentStore = OrphanedBackupAttachmentStoreImpl()
+    let orphanedBackupAttachmentStore = OrphanedBackupAttachmentStore()
     let remoteConfigManager = StubbableRemoteConfigManager()
     let tsAccountManager = MockTSAccountManager()
 
@@ -30,13 +30,13 @@ public class BackupListMediaManagerTests {
             Date()
         }
         self.accountKeyStore = AccountKeyStore(
-            backupSettingsStore: backupSettingsStore
+            backupSettingsStore: backupSettingsStore,
         )
         self.listMediaManager = BackupListMediaManagerImpl(
             accountKeyStore: accountKeyStore,
             attachmentStore: attachmentStore,
-            attachmentUploadStore: AttachmentUploadStoreImpl(
-                attachmentStore: attachmentStore
+            attachmentUploadStore: AttachmentUploadStore(
+                attachmentStore: attachmentStore,
             ),
             backupAttachmentDownloadProgress: BackupAttachmentDownloadProgressMock(),
             backupAttachmentDownloadStore: backupAttachmentDownloadStore,
@@ -44,13 +44,15 @@ public class BackupListMediaManagerTests {
             backupAttachmentUploadScheduler: backupAttachmentUploadScheduler,
             backupAttachmentUploadStore: backupAttachmentUploadStore,
             backupAttachmentUploadEraStore: BackupAttachmentUploadEraStore(),
+            backupListMediaStore: BackupListMediaStore(),
             backupRequestManager: backupRequestManager,
             backupSettingsStore: backupSettingsStore,
             dateProvider: dateProvider,
             db: db,
+            notificationPresenter: NoopNotificationPresenterImpl(),
             orphanedBackupAttachmentStore: orphanedBackupAttachmentStore,
             remoteConfigManager: remoteConfigManager,
-            tsAccountManager: tsAccountManager
+            tsAccountManager: tsAccountManager,
         )
     }
 
@@ -59,7 +61,7 @@ public class BackupListMediaManagerTests {
         let localUploadEra = "1"
 
         let remoteConfigCdnNumber: UInt32 = 100
-        remoteConfigManager.cachedConfig = RemoteConfig(
+        remoteConfigManager._currentConfig = RemoteConfig(
             clockSkew: 0,
             valueFlags: ["global.backups.mediaTierFallbackCdnNumber": "\(remoteConfigCdnNumber)"],
         )
@@ -87,10 +89,10 @@ public class BackupListMediaManagerTests {
                         sha256ContentHash: UUID().data,
                         incrementalMacInfo: nil,
                         uploadEra: localUploadEra,
-                        lastDownloadAttemptTimestamp: nil
+                        lastDownloadAttemptTimestamp: nil,
                     ),
                     scheduleDownload: true,
-                    tx: tx
+                    tx: tx,
                 )
             }
         }
@@ -101,7 +103,7 @@ public class BackupListMediaManagerTests {
             return BackupArchive.Response.StoredMedia(
                 cdn: orphanCdnNumber,
                 mediaId: UUID().uuidString,
-                objectLength: 100
+                objectLength: 100,
             )
         }
         // For other cases, we'll add duplicate entries on cdn at different
@@ -118,13 +120,13 @@ public class BackupListMediaManagerTests {
                 discoveredCdnNumberMedia.append(.init(
                     cdn: discoveredCdnNumber,
                     mediaId: mediaId.asBase64Url,
-                    objectLength: 100
+                    objectLength: 100,
                 ))
                 return insertAttachment(
                     mediaName: mediaName,
                     mediaTierInfo: nil,
                     scheduleUpload: true,
-                    tx: tx
+                    tx: tx,
                 )
             }
         }
@@ -139,12 +141,12 @@ public class BackupListMediaManagerTests {
                 matchingCdnNumberMedia.append(.init(
                     cdn: matchingCdnNumber,
                     mediaId: mediaId.asBase64Url,
-                    objectLength: 100
+                    objectLength: 100,
                 ))
                 orphanCdnNumberMedia.append(.init(
                     cdn: orphanCdnNumber,
                     mediaId: mediaId.asBase64Url,
-                    objectLength: 100
+                    objectLength: 100,
                 ))
                 return insertAttachment(
                     mediaName: mediaName,
@@ -154,9 +156,9 @@ public class BackupListMediaManagerTests {
                         sha256ContentHash: UUID().data,
                         incrementalMacInfo: nil,
                         uploadEra: localUploadEra,
-                        lastDownloadAttemptTimestamp: nil
+                        lastDownloadAttemptTimestamp: nil,
                     ),
-                    tx: tx
+                    tx: tx,
                 )
             }
         }
@@ -172,12 +174,12 @@ public class BackupListMediaManagerTests {
                     // instead of the other orphaned one below
                     cdn: remoteConfigCdnNumber,
                     mediaId: mediaId.asBase64Url,
-                    objectLength: 100
+                    objectLength: 100,
                 ))
                 orphanCdnNumberMedia.append(.init(
                     cdn: remoteConfigCdnNumber,
                     mediaId: mediaId.asBase64Url,
-                    objectLength: 100
+                    objectLength: 100,
                 ))
                 return insertAttachment(
                     mediaName: mediaName,
@@ -187,9 +189,9 @@ public class BackupListMediaManagerTests {
                         sha256ContentHash: UUID().data,
                         incrementalMacInfo: nil,
                         uploadEra: localUploadEra,
-                        lastDownloadAttemptTimestamp: nil
+                        lastDownloadAttemptTimestamp: nil,
                     ),
-                    tx: tx
+                    tx: tx,
                 )
             }
         }
@@ -200,32 +202,32 @@ public class BackupListMediaManagerTests {
                 storedMediaObjects: remoteOnlyCdnNumberMedia,
                 backupDir: "",
                 mediaDir: "",
-                cursor: "someCursor"
+                cursor: "someCursor",
             ),
             BackupArchive.Response.ListMediaResult(
                 storedMediaObjects: discoveredCdnNumberMedia,
                 backupDir: "",
                 mediaDir: "",
-                cursor: "someCursor"
+                cursor: "someCursor",
             ),
             BackupArchive.Response.ListMediaResult(
                 storedMediaObjects: matchingCdnNumberMedia,
                 backupDir: "",
                 mediaDir: "",
-                cursor: "someCursor"
+                cursor: "someCursor",
             ),
             BackupArchive.Response.ListMediaResult(
                 storedMediaObjects: nonMatchingCdnNumberMedia,
                 backupDir: "",
                 mediaDir: "",
-                cursor: "someCursor"
+                cursor: "someCursor",
             ),
             BackupArchive.Response.ListMediaResult(
                 storedMediaObjects: orphanCdnNumberMedia,
                 backupDir: "",
                 mediaDir: "",
-                cursor: nil
-            )
+                cursor: nil,
+            ),
         ]
 
         try await listMediaManager.queryListMediaIfNeeded()
@@ -237,10 +239,10 @@ public class BackupListMediaManagerTests {
                 let attachment = attachmentStore.fetch(id: attachmentId, tx: tx)!
                 #expect(attachment.mediaTierInfo == nil)
 
-                #expect(try! backupAttachmentDownloadStore.getEnqueuedDownload(
+                #expect(backupAttachmentDownloadStore.getEnqueuedDownload(
                     attachmentRowId: attachmentId,
                     thumbnail: false,
-                    tx: tx
+                    tx: tx,
                 ) == nil)
 
                 #expect(self.backupAttachmentUploadScheduler.enqueuedAttachmentIds.contains(attachmentId))
@@ -251,11 +253,12 @@ public class BackupListMediaManagerTests {
         db.read { tx in
             for orphanMedia in remoteOnlyCdnNumberMedia + orphanCdnNumberMedia {
                 let mediaId = try! Data.data(fromBase64Url: orphanMedia.mediaId)
-                #expect(try! OrphanedBackupAttachment
-                    .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaId) == mediaId)
-                    .filter(Column(OrphanedBackupAttachment.CodingKeys.cdnNumber) == orphanMedia.cdn)
-                    .fetchCount(tx.database)
-                    == 1
+                #expect(
+                    try! OrphanedBackupAttachment
+                        .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaId) == mediaId)
+                        .filter(Column(OrphanedBackupAttachment.CodingKeys.cdnNumber) == orphanMedia.cdn)
+                        .fetchCount(tx.database)
+                        == 1,
                 )
             }
         }
@@ -266,10 +269,11 @@ public class BackupListMediaManagerTests {
                 let attachment = attachmentStore.fetch(id: attachmentId, tx: tx)!
                 #expect(attachment.mediaTierInfo?.cdnNumber == discoveredCdnNumber)
 
-                #expect(try! QueuedBackupAttachmentUpload
-                    .filter(Column(QueuedBackupAttachmentUpload.CodingKeys.attachmentRowId) == attachmentId)
-                    .fetchCount(tx.database)
-                    == 0
+                #expect(
+                    try! QueuedBackupAttachmentUpload
+                        .filter(Column(QueuedBackupAttachmentUpload.CodingKeys.attachmentRowId) == attachmentId)
+                        .fetchCount(tx.database)
+                        == 0,
                 )
             }
         }
@@ -300,7 +304,7 @@ public class BackupListMediaManagerTests {
         mediaTierInfo: Attachment.MediaTierInfo?,
         scheduleDownload: Bool = false,
         scheduleUpload: Bool = false,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> Attachment.IDType {
         let thread = TSThread(uniqueId: UUID().uuidString)
         try! thread.asRecord().insert(tx.database)
@@ -314,11 +318,11 @@ public class BackupListMediaManagerTests {
                 sha256ContentHash: UUID().data,
                 mediaName: mediaName,
                 mediaTierInfo: mediaTierInfo,
-                thumbnailMediaTierInfo: nil
+                thumbnailMediaTierInfo: nil,
             )
         } else {
             attachmentParams = Attachment.ConstructionParams.mockStream(
-                mediaName: mediaName
+                mediaName: mediaName,
             )
         }
         var attachmentRecord = Attachment.Record(params: attachmentParams)
@@ -327,7 +331,7 @@ public class BackupListMediaManagerTests {
             let updateParams = Attachment.ConstructionParams.forUpdatingAsUploadedToMediaTier(
                 attachment: try! Attachment(record: attachmentRecord),
                 mediaTierInfo: mediaTierInfo,
-                mediaName: mediaName
+                mediaName: mediaName,
             )
             var updateRecord = Attachment.Record(params: updateParams)
             updateRecord.sqliteId = attachmentRecord.sqliteId
@@ -339,34 +343,35 @@ public class BackupListMediaManagerTests {
         let referenceParams = AttachmentReference.ConstructionParams.mock(
             owner: .thread(.threadWallpaperImage(.init(
                 threadRowId: thread.sqliteRowId!,
-                creationTimestamp: 0
-            )))
+                creationTimestamp: 0,
+            ))),
         )
-        let referenceRecord = try! referenceParams.buildRecord(
-            attachmentRowId: attachmentRecord.sqliteId!
+        let reference = try! attachmentStore.addReference(
+            referenceParams,
+            attachmentRowId: attachmentRecord.sqliteId!,
+            tx: tx,
         )
-        try! referenceRecord.insert(tx.database)
 
         if scheduleDownload {
             try! backupAttachmentDownloadStore.enqueue(
                 ReferencedAttachment(
-                    reference: AttachmentReference(record: referenceRecord as! AttachmentReference.ThreadAttachmentReferenceRecord),
-                    attachment: Attachment(record: attachmentRecord)
+                    reference: reference,
+                    attachment: Attachment(record: attachmentRecord),
                 ),
                 thumbnail: false,
                 canDownloadFromMediaTier: true,
                 state: .ready,
                 currentTimestamp: 0,
-                tx: tx
+                tx: tx,
             )
         }
 
         if scheduleUpload {
-            try! backupAttachmentUploadStore.enqueue(
-                Attachment(record: attachmentRecord).asStream()!,
+            backupAttachmentUploadStore.enqueue(
+                try! Attachment(record: attachmentRecord).asStream()!,
                 owner: .threadWallpaper,
                 fullsize: true,
-                tx: tx
+                tx: tx,
             )
         }
 

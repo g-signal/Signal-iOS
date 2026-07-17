@@ -11,8 +11,10 @@ public extension ChatListViewController {
     var presentedChatListViewController: ChatListViewController? {
         AssertIsOnMainThread()
 
-        guard let topViewController = navigationController?.topViewController as? ChatListViewController,
-              topViewController != self else {
+        guard
+            let topViewController = navigationController?.topViewController as? ChatListViewController,
+            topViewController != self
+        else {
             return nil
         }
         return topViewController
@@ -140,7 +142,8 @@ public extension ChatListViewController {
                 style: .plain,
                 target: chatList,
                 action: #selector(chatList.switchMultiSelectState),
-                accessibilityIdentifier: "select")
+                accessibilityIdentifier: "select",
+            )
         }
         show(chatList, sender: self)
     }
@@ -148,13 +151,15 @@ public extension ChatListViewController {
     func applyArchiveBackButton() {
         AssertIsOnMainThread()
 
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable { return }
+        if #available(iOS 26, *) { return }
 
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: CommonStrings.backButton,
-                                                           style: .plain,
-                                                           target: nil,
-                                                           action: nil,
-                                                           accessibilityIdentifier: "back")
+        navigationItem.backBarButtonItem = UIBarButtonItem(
+            title: CommonStrings.backButton,
+            style: .plain,
+            target: nil,
+            action: nil,
+            accessibilityIdentifier: "back",
+        )
     }
 }
 
@@ -190,7 +195,7 @@ extension ChatListViewController {
                 threadViewModel: threadViewModel,
                 action: .none,
                 focusMessageId: nil,
-                tx: tx
+                tx: tx,
             )
         }
         vc.previewSetup()
@@ -204,7 +209,7 @@ extension ChatListViewController {
         }
         presentThread(
             threadUniqueId: previewController.thread.uniqueId,
-            animated: false
+            animated: false,
         )
     }
 }

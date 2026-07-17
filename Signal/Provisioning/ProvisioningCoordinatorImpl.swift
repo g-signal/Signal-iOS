@@ -14,10 +14,9 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
     private let identityManager: OWSIdentityManager
     private let linkAndSyncManager: LinkAndSyncManager
     private let accountKeyStore: AccountKeyStore
-    private let messageFactory: Shims.MessageFactory
     private let networkManager: any NetworkManagerProtocol
     private let preKeyManager: PreKeyManager
-    private let profileManager: Shims.ProfileManager
+    private let profileManager: ProfileManager
     private let pushRegistrationManager: Shims.PushRegistrationManager
     private let receiptManager: Shims.ReceiptManager
     private let registrationStateChangeManager: RegistrationStateChangeManager
@@ -26,10 +25,10 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
     private let signalService: OWSSignalServiceProtocol
     private let storageServiceManager: StorageServiceManager
     private let svr: SecureValueRecovery
-    private let syncManager: Shims.SyncManager
+    private let syncManager: SyncManagerProtocol
     private let threadStore: ThreadStore
     private let tsAccountManager: TSAccountManager
-    private let udManager: Shims.UDManager
+    private let udManager: OWSUDManager
 
     init(
         chatConnectionManager: ChatConnectionManager,
@@ -37,10 +36,9 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         identityManager: OWSIdentityManager,
         linkAndSyncManager: LinkAndSyncManager,
         accountKeyStore: AccountKeyStore,
-        messageFactory: Shims.MessageFactory,
         networkManager: any NetworkManagerProtocol,
         preKeyManager: PreKeyManager,
-        profileManager: Shims.ProfileManager,
+        profileManager: ProfileManager,
         pushRegistrationManager: Shims.PushRegistrationManager,
         receiptManager: Shims.ReceiptManager,
         registrationStateChangeManager: RegistrationStateChangeManager,
@@ -49,17 +47,16 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         signalService: OWSSignalServiceProtocol,
         storageServiceManager: StorageServiceManager,
         svr: SecureValueRecovery,
-        syncManager: Shims.SyncManager,
+        syncManager: SyncManagerProtocol,
         threadStore: ThreadStore,
         tsAccountManager: TSAccountManager,
-        udManager: Shims.UDManager
+        udManager: OWSUDManager,
     ) {
         self.chatConnectionManager = chatConnectionManager
         self.db = db
         self.identityManager = identityManager
         self.linkAndSyncManager = linkAndSyncManager
         self.accountKeyStore = accountKeyStore
-        self.messageFactory = messageFactory
         self.networkManager = networkManager
         self.preKeyManager = preKeyManager
         self.profileManager = profileManager
@@ -80,7 +77,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
     func completeProvisioning(
         provisionMessage: LinkingProvisioningMessage,
         deviceName: String,
-        progressViewModel: LinkAndSyncSecondaryProgressViewModel
+        progressViewModel: LinkAndSyncSecondaryProgressViewModel,
     ) async throws(CompleteProvisioningError) {
         // * Primary devices that are re-registering can provision instead as long as either
         // the phone number or aci matches.
@@ -111,21 +108,21 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             deviceName: deviceName,
             aci: provisionMessage.aci,
             pni: provisionMessage.pni,
-            phoneNumber: phoneNumber
+            phoneNumber: phoneNumber,
         )
 
         try await continueFromLinkNSync(
             authedDevice: result.authedDevice,
             ephemeralBackupKey: provisionMessage.ephemeralBackupKey,
             progressViewModel: progressViewModel,
-            undoAllPreviousSteps: result.undoBlock
+            undoAllPreviousSteps: result.undoBlock,
         )
     }
 
     // MARK: Link'n'Sync
 
-    private class LinkAndSyncError: ProvisioningLinkAndSyncError {
-        let error: SecondaryLinkNSyncError
+    class LinkAndSyncError {
+        let error: any Error
         let ephemeralBackupKey: MessageRootBackupKey
         let authedDevice: AuthedDevice.Explicit
         let progressViewModel: LinkAndSyncSecondaryProgressViewModel
@@ -133,12 +130,12 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         weak var provisioningCoordinator: ProvisioningCoordinatorImpl?
 
         init(
-            error: SecondaryLinkNSyncError,
+            error: any Error,
             ephemeralBackupKey: MessageRootBackupKey,
             authedDevice: AuthedDevice.Explicit,
             progressViewModel: LinkAndSyncSecondaryProgressViewModel,
             undoAllPreviousSteps: @escaping () async throws -> Void,
-            provisioningCoordinator: ProvisioningCoordinatorImpl
+            provisioningCoordinator: ProvisioningCoordinatorImpl,
         ) {
             self.error = error
             self.ephemeralBackupKey = ephemeralBackupKey
@@ -156,7 +153,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
                 authedDevice: authedDevice,
                 ephemeralBackupKey: ephemeralBackupKey,
                 progressViewModel: progressViewModel,
-                undoAllPreviousSteps: undoAllPreviousSteps
+                undoAllPreviousSteps: undoAllPreviousSteps,
             )
         }
 
@@ -179,7 +176,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         authedDevice: AuthedDevice.Explicit,
         ephemeralBackupKey: MessageRootBackupKey?,
         progressViewModel: LinkAndSyncSecondaryProgressViewModel,
-        undoAllPreviousSteps: @escaping () async throws -> Void
+        undoAllPreviousSteps: @escaping () async throws -> Void,
     ) async throws(CompleteProvisioningError) {
         var didLinkNSync = false
         if let ephemeralBackupKey {
@@ -187,7 +184,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
                 ephemeralBackupKey: ephemeralBackupKey,
                 authedDevice: authedDevice,
                 progressViewModel: progressViewModel,
-                undoAllPreviousSteps: undoAllPreviousSteps
+                undoAllPreviousSteps: undoAllPreviousSteps,
             )
             didLinkNSync = true
         }
@@ -218,7 +215,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         deviceName: String,
         aci: Aci,
         pni: Pni,
-        phoneNumber: E164
+        phoneNumber: E164,
     ) async throws(CompleteProvisioningError) -> CompleteProvisioningStepResult {
         // Update censorship circumvention state as e164 could be changing.
         signalService.updateHasCensoredPhoneNumberDuringProvisioning(phoneNumber)
@@ -228,7 +225,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             deviceName: deviceName,
             aci: aci,
             pni: pni,
-            phoneNumber: phoneNumber
+            phoneNumber: phoneNumber,
         ).withUndoOnFailureStep {
             self.signalService.resetHasCensoredPhoneNumberFromProvisioning()
         }
@@ -239,25 +236,12 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         deviceName: String,
         aci: Aci,
         pni: Pni,
-        phoneNumber: E164
+        phoneNumber: E164,
     ) async throws(CompleteProvisioningError) -> CompleteProvisioningStepResult {
-        let prekeyBundles: RegistrationPreKeyUploadBundles
-        do {
-            // This should be the last failable thing we do before making the verification
-            // request, because if the verification request fails we need to clean up prekey
-            // state created by this method.
-            // If we did add new (failable) method calls between this and the verification
-            // request invocation, we would have to make sure we similarly clean up prekey
-            // state if there are failures.
-            prekeyBundles = try await self.preKeyManager
-                .createPreKeysForProvisioning(
-                    aciIdentityKeyPair: provisionMessage.aciIdentityKeyPair.asECKeyPair,
-                    pniIdentityKeyPair: provisionMessage.pniIdentityKeyPair.asECKeyPair
-                )
-                .value
-        } catch {
-            throw .genericError(error)
-        }
+        let prekeyBundles = await self.preKeyManager.createPreKeysForProvisioning(
+            aciIdentityKeyPair: provisionMessage.aciIdentityKeyPair.asECKeyPair,
+            pniIdentityKeyPair: provisionMessage.pniIdentityKeyPair.asECKeyPair,
+        )
 
         return try await completeProvisioning_createRegistrationIds(
             provisionMessage: provisionMessage,
@@ -265,12 +249,12 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             aci: aci,
             pni: pni,
             phoneNumber: phoneNumber,
-            prekeyBundles: prekeyBundles
+            prekeyBundles: prekeyBundles,
         ).withUndoOnFailureStep {
-            try await self.preKeyManager.finalizeRegistrationPreKeys(
+            await self.preKeyManager.finalizeRegistrationPreKeys(
                 prekeyBundles,
-                uploadDidSucceed: false
-            ).value
+                uploadDidSucceed: false,
+            )
         }
     }
 
@@ -280,7 +264,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         aci: Aci,
         pni: Pni,
         phoneNumber: E164,
-        prekeyBundles: RegistrationPreKeyUploadBundles
+        prekeyBundles: RegistrationPreKeyUploadBundles,
     ) async throws(CompleteProvisioningError) -> CompleteProvisioningStepResult {
         return try await completeProvisioning_verifyAndLinkOnServer(
             provisionMessage: provisionMessage,
@@ -290,7 +274,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             phoneNumber: phoneNumber,
             prekeyBundles: prekeyBundles,
             aciRegistrationId: RegistrationIdGenerator.generate(),
-            pniRegistrationId: RegistrationIdGenerator.generate()
+            pniRegistrationId: RegistrationIdGenerator.generate(),
         ).withUndoOnFailureStep {
             await self.db.awaitableWrite { tx in
                 self.tsAccountManager.clearRegistrationIds(tx: tx)
@@ -306,7 +290,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         phoneNumber: E164,
         prekeyBundles: RegistrationPreKeyUploadBundles,
         aciRegistrationId: UInt32,
-        pniRegistrationId: UInt32
+        pniRegistrationId: UInt32,
     ) async throws(CompleteProvisioningError) -> CompleteProvisioningStepResult {
         let apnRegistrationId: RegistrationRequestFactory.ApnRegistrationId?
         let encryptedDeviceName: Data
@@ -314,7 +298,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             apnRegistrationId = try await getApnRegistrationId()
             encryptedDeviceName = try OWSDeviceNames.encryptDeviceName(
                 plaintext: deviceName,
-                identityKeyPair: provisionMessage.aciIdentityKeyPair
+                identityKeyPair: provisionMessage.aciIdentityKeyPair,
             )
         } catch {
             throw .genericError(error)
@@ -329,7 +313,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             pniRegistrationId: pniRegistrationId,
             encryptedDeviceName: encryptedDeviceName,
             apnRegistrationId: apnRegistrationId,
-            prekeyBundles: prekeyBundles
+            prekeyBundles: prekeyBundles,
         )
 
         await registrationWebSocketManager.acquireRestrictedWebSocket(
@@ -341,7 +325,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             prekeyBundles: prekeyBundles,
             authedDevice: authedDevice,
             aciRegistrationId: aciRegistrationId,
-            pniRegistrationId: pniRegistrationId
+            pniRegistrationId: pniRegistrationId,
         ).withUndoOnFailureStep {
             try await self.undoVerifyAndLinkOnServer(authedDevice: authedDevice)
         }
@@ -352,24 +336,24 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         prekeyBundles: RegistrationPreKeyUploadBundles,
         authedDevice: AuthedDevice.Explicit,
         aciRegistrationId: UInt32,
-        pniRegistrationId: UInt32
+        pniRegistrationId: UInt32,
     ) async throws(CompleteProvisioningError) -> CompleteProvisioningStepResult {
         let error: CompleteProvisioningError? = await self.db.awaitableWrite { tx in
             self.identityManager.setIdentityKeyPair(
                 provisionMessage.aciIdentityKeyPair.asECKeyPair,
                 for: .aci,
-                tx: tx
+                tx: tx,
             )
             self.identityManager.setIdentityKeyPair(
                 provisionMessage.pniIdentityKeyPair.asECKeyPair,
                 for: .pni,
-                tx: tx
+                tx: tx,
             )
 
             self.profileManager.setLocalProfileKey(
                 provisionMessage.profileKey,
                 userProfileWriter: .linking,
-                tx: tx
+                transaction: tx,
             )
 
             self.tsAccountManager.setRegistrationId(aciRegistrationId, for: .aci, tx: tx)
@@ -379,7 +363,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
                 try svr.storeKeys(
                     fromProvisioningMessage: provisionMessage,
                     authedDevice: .explicit(authedDevice),
-                    tx: tx
+                    tx: tx,
                 )
             } catch {
                 switch error {
@@ -395,7 +379,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
 
             self.receiptManager.setAreReadReceiptsEnabled(
                 provisionMessage.areReadReceiptsEnabled,
-                tx: tx
+                tx: tx,
             )
 
             return nil
@@ -407,7 +391,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         return try await completeProvisioning_finalizePrekeys(
             provisionMessage: provisionMessage,
             prekeyBundles: prekeyBundles,
-            authedDevice: authedDevice
+            authedDevice: authedDevice,
         ).withUndoOnFailureStep {
             await self.db.awaitableWrite { tx in
                 self.identityManager.wipeIdentityKeysFromFailedProvisioning(tx: tx)
@@ -416,14 +400,14 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
                 self.profileManager.setLocalProfileKey(
                     Aes256Key.generateRandom(),
                     userProfileWriter: .linking,
-                    tx: tx
+                    transaction: tx,
                 )
                 self.svr.clearKeys(transaction: tx)
 
                 // reset to default (false)
                 self.receiptManager.setAreReadReceiptsEnabled(
                     false,
-                    tx: tx
+                    tx: tx,
                 )
 
                 self.accountKeyStore.wipeMediaRootBackupKeyFromFailedProvisioning(tx: tx)
@@ -434,15 +418,13 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
     private func completeProvisioning_finalizePrekeys(
         provisionMessage: LinkingProvisioningMessage,
         prekeyBundles: RegistrationPreKeyUploadBundles,
-        authedDevice: AuthedDevice.Explicit
+        authedDevice: AuthedDevice.Explicit,
     ) async throws(CompleteProvisioningError) -> CompleteProvisioningStepResult {
         do {
-            try await self.preKeyManager
+            await self.preKeyManager
                 .finalizeRegistrationPreKeys(prekeyBundles, uploadDidSucceed: true)
-                .value
             try await self.preKeyManager
                 .rotateOneTimePreKeysForRegistration(auth: authedDevice.authedAccount.chatServiceAuth)
-                .value
         } catch {
             throw .genericError(error)
         }
@@ -453,7 +435,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
                 await self.db.awaitableWrite { tx in
                     self.signalProtocolStoreManager.removeAllKeys(tx: tx)
                 }
-            }
+            },
         )
     }
 
@@ -463,7 +445,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         ephemeralBackupKey: MessageRootBackupKey,
         authedDevice: AuthedDevice.Explicit,
         progressViewModel: LinkAndSyncSecondaryProgressViewModel,
-        undoAllPreviousSteps: @escaping () async throws -> Void
+        undoAllPreviousSteps: @escaping () async throws -> Void,
     ) async throws(CompleteProvisioningError) {
         let linkNSyncProgress = await OWSSequentialProgress<SecondaryLinkNSyncProgressPhase>.createSink { progress in
             await MainActor.run {
@@ -476,17 +458,17 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
                 localIdentifiers: authedDevice.localIdentifiers,
                 auth: authedDevice.authedAccount.chatServiceAuth,
                 ephemeralBackupKey: ephemeralBackupKey,
-                progress: linkNSyncProgress
+                progress: linkNSyncProgress,
             )
-        } catch let error {
-            Logger.error("Failed link'n'sync \(error)")
+        } catch {
+            Logger.warn("Failed link'n'sync \(error)")
             throw .linkAndSyncError(LinkAndSyncError(
                 error: error,
                 ephemeralBackupKey: ephemeralBackupKey,
                 authedDevice: authedDevice,
                 progressViewModel: progressViewModel,
                 undoAllPreviousSteps: undoAllPreviousSteps,
-                provisioningCoordinator: self
+                provisioningCoordinator: self,
             ))
         }
     }
@@ -506,7 +488,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
                 capabilities: capabilities,
                 auth: authedDevice.authedAccount.chatServiceAuth,
                 networkManager: self.networkManager,
-                tsAccountManager: self.tsAccountManager
+                tsAccountManager: self.tsAccountManager,
             )
         } catch {
             throw .genericError(error)
@@ -519,7 +501,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
                 pni: authedDevice.pni,
                 authToken: authedDevice.authPassword,
                 deviceId: authedDevice.deviceId,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -527,13 +509,13 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
 
         return try await performNecessarySyncsAndRestores(
             authedDevice: authedDevice,
-            didLinkNSync: didLinkNSync
+            didLinkNSync: didLinkNSync,
         )
     }
 
     private func performNecessarySyncsAndRestores(
         authedDevice: AuthedDevice.Explicit,
-        didLinkNSync: Bool
+        didLinkNSync: Bool,
     ) async throws(CompleteProvisioningError) {
         func doSyncsAndRestores() async throws(CompleteProvisioningError) {
             try await performInitialStorageServiceRestore(authedDevice: .explicit(authedDevice))
@@ -553,7 +535,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
     }
 
     private func performInitialStorageServiceRestore(
-        authedDevice: AuthedDevice
+        authedDevice: AuthedDevice,
     ) async throws(CompleteProvisioningError) {
         do {
             try await self.storageServiceManager
@@ -576,7 +558,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         let orderedThreadIds: [String]
         do {
             orderedThreadIds = try await syncManager
-                .sendInitialSyncRequestsAwaitingCreatedThreadOrdering(timeout: 60)
+                .sendInitialSyncRequestsAwaitingCreatedThreadOrdering(timeoutSeconds: 60).awaitable()
         } catch {
             throw .genericError(error)
         }
@@ -590,7 +572,8 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
                         owsFailDebug("thread was unexpectedly nil")
                         continue
                     }
-                    self.messageFactory.insertInfoMessage(into: thread, messageType: .syncedThread, tx: tx)
+                    let infoMessage = TSInfoMessage(thread: thread, messageType: .syncedThread)
+                    infoMessage.anyInsert(transaction: tx)
                 }
             }
         }
@@ -607,7 +590,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         pniRegistrationId: UInt32,
         encryptedDeviceName: Data,
         apnRegistrationId: RegistrationRequestFactory.ApnRegistrationId?,
-        prekeyBundles: RegistrationPreKeyUploadBundles
+        prekeyBundles: RegistrationPreKeyUploadBundles,
     ) async throws(CompleteProvisioningError) -> AuthedDevice.Explicit {
         let serverAuthToken = generateServerAuthToken()
 
@@ -618,7 +601,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
                 profileKey: provisionMessage.profileKey,
                 aciRegistrationId: aciRegistrationId,
                 pniRegistrationId: pniRegistrationId,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -629,7 +612,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             accountAttributes: accountAttributes,
             apnRegistrationId: apnRegistrationId,
             prekeyBundles: prekeyBundles,
-            signalService: self.signalService
+            signalService: self.signalService,
         )
 
         let verifyDeviceResponse: ProvisioningServiceResponses.VerifySecondaryDeviceResponse
@@ -655,7 +638,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             phoneNumber: phoneNumber,
             pni: pni,
             deviceId: verifyDeviceResponse.deviceId,
-            authPassword: serverAuthToken
+            authPassword: serverAuthToken,
         )
         return authedDevice
     }
@@ -702,10 +685,10 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         profileKey: Aes256Key,
         aciRegistrationId: UInt32,
         pniRegistrationId: UInt32,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> AccountAttributes {
         let udAccessKey = SMKUDAccessKey(profileKey: profileKey).keyData.base64EncodedString()
-        let allowUnrestrictedUD = udManager.shouldAllowUnrestrictedAccessLocal(tx: tx)
+        let allowUnrestrictedUD = udManager.shouldAllowUnrestrictedAccessLocal(transaction: tx)
 
         // Linked-device provisioning uses the same AccountAttributes object as
         // primary-device registration; however, the reglock token is ignored by
@@ -713,7 +696,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
         let reglockToken: String? = nil
 
         let registrationRecoveryPassword = accountKeyStore.getMasterKey(tx: tx)?.data(
-            for: .registrationRecoveryPassword
+            for: .registrationRecoveryPassword,
         ).canonicalStringRepresentation
 
         let encryptedDeviceName = encryptedDeviceNameRaw.base64EncodedString()
@@ -732,7 +715,7 @@ class ProvisioningCoordinatorImpl: ProvisioningCoordinator {
             registrationRecoveryPassword: registrationRecoveryPassword,
             encryptedDeviceName: encryptedDeviceName,
             discoverableByPhoneNumber: phoneNumberDiscoverability,
-            hasSVRBackups: hasSVRBackups
+            capabilities: AccountAttributes.Capabilities(hasSVRBackups: hasSVRBackups),
         )
     }
 

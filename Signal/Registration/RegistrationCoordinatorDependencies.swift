@@ -11,6 +11,7 @@ public struct RegistrationCoordinatorDependencies {
     public let accountEntropyPoolGenerator: () -> AccountEntropyPool
     public let accountKeyStore: AccountKeyStore
     public let backupArchiveManager: BackupArchiveManager
+    public let backupIdService: BackupIdService
     public let backupNonceStore: BackupNonceMetadataStore
     public let backupRequestManager: BackupRequestManager
     public let changeNumberPniManager: ChangePhoneNumberPniManager
@@ -18,9 +19,8 @@ public struct RegistrationCoordinatorDependencies {
     public let contactsStore: RegistrationCoordinatorImpl.Shims.ContactsStore
     public let dateProvider: DateProvider
     public let db: any DB
-    let deviceTransferService: RegistrationCoordinatorImpl.Shims.DeviceTransferService
+    let deviceTransferService: any DeviceTransferServiceProtocol
     public let experienceManager: RegistrationCoordinatorImpl.Shims.ExperienceManager
-    public let featureFlags: RegistrationCoordinatorImpl.Shims.FeatureFlags
     public let identityManager: RegistrationCoordinatorImpl.Shims.IdentityManager
     public let localUsernameManager: LocalUsernameManager
     public let messagePipelineSupervisor: RegistrationCoordinatorImpl.Shims.MessagePipelineSupervisor
@@ -31,11 +31,12 @@ public struct RegistrationCoordinatorDependencies {
     public let preKeyManager: any PreKeyManager
     public let profileManager: RegistrationCoordinatorImpl.Shims.ProfileManager
     public let pushRegistrationManager: RegistrationCoordinatorImpl.Shims.PushRegistrationManager
-    let quickRestoreManager: RegistrationCoordinatorImpl.Shims.QuickRestoreManager
+    let quickRestoreManager: QuickRestoreManager
     public let receiptManager: RegistrationCoordinatorImpl.Shims.ReceiptManager
     public let registrationBackupErrorPresenter: RegistrationCoordinatorBackupErrorPresenter
     public let registrationStateChangeManager: RegistrationStateChangeManager
     let registrationWebSocketManager: any RegistrationWebSocketManager
+    public let remoteConfigManager: any RemoteConfigManager
     public let sessionManager: RegistrationSessionManager
     public let signalService: OWSSignalServiceProtocol
     public let storageServiceManager: RegistrationCoordinatorImpl.Shims.StorageServiceManager
@@ -53,6 +54,7 @@ public struct RegistrationCoordinatorDependencies {
             accountEntropyPoolGenerator: { AccountEntropyPool() },
             accountKeyStore: DependenciesBridge.shared.accountKeyStore,
             backupArchiveManager: DependenciesBridge.shared.backupArchiveManager,
+            backupIdService: DependenciesBridge.shared.backupIdService,
             backupNonceStore: BackupNonceMetadataStore(),
             backupRequestManager: DependenciesBridge.shared.backupRequestManager,
             changeNumberPniManager: DependenciesBridge.shared.changePhoneNumberPniManager,
@@ -60,9 +62,8 @@ public struct RegistrationCoordinatorDependencies {
             contactsStore: RegistrationCoordinatorImpl.Wrappers.ContactsStore(),
             dateProvider: { Date() },
             db: DependenciesBridge.shared.db,
-            deviceTransferService: RegistrationCoordinatorImpl.Wrappers.DeviceTransferService(AppEnvironment.shared.deviceTransferServiceRef),
+            deviceTransferService: AppEnvironment.shared.deviceTransferServiceRef,
             experienceManager: RegistrationCoordinatorImpl.Wrappers.ExperienceManager(),
-            featureFlags: RegistrationCoordinatorImpl.Wrappers.FeatureFlags(),
             identityManager: RegistrationCoordinatorImpl.Wrappers.IdentityManager(DependenciesBridge.shared.identityManager),
             localUsernameManager: DependenciesBridge.shared.localUsernameManager,
             messagePipelineSupervisor: RegistrationCoordinatorImpl.Wrappers.MessagePipelineSupervisor(SSKEnvironment.shared.messagePipelineSupervisorRef),
@@ -73,7 +74,7 @@ public struct RegistrationCoordinatorDependencies {
             preKeyManager: DependenciesBridge.shared.preKeyManager,
             profileManager: RegistrationCoordinatorImpl.Wrappers.ProfileManager(SSKEnvironment.shared.profileManagerRef),
             pushRegistrationManager: RegistrationCoordinatorImpl.Wrappers.PushRegistrationManager(AppEnvironment.shared.pushRegistrationManagerRef),
-            quickRestoreManager: RegistrationCoordinatorImpl.Wrappers.QuickRestoreManager(AppEnvironment.shared.quickRestoreManager),
+            quickRestoreManager: AppEnvironment.shared.quickRestoreManager,
             receiptManager: RegistrationCoordinatorImpl.Wrappers.ReceiptManager(SSKEnvironment.shared.receiptManagerRef),
             registrationBackupErrorPresenter: RegistrationCoordinatorBackupErrorPresenterImpl(),
             registrationStateChangeManager: DependenciesBridge.shared.registrationStateChangeManager,
@@ -82,6 +83,7 @@ public struct RegistrationCoordinatorDependencies {
                 messagePipelineSupervisor: SSKEnvironment.shared.messagePipelineSupervisorRef,
                 messageProcessor: SSKEnvironment.shared.messageProcessorRef,
             ),
+            remoteConfigManager: SSKEnvironment.shared.remoteConfigManagerRef,
             sessionManager: DependenciesBridge.shared.registrationSessionManager,
             signalService: SSKEnvironment.shared.signalServiceRef,
             storageServiceManager: RegistrationCoordinatorImpl.Wrappers.StorageServiceManager(SSKEnvironment.shared.storageServiceManagerRef),
@@ -91,7 +93,7 @@ public struct RegistrationCoordinatorDependencies {
             tsAccountManager: DependenciesBridge.shared.tsAccountManager,
             udManager: RegistrationCoordinatorImpl.Wrappers.UDManager(SSKEnvironment.shared.udManagerRef),
             usernameApiClient: RegistrationCoordinatorImpl.Wrappers.UsernameApiClient(DependenciesBridge.shared.usernameApiClient),
-            usernameLinkManager: DependenciesBridge.shared.usernameLinkManager
+            usernameLinkManager: DependenciesBridge.shared.usernameLinkManager,
         )
     }
 }

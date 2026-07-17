@@ -22,7 +22,7 @@ import PassKit
 /// 5. Intent confirmation
 ///     - Charges the user's payment method
 ///     - ``Stripe/confirmPaymentIntent(paymentIntentClientSecret:paymentIntentId:paymentMethodId:idempotencyKey:)``
-public struct Stripe {
+public enum Stripe {
     public struct PaymentIntent {
         let id: String
         let clientSecret: String
@@ -37,13 +37,13 @@ public struct Stripe {
     public static func boost(
         amount: FiatMoney,
         level: OneTimeBadgeLevel,
-        for paymentMethod: PaymentMethod
+        for paymentMethod: PaymentMethod,
     ) async throws -> ConfirmedPaymentIntent {
         let intent = try await createBoostPaymentIntent(for: amount, level: level, paymentMethod: paymentMethod.stripePaymentMethod)
         return try await confirmPaymentIntent(
             for: paymentMethod,
             clientSecret: intent.clientSecret,
-            paymentIntentId: intent.id
+            paymentIntentId: intent.id,
         )
     }
 
@@ -51,7 +51,7 @@ public struct Stripe {
     public static func createBoostPaymentIntent(
         for amount: FiatMoney,
         level: OneTimeBadgeLevel,
-        paymentMethod: OWSRequestFactory.StripePaymentMethod
+        paymentMethod: OWSRequestFactory.StripePaymentMethod,
     ) async throws -> PaymentIntent {
         // The description is never translated as it's populated into an
         // english only receipt by Stripe.
@@ -59,33 +59,27 @@ public struct Stripe {
             integerMoneyValue: DonationUtilities.integralAmount(for: amount),
             inCurrencyCode: amount.currencyCode,
             level: level.rawValue,
-            paymentMethod: paymentMethod
+            paymentMethod: paymentMethod,
         )
 
         let response = try await SSKEnvironment.shared.networkManagerRef
             .asyncRequest(request, retryPolicy: .hopefullyRecoverable)
-        guard let json = response.responseBodyJson else {
+        guard let parser = response.responseBodyParamParser else {
             throw OWSAssertionError("Missing or invalid JSON")
         }
-        guard let parser = ParamParser(responseObject: json) else {
-            throw OWSAssertionError("Failed to decode JSON response")
-        }
         return try PaymentIntent(
-            clientSecret: try parser.required(key: "clientSecret")
+            clientSecret: try parser.required(key: "clientSecret"),
         )
     }
 
     /// Steps 3 and 4: Payment source tokenization and creates payment method
     public static func createPaymentMethod(
-        with paymentMethod: PaymentMethod
+        with paymentMethod: PaymentMethod,
     ) async throws -> PaymentMethodID {
         do {
             let response = try await requestPaymentMethod(with: paymentMethod)
-            guard let json = response.responseBodyJson else {
-                throw OWSAssertionError("Missing responseBodyJson")
-            }
-            guard let parser = ParamParser(responseObject: json) else {
-                throw OWSAssertionError("Failed to decode JSON response")
+            guard let parser = response.responseBodyParamParser else {
+                throw OWSAssertionError("Missing or invalid JSON!")
             }
             return try parser.required(key: "id")
         } catch {
@@ -94,7 +88,7 @@ public struct Stripe {
     }
 
     private static func requestPaymentMethod(
-        with paymentMethod: PaymentMethod
+        with paymentMethod: PaymentMethod,
     ) async throws -> HTTPResponse {
         switch paymentMethod {
         case let .applePay(payment: payment):
@@ -118,13 +112,13 @@ public struct Stripe {
                 case let .oneTime(name: name):
                     return [
                         "billing_details[name]": name,
-                        "type": "ideal"
+                        "type": "ideal",
                     ]
                 case let .recurring(mandate: _, name: name, email: email):
                     return [
                         "billing_details[name]": name,
                         "billing_details[email]": email,
-                        "type": "ideal"
+                        "type": "ideal",
                     ]
                 }
             }()
@@ -135,7 +129,7 @@ public struct Stripe {
     }
 
     private static func requestPaymentMethod(
-        with tokenizationParameters: [String: any StripeQueryParamValue]
+        with tokenizationParameters: [String: any StripeQueryParamValue],
     ) async throws -> HTTPResponse {
         // Step 3: Payment source tokenization
         let tokenId = try await API.createToken(with: tokenizationParameters)
@@ -163,7 +157,7 @@ public struct Stripe {
     static func confirmPaymentIntent(
         for paymentMethod: PaymentMethod,
         clientSecret: String,
-        paymentIntentId: String
+        paymentIntentId: String,
     ) async throws -> ConfirmedPaymentIntent {
         // Steps 3 and 4: Payment source tokenization and payment method creation
         let paymentMethodId = try await createPaymentMethod(with: paymentMethod)
@@ -174,7 +168,7 @@ public struct Stripe {
             paymentIntentClientSecret: clientSecret,
             paymentIntentId: paymentIntentId,
             paymentMethodId: paymentMethodId,
-            callbackURL: paymentMethod.callbackURL
+            callbackURL: paymentMethod.callbackURL,
         )
     }
 
@@ -185,7 +179,7 @@ public struct Stripe {
         paymentIntentId: String,
         paymentMethodId: PaymentMethodID,
         callbackURL: String? = nil,
-        idempotencyKey: String? = nil
+        idempotencyKey: String? = nil,
     ) async throws -> ConfirmedPaymentIntent {
         do {
             let response = try await API.postForm(
@@ -196,15 +190,15 @@ public struct Stripe {
                     "return_url": callbackURL ?? RETURN_URL_FOR_3DS,
                 ].merging(
                     mandate?.parameters ?? [:],
-                    uniquingKeysWith: { _, new in new }
+                    uniquingKeysWith: { _, new in new },
                 ),
-                idempotencyKey: idempotencyKey
+                idempotencyKey: idempotencyKey,
             )
 
             return .init(
                 paymentIntentId: paymentIntentId,
                 paymentMethodId: paymentMethodId,
-                redirectToUrl: parseNextActionRedirectUrl(from: response.responseBodyJson)
+                redirectToUrl: parseNextActionRedirectUrl(from: response.responseBodyDict),
             )
         } catch {
             throw convertToStripeErrorIfPossible(error)
@@ -215,7 +209,7 @@ public struct Stripe {
         mandate: PaymentMethod.Mandate?,
         paymentMethodId: String,
         clientSecret: String,
-        callbackURL: String?
+        callbackURL: String?,
     ) async throws -> ConfirmedSetupIntent {
         do {
             let intentId = try API.id(for: clientSecret)
@@ -227,21 +221,18 @@ public struct Stripe {
                     "return_url": callbackURL ?? RETURN_URL_FOR_3DS,
                 ].merging(
                     mandate?.parameters ?? [:],
-                    uniquingKeysWith: { _, new in new }
-                )
+                    uniquingKeysWith: { _, new in new },
+                ),
             )
 
-            guard let json = response.responseBodyJson else {
-                throw OWSAssertionError("Missing responseBodyJson")
-            }
-            guard let parser = ParamParser(responseObject: json) else {
-                throw OWSAssertionError("Failed to decode JSON response")
+            guard let parser = response.responseBodyParamParser else {
+                throw OWSAssertionError("Missing or invalid JSON!")
             }
             let setupIntentId: String = try parser.required(key: "id")
             return .init(
                 setupIntentId: setupIntentId,
                 paymentMethodId: paymentMethodId,
-                redirectToUrl: parseNextActionRedirectUrl(from: response.responseBodyJson)
+                redirectToUrl: parseNextActionRedirectUrl(from: response.responseBodyDict),
             )
         } catch {
             throw convertToStripeErrorIfPossible(error)
@@ -250,7 +241,8 @@ public struct Stripe {
 }
 
 // MARK: - API
-fileprivate extension Stripe {
+
+private extension Stripe {
 
     static let publishableKey: String = TSConstants.isUsingProductionService
         ? "pk_live_6cmGZopuTsV8novGgJJW9JpC00vLIgtQ1D"
@@ -261,7 +253,7 @@ fileprivate extension Stripe {
     static let urlSession = OWSURLSession(
         baseUrl: URL(string: "https://api.stripe.com/v1/")!,
         securityPolicy: OWSURLSession.defaultSecurityPolicy,
-        configuration: URLSessionConfiguration.ephemeral
+        configuration: URLSessionConfiguration.ephemeral,
     )
 
     struct API {
@@ -292,7 +284,7 @@ fileprivate extension Stripe {
                 // Generate a fake transaction identifier
                 parameters["pk_token_transaction_id"] = "ApplePayStubs~4242424242424242~0~USD~\(UUID().uuidString)"
             } else {
-                parameters["pk_token_transaction_id"] =  payment.token.transactionIdentifier.nilIfEmpty
+                parameters["pk_token_transaction_id"] = payment.token.transactionIdentifier.nilIfEmpty
             }
 
             return parameters
@@ -330,14 +322,14 @@ fileprivate extension Stripe {
         ///
         /// [0]: https://stripe.com/docs/api/tokens/create_card
         static func parameters(
-            for creditOrDebitCard: PaymentMethod.CreditOrDebitCard
+            for creditOrDebitCard: PaymentMethod.CreditOrDebitCard,
         ) -> [String: String] {
             func pad(_ n: UInt8) -> String { n < 10 ? "0\(n)" : "\(n)" }
             return [
                 "card[number]": creditOrDebitCard.cardNumber,
                 "card[exp_month]": pad(creditOrDebitCard.expirationMonth),
                 "card[exp_year]": pad(creditOrDebitCard.expirationTwoDigitYear),
-                "card[cvc]": String(creditOrDebitCard.cvv)
+                "card[cvc]": String(creditOrDebitCard.cvv),
             ]
         }
 
@@ -346,11 +338,8 @@ fileprivate extension Stripe {
         /// Step 3 of the process. Payment source tokenization
         static func createToken(with tokenizationParameters: [String: any StripeQueryParamValue]) async throws -> Token {
             let response = try await postForm(endpoint: "tokens", parameters: tokenizationParameters)
-            guard let json = response.responseBodyJson else {
-                throw OWSAssertionError("Missing responseBodyJson")
-            }
-            guard let parser = ParamParser(responseObject: json) else {
-                throw OWSAssertionError("Failed to decode JSON response")
+            guard let parser = response.responseBodyParamParser else {
+                throw OWSAssertionError("Missing or invalid JSON!")
             }
             return try parser.required(key: "id")
         }
@@ -359,15 +348,15 @@ fileprivate extension Stripe {
         static func postForm(
             endpoint: String,
             parameters: [String: any StripeQueryParamValue],
-            idempotencyKey: String? = nil
+            idempotencyKey: String? = nil,
         ) async throws -> HTTPResponse {
             let formData = Data(try parameters.encodeStripeQueryParamValueToString().utf8)
 
             var headers: HttpHeaders = [
                 "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": authorizationHeader
+                "Authorization": authorizationHeader,
             ]
-            if let idempotencyKey = idempotencyKey {
+            if let idempotencyKey {
                 headers["Idempotency-Key"] = idempotencyKey
             }
 
@@ -375,13 +364,14 @@ fileprivate extension Stripe {
                 endpoint,
                 method: .post,
                 headers: headers,
-                body: formData
+                body: formData,
             )
         }
     }
 }
 
 // MARK: - Encoding URL query parameters
+
 private func percentEncodeStringForQueryParam(_ string: String) throws -> String {
     // characters not allowed taken from RFC 3986 Section 2.1 with exceptions for ? and / from RFC 3986 Section 3.4
     var charactersAllowed = CharacterSet.urlQueryAllowed
@@ -433,8 +423,9 @@ extension Dictionary<String, any StripeQueryParamValue>: StripeQueryParamValue {
 extension Stripe {
     private static func convertToStripeErrorIfPossible(_ error: Error) -> Error {
         guard
-            let responseJson = error.httpResponseJson as? [String: Any],
-            let errorJson = responseJson["error"] as? [String: Any],
+            let responseData = error.httpResponseData,
+            let responseDict = try? JSONSerialization.jsonObject(with: responseData) as? [String: Any],
+            let errorJson = responseDict["error"] as? [String: Any],
             let code = errorJson["code"] as? String,
             !code.isEmpty
         else {
@@ -445,6 +436,7 @@ extension Stripe {
 }
 
 // MARK: - Currency
+
 // See https://stripe.com/docs/currencies
 
 public extension Stripe {
@@ -462,7 +454,7 @@ public extension Stripe {
         "KRW",
         "PLN",
         "SEK",
-        "CHF"
+        "CHF",
     ]
     static let preferredCurrencyInfos: [Currency.Info] = {
         Currency.infos(for: preferredCurrencyCodes, ignoreMissingNames: true, shouldSort: false)
@@ -475,22 +467,22 @@ public extension Stripe {
 
     private static func isStripeIDEALCallback(_ url: URL) -> Bool {
         if
-            url.scheme == "https" &&
-            url.host == "signaldonations.org" &&
-            url.path == "/ideal" &&
-            url.user == nil &&
-            url.password == nil &&
+            url.scheme == "https",
+            url.host == "signaldonations.org",
+            url.path == "/ideal",
+            url.user == nil,
+            url.password == nil,
             url.port == nil
         {
             return true
         }
 
         if
-            url.scheme == "baxs" &&
-            url.host == "ideal" &&
-            url.path.isEmpty &&
-            url.user == nil &&
-            url.password == nil &&
+            url.scheme == "baxs",
+            url.host == "ideal",
+            url.path.isEmpty,
+            url.user == nil,
+            url.password == nil,
             url.port == nil
         {
             return true
@@ -504,7 +496,7 @@ public extension Stripe {
         case monthly(didSucceed: Bool, clientSecret: String, setupIntentId: String)
     }
 
-    static func parseStripeIDEALCallback(_ url: URL) -> IDEALCallbackType?{
+    static func parseStripeIDEALCallback(_ url: URL) -> IDEALCallbackType? {
         guard
             isStripeIDEALCallback(url),
             let components = URLComponents(string: url.absoluteString),
@@ -533,7 +525,7 @@ public extension Stripe {
         {
             return .oneTime(
                 didSucceed: redirectSuccess,
-                paymentIntentId: paymentIntentId
+                paymentIntentId: paymentIntentId,
             )
         }
 
@@ -546,7 +538,7 @@ public extension Stripe {
             return .monthly(
                 didSucceed: redirectSuccess,
                 clientSecret: clientSecret,
-                setupIntentId: setupIntentId
+                setupIntentId: setupIntentId,
             )
         }
 

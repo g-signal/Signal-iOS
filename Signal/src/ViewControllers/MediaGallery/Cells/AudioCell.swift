@@ -22,7 +22,7 @@ class AudioCell: MediaTileListModeCell {
                 attachmentStream: audioItem.attachmentStream,
                 owningMessage: audioItem.message,
                 metadata: audioItem.metadata,
-                receivedAtDate: audioItem.receivedAtDate
+                receivedAtDate: audioItem.receivedAtDate,
             )
         }
     }
@@ -46,7 +46,7 @@ class AudioCell: MediaTileListModeCell {
         let currentContentSizeCategory = UITraitCollection.current.preferredContentSizeCategory
         let displaysTopLabel = AudioAllMediaPresenter.hasAttachmentLabel(
             attachment: audioItem.attachmentStream.attachment,
-            isVoiceMessage: audioItem.isVoiceMessage
+            isVoiceMessage: audioItem.isVoiceMessage,
         )
 
         if let cellHeight: CGFloat = {
@@ -59,27 +59,29 @@ class AudioCell: MediaTileListModeCell {
             return cellHeight
         }
 
-        guard let audioAttachment = AudioAttachment(
-            attachmentStream: audioItem.attachmentStream,
-            owningMessage: audioItem.message,
-            metadata: audioItem.metadata,
-            receivedAtDate: audioItem.receivedAtDate
-        ) else {
+        guard
+            let audioAttachment = AudioAttachment(
+                attachmentStream: audioItem.attachmentStream,
+                owningMessage: audioItem.message,
+                metadata: audioItem.metadata,
+                receivedAtDate: audioItem.receivedAtDate,
+            )
+        else {
             return defaultCellHeight
         }
         let presenter = AudioAllMediaPresenter(
             sender: "",
             audioAttachment: audioAttachment,
             threadUniqueId: audioItem.thread.uniqueId,
-            playbackRate: .normal
+            playbackRate: .normal,
         )
         let audioMessageViewSize = AudioMessageView.measure(
             maxWidth: maxWidth,
             measurementBuilder: CVCellMeasurement.Builder(),
-            presentation: presenter
+            presentation: presenter,
         )
 
-        let cellHeight = audioMessageViewSize.height + AudioCell.contentInset.totalHeight + 2*Self.contentCardVerticalInset
+        let cellHeight = audioMessageViewSize.height + AudioCell.contentInset.totalHeight + 2 * Self.contentCardVerticalInset
         if displaysTopLabel {
             cellHeightsWithTopLabel[currentContentSizeCategory] = cellHeight
         } else {
@@ -122,13 +124,18 @@ class AudioCell: MediaTileListModeCell {
             return
         }
 
+        guard let localAci = DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: transaction)?.aci else {
+            owsFailDebug("User not registered")
+            return
+        }
+
         let threadAssociatedData = ThreadAssociatedData.fetchOrDefault(for: audioItem.thread, transaction: transaction)
         // Make an itemModel which is needed to play the audio file.
         // This is only used to save the playback rate, which is kind of nuts.
         let threadViewModel = ThreadViewModel(
             thread: audioItem.thread,
             forChatList: false,
-            transaction: transaction
+            transaction: transaction,
         )
         let conversationStyle = ConversationStyle(
             type: .default,
@@ -136,23 +143,27 @@ class AudioCell: MediaTileListModeCell {
             viewWidth: contentView.bounds.width,
             hasWallpaper: false,
             isWallpaperPhoto: false,
-            chatColor: ChatColorSettingStore.Constants.defaultColor.colorSetting
+            chatColor: ChatColorSettingStore.Constants.defaultColor.colorSetting,
         )
         let coreState = CVCoreState(conversationStyle: conversationStyle, mediaCache: audioItem.mediaCache)
         let viewStateSnapshot = CVViewStateSnapshot.mockSnapshotForStandaloneItems(
             coreState: coreState,
-            spoilerReveal: spoilerState.revealState
+            spoilerReveal: spoilerState.revealState,
         )
         let itemBuildingContext = CVItemBuildingContextImpl(
+            prevRenderState: nil,
             threadViewModel: threadViewModel,
             viewStateSnapshot: viewStateSnapshot,
             transaction: transaction,
-            avatarBuilder: CVAvatarBuilder(transaction: transaction)
+            avatarBuilder: CVAvatarBuilder(transaction: transaction),
+            localAci: localAci,
         )
-        guard let componentState = try? CVComponentState.build(
-            interaction: audioItem.interaction,
-            itemBuildingContext: itemBuildingContext
-        ) else {
+        guard
+            let componentState = try? CVComponentState.build(
+                interaction: audioItem.interaction,
+                itemBuildingContext: itemBuildingContext,
+            )
+        else {
             return
         }
         let itemViewState = CVItemViewState.Builder()
@@ -163,18 +174,18 @@ class AudioCell: MediaTileListModeCell {
             threadAssociatedData: threadAssociatedData,
             componentState: componentState,
             itemViewState: itemViewState.build(),
-            coreState: coreState
+            coreState: coreState,
         )
         let presentation = AudioAllMediaPresenter(
             sender: audioItem.metadata.abbreviatedSender,
             audioAttachment: audioAttachment,
             threadUniqueId: audioItem.thread.uniqueId,
-            playbackRate: AudioPlaybackRate(rawValue: itemModel.itemViewState.audioPlaybackRate)
+            playbackRate: AudioPlaybackRate(rawValue: itemModel.itemViewState.audioPlaybackRate),
         )
         let view = AudioMessageView(
             presentation: presentation,
             audioMessageViewDelegate: self,
-            mediaCache: audioItem.mediaCache
+            mediaCache: audioItem.mediaCache,
         )
         view.translatesAutoresizingMaskIntoConstraints = false
         if let incomingMessage = audioItem.interaction as? TSIncomingMessage {
@@ -187,7 +198,7 @@ class AudioCell: MediaTileListModeCell {
         measurementBuilder.cellSize = AudioMessageView.measure(
             maxWidth: contentView.bounds.width, // actual max width doesn't matter because there's no multiline text
             measurementBuilder: measurementBuilder,
-            presentation: presentation
+            presentation: presentation,
         )
         let cellMeasurement = measurementBuilder.build()
         view.configureForRendering(cellMeasurement: cellMeasurement, conversationStyle: conversationStyle)
@@ -212,24 +223,26 @@ class AudioCell: MediaTileListModeCell {
         NSLayoutConstraint.activate([
             audioMessageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Self.contentCardVerticalInset),
             audioMessageContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Self.contentCardVerticalInset),
-            audioMessageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -OWSTableViewController2.defaultHOuterMargin)
+            audioMessageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -OWSTableViewController2.defaultHOuterMargin),
         ])
 
         let constraintWithSelectionButton = audioMessageContainerView.leadingAnchor.constraint(
             equalTo: selectionButton.trailingAnchor,
-            constant: 12
+            constant: 12,
         )
         let constraintWithoutSelectionButton = audioMessageContainerView.leadingAnchor.constraint(
             equalTo: contentView.leadingAnchor,
-            constant: OWSTableViewController2.defaultHOuterMargin
+            constant: OWSTableViewController2.defaultHOuterMargin,
         )
 
         addGestureRecognizer(tapGestureRecognizer)
         addGestureRecognizer(panGestureRecognizer)
         tapGestureRecognizer.require(toFail: panGestureRecognizer)
 
-        super.setupViews(constraintWithSelectionButton: constraintWithSelectionButton,
-                         constraintWithoutSelectionButton: constraintWithoutSelectionButton)
+        super.setupViews(
+            constraintWithSelectionButton: constraintWithSelectionButton,
+            constraintWithoutSelectionButton: constraintWithoutSelectionButton,
+        )
     }
 
     @objc
@@ -252,7 +265,7 @@ class AudioCell: MediaTileListModeCell {
             let cvAudioPlayer = AppEnvironment.shared.cvAudioPlayerRef
             cvAudioPlayer.setPlaybackProgress(
                 progress: scrubbedTime,
-                forAttachmentStream: audioItem.attachmentStream.attachmentStream
+                forAttachmentStream: audioItem.attachmentStream.attachmentStream,
             )
         case .possible, .failed, .cancelled:
             audioMessageView.clearOverrideProgress(animated: false)
@@ -283,10 +296,10 @@ class AudioCell: MediaTileListModeCell {
         if let audioItem {
             accessibilityLabel = [
                 audioItem.localizedString,
-                MediaTileDateFormatter.formattedDateString(for: audioItem.receivedAtDate)
+                MediaTileDateFormatter.formattedDateString(for: audioItem.receivedAtDate),
             ]
-                .compactMap { $0 }
-                .joined(separator: ", ")
+            .compactMap { $0 }
+            .joined(separator: ", ")
         } else {
             accessibilityLabel = ""
         }

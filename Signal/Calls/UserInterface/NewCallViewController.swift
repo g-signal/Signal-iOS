@@ -4,8 +4,8 @@
 //
 
 import LibSignalClient
-import SignalUI
 import SignalServiceKit
+import SignalUI
 
 protocol NewCallViewControllerDelegate: AnyObject {
     func goToChat(for thread: TSThread)
@@ -19,28 +19,23 @@ class NewCallViewController: RecipientPickerContainerViewController {
 
         title = OWSLocalizedString(
             "NEW_CALL_TITLE",
-            comment: "Title for the contact picker that allows new calls to be started"
+            comment: "Title for the contact picker that allows new calls to be started",
         )
 
         recipientPicker.allowsAddByAddress = true
         recipientPicker.shouldShowInvites = true
         recipientPicker.delegate = self
 
-        addChild(recipientPicker)
-        view.addSubview(recipientPicker.view)
-        recipientPicker.view.autoPin(toTopLayoutGuideOf: self, withInset: 0)
-        recipientPicker.view.autoPinEdge(toSuperviewEdge: .leading)
-        recipientPicker.view.autoPinEdge(toSuperviewEdge: .trailing)
-        recipientPicker.view.autoPinEdge(toSuperviewEdge: .bottom)
+        addRecipientPicker()
 
-        navigationItem.leftBarButtonItem = .cancelButton(dismissingFrom: self)
+        navigationItem.rightBarButtonItem = .cancelButton(dismissingFrom: self)
     }
 
     private var callStarterContext: CallStarter.Context {
         .init(
             blockingManager: SSKEnvironment.shared.blockingManagerRef,
             databaseStorage: SSKEnvironment.shared.databaseStorageRef,
-            callService: AppEnvironment.shared.callService
+            callService: AppEnvironment.shared.callService,
         )
     }
 
@@ -48,7 +43,7 @@ class NewCallViewController: RecipientPickerContainerViewController {
         self.startCall(callStarter: CallStarter(
             contactThread: thread,
             withVideo: withVideo,
-            context: self.callStarterContext
+            context: self.callStarterContext,
         ))
 
     }
@@ -56,7 +51,7 @@ class NewCallViewController: RecipientPickerContainerViewController {
     private func startGroupCall(groupId: GroupIdentifier) {
         self.startCall(callStarter: CallStarter(
             groupId: groupId,
-            context: self.callStarterContext
+            context: self.callStarterContext,
         ))
     }
 
@@ -75,9 +70,9 @@ extension NewCallViewController: RecipientContextMenuHelperDelegate {
         UIAction(
             title: OWSLocalizedString(
                 "NEW_CALL_MESSAGE_ACTION_TITLE",
-                comment: "Title for a long-press context menu action to message a given recipient or group, triggered from a recipient in the New Call contact picker"
+                comment: "Title for a long-press context menu action to message a given recipient or group, triggered from a recipient in the New Call contact picker",
             ),
-            image: Theme.iconImage(.contextMenuMessage)
+            image: Theme.iconImage(.contextMenuMessage),
         ) { [weak self] _ in
             self?.delegate?.goToChat(for: thread)
         }
@@ -87,9 +82,9 @@ extension NewCallViewController: RecipientContextMenuHelperDelegate {
         UIAction(
             title: OWSLocalizedString(
                 "NEW_CALL_VOICE_CALL_ACTION_TITLE",
-                comment: "Title for a long-press context menu action to start a voice call, triggered from a recipient in the New Call contact picker"
+                comment: "Title for a long-press context menu action to start a voice call, triggered from a recipient in the New Call contact picker",
             ),
-            image: Theme.iconImage(.contextMenuVoiceCall)
+            image: Theme.iconImage(.contextMenuVoiceCall),
         ) { [weak self] _ in
             self?.startIndividualCall(thread: thread, withVideo: false)
         }
@@ -99,10 +94,10 @@ extension NewCallViewController: RecipientContextMenuHelperDelegate {
         UIAction(
             title: OWSLocalizedString(
                 "NEW_CALL_VIDEO_CALL_ACTION_TITLE",
-                comment: "Title for a long-press context menu action to start a video call, triggered from a recipient in the New Call contact picker"
+                comment: "Title for a long-press context menu action to start a video call, triggered from a recipient in the New Call contact picker",
             ),
             image: Theme.iconImage(.contextMenuVideoCall),
-            handler: handler
+            handler: handler,
         )
     }
 
@@ -122,7 +117,7 @@ extension NewCallViewController: RecipientContextMenuHelperDelegate {
             goToChatAction(thread: groupThread),
             startVideoCallAction { [weak self] _ in
                 self?.startGroupCall(groupId: try! groupThread.groupIdentifier)
-            }
+            },
         ]
     }
 }
@@ -133,7 +128,7 @@ extension NewCallViewController: RecipientPickerDelegate, UsernameLinkScanDelega
     func recipientPicker(
         _ recipientPickerViewController: RecipientPickerViewController,
         selectionStyleForRecipient recipient: PickedRecipient,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> UITableViewCell.SelectionStyle {
         return .default
     }
@@ -161,7 +156,7 @@ extension NewCallViewController: RecipientPickerDelegate, UsernameLinkScanDelega
             let voiceCallImageView = UIImageView(image: Theme.iconImage(.buttonVoiceCall))
             let videoCallButton = OWSButton(
                 imageName: Theme.iconName(.buttonVideoCall),
-                tintColor: nil
+                tintColor: nil,
             ) { [weak self] in
                 let thread = TSContactThread.getOrCreateThread(contactAddress: address)
                 self?.startIndividualCall(thread: thread, withVideo: true)
@@ -170,7 +165,7 @@ extension NewCallViewController: RecipientPickerDelegate, UsernameLinkScanDelega
                 voiceCallImageView,
                 videoCallButton,
             ])
-        case .group(_):
+        case .group:
             stackView.addArrangedSubview(UIImageView(image: Theme.iconImage(.buttonVideoCall)))
         }
 

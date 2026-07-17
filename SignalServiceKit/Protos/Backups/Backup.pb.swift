@@ -161,7 +161,7 @@ public enum BackupProto_GroupV2AccessLevel: SwiftProtobuf.Enum, Swift.CaseIterab
 
 }
 
-public struct BackupProto_BackupInfo: @unchecked Sendable {
+public struct BackupProto_BackupInfo: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -293,60 +293,94 @@ public struct BackupProto_AccountData: @unchecked Sendable {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var profileKey: Data = Data()
+  public var profileKey: Data {
+    get {return _storage._profileKey}
+    set {_uniqueStorage()._profileKey = newValue}
+  }
 
   public var username: String {
-    get {return _username ?? String()}
-    set {_username = newValue}
+    get {return _storage._username ?? String()}
+    set {_uniqueStorage()._username = newValue}
   }
   /// Returns true if `username` has been explicitly set.
-  public var hasUsername: Bool {return self._username != nil}
+  public var hasUsername: Bool {return _storage._username != nil}
   /// Clears the value of `username`. Subsequent reads from it will return its default value.
-  public mutating func clearUsername() {self._username = nil}
+  public mutating func clearUsername() {_uniqueStorage()._username = nil}
 
   public var usernameLink: BackupProto_AccountData.UsernameLink {
-    get {return _usernameLink ?? BackupProto_AccountData.UsernameLink()}
-    set {_usernameLink = newValue}
+    get {return _storage._usernameLink ?? BackupProto_AccountData.UsernameLink()}
+    set {_uniqueStorage()._usernameLink = newValue}
   }
   /// Returns true if `usernameLink` has been explicitly set.
-  public var hasUsernameLink: Bool {return self._usernameLink != nil}
+  public var hasUsernameLink: Bool {return _storage._usernameLink != nil}
   /// Clears the value of `usernameLink`. Subsequent reads from it will return its default value.
-  public mutating func clearUsernameLink() {self._usernameLink = nil}
+  public mutating func clearUsernameLink() {_uniqueStorage()._usernameLink = nil}
 
-  public var givenName: String = String()
+  public var givenName: String {
+    get {return _storage._givenName}
+    set {_uniqueStorage()._givenName = newValue}
+  }
 
-  public var familyName: String = String()
+  public var familyName: String {
+    get {return _storage._familyName}
+    set {_uniqueStorage()._familyName = newValue}
+  }
 
-  public var avatarURLPath: String = String()
+  public var avatarURLPath: String {
+    get {return _storage._avatarURLPath}
+    set {_uniqueStorage()._avatarURLPath = newValue}
+  }
 
   public var donationSubscriberData: BackupProto_AccountData.SubscriberData {
-    get {return _donationSubscriberData ?? BackupProto_AccountData.SubscriberData()}
-    set {_donationSubscriberData = newValue}
+    get {return _storage._donationSubscriberData ?? BackupProto_AccountData.SubscriberData()}
+    set {_uniqueStorage()._donationSubscriberData = newValue}
   }
   /// Returns true if `donationSubscriberData` has been explicitly set.
-  public var hasDonationSubscriberData: Bool {return self._donationSubscriberData != nil}
+  public var hasDonationSubscriberData: Bool {return _storage._donationSubscriberData != nil}
   /// Clears the value of `donationSubscriberData`. Subsequent reads from it will return its default value.
-  public mutating func clearDonationSubscriberData() {self._donationSubscriberData = nil}
+  public mutating func clearDonationSubscriberData() {_uniqueStorage()._donationSubscriberData = nil}
 
   public var accountSettings: BackupProto_AccountData.AccountSettings {
-    get {return _accountSettings ?? BackupProto_AccountData.AccountSettings()}
-    set {_accountSettings = newValue}
+    get {return _storage._accountSettings ?? BackupProto_AccountData.AccountSettings()}
+    set {_uniqueStorage()._accountSettings = newValue}
   }
   /// Returns true if `accountSettings` has been explicitly set.
-  public var hasAccountSettings: Bool {return self._accountSettings != nil}
+  public var hasAccountSettings: Bool {return _storage._accountSettings != nil}
   /// Clears the value of `accountSettings`. Subsequent reads from it will return its default value.
-  public mutating func clearAccountSettings() {self._accountSettings = nil}
+  public mutating func clearAccountSettings() {_uniqueStorage()._accountSettings = nil}
 
   public var backupsSubscriberData: BackupProto_AccountData.IAPSubscriberData {
-    get {return _backupsSubscriberData ?? BackupProto_AccountData.IAPSubscriberData()}
-    set {_backupsSubscriberData = newValue}
+    get {return _storage._backupsSubscriberData ?? BackupProto_AccountData.IAPSubscriberData()}
+    set {_uniqueStorage()._backupsSubscriberData = newValue}
   }
   /// Returns true if `backupsSubscriberData` has been explicitly set.
-  public var hasBackupsSubscriberData: Bool {return self._backupsSubscriberData != nil}
+  public var hasBackupsSubscriberData: Bool {return _storage._backupsSubscriberData != nil}
   /// Clears the value of `backupsSubscriberData`. Subsequent reads from it will return its default value.
-  public mutating func clearBackupsSubscriberData() {self._backupsSubscriberData = nil}
+  public mutating func clearBackupsSubscriberData() {_uniqueStorage()._backupsSubscriberData = nil}
 
-  public var svrPin: String = String()
+  public var svrPin: String {
+    get {return _storage._svrPin}
+    set {_uniqueStorage()._svrPin = newValue}
+  }
+
+  public var androidSpecificSettings: BackupProto_AccountData.AndroidSpecificSettings {
+    get {return _storage._androidSpecificSettings ?? BackupProto_AccountData.AndroidSpecificSettings()}
+    set {_uniqueStorage()._androidSpecificSettings = newValue}
+  }
+  /// Returns true if `androidSpecificSettings` has been explicitly set.
+  public var hasAndroidSpecificSettings: Bool {return _storage._androidSpecificSettings != nil}
+  /// Clears the value of `androidSpecificSettings`. Subsequent reads from it will return its default value.
+  public mutating func clearAndroidSpecificSettings() {_uniqueStorage()._androidSpecificSettings = nil}
+
+  public var bioText: String {
+    get {return _storage._bioText}
+    set {_uniqueStorage()._bioText = newValue}
+  }
+
+  public var bioEmoji: String {
+    get {return _storage._bioEmoji}
+    set {_uniqueStorage()._bioEmoji = newValue}
+  }
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -390,7 +424,135 @@ public struct BackupProto_AccountData: @unchecked Sendable {
 
   }
 
-  public struct UsernameLink: @unchecked Sendable {
+  public enum SentMediaQuality: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public typealias RawValue = Int
+
+    /// Interpret as "Standard"
+    case unknownQuality // = 0
+    case standard // = 1
+    case high // = 2
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .unknownQuality
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .unknownQuality
+      case 1: self = .standard
+      case 2: self = .high
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .unknownQuality: return 0
+      case .standard: return 1
+      case .high: return 2
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+    // The compiler won't synthesize support with the UNRECOGNIZED case.
+    public static let allCases: [BackupProto_AccountData.SentMediaQuality] = [
+      .unknownQuality,
+      .standard,
+      .high,
+    ]
+
+  }
+
+  public enum AppTheme: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public typealias RawValue = Int
+
+    /// Interpret as "System"
+    case unknownAppTheme // = 0
+    case system // = 1
+    case light // = 2
+    case dark // = 3
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .unknownAppTheme
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .unknownAppTheme
+      case 1: self = .system
+      case 2: self = .light
+      case 3: self = .dark
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .unknownAppTheme: return 0
+      case .system: return 1
+      case .light: return 2
+      case .dark: return 3
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+    // The compiler won't synthesize support with the UNRECOGNIZED case.
+    public static let allCases: [BackupProto_AccountData.AppTheme] = [
+      .unknownAppTheme,
+      .system,
+      .light,
+      .dark,
+    ]
+
+  }
+
+  public enum CallsUseLessDataSetting: SwiftProtobuf.Enum, Swift.CaseIterable {
+    public typealias RawValue = Int
+
+    /// Interpret as "Never"
+    case unknownCallDataSetting // = 0
+    case never // = 1
+    case mobileDataOnly // = 2
+    case wifiAndMobileData // = 3
+    case UNRECOGNIZED(Int)
+
+    public init() {
+      self = .unknownCallDataSetting
+    }
+
+    public init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .unknownCallDataSetting
+      case 1: self = .never
+      case 2: self = .mobileDataOnly
+      case 3: self = .wifiAndMobileData
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    public var rawValue: Int {
+      switch self {
+      case .unknownCallDataSetting: return 0
+      case .never: return 1
+      case .mobileDataOnly: return 2
+      case .wifiAndMobileData: return 3
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+    // The compiler won't synthesize support with the UNRECOGNIZED case.
+    public static let allCases: [BackupProto_AccountData.CallsUseLessDataSetting] = [
+      .unknownCallDataSetting,
+      .never,
+      .mobileDataOnly,
+      .wifiAndMobileData,
+    ]
+
+  }
+
+  public struct UsernameLink: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -465,6 +627,68 @@ public struct BackupProto_AccountData: @unchecked Sendable {
         .orange,
         .pink,
         .purple,
+      ]
+
+    }
+
+    public init() {}
+  }
+
+  public struct AutoDownloadSettings: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    public var images: BackupProto_AccountData.AutoDownloadSettings.AutoDownloadOption = .unknown
+
+    public var audio: BackupProto_AccountData.AutoDownloadSettings.AutoDownloadOption = .unknown
+
+    public var video: BackupProto_AccountData.AutoDownloadSettings.AutoDownloadOption = .unknown
+
+    public var documents: BackupProto_AccountData.AutoDownloadSettings.AutoDownloadOption = .unknown
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public enum AutoDownloadOption: SwiftProtobuf.Enum, Swift.CaseIterable {
+      public typealias RawValue = Int
+
+      /// Interpret as "Never"
+      case unknown // = 0
+      case never // = 1
+      case wifi // = 2
+      case wifiAndCellular // = 3
+      case UNRECOGNIZED(Int)
+
+      public init() {
+        self = .unknown
+      }
+
+      public init?(rawValue: Int) {
+        switch rawValue {
+        case 0: self = .unknown
+        case 1: self = .never
+        case 2: self = .wifi
+        case 3: self = .wifiAndCellular
+        default: self = .UNRECOGNIZED(rawValue)
+        }
+      }
+
+      public var rawValue: Int {
+        switch self {
+        case .unknown: return 0
+        case .never: return 1
+        case .wifi: return 2
+        case .wifiAndCellular: return 3
+        case .UNRECOGNIZED(let i): return i
+        }
+      }
+
+      // The compiler won't synthesize support with the UNRECOGNIZED case.
+      public static let allCases: [BackupProto_AccountData.AutoDownloadSettings.AutoDownloadOption] = [
+        .unknown,
+        .never,
+        .wifi,
+        .wifiAndCellular,
       ]
 
     }
@@ -596,6 +820,57 @@ public struct BackupProto_AccountData: @unchecked Sendable {
     /// Clears the value of `backupTier`. Subsequent reads from it will return its default value.
     public mutating func clearBackupTier() {_uniqueStorage()._backupTier = nil}
 
+    public var defaultSentMediaQuality: BackupProto_AccountData.SentMediaQuality {
+      get {return _storage._defaultSentMediaQuality}
+      set {_uniqueStorage()._defaultSentMediaQuality = newValue}
+    }
+
+    public var autoDownloadSettings: BackupProto_AccountData.AutoDownloadSettings {
+      get {return _storage._autoDownloadSettings ?? BackupProto_AccountData.AutoDownloadSettings()}
+      set {_uniqueStorage()._autoDownloadSettings = newValue}
+    }
+    /// Returns true if `autoDownloadSettings` has been explicitly set.
+    public var hasAutoDownloadSettings: Bool {return _storage._autoDownloadSettings != nil}
+    /// Clears the value of `autoDownloadSettings`. Subsequent reads from it will return its default value.
+    public mutating func clearAutoDownloadSettings() {_uniqueStorage()._autoDownloadSettings = nil}
+
+    /// If unset, consider screen lock to be disabled.
+    public var screenLockTimeoutMinutes: UInt32 {
+      get {return _storage._screenLockTimeoutMinutes ?? 0}
+      set {_uniqueStorage()._screenLockTimeoutMinutes = newValue}
+    }
+    /// Returns true if `screenLockTimeoutMinutes` has been explicitly set.
+    public var hasScreenLockTimeoutMinutes: Bool {return _storage._screenLockTimeoutMinutes != nil}
+    /// Clears the value of `screenLockTimeoutMinutes`. Subsequent reads from it will return its default value.
+    public mutating func clearScreenLockTimeoutMinutes() {_uniqueStorage()._screenLockTimeoutMinutes = nil}
+
+    /// If unset, consider pin reminders to be enabled.
+    public var pinReminders: Bool {
+      get {return _storage._pinReminders ?? false}
+      set {_uniqueStorage()._pinReminders = newValue}
+    }
+    /// Returns true if `pinReminders` has been explicitly set.
+    public var hasPinReminders: Bool {return _storage._pinReminders != nil}
+    /// Clears the value of `pinReminders`. Subsequent reads from it will return its default value.
+    public mutating func clearPinReminders() {_uniqueStorage()._pinReminders = nil}
+
+    /// If unset, treat the same as "Unknown" case
+    public var appTheme: BackupProto_AccountData.AppTheme {
+      get {return _storage._appTheme}
+      set {_uniqueStorage()._appTheme = newValue}
+    }
+
+    /// If unset, treat the same as "Unknown" case
+    public var callsUseLessDataSetting: BackupProto_AccountData.CallsUseLessDataSetting {
+      get {return _storage._callsUseLessDataSetting}
+      set {_uniqueStorage()._callsUseLessDataSetting = newValue}
+    }
+
+    public var allowSealedSenderFromAnyone: Bool {
+      get {return _storage._allowSealedSenderFromAnyone}
+      set {_uniqueStorage()._allowSealedSenderFromAnyone = newValue}
+    }
+
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
     public init() {}
@@ -603,7 +878,7 @@ public struct BackupProto_AccountData: @unchecked Sendable {
     fileprivate var _storage = _StorageClass.defaultInstance
   }
 
-  public struct SubscriberData: @unchecked Sendable {
+  public struct SubscriberData: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -619,7 +894,7 @@ public struct BackupProto_AccountData: @unchecked Sendable {
     public init() {}
   }
 
-  public struct IAPSubscriberData: @unchecked Sendable {
+  public struct IAPSubscriberData: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -661,13 +936,23 @@ public struct BackupProto_AccountData: @unchecked Sendable {
     public init() {}
   }
 
+  public struct AndroidSpecificSettings: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    public var useSystemEmoji: Bool = false
+
+    public var screenshotSecurity: Bool = false
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public init() {}
+  }
+
   public init() {}
 
-  fileprivate var _username: String? = nil
-  fileprivate var _usernameLink: BackupProto_AccountData.UsernameLink? = nil
-  fileprivate var _donationSubscriberData: BackupProto_AccountData.SubscriberData? = nil
-  fileprivate var _accountSettings: BackupProto_AccountData.AccountSettings? = nil
-  fileprivate var _backupsSubscriberData: BackupProto_AccountData.IAPSubscriberData? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 public struct BackupProto_Recipient: Sendable {
@@ -1137,7 +1422,7 @@ public struct BackupProto_Group: @unchecked Sendable {
   /// These exist to allow us to have the latest snapshot of a group during restoration without having to hit the network.
   /// We would use Groups.proto if we could, but we want a plaintext version to improve export readability.
   /// For documentation, defer to Groups.proto. The only name change is Group -> GroupSnapshot to avoid the naming conflict.
-  public struct GroupSnapshot: @unchecked Sendable {
+  public struct GroupSnapshot: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1204,7 +1489,7 @@ public struct BackupProto_Group: @unchecked Sendable {
     fileprivate var _accessControl: BackupProto_Group.AccessControl? = nil
   }
 
-  public struct GroupAttributeBlob: @unchecked Sendable {
+  public struct GroupAttributeBlob: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1247,7 +1532,7 @@ public struct BackupProto_Group: @unchecked Sendable {
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
     /// If unset, consider the field it represents to not be present
-    public enum OneOf_Content: Equatable, @unchecked Sendable {
+    public enum OneOf_Content: Equatable, Sendable {
       case title(String)
       case avatar(Data)
       case disappearingMessagesDuration(UInt32)
@@ -1258,7 +1543,7 @@ public struct BackupProto_Group: @unchecked Sendable {
     public init() {}
   }
 
-  public struct Member: @unchecked Sendable {
+  public struct Member: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1314,7 +1599,7 @@ public struct BackupProto_Group: @unchecked Sendable {
     public init() {}
   }
 
-  public struct MemberPendingProfileKey: @unchecked Sendable {
+  public struct MemberPendingProfileKey: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1339,7 +1624,7 @@ public struct BackupProto_Group: @unchecked Sendable {
     fileprivate var _member: BackupProto_Group.Member? = nil
   }
 
-  public struct MemberPendingAdminApproval: @unchecked Sendable {
+  public struct MemberPendingAdminApproval: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1353,7 +1638,7 @@ public struct BackupProto_Group: @unchecked Sendable {
     public init() {}
   }
 
-  public struct MemberBanned: @unchecked Sendable {
+  public struct MemberBanned: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -1540,7 +1825,7 @@ public struct BackupProto_Chat: Sendable {
 /// note:
 /// - room id can be derived from the root key
 /// - the presence of an admin key means this user is a call admin
-public struct BackupProto_CallLink: @unchecked Sendable {
+public struct BackupProto_CallLink: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1665,7 +1950,7 @@ public struct BackupProto_AdHocCall: Sendable {
   public init() {}
 }
 
-public struct BackupProto_DistributionListItem: @unchecked Sendable {
+public struct BackupProto_DistributionListItem: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1930,6 +2215,24 @@ public struct BackupProto_ChatItem: @unchecked Sendable {
     set {_uniqueStorage()._item = .directStoryReplyMessage(newValue)}
   }
 
+  public var poll: BackupProto_Poll {
+    get {
+      if case .poll(let v)? = _storage._item {return v}
+      return BackupProto_Poll()
+    }
+    set {_uniqueStorage()._item = .poll(newValue)}
+  }
+
+  /// only set if message is pinned
+  public var pinDetails: BackupProto_ChatItem.PinDetails {
+    get {return _storage._pinDetails ?? BackupProto_ChatItem.PinDetails()}
+    set {_uniqueStorage()._pinDetails = newValue}
+  }
+  /// Returns true if `pinDetails` has been explicitly set.
+  public var hasPinDetails: Bool {return _storage._pinDetails != nil}
+  /// Clears the value of `pinDetails`. Subsequent reads from it will return its default value.
+  public mutating func clearPinDetails() {_uniqueStorage()._pinDetails = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// If unset, importers should skip this item without throwing an error.
@@ -1952,6 +2255,7 @@ public struct BackupProto_ChatItem: @unchecked Sendable {
     case viewOnceMessage(BackupProto_ViewOnceMessage)
     /// group story reply messages are not backed up
     case directStoryReplyMessage(BackupProto_DirectStoryReplyMessage)
+    case poll(BackupProto_Poll)
 
   }
 
@@ -2003,6 +2307,44 @@ public struct BackupProto_ChatItem: @unchecked Sendable {
     // methods supported on all messages.
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public init() {}
+  }
+
+  public struct PinDetails: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    public var pinnedAtTimestamp: UInt64 = 0
+
+    public var pinExpiry: BackupProto_ChatItem.PinDetails.OneOf_PinExpiry? = nil
+
+    /// timestamp when the pin should expire
+    public var pinExpiresAtTimestamp: UInt64 {
+      get {
+        if case .pinExpiresAtTimestamp(let v)? = pinExpiry {return v}
+        return 0
+      }
+      set {pinExpiry = .pinExpiresAtTimestamp(newValue)}
+    }
+
+    public var pinNeverExpires: Bool {
+      get {
+        if case .pinNeverExpires(let v)? = pinExpiry {return v}
+        return false
+      }
+      set {pinExpiry = .pinNeverExpires(newValue)}
+    }
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public enum OneOf_PinExpiry: Equatable, Sendable {
+      /// timestamp when the pin should expire
+      case pinExpiresAtTimestamp(UInt64)
+      case pinNeverExpires(Bool)
+
+    }
 
     public init() {}
   }
@@ -2457,7 +2799,7 @@ public struct BackupProto_PaymentNotification: Sendable {
     }
 
     /// Used to map to payments on the ledger
-    public struct MobileCoinTxoIdentification: @unchecked Sendable {
+    public struct MobileCoinTxoIdentification: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2526,7 +2868,7 @@ public struct BackupProto_PaymentNotification: Sendable {
       public init() {}
     }
 
-    public struct Transaction: @unchecked Sendable {
+    public struct Transaction: Sendable {
       // SwiftProtobuf.Message conformance is added in an extension below. See the
       // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
       // methods supported on all messages.
@@ -2655,7 +2997,7 @@ public struct BackupProto_PaymentNotification: Sendable {
   fileprivate var _transactionDetails: BackupProto_PaymentNotification.TransactionDetails? = nil
 }
 
-public struct BackupProto_GiftBadge: @unchecked Sendable {
+public struct BackupProto_GiftBadge: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -3236,7 +3578,7 @@ public struct BackupProto_MessageAttachment: @unchecked Sendable {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-public struct BackupProto_FilePointer: @unchecked Sendable {
+public struct BackupProto_FilePointer: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -3324,7 +3666,7 @@ public struct BackupProto_FilePointer: @unchecked Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct LocatorInfo: @unchecked Sendable {
+  public struct LocatorInfo: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -3417,7 +3759,7 @@ public struct BackupProto_FilePointer: @unchecked Sendable {
 
     public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-    public enum OneOf_IntegrityCheck: Equatable, @unchecked Sendable {
+    public enum OneOf_IntegrityCheck: Equatable, Sendable {
       /// Set if file was at one point downloaded and its plaintextHash was calculated
       case plaintextHash(Data)
       /// Set if file has not been downloaded so its integrity has not been verified
@@ -3488,6 +3830,7 @@ public struct BackupProto_Quote: Sendable {
     case normal // = 1
     case giftBadge // = 2
     case viewOnce // = 3
+    case poll // = 4
     case UNRECOGNIZED(Int)
 
     public init() {
@@ -3500,6 +3843,7 @@ public struct BackupProto_Quote: Sendable {
       case 1: self = .normal
       case 2: self = .giftBadge
       case 3: self = .viewOnce
+      case 4: self = .poll
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
@@ -3510,6 +3854,7 @@ public struct BackupProto_Quote: Sendable {
       case .normal: return 1
       case .giftBadge: return 2
       case .viewOnce: return 3
+      case .poll: return 4
       case .UNRECOGNIZED(let i): return i
       }
     }
@@ -3520,6 +3865,7 @@ public struct BackupProto_Quote: Sendable {
       .normal,
       .giftBadge,
       .viewOnce,
+      .poll,
     ]
 
   }
@@ -3571,7 +3917,7 @@ public struct BackupProto_Quote: Sendable {
   fileprivate var _text: BackupProto_Text? = nil
 }
 
-public struct BackupProto_BodyRange: @unchecked Sendable {
+public struct BackupProto_BodyRange: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -3604,7 +3950,7 @@ public struct BackupProto_BodyRange: @unchecked Sendable {
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// If unset, importers should ignore the body range without throwing an error.
-  public enum OneOf_AssociatedValue: Equatable, @unchecked Sendable {
+  public enum OneOf_AssociatedValue: Equatable, Sendable {
     case mentionAci(Data)
     case style(BackupProto_BodyRange.Style)
 
@@ -3681,6 +4027,59 @@ public struct BackupProto_Reaction: Sendable {
   public var sortOrder: UInt64 = 0
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct BackupProto_Poll: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Between 1-100 characters
+  public var question: String = String()
+
+  public var allowMultiple: Bool = false
+
+  /// At least two
+  public var options: [BackupProto_Poll.PollOption] = []
+
+  public var hasEnded_p: Bool = false
+
+  public var reactions: [BackupProto_Reaction] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public struct PollOption: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    /// Between 1-100 characters
+    public var option: String = String()
+
+    public var votes: [BackupProto_Poll.PollOption.PollVote] = []
+
+    public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    public struct PollVote: Sendable {
+      // SwiftProtobuf.Message conformance is added in an extension below. See the
+      // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+      // methods supported on all messages.
+
+      /// A direct reference to Recipient proto id. Must be self or contact.
+      public var voterID: UInt64 = 0
+
+      /// Tracks how many times you voted.
+      public var voteCount: UInt32 = 0
+
+      public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+      public init() {}
+    }
+
+    public init() {}
+  }
 
   public init() {}
 }
@@ -3765,6 +4164,22 @@ public struct BackupProto_ChatUpdateMessage: Sendable {
     set {update = .learnedProfileChange(newValue)}
   }
 
+  public var pollTerminate: BackupProto_PollTerminateUpdate {
+    get {
+      if case .pollTerminate(let v)? = update {return v}
+      return BackupProto_PollTerminateUpdate()
+    }
+    set {update = .pollTerminate(newValue)}
+  }
+
+  public var pinMessage: BackupProto_PinMessageUpdate {
+    get {
+      if case .pinMessage(let v)? = update {return v}
+      return BackupProto_PinMessageUpdate()
+    }
+    set {update = .pinMessage(newValue)}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   /// If unset, importers should ignore the update message without throwing an error.
@@ -3778,6 +4193,8 @@ public struct BackupProto_ChatUpdateMessage: Sendable {
     case individualCall(BackupProto_IndividualCall)
     case groupCall(BackupProto_GroupCall)
     case learnedProfileChange(BackupProto_LearnedProfileChatUpdate)
+    case pollTerminate(BackupProto_PollTerminateUpdate)
+    case pinMessage(BackupProto_PinMessageUpdate)
 
   }
 
@@ -4625,7 +5042,7 @@ public struct BackupProto_GroupChangeChatUpdate: Sendable {
   public init() {}
 }
 
-public struct BackupProto_GenericGroupUpdate: @unchecked Sendable {
+public struct BackupProto_GenericGroupUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4646,7 +5063,7 @@ public struct BackupProto_GenericGroupUpdate: @unchecked Sendable {
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupCreationUpdate: @unchecked Sendable {
+public struct BackupProto_GroupCreationUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4667,7 +5084,7 @@ public struct BackupProto_GroupCreationUpdate: @unchecked Sendable {
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupNameUpdate: @unchecked Sendable {
+public struct BackupProto_GroupNameUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4699,7 +5116,7 @@ public struct BackupProto_GroupNameUpdate: @unchecked Sendable {
   fileprivate var _newGroupName: String? = nil
 }
 
-public struct BackupProto_GroupAvatarUpdate: @unchecked Sendable {
+public struct BackupProto_GroupAvatarUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4722,7 +5139,7 @@ public struct BackupProto_GroupAvatarUpdate: @unchecked Sendable {
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupDescriptionUpdate: @unchecked Sendable {
+public struct BackupProto_GroupDescriptionUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4754,7 +5171,7 @@ public struct BackupProto_GroupDescriptionUpdate: @unchecked Sendable {
   fileprivate var _newDescription: String? = nil
 }
 
-public struct BackupProto_GroupMembershipAccessLevelChangeUpdate: @unchecked Sendable {
+public struct BackupProto_GroupMembershipAccessLevelChangeUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4777,7 +5194,7 @@ public struct BackupProto_GroupMembershipAccessLevelChangeUpdate: @unchecked Sen
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupAttributesAccessLevelChangeUpdate: @unchecked Sendable {
+public struct BackupProto_GroupAttributesAccessLevelChangeUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4800,7 +5217,7 @@ public struct BackupProto_GroupAttributesAccessLevelChangeUpdate: @unchecked Sen
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupAnnouncementOnlyChangeUpdate: @unchecked Sendable {
+public struct BackupProto_GroupAnnouncementOnlyChangeUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4823,7 +5240,7 @@ public struct BackupProto_GroupAnnouncementOnlyChangeUpdate: @unchecked Sendable
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupAdminStatusUpdate: @unchecked Sendable {
+public struct BackupProto_GroupAdminStatusUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4849,7 +5266,7 @@ public struct BackupProto_GroupAdminStatusUpdate: @unchecked Sendable {
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupMemberLeftUpdate: @unchecked Sendable {
+public struct BackupProto_GroupMemberLeftUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4861,7 +5278,7 @@ public struct BackupProto_GroupMemberLeftUpdate: @unchecked Sendable {
   public init() {}
 }
 
-public struct BackupProto_GroupMemberRemovedUpdate: @unchecked Sendable {
+public struct BackupProto_GroupMemberRemovedUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4884,7 +5301,7 @@ public struct BackupProto_GroupMemberRemovedUpdate: @unchecked Sendable {
   fileprivate var _removerAci: Data? = nil
 }
 
-public struct BackupProto_SelfInvitedToGroupUpdate: @unchecked Sendable {
+public struct BackupProto_SelfInvitedToGroupUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4905,7 +5322,7 @@ public struct BackupProto_SelfInvitedToGroupUpdate: @unchecked Sendable {
   fileprivate var _inviterAci: Data? = nil
 }
 
-public struct BackupProto_SelfInvitedOtherUserToGroupUpdate: @unchecked Sendable {
+public struct BackupProto_SelfInvitedOtherUserToGroupUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4918,7 +5335,7 @@ public struct BackupProto_SelfInvitedOtherUserToGroupUpdate: @unchecked Sendable
   public init() {}
 }
 
-public struct BackupProto_GroupUnknownInviteeUpdate: @unchecked Sendable {
+public struct BackupProto_GroupUnknownInviteeUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4942,7 +5359,7 @@ public struct BackupProto_GroupUnknownInviteeUpdate: @unchecked Sendable {
   fileprivate var _inviterAci: Data? = nil
 }
 
-public struct BackupProto_GroupInvitationAcceptedUpdate: @unchecked Sendable {
+public struct BackupProto_GroupInvitationAcceptedUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4965,7 +5382,7 @@ public struct BackupProto_GroupInvitationAcceptedUpdate: @unchecked Sendable {
   fileprivate var _inviterAci: Data? = nil
 }
 
-public struct BackupProto_GroupInvitationDeclinedUpdate: @unchecked Sendable {
+public struct BackupProto_GroupInvitationDeclinedUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -4997,7 +5414,7 @@ public struct BackupProto_GroupInvitationDeclinedUpdate: @unchecked Sendable {
   fileprivate var _inviteeAci: Data? = nil
 }
 
-public struct BackupProto_GroupMemberJoinedUpdate: @unchecked Sendable {
+public struct BackupProto_GroupMemberJoinedUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5009,7 +5426,7 @@ public struct BackupProto_GroupMemberJoinedUpdate: @unchecked Sendable {
   public init() {}
 }
 
-public struct BackupProto_GroupMemberAddedUpdate: @unchecked Sendable {
+public struct BackupProto_GroupMemberAddedUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5046,7 +5463,7 @@ public struct BackupProto_GroupMemberAddedUpdate: @unchecked Sendable {
 }
 
 /// An invitation to self was revoked.
-public struct BackupProto_GroupSelfInvitationRevokedUpdate: @unchecked Sendable {
+public struct BackupProto_GroupSelfInvitationRevokedUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5070,7 +5487,7 @@ public struct BackupProto_GroupSelfInvitationRevokedUpdate: @unchecked Sendable 
 /// These invitees should never be the local user.
 /// Use GroupSelfInvitationRevokedUpdate in those cases.
 /// The inviter or updater can be the local user.
-public struct BackupProto_GroupInvitationRevokedUpdate: @unchecked Sendable {
+public struct BackupProto_GroupInvitationRevokedUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5091,7 +5508,7 @@ public struct BackupProto_GroupInvitationRevokedUpdate: @unchecked Sendable {
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  public struct Invitee: @unchecked Sendable {
+  public struct Invitee: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
@@ -5139,7 +5556,7 @@ public struct BackupProto_GroupInvitationRevokedUpdate: @unchecked Sendable {
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupJoinRequestUpdate: @unchecked Sendable {
+public struct BackupProto_GroupJoinRequestUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5151,7 +5568,7 @@ public struct BackupProto_GroupJoinRequestUpdate: @unchecked Sendable {
   public init() {}
 }
 
-public struct BackupProto_GroupJoinRequestApprovalUpdate: @unchecked Sendable {
+public struct BackupProto_GroupJoinRequestApprovalUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5177,7 +5594,7 @@ public struct BackupProto_GroupJoinRequestApprovalUpdate: @unchecked Sendable {
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupJoinRequestCanceledUpdate: @unchecked Sendable {
+public struct BackupProto_GroupJoinRequestCanceledUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5195,7 +5612,7 @@ public struct BackupProto_GroupJoinRequestCanceledUpdate: @unchecked Sendable {
 /// cancellation; if there was another open request immediately
 /// after, it will be a separate GroupJoinRequestUpdate, either
 /// in the same frame or in a subsequent frame.
-public struct BackupProto_GroupSequenceOfRequestsAndCancelsUpdate: @unchecked Sendable {
+public struct BackupProto_GroupSequenceOfRequestsAndCancelsUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5209,7 +5626,7 @@ public struct BackupProto_GroupSequenceOfRequestsAndCancelsUpdate: @unchecked Se
   public init() {}
 }
 
-public struct BackupProto_GroupInviteLinkResetUpdate: @unchecked Sendable {
+public struct BackupProto_GroupInviteLinkResetUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5230,30 +5647,7 @@ public struct BackupProto_GroupInviteLinkResetUpdate: @unchecked Sendable {
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupInviteLinkEnabledUpdate: @unchecked Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  public var updaterAci: Data {
-    get {return _updaterAci ?? Data()}
-    set {_updaterAci = newValue}
-  }
-  /// Returns true if `updaterAci` has been explicitly set.
-  public var hasUpdaterAci: Bool {return self._updaterAci != nil}
-  /// Clears the value of `updaterAci`. Subsequent reads from it will return its default value.
-  public mutating func clearUpdaterAci() {self._updaterAci = nil}
-
-  public var linkRequiresAdminApproval: Bool = false
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _updaterAci: Data? = nil
-}
-
-public struct BackupProto_GroupInviteLinkAdminApprovalUpdate: @unchecked Sendable {
+public struct BackupProto_GroupInviteLinkEnabledUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5276,7 +5670,30 @@ public struct BackupProto_GroupInviteLinkAdminApprovalUpdate: @unchecked Sendabl
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupInviteLinkDisabledUpdate: @unchecked Sendable {
+public struct BackupProto_GroupInviteLinkAdminApprovalUpdate: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var updaterAci: Data {
+    get {return _updaterAci ?? Data()}
+    set {_updaterAci = newValue}
+  }
+  /// Returns true if `updaterAci` has been explicitly set.
+  public var hasUpdaterAci: Bool {return self._updaterAci != nil}
+  /// Clears the value of `updaterAci`. Subsequent reads from it will return its default value.
+  public mutating func clearUpdaterAci() {self._updaterAci = nil}
+
+  public var linkRequiresAdminApproval: Bool = false
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _updaterAci: Data? = nil
+}
+
+public struct BackupProto_GroupInviteLinkDisabledUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5297,7 +5714,7 @@ public struct BackupProto_GroupInviteLinkDisabledUpdate: @unchecked Sendable {
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_GroupMemberJoinedByLinkUpdate: @unchecked Sendable {
+public struct BackupProto_GroupMemberJoinedByLinkUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5363,7 +5780,7 @@ public struct BackupProto_GroupV2MigrationDroppedMembersUpdate: Sendable {
 }
 
 /// For 1:1 timer updates, use ExpirationTimerChatUpdate.
-public struct BackupProto_GroupExpirationTimerUpdate: @unchecked Sendable {
+public struct BackupProto_GroupExpirationTimerUpdate: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5387,7 +5804,37 @@ public struct BackupProto_GroupExpirationTimerUpdate: @unchecked Sendable {
   fileprivate var _updaterAci: Data? = nil
 }
 
-public struct BackupProto_StickerPack: @unchecked Sendable {
+public struct BackupProto_PollTerminateUpdate: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var targetSentTimestamp: UInt64 = 0
+
+  /// Between 1-100 characters
+  public var question: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct BackupProto_PinMessageUpdate: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var targetSentTimestamp: UInt64 = 0
+
+  /// recipient id
+  public var authorID: UInt64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct BackupProto_StickerPack: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5800,7 +6247,7 @@ public struct BackupProto_ChatStyle: @unchecked Sendable {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-public struct BackupProto_NotificationProfile: @unchecked Sendable {
+public struct BackupProto_NotificationProfile: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5908,7 +6355,7 @@ public struct BackupProto_NotificationProfile: @unchecked Sendable {
   fileprivate var _emoji: String? = nil
 }
 
-public struct BackupProto_ChatFolder: @unchecked Sendable {
+public struct BackupProto_ChatFolder: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -5987,41 +6434,16 @@ public struct BackupProto_ChatFolder: @unchecked Sendable {
 fileprivate let _protobuf_package = "signal.backup"
 
 extension BackupProto_AvatarColor: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "A100"),
-    1: .same(proto: "A110"),
-    2: .same(proto: "A120"),
-    3: .same(proto: "A130"),
-    4: .same(proto: "A140"),
-    5: .same(proto: "A150"),
-    6: .same(proto: "A160"),
-    7: .same(proto: "A170"),
-    8: .same(proto: "A180"),
-    9: .same(proto: "A190"),
-    10: .same(proto: "A200"),
-    11: .same(proto: "A210"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0A100\0\u{1}A110\0\u{1}A120\0\u{1}A130\0\u{1}A140\0\u{1}A150\0\u{1}A160\0\u{1}A170\0\u{1}A180\0\u{1}A190\0\u{1}A200\0\u{1}A210\0")
 }
 
 extension BackupProto_GroupV2AccessLevel: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "ANY"),
-    2: .same(proto: "MEMBER"),
-    3: .same(proto: "ADMINISTRATOR"),
-    4: .same(proto: "UNSATISFIABLE"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}ANY\0\u{1}MEMBER\0\u{1}ADMINISTRATOR\0\u{1}UNSATISFIABLE\0")
 }
 
 extension BackupProto_BackupInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".BackupInfo"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "version"),
-    2: .same(proto: "backupTimeMs"),
-    3: .same(proto: "mediaRootBackupKey"),
-    4: .same(proto: "currentAppVersion"),
-    5: .same(proto: "firstAppVersion"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}version\0\u{1}backupTimeMs\0\u{1}mediaRootBackupKey\0\u{1}currentAppVersion\0\u{1}firstAppVersion\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -6071,16 +6493,7 @@ extension BackupProto_BackupInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 
 extension BackupProto_Frame: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Frame"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "account"),
-    2: .same(proto: "recipient"),
-    3: .same(proto: "chat"),
-    4: .same(proto: "chatItem"),
-    5: .same(proto: "stickerPack"),
-    6: .same(proto: "adHocCall"),
-    7: .same(proto: "notificationProfile"),
-    8: .same(proto: "chatFolder"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}account\0\u{1}recipient\0\u{1}chat\0\u{1}chatItem\0\u{1}stickerPack\0\u{1}adHocCall\0\u{1}notificationProfile\0\u{1}chatFolder\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -6249,109 +6662,177 @@ extension BackupProto_Frame: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
 
 extension BackupProto_AccountData: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".AccountData"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "profileKey"),
-    2: .same(proto: "username"),
-    3: .same(proto: "usernameLink"),
-    4: .same(proto: "givenName"),
-    5: .same(proto: "familyName"),
-    6: .same(proto: "avatarUrlPath"),
-    7: .same(proto: "donationSubscriberData"),
-    9: .same(proto: "accountSettings"),
-    10: .same(proto: "backupsSubscriberData"),
-    11: .same(proto: "svrPin"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}profileKey\0\u{1}username\0\u{1}usernameLink\0\u{1}givenName\0\u{1}familyName\0\u{1}avatarUrlPath\0\u{1}donationSubscriberData\0\u{2}\u{2}accountSettings\0\u{1}backupsSubscriberData\0\u{1}svrPin\0\u{1}androidSpecificSettings\0\u{1}bioText\0\u{1}bioEmoji\0\u{c}\u{8}\u{1}")
+
+  fileprivate class _StorageClass {
+    var _profileKey: Data = Data()
+    var _username: String? = nil
+    var _usernameLink: BackupProto_AccountData.UsernameLink? = nil
+    var _givenName: String = String()
+    var _familyName: String = String()
+    var _avatarURLPath: String = String()
+    var _donationSubscriberData: BackupProto_AccountData.SubscriberData? = nil
+    var _accountSettings: BackupProto_AccountData.AccountSettings? = nil
+    var _backupsSubscriberData: BackupProto_AccountData.IAPSubscriberData? = nil
+    var _svrPin: String = String()
+    var _androidSpecificSettings: BackupProto_AccountData.AndroidSpecificSettings? = nil
+    var _bioText: String = String()
+    var _bioEmoji: String = String()
+
+      // This property is used as the initial default value for new instances of the type.
+      // The type itself is protecting the reference to its storage via CoW semantics.
+      // This will force a copy to be made of this reference when the first mutation occurs;
+      // hence, it is safe to mark this as `nonisolated(unsafe)`.
+      static nonisolated(unsafe) let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _profileKey = source._profileKey
+      _username = source._username
+      _usernameLink = source._usernameLink
+      _givenName = source._givenName
+      _familyName = source._familyName
+      _avatarURLPath = source._avatarURLPath
+      _donationSubscriberData = source._donationSubscriberData
+      _accountSettings = source._accountSettings
+      _backupsSubscriberData = source._backupsSubscriberData
+      _svrPin = source._svrPin
+      _androidSpecificSettings = source._androidSpecificSettings
+      _bioText = source._bioText
+      _bioEmoji = source._bioEmoji
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.profileKey) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self._username) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._usernameLink) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.givenName) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self.familyName) }()
-      case 6: try { try decoder.decodeSingularStringField(value: &self.avatarURLPath) }()
-      case 7: try { try decoder.decodeSingularMessageField(value: &self._donationSubscriberData) }()
-      case 9: try { try decoder.decodeSingularMessageField(value: &self._accountSettings) }()
-      case 10: try { try decoder.decodeSingularMessageField(value: &self._backupsSubscriberData) }()
-      case 11: try { try decoder.decodeSingularStringField(value: &self.svrPin) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularBytesField(value: &_storage._profileKey) }()
+        case 2: try { try decoder.decodeSingularStringField(value: &_storage._username) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._usernameLink) }()
+        case 4: try { try decoder.decodeSingularStringField(value: &_storage._givenName) }()
+        case 5: try { try decoder.decodeSingularStringField(value: &_storage._familyName) }()
+        case 6: try { try decoder.decodeSingularStringField(value: &_storage._avatarURLPath) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._donationSubscriberData) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._accountSettings) }()
+        case 10: try { try decoder.decodeSingularMessageField(value: &_storage._backupsSubscriberData) }()
+        case 11: try { try decoder.decodeSingularStringField(value: &_storage._svrPin) }()
+        case 12: try { try decoder.decodeSingularMessageField(value: &_storage._androidSpecificSettings) }()
+        case 13: try { try decoder.decodeSingularStringField(value: &_storage._bioText) }()
+        case 14: try { try decoder.decodeSingularStringField(value: &_storage._bioEmoji) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.profileKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.profileKey, fieldNumber: 1)
-    }
-    try { if let v = self._username {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
-    } }()
-    try { if let v = self._usernameLink {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    } }()
-    if !self.givenName.isEmpty {
-      try visitor.visitSingularStringField(value: self.givenName, fieldNumber: 4)
-    }
-    if !self.familyName.isEmpty {
-      try visitor.visitSingularStringField(value: self.familyName, fieldNumber: 5)
-    }
-    if !self.avatarURLPath.isEmpty {
-      try visitor.visitSingularStringField(value: self.avatarURLPath, fieldNumber: 6)
-    }
-    try { if let v = self._donationSubscriberData {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
-    } }()
-    try { if let v = self._accountSettings {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
-    } }()
-    try { if let v = self._backupsSubscriberData {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
-    } }()
-    if !self.svrPin.isEmpty {
-      try visitor.visitSingularStringField(value: self.svrPin, fieldNumber: 11)
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      if !_storage._profileKey.isEmpty {
+        try visitor.visitSingularBytesField(value: _storage._profileKey, fieldNumber: 1)
+      }
+      try { if let v = _storage._username {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 2)
+      } }()
+      try { if let v = _storage._usernameLink {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      } }()
+      if !_storage._givenName.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._givenName, fieldNumber: 4)
+      }
+      if !_storage._familyName.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._familyName, fieldNumber: 5)
+      }
+      if !_storage._avatarURLPath.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._avatarURLPath, fieldNumber: 6)
+      }
+      try { if let v = _storage._donationSubscriberData {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._accountSettings {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+      } }()
+      try { if let v = _storage._backupsSubscriberData {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+      } }()
+      if !_storage._svrPin.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._svrPin, fieldNumber: 11)
+      }
+      try { if let v = _storage._androidSpecificSettings {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
+      } }()
+      if !_storage._bioText.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._bioText, fieldNumber: 13)
+      }
+      if !_storage._bioEmoji.isEmpty {
+        try visitor.visitSingularStringField(value: _storage._bioEmoji, fieldNumber: 14)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: BackupProto_AccountData, rhs: BackupProto_AccountData) -> Bool {
-    if lhs.profileKey != rhs.profileKey {return false}
-    if lhs._username != rhs._username {return false}
-    if lhs._usernameLink != rhs._usernameLink {return false}
-    if lhs.givenName != rhs.givenName {return false}
-    if lhs.familyName != rhs.familyName {return false}
-    if lhs.avatarURLPath != rhs.avatarURLPath {return false}
-    if lhs._donationSubscriberData != rhs._donationSubscriberData {return false}
-    if lhs._accountSettings != rhs._accountSettings {return false}
-    if lhs._backupsSubscriberData != rhs._backupsSubscriberData {return false}
-    if lhs.svrPin != rhs.svrPin {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._profileKey != rhs_storage._profileKey {return false}
+        if _storage._username != rhs_storage._username {return false}
+        if _storage._usernameLink != rhs_storage._usernameLink {return false}
+        if _storage._givenName != rhs_storage._givenName {return false}
+        if _storage._familyName != rhs_storage._familyName {return false}
+        if _storage._avatarURLPath != rhs_storage._avatarURLPath {return false}
+        if _storage._donationSubscriberData != rhs_storage._donationSubscriberData {return false}
+        if _storage._accountSettings != rhs_storage._accountSettings {return false}
+        if _storage._backupsSubscriberData != rhs_storage._backupsSubscriberData {return false}
+        if _storage._svrPin != rhs_storage._svrPin {return false}
+        if _storage._androidSpecificSettings != rhs_storage._androidSpecificSettings {return false}
+        if _storage._bioText != rhs_storage._bioText {return false}
+        if _storage._bioEmoji != rhs_storage._bioEmoji {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
 extension BackupProto_AccountData.PhoneNumberSharingMode: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "EVERYBODY"),
-    2: .same(proto: "NOBODY"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}EVERYBODY\0\u{1}NOBODY\0")
+}
+
+extension BackupProto_AccountData.SentMediaQuality: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN_QUALITY\0\u{1}STANDARD\0\u{1}HIGH\0")
+}
+
+extension BackupProto_AccountData.AppTheme: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN_APP_THEME\0\u{1}SYSTEM\0\u{1}LIGHT\0\u{1}DARK\0")
+}
+
+extension BackupProto_AccountData.CallsUseLessDataSetting: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN_CALL_DATA_SETTING\0\u{1}NEVER\0\u{1}MOBILE_DATA_ONLY\0\u{1}WIFI_AND_MOBILE_DATA\0")
 }
 
 extension BackupProto_AccountData.UsernameLink: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_AccountData.protoMessageName + ".UsernameLink"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "entropy"),
-    2: .same(proto: "serverId"),
-    3: .same(proto: "color"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}entropy\0\u{1}serverId\0\u{1}color\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -6390,44 +6871,61 @@ extension BackupProto_AccountData.UsernameLink: SwiftProtobuf.Message, SwiftProt
 }
 
 extension BackupProto_AccountData.UsernameLink.Color: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "BLUE"),
-    2: .same(proto: "WHITE"),
-    3: .same(proto: "GREY"),
-    4: .same(proto: "OLIVE"),
-    5: .same(proto: "GREEN"),
-    6: .same(proto: "ORANGE"),
-    7: .same(proto: "PINK"),
-    8: .same(proto: "PURPLE"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}BLUE\0\u{1}WHITE\0\u{1}GREY\0\u{1}OLIVE\0\u{1}GREEN\0\u{1}ORANGE\0\u{1}PINK\0\u{1}PURPLE\0")
+}
+
+extension BackupProto_AccountData.AutoDownloadSettings: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = BackupProto_AccountData.protoMessageName + ".AutoDownloadSettings"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}images\0\u{1}audio\0\u{1}video\0\u{1}documents\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularEnumField(value: &self.images) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self.audio) }()
+      case 3: try { try decoder.decodeSingularEnumField(value: &self.video) }()
+      case 4: try { try decoder.decodeSingularEnumField(value: &self.documents) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.images != .unknown {
+      try visitor.visitSingularEnumField(value: self.images, fieldNumber: 1)
+    }
+    if self.audio != .unknown {
+      try visitor.visitSingularEnumField(value: self.audio, fieldNumber: 2)
+    }
+    if self.video != .unknown {
+      try visitor.visitSingularEnumField(value: self.video, fieldNumber: 3)
+    }
+    if self.documents != .unknown {
+      try visitor.visitSingularEnumField(value: self.documents, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BackupProto_AccountData.AutoDownloadSettings, rhs: BackupProto_AccountData.AutoDownloadSettings) -> Bool {
+    if lhs.images != rhs.images {return false}
+    if lhs.audio != rhs.audio {return false}
+    if lhs.video != rhs.video {return false}
+    if lhs.documents != rhs.documents {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BackupProto_AccountData.AutoDownloadSettings.AutoDownloadOption: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}NEVER\0\u{1}WIFI\0\u{1}WIFI_AND_CELLULAR\0")
 }
 
 extension BackupProto_AccountData.AccountSettings: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_AccountData.protoMessageName + ".AccountSettings"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "readReceipts"),
-    2: .same(proto: "sealedSenderIndicators"),
-    3: .same(proto: "typingIndicators"),
-    4: .same(proto: "linkPreviews"),
-    5: .same(proto: "notDiscoverableByPhoneNumber"),
-    6: .same(proto: "preferContactAvatars"),
-    7: .same(proto: "universalExpireTimerSeconds"),
-    8: .same(proto: "preferredReactionEmoji"),
-    9: .same(proto: "displayBadgesOnProfile"),
-    10: .same(proto: "keepMutedChatsArchived"),
-    11: .same(proto: "hasSetMyStoriesPrivacy"),
-    12: .same(proto: "hasViewedOnboardingStory"),
-    13: .same(proto: "storiesDisabled"),
-    14: .same(proto: "storyViewReceiptsEnabled"),
-    15: .same(proto: "hasSeenGroupStoryEducationSheet"),
-    16: .same(proto: "hasCompletedUsernameOnboarding"),
-    17: .same(proto: "phoneNumberSharingMode"),
-    18: .same(proto: "defaultChatStyle"),
-    19: .same(proto: "customChatColors"),
-    20: .same(proto: "optimizeOnDeviceStorage"),
-    21: .same(proto: "backupTier"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}readReceipts\0\u{1}sealedSenderIndicators\0\u{1}typingIndicators\0\u{1}linkPreviews\0\u{1}notDiscoverableByPhoneNumber\0\u{1}preferContactAvatars\0\u{1}universalExpireTimerSeconds\0\u{1}preferredReactionEmoji\0\u{1}displayBadgesOnProfile\0\u{1}keepMutedChatsArchived\0\u{1}hasSetMyStoriesPrivacy\0\u{1}hasViewedOnboardingStory\0\u{1}storiesDisabled\0\u{1}storyViewReceiptsEnabled\0\u{1}hasSeenGroupStoryEducationSheet\0\u{1}hasCompletedUsernameOnboarding\0\u{1}phoneNumberSharingMode\0\u{1}defaultChatStyle\0\u{1}customChatColors\0\u{1}optimizeOnDeviceStorage\0\u{1}backupTier\0\u{2}\u{2}defaultSentMediaQuality\0\u{1}autoDownloadSettings\0\u{2}\u{2}screenLockTimeoutMinutes\0\u{1}pinReminders\0\u{1}appTheme\0\u{1}callsUseLessDataSetting\0\u{1}allowSealedSenderFromAnyone\0\u{c}\u{16}\u{1}\u{c}\u{19}\u{1}")
 
   fileprivate class _StorageClass {
     var _readReceipts: Bool = false
@@ -6451,16 +6949,19 @@ extension BackupProto_AccountData.AccountSettings: SwiftProtobuf.Message, SwiftP
     var _customChatColors: [BackupProto_ChatStyle.CustomChatColor] = []
     var _optimizeOnDeviceStorage: Bool = false
     var _backupTier: UInt64? = nil
+    var _defaultSentMediaQuality: BackupProto_AccountData.SentMediaQuality = .unknownQuality
+    var _autoDownloadSettings: BackupProto_AccountData.AutoDownloadSettings? = nil
+    var _screenLockTimeoutMinutes: UInt32? = nil
+    var _pinReminders: Bool? = nil
+    var _appTheme: BackupProto_AccountData.AppTheme = .unknownAppTheme
+    var _callsUseLessDataSetting: BackupProto_AccountData.CallsUseLessDataSetting = .unknownCallDataSetting
+    var _allowSealedSenderFromAnyone: Bool = false
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -6486,6 +6987,13 @@ extension BackupProto_AccountData.AccountSettings: SwiftProtobuf.Message, SwiftP
       _customChatColors = source._customChatColors
       _optimizeOnDeviceStorage = source._optimizeOnDeviceStorage
       _backupTier = source._backupTier
+      _defaultSentMediaQuality = source._defaultSentMediaQuality
+      _autoDownloadSettings = source._autoDownloadSettings
+      _screenLockTimeoutMinutes = source._screenLockTimeoutMinutes
+      _pinReminders = source._pinReminders
+      _appTheme = source._appTheme
+      _callsUseLessDataSetting = source._callsUseLessDataSetting
+      _allowSealedSenderFromAnyone = source._allowSealedSenderFromAnyone
     }
   }
 
@@ -6525,6 +7033,13 @@ extension BackupProto_AccountData.AccountSettings: SwiftProtobuf.Message, SwiftP
         case 19: try { try decoder.decodeRepeatedMessageField(value: &_storage._customChatColors) }()
         case 20: try { try decoder.decodeSingularBoolField(value: &_storage._optimizeOnDeviceStorage) }()
         case 21: try { try decoder.decodeSingularUInt64Field(value: &_storage._backupTier) }()
+        case 23: try { try decoder.decodeSingularEnumField(value: &_storage._defaultSentMediaQuality) }()
+        case 24: try { try decoder.decodeSingularMessageField(value: &_storage._autoDownloadSettings) }()
+        case 26: try { try decoder.decodeSingularUInt32Field(value: &_storage._screenLockTimeoutMinutes) }()
+        case 27: try { try decoder.decodeSingularBoolField(value: &_storage._pinReminders) }()
+        case 28: try { try decoder.decodeSingularEnumField(value: &_storage._appTheme) }()
+        case 29: try { try decoder.decodeSingularEnumField(value: &_storage._callsUseLessDataSetting) }()
+        case 30: try { try decoder.decodeSingularBoolField(value: &_storage._allowSealedSenderFromAnyone) }()
         default: break
         }
       }
@@ -6600,6 +7115,27 @@ extension BackupProto_AccountData.AccountSettings: SwiftProtobuf.Message, SwiftP
       try { if let v = _storage._backupTier {
         try visitor.visitSingularUInt64Field(value: v, fieldNumber: 21)
       } }()
+      if _storage._defaultSentMediaQuality != .unknownQuality {
+        try visitor.visitSingularEnumField(value: _storage._defaultSentMediaQuality, fieldNumber: 23)
+      }
+      try { if let v = _storage._autoDownloadSettings {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 24)
+      } }()
+      try { if let v = _storage._screenLockTimeoutMinutes {
+        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 26)
+      } }()
+      try { if let v = _storage._pinReminders {
+        try visitor.visitSingularBoolField(value: v, fieldNumber: 27)
+      } }()
+      if _storage._appTheme != .unknownAppTheme {
+        try visitor.visitSingularEnumField(value: _storage._appTheme, fieldNumber: 28)
+      }
+      if _storage._callsUseLessDataSetting != .unknownCallDataSetting {
+        try visitor.visitSingularEnumField(value: _storage._callsUseLessDataSetting, fieldNumber: 29)
+      }
+      if _storage._allowSealedSenderFromAnyone != false {
+        try visitor.visitSingularBoolField(value: _storage._allowSealedSenderFromAnyone, fieldNumber: 30)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -6630,6 +7166,13 @@ extension BackupProto_AccountData.AccountSettings: SwiftProtobuf.Message, SwiftP
         if _storage._customChatColors != rhs_storage._customChatColors {return false}
         if _storage._optimizeOnDeviceStorage != rhs_storage._optimizeOnDeviceStorage {return false}
         if _storage._backupTier != rhs_storage._backupTier {return false}
+        if _storage._defaultSentMediaQuality != rhs_storage._defaultSentMediaQuality {return false}
+        if _storage._autoDownloadSettings != rhs_storage._autoDownloadSettings {return false}
+        if _storage._screenLockTimeoutMinutes != rhs_storage._screenLockTimeoutMinutes {return false}
+        if _storage._pinReminders != rhs_storage._pinReminders {return false}
+        if _storage._appTheme != rhs_storage._appTheme {return false}
+        if _storage._callsUseLessDataSetting != rhs_storage._callsUseLessDataSetting {return false}
+        if _storage._allowSealedSenderFromAnyone != rhs_storage._allowSealedSenderFromAnyone {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -6641,11 +7184,7 @@ extension BackupProto_AccountData.AccountSettings: SwiftProtobuf.Message, SwiftP
 
 extension BackupProto_AccountData.SubscriberData: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_AccountData.protoMessageName + ".SubscriberData"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "subscriberId"),
-    2: .same(proto: "currencyCode"),
-    3: .same(proto: "manuallyCancelled"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}subscriberId\0\u{1}currencyCode\0\u{1}manuallyCancelled\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -6685,11 +7224,7 @@ extension BackupProto_AccountData.SubscriberData: SwiftProtobuf.Message, SwiftPr
 
 extension BackupProto_AccountData.IAPSubscriberData: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_AccountData.protoMessageName + ".IAPSubscriberData"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "subscriberId"),
-    2: .same(proto: "purchaseToken"),
-    3: .same(proto: "originalTransactionId"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}subscriberId\0\u{1}purchaseToken\0\u{1}originalTransactionId\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -6749,17 +7284,44 @@ extension BackupProto_AccountData.IAPSubscriberData: SwiftProtobuf.Message, Swif
   }
 }
 
+extension BackupProto_AccountData.AndroidSpecificSettings: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = BackupProto_AccountData.protoMessageName + ".AndroidSpecificSettings"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}useSystemEmoji\0\u{1}screenshotSecurity\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.useSystemEmoji) }()
+      case 2: try { try decoder.decodeSingularBoolField(value: &self.screenshotSecurity) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.useSystemEmoji != false {
+      try visitor.visitSingularBoolField(value: self.useSystemEmoji, fieldNumber: 1)
+    }
+    if self.screenshotSecurity != false {
+      try visitor.visitSingularBoolField(value: self.screenshotSecurity, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BackupProto_AccountData.AndroidSpecificSettings, rhs: BackupProto_AccountData.AndroidSpecificSettings) -> Bool {
+    if lhs.useSystemEmoji != rhs.useSystemEmoji {return false}
+    if lhs.screenshotSecurity != rhs.screenshotSecurity {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension BackupProto_Recipient: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Recipient"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "id"),
-    2: .same(proto: "contact"),
-    3: .same(proto: "group"),
-    4: .same(proto: "distributionList"),
-    5: .same(proto: "self"),
-    6: .same(proto: "releaseNotes"),
-    7: .same(proto: "callLink"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}contact\0\u{1}group\0\u{1}distributionList\0\u{1}self\0\u{1}releaseNotes\0\u{1}callLink\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -6899,29 +7461,7 @@ extension BackupProto_Recipient: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 
 extension BackupProto_Contact: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Contact"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "aci"),
-    2: .same(proto: "pni"),
-    3: .same(proto: "username"),
-    4: .same(proto: "e164"),
-    5: .same(proto: "blocked"),
-    6: .same(proto: "visibility"),
-    7: .same(proto: "registered"),
-    8: .same(proto: "notRegistered"),
-    9: .same(proto: "profileKey"),
-    10: .same(proto: "profileSharing"),
-    11: .same(proto: "profileGivenName"),
-    12: .same(proto: "profileFamilyName"),
-    13: .same(proto: "hideStory"),
-    14: .same(proto: "identityKey"),
-    15: .same(proto: "identityState"),
-    16: .same(proto: "nickname"),
-    17: .same(proto: "note"),
-    18: .same(proto: "systemGivenName"),
-    19: .same(proto: "systemFamilyName"),
-    20: .same(proto: "systemNickname"),
-    21: .same(proto: "avatarColor"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}aci\0\u{1}pni\0\u{1}username\0\u{1}e164\0\u{1}blocked\0\u{1}visibility\0\u{1}registered\0\u{1}notRegistered\0\u{1}profileKey\0\u{1}profileSharing\0\u{1}profileGivenName\0\u{1}profileFamilyName\0\u{1}hideStory\0\u{1}identityKey\0\u{1}identityState\0\u{1}nickname\0\u{1}note\0\u{1}systemGivenName\0\u{1}systemFamilyName\0\u{1}systemNickname\0\u{1}avatarColor\0")
 
   fileprivate class _StorageClass {
     var _aci: Data? = nil
@@ -6945,15 +7485,11 @@ extension BackupProto_Contact: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     var _systemNickname: String = String()
     var _avatarColor: BackupProto_AvatarColor? = nil
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -7160,19 +7696,11 @@ extension BackupProto_Contact: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 }
 
 extension BackupProto_Contact.IdentityState: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "DEFAULT"),
-    1: .same(proto: "VERIFIED"),
-    2: .same(proto: "UNVERIFIED"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0DEFAULT\0\u{1}VERIFIED\0\u{1}UNVERIFIED\0")
 }
 
 extension BackupProto_Contact.Visibility: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "VISIBLE"),
-    1: .same(proto: "HIDDEN"),
-    2: .same(proto: "HIDDEN_MESSAGE_REQUEST"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0VISIBLE\0\u{1}HIDDEN\0\u{1}HIDDEN_MESSAGE_REQUEST\0")
 }
 
 extension BackupProto_Contact.Registered: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
@@ -7196,9 +7724,7 @@ extension BackupProto_Contact.Registered: SwiftProtobuf.Message, SwiftProtobuf._
 
 extension BackupProto_Contact.NotRegistered: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_Contact.protoMessageName + ".NotRegistered"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "unregisteredTimestamp"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}unregisteredTimestamp\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7228,10 +7754,7 @@ extension BackupProto_Contact.NotRegistered: SwiftProtobuf.Message, SwiftProtobu
 
 extension BackupProto_Contact.Name: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_Contact.protoMessageName + ".Name"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "given"),
-    2: .same(proto: "family"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}given\0\u{1}family\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7266,15 +7789,7 @@ extension BackupProto_Contact.Name: SwiftProtobuf.Message, SwiftProtobuf._Messag
 
 extension BackupProto_Group: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Group"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "masterKey"),
-    2: .same(proto: "whitelisted"),
-    3: .same(proto: "hideStory"),
-    4: .same(proto: "storySendMode"),
-    5: .same(proto: "snapshot"),
-    6: .same(proto: "blocked"),
-    7: .same(proto: "avatarColor"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}masterKey\0\u{1}whitelisted\0\u{1}hideStory\0\u{1}storySendMode\0\u{1}snapshot\0\u{1}blocked\0\u{1}avatarColor\0")
 
   fileprivate class _StorageClass {
     var _masterKey: Data = Data()
@@ -7285,15 +7800,11 @@ extension BackupProto_Group: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     var _blocked: Bool = false
     var _avatarColor: BackupProto_AvatarColor? = nil
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -7389,29 +7900,12 @@ extension BackupProto_Group: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
 }
 
 extension BackupProto_Group.StorySendMode: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "DEFAULT"),
-    1: .same(proto: "DISABLED"),
-    2: .same(proto: "ENABLED"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0DEFAULT\0\u{1}DISABLED\0\u{1}ENABLED\0")
 }
 
 extension BackupProto_Group.GroupSnapshot: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_Group.protoMessageName + ".GroupSnapshot"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    2: .same(proto: "title"),
-    11: .same(proto: "description"),
-    3: .same(proto: "avatarUrl"),
-    4: .same(proto: "disappearingMessagesTimer"),
-    5: .same(proto: "accessControl"),
-    6: .same(proto: "version"),
-    7: .same(proto: "members"),
-    8: .same(proto: "membersPendingProfileKey"),
-    9: .same(proto: "membersPendingAdminApproval"),
-    10: .same(proto: "inviteLinkPassword"),
-    12: .standard(proto: "announcements_only"),
-    13: .standard(proto: "members_banned"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\u{2}title\0\u{1}avatarUrl\0\u{1}disappearingMessagesTimer\0\u{1}accessControl\0\u{1}version\0\u{1}members\0\u{1}membersPendingProfileKey\0\u{1}membersPendingAdminApproval\0\u{1}inviteLinkPassword\0\u{1}description\0\u{3}announcements_only\0\u{3}members_banned\0\u{c}\u{1}\u{1}")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7500,12 +7994,7 @@ extension BackupProto_Group.GroupSnapshot: SwiftProtobuf.Message, SwiftProtobuf.
 
 extension BackupProto_Group.GroupAttributeBlob: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_Group.protoMessageName + ".GroupAttributeBlob"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "title"),
-    2: .same(proto: "avatar"),
-    3: .same(proto: "disappearingMessagesDuration"),
-    4: .same(proto: "descriptionText"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}title\0\u{1}avatar\0\u{1}disappearingMessagesDuration\0\u{1}descriptionText\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7586,11 +8075,7 @@ extension BackupProto_Group.GroupAttributeBlob: SwiftProtobuf.Message, SwiftProt
 
 extension BackupProto_Group.Member: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_Group.protoMessageName + ".Member"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "userId"),
-    2: .same(proto: "role"),
-    5: .same(proto: "joinedAtVersion"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}userId\0\u{1}role\0\u{2}\u{3}joinedAtVersion\0\u{c}\u{3}\u{1}\u{c}\u{4}\u{1}")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7629,20 +8114,12 @@ extension BackupProto_Group.Member: SwiftProtobuf.Message, SwiftProtobuf._Messag
 }
 
 extension BackupProto_Group.Member.Role: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "DEFAULT"),
-    2: .same(proto: "ADMINISTRATOR"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}DEFAULT\0\u{1}ADMINISTRATOR\0")
 }
 
 extension BackupProto_Group.MemberPendingProfileKey: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_Group.protoMessageName + ".MemberPendingProfileKey"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "member"),
-    2: .same(proto: "addedByUserId"),
-    3: .same(proto: "timestamp"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}member\0\u{1}addedByUserId\0\u{1}timestamp\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7686,10 +8163,7 @@ extension BackupProto_Group.MemberPendingProfileKey: SwiftProtobuf.Message, Swif
 
 extension BackupProto_Group.MemberPendingAdminApproval: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_Group.protoMessageName + ".MemberPendingAdminApproval"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "userId"),
-    4: .same(proto: "timestamp"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}userId\0\u{2}\u{3}timestamp\0\u{c}\u{2}\u{1}\u{c}\u{3}\u{1}")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7724,10 +8198,7 @@ extension BackupProto_Group.MemberPendingAdminApproval: SwiftProtobuf.Message, S
 
 extension BackupProto_Group.MemberBanned: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_Group.protoMessageName + ".MemberBanned"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "userId"),
-    2: .same(proto: "timestamp"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}userId\0\u{1}timestamp\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7762,11 +8233,7 @@ extension BackupProto_Group.MemberBanned: SwiftProtobuf.Message, SwiftProtobuf._
 
 extension BackupProto_Group.AccessControl: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_Group.protoMessageName + ".AccessControl"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "attributes"),
-    2: .same(proto: "members"),
-    3: .same(proto: "addFromInviteLink"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}attributes\0\u{1}members\0\u{1}addFromInviteLink\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7805,20 +8272,12 @@ extension BackupProto_Group.AccessControl: SwiftProtobuf.Message, SwiftProtobuf.
 }
 
 extension BackupProto_Group.AccessControl.AccessRequired: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "ANY"),
-    2: .same(proto: "MEMBER"),
-    3: .same(proto: "ADMINISTRATOR"),
-    4: .same(proto: "UNSATISFIABLE"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}ANY\0\u{1}MEMBER\0\u{1}ADMINISTRATOR\0\u{1}UNSATISFIABLE\0")
 }
 
 extension BackupProto_Self: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Self"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "avatarColor"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}avatarColor\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7871,18 +8330,7 @@ extension BackupProto_ReleaseNotes: SwiftProtobuf.Message, SwiftProtobuf._Messag
 
 extension BackupProto_Chat: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Chat"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "id"),
-    2: .same(proto: "recipientId"),
-    3: .same(proto: "archived"),
-    4: .same(proto: "pinnedOrder"),
-    5: .same(proto: "expirationTimerMs"),
-    6: .same(proto: "muteUntilMs"),
-    7: .same(proto: "markedUnread"),
-    8: .same(proto: "dontNotifyForMentionsIfMuted"),
-    9: .same(proto: "style"),
-    10: .same(proto: "expireTimerVersion"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}recipientId\0\u{1}archived\0\u{1}pinnedOrder\0\u{1}expirationTimerMs\0\u{1}muteUntilMs\0\u{1}markedUnread\0\u{1}dontNotifyForMentionsIfMuted\0\u{1}style\0\u{1}expireTimerVersion\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -7961,13 +8409,7 @@ extension BackupProto_Chat: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 
 extension BackupProto_CallLink: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".CallLink"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "rootKey"),
-    2: .same(proto: "adminKey"),
-    3: .same(proto: "name"),
-    4: .same(proto: "restrictions"),
-    5: .same(proto: "expirationMs"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}rootKey\0\u{1}adminKey\0\u{1}name\0\u{1}restrictions\0\u{1}expirationMs\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8020,21 +8462,12 @@ extension BackupProto_CallLink: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 }
 
 extension BackupProto_CallLink.Restrictions: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "NONE"),
-    2: .same(proto: "ADMIN_APPROVAL"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}NONE\0\u{1}ADMIN_APPROVAL\0")
 }
 
 extension BackupProto_AdHocCall: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".AdHocCall"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "callId"),
-    2: .same(proto: "recipientId"),
-    3: .same(proto: "state"),
-    4: .same(proto: "callTimestamp"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}callId\0\u{1}recipientId\0\u{1}state\0\u{1}callTimestamp\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8078,19 +8511,12 @@ extension BackupProto_AdHocCall: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 }
 
 extension BackupProto_AdHocCall.State: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN_STATE"),
-    1: .same(proto: "GENERIC"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN_STATE\0\u{1}GENERIC\0")
 }
 
 extension BackupProto_DistributionListItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".DistributionListItem"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "distributionId"),
-    2: .same(proto: "deletionTimestamp"),
-    3: .same(proto: "distributionList"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}distributionId\0\u{1}deletionTimestamp\0\u{1}distributionList\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8157,12 +8583,7 @@ extension BackupProto_DistributionListItem: SwiftProtobuf.Message, SwiftProtobuf
 
 extension BackupProto_DistributionList: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".DistributionList"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "name"),
-    2: .same(proto: "allowReplies"),
-    3: .same(proto: "privacyMode"),
-    4: .same(proto: "memberRecipientIds"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}allowReplies\0\u{1}privacyMode\0\u{1}memberRecipientIds\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8206,37 +8627,12 @@ extension BackupProto_DistributionList: SwiftProtobuf.Message, SwiftProtobuf._Me
 }
 
 extension BackupProto_DistributionList.PrivacyMode: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "ONLY_WITH"),
-    2: .same(proto: "ALL_EXCEPT"),
-    3: .same(proto: "ALL"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}ONLY_WITH\0\u{1}ALL_EXCEPT\0\u{1}ALL\0")
 }
 
 extension BackupProto_ChatItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ChatItem"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "chatId"),
-    2: .same(proto: "authorId"),
-    3: .same(proto: "dateSent"),
-    4: .same(proto: "expireStartDate"),
-    5: .same(proto: "expiresInMs"),
-    6: .same(proto: "revisions"),
-    7: .same(proto: "sms"),
-    8: .same(proto: "incoming"),
-    9: .same(proto: "outgoing"),
-    10: .same(proto: "directionless"),
-    11: .same(proto: "standardMessage"),
-    12: .same(proto: "contactMessage"),
-    13: .same(proto: "stickerMessage"),
-    14: .same(proto: "remoteDeletedMessage"),
-    15: .same(proto: "updateMessage"),
-    16: .same(proto: "paymentNotification"),
-    17: .same(proto: "giftBadge"),
-    18: .same(proto: "viewOnceMessage"),
-    19: .same(proto: "directStoryReplyMessage"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}chatId\0\u{1}authorId\0\u{1}dateSent\0\u{1}expireStartDate\0\u{1}expiresInMs\0\u{1}revisions\0\u{1}sms\0\u{1}incoming\0\u{1}outgoing\0\u{1}directionless\0\u{1}standardMessage\0\u{1}contactMessage\0\u{1}stickerMessage\0\u{1}remoteDeletedMessage\0\u{1}updateMessage\0\u{1}paymentNotification\0\u{1}giftBadge\0\u{1}viewOnceMessage\0\u{1}directStoryReplyMessage\0\u{1}poll\0\u{1}pinDetails\0")
 
   fileprivate class _StorageClass {
     var _chatID: UInt64 = 0
@@ -8248,16 +8644,13 @@ extension BackupProto_ChatItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     var _sms: Bool = false
     var _directionalDetails: BackupProto_ChatItem.OneOf_DirectionalDetails?
     var _item: BackupProto_ChatItem.OneOf_Item?
+    var _pinDetails: BackupProto_ChatItem.PinDetails? = nil
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -8271,6 +8664,7 @@ extension BackupProto_ChatItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       _sms = source._sms
       _directionalDetails = source._directionalDetails
       _item = source._item
+      _pinDetails = source._pinDetails
     }
   }
 
@@ -8452,6 +8846,20 @@ extension BackupProto_ChatItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
             _storage._item = .directStoryReplyMessage(v)
           }
         }()
+        case 20: try {
+          var v: BackupProto_Poll?
+          var hadOneofValue = false
+          if let current = _storage._item {
+            hadOneofValue = true
+            if case .poll(let m) = current {v = m}
+          }
+          try decoder.decodeSingularMessageField(value: &v)
+          if let v = v {
+            if hadOneofValue {try decoder.handleConflictingOneOf()}
+            _storage._item = .poll(v)
+          }
+        }()
+        case 21: try { try decoder.decodeSingularMessageField(value: &_storage._pinDetails) }()
         default: break
         }
       }
@@ -8537,8 +8945,15 @@ extension BackupProto_ChatItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         guard case .directStoryReplyMessage(let v)? = _storage._item else { preconditionFailure() }
         try visitor.visitSingularMessageField(value: v, fieldNumber: 19)
       }()
+      case .poll?: try {
+        guard case .poll(let v)? = _storage._item else { preconditionFailure() }
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 20)
+      }()
       case nil: break
       }
+      try { if let v = _storage._pinDetails {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 21)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -8557,6 +8972,7 @@ extension BackupProto_ChatItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         if _storage._sms != rhs_storage._sms {return false}
         if _storage._directionalDetails != rhs_storage._directionalDetails {return false}
         if _storage._item != rhs_storage._item {return false}
+        if _storage._pinDetails != rhs_storage._pinDetails {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -8568,12 +8984,7 @@ extension BackupProto_ChatItem: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 
 extension BackupProto_ChatItem.IncomingMessageDetails: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_ChatItem.protoMessageName + ".IncomingMessageDetails"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "dateReceived"),
-    2: .same(proto: "dateServerSent"),
-    3: .same(proto: "read"),
-    4: .same(proto: "sealedSender"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}dateReceived\0\u{1}dateServerSent\0\u{1}read\0\u{1}sealedSender\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8622,10 +9033,7 @@ extension BackupProto_ChatItem.IncomingMessageDetails: SwiftProtobuf.Message, Sw
 
 extension BackupProto_ChatItem.OutgoingMessageDetails: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_ChatItem.protoMessageName + ".OutgoingMessageDetails"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "sendStatus"),
-    2: .same(proto: "dateReceived"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}sendStatus\0\u{1}dateReceived\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8677,19 +9085,71 @@ extension BackupProto_ChatItem.DirectionlessMessageDetails: SwiftProtobuf.Messag
   }
 }
 
+extension BackupProto_ChatItem.PinDetails: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = BackupProto_ChatItem.protoMessageName + ".PinDetails"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}pinnedAtTimestamp\0\u{1}pinExpiresAtTimestamp\0\u{1}pinNeverExpires\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.pinnedAtTimestamp) }()
+      case 2: try {
+        var v: UInt64?
+        try decoder.decodeSingularUInt64Field(value: &v)
+        if let v = v {
+          if self.pinExpiry != nil {try decoder.handleConflictingOneOf()}
+          self.pinExpiry = .pinExpiresAtTimestamp(v)
+        }
+      }()
+      case 3: try {
+        var v: Bool?
+        try decoder.decodeSingularBoolField(value: &v)
+        if let v = v {
+          if self.pinExpiry != nil {try decoder.handleConflictingOneOf()}
+          self.pinExpiry = .pinNeverExpires(v)
+        }
+      }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if self.pinnedAtTimestamp != 0 {
+      try visitor.visitSingularUInt64Field(value: self.pinnedAtTimestamp, fieldNumber: 1)
+    }
+    switch self.pinExpiry {
+    case .pinExpiresAtTimestamp?: try {
+      guard case .pinExpiresAtTimestamp(let v)? = self.pinExpiry else { preconditionFailure() }
+      try visitor.visitSingularUInt64Field(value: v, fieldNumber: 2)
+    }()
+    case .pinNeverExpires?: try {
+      guard case .pinNeverExpires(let v)? = self.pinExpiry else { preconditionFailure() }
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 3)
+    }()
+    case nil: break
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BackupProto_ChatItem.PinDetails, rhs: BackupProto_ChatItem.PinDetails) -> Bool {
+    if lhs.pinnedAtTimestamp != rhs.pinnedAtTimestamp {return false}
+    if lhs.pinExpiry != rhs.pinExpiry {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension BackupProto_SendStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SendStatus"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "recipientId"),
-    2: .same(proto: "timestamp"),
-    3: .same(proto: "pending"),
-    4: .same(proto: "sent"),
-    5: .same(proto: "delivered"),
-    6: .same(proto: "read"),
-    7: .same(proto: "viewed"),
-    8: .same(proto: "skipped"),
-    9: .same(proto: "failed"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}recipientId\0\u{1}timestamp\0\u{1}pending\0\u{1}sent\0\u{1}delivered\0\u{1}read\0\u{1}viewed\0\u{1}skipped\0\u{1}failed\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8870,9 +9330,7 @@ extension BackupProto_SendStatus.Pending: SwiftProtobuf.Message, SwiftProtobuf._
 
 extension BackupProto_SendStatus.Sent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_SendStatus.protoMessageName + ".Sent"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "sealedSender"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}sealedSender\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8902,9 +9360,7 @@ extension BackupProto_SendStatus.Sent: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
 extension BackupProto_SendStatus.Delivered: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_SendStatus.protoMessageName + ".Delivered"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "sealedSender"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}sealedSender\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8934,9 +9390,7 @@ extension BackupProto_SendStatus.Delivered: SwiftProtobuf.Message, SwiftProtobuf
 
 extension BackupProto_SendStatus.Read: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_SendStatus.protoMessageName + ".Read"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "sealedSender"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}sealedSender\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8966,9 +9420,7 @@ extension BackupProto_SendStatus.Read: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
 extension BackupProto_SendStatus.Viewed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_SendStatus.protoMessageName + ".Viewed"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "sealedSender"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}sealedSender\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9017,9 +9469,7 @@ extension BackupProto_SendStatus.Skipped: SwiftProtobuf.Message, SwiftProtobuf._
 
 extension BackupProto_SendStatus.Failed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_SendStatus.protoMessageName + ".Failed"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "reason"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}reason\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9048,19 +9498,12 @@ extension BackupProto_SendStatus.Failed: SwiftProtobuf.Message, SwiftProtobuf._M
 }
 
 extension BackupProto_SendStatus.Failed.FailureReason: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "NETWORK"),
-    2: .same(proto: "IDENTITY_KEY_MISMATCH"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}NETWORK\0\u{1}IDENTITY_KEY_MISMATCH\0")
 }
 
 extension BackupProto_Text: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Text"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "body"),
-    2: .same(proto: "bodyRanges"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}body\0\u{1}bodyRanges\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9095,14 +9538,7 @@ extension BackupProto_Text: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 
 extension BackupProto_StandardMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".StandardMessage"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "quote"),
-    2: .same(proto: "text"),
-    3: .same(proto: "attachments"),
-    4: .same(proto: "linkPreview"),
-    5: .same(proto: "longText"),
-    6: .same(proto: "reactions"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}quote\0\u{1}text\0\u{1}attachments\0\u{1}linkPreview\0\u{1}longText\0\u{1}reactions\0")
 
   fileprivate class _StorageClass {
     var _quote: BackupProto_Quote? = nil
@@ -9112,15 +9548,11 @@ extension BackupProto_StandardMessage: SwiftProtobuf.Message, SwiftProtobuf._Mes
     var _longText: BackupProto_FilePointer? = nil
     var _reactions: [BackupProto_Reaction] = []
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -9211,10 +9643,7 @@ extension BackupProto_StandardMessage: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
 extension BackupProto_ContactMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ContactMessage"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "contact"),
-    2: .same(proto: "reactions"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}contact\0\u{1}reactions\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9253,11 +9682,7 @@ extension BackupProto_ContactMessage: SwiftProtobuf.Message, SwiftProtobuf._Mess
 
 extension BackupProto_DirectStoryReplyMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".DirectStoryReplyMessage"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "textReply"),
-    2: .same(proto: "emoji"),
-    3: .same(proto: "reactions"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}textReply\0\u{1}emoji\0\u{1}reactions\0\u{c}\u{4}\u{1}")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9324,24 +9749,17 @@ extension BackupProto_DirectStoryReplyMessage: SwiftProtobuf.Message, SwiftProto
 
 extension BackupProto_DirectStoryReplyMessage.TextReply: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_DirectStoryReplyMessage.protoMessageName + ".TextReply"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "text"),
-    2: .same(proto: "longText"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}text\0\u{1}longText\0")
 
   fileprivate class _StorageClass {
     var _text: BackupProto_Text? = nil
     var _longText: BackupProto_FilePointer? = nil
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -9408,12 +9826,7 @@ extension BackupProto_DirectStoryReplyMessage.TextReply: SwiftProtobuf.Message, 
 
 extension BackupProto_PaymentNotification: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".PaymentNotification"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "amountMob"),
-    2: .same(proto: "feeMob"),
-    3: .same(proto: "note"),
-    4: .same(proto: "transactionDetails"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}amountMob\0\u{1}feeMob\0\u{1}note\0\u{1}transactionDetails\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9462,10 +9875,7 @@ extension BackupProto_PaymentNotification: SwiftProtobuf.Message, SwiftProtobuf.
 
 extension BackupProto_PaymentNotification.TransactionDetails: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_PaymentNotification.protoMessageName + ".TransactionDetails"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "transaction"),
-    2: .same(proto: "failedTransaction"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}transaction\0\u{1}failedTransaction\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9532,10 +9942,7 @@ extension BackupProto_PaymentNotification.TransactionDetails: SwiftProtobuf.Mess
 
 extension BackupProto_PaymentNotification.TransactionDetails.MobileCoinTxoIdentification: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_PaymentNotification.TransactionDetails.protoMessageName + ".MobileCoinTxoIdentification"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "publicKey"),
-    2: .same(proto: "keyImages"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}publicKey\0\u{1}keyImages\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9570,9 +9977,7 @@ extension BackupProto_PaymentNotification.TransactionDetails.MobileCoinTxoIdenti
 
 extension BackupProto_PaymentNotification.TransactionDetails.FailedTransaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_PaymentNotification.TransactionDetails.protoMessageName + ".FailedTransaction"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "reason"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}reason\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9601,24 +10006,12 @@ extension BackupProto_PaymentNotification.TransactionDetails.FailedTransaction: 
 }
 
 extension BackupProto_PaymentNotification.TransactionDetails.FailedTransaction.FailureReason: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "GENERIC"),
-    1: .same(proto: "NETWORK"),
-    2: .same(proto: "INSUFFICIENT_FUNDS"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0GENERIC\0\u{1}NETWORK\0\u{1}INSUFFICIENT_FUNDS\0")
 }
 
 extension BackupProto_PaymentNotification.TransactionDetails.Transaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_PaymentNotification.TransactionDetails.protoMessageName + ".Transaction"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "status"),
-    2: .same(proto: "mobileCoinIdentification"),
-    3: .same(proto: "timestamp"),
-    4: .same(proto: "blockIndex"),
-    5: .same(proto: "blockTimestamp"),
-    6: .same(proto: "transaction"),
-    7: .same(proto: "receipt"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}status\0\u{1}mobileCoinIdentification\0\u{1}timestamp\0\u{1}blockIndex\0\u{1}blockTimestamp\0\u{1}transaction\0\u{1}receipt\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9681,19 +10074,12 @@ extension BackupProto_PaymentNotification.TransactionDetails.Transaction: SwiftP
 }
 
 extension BackupProto_PaymentNotification.TransactionDetails.Transaction.Status: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "INITIAL"),
-    1: .same(proto: "SUBMITTED"),
-    2: .same(proto: "SUCCESSFUL"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0INITIAL\0\u{1}SUBMITTED\0\u{1}SUCCESSFUL\0")
 }
 
 extension BackupProto_GiftBadge: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GiftBadge"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "receiptCredentialPresentation"),
-    2: .same(proto: "state"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}receiptCredentialPresentation\0\u{1}state\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9727,20 +10113,12 @@ extension BackupProto_GiftBadge: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 }
 
 extension BackupProto_GiftBadge.State: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNOPENED"),
-    1: .same(proto: "OPENED"),
-    2: .same(proto: "REDEEMED"),
-    3: .same(proto: "FAILED"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNOPENED\0\u{1}OPENED\0\u{1}REDEEMED\0\u{1}FAILED\0")
 }
 
 extension BackupProto_ViewOnceMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ViewOnceMessage"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "attachment"),
-    2: .same(proto: "reactions"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}attachment\0\u{1}reactions\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9779,14 +10157,7 @@ extension BackupProto_ViewOnceMessage: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
 extension BackupProto_ContactAttachment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ContactAttachment"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "name"),
-    3: .same(proto: "number"),
-    4: .same(proto: "email"),
-    5: .same(proto: "address"),
-    6: .same(proto: "avatar"),
-    7: .same(proto: "organization"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{2}\u{2}number\0\u{1}email\0\u{1}address\0\u{1}avatar\0\u{1}organization\0")
 
   fileprivate class _StorageClass {
     var _name: BackupProto_ContactAttachment.Name? = nil
@@ -9796,15 +10167,11 @@ extension BackupProto_ContactAttachment: SwiftProtobuf.Message, SwiftProtobuf._M
     var _avatar: BackupProto_FilePointer? = nil
     var _organization: String = String()
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -9895,14 +10262,7 @@ extension BackupProto_ContactAttachment: SwiftProtobuf.Message, SwiftProtobuf._M
 
 extension BackupProto_ContactAttachment.Name: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_ContactAttachment.protoMessageName + ".Name"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "givenName"),
-    2: .same(proto: "familyName"),
-    3: .same(proto: "prefix"),
-    4: .same(proto: "suffix"),
-    5: .same(proto: "middleName"),
-    6: .same(proto: "nickname"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}givenName\0\u{1}familyName\0\u{1}prefix\0\u{1}suffix\0\u{1}middleName\0\u{1}nickname\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -9957,11 +10317,7 @@ extension BackupProto_ContactAttachment.Name: SwiftProtobuf.Message, SwiftProtob
 
 extension BackupProto_ContactAttachment.Phone: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_ContactAttachment.protoMessageName + ".Phone"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "value"),
-    2: .same(proto: "type"),
-    3: .same(proto: "label"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}value\0\u{1}type\0\u{1}label\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -10000,22 +10356,12 @@ extension BackupProto_ContactAttachment.Phone: SwiftProtobuf.Message, SwiftProto
 }
 
 extension BackupProto_ContactAttachment.Phone.TypeEnum: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "HOME"),
-    2: .same(proto: "MOBILE"),
-    3: .same(proto: "WORK"),
-    4: .same(proto: "CUSTOM"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}HOME\0\u{1}MOBILE\0\u{1}WORK\0\u{1}CUSTOM\0")
 }
 
 extension BackupProto_ContactAttachment.Email: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_ContactAttachment.protoMessageName + ".Email"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "value"),
-    2: .same(proto: "type"),
-    3: .same(proto: "label"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}value\0\u{1}type\0\u{1}label\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -10054,28 +10400,12 @@ extension BackupProto_ContactAttachment.Email: SwiftProtobuf.Message, SwiftProto
 }
 
 extension BackupProto_ContactAttachment.Email.TypeEnum: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "HOME"),
-    2: .same(proto: "MOBILE"),
-    3: .same(proto: "WORK"),
-    4: .same(proto: "CUSTOM"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}HOME\0\u{1}MOBILE\0\u{1}WORK\0\u{1}CUSTOM\0")
 }
 
 extension BackupProto_ContactAttachment.PostalAddress: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_ContactAttachment.protoMessageName + ".PostalAddress"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "type"),
-    2: .same(proto: "label"),
-    3: .same(proto: "street"),
-    4: .same(proto: "pobox"),
-    5: .same(proto: "neighborhood"),
-    6: .same(proto: "city"),
-    7: .same(proto: "region"),
-    8: .same(proto: "postcode"),
-    9: .same(proto: "country"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}type\0\u{1}label\0\u{1}street\0\u{1}pobox\0\u{1}neighborhood\0\u{1}city\0\u{1}region\0\u{1}postcode\0\u{1}country\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -10144,20 +10474,12 @@ extension BackupProto_ContactAttachment.PostalAddress: SwiftProtobuf.Message, Sw
 }
 
 extension BackupProto_ContactAttachment.PostalAddress.TypeEnum: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "HOME"),
-    2: .same(proto: "WORK"),
-    3: .same(proto: "CUSTOM"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}HOME\0\u{1}WORK\0\u{1}CUSTOM\0")
 }
 
 extension BackupProto_StickerMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".StickerMessage"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "sticker"),
-    2: .same(proto: "reactions"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}sticker\0\u{1}reactions\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -10215,13 +10537,7 @@ extension BackupProto_RemoteDeletedMessage: SwiftProtobuf.Message, SwiftProtobuf
 
 extension BackupProto_Sticker: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Sticker"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "packId"),
-    2: .same(proto: "packKey"),
-    3: .same(proto: "stickerId"),
-    4: .same(proto: "emoji"),
-    5: .same(proto: "data"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}packId\0\u{1}packKey\0\u{1}stickerId\0\u{1}emoji\0\u{1}data\0")
 
   fileprivate class _StorageClass {
     var _packID: Data = Data()
@@ -10230,15 +10546,11 @@ extension BackupProto_Sticker: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     var _emoji: String? = nil
     var _data: BackupProto_FilePointer? = nil
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -10323,13 +10635,7 @@ extension BackupProto_Sticker: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 
 extension BackupProto_LinkPreview: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".LinkPreview"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "url"),
-    2: .same(proto: "title"),
-    3: .same(proto: "image"),
-    4: .same(proto: "description"),
-    5: .same(proto: "date"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}url\0\u{1}title\0\u{1}image\0\u{1}description\0\u{1}date\0")
 
   fileprivate class _StorageClass {
     var _url: String = String()
@@ -10338,15 +10644,11 @@ extension BackupProto_LinkPreview: SwiftProtobuf.Message, SwiftProtobuf._Message
     var _description_p: String? = nil
     var _date: UInt64? = nil
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -10431,12 +10733,7 @@ extension BackupProto_LinkPreview: SwiftProtobuf.Message, SwiftProtobuf._Message
 
 extension BackupProto_MessageAttachment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".MessageAttachment"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "pointer"),
-    2: .same(proto: "flag"),
-    3: .same(proto: "wasDownloaded"),
-    4: .same(proto: "clientUuid"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}pointer\0\u{1}flag\0\u{1}wasDownloaded\0\u{1}clientUuid\0")
 
   fileprivate class _StorageClass {
     var _pointer: BackupProto_FilePointer? = nil
@@ -10444,15 +10741,11 @@ extension BackupProto_MessageAttachment: SwiftProtobuf.Message, SwiftProtobuf._M
     var _wasDownloaded: Bool = false
     var _clientUuid: Data? = nil
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -10530,27 +10823,12 @@ extension BackupProto_MessageAttachment: SwiftProtobuf.Message, SwiftProtobuf._M
 }
 
 extension BackupProto_MessageAttachment.Flag: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "NONE"),
-    1: .same(proto: "VOICE_MESSAGE"),
-    2: .same(proto: "BORDERLESS"),
-    3: .same(proto: "GIF"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0NONE\0\u{1}VOICE_MESSAGE\0\u{1}BORDERLESS\0\u{1}GIF\0")
 }
 
 extension BackupProto_FilePointer: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".FilePointer"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    4: .same(proto: "contentType"),
-    5: .same(proto: "incrementalMac"),
-    6: .same(proto: "incrementalMacChunkSize"),
-    7: .same(proto: "fileName"),
-    8: .same(proto: "width"),
-    9: .same(proto: "height"),
-    10: .same(proto: "caption"),
-    11: .same(proto: "blurHash"),
-    13: .same(proto: "locatorInfo"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\u{4}contentType\0\u{1}incrementalMac\0\u{1}incrementalMacChunkSize\0\u{1}fileName\0\u{1}width\0\u{1}height\0\u{1}caption\0\u{1}blurHash\0\u{2}\u{2}locatorInfo\0\u{c}\u{1}\u{1}\u{c}\u{2}\u{1}\u{c}\u{3}\u{1}")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -10624,17 +10902,7 @@ extension BackupProto_FilePointer: SwiftProtobuf.Message, SwiftProtobuf._Message
 
 extension BackupProto_FilePointer.LocatorInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_FilePointer.protoMessageName + ".LocatorInfo"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "key"),
-    10: .same(proto: "plaintextHash"),
-    11: .same(proto: "encryptedDigest"),
-    3: .same(proto: "size"),
-    4: .same(proto: "transitCdnKey"),
-    5: .same(proto: "transitCdnNumber"),
-    6: .same(proto: "transitTierUploadTimestamp"),
-    7: .same(proto: "mediaTierCdnNumber"),
-    9: .same(proto: "localKey"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}key\0\u{2}\u{2}size\0\u{1}transitCdnKey\0\u{1}transitCdnNumber\0\u{1}transitTierUploadTimestamp\0\u{1}mediaTierCdnNumber\0\u{2}\u{2}localKey\0\u{1}plaintextHash\0\u{1}encryptedDigest\0\u{c}\u{2}\u{1}\u{c}\u{8}\u{1}")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -10726,13 +10994,7 @@ extension BackupProto_FilePointer.LocatorInfo: SwiftProtobuf.Message, SwiftProto
 
 extension BackupProto_Quote: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Quote"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "targetSentTimestamp"),
-    2: .same(proto: "authorId"),
-    3: .same(proto: "text"),
-    4: .same(proto: "attachments"),
-    5: .same(proto: "type"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}targetSentTimestamp\0\u{1}authorId\0\u{1}text\0\u{1}attachments\0\u{1}type\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -10785,21 +11047,12 @@ extension BackupProto_Quote: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
 }
 
 extension BackupProto_Quote.TypeEnum: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "NORMAL"),
-    2: .same(proto: "GIFT_BADGE"),
-    3: .same(proto: "VIEW_ONCE"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}NORMAL\0\u{1}GIFT_BADGE\0\u{1}VIEW_ONCE\0\u{1}POLL\0")
 }
 
 extension BackupProto_Quote.QuotedAttachment: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_Quote.protoMessageName + ".QuotedAttachment"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "contentType"),
-    2: .same(proto: "fileName"),
-    3: .same(proto: "thumbnail"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}contentType\0\u{1}fileName\0\u{1}thumbnail\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -10843,12 +11096,7 @@ extension BackupProto_Quote.QuotedAttachment: SwiftProtobuf.Message, SwiftProtob
 
 extension BackupProto_BodyRange: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".BodyRange"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "start"),
-    2: .same(proto: "length"),
-    3: .same(proto: "mentionAci"),
-    4: .same(proto: "style"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}start\0\u{1}length\0\u{1}mentionAci\0\u{1}style\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -10914,24 +11162,12 @@ extension BackupProto_BodyRange: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 }
 
 extension BackupProto_BodyRange.Style: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "NONE"),
-    1: .same(proto: "BOLD"),
-    2: .same(proto: "ITALIC"),
-    3: .same(proto: "SPOILER"),
-    4: .same(proto: "STRIKETHROUGH"),
-    5: .same(proto: "MONOSPACE"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0NONE\0\u{1}BOLD\0\u{1}ITALIC\0\u{1}SPOILER\0\u{1}STRIKETHROUGH\0\u{1}MONOSPACE\0")
 }
 
 extension BackupProto_Reaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".Reaction"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "emoji"),
-    2: .same(proto: "authorId"),
-    3: .same(proto: "sentTimestamp"),
-    4: .same(proto: "sortOrder"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}emoji\0\u{1}authorId\0\u{1}sentTimestamp\0\u{1}sortOrder\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -10974,19 +11210,129 @@ extension BackupProto_Reaction: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
+extension BackupProto_Poll: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".Poll"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}question\0\u{1}allowMultiple\0\u{1}options\0\u{1}hasEnded\0\u{1}reactions\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.question) }()
+      case 2: try { try decoder.decodeSingularBoolField(value: &self.allowMultiple) }()
+      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.options) }()
+      case 4: try { try decoder.decodeSingularBoolField(value: &self.hasEnded_p) }()
+      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.reactions) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.question.isEmpty {
+      try visitor.visitSingularStringField(value: self.question, fieldNumber: 1)
+    }
+    if self.allowMultiple != false {
+      try visitor.visitSingularBoolField(value: self.allowMultiple, fieldNumber: 2)
+    }
+    if !self.options.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.options, fieldNumber: 3)
+    }
+    if self.hasEnded_p != false {
+      try visitor.visitSingularBoolField(value: self.hasEnded_p, fieldNumber: 4)
+    }
+    if !self.reactions.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.reactions, fieldNumber: 5)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BackupProto_Poll, rhs: BackupProto_Poll) -> Bool {
+    if lhs.question != rhs.question {return false}
+    if lhs.allowMultiple != rhs.allowMultiple {return false}
+    if lhs.options != rhs.options {return false}
+    if lhs.hasEnded_p != rhs.hasEnded_p {return false}
+    if lhs.reactions != rhs.reactions {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BackupProto_Poll.PollOption: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = BackupProto_Poll.protoMessageName + ".PollOption"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}option\0\u{1}votes\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.option) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.votes) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.option.isEmpty {
+      try visitor.visitSingularStringField(value: self.option, fieldNumber: 1)
+    }
+    if !self.votes.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.votes, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BackupProto_Poll.PollOption, rhs: BackupProto_Poll.PollOption) -> Bool {
+    if lhs.option != rhs.option {return false}
+    if lhs.votes != rhs.votes {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BackupProto_Poll.PollOption.PollVote: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = BackupProto_Poll.PollOption.protoMessageName + ".PollVote"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}voterId\0\u{1}voteCount\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.voterID) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.voteCount) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.voterID != 0 {
+      try visitor.visitSingularUInt64Field(value: self.voterID, fieldNumber: 1)
+    }
+    if self.voteCount != 0 {
+      try visitor.visitSingularUInt32Field(value: self.voteCount, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BackupProto_Poll.PollOption.PollVote, rhs: BackupProto_Poll.PollOption.PollVote) -> Bool {
+    if lhs.voterID != rhs.voterID {return false}
+    if lhs.voteCount != rhs.voteCount {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension BackupProto_ChatUpdateMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ChatUpdateMessage"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "simpleUpdate"),
-    2: .same(proto: "groupChange"),
-    3: .same(proto: "expirationTimerChange"),
-    4: .same(proto: "profileChange"),
-    5: .same(proto: "threadMerge"),
-    6: .same(proto: "sessionSwitchover"),
-    7: .same(proto: "individualCall"),
-    8: .same(proto: "groupCall"),
-    9: .same(proto: "learnedProfileChange"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}simpleUpdate\0\u{1}groupChange\0\u{1}expirationTimerChange\0\u{1}profileChange\0\u{1}threadMerge\0\u{1}sessionSwitchover\0\u{1}individualCall\0\u{1}groupCall\0\u{1}learnedProfileChange\0\u{1}pollTerminate\0\u{1}pinMessage\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -11111,6 +11457,32 @@ extension BackupProto_ChatUpdateMessage: SwiftProtobuf.Message, SwiftProtobuf._M
           self.update = .learnedProfileChange(v)
         }
       }()
+      case 10: try {
+        var v: BackupProto_PollTerminateUpdate?
+        var hadOneofValue = false
+        if let current = self.update {
+          hadOneofValue = true
+          if case .pollTerminate(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.update = .pollTerminate(v)
+        }
+      }()
+      case 11: try {
+        var v: BackupProto_PinMessageUpdate?
+        var hadOneofValue = false
+        if let current = self.update {
+          hadOneofValue = true
+          if case .pinMessage(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.update = .pinMessage(v)
+        }
+      }()
       default: break
       }
     }
@@ -11158,6 +11530,14 @@ extension BackupProto_ChatUpdateMessage: SwiftProtobuf.Message, SwiftProtobuf._M
       guard case .learnedProfileChange(let v)? = self.update else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
     }()
+    case .pollTerminate?: try {
+      guard case .pollTerminate(let v)? = self.update else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
+    }()
+    case .pinMessage?: try {
+      guard case .pinMessage(let v)? = self.update else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
+    }()
     case nil: break
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -11172,14 +11552,7 @@ extension BackupProto_ChatUpdateMessage: SwiftProtobuf.Message, SwiftProtobuf._M
 
 extension BackupProto_IndividualCall: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".IndividualCall"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "callId"),
-    2: .same(proto: "type"),
-    3: .same(proto: "direction"),
-    4: .same(proto: "state"),
-    5: .same(proto: "startedCallTimestamp"),
-    6: .same(proto: "read"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}callId\0\u{1}type\0\u{1}direction\0\u{1}state\0\u{1}startedCallTimestamp\0\u{1}read\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -11237,42 +11610,20 @@ extension BackupProto_IndividualCall: SwiftProtobuf.Message, SwiftProtobuf._Mess
 }
 
 extension BackupProto_IndividualCall.TypeEnum: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN_TYPE"),
-    1: .same(proto: "AUDIO_CALL"),
-    2: .same(proto: "VIDEO_CALL"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN_TYPE\0\u{1}AUDIO_CALL\0\u{1}VIDEO_CALL\0")
 }
 
 extension BackupProto_IndividualCall.Direction: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN_DIRECTION"),
-    1: .same(proto: "INCOMING"),
-    2: .same(proto: "OUTGOING"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN_DIRECTION\0\u{1}INCOMING\0\u{1}OUTGOING\0")
 }
 
 extension BackupProto_IndividualCall.State: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN_STATE"),
-    1: .same(proto: "ACCEPTED"),
-    2: .same(proto: "NOT_ACCEPTED"),
-    3: .same(proto: "MISSED"),
-    4: .same(proto: "MISSED_NOTIFICATION_PROFILE"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN_STATE\0\u{1}ACCEPTED\0\u{1}NOT_ACCEPTED\0\u{1}MISSED\0\u{1}MISSED_NOTIFICATION_PROFILE\0")
 }
 
 extension BackupProto_GroupCall: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupCall"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "callId"),
-    2: .same(proto: "state"),
-    3: .same(proto: "ringerRecipientId"),
-    4: .same(proto: "startedCallRecipientId"),
-    5: .same(proto: "startedCallTimestamp"),
-    6: .same(proto: "endedCallTimestamp"),
-    7: .same(proto: "read"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}callId\0\u{1}state\0\u{1}ringerRecipientId\0\u{1}startedCallRecipientId\0\u{1}startedCallTimestamp\0\u{1}endedCallTimestamp\0\u{1}read\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -11335,24 +11686,12 @@ extension BackupProto_GroupCall: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 }
 
 extension BackupProto_GroupCall.State: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN_STATE"),
-    1: .same(proto: "GENERIC"),
-    2: .same(proto: "JOINED"),
-    3: .same(proto: "RINGING"),
-    4: .same(proto: "ACCEPTED"),
-    5: .same(proto: "DECLINED"),
-    6: .same(proto: "MISSED"),
-    7: .same(proto: "MISSED_NOTIFICATION_PROFILE"),
-    8: .same(proto: "OUTGOING_RING"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN_STATE\0\u{1}GENERIC\0\u{1}JOINED\0\u{1}RINGING\0\u{1}ACCEPTED\0\u{1}DECLINED\0\u{1}MISSED\0\u{1}MISSED_NOTIFICATION_PROFILE\0\u{1}OUTGOING_RING\0")
 }
 
 extension BackupProto_SimpleChatUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SimpleChatUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "type"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}type\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -11381,32 +11720,12 @@ extension BackupProto_SimpleChatUpdate: SwiftProtobuf.Message, SwiftProtobuf._Me
 }
 
 extension BackupProto_SimpleChatUpdate.TypeEnum: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "JOINED_SIGNAL"),
-    2: .same(proto: "IDENTITY_UPDATE"),
-    3: .same(proto: "IDENTITY_VERIFIED"),
-    4: .same(proto: "IDENTITY_DEFAULT"),
-    5: .same(proto: "CHANGE_NUMBER"),
-    6: .same(proto: "RELEASE_CHANNEL_DONATION_REQUEST"),
-    7: .same(proto: "END_SESSION"),
-    8: .same(proto: "CHAT_SESSION_REFRESH"),
-    9: .same(proto: "BAD_DECRYPT"),
-    10: .same(proto: "PAYMENTS_ACTIVATED"),
-    11: .same(proto: "PAYMENT_ACTIVATION_REQUEST"),
-    12: .same(proto: "UNSUPPORTED_PROTOCOL_MESSAGE"),
-    13: .same(proto: "REPORTED_SPAM"),
-    14: .same(proto: "BLOCKED"),
-    15: .same(proto: "UNBLOCKED"),
-    16: .same(proto: "MESSAGE_REQUEST_ACCEPTED"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}JOINED_SIGNAL\0\u{1}IDENTITY_UPDATE\0\u{1}IDENTITY_VERIFIED\0\u{1}IDENTITY_DEFAULT\0\u{1}CHANGE_NUMBER\0\u{1}RELEASE_CHANNEL_DONATION_REQUEST\0\u{1}END_SESSION\0\u{1}CHAT_SESSION_REFRESH\0\u{1}BAD_DECRYPT\0\u{1}PAYMENTS_ACTIVATED\0\u{1}PAYMENT_ACTIVATION_REQUEST\0\u{1}UNSUPPORTED_PROTOCOL_MESSAGE\0\u{1}REPORTED_SPAM\0\u{1}BLOCKED\0\u{1}UNBLOCKED\0\u{1}MESSAGE_REQUEST_ACCEPTED\0")
 }
 
 extension BackupProto_ExpirationTimerChatUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ExpirationTimerChatUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "expiresInMs"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}expiresInMs\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -11436,10 +11755,7 @@ extension BackupProto_ExpirationTimerChatUpdate: SwiftProtobuf.Message, SwiftPro
 
 extension BackupProto_ProfileChangeChatUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ProfileChangeChatUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "previousName"),
-    2: .same(proto: "newName"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}previousName\0\u{1}newName\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -11474,10 +11790,7 @@ extension BackupProto_ProfileChangeChatUpdate: SwiftProtobuf.Message, SwiftProto
 
 extension BackupProto_LearnedProfileChatUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".LearnedProfileChatUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "e164"),
-    2: .same(proto: "username"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}e164\0\u{1}username\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -11534,9 +11847,7 @@ extension BackupProto_LearnedProfileChatUpdate: SwiftProtobuf.Message, SwiftProt
 
 extension BackupProto_ThreadMergeChatUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ThreadMergeChatUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "previousE164"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}previousE164\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -11566,9 +11877,7 @@ extension BackupProto_ThreadMergeChatUpdate: SwiftProtobuf.Message, SwiftProtobu
 
 extension BackupProto_SessionSwitchoverChatUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SessionSwitchoverChatUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "e164"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}e164\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -11598,9 +11907,7 @@ extension BackupProto_SessionSwitchoverChatUpdate: SwiftProtobuf.Message, SwiftP
 
 extension BackupProto_GroupChangeChatUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupChangeChatUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updates"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updates\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -11630,42 +11937,7 @@ extension BackupProto_GroupChangeChatUpdate: SwiftProtobuf.Message, SwiftProtobu
 
 extension BackupProto_GroupChangeChatUpdate.Update: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_GroupChangeChatUpdate.protoMessageName + ".Update"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "genericGroupUpdate"),
-    2: .same(proto: "groupCreationUpdate"),
-    3: .same(proto: "groupNameUpdate"),
-    4: .same(proto: "groupAvatarUpdate"),
-    5: .same(proto: "groupDescriptionUpdate"),
-    6: .same(proto: "groupMembershipAccessLevelChangeUpdate"),
-    7: .same(proto: "groupAttributesAccessLevelChangeUpdate"),
-    8: .same(proto: "groupAnnouncementOnlyChangeUpdate"),
-    9: .same(proto: "groupAdminStatusUpdate"),
-    10: .same(proto: "groupMemberLeftUpdate"),
-    11: .same(proto: "groupMemberRemovedUpdate"),
-    12: .same(proto: "selfInvitedToGroupUpdate"),
-    13: .same(proto: "selfInvitedOtherUserToGroupUpdate"),
-    14: .same(proto: "groupUnknownInviteeUpdate"),
-    15: .same(proto: "groupInvitationAcceptedUpdate"),
-    16: .same(proto: "groupInvitationDeclinedUpdate"),
-    17: .same(proto: "groupMemberJoinedUpdate"),
-    18: .same(proto: "groupMemberAddedUpdate"),
-    19: .same(proto: "groupSelfInvitationRevokedUpdate"),
-    20: .same(proto: "groupInvitationRevokedUpdate"),
-    21: .same(proto: "groupJoinRequestUpdate"),
-    22: .same(proto: "groupJoinRequestApprovalUpdate"),
-    23: .same(proto: "groupJoinRequestCanceledUpdate"),
-    24: .same(proto: "groupInviteLinkResetUpdate"),
-    25: .same(proto: "groupInviteLinkEnabledUpdate"),
-    26: .same(proto: "groupInviteLinkAdminApprovalUpdate"),
-    27: .same(proto: "groupInviteLinkDisabledUpdate"),
-    28: .same(proto: "groupMemberJoinedByLinkUpdate"),
-    29: .same(proto: "groupV2MigrationUpdate"),
-    30: .same(proto: "groupV2MigrationSelfInvitedUpdate"),
-    31: .same(proto: "groupV2MigrationInvitedMembersUpdate"),
-    32: .same(proto: "groupV2MigrationDroppedMembersUpdate"),
-    33: .same(proto: "groupSequenceOfRequestsAndCancelsUpdate"),
-    34: .same(proto: "groupExpirationTimerUpdate"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}genericGroupUpdate\0\u{1}groupCreationUpdate\0\u{1}groupNameUpdate\0\u{1}groupAvatarUpdate\0\u{1}groupDescriptionUpdate\0\u{1}groupMembershipAccessLevelChangeUpdate\0\u{1}groupAttributesAccessLevelChangeUpdate\0\u{1}groupAnnouncementOnlyChangeUpdate\0\u{1}groupAdminStatusUpdate\0\u{1}groupMemberLeftUpdate\0\u{1}groupMemberRemovedUpdate\0\u{1}selfInvitedToGroupUpdate\0\u{1}selfInvitedOtherUserToGroupUpdate\0\u{1}groupUnknownInviteeUpdate\0\u{1}groupInvitationAcceptedUpdate\0\u{1}groupInvitationDeclinedUpdate\0\u{1}groupMemberJoinedUpdate\0\u{1}groupMemberAddedUpdate\0\u{1}groupSelfInvitationRevokedUpdate\0\u{1}groupInvitationRevokedUpdate\0\u{1}groupJoinRequestUpdate\0\u{1}groupJoinRequestApprovalUpdate\0\u{1}groupJoinRequestCanceledUpdate\0\u{1}groupInviteLinkResetUpdate\0\u{1}groupInviteLinkEnabledUpdate\0\u{1}groupInviteLinkAdminApprovalUpdate\0\u{1}groupInviteLinkDisabledUpdate\0\u{1}groupMemberJoinedByLinkUpdate\0\u{1}groupV2MigrationUpdate\0\u{1}groupV2MigrationSelfInvitedUpdate\0\u{1}groupV2MigrationInvitedMembersUpdate\0\u{1}groupV2MigrationDroppedMembersUpdate\0\u{1}groupSequenceOfRequestsAndCancelsUpdate\0\u{1}groupExpirationTimerUpdate\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12276,9 +12548,7 @@ extension BackupProto_GroupChangeChatUpdate.Update: SwiftProtobuf.Message, Swift
 
 extension BackupProto_GenericGroupUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GenericGroupUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12312,9 +12582,7 @@ extension BackupProto_GenericGroupUpdate: SwiftProtobuf.Message, SwiftProtobuf._
 
 extension BackupProto_GroupCreationUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupCreationUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12348,10 +12616,7 @@ extension BackupProto_GroupCreationUpdate: SwiftProtobuf.Message, SwiftProtobuf.
 
 extension BackupProto_GroupNameUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupNameUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "newGroupName"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}newGroupName\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12390,10 +12655,7 @@ extension BackupProto_GroupNameUpdate: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
 extension BackupProto_GroupAvatarUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupAvatarUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "wasRemoved"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}wasRemoved\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12432,10 +12694,7 @@ extension BackupProto_GroupAvatarUpdate: SwiftProtobuf.Message, SwiftProtobuf._M
 
 extension BackupProto_GroupDescriptionUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupDescriptionUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "newDescription"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}newDescription\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12474,10 +12733,7 @@ extension BackupProto_GroupDescriptionUpdate: SwiftProtobuf.Message, SwiftProtob
 
 extension BackupProto_GroupMembershipAccessLevelChangeUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupMembershipAccessLevelChangeUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "accessLevel"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}accessLevel\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12516,10 +12772,7 @@ extension BackupProto_GroupMembershipAccessLevelChangeUpdate: SwiftProtobuf.Mess
 
 extension BackupProto_GroupAttributesAccessLevelChangeUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupAttributesAccessLevelChangeUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "accessLevel"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}accessLevel\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12558,10 +12811,7 @@ extension BackupProto_GroupAttributesAccessLevelChangeUpdate: SwiftProtobuf.Mess
 
 extension BackupProto_GroupAnnouncementOnlyChangeUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupAnnouncementOnlyChangeUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "isAnnouncementOnly"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}isAnnouncementOnly\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12600,11 +12850,7 @@ extension BackupProto_GroupAnnouncementOnlyChangeUpdate: SwiftProtobuf.Message, 
 
 extension BackupProto_GroupAdminStatusUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupAdminStatusUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "memberAci"),
-    3: .same(proto: "wasAdminStatusGranted"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}memberAci\0\u{1}wasAdminStatusGranted\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12648,9 +12894,7 @@ extension BackupProto_GroupAdminStatusUpdate: SwiftProtobuf.Message, SwiftProtob
 
 extension BackupProto_GroupMemberLeftUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupMemberLeftUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "aci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}aci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12680,10 +12924,7 @@ extension BackupProto_GroupMemberLeftUpdate: SwiftProtobuf.Message, SwiftProtobu
 
 extension BackupProto_GroupMemberRemovedUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupMemberRemovedUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "removerAci"),
-    2: .same(proto: "removedAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}removerAci\0\u{1}removedAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12722,9 +12963,7 @@ extension BackupProto_GroupMemberRemovedUpdate: SwiftProtobuf.Message, SwiftProt
 
 extension BackupProto_SelfInvitedToGroupUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SelfInvitedToGroupUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "inviterAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}inviterAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12758,9 +12997,7 @@ extension BackupProto_SelfInvitedToGroupUpdate: SwiftProtobuf.Message, SwiftProt
 
 extension BackupProto_SelfInvitedOtherUserToGroupUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".SelfInvitedOtherUserToGroupUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "inviteeServiceId"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}inviteeServiceId\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12790,10 +13027,7 @@ extension BackupProto_SelfInvitedOtherUserToGroupUpdate: SwiftProtobuf.Message, 
 
 extension BackupProto_GroupUnknownInviteeUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupUnknownInviteeUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "inviterAci"),
-    2: .same(proto: "inviteeCount"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}inviterAci\0\u{1}inviteeCount\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12832,10 +13066,7 @@ extension BackupProto_GroupUnknownInviteeUpdate: SwiftProtobuf.Message, SwiftPro
 
 extension BackupProto_GroupInvitationAcceptedUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupInvitationAcceptedUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "inviterAci"),
-    2: .same(proto: "newMemberAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}inviterAci\0\u{1}newMemberAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12874,10 +13105,7 @@ extension BackupProto_GroupInvitationAcceptedUpdate: SwiftProtobuf.Message, Swif
 
 extension BackupProto_GroupInvitationDeclinedUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupInvitationDeclinedUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "inviterAci"),
-    2: .same(proto: "inviteeAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}inviterAci\0\u{1}inviteeAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12916,9 +13144,7 @@ extension BackupProto_GroupInvitationDeclinedUpdate: SwiftProtobuf.Message, Swif
 
 extension BackupProto_GroupMemberJoinedUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupMemberJoinedUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "newMemberAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}newMemberAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -12948,12 +13174,7 @@ extension BackupProto_GroupMemberJoinedUpdate: SwiftProtobuf.Message, SwiftProto
 
 extension BackupProto_GroupMemberAddedUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupMemberAddedUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "newMemberAci"),
-    3: .same(proto: "hadOpenInvitation"),
-    4: .same(proto: "inviterAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}newMemberAci\0\u{1}hadOpenInvitation\0\u{1}inviterAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13002,9 +13223,7 @@ extension BackupProto_GroupMemberAddedUpdate: SwiftProtobuf.Message, SwiftProtob
 
 extension BackupProto_GroupSelfInvitationRevokedUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupSelfInvitationRevokedUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "revokerAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}revokerAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13038,10 +13257,7 @@ extension BackupProto_GroupSelfInvitationRevokedUpdate: SwiftProtobuf.Message, S
 
 extension BackupProto_GroupInvitationRevokedUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupInvitationRevokedUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "invitees"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}invitees\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13080,11 +13296,7 @@ extension BackupProto_GroupInvitationRevokedUpdate: SwiftProtobuf.Message, Swift
 
 extension BackupProto_GroupInvitationRevokedUpdate.Invitee: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_GroupInvitationRevokedUpdate.protoMessageName + ".Invitee"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "inviterAci"),
-    2: .same(proto: "inviteeAci"),
-    3: .same(proto: "inviteePni"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}inviterAci\0\u{1}inviteeAci\0\u{1}inviteePni\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13128,9 +13340,7 @@ extension BackupProto_GroupInvitationRevokedUpdate.Invitee: SwiftProtobuf.Messag
 
 extension BackupProto_GroupJoinRequestUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupJoinRequestUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "requestorAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}requestorAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13160,11 +13370,7 @@ extension BackupProto_GroupJoinRequestUpdate: SwiftProtobuf.Message, SwiftProtob
 
 extension BackupProto_GroupJoinRequestApprovalUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupJoinRequestApprovalUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "requestorAci"),
-    2: .same(proto: "updaterAci"),
-    3: .same(proto: "wasApproved"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}requestorAci\0\u{1}updaterAci\0\u{1}wasApproved\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13208,9 +13414,7 @@ extension BackupProto_GroupJoinRequestApprovalUpdate: SwiftProtobuf.Message, Swi
 
 extension BackupProto_GroupJoinRequestCanceledUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupJoinRequestCanceledUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "requestorAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}requestorAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13240,10 +13444,7 @@ extension BackupProto_GroupJoinRequestCanceledUpdate: SwiftProtobuf.Message, Swi
 
 extension BackupProto_GroupSequenceOfRequestsAndCancelsUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupSequenceOfRequestsAndCancelsUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "requestorAci"),
-    2: .same(proto: "count"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}requestorAci\0\u{1}count\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13278,9 +13479,7 @@ extension BackupProto_GroupSequenceOfRequestsAndCancelsUpdate: SwiftProtobuf.Mes
 
 extension BackupProto_GroupInviteLinkResetUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupInviteLinkResetUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13314,10 +13513,7 @@ extension BackupProto_GroupInviteLinkResetUpdate: SwiftProtobuf.Message, SwiftPr
 
 extension BackupProto_GroupInviteLinkEnabledUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupInviteLinkEnabledUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "linkRequiresAdminApproval"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}linkRequiresAdminApproval\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13356,10 +13552,7 @@ extension BackupProto_GroupInviteLinkEnabledUpdate: SwiftProtobuf.Message, Swift
 
 extension BackupProto_GroupInviteLinkAdminApprovalUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupInviteLinkAdminApprovalUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-    2: .same(proto: "linkRequiresAdminApproval"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0\u{1}linkRequiresAdminApproval\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13398,9 +13591,7 @@ extension BackupProto_GroupInviteLinkAdminApprovalUpdate: SwiftProtobuf.Message,
 
 extension BackupProto_GroupInviteLinkDisabledUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupInviteLinkDisabledUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "updaterAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}updaterAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13434,9 +13625,7 @@ extension BackupProto_GroupInviteLinkDisabledUpdate: SwiftProtobuf.Message, Swif
 
 extension BackupProto_GroupMemberJoinedByLinkUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupMemberJoinedByLinkUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "newMemberAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}newMemberAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13504,9 +13693,7 @@ extension BackupProto_GroupV2MigrationSelfInvitedUpdate: SwiftProtobuf.Message, 
 
 extension BackupProto_GroupV2MigrationInvitedMembersUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupV2MigrationInvitedMembersUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "invitedMembersCount"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}invitedMembersCount\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13536,9 +13723,7 @@ extension BackupProto_GroupV2MigrationInvitedMembersUpdate: SwiftProtobuf.Messag
 
 extension BackupProto_GroupV2MigrationDroppedMembersUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupV2MigrationDroppedMembersUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "droppedMembersCount"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}droppedMembersCount\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13568,10 +13753,7 @@ extension BackupProto_GroupV2MigrationDroppedMembersUpdate: SwiftProtobuf.Messag
 
 extension BackupProto_GroupExpirationTimerUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".GroupExpirationTimerUpdate"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "expiresInMs"),
-    2: .same(proto: "updaterAci"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}expiresInMs\0\u{1}updaterAci\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13608,12 +13790,79 @@ extension BackupProto_GroupExpirationTimerUpdate: SwiftProtobuf.Message, SwiftPr
   }
 }
 
+extension BackupProto_PollTerminateUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PollTerminateUpdate"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}targetSentTimestamp\0\u{1}question\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.targetSentTimestamp) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.question) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.targetSentTimestamp != 0 {
+      try visitor.visitSingularUInt64Field(value: self.targetSentTimestamp, fieldNumber: 1)
+    }
+    if !self.question.isEmpty {
+      try visitor.visitSingularStringField(value: self.question, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BackupProto_PollTerminateUpdate, rhs: BackupProto_PollTerminateUpdate) -> Bool {
+    if lhs.targetSentTimestamp != rhs.targetSentTimestamp {return false}
+    if lhs.question != rhs.question {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BackupProto_PinMessageUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".PinMessageUpdate"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}targetSentTimestamp\0\u{1}authorId\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.targetSentTimestamp) }()
+      case 2: try { try decoder.decodeSingularUInt64Field(value: &self.authorID) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.targetSentTimestamp != 0 {
+      try visitor.visitSingularUInt64Field(value: self.targetSentTimestamp, fieldNumber: 1)
+    }
+    if self.authorID != 0 {
+      try visitor.visitSingularUInt64Field(value: self.authorID, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BackupProto_PinMessageUpdate, rhs: BackupProto_PinMessageUpdate) -> Bool {
+    if lhs.targetSentTimestamp != rhs.targetSentTimestamp {return false}
+    if lhs.authorID != rhs.authorID {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension BackupProto_StickerPack: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".StickerPack"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "packId"),
-    2: .same(proto: "packKey"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}packId\0\u{1}packKey\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13648,29 +13897,18 @@ extension BackupProto_StickerPack: SwiftProtobuf.Message, SwiftProtobuf._Message
 
 extension BackupProto_ChatStyle: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ChatStyle"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "wallpaperPreset"),
-    2: .same(proto: "wallpaperPhoto"),
-    3: .same(proto: "autoBubbleColor"),
-    4: .same(proto: "bubbleColorPreset"),
-    5: .same(proto: "customColorId"),
-    7: .same(proto: "dimWallpaperInDarkMode"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}wallpaperPreset\0\u{1}wallpaperPhoto\0\u{1}autoBubbleColor\0\u{1}bubbleColorPreset\0\u{1}customColorId\0\u{2}\u{2}dimWallpaperInDarkMode\0")
 
   fileprivate class _StorageClass {
     var _wallpaper: BackupProto_ChatStyle.OneOf_Wallpaper?
     var _bubbleColor: BackupProto_ChatStyle.OneOf_BubbleColor?
     var _dimWallpaperInDarkMode: Bool = false
 
-    #if swift(>=5.10)
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
       // This will force a copy to be made of this reference when the first mutation occurs;
       // hence, it is safe to mark this as `nonisolated(unsafe)`.
       static nonisolated(unsafe) let defaultInstance = _StorageClass()
-    #else
-      static let defaultInstance = _StorageClass()
-    #endif
 
     private init() {}
 
@@ -13810,67 +14048,16 @@ extension BackupProto_ChatStyle: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
 }
 
 extension BackupProto_ChatStyle.WallpaperPreset: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN_WALLPAPER_PRESET"),
-    1: .same(proto: "SOLID_BLUSH"),
-    2: .same(proto: "SOLID_COPPER"),
-    3: .same(proto: "SOLID_DUST"),
-    4: .same(proto: "SOLID_CELADON"),
-    5: .same(proto: "SOLID_RAINFOREST"),
-    6: .same(proto: "SOLID_PACIFIC"),
-    7: .same(proto: "SOLID_FROST"),
-    8: .same(proto: "SOLID_NAVY"),
-    9: .same(proto: "SOLID_LILAC"),
-    10: .same(proto: "SOLID_PINK"),
-    11: .same(proto: "SOLID_EGGPLANT"),
-    12: .same(proto: "SOLID_SILVER"),
-    13: .same(proto: "GRADIENT_SUNSET"),
-    14: .same(proto: "GRADIENT_NOIR"),
-    15: .same(proto: "GRADIENT_HEATMAP"),
-    16: .same(proto: "GRADIENT_AQUA"),
-    17: .same(proto: "GRADIENT_IRIDESCENT"),
-    18: .same(proto: "GRADIENT_MONSTERA"),
-    19: .same(proto: "GRADIENT_BLISS"),
-    20: .same(proto: "GRADIENT_SKY"),
-    21: .same(proto: "GRADIENT_PEACH"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN_WALLPAPER_PRESET\0\u{1}SOLID_BLUSH\0\u{1}SOLID_COPPER\0\u{1}SOLID_DUST\0\u{1}SOLID_CELADON\0\u{1}SOLID_RAINFOREST\0\u{1}SOLID_PACIFIC\0\u{1}SOLID_FROST\0\u{1}SOLID_NAVY\0\u{1}SOLID_LILAC\0\u{1}SOLID_PINK\0\u{1}SOLID_EGGPLANT\0\u{1}SOLID_SILVER\0\u{1}GRADIENT_SUNSET\0\u{1}GRADIENT_NOIR\0\u{1}GRADIENT_HEATMAP\0\u{1}GRADIENT_AQUA\0\u{1}GRADIENT_IRIDESCENT\0\u{1}GRADIENT_MONSTERA\0\u{1}GRADIENT_BLISS\0\u{1}GRADIENT_SKY\0\u{1}GRADIENT_PEACH\0")
 }
 
 extension BackupProto_ChatStyle.BubbleColorPreset: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN_BUBBLE_COLOR_PRESET"),
-    1: .same(proto: "SOLID_ULTRAMARINE"),
-    2: .same(proto: "SOLID_CRIMSON"),
-    3: .same(proto: "SOLID_VERMILION"),
-    4: .same(proto: "SOLID_BURLAP"),
-    5: .same(proto: "SOLID_FOREST"),
-    6: .same(proto: "SOLID_WINTERGREEN"),
-    7: .same(proto: "SOLID_TEAL"),
-    8: .same(proto: "SOLID_BLUE"),
-    9: .same(proto: "SOLID_INDIGO"),
-    10: .same(proto: "SOLID_VIOLET"),
-    11: .same(proto: "SOLID_PLUM"),
-    12: .same(proto: "SOLID_TAUPE"),
-    13: .same(proto: "SOLID_STEEL"),
-    14: .same(proto: "GRADIENT_EMBER"),
-    15: .same(proto: "GRADIENT_MIDNIGHT"),
-    16: .same(proto: "GRADIENT_INFRARED"),
-    17: .same(proto: "GRADIENT_LAGOON"),
-    18: .same(proto: "GRADIENT_FLUORESCENT"),
-    19: .same(proto: "GRADIENT_BASIL"),
-    20: .same(proto: "GRADIENT_SUBLIME"),
-    21: .same(proto: "GRADIENT_SEA"),
-    22: .same(proto: "GRADIENT_TANGERINE"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN_BUBBLE_COLOR_PRESET\0\u{1}SOLID_ULTRAMARINE\0\u{1}SOLID_CRIMSON\0\u{1}SOLID_VERMILION\0\u{1}SOLID_BURLAP\0\u{1}SOLID_FOREST\0\u{1}SOLID_WINTERGREEN\0\u{1}SOLID_TEAL\0\u{1}SOLID_BLUE\0\u{1}SOLID_INDIGO\0\u{1}SOLID_VIOLET\0\u{1}SOLID_PLUM\0\u{1}SOLID_TAUPE\0\u{1}SOLID_STEEL\0\u{1}GRADIENT_EMBER\0\u{1}GRADIENT_MIDNIGHT\0\u{1}GRADIENT_INFRARED\0\u{1}GRADIENT_LAGOON\0\u{1}GRADIENT_FLUORESCENT\0\u{1}GRADIENT_BASIL\0\u{1}GRADIENT_SUBLIME\0\u{1}GRADIENT_SEA\0\u{1}GRADIENT_TANGERINE\0")
 }
 
 extension BackupProto_ChatStyle.Gradient: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_ChatStyle.protoMessageName + ".Gradient"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "angle"),
-    2: .same(proto: "colors"),
-    3: .same(proto: "positions"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}angle\0\u{1}colors\0\u{1}positions\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -13910,11 +14097,7 @@ extension BackupProto_ChatStyle.Gradient: SwiftProtobuf.Message, SwiftProtobuf._
 
 extension BackupProto_ChatStyle.CustomChatColor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = BackupProto_ChatStyle.protoMessageName + ".CustomChatColor"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "id"),
-    2: .same(proto: "solid"),
-    3: .same(proto: "gradient"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}solid\0\u{1}gradient\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -14000,20 +14183,7 @@ extension BackupProto_ChatStyle.AutomaticBubbleColor: SwiftProtobuf.Message, Swi
 
 extension BackupProto_NotificationProfile: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".NotificationProfile"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "name"),
-    2: .same(proto: "emoji"),
-    3: .same(proto: "color"),
-    4: .same(proto: "createdAtMs"),
-    5: .same(proto: "allowAllCalls"),
-    6: .same(proto: "allowAllMentions"),
-    7: .same(proto: "allowedMembers"),
-    8: .same(proto: "scheduleEnabled"),
-    9: .same(proto: "scheduleStartTime"),
-    10: .same(proto: "scheduleEndTime"),
-    11: .same(proto: "scheduleDaysEnabled"),
-    12: .same(proto: "id"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}emoji\0\u{1}color\0\u{1}createdAtMs\0\u{1}allowAllCalls\0\u{1}allowAllMentions\0\u{1}allowedMembers\0\u{1}scheduleEnabled\0\u{1}scheduleStartTime\0\u{1}scheduleEndTime\0\u{1}scheduleDaysEnabled\0\u{1}id\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -14101,31 +14271,12 @@ extension BackupProto_NotificationProfile: SwiftProtobuf.Message, SwiftProtobuf.
 }
 
 extension BackupProto_NotificationProfile.DayOfWeek: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "MONDAY"),
-    2: .same(proto: "TUESDAY"),
-    3: .same(proto: "WEDNESDAY"),
-    4: .same(proto: "THURSDAY"),
-    5: .same(proto: "FRIDAY"),
-    6: .same(proto: "SATURDAY"),
-    7: .same(proto: "SUNDAY"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}MONDAY\0\u{1}TUESDAY\0\u{1}WEDNESDAY\0\u{1}THURSDAY\0\u{1}FRIDAY\0\u{1}SATURDAY\0\u{1}SUNDAY\0")
 }
 
 extension BackupProto_ChatFolder: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ChatFolder"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "name"),
-    2: .same(proto: "showOnlyUnread"),
-    3: .same(proto: "showMutedChats"),
-    4: .same(proto: "includeAllIndividualChats"),
-    5: .same(proto: "includeAllGroupChats"),
-    6: .same(proto: "folderType"),
-    7: .same(proto: "includedRecipientIds"),
-    8: .same(proto: "excludedRecipientIds"),
-    9: .same(proto: "id"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0\u{1}showOnlyUnread\0\u{1}showMutedChats\0\u{1}includeAllIndividualChats\0\u{1}includeAllGroupChats\0\u{1}folderType\0\u{1}includedRecipientIds\0\u{1}excludedRecipientIds\0\u{1}id\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -14194,9 +14345,5 @@ extension BackupProto_ChatFolder: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 }
 
 extension BackupProto_ChatFolder.FolderType: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "UNKNOWN"),
-    1: .same(proto: "ALL"),
-    2: .same(proto: "CUSTOM"),
-  ]
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0UNKNOWN\0\u{1}ALL\0\u{1}CUSTOM\0")
 }

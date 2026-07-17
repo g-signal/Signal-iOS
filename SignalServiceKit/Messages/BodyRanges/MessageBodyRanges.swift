@@ -12,11 +12,11 @@ public import LibSignalClient
 ///
 /// This object must be further applied to NSAttributedString to actually display mentions and styles.
 @objc
-public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
+public final class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
     // Limit to up to 250 ranges per message.
     public static let maxRangesPerMessage = 250
 
-    public static var supportsSecureCoding = true
+    public static var supportsSecureCoding: Bool { true }
     public static var empty: MessageBodyRanges { MessageBodyRanges(mentions: [:], styles: []) }
 
     // Styles are kept separate from mentions; mentions are not allowed to overlap,
@@ -46,7 +46,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
     public init(
         mentions: [NSRange: Aci],
         orderedMentions: [NSRangedValue<Aci>],
-        collapsedStyles: [NSRangedValue<CollapsedStyle>]
+        collapsedStyles: [NSRangedValue<CollapsedStyle>],
     ) {
         self.mentions = mentions
         self.orderedMentions = orderedMentions
@@ -74,7 +74,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
                 continue
             }
             let range = NSRange(location: Int(proto.start), length: Int(proto.length))
-            if let mentionAciString = proto.mentionAci, let mentionAci = Aci.parseFrom(aciString: mentionAciString) {
+            if let mentionAci = Aci.parseFrom(serviceIdBinary: proto.mentionAciBinary, serviceIdString: proto.mentionAci) {
                 mentions[range] = mentionAci
             } else if
                 let protoStyle = proto.style,
@@ -156,7 +156,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
                 orderedMentions: orderedMentions,
                 // Legacy styles are going to be split; aggresively re-merge them which
                 // drops some info but that info was ignored in the originals, anyway.
-                mergeAdjacentRangesOfSameStyle: true
+                mergeAdjacentRangesOfSameStyle: true,
             )
         } else {
             self.collapsedStyles = styles
@@ -166,7 +166,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
     private static func processStylesForInitialization(
         _ styles: [NSRangedValue<SingleStyle>],
         orderedMentions: [NSRangedValue<Aci>],
-        mergeAdjacentRangesOfSameStyle: Bool = false
+        mergeAdjacentRangesOfSameStyle: Bool = false,
     ) -> [NSRangedValue<CollapsedStyle>] {
         guard !styles.isEmpty else {
             return []
@@ -179,7 +179,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
         Self.extendStylesAcrossMentions(&sortedSingleStyles, orderedMentions: orderedMentions)
         var sortedStyles = MergedSingleStyle.merge(
             sortedOriginals: sortedSingleStyles,
-            mergeAdjacentRangesOfSameStyle: mergeAdjacentRangesOfSameStyle
+            mergeAdjacentRangesOfSameStyle: mergeAdjacentRangesOfSameStyle,
         )
 
         var indexesOfInterestSet = Set<Int>()
@@ -228,7 +228,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
                 if currentCollapsedStyle.isEmpty.negated {
                     finalStyles.append(.init(
                         currentCollapsedStyle,
-                        range: NSRange(location: startIndex, length: i - startIndex)
+                        range: NSRange(location: startIndex, length: i - startIndex),
                     ))
                 }
 
@@ -247,8 +247,8 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
                 collapsedStyleAtIndex.1,
                 range: NSRange(
                     location: collapsedStyleAtIndex.start,
-                    length: max(0, (indexesOfInterest.last ?? 0) - collapsedStyleAtIndex.start)
-                )
+                    length: max(0, (indexesOfInterest.last ?? 0) - collapsedStyleAtIndex.start),
+                ),
             ))
         }
 
@@ -262,7 +262,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
     /// extended to cover the mention, and are therefore merged.
     private static func extendStylesAcrossMentions(
         _ sortedStyles: inout [NSRangedValue<SingleStyle>],
-        orderedMentions: [NSRangedValue<Aci>]
+        orderedMentions: [NSRangedValue<Aci>],
     ) {
         let orderedMentions = orderedMentions
         let enumeratedStyles = sortedStyles.enumerated()
@@ -275,27 +275,27 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
             // 1) any styles that start later in the mention are treated as if they start now.
             for (styleIndex, enumeratedStyle) in enumeratedStyles {
                 var style = enumeratedStyle
-                if style.range.location > mention.range.location && style.range.location < mention.range.upperBound {
+                if style.range.location > mention.range.location, style.range.location < mention.range.upperBound {
                     // Starts inside, move it to start at the beginning.
                     style = NSRangedValue(
                         style.value,
                         range: NSRange(
                             location: mention.range.location,
-                            length: style.range.length + style.range.location - mention.range.location
-                        )
+                            length: style.range.length + style.range.location - mention.range.location,
+                        ),
                     )
                     // Note this maintains sort; it can't move the location before another
                     // style because that other style would gets its location moved up, too.
                     sortedStyles[styleIndex] = style
                 }
-                if style.range.upperBound > mention.range.location && style.range.upperBound < mention.range.upperBound {
+                if style.range.upperBound > mention.range.location, style.range.upperBound < mention.range.upperBound {
                     // Ends inside, move it to end at the end of the mention.
                     style = NSRangedValue(
                         style.value,
                         range: NSRange(
                             location: style.range.location,
-                            length: style.range.length + mention.range.upperBound - style.range.upperBound
-                        )
+                            length: style.range.length + mention.range.upperBound - style.range.upperBound,
+                        ),
                     )
                     sortedStyles[styleIndex] = style
                 }
@@ -303,7 +303,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
         }
     }
 
-    internal struct SubrangeStyles {
+    struct SubrangeStyles {
         let substringRange: NSRange
         let stylesInSubstring: [NSRangedValue<Style>]
     }
@@ -316,7 +316,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
     /// _First_ we filter the ranges to those falling in the subrange; the subrange
     /// is now our coordinate system, with its start being 0.
     /// _Then_ we merge in the styles, which are already in this coordinate system.
-    internal func mergingStyles(_ styles: SubrangeStyles) -> MessageBodyRanges {
+    func mergingStyles(_ styles: SubrangeStyles) -> MessageBodyRanges {
         func intersect(_ range: NSRange) -> NSRange? {
             guard
                 let intersection = range.intersection(styles.substringRange),
@@ -327,7 +327,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
             }
             return NSRange(
                 location: intersection.location - styles.substringRange.location,
-                length: intersection.length
+                length: intersection.length,
             )
         }
 
@@ -358,17 +358,17 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
             .map { NSRangedValue($0.value, range: $0.key) }
         let finalStyles = Self.processStylesForInitialization(
             oldStyles + stylesInSubstring,
-            orderedMentions: orderedMentions
+            orderedMentions: orderedMentions,
         )
         return MessageBodyRanges(
             mentions: mentions,
             orderedMentions: orderedMentions,
-            collapsedStyles: finalStyles
+            collapsedStyles: finalStyles,
         )
     }
 
     public func copy(with zone: NSZone? = nil) -> Any {
-        return MessageBodyRanges(mentions: mentions, orderedMentions: orderedMentions, collapsedStyles: collapsedStyles)
+        return self
     }
 
     public func encode(with coder: NSCoder) {
@@ -412,17 +412,20 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
 
     // MARK: Proto conversion
 
-    /// If bodyLength is provided (is nonnegative), drops any ranges that exceed the length.
-    @objc
-    func toProtoBodyRanges(bodyLength: Int = -1) -> [SSKProtoBodyRange] {
-        let maxBodyLength = bodyLength < 0 ? nil : bodyLength
+    /// If bodyLength is provided, drops any ranges that exceed the length.
+    func toProtoBodyRanges(bodyLength: Int? = nil) -> [SSKProtoBodyRange] {
+        let maxBodyLength = bodyLength
         var protos = [SSKProtoBodyRange]()
 
         func appendMention(_ mention: NSRangedValue<Aci>) {
             guard let builder = self.protoBuilder(mention.range, maxBodyLength: maxBodyLength) else {
                 return
             }
-            builder.setMentionAci(mention.value.serviceIdString)
+            if BuildFlags.serviceIdBinaryOneOf {
+                builder.setMentionAciBinary(mention.value.serviceIdBinary)
+            } else {
+                builder.setMentionAci(mention.value.serviceIdString)
+            }
             protos.append(builder.buildInfallibly())
         }
 
@@ -447,7 +450,7 @@ public class MessageBodyRanges: NSObject, NSCopying, NSSecureCoding {
 
     private func protoBuilder(
         _ range: NSRange,
-        maxBodyLength: Int?
+        maxBodyLength: Int?,
     ) -> SSKProtoBodyRangeBuilder? {
         var range = range
         if let maxBodyLength {

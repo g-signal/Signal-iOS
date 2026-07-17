@@ -14,7 +14,7 @@ public struct LinkingProvisioningMessage {
     }
 
     public enum Constants {
-        public static let provisioningVersion: UInt32  = 1
+        public static let provisioningVersion: UInt32 = 1
         public static let userAgent: String = "OWI"
     }
 
@@ -45,7 +45,7 @@ public struct LinkingProvisioningMessage {
         areReadReceiptsEnabled: Bool,
         provisioningCode: String,
         provisioningUserAgent: String? = Constants.userAgent,
-        provisioningVersion: UInt32 = Constants.provisioningVersion
+        provisioningVersion: UInt32 = Constants.provisioningVersion,
     ) {
         self.rootKey = rootKey
         self.aci = aci
@@ -67,12 +67,12 @@ public struct LinkingProvisioningMessage {
 
         self.aciIdentityKeyPair = try IdentityKeyPair(
             publicKey: PublicKey(proto.aciIdentityKeyPublic),
-            privateKey: PrivateKey(proto.aciIdentityKeyPrivate)
+            privateKey: PrivateKey(proto.aciIdentityKeyPrivate),
         )
 
         self.pniIdentityKeyPair = try IdentityKeyPair(
             publicKey: PublicKey(proto.pniIdentityKeyPublic),
-            privateKey: PrivateKey(proto.pniIdentityKeyPrivate)
+            privateKey: PrivateKey(proto.pniIdentityKeyPrivate),
         )
 
         guard let profileKey = Aes256Key(data: proto.profileKey) else {
@@ -93,23 +93,26 @@ public struct LinkingProvisioningMessage {
         self.phoneNumber = phoneNumber
 
         self.aci = try {
-            guard
-                let aciString = proto.aci,
-                let aci = Aci.parseFrom(aciString: aciString)
-            else {
+            guard let aci = Aci.parseFrom(serviceIdBinary: proto.aciBinary, serviceIdString: proto.aci) else {
                 throw ProvisioningError.invalidProvisionMessage("invalid ACI from provisioning message")
             }
             return aci
         }()
 
         self.pni = try {
-            guard
-                let pniString = proto.pni,
-                let pni = Pni.parseFrom(ambiguousString: pniString)
-            else {
-                throw ProvisioningError.invalidProvisionMessage("invalid PNI from provisioning message")
+            if let pniBinary = proto.pniBinary {
+                guard let pniUuid = UUID(data: pniBinary) else {
+                    throw ProvisioningError.invalidProvisionMessage("invalid PNI from provisioning message")
+                }
+                return Pni(fromUUID: pniUuid)
             }
-            return pni
+            if let pniString = proto.pni {
+                guard let pni = Pni.parseFrom(ambiguousString: pniString) else {
+                    throw ProvisioningError.invalidProvisionMessage("invalid PNI from provisioning message")
+                }
+                return pni
+            }
+            throw ProvisioningError.invalidProvisionMessage("invalid PNI from provisioning message")
         }()
 
         if
@@ -117,7 +120,7 @@ public struct LinkingProvisioningMessage {
             let aep = try? AccountEntropyPool(key: accountEntropyPool)
         {
             self.rootKey = .accountEntropyPool(aep)
-        } else if let masterKey = try proto.masterKey.map({ try MasterKey(data: $0)}) {
+        } else if let masterKey = try proto.masterKey.map({ try MasterKey(data: $0) }) {
             self.rootKey = .masterKey(masterKey)
         } else {
             throw ProvisioningError.invalidProvisionMessage("missing master key from provisioning message")
@@ -132,7 +135,7 @@ public struct LinkingProvisioningMessage {
         self.ephemeralBackupKey = try proto.ephemeralBackupKey.map {
             return MessageRootBackupKey(
                 backupKey: try BackupKey(contents: $0),
-                aci: aci
+                aci: aci,
             )
         }
     }
@@ -144,24 +147,34 @@ public struct LinkingProvisioningMessage {
             pniIdentityKeyPublic: pniIdentityKeyPair.publicKey.serialize(),
             pniIdentityKeyPrivate: pniIdentityKeyPair.privateKey.serialize(),
             provisioningCode: provisioningCode,
-            profileKey: profileKey.keyData
+            profileKey: profileKey.keyData,
         )
         messageBuilder.setUserAgent(Constants.userAgent)
         messageBuilder.setReadReceipts(areReadReceiptsEnabled)
         messageBuilder.setProvisioningVersion(Constants.provisioningVersion)
         messageBuilder.setNumber(phoneNumber)
-        messageBuilder.setAci(aci.rawUUID.uuidString.lowercased())
-        messageBuilder.setPni(pni.rawUUID.uuidString.lowercased())
+        if BuildFlags.serviceIdStrings {
+            messageBuilder.setAci(aci.rawUUID.uuidString.lowercased())
+        }
+        if BuildFlags.serviceIdBinaryProvisioning {
+            messageBuilder.setAciBinary(aci.rawUUID.data)
+        }
+        if BuildFlags.serviceIdStrings {
+            messageBuilder.setPni(pni.rawUUID.uuidString.lowercased())
+        }
+        if BuildFlags.serviceIdBinaryProvisioning {
+            messageBuilder.setPniBinary(pni.rawUUID.data)
+        }
 
         switch rootKey {
         case .accountEntropyPool(let accountEntropyPool):
-            messageBuilder.setAccountEntropyPool(accountEntropyPool.rawData)
+            messageBuilder.setAccountEntropyPool(accountEntropyPool.rawString)
             messageBuilder.setMasterKey(accountEntropyPool.getMasterKey().rawData)
         case .masterKey(let masterKey):
             messageBuilder.setMasterKey(masterKey.rawData)
         }
         messageBuilder.setMediaRootBackupKey(mrbk.serialize())
-        ephemeralBackupKey.map { messageBuilder.setEphemeralBackupKey($0.serialize())}
+        ephemeralBackupKey.map { messageBuilder.setEphemeralBackupKey($0.serialize()) }
 
         let plainTextProvisionMessage = try messageBuilder.buildSerializedData()
 
@@ -172,7 +185,7 @@ public struct LinkingProvisioningMessage {
         do {
             encryptedProvisionMessage = try cipher.encrypt(
                 plainTextProvisionMessage,
-                theirPublicKey: theirPublicKey
+                theirPublicKey: theirPublicKey,
             )
         } catch {
             throw OWSAssertionError("Failed to encrypt provision message")
@@ -180,7 +193,7 @@ public struct LinkingProvisioningMessage {
 
         let envelopeBuilder = ProvisioningProtoProvisionEnvelope.builder(
             publicKey: ourKeyPair.publicKey.serialize(),
-            body: encryptedProvisionMessage
+            body: encryptedProvisionMessage,
         )
         return try envelopeBuilder.buildSerializedData()
     }

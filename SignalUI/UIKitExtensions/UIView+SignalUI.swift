@@ -15,7 +15,7 @@ public class SpacerView: UIView {
         CATransformLayer.self
     }
 
-    convenience public init(preferredWidth: CGFloat = UIView.noIntrinsicMetric, preferredHeight: CGFloat = UIView.noIntrinsicMetric) {
+    public convenience init(preferredWidth: CGFloat = UIView.noIntrinsicMetric, preferredHeight: CGFloat = UIView.noIntrinsicMetric) {
         self.init(preferredSize: CGSize(width: preferredWidth, height: preferredHeight))
     }
 
@@ -68,10 +68,10 @@ public extension UIView {
         view.setContentHuggingVerticalLow()
         view.setCompressionResistanceVerticalLow()
 
-        if let minHeight = minHeight {
+        if let minHeight {
             view.autoSetDimension(.height, toSize: minHeight, relation: .greaterThanOrEqual)
         }
-        if let maxHeight = maxHeight {
+        if let maxHeight {
             NSLayoutConstraint.autoSetPriority(.defaultLow) {
                 view.autoSetDimension(.height, toSize: maxHeight)
             }
@@ -119,8 +119,10 @@ public extension UIView {
     }
 
     var sizeThatFitsMaxSize: CGSize {
-        sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude,
-                            height: CGFloat.greatestFiniteMagnitude))
+        sizeThatFits(CGSize(
+            width: CGFloat.greatestFiniteMagnitude,
+            height: CGFloat.greatestFiniteMagnitude,
+        ))
     }
 
     static func container() -> UIView {
@@ -142,15 +144,15 @@ public extension UIView {
         layer.borderWidth = 1
     }
 
-    func addRedBorder() {
+    @discardableResult
+    func addRedBorder() -> Self {
         addBorder(with: .red)
+        return self
     }
 
     func addCircleBadge(color: UIColor) {
         let badge = OWSLayerView.circleView(size: 12)
         badge.backgroundColor = color
-        badge.layer.borderColor = UIColor.ows_white.cgColor
-        badge.layer.borderWidth = 1
         self.addSubview(badge)
         badge.autoPinEdge(toSuperviewEdge: .top, withInset: -3)
         badge.autoPinEdge(toSuperviewEdge: .trailing, withInset: -3)
@@ -276,8 +278,10 @@ public extension UIView {
     ///   location. **Use negative inset values to increase tappable area.**
     /// - Returns: true if `gestureRecognizer` is inside the receiver’s bounds
     /// inset by `hotAreaInsets`; otherwise, false.
-    func containsGestureLocation(_ gestureRecognizer: UIGestureRecognizer,
-                                 hotAreaInsets: UIEdgeInsets? = nil) -> Bool {
+    func containsGestureLocation(
+        _ gestureRecognizer: UIGestureRecognizer,
+        hotAreaInsets: UIEdgeInsets? = nil,
+    ) -> Bool {
         let location = gestureRecognizer.location(in: self)
         var hotArea = bounds
         if let hotAreaInsets {
@@ -296,6 +300,7 @@ public extension UIView {
         return addBottomStroke(color: .ows_middleGray, strokeWidth: .hairlineWidth)
     }
 
+    @discardableResult
     func addBottomStroke(color: UIColor, strokeWidth: CGFloat) -> UIView {
         let strokeView = UIView()
         strokeView.backgroundColor = color

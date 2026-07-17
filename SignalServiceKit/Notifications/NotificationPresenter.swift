@@ -20,6 +20,8 @@ public protocol NotificationPresenter {
 
     func notifyUserOfPollEnd(forMessage message: TSIncomingMessage, thread: TSThread, transaction: DBWriteTransaction)
 
+    func notifyUserOfPollVote(forMessage message: TSOutgoingMessage, voteAuthor: Aci, thread: TSThread, transaction: DBWriteTransaction)
+
     func notifyUser(forPreviewableInteraction: TSInteraction & OWSPreviewText, thread: TSThread, wantsSound: Bool, transaction: DBWriteTransaction)
 
     func notifyTestPopulation(ofErrorMessage errorString: String)
@@ -32,29 +34,33 @@ public protocol NotificationPresenter {
         notificationInfo: CallNotificationInfo,
         offerMediaType: TSRecentCallOfferType,
         sentAt timestamp: Date,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     )
 
     func notifyUserOfMissedCallBecauseOfNewIdentity(
         notificationInfo: CallNotificationInfo,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     func notifyUserOfMissedCallBecauseOfNoLongerVerifiedIdentity(
         notificationInfo: CallNotificationInfo,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     func notifyForGroupCallSafetyNumberChange(
         callTitle: String,
         threadUniqueId: String?,
         roomId: Data?,
-        presentAtJoin: Bool
+        presentAtJoin: Bool,
     )
 
     func scheduleNotifyForNewLinkedDevice(deviceLinkTimestamp: Date)
 
     func scheduleNotifyForBackupsEnabled(backupsTimestamp: Date)
+
+    func notifyUserOfMediaTierQuotaConsumed()
+
+    func notifyUserOfListMediaIntegrityCheckFailure()
 
     /// Notify user to relaunch the app after we deliberately terminate when an incoming device transfer completes.
     func notifyUserToRelaunchAfterTransfer(completion: @escaping () -> Void)
@@ -63,7 +69,7 @@ public protocol NotificationPresenter {
     func notifyUserOfDeregistration(tx: DBWriteTransaction)
 
     func clearAllNotifications()
-    func clearAllNonScheduledNotifications()
+    func clearNotificationsForAppActivate()
     func clearDeliveredNewLinkedDevicesNotifications()
 
     func cancelNotifications(threadId: String)

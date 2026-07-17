@@ -32,14 +32,12 @@ class NSEEnvironment {
             debugLogger.enableFileLogging(appContext: appContext, canLaunchInBackground: true)
             debugLogger.enableTTYLoggingIfNeeded()
             DebugLogger.registerLibsignal()
-            DebugLogger.registerRingRTC()
+            DebugLogger.registerRingRTC(appContext: appContext)
             didStartAppSetup = true
         }
 
-        logger.info(
-            "pid: \(ProcessInfo.processInfo.processIdentifier), memoryUsage: \(LocalDevice.memoryUsageString)",
-            flushImmediately: true
-        )
+        logger.info("pid: \(ProcessInfo.processInfo.processIdentifier), memoryUsage: \(LocalDevice.memoryUsageString)")
+        logger.flush()
     }
 
     @MainActor
@@ -52,26 +50,30 @@ class NSEEnvironment {
         let databaseStorage = try SDSDatabaseStorage(
             appReadiness: appReadiness,
             databaseFileUrl: SDSDatabaseStorage.grdbDatabaseFileUrl,
-            keychainStorage: keychainStorage
+            keychainStorage: keychainStorage,
         )
         databaseStorage.grdbStorage.setUpDatabasePathKVO()
 
-        let finalContinuation = await AppSetup().start(
-            appContext: CurrentAppContext(),
-            appReadiness: appReadiness,
-            backupArchiveErrorPresenterFactory: NoOpBackupArchiveErrorPresenterFactory(),
-            databaseStorage: databaseStorage,
-            deviceBatteryLevelManager: nil,
-            deviceSleepManager: nil,
-            paymentsEvents: PaymentsEventsAppExtension(),
-            mobileCoinHelper: MobileCoinHelperMinimal(),
-            callMessageHandler: NSECallMessageHandler(),
-            currentCallProvider: CurrentCallNoOpProvider(),
-            notificationPresenter: NotificationPresenterImpl(),
-            incrementalMessageTSAttachmentMigratorFactory: NoOpIncrementalMessageTSAttachmentMigratorFactory(),
-        ).prepareDatabase()
-        self.finalContinuation = finalContinuation
+        let finalContinuation = await AppSetup()
+            .start(
+                appContext: CurrentAppContext(),
+                databaseStorage: databaseStorage,
+            )
+            .migrateDatabaseSchema()
+            .initGlobals(
+                appReadiness: appReadiness,
+                backupArchiveErrorPresenterFactory: NoOpBackupArchiveErrorPresenterFactory(),
+                deviceBatteryLevelManager: nil,
+                deviceSleepManager: nil,
+                paymentsEvents: PaymentsEventsAppExtension(),
+                mobileCoinHelper: MobileCoinHelperMinimal(),
+                callMessageHandler: NSECallMessageHandler(),
+                currentCallProvider: CurrentCallNoOpProvider(),
+                notificationPresenter: NotificationPresenterImpl(),
+            )
+            .migrateDatabaseData()
 
+        self.finalContinuation = finalContinuation
         return finalContinuation
     }
 
@@ -84,6 +86,9 @@ class NSEEnvironment {
         // Note that this does much more than set a flag; it will also run all deferred blocks.
         appReadiness.setAppIsReady()
 
-        AppVersionImpl.shared.nseLaunchDidComplete()
+        let appVersion = AppVersionImpl.shared
+        appVersion.dumpToLog()
+        appVersion.updateFirstVersionIfNeeded()
+        appVersion.nseLaunchDidComplete()
     }
 }

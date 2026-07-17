@@ -7,7 +7,7 @@ public import SwiftUI
 
 public struct ScrollableContentPinnedFooterView<
     ScrollableContent: View,
-    PinnedFooter: View
+    PinnedFooter: View,
 >: View {
     private let scrollableContent: ScrollableContent
     private let pinnedFooter: PinnedFooter
@@ -21,10 +21,34 @@ public struct ScrollableContentPinnedFooterView<
     }
 
     public var body: some View {
+        if #available(iOS 26, *) {
+            iOS26Body
+        } else {
+            iOS18Body
+        }
+    }
+
+    @available(iOS 26, *)
+    private var iOS26Body: some View {
+        ScrollView {
+            scrollableContent
+        }
+        .safeAreaBar(edge: .bottom) {
+            VStack(spacing: 0) {
+                pinnedFooter
+            }
+            .padding(.top, 24)
+            .padding(.bottom, 12)
+        }
+        .scrollBounceBehavior(.basedOnSize)
+    }
+
+    private var iOS18Body: some View {
         VStack(spacing: 0) {
             ScrollView {
                 scrollableContent
             }
+            .scrollBounceBehaviorIfAvailable(.basedOnSize)
 
             Spacer().frame(height: 24)
 

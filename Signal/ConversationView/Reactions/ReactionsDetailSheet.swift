@@ -17,6 +17,8 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
 
     override var interactiveScrollViews: [UIScrollView] { emojiReactorsViews }
 
+    override var placeOnGlassIfAvailable: Bool { true }
+
     private var emojiCounts: [InteractionReactionState.EmojiCount] {
         reactionState.emojiCounts
     }
@@ -35,7 +37,7 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
 
     // MARK: -
 
-    override public func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
 
         stackView.axis = .vertical
@@ -54,6 +56,14 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
         setSelectedEmoji(nil)
     }
 
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        // pageWidth needs to have an accurate value
+        DispatchQueue.main.async {
+            self.updatePageConstraints(ignoreScrollingState: true)
+        }
+    }
+
     private var hasPreparedInitialLayout = false
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -64,7 +74,6 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
         guard !hasPreparedInitialLayout else { return }
         hasPreparedInitialLayout = true
         emojiPagingScrollView.superview?.layoutIfNeeded()
-        updatePageConstraints(ignoreScrollingState: true)
     }
 
     // MARK: -
@@ -77,7 +86,7 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
         // If the currently selected emoji still exists, keep it selected.
         // Otherwise, select the "all" page by setting selected emoji to nil.
         let newSelectedEmoji: Emoji?
-        if let selectedEmoji = selectedEmoji, allEmoji.contains(selectedEmoji) {
+        if let selectedEmoji, allEmoji.contains(selectedEmoji) {
             newSelectedEmoji = selectedEmoji
         } else {
             newSelectedEmoji = nil
@@ -91,9 +100,11 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
             self?.setSelectedEmoji(nil)
         }
 
-        emojiCountsCollectionView.items = [allReactionsItem] + emojiCounts.map { (emojiCount) in
-            EmojiItem(emoji: emojiCount.emoji,
-                      count: emojiCount.count) { [weak self] in
+        emojiCountsCollectionView.items = [allReactionsItem] + emojiCounts.map { emojiCount in
+            EmojiItem(
+                emoji: emojiCount.emoji,
+                count: emojiCount.count,
+            ) { [weak self] in
                 self?.setSelectedEmoji(Emoji(emojiCount.emoji))
             }
         }
@@ -122,7 +133,7 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
     private lazy var emojiReactorsViews = [
         EmojiReactorsTableView(),
         EmojiReactorsTableView(),
-        EmojiReactorsTableView()
+        EmojiReactorsTableView(),
     ]
     private var emojiReactorsViewConstraints = [NSLayoutConstraint]()
 
@@ -162,7 +173,7 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
         return allEmoji[index - 1]
     }
 
-    private var pageWidth: CGFloat { return min(CurrentAppContext().frame.width, maxWidth) }
+    private var pageWidth: CGFloat { return min(contentView.frame.width, maxWidth) }
     private var numberOfPages: CGFloat { return CGFloat(emojiReactorsViews.count) }
 
     // These thresholds indicate the offset at which we update the next / previous page.
@@ -204,13 +215,13 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
             reactorsView.autoPinEdge(toSuperviewEdge: .bottom)
 
             emojiReactorsViewConstraints.append(
-                reactorsView.autoPinEdge(toSuperviewEdge: .left, withInset: CGFloat(index) * pageWidth)
+                reactorsView.autoPinEdge(toSuperviewEdge: .left, withInset: CGFloat(index) * pageWidth),
             )
         }
     }
 
     private func reactions(for emoji: Emoji?, transaction: DBReadTransaction) -> [OWSReaction] {
-        guard let emoji = emoji else {
+        guard let emoji else {
             return reactionFinder.allReactions(transaction: transaction)
         }
 
@@ -236,7 +247,7 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
             let previousPageReactions = reactions(for: previousPageEmoji, transaction: transaction)
             previousPageReactorsView.configure(for: previousPageReactions, transaction: transaction)
 
-        // We're paging forwards!
+            // We're paging forwards!
         } else if oldSelectedEmoji == previousPageEmoji, oldSelectedEmoji != selectedEmoji {
             // The next page becomes the current page and the current page becomes
             // the previous page. We have to load the new next.
@@ -247,7 +258,7 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
             let nextPageReactions = reactions(for: nextPageEmoji, transaction: transaction)
             nextPageReactorsView.configure(for: nextPageReactions, transaction: transaction)
 
-        // We didn't get here through paging, stuff probably changed. Reload all the things.
+            // We didn't get here through paging, stuff probably changed. Reload all the things.
         } else {
             let currentPageReactions = reactions(for: selectedEmoji, transaction: transaction)
             currentPageReactorsView.configure(for: currentPageReactions, transaction: transaction)
@@ -262,7 +273,7 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
         updatePageConstraints()
 
         // Update selection on the counts view to reflect our new selected emoji
-        if let selectedEmoji = selectedEmoji, let index = allEmoji.firstIndex(of: selectedEmoji) {
+        if let selectedEmoji, let index = allEmoji.firstIndex(of: selectedEmoji) {
             emojiCountsCollectionView.setSelectedIndex(index + 1)
         } else {
             emojiCountsCollectionView.setSelectedIndex(0)
@@ -276,14 +287,14 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
         }
 
         // Scrolling backwards
-        if !ignoreScrollingState && emojiPagingScrollView.contentOffset.x <= previousPageThreshold {
+        if !ignoreScrollingState, emojiPagingScrollView.contentOffset.x <= previousPageThreshold {
             emojiPagingScrollView.contentOffset.x += pageWidth
 
-        // Scrolling forward
-        } else if !ignoreScrollingState && emojiPagingScrollView.contentOffset.x >= nextPageThreshold {
+            // Scrolling forward
+        } else if !ignoreScrollingState, emojiPagingScrollView.contentOffset.x >= nextPageThreshold {
             emojiPagingScrollView.contentOffset.x -= pageWidth
 
-        // Not moving forward or back, just scroll back to center so we can go forward and back again
+            // Not moving forward or back, just scroll back to center so we can go forward and back again
         } else {
             emojiPagingScrollView.contentOffset.x = pageWidth
         }
@@ -331,7 +342,7 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
         if offsetX <= previousPageThreshold {
             setSelectedEmoji(previousPageEmoji)
 
-        // Scrolled right a page
+            // Scrolled right a page
         } else if offsetX >= nextPageThreshold {
             setSelectedEmoji(nextPageEmoji)
 
@@ -344,19 +355,19 @@ class ReactionsDetailSheet: InteractiveSheetViewController {
 // MARK: -
 
 extension ReactionsDetailSheet: UIScrollViewDelegate {
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         checkForPageChange()
     }
 
-    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         userStartedScrolling()
     }
 
-    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         userStoppedScrolling(waitingForDeceleration: decelerate)
     }
 
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         userStoppedScrolling()
     }
 }

@@ -23,13 +23,13 @@ public protocol ThreadSoftDeleteManager {
     func softDelete(
         threads: [TSThread],
         sendDeleteForMeSyncMessage: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     func removeAllInteractions(
         thread: TSThread,
         sendDeleteForMeSyncMessage: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 }
 
@@ -57,7 +57,7 @@ final class ThreadSoftDeleteManagerImpl: ThreadSoftDeleteManager {
         recipientDatabaseTable: RecipientDatabaseTable,
         storyManager: Shims.StoryManager,
         threadReplyInfoStore: ThreadReplyInfoStore,
-        tsAccountManager: TSAccountManager
+        tsAccountManager: TSAccountManager,
     ) {
         self.deleteForMeOutgoingSyncMessageManager = deleteForMeOutgoingSyncMessageManager
         self.intentsManager = intentsManager
@@ -71,7 +71,7 @@ final class ThreadSoftDeleteManagerImpl: ThreadSoftDeleteManager {
     func softDelete(
         threads: [TSThread],
         sendDeleteForMeSyncMessage: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         var syncMessageContexts = [SyncMessageContext]()
 
@@ -85,14 +85,14 @@ final class ThreadSoftDeleteManagerImpl: ThreadSoftDeleteManager {
                     thread: thread,
                     isFullDelete: true,
                     localIdentifiers: localIdentifiers,
-                    tx: tx
+                    tx: tx,
                 )
             }
 
             softDelete(
                 thread: thread,
                 syncMessageContext: syncMessageContext,
-                tx: tx
+                tx: tx,
             )
 
             if let syncMessageContext {
@@ -103,7 +103,7 @@ final class ThreadSoftDeleteManagerImpl: ThreadSoftDeleteManager {
         if sendDeleteForMeSyncMessage {
             deleteForMeOutgoingSyncMessageManager.send(
                 threadDeletionContexts: syncMessageContexts,
-                tx: tx
+                tx: tx,
             )
         }
     }
@@ -111,7 +111,7 @@ final class ThreadSoftDeleteManagerImpl: ThreadSoftDeleteManager {
     func removeAllInteractions(
         thread: TSThread,
         sendDeleteForMeSyncMessage: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         var syncMessageContext: SyncMessageContext?
         if
@@ -122,20 +122,20 @@ final class ThreadSoftDeleteManagerImpl: ThreadSoftDeleteManager {
                 thread: thread,
                 isFullDelete: false,
                 localIdentifiers: localIdentifiers,
-                tx: tx
+                tx: tx,
             )
         }
 
         removeAllInteractions(
             thread: thread,
             syncMessageContext: syncMessageContext,
-            tx: tx
+            tx: tx,
         )
 
         if let syncMessageContext {
             deleteForMeOutgoingSyncMessageManager.send(
                 threadDeletionContexts: [syncMessageContext],
-                tx: tx
+                tx: tx,
             )
         }
     }
@@ -143,17 +143,17 @@ final class ThreadSoftDeleteManagerImpl: ThreadSoftDeleteManager {
     private func softDelete(
         thread: TSThread,
         syncMessageContext: SyncMessageContext?,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         logger.info("Deleting thread with ID \(thread.logString).")
 
         removeAllInteractions(
             thread: thread,
             syncMessageContext: syncMessageContext,
-            tx: tx
+            tx: tx,
         )
 
-        thread.anyUpdate(transaction: SDSDB.shimOnlyBridge(tx)) { thread in
+        thread.anyUpdate(transaction: tx) { thread in
             thread.messageDraft = nil
             thread.shouldThreadBeVisible = false
         }
@@ -177,20 +177,18 @@ final class ThreadSoftDeleteManagerImpl: ThreadSoftDeleteManager {
     private func removeAllInteractions(
         thread: TSThread,
         syncMessageContext: SyncMessageContext?,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
-        let sdsTx = SDSDB.shimOnlyBridge(tx)
-
         do {
             var moreInteractionsRemaining = true
             while moreInteractionsRemaining {
                 try autoreleasepool {
                     let interactionBatch = try InteractionFinder(
-                        threadUniqueId: thread.uniqueId
+                        threadUniqueId: thread.uniqueId,
                     ).fetchAllInteractions(
                         rowIdFilter: .newest,
                         limit: Constants.interactionDeletionBatchSize,
-                        tx: sdsTx
+                        tx: tx,
                     )
 
                     if let syncMessageContext {
@@ -203,9 +201,9 @@ final class ThreadSoftDeleteManagerImpl: ThreadSoftDeleteManager {
                         interactions: interactionBatch,
                         sideEffects: .custom(
                             associatedCallDelete: .localDeleteOnly,
-                            updateThreadOnInteractionDelete: .doNotUpdate
+                            updateThreadOnInteractionDelete: .doNotUpdate,
                         ),
-                        tx: tx
+                        tx: tx,
                     )
 
                     moreInteractionsRemaining = !interactionBatch.isEmpty
@@ -219,7 +217,7 @@ final class ThreadSoftDeleteManagerImpl: ThreadSoftDeleteManager {
         /// Because we skipped updating the thread for each deleted interaction,
         /// now that we're done deleting we'll do a one-time update of
         /// properties on the thread.
-        thread.anyUpdate(transaction: sdsTx) { thread in
+        thread.anyUpdate(transaction: tx) { thread in
             thread.lastInteractionRowId = 0
             thread.lastDraftInteractionRowId = 0
             thread.lastDraftUpdateTimestamp = 0
@@ -252,11 +250,11 @@ final class _ThreadSoftDeleteManagerImpl_StoryManager_Wrapper: _ThreadSoftDelete
     init() {}
 
     func deleteAllStories(contactAci: Aci, tx: DBWriteTransaction) {
-        StoryManager.deleteAllStories(forSender: contactAci, tx: SDSDB.shimOnlyBridge(tx))
+        StoryManager.deleteAllStories(forSender: contactAci, tx: tx)
     }
 
     func deleteAllStories(groupId: Data, tx: DBWriteTransaction) {
-        StoryManager.deleteAllStories(forGroupId: groupId, tx: SDSDB.shimOnlyBridge(tx))
+        StoryManager.deleteAllStories(forGroupId: groupId, tx: tx)
     }
 }
 

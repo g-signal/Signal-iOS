@@ -5,41 +5,41 @@
 
 import Foundation
 
-public struct EncryptedFileHandleImageSource: OWSImageSource {
+struct EncryptedFileHandleImageSource: OWSImageSource {
 
     private let fileHandle: EncryptedFileHandle
 
-    public init(fileHandle: EncryptedFileHandle) {
+    init(fileHandle: EncryptedFileHandle) {
         self.fileHandle = fileHandle
     }
 
-    public init(
+    init(
         encryptedFileUrl: URL,
-        encryptionKey: Data,
-        plaintextLength: UInt32
+        attachmentKey: AttachmentKey,
+        plaintextLength: UInt64,
     ) throws {
         let fileHandle = try Cryptography.encryptedAttachmentFileHandle(
             at: encryptedFileUrl,
             plaintextLength: plaintextLength,
-            encryptionKey: encryptionKey
+            attachmentKey: attachmentKey,
         )
         self.init(fileHandle: fileHandle)
     }
 
-    public var byteLength: Int { return Int(fileHandle.plaintextLength) }
+    var byteLength: Int { return Int(fileHandle.plaintextLength) }
 
-    public func readData(byteOffset: Int, byteLength: Int) throws -> Data {
+    func readData(byteOffset: Int, byteLength: Int) throws -> Data {
         if fileHandle.offset() != byteOffset {
-            try fileHandle.seek(toOffset: UInt32(byteOffset))
+            try fileHandle.seek(toOffset: UInt64(byteOffset))
         }
-        return try fileHandle.read(upToCount: UInt32(byteLength))
+        return try fileHandle.read(upToCount: byteLength)
     }
 
-    public func readIntoMemory() throws -> Data {
+    func readIntoMemory() throws -> Data {
         if fileHandle.offset() != 0 {
             try fileHandle.seek(toOffset: 0)
         }
-        return try fileHandle.read(upToCount: fileHandle.plaintextLength)
+        return try fileHandle.read(upToCount: Int(fileHandle.plaintextLength))
     }
 
     // Class-bound wrapper around FileHandle
@@ -51,7 +51,7 @@ public struct EncryptedFileHandleImageSource: OWSImageSource {
         }
     }
 
-    public func cgImageSource() throws -> CGImageSource? {
+    func cgImageSource() throws -> CGImageSource? {
         let dataProvider = try CGDataProvider.from(fileHandle: fileHandle)
         return CGImageSourceCreateWithDataProvider(dataProvider, nil)
     }

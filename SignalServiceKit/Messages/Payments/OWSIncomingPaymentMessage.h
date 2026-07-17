@@ -22,8 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initIncomingMessageWithBuilder:(TSIncomingMessageBuilder *)messageBuilder NS_UNAVAILABLE;
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_UNAVAILABLE;
-
 - (instancetype)initWithGrdbId:(int64_t)grdbId
                           uniqueId:(NSString *)uniqueId
                receivedAtTimestamp:(uint64_t)receivedAtTimestamp

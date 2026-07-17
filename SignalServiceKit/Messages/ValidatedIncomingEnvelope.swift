@@ -65,12 +65,30 @@ class ValidatedIncomingEnvelope {
         case unidentifiedSender
     }
 
+    // MARK: - GUID
+
+    var serverGuid: UUID? {
+        return Self.parseServerGuid(fromEnvelope: self.envelope)
+    }
+
+    static func parseServerGuid(fromEnvelope envelope: SSKProtoEnvelope) -> UUID? {
+        if let serverGuidBinary = envelope.serverGuidBinary {
+            return UUID(data: serverGuidBinary)
+        }
+        if let serverGuidString = envelope.serverGuid {
+            return UUID(uuidString: serverGuidString)
+        }
+        return nil
+    }
+
     // MARK: - Source
 
     func validateSource<T: ServiceId>(_ type: T.Type) throws -> (T, DeviceId) {
         guard
-            let sourceServiceIdString = envelope.sourceServiceID,
-            let sourceServiceId = try ServiceId.parseFrom(serviceIdString: sourceServiceIdString) as? T
+            let sourceServiceId = T.parseFrom(
+                serviceIdBinary: envelope.sourceServiceIDBinary,
+                serviceIdString: envelope.sourceServiceID,
+            )
         else {
             throw OWSAssertionError("Invalid source.")
         }
@@ -84,13 +102,18 @@ class ValidatedIncomingEnvelope {
 
     private static func localIdentity(
         for envelope: SSKProtoEnvelope,
-        localIdentifiers: LocalIdentifiers
+        localIdentifiers: LocalIdentifiers,
     ) throws -> OWSIdentity {
-        // Old, locally-persisted envelopes may not have a destination specified.
-        guard let destinationServiceIdString = envelope.destinationServiceID, !destinationServiceIdString.isEmpty else {
-            return .aci
+        let destinationServiceId: ServiceId
+        if envelope.destinationServiceID?.nilIfEmpty != nil || envelope.hasDestinationServiceIDBinary {
+            destinationServiceId = try ServiceId.parseFrom(
+                serviceIdBinary: envelope.destinationServiceIDBinary,
+                serviceIdString: envelope.destinationServiceID,
+            ) ?? { () throws -> ServiceId in throw OWSGenericError("Couldn't parse destination.") }()
+        } else {
+            // Old, locally-persisted envelopes may not have a destination specified.
+            destinationServiceId = localIdentifiers.aci
         }
-        let destinationServiceId = try ServiceId.parseFrom(serviceIdString: destinationServiceIdString)
         switch destinationServiceId {
         case localIdentifiers.aci:
             return .aci

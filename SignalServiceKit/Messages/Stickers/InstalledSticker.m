@@ -10,9 +10,31 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation InstalledSticker
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    return [super initWithCoder:coder];
+    NSUInteger result = [super hash];
+    result ^= self.contentType.hash;
+    result ^= self.emojiString.hash;
+    result ^= self.info.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
+    }
+    InstalledSticker *typedOther = (InstalledSticker *)other;
+    if (![NSObject isObject:self.contentType equalToObject:typedOther.contentType]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.emojiString equalToObject:typedOther.emojiString]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.info equalToObject:typedOther.info]) {
+        return NO;
+    }
+    return YES;
 }
 
 - (instancetype)initWithInfo:(StickerInfo *)info

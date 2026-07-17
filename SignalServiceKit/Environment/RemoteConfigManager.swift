@@ -60,7 +60,7 @@ public class RemoteConfig {
     /// - Parameter newClockSkew: The new clock skew; always used. Even when
     /// `newValueFlags` is nil, the HTTP 304 response has a new clock skew.
     func merging(newValueFlags: [String: String]?, newClockSkew: TimeInterval) -> RemoteConfig {
-        if var newValueFlags = newValueFlags {
+        if var newValueFlags {
             for flag in IsEnabledFlag.allCases {
                 if flag.isHotSwappable { continue }
                 newValueFlags[flag.rawValue] = self.valueFlags[flag.rawValue]
@@ -77,6 +77,24 @@ public class RemoteConfig {
         } else {
             return RemoteConfig(clockSkew: newClockSkew, valueFlags: self.valueFlags)
         }
+    }
+
+    public func netConfig() -> [String: String] {
+        return Dictionary(
+            uniqueKeysWithValues: self.valueFlags
+                .lazy
+                .compactMap { (key: String, value: String) -> (key: String, value: String)? in
+                    // Omit values that are false.
+                    // TODO: Remove this once v2/config omits these by default.
+                    if value == "false" {
+                        return nil
+                    }
+                    guard let range = key.range(of: "ios.libsignal.", options: [.anchored]) else {
+                        return nil
+                    }
+                    return (String(key[range.upperBound...]), value)
+                },
+        )
     }
 
     public var maxGroupSizeRecommended: UInt {
@@ -147,11 +165,10 @@ public class RemoteConfig {
         !isEnabled(.paypalMonthlyDonationKillSwitch)
     }
 
-    public func standardMediaQualityLevel(localPhoneNumber: String?) -> ImageQualityLevel? {
-        let rawValue: String = ValueFlag.standardMediaQualityLevel.rawValue
+    public func standardMediaQualityLevel(callingCode: Int?) -> ImageQualityLevel? {
         guard
-            let csvString = valueFlags[rawValue],
-            let stringValue = Self.countryCodeValue(csvString: csvString, csvDescription: rawValue, localPhoneNumber: localPhoneNumber),
+            let csvString = self.value(.standardMediaQualityLevel),
+            let stringValue = Self.countryCodeValue(csvString: csvString, callingCode: callingCode),
             let uintValue = UInt(stringValue),
             let defaultMediaQuality = ImageQualityLevel(rawValue: uintValue)
         else {
@@ -162,7 +179,7 @@ public class RemoteConfig {
 
     fileprivate static func parsePhoneNumberRegions(
         valueFlags: [String: String],
-        flag: ValueFlag
+        flag: ValueFlag,
     ) -> PhoneNumberRegions {
         guard let valueList = valueFlags[flag.rawValue] else { return [] }
         return PhoneNumberRegions(fromRemoteConfig: valueList)
@@ -202,25 +219,55 @@ public class RemoteConfig {
         getUInt32Value(forFlag: .maxNicknameLength, defaultValue: 32)
     }
 
-    public var attachmentMaxEncryptedBytes: UInt {
-        return getUIntValue(forFlag: .attachmentMaxEncryptedBytes, defaultValue: 100 * 1024 * 1024)
+    public var attachmentMaxEncryptedBytes: UInt64 {
+        return getUInt64Value(forFlag: .attachmentMaxEncryptedBytes, defaultValue: 100 * 1024 * 1024)
     }
 
-    public var attachmentMaxEncryptedReceiveBytes: UInt {
-        // TODO: Use the Remote Config value and new fallback value.
-        return self.attachmentMaxEncryptedBytes
+    public var attachmentMaxEncryptedReceiveBytes: UInt64 {
+        guard BuildFlags.useNewAttachmentLimits else {
+            return self.attachmentMaxEncryptedBytes
+        }
+        let maxEncryptedBytes = self.attachmentMaxEncryptedBytes
+        return getUInt64Value(
+            forFlag: .attachmentMaxEncryptedReceiveBytes,
+            defaultValue: maxEncryptedBytes + maxEncryptedBytes / 4,
+        )
     }
 
-    public var tsAttachmentMigrationBatchDelayMs: UInt64 {
-        getUInt64Value(forFlag: .tsAttachmentMigrationBatchDelayMs, defaultValue: 50)
+    public var backupListMediaDefaultRefreshInterval: TimeInterval {
+        let defaultValue: UInt64
+        if BuildFlags.Backups.useLowerDefaultListMediaRefreshInterval {
+            defaultValue = .dayInMs
+        } else {
+            defaultValue = .dayInMs * 7
+        }
+
+        let intervalMs = getUInt64Value(forFlag: .backupListMediaDefaultRefreshIntervalMs, defaultValue: defaultValue)
+        return TimeInterval(intervalMs) / 1000
+    }
+
+    public var backupListMediaOutOfQuotaRefreshInterval: TimeInterval {
+        let intervalMs = getUInt64Value(forFlag: .backupListMediaOutOfQuotaRefreshIntervalMs, defaultValue: .dayInMs)
+        return TimeInterval(intervalMs) / 1000
+    }
+
+    /// How many successful calls per million should show a call quality survey for the user's region
+    public func callQualitySurveyPPM(localIdentifiers: LocalIdentifiers) -> UInt64 {
+        let defaultValue: UInt64 = 10_000
+        let string = Self.countryCodeBucketValue(
+            csvString: getStringConvertibleValue(
+                forFlag: .callQualitySurveyPPM,
+                defaultValue: "*:\(defaultValue)",
+            ),
+            localIdentifiers: localIdentifiers,
+        )
+        guard let string else { return defaultValue }
+        return UInt64(string) ?? defaultValue
     }
 
     public var mediaTierFallbackCdnNumber: UInt32 {
         getUInt32Value(forFlag: .mediaTierFallbackCdnNumber, defaultValue: 3)
     }
-
-    // Hardcoded value (but lives alongside `attachmentMaxEncryptedBytes`).
-    public var maxMediaTierThumbnailDownloadSizeBytes: UInt = 1024 * 8
 
     public var enableGifSearch: Bool {
         return isEnabled(.enableGifSearch, defaultValue: true)
@@ -233,7 +280,7 @@ public class RemoteConfig {
     public var backgroundRefreshInterval: TimeInterval {
         return TimeInterval(getUIntValue(
             forFlag: .backgroundRefreshInterval,
-            defaultValue: UInt(TimeInterval.day)
+            defaultValue: UInt(TimeInterval.day),
         ))
     }
 
@@ -245,31 +292,40 @@ public class RemoteConfig {
         return UInt64(messageQueueTime * Double(MSEC_PER_SEC))
     }
 
-    public var shouldRunTSAttachmentMigrationInBGProcessingTask: Bool {
-        return !isEnabled(.tsAttachmentMigrationBGProcessingTaskKillSwitch)
-    }
-
-    public var shouldRunTSAttachmentMigrationInMainAppBackground: Bool {
-        return !isEnabled(.tsAttachmentMigrationMainAppBackgroundKillSwitch)
-    }
-
-    public var usePqRatchet: Bool {
-        return isEnabled(.usePqRatchet)
-    }
-
-    public var shouldValidatePrimaryPniIdentityKey: Bool {
-        return isEnabled(.shouldValidatePrimaryPniIdentityKey)
-    }
-
-    public var allowBackupSettings: Bool {
-        if FeatureFlags.Backups.showSettings {
+    public var backupsMegaphone: Bool {
+        if BuildFlags.Backups.showMegaphones, !CurrentAppContext().isRunningTests {
             return true
         }
 
-        return FeatureFlags.Backups.supported && isEnabled(.allowBackupSettings)
+        return isEnabled(.backupsMegaphone)
     }
 
-    #if TESTABLE_BUILD
+    public var ringrtcNwPathMonitorTrial: Bool {
+        return !isEnabled(.ringrtcNwPathMonitorTrialKillSwitch, defaultValue: false)
+    }
+
+    public var pollCreate: Bool {
+        guard BuildFlags.pollSend else {
+            return false
+        }
+        return !isEnabled(.pollCreateKillSwitch)
+    }
+
+    public var pollReceive: Bool {
+        guard BuildFlags.pollReceive else {
+            return false
+        }
+        return !isEnabled(.pollReceiveKillSwitch)
+    }
+
+    public var pinnedMessageLimit: UInt {
+        return getUIntValue(
+            forFlag: .pinnedMessageLimit,
+            defaultValue: UInt(3),
+        )
+    }
+
+#if TESTABLE_BUILD
     public var testHotSwappable: Bool? {
         if self.valueFlags[IsEnabledFlag.hotSwappable.rawValue] != nil {
             return isEnabled(.hotSwappable)
@@ -291,43 +347,43 @@ public class RemoteConfig {
     public var testNonSwappableValue: String? {
         return value(.nonSwappable)
     }
-    #endif
+#endif
 
     // MARK: UInt values
 
     private func getUIntValue(
         forFlag flag: ValueFlag,
-        defaultValue: UInt
+        defaultValue: UInt,
     ) -> UInt {
         getStringConvertibleValue(
             forFlag: flag,
-            defaultValue: defaultValue
+            defaultValue: defaultValue,
         )
     }
 
     private func getUInt32Value(
         forFlag flag: ValueFlag,
-        defaultValue: UInt32
+        defaultValue: UInt32,
     ) -> UInt32 {
         getStringConvertibleValue(
             forFlag: flag,
-            defaultValue: defaultValue
+            defaultValue: defaultValue,
         )
     }
 
     private func getUInt64Value(
         forFlag flag: ValueFlag,
-        defaultValue: UInt64
+        defaultValue: UInt64,
     ) -> UInt64 {
         getStringConvertibleValue(
             forFlag: flag,
-            defaultValue: defaultValue
+            defaultValue: defaultValue,
         )
     }
 
     private func getStringConvertibleValue<V>(
         forFlag flag: ValueFlag,
-        defaultValue: V
+        defaultValue: V,
     ) -> V where V: LosslessStringConvertible {
         guard let stringValue: String = value(flag) else {
             return defaultValue
@@ -343,14 +399,23 @@ public class RemoteConfig {
 
     // MARK: - Country code buckets
 
+    private static func countryCodeBucketValue(csvString: String, localIdentifiers: LocalIdentifiers) -> String? {
+        let phoneNumberUtil = SSKEnvironment.shared.phoneNumberUtilRef
+        let callingCode = phoneNumberUtil.localCallingCode(localIdentifiers: localIdentifiers)
+        return countryCodeValue(csvString: csvString, callingCode: callingCode)
+    }
+
     /// Determine if a country-code-dependent flag is enabled for the current
     /// user, given a country-code CSV and key.
     ///
     /// - Parameter csvString: a CSV containing `<country-code>:<parts-per-million>` pairs
     /// - Parameter key: a key to use as part of bucketing
-    static func isCountryCodeBucketEnabled(csvString: String, key: String, csvDescription: String, localIdentifiers: LocalIdentifiers) -> Bool {
+    static func isCountryCodeBucketEnabled(csvString: String, key: String, localIdentifiers: LocalIdentifiers) -> Bool {
         guard
-            let countryCodeValue = countryCodeValue(csvString: csvString, csvDescription: csvDescription, localPhoneNumber: localIdentifiers.phoneNumber),
+            let countryCodeValue = countryCodeBucketValue(
+                csvString: csvString,
+                localIdentifiers: localIdentifiers,
+            ),
             let countEnabled = UInt64(countryCodeValue)
         else {
             return false
@@ -359,44 +424,27 @@ public class RemoteConfig {
         return isBucketEnabled(key: key, countEnabled: countEnabled, bucketSize: 1_000_000, localAci: localIdentifiers.aci)
     }
 
-    private static func isCountryCodeBucketEnabled(flag: ValueFlag, valueFlags: [String: String], localIdentifiers: LocalIdentifiers) -> Bool {
-        let rawValue = flag.rawValue
-        guard let csvString = valueFlags[rawValue] else { return false }
-
-        return isCountryCodeBucketEnabled(csvString: csvString, key: rawValue, csvDescription: rawValue, localIdentifiers: localIdentifiers)
-    }
-
     /// Given a CSV of `<country-code>:<value>` pairs, extract the `<value>`
-    /// corresponding to the current user's country.
-    private static func countryCodeValue(csvString: String, csvDescription: String, localPhoneNumber: String?) -> String? {
-        guard !csvString.isEmpty else { return nil }
-
-        // The value should always be a comma-separated list of country codes
-        // colon-separated from a value. There all may be an optional be a wildcard
-        // "*" country code that any unspecified country codes should use. If
-        // neither the local country code or the wildcard is specified, we assume
-        // the value is not set.
+    /// corresponding to the current user's country. The value should always be
+    /// a comma-separated list of country codes colon-separated from a value.
+    /// There may be an optional "*" wildcard country code that any unspecified
+    /// country codes should use. If we can't parse the country code from our
+    /// own phone number, we fall back to this wildcard value.
+    private static func countryCodeValue(csvString: String, callingCode: Int?) -> String? {
         let callingCodeToValueMap = csvString
             .components(separatedBy: ",")
             .reduce(into: [String: String]()) { result, value in
                 let components = value.components(separatedBy: ":")
-                guard components.count == 2 else { return owsFailDebug("Invalid \(csvDescription) value \(value)") }
+                guard components.count == 2 else {
+                    owsFailDebug("malformed country-code:value remote config value")
+                    return
+                }
                 let callingCode = components[0]
                 let countryValue = components[1]
                 result[callingCode] = countryValue
             }
 
-        guard !callingCodeToValueMap.isEmpty else { return nil }
-
-        guard
-            let localPhoneNumber,
-            let localCallingCode = SSKEnvironment.shared.phoneNumberUtilRef.parseE164(localPhoneNumber)?.getCallingCode()
-        else {
-            owsFailDebug("Invalid local number")
-            return nil
-        }
-
-        return callingCodeToValueMap[String(localCallingCode)] ?? callingCodeToValueMap["*"]
+        return callingCode.flatMap({ callingCodeToValueMap[String($0)] }) ?? callingCodeToValueMap["*"]
     }
 
     private static func isBucketEnabled(key: String, countEnabled: UInt64, bucketSize: UInt64, localAci: Aci) -> Bool {
@@ -427,7 +475,7 @@ public class RemoteConfig {
         return interval
     }
 
-    fileprivate func isEnabled(_ flag: IsEnabledFlag, defaultValue: Bool = false) -> Bool {
+    private func isEnabled(_ flag: IsEnabledFlag, defaultValue: Bool = false) -> Bool {
         switch valueFlags[flag.rawValue] {
         case nil:
             return defaultValue
@@ -469,63 +517,57 @@ public class RemoteConfig {
 // MARK: - IsEnabledFlag
 
 private enum IsEnabledFlag: String, FlagType {
-    case allowBackupSettings = "ios.allowBackups"
     case applePayGiftDonationKillSwitch = "ios.applePayGiftDonationKillSwitch"
     case applePayMonthlyDonationKillSwitch = "ios.applePayMonthlyDonationKillSwitch"
     case applePayOneTimeDonationKillSwitch = "ios.applePayOneTimeDonationKillSwitch"
     case automaticSessionResetKillSwitch = "ios.automaticSessionResetKillSwitch"
+    case backupsMegaphone = "ios.backupsMegaphone"
     case cardGiftDonationKillSwitch = "ios.cardGiftDonationKillSwitch"
     case cardMonthlyDonationKillSwitch = "ios.cardMonthlyDonationKillSwitch"
     case cardOneTimeDonationKillSwitch = "ios.cardOneTimeDonationKillSwitch"
     case enableAutoAPNSRotation = "ios.enableAutoAPNSRotation"
     case enableGifSearch = "global.gifSearch"
-    case libsignalEnforceMinTlsVersion = "ios.libsignalEnforceMinTlsVersion"
     case messageResendKillSwitch = "ios.messageResendKillSwitch"
     case paymentsResetKillSwitch = "ios.paymentsResetKillSwitch"
     case paypalGiftDonationKillSwitch = "ios.paypalGiftDonationKillSwitch"
     case paypalMonthlyDonationKillSwitch = "ios.paypalMonthlyDonationKillSwitch"
     case paypalOneTimeDonationKillSwitch = "ios.paypalOneTimeDonationKillSwitch"
+    case pollCreateKillSwitch = "ios.pollCreateKillSwitch"
+    case pollReceiveKillSwitch = "ios.pollReceiveKillSwitch"
     case ringrtcNwPathMonitorTrialKillSwitch = "ios.ringrtcNwPathMonitorTrialKillSwitch"
     case serviceExtensionFailureKillSwitch = "ios.serviceExtensionFailureKillSwitch"
-    case shouldValidatePrimaryPniIdentityKey = "ios.shouldValidatePrimaryPniIdentityKey2"
-    case tsAttachmentMigrationBGProcessingTaskKillSwitch = "ios.tsAttachmentMigrationBGProcessingTaskKillSwitch"
-    case tsAttachmentMigrationMainAppBackgroundKillSwitch = "ios.tsAttachmentMigrationMainAppBackgroundKillSwitch"
-    case usePqRatchet = "ios.usePqRatchet"
 
-    #if TESTABLE_BUILD
+#if TESTABLE_BUILD
     case hotSwappable = "test.hotSwappable.enabled"
     case nonSwappable = "test.nonSwappable.enabled"
-    #endif
+#endif
 
     var isHotSwappable: Bool {
         switch self {
-        case .allowBackupSettings: true
         case .applePayGiftDonationKillSwitch: false
         case .applePayMonthlyDonationKillSwitch: false
         case .applePayOneTimeDonationKillSwitch: false
         case .automaticSessionResetKillSwitch: false
+        case .backupsMegaphone: true
         case .cardGiftDonationKillSwitch: false
         case .cardMonthlyDonationKillSwitch: false
         case .cardOneTimeDonationKillSwitch: false
         case .enableAutoAPNSRotation: false
         case .enableGifSearch: false
-        case .libsignalEnforceMinTlsVersion: true // cached during launch, so not hot-swapped in practice
         case .messageResendKillSwitch: false
         case .paymentsResetKillSwitch: false
         case .paypalGiftDonationKillSwitch: false
         case .paypalMonthlyDonationKillSwitch: false
         case .paypalOneTimeDonationKillSwitch: false
+        case .pollCreateKillSwitch: true
+        case .pollReceiveKillSwitch: true
         case .ringrtcNwPathMonitorTrialKillSwitch: true // cached during launch, so not hot-swapped in practice
         case .serviceExtensionFailureKillSwitch: true
-        case .shouldValidatePrimaryPniIdentityKey: true
-        case .tsAttachmentMigrationBGProcessingTaskKillSwitch: true
-        case .tsAttachmentMigrationMainAppBackgroundKillSwitch: true
-        case .usePqRatchet: true
 
-        #if TESTABLE_BUILD
+#if TESTABLE_BUILD
         case .hotSwappable: true
         case .nonSwappable: false
-        #endif
+#endif
         }
     }
 }
@@ -533,13 +575,14 @@ private enum IsEnabledFlag: String, FlagType {
 private enum ValueFlag: String, FlagType {
     case applePayDisabledRegions = "global.donations.apayDisabledRegions"
     case attachmentMaxEncryptedBytes = "global.attachments.maxBytes"
+    case attachmentMaxEncryptedReceiveBytes = "global.attachments.maxReceiveBytes"
     case automaticSessionResetAttemptInterval = "ios.automaticSessionResetAttemptInterval"
     case backgroundRefreshInterval = "ios.backgroundRefreshInterval"
+    case callQualitySurveyPPM = "ios.callQualitySurveyPPM"
     case cdsSyncInterval = "cds.syncInterval.seconds"
     case clientExpiration = "ios.clientExpiration"
     case creditAndDebitCardDisabledRegions = "global.donations.ccDisabledRegions"
     case idealEnabledRegions = "global.donations.idealEnabledRegions"
-    case libsignalChatRequestConnectionCheckTimeoutMillis = "ios.libsignal.chatRequestConnectionCheckTimeoutMillis"
     case maxGroupCallRingSize = "global.calling.maxGroupCallRingSize"
     case maxGroupSizeHardLimit = "global.groupsv2.groupSizeHardLimit"
     case maxGroupSizeRecommended = "global.groupsv2.maxGroupSize"
@@ -555,24 +598,27 @@ private enum ValueFlag: String, FlagType {
     case replaceableInteractionExpiration = "ios.replaceableInteractionExpiration"
     case sepaEnabledRegions = "global.donations.sepaEnabledRegions"
     case standardMediaQualityLevel = "ios.standardMediaQualityLevel"
-    case tsAttachmentMigrationBatchDelayMs = "ios.tsAttachmentMigrationBatchDelayMs"
+    case backupListMediaDefaultRefreshIntervalMs = "ios.backupListMediaDefaultRefreshIntervalMs"
+    case backupListMediaOutOfQuotaRefreshIntervalMs = "ios.backupListMediaOutOfQuotaRefreshIntervalMs"
+    case pinnedMessageLimit = "global.pinned_message_limit"
 
-    #if TESTABLE_BUILD
+#if TESTABLE_BUILD
     case hotSwappable = "test.hotSwappable.value"
     case nonSwappable = "test.nonSwappable.value"
-    #endif
+#endif
 
     var isHotSwappable: Bool {
         switch self {
         case .applePayDisabledRegions: true
-        case .attachmentMaxEncryptedBytes: false
+        case .attachmentMaxEncryptedBytes: true
+        case .attachmentMaxEncryptedReceiveBytes: true
         case .automaticSessionResetAttemptInterval: true
         case .backgroundRefreshInterval: true
+        case .callQualitySurveyPPM: true
         case .cdsSyncInterval: false
         case .clientExpiration: true
         case .creditAndDebitCardDisabledRegions: true
         case .idealEnabledRegions: true
-        case .libsignalChatRequestConnectionCheckTimeoutMillis: true
         case .maxGroupCallRingSize: true
         case .maxGroupSizeHardLimit: true
         case .maxGroupSizeRecommended: true
@@ -587,13 +633,15 @@ private enum ValueFlag: String, FlagType {
         case .reactiveProfileKeyAttemptInterval: true
         case .replaceableInteractionExpiration: false
         case .sepaEnabledRegions: true
-        case .standardMediaQualityLevel: false
-        case .tsAttachmentMigrationBatchDelayMs: true
+        case .standardMediaQualityLevel: true
+        case .backupListMediaDefaultRefreshIntervalMs: true
+        case .backupListMediaOutOfQuotaRefreshIntervalMs: true
+        case .pinnedMessageLimit: true
 
-        #if TESTABLE_BUILD
+#if TESTABLE_BUILD
         case .hotSwappable: true
         case .nonSwappable: false
-        #endif
+#endif
         }
     }
 }
@@ -623,75 +671,34 @@ private protocol FlagType: CaseIterable {
 
 public protocol RemoteConfigProvider {
     func currentConfig() -> RemoteConfig
+    func warmCaches(tx: DBReadTransaction) -> RemoteConfig
 }
 
 // MARK: -
 
-#if TESTABLE_BUILD
+class RemoteConfigProviderImpl: RemoteConfigProvider {
+    private let tsAccountManager: any TSAccountManager
 
-public class MockRemoteConfigProvider: RemoteConfigProvider {
-    var _currentConfig: RemoteConfig = .emptyConfig
-    public func currentConfig() -> RemoteConfig { _currentConfig }
-}
+    fileprivate let keyValueStore: KeyValueStore
 
-#endif
+    init(tsAccountManager: any TSAccountManager) {
+        self.tsAccountManager = tsAccountManager
 
-// MARK: -
-
-public protocol RemoteConfigManager: RemoteConfigProvider {
-    func warmCaches() -> RemoteConfig
-    var cachedConfig: RemoteConfig? { get }
-    /// Refresh the remote config from the server if it's been too long since we
-    /// last fetched it.
-    func refreshIfNeeded() async throws
-}
-
-// MARK: -
-
-#if TESTABLE_BUILD
-
-public class StubbableRemoteConfigManager: RemoteConfigManager {
-    public var cachedConfig: RemoteConfig?
-
-    public func warmCaches() -> RemoteConfig {
-        return currentConfig()
+        self.keyValueStore = KeyValueStore(collection: "RemoteConfigManager")
     }
-
-    public func refreshIfNeeded() async throws {
-    }
-
-    public func currentConfig() -> RemoteConfig {
-        return cachedConfig ?? .emptyConfig
-    }
-}
-
-#endif
-
-// MARK: -
-
-public class RemoteConfigManagerImpl: RemoteConfigManager {
-    private let appExpiry: AppExpiry
-    private let appReadiness: AppReadiness
-    private let dateProvider: DateProvider
-    private let db: any DB
-    private let keyValueStore: KeyValueStore
-    private let networkManager: NetworkManager
-    private let tsAccountManager: TSAccountManager
-
-    // MARK: -
 
     private let _cachedConfig = AtomicValue<RemoteConfig?>(nil, lock: .init())
-    public var cachedConfig: RemoteConfig? {
+    private var cachedConfig: RemoteConfig? {
         let result = _cachedConfig.get()
         owsAssertDebug(result != nil, "cachedConfig not yet set.")
         return result
     }
 
-    public func currentConfig() -> RemoteConfig {
+    func currentConfig() -> RemoteConfig {
         return cachedConfig ?? .emptyConfig
     }
 
-    private func updateCachedConfig(_ updateBlock: (RemoteConfig?) -> RemoteConfig) -> RemoteConfig {
+    fileprivate func updateCachedConfig(_ updateBlock: (RemoteConfig?) -> RemoteConfig) -> RemoteConfig {
         return _cachedConfig.update { mutableValue in
             let newValue = updateBlock(mutableValue)
             mutableValue = newValue
@@ -699,49 +706,8 @@ public class RemoteConfigManagerImpl: RemoteConfigManager {
         }
     }
 
-    public init(
-        appExpiry: AppExpiry,
-        appReadiness: AppReadiness,
-        dateProvider: @escaping DateProvider,
-        db: any DB,
-        networkManager: NetworkManager,
-        tsAccountManager: TSAccountManager
-    ) {
-        self.appExpiry = appExpiry
-        self.appReadiness = appReadiness
-        self.dateProvider = dateProvider
-        self.db = db
-        self.keyValueStore = KeyValueStore(collection: "RemoteConfigManager")
-        self.networkManager = networkManager
-        self.tsAccountManager = tsAccountManager
-
-        appReadiness.runNowOrWhenMainAppDidBecomeReadyAsync {
-            self.refreshRepeatedlyIfNeeded(forceInitialRefreshImmediately: false)
-
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(self.registrationStateDidChange),
-                name: .registrationStateDidChange,
-                object: nil
-            )
-        }
-    }
-
-    // MARK: -
-
-    @objc
-    @MainActor
-    private func registrationStateDidChange() {
-        AssertIsOnMainThread()
-
-        Logger.info("Forcing a refresh because the registration state changed.")
-        self.refreshRepeatedlyIfNeeded(forceInitialRefreshImmediately: true)
-    }
-
-    public func warmCaches() -> RemoteConfig {
-        owsAssertDebug(GRDBSchemaMigrator.areMigrationsComplete)
-
-        let (clockSkew, valueFlags) = db.read { (tx) -> (TimeInterval?, [String: String]?) in
+    func warmCaches(tx: DBReadTransaction) -> RemoteConfig {
+        let (clockSkew, valueFlags) = { () -> (TimeInterval?, [String: String]?) in
             guard self.tsAccountManager.registrationState(tx: tx).isRegistered else {
                 return (nil, nil)
             }
@@ -751,7 +717,7 @@ public class RemoteConfigManagerImpl: RemoteConfigManager {
             }
             let clockSkew = self.keyValueStore.getLastKnownClockSkew(transaction: tx)
             return (clockSkew, valueFlags)
-        }
+        }()
 
         return updateCachedConfig { oldConfig in
             if let oldConfig {
@@ -764,6 +730,103 @@ public class RemoteConfigManagerImpl: RemoteConfigManager {
                 return RemoteConfig(clockSkew: clockSkew ?? 0, valueFlags: valueFlags ?? [:])
             }
         }
+    }
+}
+
+// MARK: -
+
+#if TESTABLE_BUILD
+
+public class MockRemoteConfigProvider: RemoteConfigProvider {
+    public func warmCaches(tx: DBReadTransaction) -> RemoteConfig { _currentConfig }
+    public var _currentConfig: RemoteConfig = .emptyConfig
+    public func currentConfig() -> RemoteConfig { _currentConfig }
+}
+
+#endif
+
+// MARK: -
+
+public protocol RemoteConfigManager: RemoteConfigProvider {
+    /// Refresh the remote config from the server if it's been too long since we
+    /// last fetched it.
+    func refreshIfNeeded() async throws
+}
+
+// MARK: -
+
+#if TESTABLE_BUILD
+
+public class StubbableRemoteConfigManager: MockRemoteConfigProvider, RemoteConfigManager {
+    public func refreshIfNeeded() async throws {}
+}
+
+#endif
+
+// MARK: -
+
+public class RemoteConfigManagerImpl: RemoteConfigManager {
+    private let appExpiry: AppExpiry
+    private let appReadiness: AppReadiness
+    private let dateProvider: DateProvider
+    private let db: any DB
+    private let keyValueStore: KeyValueStore
+    private let net: Net
+    private let networkManager: NetworkManager
+    private let remoteConfigProvider: RemoteConfigProviderImpl
+    private let tsAccountManager: TSAccountManager
+
+    // MARK: -
+
+    init(
+        appExpiry: AppExpiry,
+        appReadiness: AppReadiness,
+        dateProvider: @escaping DateProvider,
+        db: any DB,
+        net: Net,
+        networkManager: NetworkManager,
+        remoteConfigProvider: RemoteConfigProviderImpl,
+        tsAccountManager: TSAccountManager,
+    ) {
+        self.appExpiry = appExpiry
+        self.appReadiness = appReadiness
+        self.dateProvider = dateProvider
+        self.db = db
+        self.keyValueStore = remoteConfigProvider.keyValueStore
+        self.net = net
+        self.networkManager = networkManager
+        self.remoteConfigProvider = remoteConfigProvider
+        self.tsAccountManager = tsAccountManager
+
+        appReadiness.runNowOrWhenMainAppDidBecomeReadyAsync {
+            self.refreshRepeatedlyIfNeeded(forceInitialRefreshImmediately: false)
+
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(self.registrationStateDidChange),
+                name: .registrationStateDidChange,
+                object: nil,
+            )
+        }
+    }
+
+    public func warmCaches(tx: DBReadTransaction) -> RemoteConfig {
+        return remoteConfigProvider.warmCaches(tx: tx)
+    }
+
+    public func currentConfig() -> RemoteConfig {
+        return remoteConfigProvider.currentConfig()
+    }
+
+    // MARK: -
+
+    @objc
+    @MainActor
+    private func registrationStateDidChange() {
+        AssertIsOnMainThread()
+
+        Logger.info("Forcing a refresh because the registration state changed.")
+        self.refreshRepeatedlyIfNeeded(forceInitialRefreshImmediately: true)
     }
 
     private static let refreshInterval: TimeInterval = 2 * .hour
@@ -795,7 +858,10 @@ public class RemoteConfigManagerImpl: RemoteConfigManager {
             }
             refreshImmediately = false
 
-            try await Retry.performWithBackoff(maxAttempts: Int.max, maxAverageBackoff: 14.1 * .minute) {
+            try await Retry.performWithBackoff(
+                maxAttempts: Int.max,
+                maxAverageBackoff: 14.1 * .minute,
+            ) {
                 do {
                     try await self.refreshIfNeeded()
                 } catch {
@@ -842,7 +908,7 @@ public class RemoteConfigManagerImpl: RemoteConfigManager {
         owsAssertDebug(serverEpochTimeMs != nil, "Must have X-Signal-Timestamp.")
 
         let clockSkew: TimeInterval
-        if let serverEpochTimeMs = serverEpochTimeMs {
+        if let serverEpochTimeMs {
             let dateAccordingToServer = Date(timeIntervalSince1970: TimeInterval(serverEpochTimeMs) / 1000)
             clockSkew = dateAccordingToServer.timeIntervalSince(Date())
         } else {
@@ -863,29 +929,13 @@ public class RemoteConfigManagerImpl: RemoteConfigManager {
         }
 
         // This has hot-swappable new values and non-hot-swappable old values.
-        let mergedConfig = updateCachedConfig { oldConfig in
+        let mergedConfig = remoteConfigProvider.updateCachedConfig { oldConfig in
             return (oldConfig ?? .emptyConfig).merging(newValueFlags: valueFlags, newClockSkew: clockSkew)
         }
 
-        let appUserDefaults = CurrentAppContext().appUserDefaults()
-
-        // As a special case, persist RingRTC field trials. See comments in
-        // ``RingrtcFieldTrials`` for details.
-        RingrtcFieldTrials.saveNwPathMonitorTrialState(
-            isEnabled: {
-                let isKilled = mergedConfig.isEnabled(.ringrtcNwPathMonitorTrialKillSwitch, defaultValue: false)
-                return !isKilled
-            }(),
-            in: appUserDefaults
-        )
-
-        let libsignalEnforceMinTlsVersion = mergedConfig.isEnabled(.libsignalEnforceMinTlsVersion, defaultValue: FeatureFlags.libsignalEnforceMinTlsVersion)
-        LibsignalUserDefaults.saveShouldEnforceMinTlsVersion(libsignalEnforceMinTlsVersion, in: appUserDefaults)
-
-        let libsignalConnectionCheckTimeout = mergedConfig.value(.libsignalChatRequestConnectionCheckTimeoutMillis).flatMap { Int($0) } ?? 0
-        LibsignalUserDefaults.saveChatRequestConnectionCheckTimeoutMillis(libsignalConnectionCheckTimeout, in: appUserDefaults)
-
         await checkClientExpiration(valueFlag: mergedConfig.value(.clientExpiration))
+
+        net.setRemoteConfig(mergedConfig.netConfig(), buildVariant: BuildFlags.netBuildVariant)
 
         mergedConfig.logFlags()
     }
@@ -1008,7 +1058,7 @@ private extension KeyValueStore {
             Self.remoteConfigIsEnabledFlagsKey,
             keyClass: NSString.self,
             objectClass: NSNumber.self,
-            transaction: transaction
+            transaction: transaction,
         ) as [String: NSNumber]?
         return decodedValue?.mapValues { $0.boolValue }
     }
@@ -1022,12 +1072,16 @@ private extension KeyValueStore {
             Self.remoteConfigValueFlagsKey,
             keyClass: NSString.self,
             objectClass: NSString.self,
-            transaction: transaction
+            transaction: transaction,
         ) as [String: String]?
     }
 
     func setRemoteConfigValueFlags(_ newValue: [String: String], transaction: DBWriteTransaction) {
-        return setObject(newValue, key: Self.remoteConfigValueFlagsKey, transaction: transaction)
+        return setObject(
+            newValue as [NSString: NSString] as NSDictionary,
+            key: Self.remoteConfigValueFlagsKey,
+            transaction: transaction,
+        )
     }
 
     // MARK: - Remote Config Time Gated Flags
@@ -1039,7 +1093,7 @@ private extension KeyValueStore {
             Self.remoteConfigTimeGatedFlagsKey,
             keyClass: NSString.self,
             objectClass: NSDate.self,
-            transaction: transaction
+            transaction: transaction,
         ) as [String: Date]?
     }
 
@@ -1077,45 +1131,5 @@ private extension KeyValueStore {
 
     func setETag(_ newValue: String?, tx: DBWriteTransaction) {
         setString(newValue, key: eTagKey, transaction: tx)
-    }
-}
-
-// MARK: -
-
-/// Workaround (hopefully temporary) for the libsignal Net instance being created before RemoteConfig is ready to access.
-enum LibsignalUserDefaults {
-
-    private static let shouldEnforceMinTlsVersionKey: String = "LibsignalEnforceMinTlsVersion"
-
-    /// We cache this in UserDefaults because it's used too early to access the RemoteConfig object.
-    ///
-    /// It also makes it possible to override the setting in Xcode via the Scheme settings:
-    /// add the arguments "-LibsignalEnforceMinTlsVersion YES" to the invocation of the app.
-    static func saveShouldEnforceMinTlsVersion(
-        _ shouldEnforceMinTlsVersion: Bool,
-        in defaults: UserDefaults
-    ) {
-        defaults.set(shouldEnforceMinTlsVersion, forKey: shouldEnforceMinTlsVersionKey)
-    }
-
-    static func readShouldEnforceMinTlsVersion(from defaults: UserDefaults) -> Bool {
-        return defaults.bool(forKey: shouldEnforceMinTlsVersionKey)
-    }
-
-    private static let chatRequestConnectionCheckTimeoutMillis: String = "LibsignalChatRequestConnectionCheckTimeoutMillis"
-
-    /// We cache this in UserDefaults because it's used too early to access the RemoteConfig object.
-    ///
-    /// It also makes it possible to override the setting in Xcode via the Scheme settings:
-    /// add the arguments "-LibsignalChatRequestConnectionCheckTimeoutMillis 2000" to the invocation of the app.
-    static func saveChatRequestConnectionCheckTimeoutMillis(
-        _ timeoutMillis: Int,
-        in defaults: UserDefaults
-    ) {
-        defaults.set(timeoutMillis, forKey: chatRequestConnectionCheckTimeoutMillis)
-    }
-
-    static func readChatRequestConnectionCheckTimeoutMillis(from defaults: UserDefaults) -> Int {
-        return defaults.integer(forKey: chatRequestConnectionCheckTimeoutMillis)
     }
 }

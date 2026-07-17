@@ -7,7 +7,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OWSDisappearingMessagesConfiguration;
 @class TSContactThread;
 
 @interface OWSDisappearingConfigurationUpdateInfoMessage : TSInfoMessage
@@ -23,7 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithThread:(TSThread *)thread
                      timestamp:(uint64_t)timestamp
                     serverGuid:(nullable NSString *)serverGuid
-                   messageType:(TSInfoMessageType)infoMessage
+                   messageType:(TSInfoMessageType)messageType
+            expireTimerVersion:(nullable NSNumber *)expireTimerVersion
+              expiresInSeconds:(unsigned int)expiresInSeconds
            infoMessageUserInfo:(nullable NSDictionary<InfoMessageUserInfoKey, id> *)infoMessageUserInfo NS_UNAVAILABLE;
 
 - (instancetype)initWithGrdbId:(int64_t)grdbId
@@ -61,8 +62,6 @@ NS_ASSUME_NONNULL_BEGIN
                               read:(BOOL)read
                         serverGuid:(nullable NSString *)serverGuid
                unregisteredAddress:(nullable SignalServiceAddress *)unregisteredAddress NS_UNAVAILABLE;
-
-- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
 
 /// Create a new disappearing-timer-update info message.
 ///

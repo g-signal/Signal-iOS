@@ -5,7 +5,7 @@
 
 public import SignalServiceKit
 
-public class ContextMenuRectionBarAccessory: ContextMenuTargetedPreviewAccessory, MessageReactionPickerDelegate {
+public class ContextMenuReactionBarAccessory: ContextMenuTargetedPreviewAccessory, MessageReactionPickerDelegate {
     public let thread: TSThread
     public let itemViewModel: CVItemViewModelImpl?
     public var didSelectReactionHandler: ((TSMessage, String, Bool) -> Void)? // = {(message: TSMessage, reaction: String, isRemoving: Bool) -> Void in }
@@ -16,12 +16,16 @@ public class ContextMenuRectionBarAccessory: ContextMenuTargetedPreviewAccessory
 
     public init(
         thread: TSThread,
-        itemViewModel: CVItemViewModelImpl?
+        itemViewModel: CVItemViewModelImpl?,
     ) {
         self.thread = thread
         self.itemViewModel = itemViewModel
 
-        reactionPicker = MessageReactionPicker(selectedEmoji: itemViewModel?.reactionState?.localUserEmoji, delegate: nil)
+        reactionPicker = MessageReactionPicker(
+            selectedEmoji: itemViewModel?.reactionState?.localUserEmoji,
+            delegate: nil,
+            style: .contextMenu(allowGlass: true),
+        )
         let isRTL = CurrentAppContext().isRTL
         let isIncomingMessage = itemViewModel?.interaction.interactionType == .incomingMessage
         let alignmentOffset = isIncomingMessage && thread.isGroupThread ? 22 : 0
@@ -44,7 +48,7 @@ public class ContextMenuRectionBarAccessory: ContextMenuTargetedPreviewAccessory
     override func animateIn(
         duration: TimeInterval,
         previewWillShift: Bool,
-        completion: @escaping () -> Void
+        completion: @escaping () -> Void,
     ) {
         let animateIn = {
             self.reactionPicker.isHidden = false
@@ -63,7 +67,7 @@ public class ContextMenuRectionBarAccessory: ContextMenuTargetedPreviewAccessory
     override func animateOut(
         duration: TimeInterval,
         previewWillShift: Bool,
-        completion: @escaping () -> Void
+        completion: @escaping () -> Void,
     ) {
         reactionPicker.playDismissalAnimation(duration: duration, completion: completion)
     }
@@ -86,12 +90,13 @@ public class ContextMenuRectionBarAccessory: ContextMenuTargetedPreviewAccessory
     override func touchLocationInViewDidEnd(locationInView: CGPoint) -> Bool {
         // Send focused emoji if needed
         if let focusedEmoji = reactionPicker.focusedEmoji {
-            if focusedEmoji == MessageReactionPicker.anyEmojiName {
+            switch focusedEmoji {
+            case .more:
                 didSelectAnyEmoji()
-            } else {
-                let isRemoving = focusedEmoji == self.itemViewModel?.reactionState?.localUserEmoji
-                if let index = reactionPicker.currentEmojiSet().firstIndex(of: focusedEmoji) {
-                    didSelectReaction(reaction: focusedEmoji, isRemoving: isRemoving, inPosition: index )
+            case .emoji(let emoji):
+                let isRemoving = emoji == self.itemViewModel?.reactionState?.localUserEmoji
+                if let index = reactionPicker.currentEmojiSet().firstIndex(of: emoji) {
+                    didSelectReaction(reaction: emoji, isRemoving: isRemoving, inPosition: index)
                 }
             }
             return true
@@ -101,10 +106,11 @@ public class ContextMenuRectionBarAccessory: ContextMenuTargetedPreviewAccessory
     }
 
     // MARK: MessageReactionPickerDelegate
+
     func didSelectReaction(
         reaction: String,
         isRemoving: Bool,
-        inPosition position: Int
+        inPosition position: Int,
     ) {
         guard let message = itemViewModel?.interaction as? TSMessage else {
             owsFailDebug("Not sending reaction for unexpected interaction type")

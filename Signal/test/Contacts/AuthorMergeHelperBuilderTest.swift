@@ -23,7 +23,7 @@ final class AuthorMergeHelperBuilderTest: XCTestCase {
         let phoneNumber2 = E164("+16505550102")!
 
         inMemoryDb.write { tx in
-            recipientDatabaseTable.insertRecipient(SignalRecipient(aci: aci1, pni: nil, phoneNumber: phoneNumber1), transaction: tx)
+            _ = try! SignalRecipient.insertRecord(aci: aci1, phoneNumber: phoneNumber1, tx: tx)
         }
 
         inMemoryDb.write { tx in
@@ -44,7 +44,7 @@ final class AuthorMergeHelperBuilderTest: XCTestCase {
             authorMergeHelper: authorMergeHelper,
             db: inMemoryDb,
             modelReadCaches: AuthorMergeHelperBuilder_MockModelReadCaches(),
-            recipientDatabaseTable: recipientDatabaseTable
+            recipientDatabaseTable: recipientDatabaseTable,
         ).buildTableIfNeeded()
 
         inMemoryDb.read { tx in

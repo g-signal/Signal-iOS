@@ -3,109 +3,126 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-import Foundation
 import GRDB
 
-public protocol OrphanedBackupAttachmentStore {
+public class OrphanedBackupAttachmentStore {
 
-    func insert(_ record: inout OrphanedBackupAttachment, tx: DBWriteTransaction) throws
+    public init() {}
+
+    public func insert(
+        _ record: inout OrphanedBackupAttachment,
+        tx: DBWriteTransaction,
+    ) {
+        failIfThrows {
+            try record.insert(tx.database)
+        }
+    }
 
     /// Read the next highest priority (FIFO) records off the table, up to count.
     /// Returns an empty array if the table is empty.
-    func peek(count: UInt, tx: DBReadTransaction) throws -> [OrphanedBackupAttachment]
+    public func peek(
+        count: UInt,
+        tx: DBReadTransaction,
+    ) -> [OrphanedBackupAttachment] {
+        let query = OrphanedBackupAttachment
+            // We want to dequeue in insertion order.
+            .order([Column(OrphanedBackupAttachment.CodingKeys.id).asc])
+            .limit(Int(count))
+
+        return failIfThrows {
+            try query.fetchAll(tx.database)
+        }
+    }
+
+    public func hasPendingDelete(
+        forMediaId mediaId: Data,
+        tx: DBReadTransaction,
+    ) -> Bool {
+        let query = OrphanedBackupAttachment
+            .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaId) == mediaId)
+
+        return failIfThrows {
+            try !query.isEmpty(tx.database)
+        }
+    }
+
+    public func enumerateMediaNamesPendingDelete(
+        tx: DBReadTransaction,
+        block: (String, inout Bool) -> Void,
+    ) {
+        let query = OrphanedBackupAttachment
+            .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaId) == nil)
+            .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaName) != nil)
+
+        failIfThrows {
+            let cursor = try query.fetchCursor(tx.database)
+
+            var stop = false
+            while
+                !stop,
+                let next = try cursor.next()?.mediaName
+            {
+                block(next, &stop)
+            }
+        }
+    }
 
     /// Remove any tasks for deleting a fullsize media tier upload with
     /// the given media name and/or derived media id.
-    func removeThumbnail(
+    public func removeThumbnail(
         fullsizeMediaName: String,
         thumbnailMediaId: Data,
-        tx: DBWriteTransaction
-    ) throws
+        tx: DBWriteTransaction,
+    ) {
+        let mediaNameQuery = OrphanedBackupAttachment
+            // Records for thumbnails are enqueued with the fullsize's media name
+            .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaName) == fullsizeMediaName)
+            .filter(
+                Column(OrphanedBackupAttachment.CodingKeys.type)
+                    == OrphanedBackupAttachment.SizeType.thumbnail.rawValue,
+            )
+
+        let mediaIdQuery = OrphanedBackupAttachment
+            // No need to filter by type; matching the mediaId is sufficient
+            .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaId) == thumbnailMediaId)
+
+        failIfThrows {
+            try mediaNameQuery.deleteAll(tx.database)
+            try mediaIdQuery.deleteAll(tx.database)
+        }
+    }
 
     /// Remove any tasks for deleting a fullsize media tier upload with
     /// the given media name (fullsize, not the thumbnail media name)
     /// and/or derived thumbnail media id.
-    func removeFullsize(
-        mediaName: String,
-        fullsizeMediaId: Data,
-        tx: DBWriteTransaction
-    ) throws
-
-    /// Remove the task from the queue. Should be called once deleted on the cdn (or permanently failed).
-    func remove(
-        _ record: OrphanedBackupAttachment,
-        tx: DBWriteTransaction
-    ) throws
-
-    /// Remove all records from the table.
-    /// Called if e.g. a backup subscription expires or is cancelled.
-    func removeAll(tx: DBWriteTransaction) throws
-}
-
-public class OrphanedBackupAttachmentStoreImpl: OrphanedBackupAttachmentStore {
-
-    public init() {}
-
-    public func insert(_ record: inout OrphanedBackupAttachment, tx: DBWriteTransaction) throws {
-        let db = tx.database
-        try record.insert(db)
-    }
-
-    public func peek(
-        count: UInt,
-        tx: DBReadTransaction
-    ) throws -> [OrphanedBackupAttachment] {
-        let db = tx.database
-        return try OrphanedBackupAttachment
-            // We want to dequeue in insertion order.
-            .order([Column(OrphanedBackupAttachment.CodingKeys.id).asc])
-            .limit(Int(count))
-            .fetchAll(db)
-    }
-
-    public func removeThumbnail(
-        fullsizeMediaName: String,
-        thumbnailMediaId: Data,
-        tx: DBWriteTransaction
-    ) throws {
-        try OrphanedBackupAttachment
-            // Records for thumbnails are enqueued with the fullsize's media name
-            .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaName) == fullsizeMediaName)
-            .filter(Column(OrphanedBackupAttachment.CodingKeys.type)
-                    == OrphanedBackupAttachment.SizeType.thumbnail.rawValue)
-            .deleteAll(tx.database)
-        try OrphanedBackupAttachment
-            // No need to filter by type; matching the mediaId is sufficient
-            .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaId) == thumbnailMediaId)
-            .deleteAll(tx.database)
-    }
-
     public func removeFullsize(
         mediaName: String,
         fullsizeMediaId: Data,
-        tx: DBWriteTransaction
-    ) throws {
-        try OrphanedBackupAttachment
+        tx: DBWriteTransaction,
+    ) {
+        let mediaNameQuery = OrphanedBackupAttachment
             .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaName) == mediaName)
-            .filter(Column(OrphanedBackupAttachment.CodingKeys.type)
-                    == OrphanedBackupAttachment.SizeType.fullsize.rawValue)
-            .deleteAll(tx.database)
-        try OrphanedBackupAttachment
-        // No need to filter by type; matching the mediaId is sufficient
+            .filter(
+                Column(OrphanedBackupAttachment.CodingKeys.type)
+                    == OrphanedBackupAttachment.SizeType.fullsize.rawValue,
+            )
+        let mediaIdQuery = OrphanedBackupAttachment
+            // No need to filter by type; matching the mediaId is sufficient
             .filter(Column(OrphanedBackupAttachment.CodingKeys.mediaId) == fullsizeMediaId)
-            .deleteAll(tx.database)
+
+        failIfThrows {
+            try mediaNameQuery.deleteAll(tx.database)
+            try mediaIdQuery.deleteAll(tx.database)
+        }
     }
 
+    /// Remove the task from the queue. Should be called once deleted on the cdn (or permanently failed).
     public func remove(
         _ record: OrphanedBackupAttachment,
-        tx: DBWriteTransaction
-    ) throws {
-        let db = tx.database
-        try record.delete(db)
-    }
-
-    public func removeAll(tx: DBWriteTransaction) throws {
-        let db = tx.database
-        try OrphanedBackupAttachment.deleteAll(db)
+        tx: DBWriteTransaction,
+    ) {
+        failIfThrows {
+            try record.delete(tx.database)
+        }
     }
 }

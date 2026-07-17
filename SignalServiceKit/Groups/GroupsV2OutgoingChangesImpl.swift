@@ -21,8 +21,8 @@ public import LibSignalClient
 /// responsible for conflict resolution. For example, if we are trying to
 /// add Alice and Bob, and if another user adds Alice before we do, we'll
 /// only add Bob. If our change turns into a no-op (e.g., both Alice and Bob
-/// are added by somebody else), we'll throw GroupsV2Error.redundantChange;
-/// callers should typically interpret this as a successful outcome.
+/// are added by somebody else), we'll return nil; callers should interpret
+/// this as a successful outcome.
 public class GroupsV2OutgoingChanges {
 
     public let groupSecretParams: GroupSecretParams
@@ -165,9 +165,11 @@ public class GroupsV2OutgoingChanges {
             accessForAddFromInviteLink = .unsatisfiable
             inviteLinkPasswordMode = .ignore
         case .enabledWithoutApproval, .enabledWithApproval:
-            accessForAddFromInviteLink = (linkMode == .enabledWithoutApproval
-                                            ? .any
-                                            : .administrator)
+            accessForAddFromInviteLink = (
+                linkMode == .enabledWithoutApproval
+                    ? .any
+                    : .administrator,
+            )
             inviteLinkPasswordMode = .ensureValid
         }
     }
@@ -198,8 +200,8 @@ public class GroupsV2OutgoingChanges {
     public func buildGroupChangeProto(
         currentGroupModel: TSGroupModelV2,
         currentDisappearingMessageToken: DisappearingMessageToken,
-        forceRefreshProfileKeyCredentials: Bool
-    ) async throws -> GroupsV2BuiltGroupChange {
+        forceRefreshProfileKeyCredentials: Bool,
+    ) async throws -> GroupsV2BuiltGroupChange? {
         let groupId = try self.groupSecretParams.getPublicParams().getGroupIdentifier()
         guard groupId.serialize() == currentGroupModel.groupId else {
             throw OWSAssertionError("Mismatched groupId.")
@@ -217,14 +219,14 @@ public class GroupsV2OutgoingChanges {
 
         let profileKeyCredentials = try await SSKEnvironment.shared.groupsV2Ref.loadProfileKeyCredentials(
             for: Array(newUserAcis),
-            forceRefresh: forceRefreshProfileKeyCredentials
+            forceRefresh: forceRefreshProfileKeyCredentials,
         )
 
         return try self.buildGroupChangeProto(
             currentGroupModel: currentGroupModel,
             currentDisappearingMessageToken: currentDisappearingMessageToken,
             localIdentifiers: localIdentifiers,
-            profileKeyCredentials: profileKeyCredentials
+            profileKeyCredentials: profileKeyCredentials,
         )
     }
 
@@ -257,13 +259,13 @@ public class GroupsV2OutgoingChanges {
     ///   kicked out Alice, we throw GroupsV2Error.conflictingChange.
     ///
     /// Essentially, our strategy is to "apply any changes that still make
-    /// sense". If no changes do, we throw GroupsV2Error.redundantChange.
+    /// sense". If no changes do, we return nil.
     private func buildGroupChangeProto(
         currentGroupModel: TSGroupModelV2,
         currentDisappearingMessageToken: DisappearingMessageToken,
         localIdentifiers: LocalIdentifiers,
         profileKeyCredentials: [Aci: ExpiringProfileKeyCredential],
-    ) throws -> GroupsV2BuiltGroupChange {
+    ) throws -> GroupsV2BuiltGroupChange? {
         let groupV2Params = try currentGroupModel.groupV2Params()
 
         var actionsBuilder = GroupsProtoGroupChangeActions.builder()
@@ -276,8 +278,6 @@ public class GroupsV2OutgoingChanges {
 
         // Track member counts that are updated to reflect each new action.
         let currentGroupMembership = currentGroupModel.groupMembership
-        var fullMembers = Set(currentGroupMembership.fullMembers.compactMap { $0.serviceId as? Aci })
-        var fullMemberAdmins = Set(currentGroupMembership.fullMemberAdministrators.compactMap { $0.serviceId as? Aci })
 
         var groupUpdateMessageBehavior: GroupUpdateMessageBehavior = .sendUpdateToOtherGroupMembers
 
@@ -335,7 +335,7 @@ public class GroupsV2OutgoingChanges {
             }
         }
 
-        if let inviteLinkPasswordMode = inviteLinkPasswordMode {
+        if let inviteLinkPasswordMode {
             let newInviteLinkPassword: Data?
             switch inviteLinkPasswordMode {
             case .ignore:
@@ -343,8 +343,10 @@ public class GroupsV2OutgoingChanges {
             case .rotate:
                 newInviteLinkPassword = GroupManager.generateInviteLinkPasswordV2()
             case .ensureValid:
-                if let oldInviteLinkPassword = currentGroupModel.inviteLinkPassword,
-                   !oldInviteLinkPassword.isEmpty {
+                if
+                    let oldInviteLinkPassword = currentGroupModel.inviteLinkPassword,
+                    !oldInviteLinkPassword.isEmpty
+                {
                     newInviteLinkPassword = oldInviteLinkPassword
                 } else {
                     newInviteLinkPassword = GroupManager.generateInviteLinkPasswordV2()
@@ -383,20 +385,18 @@ public class GroupsV2OutgoingChanges {
                     membersToUnban.append(aci)
 
                     fullOrInvitedMembers.insert(aci)
-                    fullMembers.insert(aci)
                 } else if let aci = serviceId as? Aci, let profileKeyCredential = profileKeyCredentials[aci] {
                     var actionBuilder = GroupsProtoGroupChangeActionsAddMemberAction.builder()
                     actionBuilder.setAdded(try GroupsV2Protos.buildMemberProto(
                         profileKeyCredential: profileKeyCredential,
                         role: .default,
-                        groupV2Params: groupV2Params
+                        groupV2Params: groupV2Params,
                     ))
                     actionsBuilder.addAddMembers(actionBuilder.buildInfallibly())
                     didChange = true
                     membersToUnban.append(aci)
 
                     fullOrInvitedMembers.insert(aci)
-                    fullMembers.insert(aci)
                 } else if currentGroupMembership.isInvitedMember(serviceId) {
                     // Another user has already invited this member. They may have been added
                     // with a different role. We don't treat that as a conflict.
@@ -405,7 +405,7 @@ public class GroupsV2OutgoingChanges {
                     actionBuilder.setAdded(try GroupsV2Protos.buildPendingMemberProto(
                         serviceId: serviceId,
                         role: .default,
-                        groupV2Params: groupV2Params
+                        groupV2Params: groupV2Params,
                     ))
                     actionsBuilder.addAddPendingMembers(actionBuilder.buildInfallibly())
                     didChange = true
@@ -429,11 +429,6 @@ public class GroupsV2OutgoingChanges {
                 actionsBuilder.addDeleteMembers(actionBuilder.buildInfallibly())
                 didChange = true
                 membersToBan.append(aci)
-
-                fullMembers.remove(aci)
-                if currentGroupMembership.isFullMemberAndAdministrator(aci) {
-                    fullMemberAdmins.remove(aci)
-                }
             } else if currentGroupMembership.isInvitedMember(serviceId) {
                 var actionBuilder = GroupsProtoGroupChangeActionsDeletePendingMemberAction.builder()
                 let userId = try groupV2Params.userId(for: serviceId)
@@ -473,7 +468,7 @@ public class GroupsV2OutgoingChanges {
                 let bannedSortedByAge = currentBannedMembers.sorted { member1, member2 -> Bool in
                     // Lower bannedAt time goes first
                     member1.value < member2.value
-                }.map { (aci, _) -> Aci in aci }
+                }.map { aci, _ -> Aci in aci }
 
                 acisToUnban += bannedSortedByAge.prefix(nOldMembersToUnban)
             }
@@ -533,12 +528,6 @@ public class GroupsV2OutgoingChanges {
             actionBuilder.setRole(newRole.asProtoRole)
             actionsBuilder.addModifyMemberRoles(actionBuilder.buildInfallibly())
             didChange = true
-
-            if currentRole == .administrator {
-                fullMemberAdmins.remove(aci)
-            } else if newRole == .administrator {
-                fullMemberAdmins.insert(aci)
-            }
         }
 
         let currentAccess = currentGroupModel.access
@@ -564,9 +553,11 @@ public class GroupsV2OutgoingChanges {
         }
 
         var accessForAddFromInviteLink = self.accessForAddFromInviteLink
-        if currentGroupMembership.allMembersOfAnyKind.count == 1 &&
-            currentGroupMembership.isFullMemberAndAdministrator(localAci) &&
-            self.shouldLeaveGroupDeclineInvite {
+        if
+            currentGroupMembership.allMembersOfAnyKind.count == 1,
+            currentGroupMembership.isFullMemberAndAdministrator(localAci),
+            self.shouldLeaveGroupDeclineInvite
+        {
             // If we're the last admin to leave the group,
             // disable the group invite link.
             accessForAddFromInviteLink = .unsatisfiable
@@ -590,7 +581,7 @@ public class GroupsV2OutgoingChanges {
 
             let profileKeyCredentialPresentationData = try GroupsV2Protos.presentationData(
                 profileKeyCredential: localProfileKeyCredential,
-                groupV2Params: groupV2Params
+                groupV2Params: groupV2Params,
             )
 
             // Accepting an invite to our ACI uses a different change action
@@ -632,26 +623,16 @@ public class GroupsV2OutgoingChanges {
 
             if promotedLocalAci {
                 didChange = true
-                fullMembers.insert(localAci)
             }
         }
 
         if self.shouldLeaveGroupDeclineInvite {
-            let canLeaveGroup = GroupManager.canLocalUserLeaveGroupWithoutChoosingNewAdmin(
-                localAci: localAci,
-                fullMembers: fullMembers,
-                admins: fullMemberAdmins
-            )
-            guard canLeaveGroup else {
-                // This could happen if the last two admins leave at the same time
-                // and race.
-                throw GroupsV2Error.cannotBuildGroupChangeProto_lastAdminCantLeaveGroup
-            }
-
             // Check that we are still invited or in group.
-            if let invitedAtServiceId = currentGroupMembership.localUserInvitedAtServiceId(
-                localIdentifiers: localIdentifiers
-            ) {
+            if
+                let invitedAtServiceId = currentGroupMembership.localUserInvitedAtServiceId(
+                    localIdentifiers: localIdentifiers,
+                )
+            {
                 if invitedAtServiceId == localIdentifiers.pni {
                     // If we are declining an invite to our PNI, we should not send group
                     // update messages. Messages cannot come from our PNI, so we would be
@@ -705,8 +686,10 @@ public class GroupsV2OutgoingChanges {
                 throw OWSAssertionError("Missing profile key credential: \(localAci)")
             }
             var actionBuilder = GroupsProtoGroupChangeActionsModifyMemberProfileKeyAction.builder()
-            actionBuilder.setPresentation(try GroupsV2Protos.presentationData(profileKeyCredential: profileKeyCredential,
-                                                                              groupV2Params: groupV2Params))
+            actionBuilder.setPresentation(try GroupsV2Protos.presentationData(
+                profileKeyCredential: profileKeyCredential,
+                groupV2Params: groupV2Params,
+            ))
             actionsBuilder.addModifyMemberProfileKeys(actionBuilder.buildInfallibly())
             didChange = true
         }
@@ -714,13 +697,13 @@ public class GroupsV2OutgoingChanges {
         // MARK: - Change action insertion point
 
         guard didChange else {
-            throw GroupsV2Error.redundantChange
+            return nil
         }
 
         Logger.info("Updating group.")
         return GroupsV2BuiltGroupChange(
             proto: actionsBuilder.buildInfallibly(),
-            groupUpdateMessageBehavior: groupUpdateMessageBehavior
+            groupUpdateMessageBehavior: groupUpdateMessageBehavior,
         )
     }
 }

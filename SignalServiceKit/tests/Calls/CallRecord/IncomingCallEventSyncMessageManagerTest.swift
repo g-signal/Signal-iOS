@@ -51,7 +51,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
             interactionStore: mockInteractionStore,
             markAsReadShims: mockMarkAsReadShims,
             recipientDatabaseTable: mockRecipientDatabaseTable,
-            threadStore: mockThreadStore
+            threadStore: mockThreadStore,
         )
     }
 
@@ -72,10 +72,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: callId.adjacent,
                     callTimestamp: .maxRandom,
                     callEvent: .deleted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -93,10 +93,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: callId,
                     callTimestamp: .maxRandom,
                     callEvent: .deleted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
 
             XCTAssertTrue(didDeleteModels)
@@ -116,10 +116,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: callId.adjacent,
                     callTimestamp: .maxRandom,
                     callEvent: .deleted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
 
             XCTAssertTrue(didCallMock)
@@ -129,7 +129,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
     func testDeleteGroupCall() {
         let (existingCallRecord, groupId) = createGroupCallRecord(
             callDirection: .incoming,
-            groupCallStatus: .generic
+            groupCallStatus: .generic,
         )
 
         /// If the call record in question was already deleted, do nothing. (The
@@ -144,10 +144,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: existingCallRecord.callId.adjacent,
                     callTimestamp: .maxRandom,
                     callEvent: .deleted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -165,10 +165,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: existingCallRecord.callId,
                     callTimestamp: .maxRandom,
                     callEvent: .deleted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
 
             XCTAssertTrue(didDeleteModels)
@@ -188,10 +188,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: existingCallRecord.callId.adjacent,
                     callTimestamp: .maxRandom,
                     callEvent: .deleted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
 
             XCTAssertTrue(didCallMock)
@@ -202,7 +202,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
 
     private func insertIndividualCallRecord(
         callType: RPRecentCallType = .outgoingMissed,
-        individualCallStatus: CallRecord.CallStatus.IndividualCallStatus = .notAccepted
+        individualCallStatus: CallRecord.CallStatus.IndividualCallStatus = .notAccepted,
     ) -> (ServiceId, UInt64) {
         let callId = UInt64.maxRandom
 
@@ -212,18 +212,17 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
         let threadRowId = thread.sqliteRowId!
 
         let contactServiceId = contactAddress.aci!
-        let contactRecipient = SignalRecipient(aci: contactServiceId, pni: nil, phoneNumber: nil)
 
         let interaction = TSCall(
             callType: callType,
             offerType: .audio,
             thread: thread,
-            sentAtTimestamp: UInt64.maxRandom
+            sentAtTimestamp: UInt64.maxRandom,
         )
 
         mockDB.write { tx in
             mockInteractionStore.insertInteraction(interaction, tx: tx)
-            mockRecipientDatabaseTable.insertRecipient(contactRecipient, transaction: tx)
+            _ = try! SignalRecipient.insertRecord(aci: contactServiceId, tx: tx)
         }
 
         let callRecord = CallRecord(
@@ -233,7 +232,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
             callType: .audioCall,
             callDirection: .outgoing,
             callStatus: .individual(individualCallStatus),
-            callBeganTimestamp: .maxRandomInt64Compat
+            callBeganTimestamp: .maxRandomInt64Compat,
         )
 
         mockDB.write { tx in
@@ -253,20 +252,20 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: callId,
                     callTimestamp: .maxRandom,
                     callEvent: .accepted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
         XCTAssertEqual(
             (mockInteractionStore.insertedInteractions.first! as! TSCall).callType,
-            .outgoing
+            .outgoing,
         )
         XCTAssertEqual(
             mockIndividualCallRecordManager.updatedRecords,
-            [.individual(.accepted)]
+            [.individual(.accepted)],
         )
         XCTAssertEqual(mockMarkAsReadShims.markedAsReadCount, 1)
     }
@@ -280,8 +279,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
         mockThreadStore.insertThread(contactThread)
 
         mockDB.write { tx in
-            let recipient = SignalRecipient(aci: contactServiceId, pni: nil, phoneNumber: nil)
-            mockRecipientDatabaseTable.insertRecipient(recipient, transaction: tx)
+            _ = try! SignalRecipient.insertRecord(aci: contactServiceId, tx: tx)
         }
 
         mockDB.write { tx in
@@ -291,20 +289,20 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: callId,
                     callTimestamp: .maxRandom,
                     callEvent: .accepted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
         XCTAssertEqual(
             (mockInteractionStore.insertedInteractions.first! as! TSCall).callType,
-            .outgoing
+            .outgoing,
         )
         XCTAssertEqual(
             mockIndividualCallRecordManager.createdRecords,
-            [callId]
+            [callId],
         )
         XCTAssertEqual(mockMarkAsReadShims.markedAsReadCount, 1)
     }
@@ -317,8 +315,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
         mockThreadStore.insertThread(contactThread)
 
         mockDB.write { tx in
-            let recipient = SignalRecipient(aci: contactServiceId, pni: nil, phoneNumber: nil)
-            mockRecipientDatabaseTable.insertRecipient(recipient, transaction: tx)
+            _ = try! SignalRecipient.insertRecord(aci: contactServiceId, tx: tx)
         }
 
         mockCallRecordStore.fetchMock = { .matchDeleted }
@@ -330,10 +327,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: .maxRandom,
                     callTimestamp: .maxRandom,
                     callEvent: .accepted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -348,7 +345,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
     private func createGroupCallRecord(
         groupId: UInt8 = 0,
         callDirection: CallRecord.CallDirection,
-        groupCallStatus: CallRecord.CallStatus.GroupCallStatus
+        groupCallStatus: CallRecord.CallStatus.GroupCallStatus,
     ) -> (CallRecord, Data) {
         let thread = TSGroupThread.forUnitTest(groupId: groupId)
 
@@ -357,7 +354,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
             return mockInteractionStore.insertGroupCallInteraction(
                 groupThread: thread,
                 callEventTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -368,7 +365,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
             callType: .groupCall,
             callDirection: callDirection,
             callStatus: .group(groupCallStatus),
-            callBeganTimestamp: .maxRandom
+            callBeganTimestamp: .maxRandom,
         )
 
         mockDB.write { tx in
@@ -386,7 +383,8 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
         }
 
         let (existingCallRecord, groupId) = createGroupCallRecord(
-            callDirection: .incoming, groupCallStatus: .generic
+            callDirection: .incoming,
+            groupCallStatus: .generic,
         )
 
         /// A first sync message should get us to the joined state.
@@ -397,10 +395,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: existingCallRecord.callId,
                     callTimestamp: existingCallRecord.callBeganTimestamp - 5,
                     callEvent: .accepted,
-                    callDirection: .incoming
+                    callDirection: .incoming,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -412,10 +410,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: existingCallRecord.callId,
                     callTimestamp: existingCallRecord.callBeganTimestamp - 5,
                     callEvent: .accepted,
-                    callDirection: .incoming
+                    callDirection: .incoming,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -431,11 +429,15 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
         }
 
         let (missedCallRecord, missedGroupId) = createGroupCallRecord(
-            groupId: 1, callDirection: .incoming, groupCallStatus: .ringingMissed
+            groupId: 1,
+            callDirection: .incoming,
+            groupCallStatus: .ringingMissed,
         )
 
         let (declinedCallRecord, declinedGroupId) = createGroupCallRecord(
-            groupId: 2, callDirection: .incoming, groupCallStatus: .ringingDeclined
+            groupId: 2,
+            callDirection: .incoming,
+            groupCallStatus: .ringingDeclined,
         )
 
         /// Updating a ringing-missed record makes it ringing-accepted.
@@ -446,10 +448,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: missedCallRecord.callId,
                     callTimestamp: missedCallRecord.callBeganTimestamp - 5,
                     callEvent: .accepted,
-                    callDirection: .incoming
+                    callDirection: .incoming,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -461,10 +463,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: declinedCallRecord.callId,
                     callTimestamp: declinedCallRecord.callBeganTimestamp - 5,
                     callEvent: .accepted,
-                    callDirection: .incoming
+                    callDirection: .incoming,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -476,10 +478,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: declinedCallRecord.callId,
                     callTimestamp: declinedCallRecord.callBeganTimestamp - 5,
                     callEvent: .accepted,
-                    callDirection: .incoming
+                    callDirection: .incoming,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -495,11 +497,15 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
         }
 
         let (genericCallRecord, genericGroupId) = createGroupCallRecord(
-            groupId: 1, callDirection: .incoming, groupCallStatus: .generic
+            groupId: 1,
+            callDirection: .incoming,
+            groupCallStatus: .generic,
         )
 
         let (missedCallRecord, missedGroupId) = createGroupCallRecord(
-            groupId: 2, callDirection: .incoming, groupCallStatus: .ringingMissed
+            groupId: 2,
+            callDirection: .incoming,
+            groupCallStatus: .ringingMissed,
         )
 
         /// Updating a generic record makes it ringing-declined.
@@ -510,10 +516,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: genericCallRecord.callId,
                     callTimestamp: genericCallRecord.callBeganTimestamp - 5,
                     callEvent: .notAccepted,
-                    callDirection: .incoming
+                    callDirection: .incoming,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -525,10 +531,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: missedCallRecord.callId,
                     callTimestamp: missedCallRecord.callBeganTimestamp - 5,
                     callEvent: .notAccepted,
-                    callDirection: .incoming
+                    callDirection: .incoming,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -540,10 +546,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: missedCallRecord.callId,
                     callTimestamp: missedCallRecord.callBeganTimestamp - 5,
                     callEvent: .notAccepted,
-                    callDirection: .incoming
+                    callDirection: .incoming,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -559,11 +565,15 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
         }
 
         let (joinedCallRecord, joinedGroupId) = createGroupCallRecord(
-            groupId: 1, callDirection: .incoming, groupCallStatus: .joined
+            groupId: 1,
+            callDirection: .incoming,
+            groupCallStatus: .joined,
         )
 
         let (acceptedCallRecord, acceptedGroupId) = createGroupCallRecord(
-            groupId: 2, callDirection: .incoming, groupCallStatus: .ringingAccepted
+            groupId: 2,
+            callDirection: .incoming,
+            groupCallStatus: .ringingAccepted,
         )
 
         /// Updating a joined record makes it ringing-accepted.
@@ -574,10 +584,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: joinedCallRecord.callId,
                     callTimestamp: joinedCallRecord.callBeganTimestamp - 5,
                     callEvent: .notAccepted,
-                    callDirection: .incoming
+                    callDirection: .incoming,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -589,10 +599,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: acceptedCallRecord.callId,
                     callTimestamp: acceptedCallRecord.callBeganTimestamp - 5,
                     callEvent: .notAccepted,
-                    callDirection: .incoming
+                    callDirection: .incoming,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -609,11 +619,15 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
         }
 
         let (genericCallRecord, genericGroupId) = createGroupCallRecord(
-            groupId: 1, callDirection: .incoming, groupCallStatus: .generic
+            groupId: 1,
+            callDirection: .incoming,
+            groupCallStatus: .generic,
         )
 
         let (joinedCallRecord, joinedGroupId) = createGroupCallRecord(
-            groupId: 2, callDirection: .incoming, groupCallStatus: .joined
+            groupId: 2,
+            callDirection: .incoming,
+            groupCallStatus: .joined,
         )
 
         /// Updating a generic record reassigns the direction and status.
@@ -624,10 +638,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: genericCallRecord.callId,
                     callTimestamp: genericCallRecord.callBeganTimestamp - 5,
                     callEvent: .accepted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -639,10 +653,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: joinedCallRecord.callId,
                     callTimestamp: joinedCallRecord.callBeganTimestamp - 5,
                     callEvent: .accepted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -653,14 +667,15 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
     /// We should never receive a sync message for an outgoing, not-accepted
     /// call. If we do, we should ignore it.
     func testUpdatesGroupCall_outgoingNotAcceptedIsIgnored() {
-        mockGroupCallRecordManager.updateGroupCallStub = { (_, _, _) in
+        mockGroupCallRecordManager.updateGroupCallStub = { _, _, _ in
             XCTFail("Should never be updating!")
         }
 
         /// We treat all outgoing group rings as accepted because we don't track
         /// their ring state.
         let (callRecord, groupId) = createGroupCallRecord(
-            callDirection: .incoming, groupCallStatus: .generic
+            callDirection: .incoming,
+            groupCallStatus: .generic,
         )
 
         mockDB.write { tx in
@@ -670,10 +685,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: callRecord.callId,
                     callTimestamp: callRecord.callBeganTimestamp - 5,
                     callEvent: .notAccepted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -681,7 +696,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
     }
 
     func testIgnoresGroupCallIfRecordRecentlyDeleted() {
-        mockGroupCallRecordManager.updateGroupCallStub = { (_, _, _) in
+        mockGroupCallRecordManager.updateGroupCallStub = { _, _, _ in
             XCTFail("Should never be updating!")
         }
 
@@ -694,10 +709,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                     callId: .maxRandom,
                     callTimestamp: .maxRandom,
                     callEvent: .notAccepted,
-                    callDirection: .outgoing
+                    callDirection: .outgoing,
                 ),
                 syncMessageTimestamp: .maxRandom,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -710,7 +725,7 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
 
         func simulateIncoming(
             direction: CallRecord.CallDirection,
-            event: IncomingCallEventSyncMessageParams.CallEvent
+            event: IncomingCallEventSyncMessageParams.CallEvent,
         ) {
             mockDB.write { tx in
                 incomingSyncMessageManager.createOrUpdateRecordForIncomingSyncMessage(
@@ -719,10 +734,10 @@ final class IncomingCallEventSyncMessageManagerTest: XCTestCase {
                         callId: .maxRandom,
                         callTimestamp: .maxRandom,
                         callEvent: event,
-                        callDirection: direction
+                        callDirection: direction,
                     ),
                     syncMessageTimestamp: .maxRandom,
-                    tx: tx
+                    tx: tx,
                 )
             }
         }
@@ -787,7 +802,7 @@ private func notImplemented() -> Never {
 private class MockGroupCallRecordManager: GroupCallRecordManager {
     var createGroupCallStub: ((
         _ direction: CallRecord.CallDirection,
-        _ groupCallStatus: CallRecord.CallStatus.GroupCallStatus
+        _ groupCallStatus: CallRecord.CallStatus.GroupCallStatus,
     ) -> Void)?
     func createGroupCallRecord(callId: UInt64, groupCallInteraction: OWSGroupCallMessage, groupCallInteractionRowId: Int64, groupThreadRowId: Int64, callDirection: CallRecord.CallDirection, groupCallStatus: CallRecord.CallStatus.GroupCallStatus, groupCallRingerAci: Aci?, callEventTimestamp: UInt64, shouldSendSyncMessage: Bool, tx: DBWriteTransaction) -> CallRecord {
         createGroupCallStub!(callDirection, groupCallStatus)
@@ -798,7 +813,7 @@ private class MockGroupCallRecordManager: GroupCallRecordManager {
     var updateGroupCallStub: ((
         _ existingCallRecord: CallRecord,
         _ newCallDirection: CallRecord.CallDirection,
-        _ newGroupCallStatus: CallRecord.CallStatus.GroupCallStatus
+        _ newGroupCallStatus: CallRecord.CallStatus.GroupCallStatus,
     ) -> Void)?
     func updateGroupCallRecord(existingCallRecord: CallRecord, newCallDirection: CallRecord.CallDirection, newGroupCallStatus: CallRecord.CallStatus.GroupCallStatus, newGroupCallRingerAci: Aci?, callEventTimestamp: UInt64, shouldSendSyncMessage: Bool, tx: DBWriteTransaction) {
         updateGroupCallStub!(existingCallRecord, newCallDirection, newGroupCallStatus)
@@ -831,7 +846,7 @@ private class MockIndividualCallRecordManager: IndividualCallRecordManager {
         individualCallStatus: CallRecord.CallStatus.IndividualCallStatus,
         callEventTimestamp: UInt64,
         shouldSendSyncMessage: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> CallRecord {
         createdRecords.append(callId)
 
@@ -843,7 +858,7 @@ private class MockIndividualCallRecordManager: IndividualCallRecordManager {
         existingCallRecord: CallRecord,
         newIndividualCallStatus: CallRecord.CallStatus.IndividualCallStatus,
         shouldSendSyncMessage: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         updatedRecords.append(.individual(newIndividualCallStatus))
     }
@@ -865,7 +880,7 @@ private class MockMarkAsReadShims: IncomingCallEventSyncMessageManagerImpl.Shims
         callInteraction: TSInteraction & OWSReadTracking,
         thread: TSThread,
         syncMessageTimestamp: UInt64,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         markedAsReadCount += 1
     }

@@ -64,19 +64,15 @@ public protocol MediaBandwidthPreferenceStore {
 
     func preference(
         for mediaDownloadType: MediaBandwidthPreferences.MediaType,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> MediaBandwidthPreferences.Preference
 
     func autoDownloadableMediaTypes(tx: DBReadTransaction) -> Set<MediaBandwidthPreferences.MediaType>
 
-    /// Which sources (e.g. transit, media tier) are capable of being downloaded given the current network
-    /// state. (At time of writing, there is no user-level setting for this, but that could change.)
-    func downloadableSources() -> Set<QueuedAttachmentDownloadRecord.SourceType>
-
     func set(
         _ mediaBandwidthPreference: MediaBandwidthPreferences.Preference,
         for mediaDownloadType: MediaBandwidthPreferences.MediaType,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     func resetPreferences(tx: DBWriteTransaction)
@@ -85,13 +81,13 @@ public protocol MediaBandwidthPreferenceStore {
 extension MediaBandwidthPreferenceStore {
 
     public func loadPreferences(
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> [MediaBandwidthPreferences.MediaType: MediaBandwidthPreferences.Preference] {
         var result = [MediaBandwidthPreferences.MediaType: MediaBandwidthPreferences.Preference]()
         for mediaDownloadType in MediaBandwidthPreferences.MediaType.allCases {
             result[mediaDownloadType] = preference(
                 for: mediaDownloadType,
-                tx: tx
+                tx: tx,
             )
         }
         return result

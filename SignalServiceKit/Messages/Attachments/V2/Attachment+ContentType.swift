@@ -34,6 +34,22 @@ extension Attachment {
             }
             self = value
         }
+
+        init(mimeType: String) {
+            if MimeTypeUtil.isSupportedVideoMimeType(mimeType) {
+                self = .video
+            } else if MimeTypeUtil.isSupportedAudioMimeType(mimeType) {
+                self = .audio
+            } else if MimeTypeUtil.isSupportedDefinitelyAnimatedMimeType(mimeType) {
+                self = .animatedImage
+            } else if MimeTypeUtil.isSupportedImageMimeType(mimeType) {
+                self = .image
+            } else if MimeTypeUtil.isSupportedMaybeAnimatedMimeType(mimeType) {
+                self = .animatedImage
+            } else {
+                self = .file
+            }
+        }
     }
 
     public enum ContentType {
@@ -61,7 +77,7 @@ extension Attachment {
             cachedMediaWidthPixels: UInt32?,
             cachedVideoDurationSeconds: Double?,
             audioWaveformRelativeFilePath: String?,
-            videoStillFrameRelativeFilePath: String?
+            videoStillFrameRelativeFilePath: String?,
         ) throws {
             guard let raw else {
                 return nil
@@ -97,7 +113,7 @@ extension Attachment {
                 self = .video(
                     duration: cachedVideoDurationSeconds,
                     pixelSize: try requirePixelSize(),
-                    stillFrameRelativeFilePath: videoStillFrameRelativeFilePath
+                    stillFrameRelativeFilePath: videoStillFrameRelativeFilePath,
                 )
             case .animatedImage:
                 self = .animatedImage(pixelSize: try requirePixelSize())
@@ -110,7 +126,7 @@ extension Attachment {
                 }
                 self = .audio(
                     duration: cachedAudioDurationSeconds,
-                    waveformRelativeFilePath: audioWaveformRelativeFilePath
+                    waveformRelativeFilePath: audioWaveformRelativeFilePath,
                 )
             }
         }

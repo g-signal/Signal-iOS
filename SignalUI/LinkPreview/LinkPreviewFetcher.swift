@@ -38,7 +38,7 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
         db: any DB,
         groupsV2: any GroupsV2,
         linkPreviewSettingStore: LinkPreviewSettingStore,
-        tsAccountManager: any TSAccountManager
+        tsAccountManager: any TSAccountManager,
     ) {
         self.authCredentialManager = authCredentialManager
         self.db = db
@@ -91,15 +91,15 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
             if
                 let imageUrlString = content.ogImageUrlString ?? content.faviconUrlString,
                 let imageUrl = URL(string: imageUrlString, relativeTo: respondingUrl),
-                let (imageData, mimeType) = try? await self.fetchImageResource(from: imageUrl)
+                let imageData = try? await self.fetchImageResource(from: imageUrl)
             {
-                previewThumbnail = await Self.previewThumbnail(srcImageData: imageData, srcMimeType: mimeType)
+                previewThumbnail = await Self.previewThumbnail(srcImageData: imageData)
             } else {
                 previewThumbnail = nil
             }
 
-        case .image(let url, let mimeType, let contents):
-            previewThumbnail = await Self.previewThumbnail(srcImageData: contents, srcMimeType: mimeType)
+        case .image(let url, let contents):
+            previewThumbnail = await Self.previewThumbnail(srcImageData: contents)
             normalizedDescription = nil
             dateForLinkPreview = nil
             normalizedTitle = if previewThumbnail != nil {
@@ -141,7 +141,7 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
             securityPolicy: OWSURLSession.defaultSecurityPolicy,
             configuration: sessionConfig,
             extraHeaders: extraHeaders,
-            maxResponseSize: Self.maxFetchedContentSize
+            maxResponseSize: Self.maxFetchedContentSize,
         )
         urlSession.allowRedirects = true
         urlSession.customRedirectHandler = { request in
@@ -155,9 +155,9 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
 
     enum StringOrImageResource {
         case string(url: URL, contents: String)
-        case image(url: URL, mimeType: String?, contents: Data)
+        case image(url: URL, contents: Data)
 
-        static func dataForImage(_ response: any HTTPResponse) -> Data? {
+        static func dataForImage(_ response: HTTPResponse) -> Data? {
             guard let rawData = response.responseBodyData, rawData.count < maxFetchedContentSize else {
                 return nil
             }
@@ -166,7 +166,7 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
     }
 
     func fetchStringOrImageResource(from url: URL) async throws -> StringOrImageResource {
-        let response: any HTTPResponse
+        let response: HTTPResponse
         do {
             response = try await self.buildOWSURLSession().performRequest(url.absoluteString, method: .get, ignoreAppExpiry: true)
         } catch {
@@ -174,18 +174,21 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
             throw LinkPreviewError.fetchFailure
         }
         let statusCode = response.responseStatusCode
-        guard statusCode >= 200 && statusCode < 300 else {
+        guard statusCode >= 200, statusCode < 300 else {
             Logger.warn("Invalid response: \(statusCode).")
             throw LinkPreviewError.fetchFailure
         }
 
-        if let mimeType = response.headers.value(forHeader: "Content-Type"),
-           MimeTypeUtil.isSupportedImageMimeType(mimeType) {
+        // TODO: Add support for HEIC, HEIF, JPEG XL, etc.
+        if
+            let mimeType = response.headers.value(forHeader: "Content-Type"),
+            MimeTypeUtil.isSupportedImageMimeType(mimeType)
+        {
             guard let imageData = StringOrImageResource.dataForImage(response) else {
                 Logger.warn("Response object could not be parsed")
                 throw LinkPreviewError.invalidPreview
             }
-            return .image(url: response.requestUrl, mimeType: mimeType, contents: imageData)
+            return .image(url: response.requestUrl, contents: imageData)
         }
 
         guard let string = response.responseBodyString, !string.isEmpty else {
@@ -195,8 +198,8 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
         return .string(url: response.requestUrl, contents: string)
     }
 
-    private func fetchImageResource(from url: URL) async throws -> (Data, String?) {
-        let response: any HTTPResponse
+    private func fetchImageResource(from url: URL) async throws -> Data {
+        let response: HTTPResponse
         do {
             response = try await self.buildOWSURLSession().performRequest(url.absoluteString, method: .get, ignoreAppExpiry: true)
         } catch {
@@ -204,7 +207,7 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
             throw LinkPreviewError.fetchFailure
         }
         let statusCode = response.responseStatusCode
-        guard statusCode >= 200 && statusCode < 300 else {
+        guard statusCode >= 200, statusCode < 300 else {
             Logger.warn("Invalid response: \(statusCode).")
             throw LinkPreviewError.fetchFailure
         }
@@ -212,12 +215,12 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
             Logger.warn("Response object could not be parsed")
             throw LinkPreviewError.invalidPreview
         }
-        return (rawData, response.headers.value(forHeader: "Content-Type"))
+        return rawData
     }
 
     // MARK: - Private, Constants
 
-    private static let maxFetchedContentSize = 2 * 1024 * 1024
+    private static let maxFetchedContentSize: UInt64 = 2 * 1024 * 1024
 
     // MARK: - Preview Thumbnails
 
@@ -226,27 +229,22 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
         let mimetype: String
     }
 
-    private static func previewThumbnail(srcImageData: Data?, srcMimeType: String?) async -> PreviewThumbnail? {
-        guard let srcImageData = srcImageData else {
+    private static func previewThumbnail(srcImageData: Data?) async -> PreviewThumbnail? {
+        guard let srcImageData else {
             return nil
         }
-        let imageMetadata = srcImageData.imageMetadata(withPath: nil, mimeType: srcMimeType)
-        guard imageMetadata.isValid else {
+        let imageSource = DataImageSource(srcImageData)
+        let imageMetadata = imageSource.imageMetadata()
+        guard let imageMetadata else {
             return nil
         }
-        let hasValidFormat = imageMetadata.imageFormat != .unknown
-        guard hasValidFormat else {
-            return nil
-        }
+        let imageFormat = imageMetadata.imageFormat
 
         let maxImageSize: CGFloat = 2400
 
-        switch imageMetadata.imageFormat {
-        case .unknown:
-            owsFailDebug("Invalid imageFormat.")
-            return nil
+        switch imageFormat {
         case .webp:
-            guard let stillImage = srcImageData.stillForWebpData() else {
+            guard let stillImage = imageSource.stillForWebpData() else {
                 owsFailDebug("Couldn't derive still image for Webp.")
                 return nil
             }
@@ -268,17 +266,14 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
             }
             return PreviewThumbnail(imageData: stillData, mimetype: MimeType.imagePng.rawValue)
         default:
-            guard let mimeType = imageMetadata.mimeType else {
-                owsFailDebug("Unknown mimetype for thumbnail.")
-                return nil
-            }
+            let mimeType = imageFormat.mimeType
 
             let imageSize = imageMetadata.pixelSize
             let shouldResize = imageSize.width > maxImageSize || imageSize.height > maxImageSize
-            if (imageMetadata.imageFormat == .jpeg || imageMetadata.imageFormat == .png), !shouldResize {
+            if imageMetadata.imageFormat == .jpeg || imageMetadata.imageFormat == .png, !shouldResize {
                 // If we don't need to resize or convert the file format,
                 // return the original data.
-                return PreviewThumbnail(imageData: srcImageData, mimetype: mimeType)
+                return PreviewThumbnail(imageData: srcImageData, mimetype: mimeType.rawValue)
             }
 
             guard let srcImage = UIImage(data: srcImageData) else {
@@ -316,9 +311,9 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
         // tryToDownloadStickerPack will use locally saved data if possible...
         let stickerPack = try await StickerManager.tryToDownloadStickerPack(stickerPackInfo: stickerPackInfo).awaitable()
         let title = stickerPack.title?.filterForDisplay.nilIfEmpty
-        let coverUrl = try await StickerManager.tryToDownloadSticker(stickerPack: stickerPack, stickerInfo: stickerPack.coverInfo).awaitable()
-        let coverData = try Data(contentsOf: coverUrl)
-        let previewThumbnail = await Self.previewThumbnail(srcImageData: coverData, srcMimeType: MimeType.imageWebp.rawValue)
+        let coverUrl = try await StickerManager.tryToDownloadSticker(stickerInfo: stickerPack.coverInfo).awaitable()
+        let coverData = try Data(contentsOf: coverUrl, options: [.mappedIfSafe])
+        let previewThumbnail = await Self.previewThumbnail(srcImageData: coverData)
 
         guard title != nil || previewThumbnail != nil else {
             return nil
@@ -329,7 +324,7 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
             title: title,
             imageData: previewThumbnail?.imageData,
             imageMimeType: previewThumbnail?.mimetype,
-            isForwarded: false
+            isForwarded: false,
         )
     }
 
@@ -343,7 +338,7 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
         let groupV2ContextInfo = try GroupV2ContextInfo.deriveFrom(masterKeyData: groupInviteLinkInfo.masterKey)
         let groupInviteLinkPreview = try await self.groupsV2.fetchGroupInviteLinkPreview(
             inviteLinkPassword: groupInviteLinkInfo.inviteLinkPassword,
-            groupSecretParams: groupV2ContextInfo.groupSecretParams
+            groupSecretParams: groupV2ContextInfo.groupSecretParams,
         )
         let previewThumbnail: PreviewThumbnail? = await {
             guard let avatarUrlPath = groupInviteLinkPreview.avatarUrlPath else {
@@ -353,13 +348,13 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
             do {
                 avatarData = try await self.groupsV2.fetchGroupInviteLinkAvatar(
                     avatarUrlPath: avatarUrlPath,
-                    groupSecretParams: groupV2ContextInfo.groupSecretParams
+                    groupSecretParams: groupV2ContextInfo.groupSecretParams,
                 )
             } catch {
                 owsFailDebugUnlessNetworkFailure(error)
                 return nil
             }
-            return await Self.previewThumbnail(srcImageData: avatarData, srcMimeType: nil)
+            return await Self.previewThumbnail(srcImageData: avatarData)
         }()
 
         let title = groupInviteLinkPreview.title.nilIfEmpty
@@ -386,10 +381,10 @@ public class LinkPreviewFetcherImpl: LinkPreviewFetcher {
     }
 }
 
-fileprivate extension HTMLMetadata {
+private extension HTMLMetadata {
     var dateForLinkPreview: Date? {
         [ogPublishDateString, articlePublishDateString, ogModifiedDateString, articleModifiedDateString]
-            .first(where: {$0 != nil})?
+            .first(where: { $0 != nil })?
             .flatMap {
                 guard
                     let date = Date.ows_parseFromISO8601String($0),

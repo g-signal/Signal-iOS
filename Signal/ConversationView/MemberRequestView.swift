@@ -6,7 +6,7 @@
 import SignalServiceKit
 import SignalUI
 
-class MemberRequestView: UIStackView {
+class MemberRequestView: ConversationBottomPanelView {
 
     private let thread: TSThread
 
@@ -15,97 +15,100 @@ class MemberRequestView: UIStackView {
     weak var delegate: MessageRequestDelegate?
 
     init(threadViewModel: ThreadViewModel, fromViewController: UIViewController) {
-        let thread = threadViewModel.threadRecord
-        self.thread = thread
+        self.thread = threadViewModel.threadRecord
         owsAssertDebug(thread is TSGroupThread)
         self.fromViewController = fromViewController
 
         super.init(frame: .zero)
 
-        createContents()
-    }
-
-    private func createContents() {
-        // We want the background to extend to the bottom of the screen
-        // behind the safe area, so we add that inset to our bottom inset
-        // instead of pinning this view to the safe area
-        let safeAreaInset = safeAreaInsets.bottom
-
-        autoresizingMask = .flexibleHeight
-
-        axis = .vertical
-        spacing = 11
-        layoutMargins = UIEdgeInsets(top: 16, leading: 16, bottom: 20 + safeAreaInset, trailing: 16)
-        isLayoutMarginsRelativeArrangement = true
-        alignment = .fill
-
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = Theme.backgroundColor
-        addSubview(backgroundView)
-        backgroundView.autoPinEdgesToSuperviewEdges()
-
         let label = UILabel()
         label.font = .dynamicTypeSubheadlineClamped
         label.textColor = Theme.secondaryTextAndIconColor
-        label.text = OWSLocalizedString("MESSAGE_REQUESTS_CONVERSATION_REQUEST_INDICATOR",
-                                       comment: "Indicator that you have requested to join this group.")
+        label.text = OWSLocalizedString(
+            "MESSAGE_REQUESTS_CONVERSATION_REQUEST_INDICATOR",
+            comment: "Indicator that you have requested to join this group.",
+        )
         label.numberOfLines = 0
+        label.textAlignment = .center
         label.lineBreakMode = .byWordWrapping
-        addArrangedSubview(label)
 
-        let cancelTitle = OWSLocalizedString("MESSAGE_REQUESTS_CANCEL_REQUEST_BUTTON",
-                                            comment: "Label for button to cancel your request to join the group.")
-        let cancelButton = OWSFlatButton.button(title: cancelTitle,
-                                                 font: UIFont.dynamicTypeBody.semibold(),
-                                                 titleColor: Theme.secondaryTextAndIconColor,
-                                                 backgroundColor: Theme.washColor,
-                                                 target: self,
-                                                 selector: #selector(didTapCancelButton))
-        cancelButton.autoSetHeightUsingFont()
-        addArrangedSubview(cancelButton)
+        let cancelButton = UIButton(
+            configuration: .largeSecondary(title: OWSLocalizedString(
+                "MESSAGE_REQUESTS_CANCEL_REQUEST_BUTTON",
+                comment: "Label for button to cancel your request to join the group.",
+            )),
+            primaryAction: UIAction { [weak self] _ in
+                self?.didTapCancelButton()
+            },
+        )
+        cancelButton.configuration?.baseForegroundColor = .Signal.red
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        let cancelButtonContainer = UIView.container()
+        cancelButtonContainer.addSubview(cancelButton)
+        cancelButtonContainer.addConstraints([
+            cancelButton.topAnchor.constraint(equalTo: cancelButtonContainer.topAnchor),
+            cancelButton.leadingAnchor.constraint(equalTo: cancelButtonContainer.leadingAnchor, constant: 18),
+            cancelButton.centerXAnchor.constraint(equalTo: cancelButtonContainer.centerXAnchor),
+            cancelButton.bottomAnchor.constraint(equalTo: cancelButtonContainer.bottomAnchor),
+        ])
+
+        let stackView = UIStackView(arrangedSubviews: [label, cancelButtonContainer])
+        stackView.axis = .vertical
+        stackView.spacing = 16
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(stackView)
+
+        addConstraints([
+            stackView.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor),
+        ])
     }
 
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override var intrinsicContentSize: CGSize {
-        return .zero
-    }
-
     // MARK: -
 
-    @objc
-    private func didTapCancelButton(_ sender: UIButton) {
+    private func didTapCancelButton() {
         showCancelRequestUI()
     }
 
-    func showCancelRequestUI() {
-        guard let fromViewController = fromViewController else {
+    private func showCancelRequestUI() {
+        guard let fromViewController else {
             owsFailDebug("Missing fromViewController.")
             return
         }
 
-        let title = OWSLocalizedString("MESSAGE_REQUESTS_CANCEL_REQUEST_CONFIRM_TITLE",
-                                            comment: "Title for the confirmation alert when cancelling your request to join the group.")
+        let title = OWSLocalizedString(
+            "MESSAGE_REQUESTS_CANCEL_REQUEST_CONFIRM_TITLE",
+            comment: "Title for the confirmation alert when cancelling your request to join the group.",
+        )
         let actionSheet = ActionSheetController(title: title)
 
-        actionSheet.addAction(ActionSheetAction(title: CommonStrings.yesButton,
-                                                style: .destructive) { [weak self] _ in
-                                                    self?.cancelRequestToJoin()
+        actionSheet.addAction(ActionSheetAction(
+            title: CommonStrings.yesButton,
+            style: .destructive,
+        ) { [weak self] _ in
+            self?.cancelRequestToJoin()
         })
-        actionSheet.addAction(ActionSheetAction(title: CommonStrings.noButton,
-                                                style: .destructive) { _ in
-                                                    // Do nothing.
+        actionSheet.addAction(ActionSheetAction(
+            title: CommonStrings.noButton,
+            style: .cancel,
+        ) { _ in
+            // Do nothing.
         })
 
         fromViewController.presentActionSheet(actionSheet)
     }
 
-    func cancelRequestToJoin() {
-        guard let fromViewController = fromViewController,
-              let groupThread = thread as? TSGroupThread,
-              let groupModelV2 = groupThread.groupModel as? TSGroupModelV2
+    private func cancelRequestToJoin() {
+        guard
+            let fromViewController,
+            let groupThread = thread as? TSGroupThread,
+            let groupModelV2 = groupThread.groupModel as? TSGroupModelV2
         else {
             GroupViewUtils.showUpdateErrorUI(error: OWSAssertionError("Missing properties needed to update group"))
             return
@@ -116,7 +119,7 @@ class MemberRequestView: UIStackView {
             updateBlock: {
                 try await GroupManager.cancelRequestToJoin(groupModel: groupModelV2)
             },
-            completion: nil
+            completion: nil,
         )
     }
 }

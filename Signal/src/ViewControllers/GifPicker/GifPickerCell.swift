@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import SDWebImage
 import SignalServiceKit
 import SignalUI
-import SDWebImage
 
 class GifPickerCell: UICollectionViewCell {
 
@@ -49,7 +49,8 @@ class GifPickerCell: UICollectionViewCell {
             self,
             selector: #selector(applyTheme),
             name: .themeDidChange,
-            object: nil)
+            object: nil,
+        )
 
         applyTheme()
     }
@@ -64,7 +65,7 @@ class GifPickerCell: UICollectionViewCell {
 
     // MARK: Public
 
-    public func ensureCellState() {
+    func ensureCellState() {
         ensureLoadState()
         ensureViewState()
     }
@@ -96,13 +97,15 @@ class GifPickerCell: UICollectionViewCell {
         }
     }
 
-    public var isDisplayingPreview: Bool {
+    var isDisplayingPreview: Bool {
         (previewAsset != nil) && (mp4View.video != nil || imageView.image != nil)
     }
 
-    public func requestRenditionForSending() async throws(GiphyError) -> ProxiedContentAsset {
-        guard let imageInfo = imageInfo,
-              let fullSizeAsset = imageInfo.fullSizeAsset else {
+    func requestRenditionForSending() async throws(GiphyError) -> ProxiedContentAsset {
+        guard
+            let imageInfo,
+            let fullSizeAsset = imageInfo.fullSizeAsset
+        else {
             owsFailDebug("fullSizeAsset was unexpectedly nil")
             throw GiphyError.assertionError(description: "fullSizeAsset was unexpectedly nil")
         }
@@ -139,7 +142,7 @@ class GifPickerCell: UICollectionViewCell {
     }
 
     private func ensureLoadState() {
-        guard isCellVisible, let imageInfo = imageInfo else {
+        guard isCellVisible, let imageInfo else {
             // Nothing to load. We don't load non-visible cell content
             previewAssetRequest = nil
             return
@@ -158,7 +161,7 @@ class GifPickerCell: UICollectionViewCell {
             priority: .low,
             success: { [weak self] assetRequest, asset in
                 AssertIsOnMainThread()
-                guard let self = self else { return }
+                guard let self else { return }
                 guard assetRequest == self.previewAssetRequest else {
                     owsFailDebug("Obsolete request callback.")
                     return
@@ -169,13 +172,13 @@ class GifPickerCell: UICollectionViewCell {
             },
             failure: { [weak self] assetRequest in
                 AssertIsOnMainThread()
-                guard let self = self else { return }
+                guard let self else { return }
                 guard assetRequest == self.previewAssetRequest else {
                     owsFailDebug("Obsolete request callback.")
                     return
                 }
                 self.previewAssetRequest = nil
-            }
+            },
         )
     }
 
@@ -193,18 +196,14 @@ class GifPickerCell: UICollectionViewCell {
             activityIndicator.stopAnimating()
         }
 
-        if asset.assetDescription.fileExtension == "mp4",
-           let video = LoopingVideo(decryptedLocalFileUrl: URL(fileURLWithPath: asset.filePath)) {
+        if asset.assetDescription.fileExtension == "mp4" {
+            let video = LoopingVideo(decryptedLocalFileUrl: URL(fileURLWithPath: asset.filePath))
             mp4View.video = video
             mp4View.isHidden = false
-        } else if
-            Data.ows_isValidImage(atPath: asset.filePath, mimeType: MimeType.imageGif.rawValue),
-            let image = SDAnimatedImage(contentsOfFile: asset.filePath)
-        {
+        } else if (try? DataImageSource.forPath(asset.filePath))?.ows_isValidImage ?? false, let image = SDAnimatedImage(contentsOfFile: asset.filePath) {
             imageView.image = image
             imageView.isHidden = false
-        } else if Data.ows_isValidImage(atPath: asset.filePath, mimeType: MimeType.imageJpeg.rawValue),
-                  let image = UIImage(contentsOfFile: asset.filePath) {
+        } else if (try? DataImageSource.forPath(asset.filePath))?.ows_isValidImage ?? false, let image = UIImage(contentsOfFile: asset.filePath) {
             imageView.image = image
             imageView.isHidden = false
         } else {

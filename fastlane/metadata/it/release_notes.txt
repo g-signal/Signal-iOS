@@ -1,1 +1,1 @@
-• Abbiamo corretto un bug che causava la visualizzazione di uno schermo vuoto quando provavi a collegare un nuovo dispositivo. Da ora la schermata per navigare fra i media tornerà a vedersi chiaramente… a meno che tu non sia al buio.
+• Da ora diventa più semplice ricordarsi delle cose importanti: basta usare i messaggi in evidenza! Le tue domande più frequenti, i piani per il weekend e gli itinerari di viaggio sono già in cima ai tuoi pensieri… beh, d'ora in poi saranno anche in cima alle tue chat!

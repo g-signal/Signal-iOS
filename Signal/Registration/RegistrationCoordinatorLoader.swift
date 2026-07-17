@@ -55,8 +55,8 @@ public class RegistrationCoordinatorLoaderImpl: RegistrationCoordinatorLoader {
             public struct PendingPniState {
                 public let newE164: E164
                 public let pniIdentityKeyPair: ECKeyPair
-                public let localDevicePniSignedPreKeyRecord: SignalServiceKit.SignedPreKeyRecord
-                public let localDevicePniPqLastResortPreKeyRecord: SignalServiceKit.KyberPreKeyRecord?
+                public let localDevicePniSignedPreKeyRecord: Result<LibSignalClient.SignedPreKeyRecord, DecodingError>
+                public let localDevicePniPqLastResortPreKeyRecord: Result<LibSignalClient.KyberPreKeyRecord, DecodingError>
                 public let localDevicePniRegistrationId: UInt32
             }
 
@@ -67,7 +67,7 @@ public class RegistrationCoordinatorLoaderImpl: RegistrationCoordinatorLoader {
                 oldAuthToken: String,
                 localAci: Aci,
                 localDeviceId: DeviceId,
-                pniState: PendingPniState?
+                pniState: PendingPniState?,
             ) {
                 self.oldE164 = oldE164
                 self.oldAuthToken = oldAuthToken
@@ -103,7 +103,7 @@ public class RegistrationCoordinatorLoaderImpl: RegistrationCoordinatorLoader {
 
     public func coordinator(
         forDesiredMode desiredMode: RegistrationMode,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     ) -> RegistrationCoordinator {
         let mode = loadMode(transaction: transaction) ?? desiredMode.asInternalMode()
         do {
@@ -158,7 +158,7 @@ public class RegistrationCoordinatorLoaderImpl: RegistrationCoordinatorLoader {
         func savePendingChangeNumber(
             oldState: Mode.ChangeNumberState,
             pniState: Mode.ChangeNumberState.PendingPniState?,
-            transaction: DBWriteTransaction
+            transaction: DBWriteTransaction,
         ) throws -> Mode.ChangeNumberState {
             var newState = oldState
             newState.pniState = pniState
@@ -167,7 +167,7 @@ public class RegistrationCoordinatorLoaderImpl: RegistrationCoordinatorLoader {
             let preKeyManager = loader.deps.preKeyManager
             transaction.addSyncCompletion {
                 let hasPendingChangeNumber = Mode.changingNumber(newState).hasPendingChangeNumber
-                if  hasPendingChangeNumber {
+                if hasPendingChangeNumber {
                     messagePipelineSupervisor.suspendMessageProcessingWithoutHandle(for: .pendingChangeNumber)
                 } else {
                     messagePipelineSupervisor.unsuspendMessageProcessing(for: .pendingChangeNumber)
@@ -200,7 +200,7 @@ extension RegistrationMode {
                 oldAuthToken: params.oldAuthToken,
                 localAci: params.localAci,
                 localDeviceId: params.localDeviceId,
-                pniState: nil
+                pniState: nil,
             ))
         }
     }
@@ -219,7 +219,7 @@ extension RegistrationCoordinatorLoaderImpl.Mode {
                 oldE164: state.oldE164,
                 oldAuthToken: state.oldAuthToken,
                 localAci: state.localAci,
-                localDeviceId: state.localDeviceId
+                localDeviceId: state.localDeviceId,
             ))
         }
     }
@@ -236,30 +236,16 @@ extension RegistrationCoordinatorLoaderImpl.Mode {
     }
 }
 
-// MARK: - PNI state transformers
-
-extension RegistrationCoordinatorLoaderImpl.Mode.ChangeNumberState.PendingPniState {
-
-    func asPniState() -> ChangePhoneNumberPni.PendingState {
-        return ChangePhoneNumberPni.PendingState(
-            newE164: newE164,
-            pniIdentityKeyPair: pniIdentityKeyPair,
-            localDevicePniSignedPreKeyRecord: localDevicePniSignedPreKeyRecord,
-            localDevicePniPqLastResortPreKeyRecord: localDevicePniPqLastResortPreKeyRecord,
-            localDevicePniRegistrationId: localDevicePniRegistrationId
-        )
-    }
-}
+// MARK: - PNI state transformer
 
 extension ChangePhoneNumberPni.PendingState {
-
     func asRegPniState() -> RegistrationCoordinatorLoaderImpl.Mode.ChangeNumberState.PendingPniState {
         return RegistrationCoordinatorLoaderImpl.Mode.ChangeNumberState.PendingPniState(
             newE164: newE164,
             pniIdentityKeyPair: pniIdentityKeyPair,
-            localDevicePniSignedPreKeyRecord: localDevicePniSignedPreKeyRecord,
-            localDevicePniPqLastResortPreKeyRecord: localDevicePniPqLastResortPreKeyRecord,
-            localDevicePniRegistrationId: localDevicePniRegistrationId
+            localDevicePniSignedPreKeyRecord: .success(localDevicePniSignedPreKeyRecord),
+            localDevicePniPqLastResortPreKeyRecord: .success(localDevicePniPqLastResortPreKeyRecord),
+            localDevicePniRegistrationId: localDevicePniRegistrationId,
         )
     }
 }
@@ -270,8 +256,10 @@ extension RegistrationCoordinatorLoaderImpl.Mode.ChangeNumberState.PendingPniSta
     private enum CodingKeys: String, CodingKey {
         case newE164
         case pniIdentityKeyPair
-        case localDevicePniSignedPreKeyRecord
-        case localDevicePniPqLastResortPreKeyRecord
+        case localDevicePniSignedPreKeyRecord // deprecated
+        case localDevicePniSignedPreKeyRecordData
+        case localDevicePniPqLastResortPreKeyRecord // deprecated
+        case localDevicePniPqLastResortPreKeyRecordData
         case localDevicePniRegistrationId
     }
 
@@ -280,23 +268,61 @@ extension RegistrationCoordinatorLoaderImpl.Mode.ChangeNumberState.PendingPniSta
 
         self.newE164 = try container.decode(E164.self, forKey: .newE164)
         self.localDevicePniRegistrationId = try container.decode(UInt32.self, forKey: .localDevicePniRegistrationId)
-        self.localDevicePniPqLastResortPreKeyRecord = try container.decodeIfPresent(KyberPreKeyRecord.self, forKey: .localDevicePniPqLastResortPreKeyRecord)
+
+        if let modernValue = try container.decodeIfPresent(Data.self, forKey: .localDevicePniPqLastResortPreKeyRecordData) {
+            self.localDevicePniPqLastResortPreKeyRecord = .success(try LibSignalClient.KyberPreKeyRecord(bytes: modernValue))
+        } else if
+            BuildFlags.decodeDeprecatedPreKeys,
+            let deprecatedValue = try container.decodeIfPresent(KyberRecordKeyData.self, forKey: .localDevicePniPqLastResortPreKeyRecord)
+        {
+            self.localDevicePniPqLastResortPreKeyRecord = .success(try LibSignalClient.KyberPreKeyRecord(bytes: deprecatedValue.keyData))
+        } else {
+            // We don't want to fail the ENTIRE registration operation when this is
+            // missing -- we can recover in this case, but we need to communicate the
+            // failure to finalizePniIdentity.
+            self.localDevicePniPqLastResortPreKeyRecord = .failure(.dataCorruptedError(
+                forKey: .localDevicePniPqLastResortPreKeyRecordData,
+                in: container,
+                debugDescription: "last resort pre key is missing",
+            ))
+        }
+
+        if let modernValue = try container.decodeIfPresent(Data.self, forKey: .localDevicePniSignedPreKeyRecordData) {
+            self.localDevicePniSignedPreKeyRecord = .success(try LibSignalClient.SignedPreKeyRecord(bytes: modernValue))
+        } else if
+            BuildFlags.decodeDeprecatedPreKeys,
+            let deprecatedValue = try container.decodeIfPresent(Data.self, forKey: .localDevicePniSignedPreKeyRecord)
+        {
+            guard let signedPreKeyRecord = try NSKeyedUnarchiver.unarchivedObject(ofClass: SignalServiceKit.SignedPreKeyRecord.self, from: deprecatedValue) else {
+                throw DecodingError.dataCorruptedError(forKey: .localDevicePniSignedPreKeyRecord, in: container, debugDescription: "")
+            }
+            self.localDevicePniSignedPreKeyRecord = .success(try LibSignalClient.SignedPreKeyRecord(
+                id: UInt32(bitPattern: signedPreKeyRecord.id),
+                timestamp: signedPreKeyRecord.generatedAt.ows_millisecondsSince1970,
+                privateKey: signedPreKeyRecord.keyPair.keyPair.privateKey,
+                signature: signedPreKeyRecord.signature,
+            ))
+        } else {
+            // We don't want to fail the ENTIRE registration operation when this is
+            // missing -- we can recover in this case, but we need to communicate the
+            // failure to finalizePniIdentity.
+            self.localDevicePniSignedPreKeyRecord = .failure(.dataCorruptedError(
+                forKey: .localDevicePniSignedPreKeyRecordData,
+                in: container,
+                debugDescription: "signed pre key is missing",
+            ))
+        }
 
         guard
             let pniIdentityKeyPair: ECKeyPair = try Self.decodeKeyedArchive(
                 fromDecodingContainer: container,
-                forKey: .pniIdentityKeyPair
-            ),
-            let localDevicePniSignedPreKeyRecord: SignalServiceKit.SignedPreKeyRecord = try Self.decodeKeyedArchive(
-                fromDecodingContainer: container,
-                forKey: .localDevicePniSignedPreKeyRecord
+                forKey: .pniIdentityKeyPair,
             )
         else {
             throw OWSAssertionError("Unable to deserialize NSKeyedArchiver fields!")
         }
 
         self.pniIdentityKeyPair = pniIdentityKeyPair
-        self.localDevicePniSignedPreKeyRecord = localDevicePniSignedPreKeyRecord
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -304,26 +330,27 @@ extension RegistrationCoordinatorLoaderImpl.Mode.ChangeNumberState.PendingPniSta
 
         try container.encode(newE164, forKey: .newE164)
         try container.encode(localDevicePniRegistrationId, forKey: .localDevicePniRegistrationId)
-        try container.encode(localDevicePniPqLastResortPreKeyRecord, forKey: .localDevicePniPqLastResortPreKeyRecord)
+        try container.encodeIfPresent((try? localDevicePniSignedPreKeyRecord.get())?.serialize(), forKey: .localDevicePniSignedPreKeyRecordData)
+        try container.encodeIfPresent((try? localDevicePniPqLastResortPreKeyRecord.get())?.serialize(), forKey: .localDevicePniPqLastResortPreKeyRecordData)
 
         try Self.encodeKeyedArchive(
             value: pniIdentityKeyPair,
             toEncodingContainer: &container,
-            forKey: .pniIdentityKeyPair
+            forKey: .pniIdentityKeyPair,
         )
+    }
 
-        try Self.encodeKeyedArchive(
-            value: localDevicePniSignedPreKeyRecord,
-            toEncodingContainer: &container,
-            forKey: .localDevicePniSignedPreKeyRecord
-        )
+    /// A shim of the former KyberPreKeyRecord that contains what's necessary to
+    /// maintain continuity with historically-encoded values.
+    private struct KyberRecordKeyData: Codable {
+        var keyData: Data
     }
 
     // MARK: NSKeyed[Un]Archiver
 
     private static func decodeKeyedArchive<T: NSObject & NSSecureCoding>(
         fromDecodingContainer decodingContainer: KeyedDecodingContainer<CodingKeys>,
-        forKey key: CodingKeys
+        forKey key: CodingKeys,
     ) throws -> T? {
         let data = try decodingContainer.decode(Data.self, forKey: key)
 
@@ -333,11 +360,11 @@ extension RegistrationCoordinatorLoaderImpl.Mode.ChangeNumberState.PendingPniSta
     private static func encodeKeyedArchive<T: NSObject & NSSecureCoding>(
         value: T,
         toEncodingContainer encodingContainer: inout KeyedEncodingContainer<CodingKeys>,
-        forKey key: CodingKeys
+        forKey key: CodingKeys,
     ) throws {
         let data = try NSKeyedArchiver.archivedData(
             withRootObject: value,
-            requiringSecureCoding: true
+            requiringSecureCoding: true,
         )
 
         try encodingContainer.encode(data, forKey: key)

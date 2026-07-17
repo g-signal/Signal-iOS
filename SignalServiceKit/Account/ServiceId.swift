@@ -52,6 +52,18 @@ extension ServiceId {
     }
 }
 
+extension ServiceId {
+    public static func parseFrom(serviceIdBinary: Data?, serviceIdString: String?) -> Self? {
+        if let serviceIdBinary {
+            return try? Self.parseFrom(serviceIdBinary: serviceIdBinary)
+        }
+        if let serviceIdString {
+            return try? Self.parseFrom(serviceIdString: serviceIdString)
+        }
+        return nil
+    }
+}
+
 extension ProtocolAddress {
     public convenience init(_ serviceId: ServiceId, deviceId: DeviceId) {
         self.init(serviceId, deviceId: deviceId.uint32Value)
@@ -157,7 +169,7 @@ public struct NormalizedDatabaseRecordAddress {
 public class ServiceIdObjC: NSObject, NSCopying {
     public var wrappedValue: ServiceId { owsFail("Subclasses must implement.") }
 
-    fileprivate override init() { super.init() }
+    override fileprivate init() { super.init() }
 
     public static func wrapValue(_ wrappedValue: ServiceId) -> ServiceIdObjC {
         switch wrappedValue.kind {
@@ -180,29 +192,32 @@ public class ServiceIdObjC: NSObject, NSCopying {
     public var serviceIdString: String { wrappedValue.serviceIdString }
 
     @objc
+    public var serviceIdBinary: Data { wrappedValue.serviceIdBinary }
+
+    @objc
     public var serviceIdUppercaseString: String { wrappedValue.serviceIdUppercaseString }
 
     @objc
     public var rawUUID: UUID { wrappedValue.rawUUID }
 
     @objc
-    public override var hash: Int { wrappedValue.hashValue }
+    override public var hash: Int { wrappedValue.hashValue }
 
     @objc
-    public override func isEqual(_ object: Any?) -> Bool { wrappedValue == (object as? ServiceIdObjC)?.wrappedValue }
+    override public func isEqual(_ object: Any?) -> Bool { wrappedValue == (object as? ServiceIdObjC)?.wrappedValue }
 
     @objc
     public func copy(with zone: NSZone? = nil) -> Any { self }
 
     @objc
-    public override var description: String { wrappedValue.debugDescription }
+    override public var description: String { wrappedValue.debugDescription }
 }
 
 @objc
 public final class AciObjC: ServiceIdObjC {
     public let wrappedAciValue: Aci
 
-    public override var wrappedValue: ServiceId { wrappedAciValue }
+    override public var wrappedValue: ServiceId { wrappedAciValue }
 
     public init(_ wrappedValue: Aci) {
         self.wrappedAciValue = wrappedValue
@@ -226,7 +241,7 @@ public final class AciObjC: ServiceIdObjC {
 public final class PniObjC: ServiceIdObjC {
     public let wrappedPniValue: Pni
 
-    public override var wrappedValue: ServiceId { wrappedPniValue }
+    override public var wrappedValue: ServiceId { wrappedPniValue }
 
     public init(_ wrappedValue: Pni) {
         self.wrappedPniValue = wrappedValue
@@ -306,7 +321,7 @@ public struct ServiceIdString: Codable, Hashable {
 
     public init(from decoder: Decoder) throws {
         self.wrappedValue = try ServiceId.parseFrom(
-            serviceIdString: try decoder.singleValueContainer().decode(String.self)
+            serviceIdString: try decoder.singleValueContainer().decode(String.self),
         )
     }
 
@@ -317,16 +332,16 @@ public struct ServiceIdString: Codable, Hashable {
 }
 
 @propertyWrapper
-public struct ServiceIdUppercaseString: Codable, Hashable {
-    public let wrappedValue: ServiceId
+public struct ServiceIdUppercaseString<T: ServiceId>: Codable, Hashable {
+    public let wrappedValue: T
 
-    public init(wrappedValue: ServiceId) {
+    public init(wrappedValue: T) {
         self.wrappedValue = wrappedValue
     }
 
     public init(from decoder: Decoder) throws {
-        self.wrappedValue = try ServiceId.parseFrom(
-            serviceIdString: try decoder.singleValueContainer().decode(String.self)
+        self.wrappedValue = try T.parseFrom(
+            serviceIdString: try decoder.singleValueContainer().decode(String.self),
         )
     }
 
@@ -337,7 +352,7 @@ public struct ServiceIdUppercaseString: Codable, Hashable {
 }
 
 extension ServiceId {
-    public var codableUppercaseString: ServiceIdUppercaseString { .init(wrappedValue: self) }
+    public var codableUppercaseString: ServiceIdUppercaseString<ServiceId> { .init(wrappedValue: self) }
 }
 
 // MARK: - Unit Tests
@@ -351,8 +366,8 @@ extension Aci {
 
     public static func constantForTesting(_ uuidString: String) -> Aci {
         try! ServiceId.parseFrom(serviceIdString: uuidString) as! Aci
-     }
- }
+    }
+}
 
 extension Pni {
     public static func randomForTesting() -> Pni {

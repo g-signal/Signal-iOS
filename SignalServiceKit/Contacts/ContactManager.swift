@@ -39,7 +39,7 @@ extension ContactManager {
             }
             return DisplayName.SystemContactName(
                 nameComponents: nameComponents,
-                multipleAccountLabel: $0?.multipleAccountLabelText
+                multipleAccountLabel: $0?.multipleAccountLabelText,
             )
         }
     }
@@ -64,7 +64,7 @@ extension ContactManager {
         guard let avatarData = self.avatarData(for: cnContactId) else {
             return nil
         }
-        guard avatarData.ows_isValidImage else {
+        guard DataImageSource(avatarData).ows_isValidImage else {
             Logger.warn("Invalid image.")
             return nil
         }

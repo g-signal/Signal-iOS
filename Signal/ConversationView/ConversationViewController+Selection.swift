@@ -28,10 +28,12 @@ public struct CVSelectionItem {
 
     public let selectionType: CVSelectionType
 
-    init(interactionId: String,
-         interactionType: OWSInteractionType,
-         isForwardable: Bool,
-         selectionType: CVSelectionType) {
+    init(
+        interactionId: String,
+        interactionType: OWSInteractionType,
+        isForwardable: Bool,
+        selectionType: CVSelectionType,
+    ) {
 
         self.interactionId = interactionId
         self.interactionType = interactionType
@@ -42,15 +44,18 @@ public struct CVSelectionItem {
     init(
         interaction: TSInteraction,
         hasRenderableContent: Bool,
-        selectionType: CVSelectionType
+        selectionType: CVSelectionType,
     ) {
 
         self.interactionId = interaction.uniqueId
         self.interactionType = interaction.interactionType
         if let message = interaction as? TSMessage {
-            self.isForwardable = (hasRenderableContent &&
-                                    !message.isViewOnceMessage &&
-                                    !message.wasRemotelyDeleted)
+            self.isForwardable = (
+                hasRenderableContent &&
+                    !message.isViewOnceMessage &&
+                    !message.wasRemotelyDeleted &&
+                    !message.isPoll,
+            )
         } else {
             self.isForwardable = false
         }
@@ -92,7 +97,7 @@ public class CVSelectionState: NSObject {
             let newItem = CVSelectionItem(
                 interaction: interaction,
                 hasRenderableContent: hasRenderableContent,
-                selectionType: oldItem.selectionType.union(selectionType)
+                selectionType: oldItem.selectionType.union(selectionType),
             )
             owsAssertDebug(!newItem.selectionType.isEmpty)
             owsAssertDebug(oldItem.interactionId == newItem.interactionId)
@@ -106,7 +111,7 @@ public class CVSelectionState: NSObject {
             let newItem = CVSelectionItem(
                 interaction: interaction,
                 hasRenderableContent: hasRenderableContent,
-                selectionType: selectionType
+                selectionType: selectionType,
             )
             itemMap[interactionId] = newItem
         }
@@ -117,7 +122,7 @@ public class CVSelectionState: NSObject {
         add(
             interaction: itemViewModel.interaction,
             hasRenderableContent: itemViewModel.hasRenderableContent,
-            selectionType: selectionType
+            selectionType: selectionType,
         )
     }
 
@@ -136,7 +141,7 @@ public class CVSelectionState: NSObject {
             let newItem = CVSelectionItem(
                 interaction: interaction,
                 hasRenderableContent: hasRenderableContent,
-                selectionType: oldItem.selectionType.subtracting(selectionType)
+                selectionType: oldItem.selectionType.subtracting(selectionType),
             )
             owsAssertDebug(oldItem.interactionId == newItem.interactionId)
             owsAssertDebug(oldItem.interactionType == newItem.interactionType)
@@ -160,7 +165,7 @@ public class CVSelectionState: NSObject {
         remove(
             interaction: itemViewModel.interaction,
             hasRenderableContent: itemViewModel.hasRenderableContent,
-            selectionType: selectionType
+            selectionType: selectionType,
         )
     }
 
@@ -269,98 +274,96 @@ extension ConversationViewController {
     public func buildSelectionToolbar() -> MessageActionsToolbar {
         let deleteMessagesAction = MessageAction(
             .delete,
-            accessibilityLabel: OWSLocalizedString("MESSAGE_ACTION_DELETE_SELECTED_MESSAGES",
-                                                  comment: "accessibility label"),
-            accessibilityIdentifier: UIView.accessibilityIdentifier(containerName: "message_action",
-                                                                    name: "delete_selected_messages"),
+            accessibilityLabel: OWSLocalizedString(
+                "MESSAGE_ACTION_DELETE_SELECTED_MESSAGES",
+                comment: "accessibility label",
+            ),
+            accessibilityIdentifier: UIView.accessibilityIdentifier(
+                containerName: "message_action",
+                name: "delete_selected_messages",
+            ),
             contextMenuTitle: "Delete Selected",
             contextMenuAttributes: [],
-            block: { [weak self] _ in self?.didTapDeleteSelectedItems() }
+            block: { [weak self] _ in self?.didTapDeleteSelectedItems() },
         )
         let forwardMessagesAction = MessageAction(
             .forward,
-            accessibilityLabel: OWSLocalizedString("MESSAGE_ACTION_FORWARD_SELECTED_MESSAGES",
-                                                  comment: "Action sheet button title"),
-            accessibilityIdentifier: UIView.accessibilityIdentifier(containerName: "message_action",
-                                                                    name: "forward_selected_messages"),
+            accessibilityLabel: OWSLocalizedString(
+                "MESSAGE_ACTION_FORWARD_SELECTED_MESSAGES",
+                comment: "Action sheet button title",
+            ),
+            accessibilityIdentifier: UIView.accessibilityIdentifier(
+                containerName: "message_action",
+                name: "forward_selected_messages",
+            ),
             contextMenuTitle: "Forward Selected",
             contextMenuAttributes: [],
-            block: { [weak self] _ in self?.didTapForwardSelectedItems() }
+            block: { [weak self] _ in self?.didTapForwardSelectedItems() },
         )
 
-        let toolbarMode = MessageActionsToolbar.Mode.selection(deleteMessagesAction: deleteMessagesAction,
-                                                               forwardMessagesAction: forwardMessagesAction)
+        let toolbarMode = MessageActionsToolbar.Mode.selection(
+            deleteMessagesAction: deleteMessagesAction,
+            forwardMessagesAction: forwardMessagesAction,
+        )
         let toolbar = MessageActionsToolbar(mode: toolbarMode)
         toolbar.actionDelegate = self
         return toolbar
     }
 
     func didTapDeleteSelectedItems() {
+        let db = DependenciesBridge.shared.db
+
         let selectionItems = self.selectionState.selectionItems
         guard !selectionItems.isEmpty else {
             owsFailDebug("Invalid selection.")
             return
         }
 
-        DeleteForMeInfoSheetCoordinator.fromGlobals().coordinateDelete(
-            fromViewController: self
-        ) { interactionDeleteManager, _ in
-            self.presentDeleteSelectedMessagesActionSheet(
-                selectionItems: selectionItems,
-                interactionDeleteManager: interactionDeleteManager
-            )
-        }
-    }
-
-    private func presentDeleteSelectedMessagesActionSheet(
-        selectionItems: [CVSelectionItem],
-        interactionDeleteManager: InteractionDeleteManager
-    ) {
         let alert = ActionSheetController(
             title: nil,
             message: String.localizedStringWithFormat(
                 OWSLocalizedString(
                     "DELETE_SELECTED_MESSAGES_IN_CONVERSATION_ALERT_%d",
                     tableName: "PluralAware",
-                    comment: "action sheet body. Embeds {{number of selected messages}} which will be deleted."
+                    comment: "action sheet body. Embeds {{number of selected messages}} which will be deleted.",
                 ),
-                selectionItems.count
-            )
+                selectionItems.count,
+            ),
         )
         alert.addAction(OWSActionSheets.cancelAction)
 
         let deleteForMeAction = ActionSheetAction(
             title: CommonStrings.deleteForMeButton,
-            style: .destructive
+            style: .destructive,
         ) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
 
             ModalActivityIndicatorViewController.present(
                 fromViewController: self,
-                canCancel: false
+                canCancel: false,
             ) { [weak self] modalActivityIndicator in
-                guard let self = self else { return }
+                guard let self else { return }
 
-                DispatchQueue.main.async {
-                    Self.deleteSelectedItems(
+                await db.awaitableWrite { tx in
+                    self.deleteSelectedItemsForMe(
                         selectionItems: selectionItems,
                         thread: self.thread,
-                        interactionDeleteManager: interactionDeleteManager
+                        tx: tx,
                     )
+                }
 
-                    modalActivityIndicator.dismiss {
-                        self.uiMode = .normal
-                    }
+                modalActivityIndicator.dismiss {
+                    self.uiMode = .normal
                 }
             }
         }
         alert.addAction(deleteForMeAction)
 
-        let canDeleteForEveryone: Bool = SSKEnvironment.shared.databaseStorageRef.read { tx in
+        let canDeleteForEveryone: Bool = db.read { tx in
             selectionItems.allSatisfy { selectionItem in
                 TSOutgoingMessage.anyFetchOutgoingMessage(
                     uniqueId: selectionItem.interactionId,
-                    transaction: tx
+                    transaction: tx,
                 )?.canBeRemotelyDeleted ?? false
             }
         }
@@ -368,21 +371,20 @@ extension ConversationViewController {
         if canDeleteForEveryone {
             let deleteForEveryoneAction = ActionSheetAction(
                 title: CommonStrings.deleteForEveryoneButton,
-                style: .destructive
+                style: .destructive,
             ) { [weak self] _ in
                 guard let self else { return }
                 TSInteraction.showDeleteForEveryoneConfirmationIfNecessary {
                     ModalActivityIndicatorViewController.present(
                         fromViewController: self,
-                        canCancel: false
+                        canCancel: false,
                     ) { @MainActor [weak self] modalActivityIndicator in
                         guard let self else { return }
-                        let thread = self.thread
-                        await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
-                            Self.deleteSelectedItemsForEveryone(
+                        await db.awaitableWrite { tx in
+                            self.deleteSelectedItemsForEveryone(
                                 selectionItems: selectionItems,
-                                thread: thread,
-                                tx: tx
+                                thread: self.thread,
+                                tx: tx,
                             )
                         }
 
@@ -398,33 +400,33 @@ extension ConversationViewController {
         present(alert, animated: true)
     }
 
-    private static func deleteSelectedItems(
+    private func deleteSelectedItemsForMe(
         selectionItems: [CVSelectionItem],
         thread: TSThread,
-        interactionDeleteManager: InteractionDeleteManager
+        tx: DBWriteTransaction,
     ) {
-        SSKEnvironment.shared.databaseStorageRef.write { tx in
-            let interactionsToDelete = selectionItems.compactMap { item in
-                TSInteraction.anyFetch(
-                    uniqueId: item.interactionId,
-                    transaction: tx
-                )
-            }
+        let interactionDeleteManager = DependenciesBridge.shared.interactionDeleteManager
 
-            interactionDeleteManager.delete(
-                interactions: interactionsToDelete,
-                sideEffects: .custom(
-                    deleteForMeSyncMessage: .sendSyncMessage(interactionsThread: thread)
-                ),
-                tx: tx
+        let interactionsToDelete = selectionItems.compactMap { item in
+            TSInteraction.anyFetch(
+                uniqueId: item.interactionId,
+                transaction: tx,
             )
         }
+
+        interactionDeleteManager.delete(
+            interactions: interactionsToDelete,
+            sideEffects: .custom(
+                deleteForMeSyncMessage: .sendSyncMessage(interactionsThread: thread),
+            ),
+            tx: tx,
+        )
     }
 
-    private static func deleteSelectedItemsForEveryone(
+    private func deleteSelectedItemsForEveryone(
         selectionItems: [CVSelectionItem],
         thread: TSThread,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         guard !selectionItems.isEmpty else { return }
         guard let latestThread = TSThread.anyFetch(uniqueId: thread.uniqueId, transaction: tx) else {
@@ -436,22 +438,20 @@ extension ConversationViewController {
         }
 
         selectionItems.forEach {
-            guard let message = TSOutgoingMessage.anyFetchOutgoingMessage(
-                uniqueId: $0.interactionId,
-                transaction: tx
-            ) else {
+            guard
+                let message = TSOutgoingMessage.anyFetchOutgoingMessage(
+                    uniqueId: $0.interactionId,
+                    transaction: tx,
+                )
+            else {
                 return
             }
 
-            let deleteMessage = TSOutgoingDeleteMessage(
-                thread: latestThread,
-                message: message,
-                transaction: tx
-            )
+            let deleteMessage = OutgoingDeleteMessage(thread: latestThread, message: message, tx: tx)
 
             message.updateWithRecipientAddressStates(
                 deleteMessage.recipientAddressStates,
-                tx: tx
+                tx: tx,
             )
 
             _ = TSMessage.tryToRemotelyDeleteMessage(
@@ -459,11 +459,11 @@ extension ConversationViewController {
                 sentAtTimestamp: message.timestamp,
                 threadUniqueId: latestThread.uniqueId,
                 serverTimestamp: 0, // TSOutgoingMessage won't have server timestamp.
-                transaction: tx
+                transaction: tx,
             )
 
             let preparedMessage = PreparedOutgoingMessage.preprepared(
-                transientMessageWithoutAttachments: deleteMessage
+                transientMessageWithoutAttachments: deleteMessage,
             )
 
             SSKEnvironment.shared.messageSenderJobQueueRef.add(message: preparedMessage, transaction: tx)
@@ -490,16 +490,20 @@ extension ConversationViewController {
         selectionToolbar.updateContent()
 
         if let deleteButton = selectionToolbar.buttonItem(for: .delete) {
-            deleteButton.isEnabled = (uiMode == .selection &&
-                                        selectionState.selectionCanBeDeleted)
+            deleteButton.isEnabled = (
+                uiMode == .selection &&
+                    selectionState.selectionCanBeDeleted,
+            )
         } else {
             owsFailDebug("deleteButton was unexpectedly nil")
             return
         }
 
         if let forwardButton = selectionToolbar.buttonItem(for: .forward) {
-            forwardButton.isEnabled = (uiMode == .selection &&
-                                        selectionState.selectionCanBeForwarded)
+            forwardButton.isEnabled = (
+                uiMode == .selection &&
+                    selectionState.selectionCanBeForwarded,
+            )
         } else {
             owsFailDebug("forwardButton was unexpectedly nil")
             return
@@ -521,48 +525,37 @@ extension ConversationViewController {
         return .button(
             title: OWSLocalizedString(
                 "CONVERSATION_VIEW_DELETE_ALL_MESSAGES",
-                comment: "button text to delete all items in the current conversation"
+                comment: "button text to delete all items in the current conversation",
             ),
             style: .plain,
             action: { [weak self] in
                 self?.didTapDeleteAll()
-            }
+            },
         )
     }
 
     func didTapDeleteAll() {
-        DeleteForMeInfoSheetCoordinator.fromGlobals().coordinateDelete(
-            fromViewController: self
-        ) { [weak self] _, threadSoftDeleteManager in
-            guard let self else { return }
+        let db = DependenciesBridge.shared.db
+        let threadSoftDeleteManager = DependenciesBridge.shared.threadSoftDeleteManager
 
-            self.presentDeleteAllConfirmationSheet(
-                threadSoftDeleteManager: threadSoftDeleteManager
-            )
-        }
-    }
-
-    private func presentDeleteAllConfirmationSheet(
-        threadSoftDeleteManager: any ThreadSoftDeleteManager
-    ) {
         let thread = self.thread
         let alert = ActionSheetController(title: nil, message: OWSLocalizedString("DELETE_ALL_MESSAGES_IN_CONVERSATION_ALERT_BODY", comment: "action sheet body"))
         alert.addAction(OWSActionSheets.cancelAction)
         let deleteTitle = OWSLocalizedString("DELETE_ALL_MESSAGES_IN_CONVERSATION_BUTTON", comment: "button text")
         let delete = ActionSheetAction(title: deleteTitle, style: .destructive) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self else { return }
             ModalActivityIndicatorViewController.present(fromViewController: self, canCancel: false) { [weak self] modalActivityIndicator in
-                guard let self = self else { return }
-                SSKEnvironment.shared.databaseStorageRef.write {
+                guard let self else { return }
+                db.write {
                     threadSoftDeleteManager.removeAllInteractions(
                         thread: thread,
                         sendDeleteForMeSyncMessage: true,
-                        tx: $0
+                        tx: $0,
                     )
                 }
                 DispatchQueue.main.async {
                     modalActivityIndicator.dismiss { [weak self] in
-                        guard let self = self else { return }
+                        guard let self else { return }
                         self.uiMode = .normal
                     }
                 }

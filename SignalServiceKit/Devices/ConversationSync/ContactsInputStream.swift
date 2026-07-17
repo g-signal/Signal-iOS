@@ -7,11 +7,11 @@ import Foundation
 import LibSignalClient
 
 struct ContactDetails {
-    public let aci: Aci?
-    public let phoneNumber: E164?
-    public let expireTimer: UInt32
-    public let expireTimerVersion: UInt32
-    public let inboxSortOrder: UInt32?
+    let aci: Aci?
+    let phoneNumber: E164?
+    let expireTimer: UInt32
+    let expireTimerVersion: UInt32
+    let inboxSortOrder: UInt32?
 }
 
 class ContactsInputStream {
@@ -42,7 +42,10 @@ class ContactsInputStream {
             _ = try inputStream.decodeData(count: Int(contactDetails.avatar.length))
         }
 
-        let aci = Aci.parseFrom(aciString: contactDetails.hasAci ? contactDetails.aci : nil)
+        let aci = Aci.parseFrom(
+            serviceIdBinary: contactDetails.hasAciBinary ? contactDetails.aciBinary : nil,
+            serviceIdString: contactDetails.hasAci ? contactDetails.aci : nil,
+        )
         let phoneNumber = E164.expectNilOrValid(stringValue: contactDetails.hasContactE164 ? contactDetails.contactE164 : nil)
 
         return ContactDetails(
@@ -50,7 +53,7 @@ class ContactsInputStream {
             phoneNumber: phoneNumber,
             expireTimer: contactDetails.expireTimer,
             expireTimerVersion: contactDetails.expireTimerVersion,
-            inboxSortOrder: contactDetails.hasInboxPosition ? contactDetails.inboxPosition : nil
+            inboxSortOrder: contactDetails.hasInboxPosition ? contactDetails.inboxPosition : nil,
         )
     }
 }

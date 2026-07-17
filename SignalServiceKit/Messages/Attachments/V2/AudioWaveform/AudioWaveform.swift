@@ -15,7 +15,7 @@ public class AudioWaveform: Equatable {
         self.decibelSamples = decibelSamples
     }
 
-    public static func == (lhs: AudioWaveform, rhs: AudioWaveform) -> Bool {
+    public static func ==(lhs: AudioWaveform, rhs: AudioWaveform) -> Bool {
         lhs.decibelSamples == rhs.decibelSamples
     }
 
@@ -30,12 +30,11 @@ public class AudioWaveform: Equatable {
     }
 
     public func archive() throws -> Data {
-        return try NSKeyedArchiver.archivedData(withRootObject: decibelSamples, requiringSecureCoding: false)
+        return try NSKeyedArchiver.archivedData(withRootObject: decibelSamples, requiringSecureCoding: true)
     }
 
     public func write(toFile filePath: String, atomically: Bool) throws {
-        let archivedData = try NSKeyedArchiver.archivedData(withRootObject: decibelSamples, requiringSecureCoding: false)
-        try archivedData.write(to: URL(fileURLWithPath: filePath), options: atomically ? .atomicWrite : .init())
+        try archive().write(to: URL(fileURLWithPath: filePath), options: atomically ? .atomicWrite : .init())
     }
 
     // MARK: -
@@ -50,7 +49,7 @@ public class AudioWaveform: Equatable {
             float.inverseLerp(
                 AudioWaveform.silenceThreshold,
                 AudioWaveform.clippingThreshold,
-                shouldClamp: true
+                shouldClamp: true,
             )
         }
 
@@ -85,7 +84,7 @@ public class AudioWaveform: Equatable {
             filter,
             &downSampledData,
             vDSP_Length(sampleCount),
-            vDSP_Length(strideLength)
+            vDSP_Length(strideLength),
         )
 
         return downSampledData

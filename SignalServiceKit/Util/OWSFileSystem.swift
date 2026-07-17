@@ -10,6 +10,7 @@ private let owsTempDir = {
     owsPrecondition(OWSFileSystem.ensureDirectoryExists(dirPath, fileProtectionType: .complete))
     return dirPath
 }()
+
 /// Use instead of NSTemporaryDirectory()
 /// prefer the more restrictice OWSTemporaryDirectory,
 /// unless the temp data may need to be accessed while the device is locked.
@@ -162,6 +163,7 @@ public enum OWSFileSystem {
         }
         return result
     }()
+
     public static func cachesDirectoryPath() -> String {
         return cachesDirectoryPathPrecomputed
     }
@@ -178,7 +180,7 @@ public enum OWSFileSystem {
     }
 
     public static func ensureFileExists(_ filePath: String) -> Bool {
-        if FileManager.default.fileExists(atPath: filePath) || FileManager.default.createFile(atPath: filePath, contents: nil){
+        if FileManager.default.fileExists(atPath: filePath) || FileManager.default.createFile(atPath: filePath, contents: nil) {
             return Self.protectFileOrFolder(atPath: filePath)
         }
 
@@ -197,40 +199,13 @@ public enum OWSFileSystem {
         }
     }
 
-    public static func fileSize(ofPath filePath: String) -> NSNumber? {
-        do {
-            let attrs = try FileManager.default.attributesOfItem(atPath: filePath)
-            guard let result = attrs[.size] as? NSNumber else {
-                owsFail("file size attribute was not NSNumber")
-            }
-            return result
-        } catch {
-            Logger.error("Couldn't fetch file size: \(error)")
-            return nil
-        }
+    public static func fileSize(ofPath filePath: String) throws -> UInt64 {
+        let attributes = try FileManager.default.attributesOfItem(atPath: filePath)
+        return (attributes[.size] as! NSNumber).uint64Value
     }
 
-    public static func fileSize(of fileUrl: URL) -> NSNumber? {
-        Self.fileSize(ofPath: fileUrl.path)
-    }
-
-    public static func folderSizeRecursive(ofPath dirPath: String) -> NSNumber? {
-        do {
-            let filePaths = try Self.recursiveFilesInDirectory(dirPath)
-            var sum: UInt64 = 0
-            for filePath in filePaths {
-                guard let fileSize = fileSize(ofPath: filePath) else { return nil }
-                sum += fileSize.uint64Value
-            }
-            return NSNumber(value: sum)
-        } catch {
-            Logger.error("Couldn't fetch file sizes \(error)")
-            return nil
-        }
-    }
-
-    public static func folderSizeRecursive(of dirUrl: URL) -> NSNumber? {
-        return self.folderSizeRecursive(ofPath: dirUrl.path)
+    public static func fileSize(of fileUrl: URL) throws -> UInt64 {
+        return try fileSize(ofPath: fileUrl.path)
     }
 }
 
@@ -310,14 +285,14 @@ public extension OWSFileSystem {
             self.protectRecursiveContents(atPath: toUrl.path)
         }
 
-        #if TESTABLE_BUILD
+#if TESTABLE_BUILD
         guard !FileManager.default.fileExists(atPath: fromUrl.path) else {
             throw OWSAssertionError("Source file does not exist.")
         }
         guard FileManager.default.fileExists(atPath: toUrl.path) else {
             throw OWSAssertionError("Destination file already exists.")
         }
-        #endif
+#endif
     }
 
     static func copyFile(from fromUrl: URL, to toUrl: URL) throws {
@@ -336,11 +311,11 @@ public extension OWSFileSystem {
             self.protectRecursiveContents(atPath: toUrl.path)
         }
 
-        #if TESTABLE_BUILD
+#if TESTABLE_BUILD
         guard FileManager.default.fileExists(atPath: toUrl.path) else {
             throw OWSAssertionError("Destination file not created.")
         }
-        #endif
+#endif
     }
 
     static func recursiveFilesInDirectory(_ dirPath: String) throws -> [String] {
@@ -367,47 +342,49 @@ public extension OWSFileSystem {
 
     static func temporaryFileUrl(
         fileExtension: String? = nil,
-        isAvailableWhileDeviceLocked: Bool = false
+        isAvailableWhileDeviceLocked: Bool = false,
     ) -> URL {
         return URL(fileURLWithPath: temporaryFilePath(
             fileName: nil,
             fileExtension: fileExtension,
-            isAvailableWhileDeviceLocked: isAvailableWhileDeviceLocked
+            isAvailableWhileDeviceLocked: isAvailableWhileDeviceLocked,
         ))
     }
 
     static func temporaryFileUrl(
         fileName: String,
         fileExtension: String? = nil,
-        isAvailableWhileDeviceLocked: Bool = false
+        isAvailableWhileDeviceLocked: Bool = false,
     ) -> URL {
         return URL(fileURLWithPath: temporaryFilePath(
             fileName: fileName,
             fileExtension: fileExtension,
-            isAvailableWhileDeviceLocked: isAvailableWhileDeviceLocked
+            isAvailableWhileDeviceLocked: isAvailableWhileDeviceLocked,
         ))
     }
 
     static func temporaryFilePath(
         fileName: String? = nil,
-        fileExtension: String? = nil
+        fileExtension: String? = nil,
     ) -> String {
         temporaryFilePath(
             fileName: fileName,
             fileExtension: fileExtension,
-            isAvailableWhileDeviceLocked: false
+            isAvailableWhileDeviceLocked: false,
         )
     }
 
     static func temporaryFilePath(
         fileName: String? = nil,
         fileExtension: String? = nil,
-        isAvailableWhileDeviceLocked: Bool = false
+        isAvailableWhileDeviceLocked: Bool = false,
     ) -> String {
         let tempDirPath = tempDirPath(availableWhileDeviceLocked: isAvailableWhileDeviceLocked)
         var fileName = fileName ?? UUID().uuidString
-        if let fileExtension = fileExtension,
-            !fileExtension.isEmpty {
+        if
+            let fileExtension,
+            !fileExtension.isEmpty
+        {
             fileName = String(format: "\(fileName).\(fileExtension)")
         }
         let filePath = (tempDirPath as NSString).appendingPathComponent(fileName)
@@ -434,7 +411,7 @@ public extension OWSFileSystem {
         } catch CocoaError.fileWriteNoPermission {
             let attemptedUrl = URL(fileURLWithPath: filePath)
             let knownNoWritePermissionUrls = [
-                OWSFileSystem.appSharedDataDirectoryURL().appendingPathComponent(".com.apple.mobile_container_manager.metadata.plist")
+                OWSFileSystem.appSharedDataDirectoryURL().appendingPathComponent(".com.apple.mobile_container_manager.metadata.plist"),
             ]
             owsAssertDebug(knownNoWritePermissionUrls.contains(attemptedUrl))
             return false
@@ -462,30 +439,5 @@ public extension OWSFileSystem {
             throw OWSGenericError("Got negative remaining disk space!")
         }
         return UInt64(result)
-    }
-}
-
-// MARK: - Creating Partial files
-
-public extension OWSFileSystem {
-    static func createTempFileSlice(url: URL, start: Int) throws -> (URL, Int) {
-        // Resuming, slice attachment data in memory.
-        let dataSliceFileUrl = OWSFileSystem.temporaryFileUrl(isAvailableWhileDeviceLocked: true)
-
-        // TODO: It'd be better if we could slice on disk.
-        let entireFileData = try Data(contentsOf: url)
-        guard start <= entireFileData.count else {
-            throw OWSAssertionError("Invalid slice length.")
-        }
-        let dataSlice = entireFileData.suffix(from: start)
-        let dataSliceLength = dataSlice.count
-        guard dataSliceLength + start == entireFileData.count else {
-            throw OWSAssertionError("Could not slice the data.")
-        }
-
-        // Write the slice to a temporary file.
-        try dataSlice.write(to: dataSliceFileUrl)
-
-        return (dataSliceFileUrl, dataSliceLength)
     }
 }

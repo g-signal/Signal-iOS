@@ -3,21 +3,20 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import SDWebImage
 import SignalServiceKit
 import UIKit
-import SDWebImage
 
 class MediaMessageView: UIView, AudioPlayerDelegate {
 
-    private let attachment: SignalAttachment
+    private let attachment: PreviewableAttachment
 
     private var audioPlayer: AudioPlayer?
     private lazy var audioPlayButton = UIButton()
 
     // MARK: Initializers
 
-    init(attachment: SignalAttachment, contentMode: UIView.ContentMode = .scaleAspectFit) {
-        assert(!attachment.hasError)
+    init(attachment: PreviewableAttachment, contentMode: UIView.ContentMode = .scaleAspectFit) {
         self.attachment = attachment
 
         super.init(frame: CGRect.zero)
@@ -55,9 +54,9 @@ class MediaMessageView: UIView, AudioPlayerDelegate {
     private func recreateViews() {
         subviews.forEach { $0.removeFromSuperview() }
 
-        if attachment.isLoopingVideo {
+        if attachment.rawValue.isLoopingVideo {
             createLoopingVideoPreview()
-        } else if attachment.isAnimatedImage {
+        } else if attachment.rawValue.isAnimatedImage {
             createAnimatedPreview()
         } else if attachment.isImage {
             createImagePreview()
@@ -82,10 +81,7 @@ class MediaMessageView: UIView, AudioPlayerDelegate {
     }
 
     private func createAudioPreview() {
-        guard let audioPlayer = AudioPlayer(attachment: attachment, audioBehavior: .playback) else {
-            createGenericPreview()
-            return
-        }
+        let audioPlayer = AudioPlayer(attachment: attachment, audioBehavior: .playback)
 
         audioPlayer.delegate = self
         self.audioPlayer = audioPlayer
@@ -100,7 +96,7 @@ class MediaMessageView: UIView, AudioPlayerDelegate {
         subviews.append(audioPlayButton)
 
         let fileNameLabel = createFileNameLabel()
-        if let fileNameLabel = fileNameLabel {
+        if let fileNameLabel {
             subviews.append(fileNameLabel)
         }
 
@@ -118,13 +114,11 @@ class MediaMessageView: UIView, AudioPlayerDelegate {
     }
 
     private func createLoopingVideoPreview() {
-        guard
-            let video = LoopingVideo(attachment),
-            let previewImage = attachment.videoPreview()
-        else {
+        guard let previewImage = attachment.rawValue.videoPreview() else {
             createGenericPreview()
             return
         }
+        let video = LoopingVideo(attachment)
 
         let loopingVideoView = LoopingVideoView()
         loopingVideoView.video = video
@@ -136,10 +130,10 @@ class MediaMessageView: UIView, AudioPlayerDelegate {
     }
 
     private func createAnimatedPreview() {
-        guard attachment.isValidImage,
-              let dataUrl = attachment.dataUrl,
-              let image = SDAnimatedImage(contentsOfFile: dataUrl.path),
-              image.size.width > 0 && image.size.height > 0
+        guard
+            attachment.isImage,
+            let image = SDAnimatedImage(contentsOfFile: attachment.rawValue.dataSource.fileUrl.path),
+            image.size.width > 0, image.size.height > 0
         else {
             createGenericPreview()
             return
@@ -181,9 +175,11 @@ class MediaMessageView: UIView, AudioPlayerDelegate {
     }
 
     private func createImagePreview() {
-        guard attachment.isValidImage,
-              let image = attachment.image(),
-              image.size.width > 0 && image.size.height > 0 else {
+        guard
+            attachment.isImage,
+            let image = attachment.rawValue.image(),
+            image.size.width > 0, image.size.height > 0
+        else {
             createGenericPreview()
             return
         }
@@ -200,9 +196,11 @@ class MediaMessageView: UIView, AudioPlayerDelegate {
     }
 
     private func createVideoPreview() {
-        guard attachment.isValidVideo,
-              let image = attachment.videoPreview(),
-              image.size.width > 0 && image.size.height > 0 else {
+        guard
+            attachment.isVideo,
+            let image = attachment.rawValue.videoPreview(),
+            image.size.width > 0, image.size.height > 0
+        else {
             createGenericPreview()
             return
         }
@@ -226,7 +224,7 @@ class MediaMessageView: UIView, AudioPlayerDelegate {
         subviews.append(imageView)
 
         let fileNameLabel = createFileNameLabel()
-        if let fileNameLabel = fileNameLabel {
+        if let fileNameLabel {
             subviews.append(fileNameLabel)
         }
 
@@ -267,17 +265,21 @@ class MediaMessageView: UIView, AudioPlayerDelegate {
     }
 
     private func formattedFileExtension() -> String? {
-        guard let fileExtension = attachment.fileExtension else {
+        guard let fileExtension = attachment.rawValue.fileExtension else {
             return nil
         }
 
-        return String(format: OWSLocalizedString("ATTACHMENT_APPROVAL_FILE_EXTENSION_FORMAT",
-                                               comment: "Format string for file extension label in call interstitial view"),
-                      fileExtension.uppercased())
+        return String(
+            format: OWSLocalizedString(
+                "ATTACHMENT_APPROVAL_FILE_EXTENSION_FORMAT",
+                comment: "Format string for file extension label in call interstitial view",
+            ),
+            fileExtension.uppercased(),
+        )
     }
 
     private func formattedFileName() -> String? {
-        guard let sourceFilename = attachment.sourceFilename else {
+        guard let sourceFilename = attachment.rawValue.dataSource.sourceFilename?.filterFilename() else {
             return nil
         }
         let filename = sourceFilename.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
@@ -303,10 +305,14 @@ class MediaMessageView: UIView, AudioPlayerDelegate {
 
     private func createFileSizeLabel() -> UIView {
         let label = UILabel()
-        let fileSize = attachment.dataLength
-        label.text = String(format: OWSLocalizedString("ATTACHMENT_APPROVAL_FILE_SIZE_FORMAT",
-                                                     comment: "Format string for file size label in call interstitial view. Embeds: {{file size as 'N mb' or 'N kb'}}."),
-                            OWSFormat.localizedFileSizeString(from: Int64(fileSize)))
+        let fileSize = (try? attachment.rawValue.dataSource.readLength()) ?? 0
+        label.text = String(
+            format: OWSLocalizedString(
+                "ATTACHMENT_APPROVAL_FILE_SIZE_FORMAT",
+                comment: "Format string for file size label in call interstitial view. Embeds: {{file size as 'N mb' or 'N kb'}}.",
+            ),
+            OWSFormat.localizedFileSizeString(from: Int64(fileSize)),
+        )
 
         label.textColor = tintColor
         label.font = labelFont

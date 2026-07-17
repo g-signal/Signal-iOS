@@ -24,7 +24,7 @@ public class SpoilerRenderer {
                 maxAlpha: 0.9,
                 alphaDropoffRate: 0.2,
                 particleSizePixels: UIScreen.main.scale > 2 ? 2 : 1,
-                color: color
+                color: color,
             )
         }
 
@@ -33,18 +33,20 @@ public class SpoilerRenderer {
                 maxAlpha: 0.9,
                 alphaDropoffRate: 0.05,
                 particleSizePixels: 3,
-                color: color
+                color: color,
             )
         }
 
         // Values from 0 to 255.
         var colorRGB: SIMD3<UInt8> {
-            var (r, g, b): (CGFloat, CGFloat, CGFloat) = (0, 0, 0)
+            var r: CGFloat = 0
+            var g: CGFloat = 0
+            var b: CGFloat = 0
             color.forCurrentTheme.getRed(&r, green: &g, blue: &b, alpha: nil)
             return .init(
                 UInt8(clamping: Int(r * 255)),
                 UInt8(clamping: Int(g * 255)),
-                UInt8(clamping: Int(b * 255))
+                UInt8(clamping: Int(b * 255)),
             )
         }
 
@@ -87,19 +89,21 @@ public class SpoilerRenderer {
             self,
             selector: #selector(didEnterForeground),
             name: .OWSApplicationWillEnterForeground,
-            object: nil
+            object: nil,
         )
         NotificationCenter.default.addObserver(
-            self, selector:
-                #selector(didEnterBackground),
+            self,
+            selector:
+            #selector(didEnterBackground),
             name: .OWSApplicationDidEnterBackground,
-            object: nil
+            object: nil,
         )
         NotificationCenter.default.addObserver(
-            self, selector:
-                #selector(reduceMotionSettingChanged),
+            self,
+            selector:
+            #selector(reduceMotionSettingChanged),
             name: UIAccessibility.reduceTransparencyStatusDidChangeNotification,
-            object: nil
+            object: nil,
         )
     }
 
@@ -116,7 +120,7 @@ public class SpoilerRenderer {
         }
         let particleView = SpoilerParticleView(
             metalConfig: metalConfig,
-            renderer: self
+            renderer: self,
         )
         particleView.isInUse = false
         view.addSubview(particleView)
@@ -137,7 +141,7 @@ public class SpoilerRenderer {
                 } else {
                     let particleView = SpoilerParticleView(
                         metalConfig: metalConfig,
-                        renderer: self
+                        renderer: self,
                     )
                     particleView.isInUse = true
                     self.particleViews.append(Weak(value: particleView))
@@ -157,9 +161,10 @@ public class SpoilerRenderer {
     }
 
     public func removeSpoilerViews(from view: UIView) {
-        removeSpoilerViews(view.subviews.lazy
-            .compactMap { $0 as? SpoilerParticleView }
-       )
+        removeSpoilerViews(
+            view.subviews.lazy
+                .compactMap { $0 as? SpoilerParticleView },
+        )
         recomputeFidelity()
     }
 
@@ -223,55 +228,51 @@ public class SpoilerRenderer {
     // 7 (2 duration + 5 "extra").
 
     // If nil, we are not currently animating and therefore not tracking time changes.
-    private var animationStartMs: UInt32?
-    private var extraAnimationDurationMs: UInt32 = 0
+    private var animationStart: CFTimeInterval?
+    private var extraAnimationDuration: CFTimeInterval = 0
 
     // Reset duration every hour so numbers don't get too big.
-    private static var maxDurationMs: UInt32 = 60 * 60 * 1000
+    private static var maxDuration: CFTimeInterval = .hour
 
     private func didChangeAnimationState() {
         self.particleViews.removeAll(where: { $0.value == nil })
         let wantsToAnimate =
             isAppInForeground
-            && !UIAccessibility.isReduceMotionEnabled
-            && !self.particleViews.isEmpty
-        let wasAnimating = animationStartMs != nil
+                && !UIAccessibility.isReduceMotionEnabled
+                && !self.particleViews.isEmpty
+        let wasAnimating = animationStart != nil
 
         guard wantsToAnimate != wasAnimating else {
             return
         }
 
-        // Ok to drop higher order bits; we only care about duration
-        // measured in shorter timescales.
-        let currentDateMs = UInt32(truncatingIfNeeded: Date().ows_millisecondsSince1970)
+        let currentDate = CACurrentMediaTime()
         if wantsToAnimate {
             // resuming, set the current date (and preserve any extra)
-            animationStartMs = currentDateMs
+            animationStart = currentDate
         } else {
             // pausing, write the current duration to the extra.
-            extraAnimationDurationMs += currentDateMs - (animationStartMs ?? currentDateMs)
-            if extraAnimationDurationMs > Self.maxDurationMs {
-                extraAnimationDurationMs = 0
+            extraAnimationDuration += currentDate - (animationStart ?? currentDate)
+            if extraAnimationDuration > Self.maxDuration {
+                extraAnimationDuration = 0
             }
-            animationStartMs = nil
+            animationStart = nil
         }
     }
 
     /// This method is on the hot path of rendering; should be as efficient as possible.
     public func getAnimationDuration() -> UInt32 {
-        guard let animationStartMs else {
-            return extraAnimationDurationMs
+        guard let animationStart else {
+            return UInt32(extraAnimationDuration * 1000)
         }
-        // Ok to drop higher order bits; we only care about duration
-        // measured in shorter timescales.
-        let currentDateMs = UInt32(truncatingIfNeeded: Date().ows_millisecondsSince1970)
-        let duration = (currentDateMs - animationStartMs) + extraAnimationDurationMs
-        if duration > Self.maxDurationMs {
-            self.extraAnimationDurationMs = 0
-            self.animationStartMs = currentDateMs
+        let currentDate = CACurrentMediaTime()
+        let duration = (currentDate - animationStart) + extraAnimationDuration
+        if duration > Self.maxDuration {
+            self.extraAnimationDuration = 0
+            self.animationStart = currentDate
             return 0
         } else {
-            return duration
+            return UInt32(duration * 1000)
         }
     }
 
