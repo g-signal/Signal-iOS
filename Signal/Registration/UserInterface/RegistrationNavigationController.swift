@@ -612,7 +612,6 @@ extension RegistrationNavigationController: RegistrationPinPresenter {
             .value(.enterRecoveryKey(
                 RegistrationEnterAccountEntropyPoolState(
                     canShowBackButton: true,
-                    canShowNoKeyHelpButton: false,
                 ),
             )),
         )
