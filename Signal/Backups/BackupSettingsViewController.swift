@@ -1297,7 +1297,7 @@ struct BackupSettingsView: View {
                     )
                 }
 
-                if FeatureFlags.Backups.showOptimizeMedia {
+                if BuildFlags.Backups.showOptimizeMedia {
                     SignalSection {
                         Toggle(
                             OWSLocalizedString(
