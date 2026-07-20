@@ -402,14 +402,15 @@ class BackupSettingsViewController:
                         "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE",
                         comment: "Title for a sheet shown after the user enables backups."
                     ),
-                    body: OWSLocalizedString(
+                    body: HeroSheetViewController.Body(text: OWSLocalizedString(
                         "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE",
                         comment: "Message for a sheet shown after the user enables backups."
-                    ),
+                    )),
                     primary: .button(HeroSheetViewController.Button(
                         title: CommonStrings.okButton,
                         action: { _ in onConfirm() }
                     )),
+                    secondary: nil,
                 )
             }
         }
@@ -566,7 +567,7 @@ class BackupSettingsViewController:
             break
         }
 
-        let endOfCurrentPeriod = Date(timeIntervalSince1970: backupSubscription.endOfCurrentPeriod)
+        let endOfCurrentPeriod = backupSubscription.endOfCurrentPeriod
 
         if backupSubscription.cancelAtEndOfPeriod {
             if endOfCurrentPeriod.isAfterNow {
@@ -670,40 +671,35 @@ class BackupSettingsViewController:
     // MARK: -
 
     fileprivate func setOptimizeLocalStorage(_ newOptimizeLocalStorage: Bool) {
-        do {
-            let isPaidPlanTester: Bool = try db.writeWithRollbackIfThrows { tx in
-                let currentBackupPlan = backupPlanManager.backupPlan(tx: tx)
-                let newBackupPlan: BackupPlan
-                let isPaidPlanTester: Bool
+        let isPaidPlanTester: Bool = db.write { tx in
+            let currentBackupPlan = backupPlanManager.backupPlan(tx: tx)
+            let newBackupPlan: BackupPlan
+            let isPaidPlanTester: Bool
 
-                switch currentBackupPlan {
-                case .disabled, .disabling, .free:
-                    owsFailDebug("Shouldn't be setting Optimize Local Storage: \(currentBackupPlan)")
-                    return false
-                case .paid:
-                    newBackupPlan = .paid(optimizeLocalStorage: newOptimizeLocalStorage)
-                    isPaidPlanTester = false
-                case .paidExpiringSoon:
-                    newBackupPlan = .paidExpiringSoon(optimizeLocalStorage: newOptimizeLocalStorage)
-                    isPaidPlanTester = false
-                case .paidAsTester:
-                    newBackupPlan = .paidAsTester(optimizeLocalStorage: newOptimizeLocalStorage)
-                    isPaidPlanTester = true
-                }
-
-                try backupPlanManager.setBackupPlan(newBackupPlan, tx: tx)
-                return isPaidPlanTester
+            switch currentBackupPlan {
+            case .disabled, .disabling, .free:
+                owsFailDebug("Shouldn't be setting Optimize Local Storage: \(currentBackupPlan)")
+                return false
+            case .paid:
+                newBackupPlan = .paid(optimizeLocalStorage: newOptimizeLocalStorage)
+                isPaidPlanTester = false
+            case .paidExpiringSoon:
+                newBackupPlan = .paidExpiringSoon(optimizeLocalStorage: newOptimizeLocalStorage)
+                isPaidPlanTester = false
+            case .paidAsTester:
+                newBackupPlan = .paidAsTester(optimizeLocalStorage: newOptimizeLocalStorage)
+                isPaidPlanTester = true
             }
 
-            // If disabling Optimize Local Storage, offer to start downloads now.
-            if !newOptimizeLocalStorage {
-                showDownloadOffloadedMediaSheet()
-            } else if isPaidPlanTester {
-                showOffloadedMediaForTestersWarningSheet(onAcknowledge: {})
-            }
-        } catch {
-            owsFailDebug("Failed to set Optimize Local Storage: \(error)")
-            return
+            backupPlanManager.setBackupPlan(newBackupPlan, tx: tx)
+            return isPaidPlanTester
+        }
+
+        // If disabling Optimize Local Storage, offer to start downloads now.
+        if !newOptimizeLocalStorage {
+            showDownloadOffloadedMediaSheet()
+        } else if isPaidPlanTester {
+            showOffloadedMediaForTestersWarningSheet(onAcknowledge: {})
         }
     }
 
@@ -825,7 +821,7 @@ class BackupSettingsViewController:
 
     fileprivate func setShouldAllowBackupDownloadsOnCellular() {
         db.write { tx in
-            backupSettingsStore.setShouldAllowBackupDownloadsOnCellular(tx: tx)
+            backupSettingsStore.setShouldAllowBackupDownloadsOnCellular(true, tx: tx)
         }
     }
 
@@ -900,10 +896,10 @@ class BackupSettingsViewController:
                 "BACKUP_SETTINGS_CREATE_NEW_KEY_WARNING_SHEET_TITLE",
                 comment: "Title for a sheet warning users about creating a new Recovery Key."
             ),
-            body: OWSLocalizedString(
+            body: HeroSheetViewController.Body(text: OWSLocalizedString(
                 "BACKUP_SETTINGS_CREATE_NEW_KEY_WARNING_SHEET_BODY",
                 comment: "Body for a sheet warning users about creating a new Recovery Key."
-            ),
+            )),
             primary: .button(HeroSheetViewController.Button(
                 title: primaryButtonTitle,
                 action: { sheet in
@@ -938,7 +934,7 @@ class BackupSettingsViewController:
     private func showConfirmNewRecoveryKey(newCandidateAEP: AccountEntropyPool) {
         let confirmKeyViewController = BackupConfirmKeyViewController(
             aep: newCandidateAEP,
-            onContinue: { [weak self] in
+            onContinue: { [weak self] _ in
                 guard let self else { return }
 
                 self.finalizeNewRecoveryKey(newCandidateAEP: newCandidateAEP)
@@ -1189,7 +1185,7 @@ struct BackupSettingsView: View {
             let latestDownloadUpdate = viewModel.latestBackupAttachmentDownloadUpdate
 
             switch latestDownloadUpdate?.state {
-            case nil, .suspended:
+            case nil, .suspended, .empty, .appBackgrounded, .notRegisteredAndReady:
                 return .disabling
             case .running, .pausedLowBattery, .pausedLowPowerMode, .pausedNeedsWifi, .pausedNeedsInternet, .outOfDiskSpace:
                 return .disablingDownloadsRunning(latestDownloadUpdate!)
@@ -1723,7 +1719,7 @@ private struct BackupAttachmentDownloadProgressView: View {
     var body: some View {
         VStack(alignment: .leading) {
             let progressViewColor: Color? = switch latestDownloadUpdate.state {
-            case .suspended:
+            case .suspended, .empty, .appBackgrounded, .notRegisteredAndReady:
                 nil
             case .running, .pausedLowBattery, .pausedLowPowerMode, .pausedNeedsWifi, .pausedNeedsInternet:
                 .Signal.accent
@@ -1789,6 +1785,8 @@ private struct BackupAttachmentDownloadProgressView: View {
                     ),
                     bytesRequired.formatted(.owsByteCount())
                 )
+            case .empty, .appBackgrounded, .notRegisteredAndReady:
+                ""
             }
 
             if let progressViewColor {
@@ -1850,7 +1848,8 @@ private struct BackupAttachmentDownloadProgressView: View {
                 }
             }
             .foregroundStyle(Color.Signal.label)
-        case .pausedLowBattery, .pausedLowPowerMode, .pausedNeedsInternet:
+        case .pausedLowBattery, .pausedLowPowerMode, .pausedNeedsInternet,
+             .empty, .appBackgrounded, .notRegisteredAndReady:
             EmptyView()
         }
     }

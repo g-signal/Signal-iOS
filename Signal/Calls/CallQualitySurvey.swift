@@ -103,7 +103,7 @@ class CallQualitySurveyManager {
     }
 
     private func shouldShowSurvey(tx: DBReadTransaction) -> Bool {
-        if InMemorySettings.forceCallQualitySurvey {
+        if false { // forceCallQualitySurvey removed
             return true
         }
 
