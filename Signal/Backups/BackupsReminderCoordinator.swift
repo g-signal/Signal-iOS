@@ -51,7 +51,6 @@ class BackupsReminderCoordinator {
             RegistrationEnterAccountEntropyPoolViewController(
                 state: RegistrationEnterAccountEntropyPoolState(
                     canShowBackButton: true,
-                    canShowNoKeyHelpButton: true,
                 ),
                 presenter: self,
                 aepValidationPolicy: .acceptOnly(aep),

@@ -166,16 +166,22 @@ class BackupOnboardingCoordinator {
     private func showChooseBackupPlan() async throws(SheetDisplayableError) {
         guard let onboardingNavController else { return }
 
-        let chooseBackupPlanViewController: ChooseBackupPlanViewController = try await .load(
-            fromViewController: onboardingNavController,
-            initialPlanSelection: nil,
-        ) { [self] chooseBackupPlanViewController, planSelection in
-            Task {
-                await enableBackups(
-                    planSelection: planSelection,
-                    fromViewController: chooseBackupPlanViewController,
-                )
-            }
+        let chooseBackupPlanViewController: ChooseBackupPlanViewController
+        do throws(OWSAssertionError) {
+            chooseBackupPlanViewController = try await .load(
+                fromViewController: onboardingNavController,
+                initialPlanSelection: nil,
+                onConfirmPlanSelectionBlock: { [self] chooseBackupPlanViewController, planSelection in
+                    Task {
+                        await enableBackups(
+                            planSelection: planSelection,
+                            fromViewController: chooseBackupPlanViewController,
+                        )
+                    }
+                },
+            )
+        } catch {
+            throw SheetDisplayableError.genericError
         }
 
         onboardingNavController.pushViewController(

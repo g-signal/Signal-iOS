@@ -115,10 +115,10 @@ class BackupSettingsViewController:
                 latestBackupExportProgressUpdate: nil,
                 latestBackupAttachmentDownloadUpdate: nil,
                 latestBackupAttachmentUploadUpdate: nil,
-                lastBackupDate: backupSettingsStore.lastBackupDate(tx: tx),
-                lastBackupSizeBytes: backupSettingsStore.lastBackupSizeBytes(tx: tx),
+                lastBackupDate: backupSettingsStore.lastBackupDetails(tx: tx)?.date,
+                lastBackupSizeBytes: backupSettingsStore.lastBackupDetails(tx: tx)?.backupFileSizeBytes,
                 shouldAllowBackupUploadsOnCellular: backupSettingsStore.shouldAllowBackupUploadsOnCellular(tx: tx),
-                hasBackupFailed: backupSettingsStore.getLastBackupFailed(tx: tx)
+                hasBackupFailed: DependenciesBridge.shared.backupFailureStateManager.hasFailedBackup(tx: tx)
             )
 
             return viewModel
@@ -188,32 +188,27 @@ class BackupSettingsViewController:
                         switch result {
                         case .success:
                             break
-                        case .failure(let exportJobError):
-                            switch exportJobError {
-                            case .cancellationError, .needsWifi, .networkRequestError:
-                                Logger.warn("Failed to perform manual backup! \(exportJobError)")
-                            case .backupError, .backupKeyError, .unregistered:
-                                owsFailDebug("Failed to perform manual backup! \(exportJobError)")
+                        case .failure(let error):
+                            Logger.warn("Failed to perform manual backup! \(error)")
+                            if let exportJobError = error as? BackupExportJobError {
+                                showSheetForBackupExportJobError(exportJobError)
                             }
-
-                            showSheetForBackupExportJobError(exportJobError)
                         }
 
                         db.read { tx in
-                            self.viewModel.lastBackupDate = self.backupSettingsStore.lastBackupDate(tx: tx)
-                            self.viewModel.lastBackupSizeBytes = self.backupSettingsStore.lastBackupSizeBytes(tx: tx)
-                            self.viewModel.hasBackupFailed = self.backupSettingsStore.getLastBackupFailed(tx: tx)
+                            self.viewModel.lastBackupDate = self.backupSettingsStore.lastBackupDetails(tx: tx)?.date
+                            self.viewModel.lastBackupSizeBytes = self.backupSettingsStore.lastBackupDetails(tx: tx)?.backupFileSizeBytes
+                            self.viewModel.hasBackupFailed = DependenciesBridge.shared.backupFailureStateManager.hasFailedBackup(tx: tx)
                         }
                     }
                 }
             },
             Task { [weak self, backupAttachmentDownloadTracker] in
-                await self?.preventDeviceSleepDuringNonNilUpdates(
-                    updateStream: backupAttachmentDownloadTracker.updates(),
-                    label: "Downloads",
-                ) { [weak self] downloadUpdate in
-                    guard let self else { return }
-                    viewModel.latestBackupAttachmentDownloadUpdate = downloadUpdate
+                for await downloadUpdate in backupAttachmentDownloadTracker.updates() {
+                    await MainActor.run { [weak self] in
+                        guard let self else { return }
+                        viewModel.latestBackupAttachmentDownloadUpdate = downloadUpdate
+                    }
                 }
             },
             Task { [weak self, backupAttachmentUploadTracker] in
@@ -297,8 +292,8 @@ class BackupSettingsViewController:
         db.read { tx in
             viewModel.backupPlan = backupPlanManager.backupPlan(tx: tx)
             viewModel.failedToDisableBackupsRemotely = backupDisablingManager.disableRemotelyFailed(tx: tx)
-            viewModel.lastBackupDate = backupSettingsStore.lastBackupDate(tx: tx)
-            viewModel.lastBackupSizeBytes = backupSettingsStore.lastBackupSizeBytes(tx: tx)
+            viewModel.lastBackupDate = backupSettingsStore.lastBackupDetails(tx: tx)?.date
+            viewModel.lastBackupSizeBytes = backupSettingsStore.lastBackupDetails(tx: tx)?.backupFileSizeBytes
             viewModel.shouldAllowBackupUploadsOnCellular = backupSettingsStore.shouldAllowBackupUploadsOnCellular(tx: tx)
         }
 
@@ -379,16 +374,13 @@ class BackupSettingsViewController:
         fromViewController: UIViewController,
         planSelection: ChooseBackupPlanViewController.PlanSelection
     ) async {
-        do throws(BackupEnablingManager.DisplayableError) {
+        do throws(SheetDisplayableError) {
             try await backupEnablingManager.enableBackups(
                 fromViewController: fromViewController,
                 planSelection: planSelection
             )
         } catch {
-            OWSActionSheets.showActionSheet(
-                message: error.localizedActionSheetMessage,
-                fromViewController: fromViewController,
-            )
+            error.showSheet(from: fromViewController)
             return
         }
 
@@ -638,9 +630,6 @@ class BackupSettingsViewController:
     private func showSheetForBackupExportJobError(_ error: BackupExportJobError) {
         let actionSheet: ActionSheetController
         switch error {
-        case .cancellationError:
-            return
-
         case .needsWifi:
             actionSheet = ActionSheetController(
                 title: OWSLocalizedString(
@@ -665,29 +654,6 @@ class BackupSettingsViewController:
                 }
             ))
             actionSheet.addAction(.cancel)
-
-        case .networkRequestError:
-            actionSheet = ActionSheetController(
-                message: OWSLocalizedString(
-                    "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR",
-                    comment: "Message for an action sheet explaining that performing a backup failed with a network error."
-                )
-            )
-            actionSheet.addAction(.okay)
-
-        case .unregistered, .backupKeyError, .backupError:
-            actionSheet = ActionSheetController(
-                message: OWSLocalizedString(
-                    "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR",
-                    comment: "Message for an action sheet explaining that performing a backup failed with a generic error."
-                )
-            )
-            actionSheet.addAction(.contactSupport(
-                emailFilter: .backupExportFailed,
-                fromViewController: self
-            ))
-            actionSheet.addAction(.okay)
-
         }
 
         presentActionSheet(actionSheet)
@@ -1273,12 +1239,9 @@ struct BackupSettingsView: View {
                             .font(.footnote)
                             .multilineTextAlignment(.leading)
                         } icon: {
-                            Image(
-                                uiImage: UIImage.buildBadgeImage(
-                                    size: .square(8),
-                                    color: UIColor.Signal.yellow
-                                )
-                            )
+                            Circle()
+                                .fill(Color(UIColor.Signal.yellow))
+                                .frame(width: 8, height: 8)
                         }
                     }
 
@@ -1537,7 +1500,7 @@ private struct BackupExportProgressView: View {
 
     private var progressBarState: ProgressBarState {
         switch latestExportProgressUpdate.currentStep {
-        case .registerBackupId, .backupExport, .backupUpload:
+        case .backupExport, .backupUpload:
             let percentExportCompleted = latestExportProgressUpdate.progress(for: .backupExport)?.percentComplete ?? 0
             let percentUploadCompleted = latestExportProgressUpdate.progress(for: .backupUpload)?.percentComplete ?? 0
             let percentComplete = (0.95 * percentExportCompleted) + (0.05 * percentUploadCompleted)
@@ -1777,7 +1740,7 @@ private struct BackupAttachmentDownloadProgressView: View {
                             "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_SUSPENDED",
                             comment: "Subtitle for a view explaining that downloads are available but not running. Embeds {{ the amount available to download as a file size, e.g. 100 MB }}."
                         ),
-                        latestDownloadUpdate.totalBytesToDownload.formatted(.owsByteCount)
+                        latestDownloadUpdate.totalBytesToDownload.formatted(.owsByteCount())
                     )
                 case .disabling, .paidExpiringSoon:
                     String(
@@ -1785,7 +1748,7 @@ private struct BackupAttachmentDownloadProgressView: View {
                             "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_SUSPENDED_PAID_SUBSCRIPTION_EXPIRING",
                             comment: "Subtitle for a view explaining that downloads are available but not running, and the user's paid subscription is expiring. Embeds {{ the amount available to download as a file size, e.g. 100 MB }}."
                         ),
-                        latestDownloadUpdate.totalBytesToDownload.formatted(.owsByteCount)
+                        latestDownloadUpdate.totalBytesToDownload.formatted(.owsByteCount())
                     )
                 }
             case .running:
@@ -1794,8 +1757,8 @@ private struct BackupAttachmentDownloadProgressView: View {
                         "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_RUNNING",
                         comment: "Subtitle for a progress bar tracking active downloading. Embeds 1:{{ the amount downloaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to download as a file size, e.g. 1 GB }}; 3:{{ the amount downloaded as a percentage, e.g. 10% }}."
                     ),
-                    latestDownloadUpdate.bytesDownloaded.formatted(.owsByteCount),
-                    latestDownloadUpdate.totalBytesToDownload.formatted(.owsByteCount),
+                    latestDownloadUpdate.bytesDownloaded.formatted(.owsByteCount()),
+                    latestDownloadUpdate.totalBytesToDownload.formatted(.owsByteCount()),
                     latestDownloadUpdate.percentageDownloaded.formatted(.percent.precision(.fractionLength(0))),
                 )
             case .pausedLowBattery:
@@ -1824,7 +1787,7 @@ private struct BackupAttachmentDownloadProgressView: View {
                         "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_DISK_SPACE",
                         comment: "Subtitle for a progress bar tracking downloads that are paused because they need more disk space available. Embeds {{ the amount of space needed as a file size, e.g. 100 MB }}."
                     ),
-                    bytesRequired.formatted(.owsByteCount)
+                    bytesRequired.formatted(.owsByteCount())
                 )
             }
 
@@ -1927,8 +1890,8 @@ private struct BackupAttachmentUploadProgressView: View {
                     "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING",
                     comment: "Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}."
                 ),
-                bytesUploaded.formatted(.owsByteCount),
-                totalBytesToUpload.formatted(.owsByteCount),
+                bytesUploaded.formatted(.owsByteCount()),
+                totalBytesToUpload.formatted(.owsByteCount()),
                 percentageUploaded.formatted(.percent.precision(.fractionLength(0)))
             )
         case .pausedLowBattery:
@@ -2227,7 +2190,7 @@ private struct BackupDetailsView: View {
                     comment: "Label for a menu item explaining the size of the user's backup."
                 ))
                 Spacer()
-                Text(lastBackupSizeBytes.formatted(.owsByteCount))
+                Text(lastBackupSizeBytes.formatted(.owsByteCount()))
                     .foregroundStyle(Color.Signal.secondaryLabel)
             }
         }
@@ -2391,6 +2354,8 @@ private extension BackupSettingsViewModel {
         backupSubscriptionLoadingState: .genericError
     ))
 }
+
+} // end private extension BackupSettingsViewModel
 
 extension OWSSequentialProgress<BackupExportJobStep> {
     static func forPreview(
@@ -2593,7 +2558,5 @@ extension OWSSequentialProgress<BackupExportJobStep> {
         backupSubscriptionLoadingState: .loaded(.free),
     ))
 }
-
-} // end private extension BackupSettingsViewModel
 
 #endif

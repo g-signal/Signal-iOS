@@ -66,9 +66,8 @@ class BadgeDetailsSheet: OWSTableSheetViewController {
         !owner.isLocal && !localProfileHasBadges()
     }
 
-    override public func updateTableContents(shouldReload: Bool = true) {
+    override public func tableContents() -> OWSTableContents {
         let contents = OWSTableContents()
-        defer { tableViewController.setContents(contents, shouldReload: shouldReload) }
 
         let focusedBadgeSection = OWSTableSection()
         focusedBadgeSection.hasBackground = false
@@ -125,34 +124,7 @@ class BadgeDetailsSheet: OWSTableSheetViewController {
             return cell
         }, actionBlock: nil))
 
-//        if shouldShowDonateButton() {
-//            let buttonSection = OWSTableSection(items: [.init(customCellBlock: { [weak self] in
-//                let cell = OWSTableItem.newCell()
-//                cell.selectionStyle = .none
-//
-//                guard let self = self else { return cell }
-//                let button = OWSFlatButton.button(
-//                    title: OWSLocalizedString(
-//                        "BADGE_DETAILS_DONATE_TO_SIGNAL",
-//                        comment: "When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to Signal\" button will be shown. This is the text in that button."
-//                    ),
-//                    font: UIFont.dynamicTypeBody.semibold(),
-//                    titleColor: .white,
-//                    backgroundColor: .ows_accentBlue,
-//                    target: self,
-//                    selector: #selector(self.didTapDonate)
-//                )
-//                button.autoSetHeightUsingFont()
-//                button.cornerRadius = 8
-//                cell.contentView.addSubview(button)
-//                button.autoPinEdgesToSuperviewMargins()
-//
-//                return cell
-//            })])
-//            buttonSection.hasBackground = false
-//            contents.add(buttonSection)
-//        }
-
+        return contents
     }
 
     @objc
