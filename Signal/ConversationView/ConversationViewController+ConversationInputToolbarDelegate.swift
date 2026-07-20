@@ -995,7 +995,7 @@ extension ConversationViewController: SendMediaNavDataSource {
     }
 
     func sendMediaNavMentionableAddresses(tx: DBReadTransaction) -> [SignalServiceAddress] {
-        supportsMentions ? thread.recipientAddresses(with: SDSDB.shimOnlyBridge(tx)) : []
+        supportsMentions ? thread.recipientAddresses(with: tx) : []
     }
 
     func sendMediaNavMentionCacheInvalidationKey() -> String {
