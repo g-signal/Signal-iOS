@@ -633,11 +633,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Grupurile B&A funcționează cel mai bine cu %1$d membri sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
+			<string>Grupurile B&amp;A funcționează cel mai bine cu %1$d membri sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
 			<key>one</key>
-			<string>Grupurile B&A funcționează cel mai bine cu %1$d membru sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
+			<string>Grupurile B&amp;A funcționează cel mai bine cu %1$d membru sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
 			<key>other</key>
-			<string>Grupurile B&A funcționează cel mai bine cu %1$d de membri sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
+			<string>Grupurile B&amp;A funcționează cel mai bine cu %1$d de membri sau mai puțin. Adăugarea mai multor membri va cauza întârzieri la trimiterea și primirea mesajelor.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -813,11 +813,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>B&A va apela %2$@, %3$@, și încă %1$d</string>
+			<string>B&amp;A va apela %2$@, %3$@, și încă %1$d</string>
 			<key>one</key>
-			<string>B&A va suna pe %2$@, %3$@, și %1$d altul</string>
+			<string>B&amp;A va suna pe %2$@, %3$@, și %1$d altul</string>
 			<key>other</key>
-			<string>B&A va apela %2$@, %3$@, și încă %1$d</string>
+			<string>B&amp;A va apela %2$@, %3$@, și încă %1$d</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -1137,11 +1137,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Pentru a menține "%2$@" conectat, deschide B&A pe dispozitivul respectiv în termen de %1$d zile.</string>
+			<string>Pentru a menține "%2$@" conectat, deschide B&amp;A pe dispozitivul respectiv în termen de %1$d zile.</string>
 			<key>one</key>
-			<string>Pentru a menține "%2$@" conectat, deschide B&A pe dispozitivul respectiv în termen de %1$d zi.</string>
+			<string>Pentru a menține "%2$@" conectat, deschide B&amp;A pe dispozitivul respectiv în termen de %1$d zi.</string>
 			<key>other</key>
-			<string>Pentru a menține "%2$@" conectat, deschide B&A pe dispozitivul respectiv în termen de %1$d de zile.</string>
+			<string>Pentru a menține "%2$@" conectat, deschide B&amp;A pe dispozitivul respectiv în termen de %1$d de zile.</string>
 		</dict>
 	</dict>
 	<key>LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE_%d</key>
@@ -1371,11 +1371,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Toate conexiunile B&A · %1$d spectatori</string>
+			<string>Toate conexiunile B&amp;A · %1$d spectatori</string>
 			<key>one</key>
-			<string>Toate conexiunile B&A · %1$d spectator</string>
+			<string>Toate conexiunile B&amp;A · %1$d spectator</string>
 			<key>other</key>
-			<string>Toate conexiunile B&A · %1$d de spectatori</string>
+			<string>Toate conexiunile B&amp;A · %1$d de spectatori</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1389,11 +1389,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Toate conexiunile B&A · %1$d excluse</string>
+			<string>Toate conexiunile B&amp;A · %1$d excluse</string>
 			<key>one</key>
-			<string>Toate conexiunile B&A · %1$d exclusă</string>
+			<string>Toate conexiunile B&amp;A · %1$d exclusă</string>
 			<key>other</key>
-			<string>Toate conexiunile B&A · %1$d excluse</string>
+			<string>Toate conexiunile B&amp;A · %1$d excluse</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>

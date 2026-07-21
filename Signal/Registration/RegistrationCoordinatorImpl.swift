@@ -642,7 +642,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
                     }
                 }
             } else if let metadataHeader = self.inMemoryState.backupMetadataHeader {
-                nonceSource = .svr🐝(header: metadataHeader, auth: identity.chatServiceAuth)
+                nonceSource = .svrB(header: metadataHeader, auth: identity.chatServiceAuth)
             } else {
                 owsFailDebug("Missing metadata header; refetching from cdn")
                 let backupServiceAuth = try await self.deps.backupRequestManager.fetchBackupServiceAuthForRegistration(
@@ -655,7 +655,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
                     backupAuth: backupServiceAuth
                 ).metadataHeader
                 self.inMemoryState.backupMetadataHeader = metadataHeader
-                nonceSource = .svr🐝(header: metadataHeader, auth: identity.chatServiceAuth)
+                nonceSource = .svrB(header: metadataHeader, auth: identity.chatServiceAuth)
             }
 
             try await self.deps.backupArchiveManager.importEncryptedBackup(
@@ -1769,10 +1769,11 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
         switch persistedState.restoreMethod {
         case .deviceTransfer:
             if let restoreToken = registrationMessage.restoreMethodToken {
-                let transferStatusState = RegistrationTransferStatusState(
+                let transferStatusState = DeviceTransferCoordinator(
                     deviceTransferService: deps.deviceTransferService,
                     quickRestoreManager: deps.quickRestoreManager,
-                    restoreMethodToken: restoreToken
+                    restoreMethodToken: restoreToken,
+                    restoreMode: .primary
                 )
                 return .deviceTransfer(transferStatusState)
             } else {
@@ -1853,7 +1854,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             if false /* deps.featureFlags.backupSupported */ {
                 return .chooseRestoreMethod(.unspecified)
             } else if !persistedState.hasDeclinedTransfer {
-                return .transferSelection
+                return .chooseRestoreMethod(.unspecified)
             }
         } else if
             persistedState.restoreMethod?.isBackup == true,
@@ -2380,7 +2381,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             if false /* deps.featureFlags.backupSupported */ {
                 return .chooseRestoreMethod(.unspecified)
             } else {
-                return .transferSelection
+                return .chooseRestoreMethod(.unspecified)
             }
         }
 
@@ -2701,7 +2702,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             if false /* deps.featureFlags.backupSupported */ {
                 return .chooseRestoreMethod(.unspecified)
             } else {
-                return .transferSelection
+                return .chooseRestoreMethod(.unspecified)
             }
         case .networkError:
             if retriesLeft > 0 {
@@ -2758,13 +2759,13 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
                 validationError: .invalidE164(.init(invalidE164: e164))
             ))
         case .retryAfter(let timeInterval):
-            if timeInterval < Constants.autoRetryInterval {
+            if let timeInterval, timeInterval < Constants.autoRetryInterval {
                 try? await Task.sleep(nanoseconds: timeInterval.clampedNanoseconds)
                 return await startSession(e164: e164)
             }
             return .phoneNumberEntry(phoneNumberEntryState(
                 validationError: .rateLimited(.init(
-                    expiration: deps.dateProvider().addingTimeInterval(timeInterval),
+                    expiration: deps.dateProvider().addingTimeInterval(timeInterval ?? Constants.autoRetryInterval),
                     e164: e164
                 ))
             ))
@@ -2837,7 +2838,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             // Wipe the pending code request, so we don't auto-retry.
             inMemoryState.pendingCodeTransport = nil
             return await nextStep()
-        case .retryAfterTimeout(let session):
+        case .retryAfterTimeout(let session, retryAfterHeader: _):
             let timeInterval: TimeInterval?
             switch transport {
             case .sms:
@@ -3146,7 +3147,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             } else {
                 return .showErrorSheet(.networkError)
             }
-        case .retryAfterTimeout(let session):
+        case .retryAfterTimeout(let session, retryAfterHeader: _):
             Logger.error("Should not have to retry a captcha challenge request")
             // Clear the pending code; we want the user to press again
             // once the timeout expires.
@@ -3229,7 +3230,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             } else {
                 return .showErrorSheet(.networkError)
             }
-        case .retryAfterTimeout(let session):
+        case .retryAfterTimeout(let session, retryAfterHeader: _):
             db.write { self.processSession(session, $0) }
             if let timeInterval = session.nextVerificationAttempt, timeInterval < Constants.autoRetryInterval {
                 try? await Task.sleep(nanoseconds: timeInterval.clampedNanoseconds)
@@ -3376,7 +3377,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             // But we should still upload one-time prekeys, as that is not part
             // of account creation.
             do {
-                try await deps.preKeyManager.rotateOneTimePreKeysForRegistration(auth: accountIdentity.chatServiceAuth).value
+                try await deps.preKeyManager.rotateOneTimePreKeysForRegistration(auth: accountIdentity.chatServiceAuth)
                 self.db.write { tx in
                     self.updatePersistedState(tx) {
                         // No harm marking both down as done even though
@@ -3839,7 +3840,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
                     masterKey: backedUpMasterKey,
                     tx: tx
                 )
-                deps.ows2FAManager.markPinEnabled(pin, tx)
+                deps.ows2FAManager.markPinEnabled(pin: pin, resetReminderInterval: true, tx: tx)
             }
 
             return await nextStep()
@@ -4105,8 +4106,11 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
         do {
             try await self.db.awaitableWrite { tx in
                 try self.deps.changeNumberPniManager.finalizePniIdentity(
-                    withPendingState: pniState.asPniState(),
-                    transaction: tx
+                    identityKey: pniState.pniIdentityKeyPair,
+                    signedPreKey: pniState.localDevicePniSignedPreKeyRecord,
+                    lastResortPreKey: pniState.localDevicePniPqLastResortPreKeyRecord,
+                    registrationId: pniState.localDevicePniRegistrationId,
+                    tx: tx
                 )
                 self._unsafeToModify_mode = .changingNumber(try self.loader.savePendingChangeNumber(
                     oldState: changeNumberState,
@@ -4354,12 +4358,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             persistRegistrationMessage(registrationMessage)
         }
 
-        let prekeyBundles: RegistrationPreKeyUploadBundles
-        do {
-            prekeyBundles = try await deps.preKeyManager.createPreKeysForRegistration().value
-        } catch {
-            return .showErrorSheet(.genericError)
-        }
+        let prekeyBundles = await deps.preKeyManager.createPreKeysForRegistration()
 
         let shouldSkipDeviceTransfer = self.shouldSkipDeviceTransfer()
         let signalService = self.deps.signalService
@@ -4383,15 +4382,10 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
                 .genericError,
                 .deviceTransferPossible: false
         }
-        do {
-            try await deps.preKeyManager.finalizeRegistrationPreKeys(
-                prekeyBundles,
-                uploadDidSucceed: isPrekeyUploadSuccess
-            ).value
-        } catch {
-            // Finalizing is best effort.
-            Logger.error("Unable to finalize prekeys, ignoring and continuing")
-        }
+        await deps.preKeyManager.finalizeRegistrationPreKeys(
+            prekeyBundles,
+            uploadDidSucceed: isPrekeyUploadSuccess
+        )
         return await responseHandler(accountResponse)
     }
 
@@ -4622,7 +4616,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             registrationRecoveryPassword: inMemoryState.regRecoveryPw,
             encryptedDeviceName: nil, // This class only deals in primary devices, which have no name
             discoverableByPhoneNumber: inMemoryState.phoneNumberDiscoverability,
-            hasSVRBackups: hasSVRBackups
+            capabilities: AccountAttributes.Capabilities(hasSVRBackups: hasSVRBackups)
         )
     }
 

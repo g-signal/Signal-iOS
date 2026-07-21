@@ -102,7 +102,7 @@ extension ConversationViewController: MessageActionsDelegate {
                         return
                     }
                     guard let inputToolbar,
-                          inputToolbar.shouldShowEditUI else { return }
+                          inputToolbar.isEditingMessage else { return }
                     inputToolbar.editThumbnail = image
                 }
             }
@@ -210,7 +210,13 @@ extension ConversationViewController: MessageActionsDelegate {
     func messageActionsForwardItem(_ itemViewModel: CVItemViewModelImpl) {
         AssertIsOnMainThread()
 
-        ForwardMessageViewController.present(forItemViewModels: [itemViewModel],
+        let selectionItem = CVSelectionItem(
+            interactionId: itemViewModel.interaction.uniqueId,
+            interactionType: itemViewModel.interaction.interactionType,
+            isForwardable: true,
+            selectionType: .allContent
+        )
+        ForwardMessageViewController.present(forSelectionItems: [selectionItem],
                                              from: self,
                                              delegate: self)
     }
@@ -277,5 +283,243 @@ extension ConversationViewController: MessageActionsDelegate {
 
 //        let paymentsDetailViewController = PaymentsDetailViewController(paymentItem: paymentHistoryItem)
 //        navigationController?.pushViewController(paymentsDetailViewController, animated: true)
+    }
+}
+
+extension ConversationViewController {
+    private func sendPinMessageChange(pinMessage: TransientOutgoingMessage) async throws {
+        let db = DependenciesBridge.shared.db
+        let messageSenderJobQueue = SSKEnvironment.shared.messageSenderJobQueueRef
+        let pinnedMessageManager = DependenciesBridge.shared.pinnedMessageManager
+
+        let sendPromise = await db.awaitableWrite { tx in
+            let preparedMessage = PreparedOutgoingMessage.preprepared(
+                transientMessageWithoutAttachments: pinMessage,
+            )
+            return messageSenderJobQueue.add(
+                .promise,
+                message: preparedMessage,
+                transaction: tx,
+            )
+        }
+
+        do {
+            try await sendPromise.awaitable()
+        } catch is MessageSenderNoSuchSignalRecipientError, is MessageSenderErrorNoValidRecipients {
+            Logger.info("Recipient not found, still showing a pin success locally")
+            db.write { tx in
+                let sentTimestamp = Date.ows_millisecondTimestamp()
+                if let _pinMessage = pinMessage as? OutgoingPinMessage {
+                    let expiresAtMs: UInt64? = _pinMessage.pinDurationSeconds > 0
+                        ? Date.ows_millisecondTimestamp() + UInt64(_pinMessage.pinDurationSeconds * 1000)
+                        : nil
+                    pinnedMessageManager.applyPinMessageChangeToLocalState(
+                        targetTimestamp: _pinMessage.targetMessageTimestamp,
+                        targetAuthorAci: _pinMessage.targetMessageAuthorAci,
+                        expiresAt: expiresAtMs,
+                        isPin: true,
+                        sentTimestamp: sentTimestamp,
+                        tx: tx,
+                    )
+                } else if let _unpinMessage = pinMessage as? OutgoingUnpinMessage {
+                    pinnedMessageManager.applyPinMessageChangeToLocalState(
+                        targetTimestamp: _unpinMessage.targetMessageTimestamp,
+                        targetAuthorAci: _unpinMessage.targetMessageAuthorAci,
+                        expiresAt: nil,
+                        isPin: false,
+                        sentTimestamp: sentTimestamp,
+                        tx: tx,
+                    )
+                }
+            }
+        }
+    }
+
+    func queuePinMessageChangeWithModal(
+        message: TSMessage,
+        pinMessage: TransientOutgoingMessage,
+        modalDelegate: UIViewController? = nil,
+        completion: (() -> Void)?,
+    ) async {
+        let delegate = modalDelegate ?? self
+        do {
+            try await ModalActivityIndicatorViewController.presentAndPropagateResult(from: delegate) {
+                try await self.sendPinMessageChange(pinMessage: pinMessage)
+            }
+        } catch {
+            OWSActionSheets.showActionSheet(
+                title: OWSLocalizedString(
+                    "PINNED_MESSAGE_SEND_ERROR_SHEET_TITLE",
+                    comment: "Title for error sheet shown if the pinned message failed to send",
+                ),
+                message: OWSLocalizedString(
+                    "PINNED_MESSAGE_SEND_ERROR_SHEET_BODY",
+                    comment: "Body for error sheet shown if the pinned message failed to send",
+                ),
+            )
+            return
+        }
+        pinnedMessageIndex = 0
+        completion?()
+    }
+
+    func handleActionUnpin(message: TSMessage, modalDelegate: UIViewController? = nil) {
+        let pinnedMessageManager = DependenciesBridge.shared.pinnedMessageManager
+        let db = DependenciesBridge.shared.db
+
+        let unpinMessage = db.write { tx in
+            pinnedMessageManager.getOutgoingUnpinMessage(
+                interaction: message,
+                thread: thread,
+                expiresAt: nil,
+                tx: tx
+            )
+        }
+        guard let unpinMessage else { return }
+
+        Task {
+            await queuePinMessageChangeWithModal(
+                message: message,
+                pinMessage: unpinMessage,
+                completion: { [weak self] in
+                    self?.presentToast(
+                        text: OWSLocalizedString(
+                            "PINNED_MESSAGE_TOAST",
+                            comment: "Text to show on a toast when someone unpins a message"
+                        )
+                    )
+                }
+            )
+        }
+    }
+
+    func handleActionUnpinAsync(message: TSMessage) async {
+        let pinnedMessageManager = DependenciesBridge.shared.pinnedMessageManager
+        let db = DependenciesBridge.shared.db
+
+        let unpinMessage = db.write { tx in
+            pinnedMessageManager.getOutgoingUnpinMessage(
+                interaction: message,
+                thread: thread,
+                expiresAt: nil,
+                tx: tx
+            )
+        }
+        guard let unpinMessage else { return }
+
+        await queuePinMessageChangeWithModal(
+            message: message,
+            pinMessage: unpinMessage,
+            completion: nil
+        )
+    }
+
+    func messageActionsEndPoll(_ itemViewModel: CVItemViewModelImpl) {
+        if let groupThread = self.thread as? TSGroupThread, let poll = itemViewModel.componentState.poll?.state.poll {
+            do {
+                try DependenciesBridge.shared.pollMessageManager.sendPollTerminateMessage(poll: poll, thread: groupThread)
+            } catch {
+                Logger.error("Failed to end poll: \(error)")
+            }
+        }
+    }
+
+    private func showPinExpiryActionSheet(completion: @escaping (TimeInterval?) -> Void) {
+        let actionSheet = ActionSheetController(
+            title: nil,
+            message: OWSLocalizedString(
+                "PINNED_MESSAGES_EXPIRY_SHEET_TITLE",
+                comment: "Title for an action sheet to indicate how long to keep the pin active",
+            ),
+        )
+        actionSheet.addAction(ActionSheetAction(
+            title: OWSLocalizedString("PINNED_MESSAGES_24_HOURS", comment: "Option in pinned message action sheet to pin for 24 hours."),
+            handler: { _ in completion(.day) },
+        ))
+        actionSheet.addAction(ActionSheetAction(
+            title: OWSLocalizedString("PINNED_MESSAGES_7_DAYS", comment: "Option in pinned message action sheet to pin for 7 days."),
+            handler: { _ in completion(7 * .day) },
+        ))
+        actionSheet.addAction(ActionSheetAction(
+            title: OWSLocalizedString("PINNED_MESSAGES_30_DAYS", comment: "Option in pinned message action sheet to pin for 30 days."),
+            handler: { _ in completion(30 * .day) },
+        ))
+        actionSheet.addAction(ActionSheetAction(
+            title: OWSLocalizedString("PINNED_MESSAGES_FOREVER", comment: "Option in pinned message action sheet to pin with no expiry."),
+            handler: { _ in completion(nil) },
+        ))
+        actionSheet.addAction(.cancel)
+        presentActionSheet(actionSheet)
+    }
+
+    private func handleActionPin(message: TSMessage) {
+        let pinnedMessageManager = DependenciesBridge.shared.pinnedMessageManager
+        let db = DependenciesBridge.shared.db
+
+        let choosePinExpiryAndSendWithOptionalDMWarning: () -> Void = {
+            self.showPinExpiryActionSheet(completion: { expiryInSeconds in
+                db.write { tx in
+                    let pinMessage = pinnedMessageManager.getOutgoingPinMessage(
+                        interaction: message,
+                        thread: self.thread,
+                        expiresAt: expiryInSeconds,
+                        tx: tx,
+                    )
+                    guard let pinMessage else { return }
+
+                    if pinnedMessageManager.shouldShowDisappearingMessageWarning(message: message, tx: tx) {
+                        pinnedMessageManager.incrementDisappearingMessageWarningCount(tx: tx)
+                        self.present(
+                            PinDisappearingMessageViewController(
+                                pinnedMessageManager: pinnedMessageManager,
+                                db: DependenciesBridge.shared.db,
+                                completion: {
+                                    Task {
+                                        await self.queuePinMessageChangeWithModal(
+                                            message: message,
+                                            pinMessage: pinMessage,
+                                            modalDelegate: self,
+                                            completion: nil,
+                                        )
+                                    }
+                                },
+                            ),
+                            animated: true,
+                        )
+                    } else {
+                        Task {
+                            await self.queuePinMessageChangeWithModal(message: message, pinMessage: pinMessage, modalDelegate: self, completion: nil)
+                        }
+                    }
+                }
+            })
+        }
+
+        if threadViewModel.pinnedMessages.count >= RemoteConfig.current.pinnedMessageLimit {
+            let actionSheet = ActionSheetController(
+                title: OWSLocalizedString("PINNED_MESSAGE_REPLACE_OLDEST_TITLE", comment: "Title for an action sheet confirming the user wants to replace oldest pinned message."),
+                message: OWSLocalizedString("PINNED_MESSAGE_REPLACE_OLDEST_BODY", comment: "Message for an action sheet confirming the user wants to replace oldest pinned message."),
+            )
+            actionSheet.addAction(ActionSheetAction(
+                title: OWSLocalizedString("PINNED_MESSAGE_REPLACE_OLDEST_BUTTON", comment: "Option in pinned message action sheet to replace oldest pin."),
+                handler: { _ in choosePinExpiryAndSendWithOptionalDMWarning() },
+            ))
+            actionSheet.addAction(.cancel)
+            presentActionSheet(actionSheet)
+        } else {
+            choosePinExpiryAndSendWithOptionalDMWarning()
+        }
+    }
+
+    func messageActionsChangePinStatus(_ itemViewModel: CVItemViewModelImpl, pin: Bool) {
+        guard let message = itemViewModel.renderItem.interaction as? TSMessage else {
+            return
+        }
+
+        if pin {
+            handleActionPin(message: message)
+            return
+        }
+        handleActionUnpin(message: message, modalDelegate: self)
     }
 }

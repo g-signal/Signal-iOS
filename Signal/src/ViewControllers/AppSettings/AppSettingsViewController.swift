@@ -612,17 +612,19 @@ extension AppSettingsViewController: UsernameLinkScanDelegate {
         }
 
         presentingViewController.dismiss(animated: true) {
-            SSKEnvironment.shared.databaseStorageRef.read { tx in
-                UsernameQuerier().queryForUsernameLink(
-                    link: usernameLink,
-                    fromViewController: presentingViewController,
-                    tx: tx
-                ) { _, aci in
-                    SignalApp.shared.presentConversationForAddress(
-                        SignalServiceAddress(aci),
-                        animated: true
+            Task {
+                guard
+                    let (_, aci) = await UsernameQuerier().queryForUsernameLink(
+                        link: usernameLink,
+                        fromViewController: presentingViewController,
                     )
+                else {
+                    return
                 }
+                SignalApp.shared.presentConversationForAddress(
+                    SignalServiceAddress(aci),
+                    animated: true
+                )
             }
         }
     }

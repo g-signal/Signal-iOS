@@ -115,7 +115,7 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
         updateBarButtonItems()
         OWSTableViewController2.removeBackButtonText(viewController: self)
 
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) { // iOS26SDKIsAvailable: always true with compiler >= 6.2
             toolbarDeleteButton.image = UIImage(resource: .trash)
             self.toolbarItems = [.flexibleSpace(), toolbarDeleteButton]
         }
@@ -165,7 +165,7 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
         reloadAllRows()
     }
 
-    private func updateBarButtonItems() {
+    func updateBarButtonItems() {
         if tableView.isEditing {
             navigationItem.leftBarButtonItem = cancelMultiselectButton()
             navigationItem.rightBarButtonItem = deleteAllCallsButton()
@@ -233,7 +233,7 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
     )
 
     private func showToolbar() {
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) { // iOS26SDKIsAvailable: always true with compiler >= 6.2
             navigationController?.setToolbarHidden(false, animated: true)
             (tabBarController as? HomeTabBarController)?.setTabBarHidden(true)
             return
@@ -351,7 +351,7 @@ class CallsListViewController: OWSViewController, HomeTabViewController, CallSer
     }
 
     private func hideToolbar() {
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) { // iOS26SDKIsAvailable: always true with compiler >= 6.2
             self.navigationController?.setToolbarHidden(true, animated: true)
             (self.tabBarController as? HomeTabBarController)?.setTabBarHidden(false)
             return

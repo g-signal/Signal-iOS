@@ -236,7 +236,7 @@ class RegistrationPinViewController: OWSViewController {
             }(),
             separator: " "
         )
-        result.font = .fontForRegistrationExplanationLabel
+        result.font = .dynamicTypeSubheadlineClamped
         result.textAlignment = .center
         result.delegate = self
         result.accessibilityIdentifier = "registration.pin.explanationLabel"
@@ -412,8 +412,8 @@ class RegistrationPinViewController: OWSViewController {
             tintColor: Theme.accentBlueColor
         )
         nextBarButton.tintColor = Theme.accentBlueColor
-        titleLabel.textColor = .colorForRegistrationTitleLabel
-        explanationView.textColor = .colorForRegistrationExplanationLabel
+        titleLabel.textColor = Theme.primaryTextColor
+        explanationView.textColor = Theme.secondaryTextAndIconColor
         explanationView.linkTextAttributes = [
             .foregroundColor: Theme.accentBlueColor,
             .underlineColor: UIColor.clear
@@ -468,7 +468,7 @@ class RegistrationPinViewController: OWSViewController {
                 comment: "Button asking if the user would like to create an numeric PIN"
             ))
         }
-        pinValidationLabel.textColor = .colorForRegistrationExplanationLabel
+        pinValidationLabel.textColor = Theme.secondaryTextAndIconColor
 
         replaceViewsAfterTextField(with: [
             pinValidationLabel,

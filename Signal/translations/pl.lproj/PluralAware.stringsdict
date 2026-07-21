@@ -703,13 +703,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Grupy B&A działają najlepiej, gdy należą do nich nie więcej niż %1$d osoby. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
+			<string>Grupy B&amp;A działają najlepiej, gdy należą do nich nie więcej niż %1$d osoby. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
 			<key>many</key>
-			<string>Grupy B&A działają najlepiej, gdy należy do nich nie więcej niż %1$d osób. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
+			<string>Grupy B&amp;A działają najlepiej, gdy należy do nich nie więcej niż %1$d osób. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
 			<key>one</key>
-			<string>Grupy B&A działają najlepiej, gdy należy do nich nie więcej niż %1$d osoba. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
+			<string>Grupy B&amp;A działają najlepiej, gdy należy do nich nie więcej niż %1$d osoba. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
 			<key>other</key>
-			<string>Grupy B&A działają najlepiej, gdy należy do nich nie więcej niż %1$d osoby. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
+			<string>Grupy B&amp;A działają najlepiej, gdy należy do nich nie więcej niż %1$d osoby. Dodanie kolejnych członków spowoduje opóźnienia w wysyłaniu i odbieraniu wiadomości.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -903,13 +903,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>B&A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osób</string>
+			<string>B&amp;A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osób</string>
 			<key>many</key>
-			<string>B&A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osób</string>
+			<string>B&amp;A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osób</string>
 			<key>one</key>
-			<string>B&A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osoby</string>
+			<string>B&amp;A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osoby</string>
 			<key>other</key>
-			<string>B&A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osoby</string>
+			<string>B&amp;A zadzowni do tych osób: %2$@, %3$@ i jeszcze do %1$d osoby</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -1263,13 +1263,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&A w ciągu %1$d dni.</string>
+			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&amp;A w ciągu %1$d dni.</string>
 			<key>many</key>
-			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&A w ciągu %1$d dni.</string>
+			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&amp;A w ciągu %1$d dni.</string>
 			<key>one</key>
-			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&A w ciągu %1$d dnia.</string>
+			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&amp;A w ciągu %1$d dnia.</string>
 			<key>other</key>
-			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&A w ciągu %1$d dnia.</string>
+			<string>Aby zachować połączenie z urządzeniem %2$@, otwórz na nim B&amp;A w ciągu %1$d dnia.</string>
 		</dict>
 	</dict>
 	<key>LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE_%d</key>
@@ -1523,13 +1523,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Wszystkie kontakty B&A · %1$d odbiorców</string>
+			<string>Wszystkie kontakty B&amp;A · %1$d odbiorców</string>
 			<key>many</key>
-			<string>Wszystkie kontakty B&A · %1$d odbiorców</string>
+			<string>Wszystkie kontakty B&amp;A · %1$d odbiorców</string>
 			<key>one</key>
-			<string>Wszystkie kontakty B&A · %1$d odbiorca</string>
+			<string>Wszystkie kontakty B&amp;A · %1$d odbiorca</string>
 			<key>other</key>
-			<string>Wszystkie kontakty B&A · %1$d odbiorcy</string>
+			<string>Wszystkie kontakty B&amp;A · %1$d odbiorcy</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1543,13 +1543,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>few</key>
-			<string>Wszystkie kontakty B&A · %1$d pominięte osoby</string>
+			<string>Wszystkie kontakty B&amp;A · %1$d pominięte osoby</string>
 			<key>many</key>
-			<string>Wszystkie kontakty B&A · %1$d pominiętych osób</string>
+			<string>Wszystkie kontakty B&amp;A · %1$d pominiętych osób</string>
 			<key>one</key>
-			<string>Wszystkie kontakty B&A · %1$d pominięta osoba</string>
+			<string>Wszystkie kontakty B&amp;A · %1$d pominięta osoba</string>
 			<key>other</key>
-			<string>Wszystkie kontakty B&A · %1$d pominiętej osoby</string>
+			<string>Wszystkie kontakty B&amp;A · %1$d pominiętej osoby</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>

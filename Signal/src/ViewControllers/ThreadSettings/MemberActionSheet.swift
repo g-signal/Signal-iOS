@@ -153,8 +153,7 @@ class MemberActionSheet: OWSTableSheetViewController {
         section.customHeaderView = ConversationHeaderBuilder.buildHeader(
             for: thread,
             sizeClass: .eighty,
-            options: [.message, .videoCall, .audioCall, .noBackground],
-            memberLabel: memberLabel,
+            options: [.message, .videoCall, .audioCall],
             delegate: self,
         )
 

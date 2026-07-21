@@ -147,6 +147,7 @@
 		3236FCC42592B67B006D33B9 /* NameCollisionReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3236FCC32592B67B006D33B9 /* NameCollisionReviewCell.swift */; };
 		326DF2612739F4D90017B789 /* FeaturedBadgeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326DF2602739F4D90017B789 /* FeaturedBadgeViewController.swift */; };
 		327CF66825ACE7DD00DA0A6F /* GetStartedBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327CF66725ACE7DC00DA0A6F /* GetStartedBannerViewController.swift */; };
+		6053C460EF144D8EA13F746C /* GetStartedBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA22207C140368F7A920F /* GetStartedBannerCell.swift */; };
 		329D42A725AE673400DCB449 /* NetworkInterfacePreferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329D42A625AE673400DCB449 /* NetworkInterfacePreferenceViewController.swift */; };
 		32A9E22624C11B3F00C43518 /* EmojiMoodPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A9E22524C11B3F00C43518 /* EmojiMoodPickerView.swift */; };
 		32AC5CE7255B51E900829BD8 /* JoinGroupCallPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AC5CE6255B51E900829BD8 /* JoinGroupCallPill.swift */; };
@@ -1740,7 +1741,6 @@
 		B91751D52EC5545200FF7A9C /* AppIcon-white.icon in Resources */ = {isa = PBXBuildFile; fileRef = B91751D42EC5545200FF7A9C /* AppIcon-white.icon */; };
 		B91751D72EC5546800FF7A9C /* AppIcon-weather.icon in Resources */ = {isa = PBXBuildFile; fileRef = B91751D62EC5546800FF7A9C /* AppIcon-weather.icon */; };
 		B91751D92EC5548500FF7A9C /* AppIcon-yellow.icon in Resources */ = {isa = PBXBuildFile; fileRef = B91751D82EC5548500FF7A9C /* AppIcon-yellow.icon */; };
-		B91751DB2EC5556B00FF7A9C /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = B91751DA2EC5556B00FF7A9C /* AppIcon.icon */; };
 		B91ACD9E2A797698000CFBC7 /* StickerPickerKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91ACD9D2A797698000CFBC7 /* StickerPickerKeyboard.swift */; };
 		B924DFA62EE7C42B00B88147 /* CallQualitySurveyNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B924DFA52EE7C42B00B88147 /* CallQualitySurveyNavigation.swift */; };
 		B924DFA82EE7C63400B88147 /* CallQualitySurveyRatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B924DFA72EE7C63400B88147 /* CallQualitySurveyRatingViewController.swift */; };
@@ -4219,6 +4219,7 @@
 		32525F9427C74B1A0099E801 /* GroupCallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCallManager.swift; sourceTree = "<group>"; };
 		326DF2602739F4D90017B789 /* FeaturedBadgeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedBadgeViewController.swift; sourceTree = "<group>"; };
 		327CF66725ACE7DC00DA0A6F /* GetStartedBannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedBannerViewController.swift; sourceTree = "<group>"; };
+		84BFA22207C140368F7A920F /* GetStartedBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedBannerCell.swift; sourceTree = "<group>"; };
 		329D42A625AE673400DCB449 /* NetworkInterfacePreferenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkInterfacePreferenceViewController.swift; sourceTree = "<group>"; };
 		32A9E22524C11B3F00C43518 /* EmojiMoodPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMoodPickerView.swift; sourceTree = "<group>"; };
 		32AC5CE6255B51E900829BD8 /* JoinGroupCallPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinGroupCallPill.swift; sourceTree = "<group>"; };
@@ -5911,7 +5912,6 @@
 		B91751D42EC5545200FF7A9C /* AppIcon-white.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "AppIcon-white.icon"; sourceTree = "<group>"; };
 		B91751D62EC5546800FF7A9C /* AppIcon-weather.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "AppIcon-weather.icon"; sourceTree = "<group>"; };
 		B91751D82EC5548500FF7A9C /* AppIcon-yellow.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "AppIcon-yellow.icon"; sourceTree = "<group>"; };
-		B91751DA2EC5556B00FF7A9C /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		B91ACD9D2A797698000CFBC7 /* StickerPickerKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerPickerKeyboard.swift; sourceTree = "<group>"; };
 		B924DFA52EE7C42B00B88147 /* CallQualitySurveyNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallQualitySurveyNavigation.swift; sourceTree = "<group>"; };
 		B924DFA72EE7C63400B88147 /* CallQualitySurveyRatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallQualitySurveyRatingViewController.swift; sourceTree = "<group>"; };
@@ -10976,6 +10976,7 @@
 				88A4CC0F246CE2760082211F /* TransferProgressView.swift */,
 				34B6A902218B3F62007C4606 /* TypingIndicatorView.swift */,
 				88928A7426418904009C9B30 /* VoiceMessageTooltip.swift */,
+				84BFA22207C140368F7A920F /* GetStartedBannerCell.swift */,
 			);
 			name = Views;
 			path = views;
@@ -11543,7 +11544,6 @@
 				B91751D62EC5546800FF7A9C /* AppIcon-weather.icon */,
 				B91751D42EC5545200FF7A9C /* AppIcon-white.icon */,
 				B91751D82EC5548500FF7A9C /* AppIcon-yellow.icon */,
-				B91751DA2EC5556B00FF7A9C /* AppIcon.icon */,
 			);
 			path = AppIcons;
 			sourceTree = "<group>";
@@ -15776,7 +15776,6 @@
 				B91751D72EC5546800FF7A9C /* AppIcon-weather.icon in Resources */,
 				B91751D52EC5545200FF7A9C /* AppIcon-white.icon in Resources */,
 				B91751D92EC5548500FF7A9C /* AppIcon-yellow.icon in Resources */,
-				B91751DB2EC5556B00FF7A9C /* AppIcon.icon in Resources */,
 				052D17882C7E34D00023D56F /* AppIcon.xcassets in Resources */,
 				88DBDFBB2638FFBD00C2101C /* audio-played-dot.json in Resources */,
 				45B74A742044AAB600CD42F8 /* aurora-quiet.aifc in Resources */,
@@ -18000,6 +17999,7 @@
 				88EFF4F825AD1F0D000FAFBA /* ForwardMessageViewController.swift in Sources */,
 				50A76F582AF5765000FCF02D /* FullTextSearchOptimizer.swift in Sources */,
 				327CF66825ACE7DD00DA0A6F /* GetStartedBannerViewController.swift in Sources */,
+				6053C460EF144D8EA13F746C /* GetStartedBannerCell.swift in Sources */,
 				34D1F0501F7D45A60066283D /* GifPickerCell.swift in Sources */,
 				34BECE301F7ABCF800D7438D /* GifPickerLayout.swift in Sources */,
 				34BECE2E1F7ABCE000D7438D /* GifPickerViewController.swift in Sources */,

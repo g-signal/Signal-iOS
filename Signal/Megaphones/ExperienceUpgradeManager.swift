@@ -89,6 +89,7 @@ class ExperienceUpgradeManager {
                         return ExperienceUpgradeManifest
                             .checkPreconditionsForBackupEnablementReminder(
                                 backupSettingsStore: BackupSettingsStore(),
+                                remoteConfigProvider: SSKEnvironment.shared.remoteConfigManagerRef,
                                 tsAccountManager: DependenciesBridge.shared.tsAccountManager,
                                 transaction: transaction,
                             )
@@ -160,7 +161,7 @@ class ExperienceUpgradeManager {
             lastPresented = splash
             didPresentView = true
         } else {
-            Logger.info("no megaphone or splash needed for experience upgrade: \(next.id as Optional)")
+            Logger.info("no megaphone or splash needed for experience upgrade: \(String(describing: next.id))")
             didPresentView = false
         }
 

@@ -38,6 +38,13 @@ enum AppIcon: String {
         }
     }
 
+    var shouldShowShadow: Bool {
+        switch self {
+        case .default: return true
+        default: return false
+        }
+    }
+
     var alternateIconName: String? {
         if case .default = self {
             nil

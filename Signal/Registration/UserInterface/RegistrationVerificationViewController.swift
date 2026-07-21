@@ -368,8 +368,8 @@ class RegistrationVerificationViewController: OWSViewController {
         }
 
         view.backgroundColor = Theme.backgroundColor
-        titleLabel.textColor = .colorForRegistrationTitleLabel
-        explanationLabel.textColor = .colorForRegistrationExplanationLabel
+        titleLabel.textColor = Theme.primaryTextColor
+        explanationLabel.textColor = Theme.secondaryTextAndIconColor
         explanationLabel.text = explanationLabelText
         wrongNumberButton.isHidden = state.canChangeE164.negated
         helpButton.isHidden = state.showHelpText.negated

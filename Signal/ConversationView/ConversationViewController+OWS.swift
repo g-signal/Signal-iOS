@@ -77,10 +77,6 @@ extension ConversationViewController {
     internal func updateContentInsets() {
         AssertIsOnMainThread()
 
-        guard !isMeasuringKeyboardHeight, !isSwitchingKeyboard else {
-            return
-        }
-
         // Don't update the content insets if an interactive pop is in progress
         guard let navigationController = self.navigationController else {
             return
@@ -99,11 +95,8 @@ extension ConversationViewController {
         let oldInsets = collectionView.contentInset
         var newInsets = oldInsets
 
-        let keyboardOverlap = inputAccessoryPlaceholder.keyboardOverlap
-        newInsets.bottom = (keyboardOverlap +
-                                bottomBar.height -
-                                view.safeAreaInsets.bottom)
-        newInsets.top = (bannerView?.height ?? 0)
+        newInsets.bottom = bottomBarContainer.frame.height - collectionView.safeAreaInsets.bottom
+        newInsets.top = (bannerStackView?.height ?? 0)
 
         let wasScrolledToBottom = self.isScrolledToBottom
 
@@ -218,7 +211,7 @@ extension ConversationViewController {
 // MARK: - ForwardMessageDelegate
 
 extension ConversationViewController: ForwardMessageDelegate {
-    public func forwardMessageFlowDidComplete(items: [ForwardMessageItem],
+    func forwardMessageFlowDidComplete(items: [ForwardMessageItem],
                                               recipientThreads: [TSThread]) {
         AssertIsOnMainThread()
 
@@ -413,7 +406,7 @@ extension ConversationViewController: MediaPresentationContextProvider {
         // To avoid flicker when transition view is animated over the message bubble,
         // we initially hide the overlaying elements and fade them in.
         let mediaOverlayViews = toContext.mediaOverlayViews
-        let duration: TimeInterval = kIsDebuggingMediaPresentationAnimations ? 1.5 : 0.2
+        let duration: TimeInterval = false /* kIsDebuggingMediaPresentationAnimations removed */ ? 1.5 : 0.2
         UIView.animate(
             withDuration: duration,
             animations: {
@@ -464,13 +457,13 @@ extension ConversationViewController: MessageEditHistoryViewDelegate {
 
 extension ConversationViewController: LongTextViewDelegate {
 
-    public func longTextViewMessageWasDeleted(_ longTextViewController: LongTextViewController) {
+    func longTextViewMessageWasDeleted(_ longTextViewController: LongTextViewController) {
         Logger.info("")
 
         navigationController?.popToViewController(self, animated: true)
     }
 
-    public func expandTruncatedTextOrPresentLongTextView(_ itemViewModel: CVItemViewModelImpl) {
+    func expandTruncatedTextOrPresentLongTextView(_ itemViewModel: CVItemViewModelImpl) {
         AssertIsOnMainThread()
 
         guard let displayableBodyText = itemViewModel.displayableBodyText else {

@@ -142,7 +142,7 @@ extension RegistrationCoordinatorImpl {
                 return .reglockFailure(response)
 
             case .retry:
-                return .retryAfter(retryAfterHeader)
+                return .retryAfter(retryAfterHeader ?? 0)
 
             case .unauthorized:
                 Logger.warn("Got unauthorized response for create account")
@@ -227,7 +227,7 @@ extension RegistrationCoordinatorImpl {
                 return .reglockFailure(response)
 
             case .retry:
-                return .retryAfter(retryAfterHeader)
+                return .retryAfter(retryAfterHeader ?? 0)
 
             case .unauthorized, .regRecoveryPasswordRejected:
                 return .rejectedVerificationMethod

@@ -441,7 +441,6 @@ extension ConversationSearchViewController: UITableViewDataSource {
 
             let cellContentToken = cellContentToken(forConfiguration: configuration)
             cell.configure(cellContentToken: cellContentToken, spoilerAnimationManager: spoilerAnimationManager)
-            cell.useSidebarAppearance = useSidebarTableViewCellAppearance
             return cell
         }
     }

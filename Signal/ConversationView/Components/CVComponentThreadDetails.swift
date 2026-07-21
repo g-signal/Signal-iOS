@@ -1115,7 +1115,7 @@ extension CVComponentThreadDetails {
         }
 
         let groupThreads = TSGroupThread.groupThreads(with: contactThread.contactAddress, transaction: tx)
-        let mutualGroupNames = groupThreads.filter { $0.isLocalUserFullMember && $0.shouldThreadBeVisible }.map { $0.groupNameOrDefault }
+        let mutualGroupNames = groupThreads.filter { $0.isLocalUserFullMemberOfThread && $0.shouldThreadBeVisible }.map { $0.groupNameOrDefault }
 
         let formatString: String
         var args: [CVarArg] = mutualGroupNames

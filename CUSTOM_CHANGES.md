@@ -98,7 +98,6 @@ git diff <new-tag> HEAD -- \
   Signal/src/ViewControllers/AppSettings/Profile/ProfileSettingsViewController.swift \
   "Signal/src/ViewControllers/Attachment Keyboard/AttachmentFormatPickerView.swift" \
   "Signal/src/ViewControllers/Attachment Keyboard/AttachmentKeyboard.swift" \
-  Signal/src/ViewControllers/DebugUI/DebugUIMisc.swift \
   Signal/src/ViewControllers/Donations/BadgeDetailsSheet.swift \
   Signal/src/ViewControllers/Donations/DonationViewsUtil.swift \
   "Signal/src/ViewControllers/Donations/DonationViewsUtil+IDEAL.swift" \
@@ -163,27 +162,6 @@ git diff <new-tag> HEAD -- \
   SignalUI/Utils/GroupViewUtils.swift \
   SignalUI/ViewControllers/OWSTableViewController2.swift \
   SignalUI/ViewControllers/ScanQRCodeViewController.swift \
-  "Signal/src/ViewControllers/AppSettings/Payments/ArchivedPaymentHistoryItem.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentModelCell.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsBiometryLockPromptViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsDeactivateViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsDetailViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsHistory.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsHistoryViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsQRScanViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsRestoreWalletCompleteViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsRestoreWalletPasteboardViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsRestoreWalletSplashViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsRestoreWalletWordViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsSendRecipientViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsSettingsViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsTransferInViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsTransferOutViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsViewPassphraseConfirmViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsViewPassphraseGridViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsViewPassphraseSplashViewController.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/PaymentsViewUtils.swift" \
-  "Signal/src/ViewControllers/AppSettings/Payments/TSPaymentModelHistoryItem.swift" \
   Signal/Images.xcassets/signal-logo-40.imageset/Contents.json \
   Signal/Images.xcassets/signal-logo-128-launch-screen.imageset/Contents.json \
   "Signal/src/ViewControllers/HomeView/Chat List/ChatListViewController+BackupDownloadProgressView.swift" \
@@ -424,16 +402,7 @@ GExtGroupProfileFetcher.shared.fetchAndStoreGroupExtTags(groupId: ...)
 
 ---
 
-## 19. `SignalServiceKit/Groups/GroupV2UpdatesImpl.swift`
-
-群组信息更新后调用：
-```swift
-GExtGroupProfileFetcher.shared.fetchAndStoreGroupExtTags(groupId: ...)
-```
-
----
-
-## 20. `Signal/ConversationView/ConversationHeaderView.swift`
+## 19. `Signal/ConversationView/ConversationHeaderView.swift`
 
 会话顶部标题旁新增 `GExtTagsStackView`：
 - 联系人会话：显示该联系人的 GExtTag
@@ -442,7 +411,7 @@ GExtGroupProfileFetcher.shared.fetchAndStoreGroupExtTags(groupId: ...)
 
 ---
 
-## 21. `Signal/ConversationView/ConversationInputToolbar.swift`
+## 20. `Signal/ConversationView/ConversationInputToolbar.swift`
 
 新增 `msgButtonVisible: GExtRobot.MsgButtonVisible?` 参数，机器人配置隐藏输入栏按钮：
 
@@ -454,7 +423,7 @@ GExtGroupProfileFetcher.shared.fetchAndStoreGroupExtTags(groupId: ...)
 
 ---
 
-## 22. `Signal/src/ViewControllers/ThreadSettings/ConversationSettingsViewController+Contents.swift`
+## 21. `Signal/src/ViewControllers/ThreadSettings/ConversationSettingsViewController+Contents.swift`
 
 机器人会话（`gextRobot.robot == true`）隐藏以下入口：
 - 昵称（Nickname）
@@ -465,7 +434,7 @@ GExtGroupProfileFetcher.shared.fetchAndStoreGroupExtTags(groupId: ...)
 
 ---
 
-## 23. `Signal/src/ViewControllers/AppSettings/AppSettingsViewController.swift`
+## 22. `Signal/src/ViewControllers/AppSettings/AppSettingsViewController.swift`
 
 - 删除 Donate 入口（整块移除）
 - 删除 Backups 入口（整块移除）
@@ -473,7 +442,7 @@ GExtGroupProfileFetcher.shared.fetchAndStoreGroupExtTags(groupId: ...)
 
 ---
 
-## 24. `Signal/src/ViewControllers/AppSettings/HelpViewController.swift`
+## 23. `Signal/src/ViewControllers/AppSettings/HelpViewController.swift`
 
 新增 `SupportConstants` 类：
 
@@ -493,7 +462,7 @@ Debug Log 上传入口已禁用。
 
 ---
 
-## 25. `Signal/src/ViewControllers/AppSettings/ContactSupportViewController.swift`
+## 24. `Signal/src/ViewControllers/AppSettings/ContactSupportViewController.swift`
 
 - 注释掉 payments / donationsAndBadges 支持分类
 - Debug log info button（`?` 图标）隐藏：`cell.contentView.addSubview(infoButton)` 及布局约束注释掉
@@ -501,7 +470,7 @@ Debug Log 上传入口已禁用。
 
 ---
 
-## 26. `Signal/Notifications/PushRegistrationManager.swift`
+## 25. `Signal/Notifications/PushRegistrationManager.swift`
 
 重写 VoIP Push token 注册逻辑：
 - 新增 `voipTokenPromise` / `voipTokenFuture` / `voipTokenPromiseCreationTime` 字段
@@ -510,7 +479,7 @@ Debug Log 上传入口已禁用。
 
 ---
 
-## 27. `Signal/util/SyncPushTokensJob.swift`
+## 26. `Signal/util/SyncPushTokensJob.swift`
 
 - `updatePushTokens` / `recordPushTokensLocally` 增加 `voipToken` 参数
 - VoIP token 变化时触发上传（`reason = "voip_changed"`）
@@ -518,7 +487,7 @@ Debug Log 上传入口已禁用。
 
 ---
 
-## 28. `Signal/AppLaunch/AppDelegate.swift`
+## 27. `Signal/AppLaunch/AppDelegate.swift`
 
 ```swift
 // DebugLogger.configureSwiftLogging()  // 注释掉
@@ -528,7 +497,7 @@ mobileCoinHelper: MobileCoinHelperMinimal() // 原 MobileCoinHelperSDK()
 
 ---
 
-## 29. `Signal/Signal-Info.plist`
+## 28. `Signal/Signal-Info.plist`
 
 | 字段 | 原始 | 自定义 |
 |------|------|--------|
@@ -539,7 +508,7 @@ mobileCoinHelper: MobileCoinHelperMinimal() // 原 MobileCoinHelperSDK()
 
 ---
 
-## 30. `Signal/Signal.entitlements`
+## 29. `Signal/Signal.entitlements`
 
 ```xml
 <key>com.apple.developer.associated-domains</key>
@@ -556,13 +525,13 @@ mobileCoinHelper: MobileCoinHelperMinimal() // 原 MobileCoinHelperSDK()
 
 ---
 
-## 31. `Signal/Signal-AppStore.entitlements`
+## 30. `Signal/Signal-AppStore.entitlements`
 
 与 `Signal.entitlements` 相同修改（associated-domains + application-groups）。
 
 ---
 
-## 32. `Signal/Calls/CallKitCallManager.swift`
+## 31. `Signal/Calls/CallKitCallManager.swift`
 
 | 原始 | 自定义 |
 |------|--------|
@@ -572,7 +541,7 @@ mobileCoinHelper: MobileCoinHelperMinimal() // 原 MobileCoinHelperSDK()
 
 ---
 
-## 33. `SignalUI/Appearance/Theme+Icons.swift`
+## 32. `SignalUI/Appearance/Theme+Icons.swift`
 
 新增图标映射：
 
@@ -583,44 +552,44 @@ case .settingsLinkBAPlatform:
 
 ---
 
-## 34. `SignalUI/Payments/MobileCoinAPI.swift`
+## 33. `SignalUI/Payments/MobileCoinAPI.swift`
 
 整个文件注释掉（约 776 行）。
 
 ---
 
-## 35. `SignalUI/Payments/Payments.swift`
+## 34. `SignalUI/Payments/Payments.swift`
 
 - `shouldShowPaymentsUI` 返回 `false`
 - 核心支付方法注释掉
 
 ---
 
-## 36. `SignalUI/Payments/PaymentsImpl.swift`
+## 35. `SignalUI/Payments/PaymentsImpl.swift`
 
 整个文件注释掉。
 
 ---
 
-## 37. `Signal/src/ViewControllers/AppSettings/Privacy/AdvancedPrivacySettingsViewController.swift`
+## 36. `Signal/src/ViewControllers/AppSettings/Privacy/AdvancedPrivacySettingsViewController.swift`
 
 Support URL 链接指向 `about:blank`。
 
 ---
 
-## 38. `Signal/src/ViewControllers/AppSettings/Privacy/ProxySettingsViewController.swift`
+## 37. `Signal/src/ViewControllers/AppSettings/Privacy/ProxySettingsViewController.swift`
 
 Support URL 链接指向 `about:blank`。
 
 ---
 
-## 39. `Signal/src/ViewControllers/AppSettings/Account/AccountSettingsViewController.swift`
+## 38. `Signal/src/ViewControllers/AppSettings/Account/AccountSettingsViewController.swift`
 
 Support URL 链接指向 `about:blank`。
 
 ---
 
-## 40. `Signal/translations/`（45 个语言，每语言 3 个文件）
+## 39. `Signal/translations/`（45 个语言，每语言 3 个文件）
 
 **Localizable.strings**：品牌词替换
 
@@ -641,7 +610,7 @@ Support URL 链接指向 `about:blank`。
 
 ---
 
-## 41. `.gitignore`
+## 40. `.gitignore`
 
 新增：
 ```
@@ -650,7 +619,7 @@ CUSTOM_CHANGES.md
 
 ---
 
-## 42. `Signal/Registration/RegistrationCoordinatorImpl.swift`（7.79 新增改动）
+## 41. `Signal/Registration/RegistrationCoordinatorImpl.swift`（7.79 新增改动）
 
 注册流程中完全禁用备份恢复入口：
 
@@ -660,73 +629,73 @@ CUSTOM_CHANGES.md
 
 ---
 
-## 43. `SignalUI/Utils/URL+Support.swift`（7.79 新增文件，不修改）
+## 42. `SignalUI/Utils/URL+Support.swift`（7.79 新增文件，不修改）
 
 7.79 新增的 support URL 集中管理文件。所有通过 `URL.Support.*` 触发的 support.signal.org 链接在各调用入口处直接隐藏按钮（见下方各文件），本文件保持不改动。
 
 ---
 
-## 44. `Signal/Backups/BackupSettingsViewController.swift`
+## 43. `Signal/Backups/BackupSettingsViewController.swift`
 
 Action sheet 中"了解更多"ActionSheetAction 整块注释掉（入口隐藏，不跳转 support.signal.org/backups）。
 
 ---
 
-## 45. `Signal/Backups/ChooseBackupPlanViewController.swift`
+## 44. `Signal/Backups/ChooseBackupPlanViewController.swift`
 
 SwiftUI Text `.appendLink(learnMore)` 整块注释掉（入口链接隐藏，不显示"了解更多"，不跳转 support.signal.org/backups）。
 
 ---
 
-## 46. `Signal/ConversationView/ConversationViewController+MessageRequest.swift`
+## 45. `Signal/ConversationView/ConversationViewController+MessageRequest.swift`
 
 `messageRequestViewDidTapLearnMore()` 函数体注释掉，按钮点击后不跳转 support.signal.org。
 
 ---
 
-## 47. `Signal/ConversationView/MessageRequestView.swift`
+## 46. `Signal/ConversationView/MessageRequestView.swift`
 
 隐藏"了解更多"链接（2 处注释掉 `appendLearnMoreLink = true`），防止跳转到 signal.org 支持页面。
 
 ---
 
-## 48. `Signal/ConversationView/ConversationViewController+Calls.swift`
+## 47. `Signal/ConversationView/ConversationViewController+Calls.swift`
 
 机器人账户不允许发起通话（`GExtTagStore.shared.getUserRobot(...).robot == true` 时直接 return）。
 
 ---
 
-## 49. `Signal/ConversationView/ConversationViewController+CVComponentDelegate.swift`
+## 48. `Signal/ConversationView/ConversationViewController+CVComponentDelegate.swift`
 
 注释掉支付历史记录导航（MobileCoin 移除）。
 
 ---
 
-## 50. `Signal/ConversationView/ConversationViewController+Delegates.swift`
+## 49. `Signal/ConversationView/ConversationViewController+Delegates.swift`
 
 机器人账户点击标题不跳转会话设置（robot 账户屏蔽 `titleTapped` 导航）。
 
 ---
 
-## 51. `Signal/ConversationView/ConversationViewController+ConversationInputToolbarDelegate.swift`
+## 50. `Signal/ConversationView/ConversationViewController+ConversationInputToolbarDelegate.swift`
 
 注释掉支付按钮处理逻辑（MobileCoin 移除）。
 
 ---
 
-## 52. `Signal/ConversationView/ConversationViewController+GiftBadges.swift`
+## 51. `Signal/ConversationView/ConversationViewController+GiftBadges.swift`
 
 禁用捐赠/徽章相关感谢弹窗逻辑。
 
 ---
 
-## 53. `Signal/ConversationView/ConversationViewController+MessageActionsDelegate.swift`
+## 52. `Signal/ConversationView/ConversationViewController+MessageActionsDelegate.swift`
 
 注释掉支付详情导航（MobileCoin 移除）。
 
 ---
 
-## 54. `Signal/ConversationView/ConversationViewController+OWS.swift`
+## 53. `Signal/ConversationView/ConversationViewController+OWS.swift`
 
 - 注释掉 `SendPaymentViewDelegate` 相关实现（MobileCoin 移除）
 - 未知线程警告 action sheet 中的"了解更多"ActionSheetAction 注释掉
@@ -734,239 +703,239 @@ SwiftUI Text `.appendLink(learnMore)` 整块注释掉（入口链接隐藏，不
 
 ---
 
-## 55. `Signal/ConversationView/ConversationViewController+UI.swift`
+## 54. `Signal/ConversationView/ConversationViewController+UI.swift`
 
 集成 `GExtRobot.msgButtonVisible`，根据机器人配置控制输入栏按钮可见性。
 
 ---
 
-## 56. `Signal/ConversationView/Components/CVComponentArchivedPayment.swift`
+## 55. `Signal/ConversationView/Components/CVComponentArchivedPayment.swift`
 
 注释掉支付金额格式化逻辑（MobileCoin 移除）。
 
 ---
 
-## 57. `Signal/ConversationView/Components/CVComponentMessage.swift`
+## 56. `Signal/ConversationView/Components/CVComponentMessage.swift`
 
 注释掉 payment attachment 相关逻辑（MobileCoin 移除）。
 
 ---
 
-## 58. `Signal/ConversationView/Components/CVComponentPaymentAttachment.swift`
+## 57. `Signal/ConversationView/Components/CVComponentPaymentAttachment.swift`
 
 注释掉支付格式化逻辑（MobileCoin 移除）。
 
 ---
 
-## 59. `Signal/ConversationView/Components/CVComponentState.swift`
+## 58. `Signal/ConversationView/Components/CVComponentState.swift`
 
 - 注释掉 MobileCoin import
 - 新增 `isRobotThread` 字段
 
 ---
 
-## 60. `Signal/ConversationView/Components/CVComponentThreadDetails.swift`
+## 59. `Signal/ConversationView/Components/CVComponentThreadDetails.swift`
 
 添加 `isRobotThread` 标志，robot 账户禁用标题点击跳转。
 
 ---
 
-## 61. `Signal/ConversationView/Loading/CVItemViewState.swift`
+## 60. `Signal/ConversationView/Loading/CVItemViewState.swift`
 
 新增 GExt tag 渲染逻辑，在消息发送者名旁显示 GExtTagsStackView。
 
 ---
 
-## 62. `Signal/Calls/UserInterface/CallsListViewController.swift`
+## 61. `Signal/Calls/UserInterface/CallsListViewController.swift`
 
 - 禁用 Call Links 获取
 - 隐藏"创建通话链接"入口
 
 ---
 
-## 63. `Signal/Calls/UserInterface/CallsListViewController+ViewModelLoader.swift`
+## 62. `Signal/Calls/UserInterface/CallsListViewController+ViewModelLoader.swift`
 
 清除 upcoming call link 引用（Call Links 功能禁用）。
 
 ---
 
-## 64. `Signal/Megaphones/ExperienceUpgradeManager.swift`
+## 63. `Signal/Megaphones/ExperienceUpgradeManager.swift`
 
 禁用备份相关提示横幅（`backupKeyReminder`、`enableBackupsReminder`、`haveEnabledBackupsNotification` 返回 nil）。
 
 ---
 
-## 65. `Signal/Megaphones/UserInterface/BackupEnablementMegaphone.swift`
+## 64. `Signal/Megaphones/UserInterface/BackupEnablementMegaphone.swift`
 
 禁用备份引导流程：直接 dismiss，不启动备份流程。
 
 ---
 
-## 66. `Signal/Megaphones/UserInterface/InactivePrimaryDeviceReminderMegaphone.swift`
+## 65. `Signal/Megaphones/UserInterface/InactivePrimaryDeviceReminderMegaphone.swift`
 
 禁用"了解更多"按钮，防止跳转 support URL。
 
 ---
 
-## 67. `Signal/Megaphones/UserInterface/RecoveryKeyReminderMegaphone.swift`
+## 66. `Signal/Megaphones/UserInterface/RecoveryKeyReminderMegaphone.swift`
 
 禁用恢复密钥提醒：移除 BackupsReminderCoordinator 逻辑，直接 dismiss。
 
 ---
 
-## 68. `Signal/Megaphones/UserInterface/RemoteMegaphone.swift`
+## 67. `Signal/Megaphones/UserInterface/RemoteMegaphone.swift`
 
 `donate` / `donateFriend` megaphone 动作替换为 `break`（禁用捐赠横幅）。
 
 ---
 
-## 69. `Signal/Provisioning/UserInterface/LinkAndSyncProvisioningProgressViewController.swift`
+## 68. `Signal/Provisioning/UserInterface/LinkAndSyncProvisioningProgressViewController.swift`
 
 "了解更多" support URL 链接指向 `about:blank`。
 
 ---
 
-## 70. `Signal/Provisioning/UserInterface/ProvisioningQRCodeViewController.swift`
+## 69. `Signal/Provisioning/UserInterface/ProvisioningQRCodeViewController.swift`
 
 Support URL 链接禁用。
 
 ---
 
-## 71. `Signal/Provisioning/UserInterface/ProvisioningTransferChoiceViewController.swift`
+## 70. `Signal/Provisioning/UserInterface/ProvisioningTransferChoiceViewController.swift`
 
 "了解更多" support URL 链接指向 `about:blank`。
 
 ---
 
-## 72. `Signal/QRCodes/QRCodeView.swift`
+## 71. `Signal/QRCodes/QRCodeView.swift`
 
 QR 码预览 URL 调整（与 support URL 替换相关）。
 
 ---
 
-## 73. `Signal/Registration/RegistrationCoordinatorBackupErrorPresenter.swift`
+## 72. `Signal/Registration/RegistrationCoordinatorBackupErrorPresenter.swift`
 
 Support URL 全部替换为 `about:blank`。
 
 ---
 
-## 74. `Signal/Registration/UserInterface/RegistrationChooseRestoreMethodViewController.swift`
+## 73. `Signal/Registration/UserInterface/RegistrationChooseRestoreMethodViewController.swift`
 
 从备份恢复按钮禁用/注释掉。
 
 ---
 
-## 75. `Signal/Registration/UserInterface/RegistrationEnterAccountEntropyPoolViewController.swift`
+## 74. `Signal/Registration/UserInterface/RegistrationEnterAccountEntropyPoolViewController.swift`
 
 "了解更多" support 链接指向 `about:blank`。
 
 ---
 
-## 76. `Signal/Registration/UserInterface/RegistrationPhoneNumberViewController.swift`
+## 75. `Signal/Registration/UserInterface/RegistrationPhoneNumberViewController.swift`
 
 代理设置入口禁用。
 
 ---
 
-## 77. `Signal/Registration/UserInterface/RegistrationPinAttemptsExhaustedAndMustCreateNewPinViewController.swift`
+## 76. `Signal/Registration/UserInterface/RegistrationPinAttemptsExhaustedAndMustCreateNewPinViewController.swift`
 
 learnMoreButton 从 stackView 注释掉（入口隐藏），`didTapLearnMoreButton()` 函数体也注释掉。
 
 ---
 
-## 78. `Signal/Registration/UserInterface/RegistrationPinViewController.swift`
+## 77. `Signal/Registration/UserInterface/RegistrationPinViewController.swift`
 
 Support URL 链接禁用。
 
 ---
 
-## 79. `Signal/Registration/UserInterface/RegistrationProfileViewController.swift`
+## 78. `Signal/Registration/UserInterface/RegistrationProfileViewController.swift`
 
 Profile FAQ support 链接禁用。
 
 ---
 
-## 80. `Signal/Registration/UserInterface/RegistrationReglockTimeoutViewController.swift`
+## 79. `Signal/Registration/UserInterface/RegistrationReglockTimeoutViewController.swift`
 
 learnMoreButton 从 stackView 注释掉（入口隐藏），`didTapLearnMoreButton()` 函数体也注释掉。
 
 ---
 
-## 81. `Signal/Registration/UserInterface/RegistrationVerificationCodeView.swift`
+## 80. `Signal/Registration/UserInterface/RegistrationVerificationCodeView.swift`
 
 自动填充逻辑调整。
 
 ---
 
-## 82. `Signal/src/ViewControllers/AppSettings/Account/AdvancedPinSettingsTableViewController.swift`
+## 81. `Signal/src/ViewControllers/AppSettings/Account/AdvancedPinSettingsTableViewController.swift`
 
 MobileCoin 支付相关代码禁用/注释掉。
 
 ---
 
-## 83. `Signal/src/ViewControllers/AppSettings/Account/DeleteAccountConfirmationViewController.swift`
+## 82. `Signal/src/ViewControllers/AppSettings/Account/DeleteAccountConfirmationViewController.swift`
 
 转移支付禁用（MobileCoin 移除）。
 
 ---
 
-## 84. `Signal/src/ViewControllers/AppSettings/Account/RequestAccountDataReportViewController.swift`
+## 83. `Signal/src/ViewControllers/AppSettings/Account/RequestAccountDataReportViewController.swift`
 
 Support URL 指向 `about:blank`。
 
 ---
 
-## 85. `Signal/src/ViewControllers/AppSettings/Appearance/AppIconSettingsTableViewController.swift`
+## 84. `Signal/src/ViewControllers/AppSettings/Appearance/AppIconSettingsTableViewController.swift`
 
 App 图标设置 footer 中的 support URL 链接指向 `about:blank`。
 
 ---
 
-## 86. `Signal/src/ViewControllers/AppSettings/Donations/DonationSettingsViewController.swift`
+## 85. `Signal/src/ViewControllers/AppSettings/Donations/DonationSettingsViewController.swift`
 
 捐赠按钮和 gift 功能禁用。
 
 ---
 
-## 87. `Signal/src/ViewControllers/AppSettings/Internal/InternalSettingsViewController.swift`
+## 86. `Signal/src/ViewControllers/AppSettings/Internal/InternalSettingsViewController.swift`
 
 - Backups section 禁用
 - MobileCoin 环境配置禁用
 
 ---
 
-## 88. `Signal/src/ViewControllers/AppSettings/Internal/TestingViewController.swift`
+## 87. `Signal/src/ViewControllers/AppSettings/Internal/TestingViewController.swift`
 
 MobileCoin import 注释掉。
 
 ---
 
-## 89. `Signal/src/ViewControllers/AppSettings/Linked Devices/LinkedDevicesView.swift`
+## 88. `Signal/src/ViewControllers/AppSettings/Linked Devices/LinkedDevicesView.swift`
 
 禁用"了解更多"链接，防止跳转 support URL。
 
 ---
 
-## 90. `Signal/src/ViewControllers/AppSettings/Linked Devices/LinkedDevicesEducationSheet.swift`
+## 89. `Signal/src/ViewControllers/AppSettings/Linked Devices/LinkedDevicesEducationSheet.swift`
 
 下载链接：`signal.org` → `ba-chat.com`。
 
 ---
 
-## 91. `Signal/src/ViewControllers/AppSettings/Privacy/PrivacySettingsViewController.swift`
+## 90. `Signal/src/ViewControllers/AppSettings/Privacy/PrivacySettingsViewController.swift`
 
 - 禁用 MobileCoin 支付设置入口
 - 禁用高级隐私设置中的部分 support 链接
 
 ---
 
-## 92. `Signal/src/ViewControllers/AppSettings/Profile/ProfileSettingsViewController.swift`
+## 91. `Signal/src/ViewControllers/AppSettings/Profile/ProfileSettingsViewController.swift`
 
 Badge 配置 section 禁用。
 
 ---
 
-## 93. `Signal/src/ViewControllers/Attachment Keyboard/AttachmentFormatPickerView.swift`
+## 92. `Signal/src/ViewControllers/Attachment Keyboard/AttachmentFormatPickerView.swift`
 
 新增 `msgButtonVisible: GExtRobot.MsgButtonVisible?` 参数，通过 `isVisible(_:)` 方法按机器人配置过滤附件格式按钮：
 
@@ -980,49 +949,43 @@ Badge 配置 section 禁用。
 
 ---
 
-## 94. `Signal/src/ViewControllers/Attachment Keyboard/AttachmentKeyboard.swift`
+## 93. `Signal/src/ViewControllers/Attachment Keyboard/AttachmentKeyboard.swift`
 
 集成 `GExtRobot.msgButtonVisible`，根据机器人配置隐藏附件键盘中的按钮。
 
 ---
 
-## 95. `Signal/src/ViewControllers/DebugUI/DebugUIMisc.swift`
-
-MobileCoin import 注释掉。
-
----
-
-## 96. `Signal/src/ViewControllers/Donations/BadgeDetailsSheet.swift`
+## 94. `Signal/src/ViewControllers/Donations/BadgeDetailsSheet.swift`
 
 捐赠按钮和捐赠流程禁用。
 
 ---
 
-## 97. `Signal/src/ViewControllers/Donations/DonationViewsUtil.swift`
+## 95. `Signal/src/ViewControllers/Donations/DonationViewsUtil.swift`
 
 support 联系过滤器禁用。
 
 ---
 
-## 98. `Signal/src/ViewControllers/Donations/DonationViewsUtil+IDEAL.swift`
+## 96. `Signal/src/ViewControllers/Donations/DonationViewsUtil+IDEAL.swift`
 
 IDEAL 捐赠流程禁用。
 
 ---
 
-## 99. `Signal/src/ViewControllers/GetStartedBannerViewController.swift`
+## 97. `Signal/src/ViewControllers/GetStartedBannerViewController.swift`
 
 禁用 `inviteFriends` case。
 
 ---
 
-## 100. `Signal/src/ViewControllers/HomeView/Chat List/ChatListCell.swift`
+## 98. `Signal/src/ViewControllers/HomeView/Chat List/ChatListCell.swift`
 
 会话列表单元格新增 GExt tags 显示支持。
 
 ---
 
-## 101. `Signal/src/ViewControllers/HomeView/Chat List/ChatListViewController.swift`
+## 99. `Signal/src/ViewControllers/HomeView/Chat List/ChatListViewController.swift`
 
 - 新增 LinkBAPlatform 导航 case
 - 禁用 MobileCoin 支付设置导航
@@ -1030,19 +993,19 @@ IDEAL 捐赠流程禁用。
 
 ---
 
-## 102. `Signal/src/ViewControllers/HomeView/Chat List/ChatListViewController+BackupDownloadProgressView.swift`
+## 100. `Signal/src/ViewControllers/HomeView/Chat List/ChatListViewController+BackupDownloadProgressView.swift`
 
 Action sheet 中"了解更多"ActionSheetAction 整块注释掉（入口隐藏）。
 
 ---
 
-## 103. `Signal/src/ViewControllers/HomeView/Chat List/CLVTableDataSource.swift`
+## 101. `Signal/src/ViewControllers/HomeView/Chat List/CLVTableDataSource.swift`
 
 会话列表单元格中，联系人和群组名称旁显示 GExtTagsStackView。
 
 ---
 
-## 104. `Signal/src/ViewControllers/HomeView/HomeTabBarController.swift`
+## 102. `Signal/src/ViewControllers/HomeView/HomeTabBarController.swift`
 
 保存/恢复 tab bar 帧逻辑，修复 iOS 26 浮动 tab bar 在显示/隐藏时的帧漂移问题：
 - 新增 `_savedTabBarFrame: CGRect?` 字段
@@ -1050,62 +1013,62 @@ Action sheet 中"了解更多"ActionSheetAction 整块注释掉（入口隐藏�
 
 ---
 
-## 105. `Signal/src/ViewControllers/HomeView/HomeTabViewController.swift`
+## 103. `Signal/src/ViewControllers/HomeView/HomeTabViewController.swift`
 
 禁用支付未读角标（MobileCoin 移除）。
 
 ---
 
-## 106. `Signal/src/ViewControllers/NameEducationSheet.swift`
+## 104. `Signal/src/ViewControllers/NameEducationSheet.swift`
 
-将 BonMot 样式替换为手动 attributed string 构建。
+将 BonMot 样式替换为手动 attributed string 构建（同时移除了多余的 `import BonMot`）。
 
 ---
 
-## 107. `Signal/src/ViewControllers/NewGroupView/NewGroupConfirmViewController.swift`
+## 105. `Signal/src/ViewControllers/NewGroupView/NewGroupConfirmViewController.swift`
 
 禁用"了解更多"按钮和 support URL 导航。
 
 ---
 
-## 108. `Signal/src/ViewControllers/OWSPinSetupViewController.swift`
+## 106. `Signal/src/ViewControllers/OWSPinSetupViewController.swift`
 
 - `moreButton` 从视图层级注释掉（`view.addSubview(moreButton)` 及布局约束注释掉）
 - Action sheet 中"了解更多"ActionSheetAction 注释掉
 
 ---
 
-## 109. `Signal/src/ViewControllers/Payments/SendPaymentCompletionActionSheet.swift`
+## 107. `Signal/src/ViewControllers/Payments/SendPaymentCompletionActionSheet.swift`
 
 整个文件注释掉（MobileCoin 移除）。
 
 ---
 
-## 110. `Signal/src/ViewControllers/Payments/SendPaymentHelper.swift`
+## 108. `Signal/src/ViewControllers/Payments/SendPaymentHelper.swift`
 
 整个文件注释掉（MobileCoin 移除）。
 
 ---
 
-## 111. `Signal/src/ViewControllers/Payments/SendPaymentMemoViewController.swift`
+## 109. `Signal/src/ViewControllers/Payments/SendPaymentMemoViewController.swift`
 
 整个文件注释掉（MobileCoin 移除）。
 
 ---
 
-## 112. `Signal/src/ViewControllers/Payments/SendPaymentViewController.swift`
+## 110. `Signal/src/ViewControllers/Payments/SendPaymentViewController.swift`
 
 整个文件注释掉（MobileCoin 移除）。
 
 ---
 
-## 113. `Signal/src/ViewControllers/Photos/PhotoCaptureViewController.swift`
+## 111. `Signal/src/ViewControllers/Photos/PhotoCaptureViewController.swift`
 
 新增 `baxs://` 协议处理，支持 LinkBaPay 扫码入口。
 
 ---
 
-## 114. `Signal/src/ViewControllers/ThreadSettings/ConversationHeaderBuilder.swift`
+## 112. `Signal/src/ViewControllers/ThreadSettings/ConversationHeaderBuilder.swift`
 
 - 机器人账户检测
 - 显示 GExtTagsStackView
@@ -1114,43 +1077,37 @@ Action sheet 中"了解更多"ActionSheetAction 整块注释掉（入口隐藏�
 
 ---
 
-## 115. `Signal/src/ViewControllers/ThreadSettings/ConversationSettingsViewController.swift`
+## 113. `Signal/src/ViewControllers/ThreadSettings/ConversationSettingsViewController.swift`
 
 新增 `isRobotThread` 属性，通过 `GExtTagStore` 判断当前会话是否为机器人账户。
 
 ---
 
-## 116. `Signal/src/ViewControllers/ThreadSettings/DisappearingMessagesTimerSettingsViewController.swift`
-
-新增 `@preconcurrency` import（并发兼容）。
-
----
-
-## 117. `Signal/src/views/ExpirationNagView.swift`
+## 114. `Signal/src/views/ExpirationNagView.swift`
 
 Support URL 导航指向 `about:blank`。
 
 ---
 
-## 118. `Signal/src/views/GetStartedBannerCell.swift`
+## 115. `Signal/src/views/GetStartedBannerCell.swift`
 
 禁用 `inviteFriends` case。
 
 ---
 
-## 119. `Signal/Usernames/Selection/UsernameSelectionViewController.swift`
+## 116. `Signal/Usernames/Selection/UsernameSelectionViewController.swift`
 
 URL scheme：`sgnl://` → `baxs://`。
 
 ---
 
-## 120. `SignalServiceKit/Attachments/SignalAttachment.swift`
+## 117. `SignalServiceKit/Attachments/SignalAttachment.swift`
 
 默认附件名称：`"signal"` → `"ba"`。
 
 ---
 
-## 121. `SignalServiceKit/Messages/Attachments/V2/Playback/AVAsset+Attachment.swift`
+## 118. `SignalServiceKit/Messages/Attachments/V2/Playback/AVAsset+Attachment.swift`
 
 ```swift
 // 原：private static let customScheme = "signal"
@@ -1160,92 +1117,96 @@ private static let customScheme = "ba"
 
 ---
 
-## 122. `SignalServiceKit/Calls/CallHTTPClient.swift`
+## 119. `SignalServiceKit/Calls/CallHTTPClient.swift`
 
 安全策略改为系统默认（禁用 Signal 自定义证书验证）。
 
 ---
 
-## 123. `SignalServiceKit/Groups/TSGroupModel.swift`
+## 120. `SignalServiceKit/Groups/TSGroupModel.swift`
 
 群组分享 URL：`signal.group` → `group.baxs.com`。
 
 ---
 
-## 124. `SignalServiceKit/Messages/Interactions/LinkPreview/Manager/LinkPreviewHelper.swift`
+## 121. `SignalServiceKit/Messages/Interactions/LinkPreview/Manager/LinkPreviewHelper.swift`
 
 群组链接域名：`signal.org` → `baxs.com`。
 
 ---
 
-## 125. `SignalServiceKit/Messages/Interactions/TSInfoMessage+GroupUpdates+DisplayableGroupUpdateItem.swift`
+## 122. `SignalServiceKit/Messages/Interactions/TSInfoMessage+GroupUpdates+DisplayableGroupUpdateItem.swift`
 
 禁用群组链接推广更新提示。
 
 ---
 
-## 126. `SignalServiceKit/Network/API/Requests/Registration/RegistrationRequestFactory.swift`
+## 123. `SignalServiceKit/Network/API/Requests/Registration/RegistrationRequestFactory.swift`
 
 `ApnRegistrationId` 结构新增 `voipToken` 参数。
 
 ---
 
-## 127. `SignalServiceKit/Profiles/BadgeAssets.swift`
+## 124. `SignalServiceKit/Profiles/BadgeAssets.swift`
 
 禁用 badge sprite 下载。
 
 ---
 
-## 128. `SignalServiceKit/Profiles/BadgeStore.swift`
+## 125. `SignalServiceKit/Profiles/BadgeStore.swift`
 
 Badge URL：`signal.org` → `ba-chat.com`。
 
 ---
 
-## 129. `SignalServiceKit/Storage/Database/SDSDatabaseStorage/SDSDatabaseStorage.swift`
+## 126. `SignalServiceKit/Storage/Database/SDSDatabaseStorage/SDSDatabaseStorage.swift`
 
-弱引用处理从原生 Swift `weak` 改为自定义 `Weak()` 包装类型。
+上游在 `#if compiler(>=6.2.3)` 分支中使用 `weak let`，但在 `#else` 分支中使用了自定义 `Weak<>` 包装类型，导致 124–125 行断言写成 `.value == nil`。我们将两处断言统一为 `== nil`，使两个分支语法一致：
+```swift
+owsAssertDebug(weakPool == nil)
+owsAssertDebug(weakGrdbStorage == nil)
+```
 
 ---
 
-## 130. `SignalServiceKit/Subscriptions/Donations/Paypal+WebAuthentication.swift`
+## 127. `SignalServiceKit/Subscriptions/Donations/Paypal+WebAuthentication.swift`
 
 URL scheme：`sgnl://` → `baxs://`。
 
 ---
 
-## 131. `SignalServiceKit/Subscriptions/Donations/Stripe.swift`
+## 128. `SignalServiceKit/Subscriptions/Donations/Stripe.swift`
 
 URL scheme：`sgnl://` → `baxs://`。
 
 ---
 
-## 132. `SignalServiceKit/Subscriptions/Donations/Stripe+3DSecure.swift`
+## 129. `SignalServiceKit/Subscriptions/Donations/Stripe+3DSecure.swift`
 
 支付 scheme：`sgnlpay` → `baxspay`。
 
 ---
 
-## 133. `SignalServiceKit/Util/OWSPaymentsLock.swift`
+## 130. `SignalServiceKit/Util/OWSPaymentsLock.swift`
 
 支付锁错误处理调整（与 MobileCoin 移除相关的兼容改动）。
 
 ---
 
-## 134. `SignalServiceKit/Util/Preferences.swift`
+## 131. `SignalServiceKit/Util/Preferences.swift`
 
 新增 `voipToken` 存储字段。
 
 ---
 
-## 135. `SignalNSE/NotificationService.swift`
+## 132. `SignalNSE/NotificationService.swift`
 
 - `bestAttemptContent` 角标赋值
 - 统一复用 `bestAttemptContent` 而不是每次创建新对象
 
 ---
 
-## 136. `SignalNSE/NSECallMessageHandler.swift`
+## 133. `SignalNSE/NSECallMessageHandler.swift`
 
 - VoIP token 处理逻辑调整
 - 禁用 CXProvider
@@ -1253,110 +1214,110 @@ URL scheme：`sgnl://` → `baxs://`。
 
 ---
 
-## 137. `SignalNSE/SignalNSE.entitlements`
+## 134. `SignalNSE/SignalNSE.entitlements`
 
 App Groups bundle 前缀改为 `$(SIGNAL_BUNDLEID_PREFIX)`（与主 app 一致）。
 
 ---
 
-## 138. `SignalNSE/SignalNSE-AppStore.entitlements`
+## 135. `SignalNSE/SignalNSE-AppStore.entitlements`
 
 同 `SignalNSE.entitlements`。
 
 ---
 
-## 139. `SignalShareExtension/Info.plist`
+## 136. `SignalShareExtension/Info.plist`
 
 域名：`signal.org` → `baxs.com`。
 
 ---
 
-## 140. `SignalShareExtension/SAEFailedViewController.swift`
+## 137. `SignalShareExtension/SAEFailedViewController.swift`
 
 错误页面标题：`"Signal"` → `"B&A"`。
 
 ---
 
-## 141. `SignalShareExtension/SignalShareExtension.entitlements`
+## 138. `SignalShareExtension/SignalShareExtension.entitlements`
 
 App Groups bundle 前缀改为 `$(SIGNAL_BUNDLEID_PREFIX)`。
 
 ---
 
-## 142. `SignalShareExtension/SignalShareExtension-AppStore.entitlements`
+## 139. `SignalShareExtension/SignalShareExtension-AppStore.entitlements`
 
 同 `SignalShareExtension.entitlements`。
 
 ---
 
-## 143. `SignalUI/AppLaunch/SUIEnvironment.swift`
+## 140. `SignalUI/AppLaunch/SUIEnvironment.swift`
 
 `PaymentsImpl` 替换为 `MockPayments`（MobileCoin 移除）。
 
 ---
 
-## 144. `SignalUI/Calls/CallLink.swift`
+## 141. `SignalUI/Calls/CallLink.swift`
 
 - 通话链接域名：`signal.link` → `link.baxs.com`
 - URL scheme：`sgnl://` → `baxs://`
 
 ---
 
-## 145. `SignalUI/Payments/DebugLogger+Payments.swift`
+## 142. `SignalUI/Payments/DebugLogger+Payments.swift`
 
 整个 section 注释掉（MobileCoin 移除）。
 
 ---
 
-## 146. `SignalUI/Payments/MobileCoinAPI+Configuration.swift`
+## 143. `SignalUI/Payments/MobileCoinAPI+Configuration.swift`
 
 整个文件注释掉（MobileCoin 移除）。
 
 ---
 
-## 147. `SignalUI/Payments/MobileCoinHelperSDK.swift`
+## 144. `SignalUI/Payments/MobileCoinHelperSDK.swift`
 
 整个文件注释掉（MobileCoin 移除）。
 
 ---
 
-## 148. `SignalUI/Payments/PaymentsFormat+MobileCoin.swift`
+## 145. `SignalUI/Payments/PaymentsFormat+MobileCoin.swift`
 
 整个文件注释掉（MobileCoin 移除）。
 
 ---
 
-## 149. `SignalUI/Payments/PaymentsProcessor.swift`
+## 146. `SignalUI/Payments/PaymentsProcessor.swift`
 
 整个文件注释掉（MobileCoin 移除）。
 
 ---
 
-## 150. `SignalUI/Payments/PaymentsReconciliation.swift`
+## 147. `SignalUI/Payments/PaymentsReconciliation.swift`
 
 整个文件注释掉（MobileCoin 移除）。
 
 ---
 
-## 151. `SignalUI/RecipientPickers/ContactsViewHelper.swift`
+## 148. `SignalUI/RecipientPickers/ContactsViewHelper.swift`
 
 `presentContactAccessNotAllowedAlert()` 中"了解更多"ActionSheetAction 整块注释掉（入口按钮隐藏），`presentContactAccessNotAllowedLearnMore()` 函数体也注释掉。
 
 ---
 
-## 152. `SignalUI/RecipientPickers/InviteFlow.swift`
+## 149. `SignalUI/RecipientPickers/InviteFlow.swift`
 
 邀请链接 URL：`signal.org` → `ba-chat.com`。
 
 ---
 
-## 153. `SignalUI/RecipientPickers/RecipientPickerViewController.swift`
+## 150. `SignalUI/RecipientPickers/RecipientPickerViewController.swift`
 
 禁用"邀请联系人"入口（invite contacts section 隐藏）。
 
 ---
 
-## 154. `SignalUI/SafetyNumbers/FingerprintViewController.swift`
+## 151. `SignalUI/SafetyNumbers/FingerprintViewController.swift`
 
 - Action sheet 中"了解更多"ActionSheetAction 整块注释掉（入口隐藏）
 - `learnMoreString` 设为空字符串，instructions 文字中不渲染链接
@@ -1364,39 +1325,29 @@ App Groups bundle 前缀改为 `$(SIGNAL_BUNDLEID_PREFIX)`。
 
 ---
 
-## 155. `SignalUI/Sending/DraftQuotedReplyModel+Payments.swift`
+## 152. `SignalUI/Sending/DraftQuotedReplyModel+Payments.swift`
 
 `PaymentsFormat` 调用注释掉（MobileCoin 移除）。
 
 ---
 
-## 156. `SignalUI/Stories/ConnectionsEducationSheetViewController.swift`
-
-将 BonMot 样式替换为手动 attributed string 构建。
-
----
-
-## 157. `SignalUI/Utils/GroupViewUtils.swift`
+## 153. `SignalUI/Utils/GroupViewUtils.swift`
 
 `showInvalidGroupMemberAlert()` 中"了解更多"ActionSheetAction 整块注释掉（入口按钮隐藏），`showCantAddMemberView()` 函数体也注释掉（不跳转 support.signal.org/groups）。
 
 ---
 
-## 158. `SignalUI/ViewControllers/OWSTableViewController2.swift`
-
-新增 iOS 19 兼容性检查。
-
----
-
-## 159. `SignalUI/ViewControllers/ScanQRCodeViewController.swift`
+## 154. `SignalUI/ViewControllers/ScanQRCodeViewController.swift`
 
 QR 码解析新增 ECI 模式支持；新增 `resetAndStartScanning` 方法。
 
 ---
 
-## MobileCoin 支付 UI 文件（整体注释掉）
+## MobileCoin 支付 UI 文件
 
-以下文件全部整体注释掉（MobileCoin 移除）：
+> **v7.94 更新：** 上游已将这些文件重写，不再直接依赖 MobileCoin SDK，可以正常编译。**不再需要整体注释**，合并时无需处理这些文件。
+
+以下文件在 v7.94 之前需要整体注释掉（MobileCoin 移除），v7.94 起上游已重写，无需操作：
 
 ```
 Signal/src/ViewControllers/AppSettings/Payments/ArchivedPaymentHistoryItem.swift
@@ -1424,17 +1375,17 @@ Signal/src/ViewControllers/AppSettings/Payments/TSPaymentModelHistoryItem.swift
 
 ---
 
-## 160. `Signal/Images.xcassets/signal-logo-40.imageset/Contents.json`
+## 155. `Signal/Images.xcassets/signal-logo-40.imageset/Contents.json`
 
 图标内容配置更新，引用 `BA-app-no-padding.svg` 替换原 Signal logo。
 
 ---
 
-## 161. `Signal/Images.xcassets/signal-logo-128-launch-screen.imageset/Contents.json`
+## 156. `Signal/Images.xcassets/signal-logo-128-launch-screen.imageset/Contents.json`
 
 启动画面 logo 资源配置更新：原 `signal-logo-ultramarine.pdf` / `signal-logo-white.pdf` 替换为 `icon_64x64@2x.png` / `icon_64x64@2x 1.png`。
 
-## 162. `Signal/src/ViewControllers/HomeView/Chat List/ChatListViewController+Loading.swift`
+## 157. `Signal/src/ViewControllers/HomeView/Chat List/ChatListViewController+Loading.swift`
 
 修复 iOS 26 Release 构建下聊天列表 cell 滑动操作（静音、置顶、归档等）必崩的 bug。
 
@@ -1443,7 +1394,7 @@ Signal/src/ViewControllers/AppSettings/Payments/TSPaymentModelHistoryItem.swift
 由于该闭包不逃逸（仅在同一函数体内同步调用），`[weak self]` 完全多余，移除后改为隐式强引用即可。
 
 
-## 163. `SignalServiceKit/Network/OWSSignalService.swift`
+## 158. `SignalServiceKit/Network/OWSSignalService.swift`
 
 修复图片、视频发送失败及收到后无法打开的问题。
 
@@ -1451,7 +1402,7 @@ CDN session 原本使用 `shouldUseSignalCertificate: true`，即用 `signal-mes
 
 改为 `shouldUseSignalCertificate: false`，使用系统信任链验证即可，与主服务、Storage Service、SVR2 等其他 session 保持一致。
 
-## 164. `Podfile`
+## 159. `Podfile`
 
 三处 B&A 自定义改动，每次合并上游 tag 时必须手动恢复：
 
@@ -1486,3 +1437,18 @@ end
 
 **4. Mantle（已随上游删除，无需恢复）**
 上游 v7.94 已删除 Mantle pod，B&A 代码无自定义依赖，跟随删除即可。
+
+## 160. App Icon：移除 `AppIcon.icon`（Liquid Glass）
+
+**背景：** 上游从 v7.94 开始引入 Liquid Glass 格式的 `.icon` 文件（`Signal/AppIcons/AppIcon.icon`），并在 `project.pbxproj` 中引用它作为主图标。Xcode 编译时会优先使用 `.icon` 文件，导致 `Signal/AppIcon.xcassets/AppIcon.appiconset/` 中的自定义图标被覆盖。
+
+**改动：** 从 `Signal.xcodeproj/project.pbxproj` 中移除 `AppIcon.icon` 的所有引用（PBXBuildFile、PBXFileReference、Resources phase、group children），共 4 处。文件本身保留在磁盘上，不纳入构建。
+
+**合并上游时的处理：**
+1. 检查 `project.pbxproj` 中是否有新增 `AppIcon.icon` 的引用（grep `AppIcon\.icon`）
+2. 如有，删除以下四类引用：
+   - `PBXBuildFile` 段中的 `AppIcon.icon in Resources` 行
+   - `PBXFileReference` 段中的 `AppIcon.icon` 行
+   - `PBXGroup`（AppIcons group）中的 `AppIcon.icon` children 行
+   - `PBXResourcesBuildPhase` 中的 `AppIcon.icon in Resources` 行
+3. 确认自定义图片 `Signal/AppIcon.xcassets/AppIcon.appiconset/icon_*.png` 未被替换（对比 git diff）

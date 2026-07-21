@@ -493,7 +493,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Kumpulan B&A berjalan dengan baik dengan %1$d ahli atau kurang. Menambah lebih banyak ahli akan menyebabkan kelewatan menghantar dan menerima mesej.</string>
+			<string>Kumpulan B&amp;A berjalan dengan baik dengan %1$d ahli atau kurang. Menambah lebih banyak ahli akan menyebabkan kelewatan menghantar dan menerima mesej.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -633,7 +633,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>B&A akan memanggil %2$@, %3$@ dan %1$d yang lain</string>
+			<string>B&amp;A akan memanggil %2$@, %3$@ dan %1$d yang lain</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -885,7 +885,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Untuk memastikan "%2$@" dipautkan, buka B&A pada peranti dalam masa %1$d hari.</string>
+			<string>Untuk memastikan "%2$@" dipautkan, buka B&amp;A pada peranti dalam masa %1$d hari.</string>
 		</dict>
 	</dict>
 	<key>LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE_%d</key>
@@ -1067,7 +1067,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Semua Hubungan B&A · %1$d Penonton</string>
+			<string>Semua Hubungan B&amp;A · %1$d Penonton</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1081,7 +1081,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Semua Hubungan B&A · %1$d Dikecualikan</string>
+			<string>Semua Hubungan B&amp;A · %1$d Dikecualikan</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>

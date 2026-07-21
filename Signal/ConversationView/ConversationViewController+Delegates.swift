@@ -397,8 +397,7 @@ extension ConversationViewController: InputAccessoryViewPlaceholderDelegate {
             return
         }
 
-        let isAnimatingHeightChange = viewState.inputToolbar?.isAnimatingHeightChange ?? false
-        let duration = isAnimatingHeightChange ? ConversationInputToolbar.heightChangeAnimationDuration : animationDuration
+        let duration = animationDuration
 
         if shouldAnimateKeyboardChanges, duration > 0 {
             if hasViewDidAppearEverCompleted {
@@ -413,21 +412,15 @@ extension ConversationViewController: InputAccessoryViewPlaceholderDelegate {
                 }
             }
 
-            // The animation curve provided by the keyboard notifications
-            // is a private value not represented in UIViewAnimationOptions.
-            // We don't use a block based animation here because it's not
-            // possible to pass a curve directly to block animations.
             UIView.animate(
                 withDuration: duration,
                 delay: 0,
                 options: animationCurve.asAnimationOptions,
                 animations: { [self] in
                     updateBottomBarPosition()
-                    // To minimize risk, only animatedly update insets when animating quoted reply for now
-                    if isAnimatingHeightChange { updateContentInsets() }
                 }
             )
-            if !isAnimatingHeightChange { updateContentInsets() }
+            updateContentInsets()
         } else {
             updateBottomBarPosition()
             updateContentInsets()

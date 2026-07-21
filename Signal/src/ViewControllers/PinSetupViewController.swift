@@ -313,7 +313,7 @@ public class PinSetupViewController: OWSViewController, OWSNavigationChildContro
             bottomSpacer,
             pinTypeToggle,
             pinToggleSpacer,
-            ProvisioningBaseViewController.horizontallyWrap(primaryButton: nextButton),
+            nextButton,
             buttonSpacer
         ])
         stackView.axis = .vertical

@@ -10,7 +10,7 @@ import UIKit
 
 class ProvisioningSplashViewController: ProvisioningBaseViewController {
 
-    var prefersNavigationBarHidden: Bool {
+    override var prefersNavigationBarHidden: Bool {
         true
     }
 

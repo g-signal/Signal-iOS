@@ -315,6 +315,14 @@ public final class Theme {
         isDarkThemeEnabled ? darkThemeSecondaryTextAndIconColor : lightThemeSecondaryTextAndIconColor
     }
 
+    public class var lightThemeSnippetColor: UIColor { .ows_gray45 }
+    public class var darkThemeSnippetColor: UIColor { .ows_gray25 }
+    public class var snippetColor: UIColor {
+        isDarkThemeEnabled ? darkThemeSnippetColor : lightThemeSnippetColor
+    }
+
+    public class var backdropColor: UIColor { .ows_blackAlpha40 }
+
     public class var navbarBackgroundColor: UIColor {
         backgroundColor
     }
