@@ -767,29 +767,67 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
         // iOS 26 has three in-field buttons: Sticker/Keyboard, Camera, Voice Note.
         // iOS 15-18 only have Sticker/Keyboard.
         if iOS26Layout {
-            inputTextView.inFieldButtonsAreaWidth = 3 * LayoutMetrics.initialTextBoxHeight
+            let micHidden = msgButtonVisible?.microphone == false
+            let cameraHidden = msgButtonVisible?.camera == false
+
+            // 根据机器人配置决定实际显示的按钮数量，调整文字区域右侧留白
+            let visibleCount = (micHidden ? 0 : 1) + (cameraHidden ? 0 : 1) + 1 // +1 for sticker/keyboard
+            inputTextView.inFieldButtonsAreaWidth = CGFloat(visibleCount) * LayoutMetrics.initialTextBoxHeight
 
             inputTextViewContainer.addSubview(stickerButton)
             inputTextViewContainer.addSubview(keyboardButton)
-            inputTextViewContainer.addSubview(cameraButton)
-            inputTextViewContainer.addSubview(voiceNoteButton)
+            if !cameraHidden { inputTextViewContainer.addSubview(cameraButton) }
+            if !micHidden { inputTextViewContainer.addSubview(voiceNoteButton) }
 
             stickerButton.translatesAutoresizingMaskIntoConstraints = false
             keyboardButton.translatesAutoresizingMaskIntoConstraints = false
             cameraButton.translatesAutoresizingMaskIntoConstraints = false
             voiceNoteButton.translatesAutoresizingMaskIntoConstraints = false
 
-            NSLayoutConstraint.activate([
-                voiceNoteButton.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -4),
-                cameraButton.trailingAnchor.constraint(equalTo: voiceNoteButton.leadingAnchor),
-                stickerButton.trailingAnchor.constraint(equalTo: cameraButton.leadingAnchor),
-                keyboardButton.trailingAnchor.constraint(equalTo: cameraButton.leadingAnchor),
+            // 从右往左链式布局，跳过隐藏的按钮
+            // 最右侧按钮 trailing → backgroundView
+            let rightmostTrailing = backgroundView.trailingAnchor
+            var constraints: [NSLayoutConstraint] = []
 
-                voiceNoteButton.bottomAnchor.constraint(equalTo: inputTextViewContainer.bottomAnchor),
-                cameraButton.bottomAnchor.constraint(equalTo: inputTextViewContainer.bottomAnchor),
+            if !micHidden {
+                constraints += [
+                    voiceNoteButton.trailingAnchor.constraint(equalTo: rightmostTrailing, constant: -4),
+                    voiceNoteButton.bottomAnchor.constraint(equalTo: inputTextViewContainer.bottomAnchor),
+                ]
+                if !cameraHidden {
+                    constraints += [
+                        cameraButton.trailingAnchor.constraint(equalTo: voiceNoteButton.leadingAnchor),
+                        cameraButton.bottomAnchor.constraint(equalTo: inputTextViewContainer.bottomAnchor),
+                        stickerButton.trailingAnchor.constraint(equalTo: cameraButton.leadingAnchor),
+                        keyboardButton.trailingAnchor.constraint(equalTo: cameraButton.leadingAnchor),
+                    ]
+                } else {
+                    constraints += [
+                        stickerButton.trailingAnchor.constraint(equalTo: voiceNoteButton.leadingAnchor),
+                        keyboardButton.trailingAnchor.constraint(equalTo: voiceNoteButton.leadingAnchor),
+                    ]
+                }
+            } else if !cameraHidden {
+                // 语音隐藏，相机右对齐
+                constraints += [
+                    cameraButton.trailingAnchor.constraint(equalTo: rightmostTrailing, constant: -4),
+                    cameraButton.bottomAnchor.constraint(equalTo: inputTextViewContainer.bottomAnchor),
+                    stickerButton.trailingAnchor.constraint(equalTo: cameraButton.leadingAnchor),
+                    keyboardButton.trailingAnchor.constraint(equalTo: cameraButton.leadingAnchor),
+                ]
+            } else {
+                // 语音和相机都隐藏，sticker/keyboard 右对齐
+                constraints += [
+                    stickerButton.trailingAnchor.constraint(equalTo: rightmostTrailing, constant: -4),
+                    keyboardButton.trailingAnchor.constraint(equalTo: rightmostTrailing, constant: -4),
+                ]
+            }
+
+            constraints += [
                 stickerButton.bottomAnchor.constraint(equalTo: inputTextViewContainer.bottomAnchor),
                 keyboardButton.bottomAnchor.constraint(equalTo: inputTextViewContainer.bottomAnchor),
-            ])
+            ]
+            NSLayoutConstraint.activate(constraints)
         } else {
             inputTextView.inFieldButtonsAreaWidth = 1 * LayoutMetrics.initialTextBoxHeight
 
@@ -976,10 +1014,13 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
         ConversationInputToolbar.setView(stickerButton, hidden: hideStickerButton, usingAnimator: animator)
         ConversationInputToolbar.setView(keyboardButton, hidden: hideKeyboardButton, usingAnimator: animator)
         if iOS26Layout {
-            let cameraDisabledByRobot = msgButtonVisible?.camera == false
-            let micDisabledByRobot = msgButtonVisible?.microphone == false
-            ConversationInputToolbar.setView(cameraButton, hidden: hideAllTextFieldButtons || cameraDisabledByRobot, usingAnimator: animator)
-            ConversationInputToolbar.setView(voiceNoteButton, hidden: hideAllTextFieldButtons || micDisabledByRobot, usingAnimator: animator)
+            // 机器人禁用的按钮未加入 superview，只对实际存在的按钮做显隐动画
+            if msgButtonVisible?.camera != false {
+                ConversationInputToolbar.setView(cameraButton, hidden: hideAllTextFieldButtons, usingAnimator: animator)
+            }
+            if msgButtonVisible?.microphone != false {
+                ConversationInputToolbar.setView(voiceNoteButton, hidden: hideAllTextFieldButtons, usingAnimator: animator)
+            }
         }
 
         // Text input is hidden whenever Voice Message UI is presented.

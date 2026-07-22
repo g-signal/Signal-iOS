@@ -274,6 +274,8 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
             owsFailDebug("InputToolbar not yet ready.")
             return
         }
+        // preview platter 模式下不创建 inputToolbar，静默跳过即可
+        guard !viewState.isInPreviewPlatter else { return }
         guard let inputToolbar = inputToolbar else {
             owsFailDebug("Missing inputToolbar.")
             return

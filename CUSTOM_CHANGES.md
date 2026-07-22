@@ -421,6 +421,8 @@ GExtGroupProfileFetcher.shared.fetchAndStoreGroupExtTags(groupId: ...)
 | `microphone` | 麦克风/语音按钮 |
 | `sticker` | 贴纸按钮 |
 
+iOS 26 布局：被禁用的按钮不加入 superview，剩余按钮自动右对齐。`inFieldButtonsAreaWidth` 根据实际显示按钮数动态计算（`visibleCount * 40`）。
+
 ---
 
 ## 21. `Signal/src/ViewControllers/ThreadSettings/ConversationSettingsViewController+Contents.swift`
@@ -685,7 +687,8 @@ SwiftUI Text `.appendLink(learnMore)` 整块注释掉（入口链接隐藏，不
 
 ## 50. `Signal/ConversationView/ConversationViewController+ConversationInputToolbarDelegate.swift`
 
-注释掉支付按钮处理逻辑（MobileCoin 移除）。
+- 注释掉支付按钮处理逻辑（MobileCoin 移除）。
+- `saveDraft()`：在 `isInPreviewPlatter` 为 true 时静默返回，避免会话列表长按弹框时因 `inputToolbar == nil` 触发崩溃。
 
 ---
 
