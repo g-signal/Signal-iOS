@@ -153,14 +153,15 @@ public class AppEnvironment: NSObject {
             operation: { try await inactiveLinkedDeviceFinder.refreshLinkedDeviceStateIfNecessary() },
         )
 
-        let subscriptionConfigManager = DependenciesBridge.shared.subscriptionConfigManager
-        cron.schedulePeriodically(
-            uniqueKey: .fetchSubscriptionConfig,
-            approximateInterval: .day,
-            mustBeRegistered: false,
-            mustBeConnected: true,
-            operation: { try await subscriptionConfigManager.refresh() },
-        )
+        // 禁用订阅配置请求：捐赠/备份入口已注释，无需拉取 v1/subscription/configuration
+//        let subscriptionConfigManager = DependenciesBridge.shared.subscriptionConfigManager
+//        cron.schedulePeriodically(
+//            uniqueKey: .fetchSubscriptionConfig,
+//            approximateInterval: .day,
+//            mustBeRegistered: false,
+//            mustBeConnected: true,
+//            operation: { try await subscriptionConfigManager.refresh() },
+//        )
 
         appReadiness.runNowOrWhenAppWillBecomeReady {
             self.badgeManager.startObservingChanges(in: DependenciesBridge.shared.databaseChangeObserver)

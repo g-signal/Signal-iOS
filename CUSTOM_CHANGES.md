@@ -34,6 +34,7 @@ git diff <new-tag> HEAD -- \
   Signal/Notifications/PushRegistrationManager.swift \
   Signal/util/SyncPushTokensJob.swift \
   Signal/AppLaunch/AppDelegate.swift \
+  Signal/AppLaunch/AppEnvironment.swift \
   Signal/Signal-Info.plist \
   Signal/Signal.entitlements \
   Signal/Signal-AppStore.entitlements \
@@ -120,7 +121,6 @@ git diff <new-tag> HEAD -- \
   Signal/src/ViewControllers/ThreadSettings/ConversationSettingsViewController.swift \
   Signal/src/ViewControllers/ThreadSettings/DisappearingMessagesTimerSettingsViewController.swift \
   Signal/src/views/ExpirationNagView.swift \
-  Signal/src/views/GetStartedBannerCell.swift \
   Signal/Usernames/Selection/UsernameSelectionViewController.swift \
   SignalServiceKit/Attachments/SignalAttachment.swift \
   "SignalServiceKit/Messages/Attachments/V2/Playback/AVAsset+Attachment.swift" \
@@ -494,6 +494,12 @@ Debug Log 上传入口已禁用。
 paymentsEvents: PaymentsEventsNoop()        // 原 PaymentsEventsMainApp()
 mobileCoinHelper: MobileCoinHelperMinimal() // 原 MobileCoinHelperSDK()
 ```
+
+---
+
+## 27a. `Signal/AppLaunch/AppEnvironment.swift`
+
+注释掉 `fetchSubscriptionConfig` 定时任务：捐赠/备份入口已禁用，无需定期请求 `v1/subscription/configuration`。
 
 ---
 
@@ -975,7 +981,7 @@ IDEAL 捐赠流程禁用。
 
 ## 97. `Signal/src/ViewControllers/GetStartedBannerViewController.swift`
 
-禁用 `inviteFriends` case。
+禁用 `inviteFriends`：在 `GetStartedCard.all` 数组中注释掉 `inviteFriends`（上游 v7.94 重构后，不再是 enum case，改为 struct 静态属性）。
 
 ---
 
@@ -1088,10 +1094,6 @@ Action sheet 中"了解更多"ActionSheetAction 整块注释掉（入口隐藏�
 Support URL 导航指向 `about:blank`。
 
 ---
-
-## 115. `Signal/src/views/GetStartedBannerCell.swift`
-
-禁用 `inviteFriends` case。
 
 ---
 
