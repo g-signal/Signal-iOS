@@ -13,13 +13,13 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Thu Jun 25 12:14:30 UTC 2026</string>
+		<string>Wed Jul 22 06:59:27 UTC 2026</string>
 		<key>SignalCommit</key>
-		<string>e1588245850e49fef5277100fc060109b67dc8d4 Update CUSTOM_CHANGES.md: add OWSSignalService.swift CDN cert fix entry</string>
+		<string>b3fbc8579775ddddf8794d455a9d12c4de0b07dd 7.79</string>
 		<key>Timestamp</key>
-		<integer>1782389670</integer>
+		<integer>1784703567</integer>
 		<key>XCodeVersion</key>
-		<string>2600.2650</string>
+		<string>2600.2660</string>
 	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
@@ -40,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.79</string>
+	<string>7.79.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
