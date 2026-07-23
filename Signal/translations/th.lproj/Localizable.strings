@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "คุณได้ตั้งเวลาข้อความที่ลบตัวเองได้ไว้ที่ %1$@";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "ข้อความเสียงนี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ไฟล์และสื่อที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "ไฟล์นี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ไฟล์และสื่อที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "เนื้อหาที่ครบถ้วนทั้งหมดในข้อความนี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ข้อความขนาดยาวที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "สติกเกอร์นี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ไฟล์และสื่อที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "สำรองข้อความ + สื่อจาก 45 วัน";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "ไฟล์สื่อจาก 45 วันที่ผ่านมา";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "ข้อความ + สื่อจาก 45 วัน";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "ดูเพิ่ม";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "วิธีอื่นในการบริจาค";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "ลิขสิทธิ์ B&A Messenger\nเผยแพร่ภายใต้สัญญาอนุญาต AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "ดูเหมือนว่าคุณพยายามจะเชื่อมโยงบัญชี BAXS แตะดำเนินการต่อ จากนั้นให้แตะ \"สแกนคิวอาร์โค้ด\" แล้วสแกนคิวอาร์โค้ดอีกครั้ง";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "บัญชี BAXS ที่เชื่อมต่อแล้ว";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "บัญชีแพลตฟอร์ม BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "สแกน QR โค้ดที่แสดงบนแพลตฟอร์มการชำระเงิน BA เพื่อเชื่อมต่อบัญชีของคุณ";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "สแกน QR โค้ด";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "สแกนอีกครั้ง";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "มือถือ";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "อีเมล";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "เชื่อมต่อบัญชีของคุณกับ \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA สำเร็จแล้ว";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "QR โค้ดไม่ถูกต้อง";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "QR โค้ดนี้ไม่ใช่รหัสเชื่อมต่อแพลตฟอร์ม BA ที่ถูกต้อง";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "ไม่สามารถเชื่อมต่อได้";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "ไม่สามารถใช้ QR โค้ดนี้สำหรับการเชื่อมต่อได้";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "การเชื่อมต่อล้มเหลว";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "แพลตฟอร์ม BA ปฏิเสธคำขอเชื่อมต่อ";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "การเชื่อมต่อหมดเวลา";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "แพลตฟอร์ม BA ไม่ตอบสนองทันเวลา กรุณาลองอีกครั้ง";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "ข้อผิดพลาด";
+

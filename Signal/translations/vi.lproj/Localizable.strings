@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Bạn đã đặt thời gian để tin nhắn biến mất là %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Tin nhắn thoại này không được chuyển từ điện thoại của bạn khi thiết bị này được liên kết. Tập tin và đa phương tiện cũ hơn 45 ngày tại thời điểm liên kết thiết bị thì không thể được đồng bộ.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Tập tin không được chuyển từ điện thoại của bạn khi thiết bị này được liên kết. Tập tin và đa phương tiện cũ hơn 45 ngày tại thời điểm liên kết thiết bị thì không thể được đồng bộ.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Văn bản hoàn chỉnh của tin nhắn không được chuyển từ điện thoại của bạn khi thiết bị này được liên kết. Tin nhắn văn bản có nội dung dài cũ hơn 45 ngày tại thời điểm liên kết thiết bị thì không thể được đồng bộ.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Nhãn dán này không được chuyển từ điện thoại của bạn khi thiết bị này được liên kết. Đa phương tiện và tập tin cũ hơn 45 ngày tại thời điểm liên kết thiết bị thì không thể được đồng bộ.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Bản sao lưu tin nhắn văn bản + tập tin đa phương tiện 45 ngày qua";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Đa phương tiện 45 ngày qua";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Tin nhắn + đa phương tiện 45 ngày qua";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Thêm";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Các Cách khác để Đóng góp";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Bản quyền B&A Messenger\nCấp phép theo GPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Có vẻ như bạn đang cố liên kết một tài khoản BAXS. Nhấn tiếp tục và sau đó nhấn \"Quét mã QR\" và quét lại mã QR.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Liên kết tài khoản nền tảng BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Tài khoản BAXS đã liên kết";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Tài khoản nền tảng BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Quét mã QR hiển thị trên nền tảng thanh toán BA để liên kết tài khoản của bạn.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Quét mã QR";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Quét lại";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Di động";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Email";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Liên kết tài khoản nền tảng BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Liên kết tài khoản của bạn với \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Tài khoản nền tảng BA đã được liên kết thành công.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Mã QR không hợp lệ";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Mã QR này không phải là mã liên kết hợp lệ của nền tảng BA.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Không thể liên kết";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Mã QR này không thể dùng để liên kết.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Liên kết thất bại";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Nền tảng BA đã từ chối yêu cầu liên kết.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Liên kết hết thời gian";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Nền tảng BA không phản hồi kịp thời. Vui lòng thử lại.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Lỗi";
+

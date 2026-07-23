@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "您已將過眼雲煙訊息倒數設定為 %1$@。";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "連結呢部機嗰陣，呢個語音訊息冇喺你手機度轉移過嚟。連結裝置嗰陣，超過 45 日嘅檔案同媒體冇得同步。";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "連結呢部機嗰陣，呢個檔案冇喺你手機度轉移過嚟。連結裝置嗰陣，超過 45 日嘅檔案同媒體冇得同步。";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "連結呢部機嗰陣，呢個訊息嘅完整文字冇喺你手機度轉移過嚟。連結裝置嗰陣，超過 45 日嘅長文字訊息冇得同步。";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "連結呢部機嗰陣，呢個貼圖冇喺你手機度轉移過嚟。連結裝置嗰陣，超過 45 日嘅媒體同檔案冇得同步。";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "備份文字訊息 + 45 日嘅媒體";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "最近 45 日嘅媒體";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "文字 + 45 日嘅媒體";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "更多";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "其他捐款方法";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "B&A Messenger 版權所有\n由 AGPLv3 許可";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "你似乎嘗試緊連結 BAXS 帳號。㩒一下繼續，然後㩒一下「掃描二維碼」再掃描二維碼。";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "連結 BA 平台帳戶";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "已連結嘅 BAXS 帳戶";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA 平台帳戶";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "掃描 BA 支付平台上顯示嘅 QR 碼嚟連結你嘅帳戶。";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "掃描 QR 碼";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "再次掃描";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "手機";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "電郵";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "連結 BA 平台帳戶";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "將你嘅帳戶連結到 \"%@\"？";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA 平台帳戶連結成功。";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "無效嘅 QR 碼";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "呢個 QR 碼唔係有效嘅 BA 平台連結碼。";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "無法連結";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "呢個 QR 碼唔可以用嚟連結。";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "連結失敗";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA 平台拒絕咗連結請求。";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "連結逾時";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA 平台未能及時回應。請再試一次。";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "錯誤";
+

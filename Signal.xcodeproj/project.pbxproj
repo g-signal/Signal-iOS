@@ -4182,6 +4182,7 @@
 		0DB93E082F67AB5400CB9799 /* GExtTagsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtTagsStackView.swift; sourceTree = "<group>"; };
 		0DB93E092F67AB5400CB9799 /* GExtTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GExtTagView.swift; sourceTree = "<group>"; };
 		0DC8F6E32EA8ED5E009573F8 /* NetworkRequestLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequestLogger.swift; sourceTree = "<group>"; };
+		122D2215EDCE8CB4D3EEE497 /* Pods-SignalShareExtension.app store staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalShareExtension.app store staging.xcconfig"; path = "Target Support Files/Pods-SignalShareExtension/Pods-SignalShareExtension.app store staging.xcconfig"; sourceTree = "<group>"; };
 		1404D8B2276A353A0068E2F6 /* ChatListViewController+Multiselect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatListViewController+Multiselect.swift"; sourceTree = "<group>"; };
 		1466AB272817F7E7003B3D9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = translations/en.lproj/PluralAware.stringsdict; sourceTree = "<group>"; };
 		1466AB292817F7F2003B3D9F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = translations/de.lproj/PluralAware.stringsdict; sourceTree = "<group>"; };
@@ -5030,6 +5031,7 @@
 		55B7535F2D97303A00CCC91C /* RemoteMuteToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteMuteToast.swift; sourceTree = "<group>"; };
 		5AA002E52CA2455F002D1CC2 /* SessionStoreTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStoreTest.swift; sourceTree = "<group>"; };
 		5D6C4583F668E9D733E59B9B /* Pods-SignalServiceKitTests.testable release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalServiceKitTests.testable release.xcconfig"; path = "Target Support Files/Pods-SignalServiceKitTests/Pods-SignalServiceKitTests.testable release.xcconfig"; sourceTree = "<group>"; };
+		5F3714DC704E0C955BDE95EF /* Pods-SignalTests.app store staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalTests.app store staging.xcconfig"; path = "Target Support Files/Pods-SignalTests/Pods-SignalTests.app store staging.xcconfig"; sourceTree = "<group>"; };
 		5F85041386A219C9710EAB41 /* Pods-Signal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Signal.debug.xcconfig"; path = "Target Support Files/Pods-Signal/Pods-Signal.debug.xcconfig"; sourceTree = "<group>"; };
 		65703441A3D2C7FE670E65ED /* Pods-SignalServiceKit.profiling.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalServiceKit.profiling.xcconfig"; path = "Target Support Files/Pods-SignalServiceKit/Pods-SignalServiceKit.profiling.xcconfig"; sourceTree = "<group>"; };
 		6600BB192BA3A0930005A035 /* LinkPreviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewManager.swift; sourceTree = "<group>"; };
@@ -5498,6 +5500,7 @@
 		67391FF368D9A60FC8B73F0E /* Pods-Signal.profiling.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Signal.profiling.xcconfig"; path = "Target Support Files/Pods-Signal/Pods-Signal.profiling.xcconfig"; sourceTree = "<group>"; };
 		675486AB8F0612FF2C717BAE /* Pods_SignalUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BB92957776B3173894CD3E9 /* Pods-SignalServiceKit.app store release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalServiceKit.app store release.xcconfig"; path = "Target Support Files/Pods-SignalServiceKit/Pods-SignalServiceKit.app store release.xcconfig"; sourceTree = "<group>"; };
+		6D8510041149EB13CD32AE33 /* Pods-SignalUI.app store staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalUI.app store staging.xcconfig"; path = "Target Support Files/Pods-SignalUI/Pods-SignalUI.app store staging.xcconfig"; sourceTree = "<group>"; };
 		70377AAA1918450100CAF501 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7203F5322D53B52900639949 /* UInt64+SSK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UInt64+SSK.swift"; sourceTree = "<group>"; };
 		7203F5342D53B83000639949 /* TimeInterval+SSK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+SSK.swift"; sourceTree = "<group>"; };
@@ -5620,6 +5623,7 @@
 		76FCCDBB27AB8FBE00BAA7F0 /* MediaControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaControls.swift; sourceTree = "<group>"; };
 		7F965533D71CA51BE6704CC4 /* Pods_SignalNSE.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalNSE.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FF88FB580BC19B240EEB86A /* Pods_Signal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Signal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		82212CED3E6CAEBBBD9AC6EB /* Pods-SignalServiceKit.app store staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalServiceKit.app store staging.xcconfig"; path = "Target Support Files/Pods-SignalServiceKit/Pods-SignalServiceKit.app store staging.xcconfig"; sourceTree = "<group>"; };
 		83B9573827C9A1FA00A678FD /* CaptchaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptchaView.swift; sourceTree = "<group>"; };
 		8806EF18248DBD7200E764C7 /* NotificationPermissionReminderMegaphone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionReminderMegaphone.swift; sourceTree = "<group>"; };
 		8806EF1A248DBFC100E764C7 /* ContactPermissionReminderMegaphone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactPermissionReminderMegaphone.swift; sourceTree = "<group>"; };
@@ -5860,6 +5864,7 @@
 		88F5FA9528EF7E02007AA1BF /* StorySharingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorySharingTests.swift; sourceTree = "<group>"; };
 		88FE237D249C22080041670F /* ConversationViewController+Scroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewController+Scroll.swift"; sourceTree = "<group>"; };
 		89BA19AB4B8B1BC811E53717 /* Pods-SignalServiceKit.testable release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalServiceKit.testable release.xcconfig"; path = "Target Support Files/Pods-SignalServiceKit/Pods-SignalServiceKit.testable release.xcconfig"; sourceTree = "<group>"; };
+		8F39A83F1CDF7371A413A1E9 /* Pods-SignalUITests.app store staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalUITests.app store staging.xcconfig"; path = "Target Support Files/Pods-SignalUITests/Pods-SignalUITests.app store staging.xcconfig"; sourceTree = "<group>"; };
 		91DA2BE463493965F5BC71C0 /* Pods_SignalServiceKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalServiceKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		948B2FC201146EF3BA459226 /* Pods_SignalServiceKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalServiceKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A685625E25E6F3EE3CC812 /* Pods-SignalUITests.testable release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalUITests.testable release.xcconfig"; path = "Target Support Files/Pods-SignalUITests/Pods-SignalUITests.testable release.xcconfig"; sourceTree = "<group>"; };
@@ -6087,6 +6092,8 @@
 		C1FB9B742B16498C00D51A3B /* ExternalPendingDonationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalPendingDonationStore.swift; sourceTree = "<group>"; };
 		C1FE1F602C80CDC30031860B /* AttachmentBackupThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentBackupThumbnail.swift; sourceTree = "<group>"; };
 		C597942EF64D456BBE9782A2 /* Pods-SignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalTests.debug.xcconfig"; path = "Target Support Files/Pods-SignalTests/Pods-SignalTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C9DC13E45695E2E8D69A691E /* Pods-SignalServiceKitTests.app store staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalServiceKitTests.app store staging.xcconfig"; path = "Target Support Files/Pods-SignalServiceKitTests/Pods-SignalServiceKitTests.app store staging.xcconfig"; sourceTree = "<group>"; };
+		CBBE4C9E9E4B2D3E633AE555 /* Pods-SignalNSE.app store staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalNSE.app store staging.xcconfig"; path = "Target Support Files/Pods-SignalNSE/Pods-SignalNSE.app store staging.xcconfig"; sourceTree = "<group>"; };
 		D2179CFB16BB0B3A0006F3AB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		D2179CFD16BB0B480006F3AB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		D221A089169C9E5E00537ABF /* Signal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Signal.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -7413,6 +7420,7 @@
 		D9FC1C902C6FE5A50023AB87 /* BackupArchiveTSMessageEditHistoryArchiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupArchiveTSMessageEditHistoryArchiver.swift; sourceTree = "<group>"; };
 		D9FF515B2F03A2A10011982F /* DBUInt64.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUInt64.swift; sourceTree = "<group>"; };
 		D9FF515D2F03A6CD0011982F /* DBUInt64Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUInt64Test.swift; sourceTree = "<group>"; };
+		DBB95C0F2D7C7B2972BD8F56 /* Pods-Signal.app store staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Signal.app store staging.xcconfig"; path = "Target Support Files/Pods-Signal/Pods-Signal.app store staging.xcconfig"; sourceTree = "<group>"; };
 		E1447D8E2CCACFFA004D8FA2 /* BackupArchiveCallLinkRecipientArchiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupArchiveCallLinkRecipientArchiver.swift; sourceTree = "<group>"; };
 		E14EDF6D2A71AFDF00F0FD7C /* RecipientContextMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientContextMenuHelper.swift; sourceTree = "<group>"; };
 		E15066C22CED498600F6F9AF /* RegistrationQuickRestoreQRCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationQuickRestoreQRCodeViewController.swift; sourceTree = "<group>"; };
@@ -8364,6 +8372,14 @@
 				46A35218397D9FD1709A675C /* Pods-SignalUITests.debug.xcconfig */,
 				55B305CB99EC1478F69D91CF /* Pods-SignalUITests.profiling.xcconfig */,
 				94A685625E25E6F3EE3CC812 /* Pods-SignalUITests.testable release.xcconfig */,
+				DBB95C0F2D7C7B2972BD8F56 /* Pods-Signal.app store staging.xcconfig */,
+				CBBE4C9E9E4B2D3E633AE555 /* Pods-SignalNSE.app store staging.xcconfig */,
+				82212CED3E6CAEBBBD9AC6EB /* Pods-SignalServiceKit.app store staging.xcconfig */,
+				C9DC13E45695E2E8D69A691E /* Pods-SignalServiceKitTests.app store staging.xcconfig */,
+				122D2215EDCE8CB4D3EEE497 /* Pods-SignalShareExtension.app store staging.xcconfig */,
+				5F3714DC704E0C955BDE95EF /* Pods-SignalTests.app store staging.xcconfig */,
+				6D8510041149EB13CD32AE33 /* Pods-SignalUI.app store staging.xcconfig */,
+				8F39A83F1CDF7371A413A1E9 /* Pods-SignalUITests.app store staging.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -15891,7 +15907,6 @@
 				F9B0DC5C28948656004E07B7 /* GTSR3.crt in Resources */,
 				F9B0DC5F28948656004E07B7 /* GTSR4.crt in Resources */,
 				F9B0DC5328948656004E07B7 /* isrgrootx1.crt in Resources */,
-				F9B0DC4F28948656004E07B7 /* schema.sql in Resources */,
 				F9B0DC5928948656004E07B7 /* signal-messenger_bak.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -19407,7 +19422,6 @@
 				F9C5CC9A289453B300548EEE /* SignalService.pb.swift in Sources */,
 				F9C5CCE2289453B300548EEE /* SignalServiceAddress.swift in Sources */,
 				F9C5CDBB289453B400548EEE /* SignalServiceProfile.swift in Sources */,
-				C1CD0E3A2A6B0D2700307F1A /* SignalSessionStore.swift in Sources */,
 				060C7D052FBD95F5003DCEF9 /* GExtRobot.swift in Sources */,
 				72B0C2422C9EED0E00B57DAD /* SignedPreKeyRecord.swift in Sources */,
 				F9C5CD33289453B300548EEE /* SignedPreKeyStoreImpl.swift in Sources */,
@@ -20150,6 +20164,126 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		268C4B8C615C8A92AB1CA39F /* App Store Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C9DC13E45695E2E8D69A691E /* Pods-SignalServiceKitTests.app store staging.xcconfig */;
+			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SIGNAL_STAGING";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX).SignalServiceKitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Signal.app/Signal";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "App Store Staging";
+		};
+		2DCEAB114444695CF81F8010 /* App Store Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 122D2215EDCE8CB4D3EEE497 /* Pods-SignalShareExtension.app store staging.xcconfig */;
+			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SIGNAL_STAGING";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "SignalShareExtension/SignalShareExtension-AppStore.entitlements";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 362WY7UW9U;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SignalShareExtension/SignalShareExtension-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = SignalShareExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX).shareextension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SIGNAL_BUNDLEID_PREFIX = com.baxs.bachat;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "App Store Staging";
+		};
 		342FFE9127245852000AC89F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EA03B20E7D8DBBE1B07BA967 /* Pods-SignalNSE.debug.xcconfig */;
@@ -20359,6 +20493,65 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = "Testable Release";
+		};
+		3479507FC1EAB3D3222A38AA /* App Store Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CBBE4C9E9E4B2D3E633AE555 /* Pods-SignalNSE.app store staging.xcconfig */;
+			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SIGNAL_STAGING";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "SignalNSE/SignalNSE-AppStore.entitlements";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 362WY7UW9U;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = SignalNSE/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SignalNSE;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.baxs.bachat.SignalNSE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SIGNAL_BUNDLEID_PREFIX = com.baxs.bachat;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "App Store Staging";
 		};
 		34A954BF271A471300B05242 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -20812,6 +21005,51 @@
 			};
 			name = "Testable Release";
 		};
+		3E4C5F6CE992D5F007576A6C /* App Store Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DBB95C0F2D7C7B2972BD8F56 /* Pods-Signal.app store staging.xcconfig */;
+			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SIGNAL_STAGING";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-color AppIcon-bubbles AppIcon-white AppIcon-dark AppIcon-dark-variant AppIcon-chat AppIcon-yellow AppIcon-news AppIcon-notes AppIcon-weather AppIcon-wave";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Signal/Signal-AppStore.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 362WY7UW9U;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				"EXCLUDED_SOURCE_FILE_NAMES[arch=*]" = Signal/test/Assets/input_video.mp4;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Signal/Signal-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					HAVE_CONFIG_H,
+					"RELEASE=1",
+				);
+				GCC_STRICT_ALIASING = NO;
+				INFOPLIST_FILE = "$(SRCROOT)/Signal/Signal-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LLVM_LTO = NO;
+				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX)";
+				PRODUCT_NAME = Signal;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = iphoneos;
+				SIGNAL_BUNDLEID_PREFIX = com.baxs.bachat;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = app;
+			};
+			name = "App Store Staging";
+		};
 		453518731FC635DD00210559 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 741B66EF7DCE5EF90200211D /* Pods-SignalShareExtension.debug.xcconfig */;
@@ -21178,6 +21416,66 @@
 			};
 			name = "Testable Release";
 		};
+		52DE6480EDAC0A80E2C1211F /* App Store Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5F3714DC704E0C955BDE95EF /* Pods-SignalTests.app store staging.xcconfig */;
+			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SIGNAL_STAGING";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Signal.app/Signal";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				EXCLUDED_ARCHS = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+				);
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Signal/Signal-Prefix.pch";
+				GCC_VERSION = "";
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				HEADER_SEARCH_PATHS = (
+					"${PODS_HEADERS_SEARCH_PATHS}",
+					"$(inherited)",
+					"\"${SRCROOT}/Signal/lib/speex/include\"",
+					"\"${SRCROOT}/Signal/lib/ogg/include\"",
+					"\"${SRCROOT}/Signal/lib/debug/include\"",
+					"\"$(SRCROOT)/libtommath\"",
+					"\"$(SRCROOT)/libtomcrypt/headers\"",
+					"\"$(SRCROOT)/Libraries\"/**",
+					"\"$(TARGET_TEMP_DIR)/../$(PROJECT_NAME).build/DerivedSources\"",
+				);
+				INFOPLIST_FILE = "Signal/test/Supporting Files/SignalTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fobjc-arc-exceptions",
+				);
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX).${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = SignalTests;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				VALID_ARCHS = "arm64 armv7s armv7 i386 x86_64";
+			};
+			name = "App Store Staging";
+		};
 		88238EA724EAD2FD00F28079 /* Profiling */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05EA61432CC943D200B16D4E /* Project-Release.xcconfig */;
@@ -21443,6 +21741,176 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Profiling;
+		};
+		AA5F7B64AD893EDD5028CE4F /* App Store Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6D8510041149EB13CD32AE33 /* Pods-SignalUI.app store staging.xcconfig */;
+			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SIGNAL_STAGING";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX).SignalUI";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "App Store Staging";
+		};
+		B7346C757145A03EE095894D /* App Store Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05EA61432CC943D200B16D4E /* Project-Release.xcconfig */;
+			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SIGNAL_STAGING";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_GCD_PERFORMANCE = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ANALYZER_OSOBJECT_C_STYLE_CAST = YES;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_ENABLE_CPLUSPLUS_TYPED_ALLOCATOR_SUPPORT = NO;
+				CLANG_ENABLE_C_TYPED_ALLOCATOR_SUPPORT = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_NULLABILITY = YES;
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_SEMICOLON_BEFORE_METHOD_BODY = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEVELOPMENT_TEAM = U68MSDN6DR;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				"EXCLUDED_SOURCE_FILE_NAMES[arch=*]" = Signal/test/Assets/input_video.mp4;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Signal Messenger, LLC";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				SIGNAL_BUNDLEID_PREFIX = com.baxs.bachat;
+				SIGNAL_MERCHANTID = org.signalfoundation;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
+				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
+				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
+				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
+				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
+				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+				WARNING_CFLAGS = (
+					"-Werror=incompatible-pointer-types",
+					"-Werror=protocol",
+					"-Werror=incomplete-implementation",
+					"-Werror=objc-designated-initializers",
+					"-Werror=objc-literal-conversion",
+					"-Werror=objc-property-synthesis",
+					"-Werror=objc-protocol-property-synthesis",
+					"-Werror=shadow",
+				);
+			};
+			name = "App Store Staging";
 		};
 		D221A0BA169C9E5F00537ABF /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -21864,6 +22332,106 @@
 			};
 			name = "App Store Release";
 		};
+		E8E8AF97CC1282DA9AEDBA8D /* App Store Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8F39A83F1CDF7371A413A1E9 /* Pods-SignalUITests.app store staging.xcconfig */;
+			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SIGNAL_STAGING";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX).SignalUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Signal.app/Signal";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "App Store Staging";
+		};
+		F1D928B9AC1405C35B42B6EE /* App Store Staging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 82212CED3E6CAEBBBD9AC6EB /* Pods-SignalServiceKit.app store staging.xcconfig */;
+			buildSettings = {
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SIGNAL_STAGING";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SignalServiceKit/SignalServiceKit-Prefix.pch";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_SWIFT_FLAGS = "$(inherited) -Wwarning DeprecatedDeclaration";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(SIGNAL_BUNDLEID_PREFIX).SignalServiceKit";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "App Store Staging";
+		};
 		F9C5C8AC289451B900548EEE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A33E43CA8A572CA70089C4CC /* Pods-SignalServiceKit.debug.xcconfig */;
@@ -22251,6 +22819,7 @@
 			buildConfigurations = (
 				342FFE9127245852000AC89F /* Debug */,
 				342FFE9227245852000AC89F /* App Store Release */,
+				3479507FC1EAB3D3222A38AA /* App Store Staging */,
 				342FFE9327245852000AC89F /* Profiling */,
 				342FFE9427245852000AC89F /* Testable Release */,
 			);
@@ -22262,6 +22831,7 @@
 			buildConfigurations = (
 				34A954BF271A471300B05242 /* Debug */,
 				34A954C0271A471300B05242 /* App Store Release */,
+				AA5F7B64AD893EDD5028CE4F /* App Store Staging */,
 				34A954C1271A471300B05242 /* Profiling */,
 				34A954C2271A471300B05242 /* Testable Release */,
 			);
@@ -22273,6 +22843,7 @@
 			buildConfigurations = (
 				34A954C3271A471300B05242 /* Debug */,
 				34A954C4271A471300B05242 /* App Store Release */,
+				E8E8AF97CC1282DA9AEDBA8D /* App Store Staging */,
 				34A954C5271A471300B05242 /* Profiling */,
 				34A954C6271A471300B05242 /* Testable Release */,
 			);
@@ -22284,6 +22855,7 @@
 			buildConfigurations = (
 				453518731FC635DD00210559 /* Debug */,
 				453518751FC635DD00210559 /* App Store Release */,
+				2DCEAB114444695CF81F8010 /* App Store Staging */,
 				88238EAA24EAD2FD00F28079 /* Profiling */,
 				4C10B17D23176CEB0099396B /* Testable Release */,
 			);
@@ -22295,6 +22867,7 @@
 			buildConfigurations = (
 				D221A0BA169C9E5F00537ABF /* Debug */,
 				D221A0BB169C9E5F00537ABF /* App Store Release */,
+				B7346C757145A03EE095894D /* App Store Staging */,
 				88238EA724EAD2FD00F28079 /* Profiling */,
 				4C10B17A23176CEB0099396B /* Testable Release */,
 			);
@@ -22306,6 +22879,7 @@
 			buildConfigurations = (
 				D221A0BD169C9E5F00537ABF /* Debug */,
 				D221A0BE169C9E5F00537ABF /* App Store Release */,
+				3E4C5F6CE992D5F007576A6C /* App Store Staging */,
 				88238EA824EAD2FD00F28079 /* Profiling */,
 				4C10B17B23176CEB0099396B /* Testable Release */,
 			);
@@ -22317,6 +22891,7 @@
 			buildConfigurations = (
 				D221A0C0169C9E5F00537ABF /* Debug */,
 				D221A0C1169C9E5F00537ABF /* App Store Release */,
+				52DE6480EDAC0A80E2C1211F /* App Store Staging */,
 				88238EA924EAD2FD00F28079 /* Profiling */,
 				4C10B17C23176CEB0099396B /* Testable Release */,
 			);
@@ -22328,6 +22903,7 @@
 			buildConfigurations = (
 				F9C5C8AC289451B900548EEE /* Debug */,
 				F9C5C8AD289451B900548EEE /* App Store Release */,
+				F1D928B9AC1405C35B42B6EE /* App Store Staging */,
 				F9C5C8AE289451B900548EEE /* Profiling */,
 				F9C5C8AF289451B900548EEE /* Testable Release */,
 			);
@@ -22339,6 +22915,7 @@
 			buildConfigurations = (
 				F9C5C8B0289451B900548EEE /* Debug */,
 				F9C5C8B1289451B900548EEE /* App Store Release */,
+				268C4B8C615C8A92AB1CA39F /* App Store Staging */,
 				F9C5C8B2289451B900548EEE /* Profiling */,
 				F9C5C8B3289451B900548EEE /* Testable Release */,
 			);

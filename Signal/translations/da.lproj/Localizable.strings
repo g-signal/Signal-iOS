@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Du indstillede udløbstid for forsvindende besked til %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Denne stemmebesked blev ikke overført fra din telefon, da denne enhed blev tilknyttet. Filer og medier, der er ældre end 45 dage, når enheder tilknyttes, kan ikke synkroniseres.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Denne fil blev ikke overført fra din telefon, da denne enhed blev tilknyttet. Filer og medier, der er ældre end 45 dage gamle, når enheder tilknyttes, kan ikke synkroniseres.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Hele teksten i denne besked blev ikke overført fra din telefon, da denne enhed blev tilknyttet. Lange beskeder, der er ældre end 45 dage gamle, når enheder tilknyttes, kan ikke synkroniseres.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Dette klistermærke blev ikke overført fra din telefon, da denne enhed blev tilknyttet. Medier og filer, der er ældre end 45 dage, når enheder tilknyttes, kan ikke synkroniseres.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Tekst + 45 dages sikkerhedskopi af medier";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Dine medier for de sidste 45 dage";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Tekst + medier for de sidste 45 dage";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Mere";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Andre måder at donere";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicenseret under AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Det ser ud til, at du forsøger at tilknytte en BAXS-konto. Tryk på fortsæt, tryk \"Scan QR-kode\" og scan QR-koden igen.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Tilknyt BA-platformkonto";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Tilknyttet BAXS-konto";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA-platformkonto";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Scan QR-koden vist på BA-betalingsplatformen for at tilknytte din konto.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Scan QR-kode";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Scan igen";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "E-mail";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Tilknyt BA-platformkonto";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Tilknyt din konto til \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA-platformkonto tilknyttet.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Ugyldig QR-kode";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Denne QR-kode er ikke en gyldig BA-platformtilknytningskode.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Kan ikke tilknytte";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Denne QR-kode kan ikke bruges til tilknytning.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Tilknytning mislykkedes";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA-platformen afviste tilknytningsanmodningen.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Tilknytning udløbet";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA-platformen svarede ikke i tide. Prøv venligst igen.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Fejl";
+

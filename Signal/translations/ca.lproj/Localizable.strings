@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Heu establert els missatges efímers en %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Aquest missatge de veu no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de 45 dies d'antiguitat no es podran sincronitzar.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Aquest arxiu no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de 45 dies d'antiguitat no es podran sincronitzar.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "El text complet d'aquest missatge no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els missatges de text llargs que en el moment de vincular el dispositiu tinguin més de 45 dies d'antiguitat no es podran sincronitzar.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Aquest sticker no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de 45 dies d'antiguitat no es podran sincronitzar.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Còpia de seguretat de missatges de text + 45 dies d'arxius multimèdia";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Darrers 45 dies d'arxius multimèdia";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Missatges + 45 dia d'arxius multimèdia";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Més";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Altres maneres de fer-hi una donació";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nAmb llicència de AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Sembla que estàs intentant vincular un compte de BAXS. Toca \"Continuar\", selecciona \"Escanejar codi QR\" i torna a escanejar el codi QR.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Vincula el compte de la plataforma BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Compte BAXS vinculat";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Compte de la plataforma BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Escaneja el codi QR que es mostra a la plataforma de pagament BA per vincular el teu compte.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Escaneja el codi QR";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Torna a escanejar";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mòbil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Adreça electrònica";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Vincula el compte de la plataforma BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Vols vincular el teu compte a \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "El compte de la plataforma BA s'ha vinculat correctament.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Codi QR no vàlid";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Aquest codi QR no és un codi de vinculació vàlid de la plataforma BA.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "No es pot vincular";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Aquest codi QR no es pot utilitzar per a la vinculació.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "La vinculació ha fallat";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "La plataforma BA ha rebutjat la sol·licitud de vinculació.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "La vinculació ha expirat";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "La plataforma BA no ha respost a temps. Torna-ho a intentar.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Error";
+

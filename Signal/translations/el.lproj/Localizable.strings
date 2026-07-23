@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Όρισες τον χρόνο εξαφάνισης των μηνυμάτων σε %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Αυτό το ηχητικό μήνυμα δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός αρχείων και πολυμέσων παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Αυτό το αρχείο δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός αρχείων και πολυμέσων παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Το πλήρες κείμενο σε αυτό το μήνυμα δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός μεγάλων μηνυμάτων κειμένου παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Αυτό το αυτοκόλλητο δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός πολυμέσων και αρχείων παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Αντίγραφα ασφαλείας κειμένου + των πολυμέσων 45 ημερών";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Τελευταίες 45 ημέρες πολυμέσων";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Κείμενο + 45 ημέρες πολυμέσων";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Περισσότερα";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Άλλοι τρόποι δωρεάς";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Πνευματική ιδιοκτησία B&A Messenger\nΥπό την άδεια AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Φαίνεται πως προσπαθείς να συνδέσεις έναν λογαριασμό BAXS. Πάτησε «Συνέχεια», μετά «Σάρωση κωδικού QR» και σκάναρε ξανά τον κωδικό QR.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Σύνδεση λογαριασμού πλατφόρμας BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Συνδεδεμένος λογαριασμός BAXS";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Λογαριασμός πλατφόρμας BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Σαρώστε τον κωδικό QR που εμφανίζεται στην πλατφόρμα πληρωμών BA για να συνδέσετε τον λογαριασμό σας.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Σάρωση κωδικού QR";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Σάρωση ξανά";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Κινητό";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Email";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Σύνδεση λογαριασμού πλατφόρμας BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Σύνδεση του λογαριασμού σας με \"%@\";";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Ο λογαριασμός πλατφόρμας BA συνδέθηκε επιτυχώς.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Μη έγκυρος κωδικός QR";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Αυτός ο κωδικός QR δεν είναι έγκυρος κωδικός σύνδεσης πλατφόρμας BA.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Αδύνατη η σύνδεση";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Αυτός ο κωδικός QR δεν μπορεί να χρησιμοποιηθεί για σύνδεση.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Αποτυχία σύνδεσης";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Η πλατφόρμα BA απέρριψε το αίτημα σύνδεσης.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Λήξη χρόνου σύνδεσης";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Η πλατφόρμα BA δεν απάντησε εγκαίρως. Παρακαλώ δοκιμάστε ξανά.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Σφάλμα";
+

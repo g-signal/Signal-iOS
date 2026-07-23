@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "사라지는 메시지 시간을 %1$@(으)로 설정했습니다.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "이 기기 연결 시 이 음성 메시지를 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 파일과 미디어는 동기화할 수 없습니다.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "이 기기를 연결한 상태로 이 파일을 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 파일과 미디어는 동기화할 수 없습니다.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "이 기기를 연결한 상태로 이 메시지의 전체 텍스트를 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 긴 텍스트 메시지는 동기화할 수 없습니다.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "이 기기 연결 시 이 스티커를 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 미디어와 파일은 동기화할 수 없습니다.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "텍스트 + 45일간의 미디어 백업";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "지난 45일간의 미디어";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "텍스트 + 45일 분량의 미디어";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "더 보기";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "다른 기부 방법";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "B&A Messenger 저작권\nAGPLv3에 따라 라이선스 부여됨";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "BAXS 계정을 연결하려는 것 같네요. 계속을 탭한 다음 'QR 코드 스캔'을 탭하고 QR 코드를 다시 스캔하세요.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BA 플랫폼 계정 연결";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "연결된 BAXS 계정";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA 플랫폼 계정";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "BA 결제 플랫폼에 표시된 QR 코드를 스캔하여 계정을 연결하세요.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR 코드 스캔";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "다시 스캔";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "휴대폰";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "이메일";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA 플랫폼 계정 연결";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "\"%@\"에 계정을 연결하시겠습니까?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA 플랫폼 계정이 성공적으로 연결되었습니다.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "유효하지 않은 QR 코드";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "이 QR 코드는 유효한 BA 플랫폼 연결 코드가 아닙니다.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "연결할 수 없음";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "이 QR 코드는 연결에 사용할 수 없습니다.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "연결 실패";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA 플랫폼이 연결 요청을 거부했습니다.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "연결 시간 초과";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA 플랫폼이 제때 응답하지 않았습니다. 다시 시도해 주세요.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "오류";
+

@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "شما زمان ناپدید شدن پیام‌ها را روی %1$@ تنظیم کردید.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "در زمان اتصال این دستگاه، این پیام صوتی از گوشی شما انتقال داده نشد. فایل‌ها و رسانه‌های قدیمی‌تر از ۴۵ روز در زمان اتصال دستگاه، قابل همگام‌سازی نیستند.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "در زمان اتصال این دستگاه، این فایل از تلفن شما منتقل نشد. فایل‌ها و رسانه‌های قدیمی‌تر از ۴۵ روز در زمان اتصال دستگاه، قابل همگام‌سازی نیستند.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "در زمان اتصال این دستگاه، متن کامل این پیام از تلفن شما منتقل نشد. پیامک‌های قدیمی‌تر از ۴۵ روز در زمان اتصال دستگاه، قابل همگام‌سازی نیستند.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "در زمان اتصال این دستگاه، این استیکر از گوشی شما انتقال داده نشد. رسانه‌ها و فایل‌های قدیمی‌تر از ۴۵ روز در زمان اتصال دستگاه، قابل همگام‌سازی نیستند.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "پشتیبان‌گیری متن + رسانه ۴۵ روز گذشته";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "رسانه‌های ۴۵ روز اخیر";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "پیامک + رسانه‌های ۴۵ روز اخیر";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "بیشتر";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "راه‌‌های دیگر کمک مالی";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "حق تکثیر پیام‌رسان B&A\nگواهی شده تحت AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "به نظر می‌رسد می‌خواهید یک حساب BAXS را متصل کنید. روی ادامه و سپس روی «اسکن کد QR» ضربه بزنید و دوباره کد QR را اسکن کنید.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "پیوند حساب پلتفرم BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "حساب BAXS پیوند شده";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "حساب پلتفرم BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "کد QR نمایش داده شده در پلتفرم پرداخت BA را اسکن کنید تا حساب خود را پیوند دهید.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "اسکن کد QR";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "اسکن مجدد";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "موبایل";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "ایمیل";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "پیوند حساب پلتفرم BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "حساب خود را به \"%@\" پیوند می‌دهید؟";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "حساب پلتفرم BA با موفقیت پیوند داده شد.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "کد QR نامعتبر";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "این کد QR یک کد پیوند معتبر پلتفرم BA نیست.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "پیوند امکان‌پذیر نیست";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "این کد QR برای پیوند قابل استفاده نیست.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "پیوند ناموفق بود";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "پلتفرم BA درخواست پیوند را رد کرد.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "زمان پیوند به پایان رسید";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "پلتفرم BA به موقع پاسخ نداد. لطفاً دوباره تلاش کنید.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "خطا";
+

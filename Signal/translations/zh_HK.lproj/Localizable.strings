@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "您已將限時訊息的消失時間設為 %1$@。";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "連結此裝置時，此語音訊息未從你的手機轉移過來。當裝置連結時，超過 45 天的檔案和媒體無法同步。";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "連結此裝置時，此檔案未從你的手機轉移過來。當裝置連結時，超過 45 天的檔案和媒體無法同步。";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "連結此裝置時，此訊息中的完整文字未從你的手機轉移過來。裝置連結時，超過 45 天的長文字訊息無法同步。";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "連結此裝置時，此貼圖未從你的手機轉移過來。當裝置連結時，超過 45 天的媒體和檔案無法同步";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "文字 + 45 天的媒體備份";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "最近 45 天的媒體";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "文字 + 30 天的媒體";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "更多";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "其他捐款方法";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "B&A Messenger 版權所有\n根據 AGPLv3 授權";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "你似乎正嘗試連結 BAXS 帳號。輕按繼續，然後輕按「掃描二維碼」並再次掃描二維碼。";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "綁定BAXS帳號";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "已綁定BAXS帳號";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BAXS帳號";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "掃描BAXS顯示的二維碼，完成帳號綁定。";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "掃描二維碼";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "重新掃描";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "手機號";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "電郵";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "綁定BAXS帳號";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "確認綁定到\"%@\"？";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BAXS帳號綁定成功。";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "無效的二維碼";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "此二維碼不是有效的BAXS綁定碼。";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "無法綁定";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "此二維碼不可用於綁定。";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "綁定失敗";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BAXS拒絕了綁定請求。";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "綁定超時";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BAXS未在規定時間內響應，請重試。";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "錯誤";
+

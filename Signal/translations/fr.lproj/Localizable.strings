@@ -9899,3 +9899,82 @@ B&A a fusionné ici les messages contenus dans les deux conversations.";
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Vous avez défini le délai avant disparition des messages éphémères sur %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Ce message vocal n'a pas été transféré depuis votre téléphone lorsque vous avez associé cet appareil. Les fichiers et médias datant de plus de 45 jours au moment de l'association ne sont pas synchronisés.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Ce fichier n'a pas été transféré depuis votre téléphone lorsque vous avez associé cet appareil. Les fichiers et médias datant de plus de 45 jours au moment de l'association ne sont pas synchronisés.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "B&A n'a pas transféré l'intégralité de ce message depuis votre téléphone lorsque vous avez associé cet appareil. Les longs messages texte datant de plus de 45 jours au moment de l'association ne sont pas synchronisés.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Ce sticker n'a pas été transféré depuis votre téléphone lorsque vous avez associé cet appareil. Les fichiers et médias datant de plus de 45 jours au moment de l'association ne sont pas synchronisés.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Messages texte + 45 jours de médias";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Médias des 45 derniers jours";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Messages texte + 45 jours de médias";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Plus";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Nous soutenir autrement";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nSous licence AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Vous voulez associer un compte BAXS ? Appuyez sur \"Continuer\", puis sur \"Scanner le code QR\" et rescannez le code QR.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Lier le compte de la plateforme BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Compte BAXS lié";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Compte de la plateforme BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Scannez le code QR affiché sur la plateforme de paiement BA pour lier votre compte.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Scanner le code QR";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Scanner à nouveau";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobile";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "E-mail";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Lier le compte de la plateforme BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Lier votre compte à \"%@\" ?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Compte de la plateforme BA lié avec succès.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Code QR invalide";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Ce code QR n'est pas un code de liaison valide pour la plateforme BA.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Impossible de lier";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Ce code QR ne peut pas être utilisé pour la liaison.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Échec de la liaison";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "La plateforme BA a rejeté la demande de liaison.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Délai de liaison dépassé";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "La plateforme BA n'a pas répondu à temps. Veuillez réessayer.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Erreur";
+

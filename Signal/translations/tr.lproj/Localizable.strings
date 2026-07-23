@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Kaybolan ileti süresini %1$@ olarak ayarladınız.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Bu cihaz bağlandığında, bu sesli mesaj telefonundan aktarılmadı. Cihaz bağlandığında 45 günden eski olan dosyalar ve medya senkronize edilemez.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Bu cihaz bağlandığında, bu dosya telefonundan aktarılmadı. Cihaz bağlandığında 45 günden eski olan dosyalar ve medya senkronize edilemez.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Bu mesajdaki metnin tamamı, bu cihaz bağlandığında telefonundan aktarılmadı. Cihaz bağlandığında 45 günden eski olan uzun metin mesajları senkronize edilemez.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Bu cihaz bağlandığında, bu çıkartma telefonundan aktarılmadı. Cihaz bağlandığında 45 günden eski olan medya ve dosyalar senkronize edilemez.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Metin + 45 günlük medya yedeklemesi";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Medyanın son 45 günü";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Metin + 45 günlük medya";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Daha fazla";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Diğer Bağış Yapma Yöntemleri";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Telif Hakkı B&A Messenger\n AGPLv3 altında lisanslanmıştır";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "BAXS hesabını bağlamaya çalışıyorsun gibi görünüyor. Devam et'e dokun ve ardından \"QR Kodu Tara\"ya dokun ve kare kodu tekrar tara.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BAXS Hesabını Bağla";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Bağlı BAXS Hesabı";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BAXS Hesabı";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Hesabınızı bağlamak için BAXS görüntülenen QR kodunu tarayın.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR Kodu Tara";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Tekrar Tara";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Eposta";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BAXS Hesabını Bağla";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Hesabınızı \"%@\" ile bağlamak istiyor musunuz?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BAXS hesabı başarıyla bağlandı.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Geçersiz QR Kodu";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Bu QR kodu geçerli bir BAXS bağlantı kodu değil.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Bağlanamıyor";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Bu QR kodu bağlantı için kullanılamaz.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Bağlantı Başarısız";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BAXSu bağlantı isteğini reddetti.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Bağlantı Zaman Aşımına Uğradı";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BAXSu zamanında yanıt vermedi. Lütfen tekrar deneyin.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Hata";
+

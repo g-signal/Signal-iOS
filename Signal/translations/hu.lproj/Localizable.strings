@@ -9899,3 +9899,82 @@ Kezdés előtt győződj meg róla, hogy az új számon tudsz SMS-t, vagy hívá
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Beállítottad az eltűnő üzenetek idejét erre: %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Ez a hangüzenet nem lett átmásolva a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi fájlok és médiafájlok nem szinkronizálhatók.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Ez a fájl nem lett átmásolva a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi fájlok és médiafájlok nem szinkronizálhatók.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Az üzenetben szereplő teljes szöveg nem került át a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi hosszú szöveges üzenetek nem szinkronizálhatók.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Ez a matrica nem lett átmásolva a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi médiafájlok és fájlok nem szinkronizálhatók.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Szöveg és médiafájlok biztonsági mentése 45 napra";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Médiafájl az elmúlt 45 napban";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Szöveg + 45 napnyi médiafájl";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Tovább";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Az adományozás egyéb módjai";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicenc típusa: AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Úgy tűnik, hogy egy BAXS-fiókot próbálsz összekapcsolni. Koppints a Folytatás, majd a „QR-kód beolvasása“ elemre, és olvasd be újra a QR-kódot.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BAXS fiók összekapcsolása";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Összekapcsolt BAXS fiók";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BAXS fiók";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Olvassa be a BA fizetési platformon megjelenő QR-kódot a fiókja összekapcsolásához.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR-kód beolvasása";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Újra beolvasás";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Email";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BAXS fiók összekapcsolása";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Összekapcsolja fiókját a következővel: \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "A BAXS fiók sikeresen összekapcsolva.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Érvénytelen QR-kód";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Ez a QR-kód nem érvényes BAXS összekapcsolási kód.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Nem lehet összekapcsolni";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Ez a QR-kód nem használható összekapcsoláshoz.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Összekapcsolás sikertelen";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "A BAXS elutasította az összekapcsolási kérelmet.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Összekapcsolás időtúllépés";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "A BAXS nem válaszolt időben. Kérjük, próbálja újra.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Hiba";
+

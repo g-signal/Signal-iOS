@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Ai setat timpul de expirare a mesajelor la %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Acest mesaj vocal nu a fost transferat de pe telefonul tău când acest dispozitiv a fost asociat. Fișierele și conținutul media mai vechi de 45 de zile în momentul asocierii dispozitivului nu pot fi sincronizate.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Acest fișier nu a fost transferat de pe telefonul tău când acest dispozitiv a fost asociat. Fișierele și conținutul media mai vechi de 45 de zile în momentul asocierii dispozitivului nu pot fi sincronizate.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Textul complet din acest mesaj nu a fost transferat de pe telefonul tău atunci când acest dispozitiv a fost asociat. Mesajele text lungi mai vechi de 45 de zile la momentul asocierii dispozitivului nu pot fi sincronizate.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Acest fișier nu a fost transferat de pe telefonul tău când acest dispozitiv a fost asociat. Media și fișierele mai vechi de 45 de zile în momentul conectării dispozitivului nu pot fi sincronizate.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Text + 45 de zile de backup al fișierelor media";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Fișierele media din ultimele 45 de zile";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Text + 45 de zile de fișiere media";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Mai multe";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Alte modalități de a dona";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Drepturi de autor B&A Messenger\nSub licența GPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Se pare că încerci să asociezi un cont BAXS. Atinge Continuă, apoi atinge „Scanează codul QR“ și scanează din nou codul QR.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Conectați contul platformei BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Cont BAXS conectat";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Cont platformă BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Scanați codul QR afișat pe platforma de plată BA pentru a vă conecta contul.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Scanați codul QR";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Scanați din nou";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Email";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Conectați contul platformei BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Conectați contul dvs. la \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Contul platformei BA a fost conectat cu succes.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Cod QR invalid";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Acest cod QR nu este un cod de conectare valid pentru platforma BA.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Nu se poate conecta";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Acest cod QR nu poate fi utilizat pentru conectare.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Conectarea a eșuat";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Platforma BA a respins cererea de conectare.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Conectarea a expirat";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Platforma BA nu a răspuns la timp. Vă rugăm să încercați din nou.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Eroare";
+

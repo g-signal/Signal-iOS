@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Anda menetapkan pemasa mesej hilang kepada %1$@";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Mesej suara ini tidak dipindahkan daripada telefon anda apabila peranti ini dipautkan. Fail dan media yang lebih lama daripada 45 hari ketika peranti dipautkan, tidak boleh disegerakkan.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Fail ini tidak dipindahkan dari telefon anda semasa peranti ini dipautkan. Fail dan media yang lebih lama daripada 45 hari ketika peranti dipautkan, tidak boleh disegerakkan.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Teks penuh dalam mesej ini tidak dipindahkan dari telefon anda semasa peranti ini dipautkan. Mesej teks panjang yang lebih lama daripada 45 hari ketika peranti dipautkan, tidak boleh disegerakkan.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Fail ini tidak dipindahkan dari telefon anda semasa peranti ini dipautkan. Media dan fail lebih lama daripada 45 hari pada masa pemautan peranti tidak boleh disegerakkan.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Teks + 45 hari sandaran media";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "45 hari terakhir media";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Teks + 45 hari media";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Lagi";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Cara Lain untuk Menderma";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Hak Cipta B&A Messenger\nBerlesen di bawah AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Nampaknya anda sedang cuba memautkan akaun BAXS. Ketik teruskan, kemudian ketik \"Imbas Kod QR\" dan imbas semula kod QR.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Pautkan Akaun Platform BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Akaun BAXS Dipautkan";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Akaun Platform BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Imbas kod QR yang dipaparkan pada platform pembayaran BA untuk memautkan akaun anda.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Imbas Kod QR";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Imbas Semula";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mudah Alih";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "E-mel";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Pautkan Akaun Platform BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Pautkan akaun anda ke \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Akaun platform BA berjaya dipautkan.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Kod QR Tidak Sah";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Kod QR ini bukan kod pautan platform BA yang sah.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Tidak Dapat Memautkan";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Kod QR ini tidak boleh digunakan untuk memautkan.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Pemautkan Gagal";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Platform BA menolak permintaan pemautkan.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Pemautkan Tamat Masa";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Platform BA tidak bertindak balas tepat pada masanya. Sila cuba lagi.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Ralat";
+

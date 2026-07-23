@@ -9899,3 +9899,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "您设置了消息%1$@后消失。";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "此设备链接时，此语音消息未从您的手机转移。设备链接时已存在超过 45 天的文件和媒体无法同步。";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "此设备链接时，此文件未从您的手机转移。设备链接时已存在超过 45 天的文件和媒体无法同步。";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "此设备链接时，此消息的完整文本未从您的手机转移。设备链接时已存在超过 45 天的长文本消息无法同步。";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "此设备链接时，此表情未从您的手机转移。设备链接时已存在超过 45 天的媒体和文件无法同步。";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "文本 + 45 天媒体备份";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "最近 45 天的媒体";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "文本 + 45 天的媒体";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "更多";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "其他捐赠方式";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "版权所有 B&A Messenger\n根据 AGPLv3 授权许可";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "您似乎正在尝试绑定 BAXS 账号，请点击“继续”，然后点击“扫描二维码”，并再次扫描二维码。";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "绑定BAXS账号";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "已绑定BAXS账号";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BAXS账号";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "扫描BAXS显示的二维码，完成账号绑定。";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "扫描二维码";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "重新扫描";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "手机号";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "邮箱";
+
+"LINK_BA_PLATFORM_USER_ID" = "用户ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "用户名";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "绑定BAXS账号";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "确认绑定到\"%@\"？";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BAXS账号绑定成功。";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "无效的二维码";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "此二维码不是有效的BAXS绑定码。";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "无法绑定";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "此二维码不可用于绑定。";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "绑定失败";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BAXS拒绝了绑定请求。";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "绑定超时";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BAXS未在规定时间内响应，请重试。";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "错误";
+

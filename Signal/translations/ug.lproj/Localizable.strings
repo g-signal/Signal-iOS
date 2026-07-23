@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "ئۇچۇرنىڭ ئۆچۈرۈلۈش ۋاقتىنى %1$@ قىلىپ تەڭشىدىڭىز.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "بۇ ئۈسكۈنە ئۇلانغان ۋاقىتتا بۇ ئاۋازلىق ئۇچۇر تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلانغان ۋاقىتتا ، 45 كۈندىن ئاشقان ھۆججەتلەر ۋە مېدىيانى ماسقەدەملىگىلى بولمايدۇ.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "بۇ ھۆججەت بۇ ئۈسكۈنە ئۇلانغان ۋاقىتتا تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلانغان ۋاقىتتا ، 45 كۈندىن ئاشقان ھۆججەتلەر ۋە مېدىيانى ماسقەدەملىگىلى بولمايدۇ.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "بۇئۈسكۈنە ئۇلانغان ۋاقىتتا ، بۇ ئۇچۇردىكى تولۇق تېكىست تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلانغان ۋاقىتتا ، 45 كۈندىن ئاشقان ئۇزۇن تېكىستلىك ئۇچۇرلارنى ماسقەدەملىگىلى بولمايدۇ.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "بۇ چاپلاق بۇ ئۈسكۈنە ئۇلانغان ۋاقىتتا تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلىنىۋاتقان ۋاقىتتا ، 45 كۈندىن ئاشقان ھۆججەتلەر ۋە مېدىيانى ماسقەدەملىگىلى بولمايدۇ.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "تېكىست + 45 كۈنلۈك مېدىيانى زاپاسلاش";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "ئەڭ ئاخىرقى 45 كۈنلۈك مېدىيا";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "تېكىست + 45 كۈنلۈك مېدىيا";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "تېخىمۇ كۆپ";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "باشقا يول بىلەن ئىئانە قىلىش";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "‫B&A Messenger نەشر ھوقۇقىغا ئىگە\nGPLv3 ئىجازىتىدە تارقىتىلدى";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "BAXS ھېساباتىنى ئۇلىماقچى بولغاندەك تۇرىسىز. داۋاملاشتۇرۇشنى چېكىپ ئاندىن «QR كودىنى سىكانېرلاش» نى چېكىڭ ھەمدە QR كودىنى قايتا سىكانېرلاڭ.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BA سۇپا ھېساباتىنى باغلاش";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "باغلانغان BAXS ھېسابات";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA سۇپا ھېسابات";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "ھېساباتىڭىزنى باغلاش ئۈچۈن BA تۆلەم سۇپىسىدا كۆرسىتىلگەن QR كودنى سايىلاڭ.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR كودنى سايىلاش";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "قايتا سايىلاش";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "موبىل";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "ئېلخەت";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA سۇپا ھېساباتىنى باغلاش";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "ھېساباتىڭىزنى \"%@\" غا باغلامسىز؟";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA سۇپا ھېسابات مۇۋەپپەقىيەتلىك باغلاندى.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "ئىناۋەتسىز QR كود";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "بۇ QR كود ئىناۋەتلىك BA سۇپا باغلاش كودى ئەمەس.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "باغلىيالمايدۇ";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "بۇ QR كودنى باغلاش ئۈچۈن ئىشلەتكىلى بولمايدۇ.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "باغلاش مەغلۇب بولدى";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA سۇپىسى باغلاش تەلىپىنى رەت قىلدى.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "باغلاش ۋاقتى ئۆتتى";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA سۇپىسى ۋاقتىدا جاۋاب بەرمىدى. قايتا سىناپ بېقىڭ.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "خاتالىق";
+

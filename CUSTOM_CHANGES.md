@@ -19,7 +19,7 @@ git diff <new-tag> HEAD -- \
   SignalServiceKit/Messages/Stickers/DefaultStickers.swift \
   SignalServiceKit/Usernames/Usernames+UsernameLink.swift \
   SignalServiceKit/Network/API/Requests/OWSRequestFactory.swift \
-  SignalServiceKit/Network/API/SignalServiceProfile.swift \
+  SignalServiceKit/Profiles/SignalServiceProfile.swift \
   SignalServiceKit/Resources/schema.sql \
   SignalServiceKit/Storage/Database/GRDBSchemaMigrator.swift \
   SignalServiceKit/Profiles/ProfileFetcherJob.swift \
@@ -38,6 +38,7 @@ git diff <new-tag> HEAD -- \
   Signal/Signal-Info.plist \
   Signal/Signal.entitlements \
   Signal/Signal-AppStore.entitlements \
+  Signal.xcodeproj/xcshareddata/xcschemes/Signal-Staging.xcscheme \
   Signal/Calls/CallKitCallManager.swift \
   SignalUI/Appearance/Theme+Icons.swift \
   SignalUI/Payments/MobileCoinAPI.swift \
@@ -215,6 +216,21 @@ Signal/src/ViewControllers/AppSettings/Linked Devices/ScanBaQRCodeViewController
 
 `TSConstantsStaging` 中所有 URL 指向 `imba-test.com` 域名。
 
+**`environment` 判断逻辑（已自定义）：**
+
+```swift
+#if SIGNAL_STAGING
+    return .staging
+#else
+#if DEBUG
+    if ProcessInfo.processInfo.environment["USE_STAGING"] == "1" { return .staging }
+#endif
+    return .production
+#endif
+```
+
+原始逻辑是始终返回 `.production`（加注释掉的 `.staging`）。自定义改动通过编译条件 `SIGNAL_STAGING` 自动区分正式包与 Staging 包，无需手动改代码。`SIGNAL_STAGING` 由 Signal-Staging scheme 的 Archive PreAction 通过 `Config/User-Release.xcconfig` 注入。
+
 ---
 
 ## 2. `SignalServiceKit/Network/OWSSignalServiceProtocol.swift`
@@ -336,7 +352,9 @@ static func linkBaPayGetLinkedBaUserInfoRequest() -> TSRequest
 
 ---
 
-## 14. `SignalServiceKit/Network/API/SignalServiceProfile.swift`
+## 14. `SignalServiceKit/Profiles/SignalServiceProfile.swift`
+
+> ⚠️ 上游 v7.94 将此文件从 `SignalServiceKit/Network/API/` 移至 `SignalServiceKit/Profiles/`，路径已更新。
 
 新增两个字段：
 
@@ -615,6 +633,62 @@ Support URL 链接指向 `about:blank`。
 **PluralAware.stringsdict**：所有复数形式字符串中的品牌词替换，规则同上。涉及词条：`Signal groups`、`Signal will ring`、`open Signal on that device`、`All Signal Connections` 等（各语言语法形式不同，如日语 `Signalグループ`、韩语 `Signal은` 等）。
 
 **InfoPlist.strings**：所有 NS*UsageDescription 中的 `Signal` 替换为 `B&A`（共 9 个权限字段，适用于所有 45 个语言）。
+
+**自定义新增 key**：每个语言的 `Localizable.strings` 末尾有一个 `/* ===== B&A Custom Strings ===== */` 块，包含以下 33 个 key（各语言有自己的翻译，部分语言若无对应翻译则跳过）：
+
+```
+/* Unavailable media sheets */
+AUDIO_UNAVAILABLE_SHEET_MESSAGE
+FILE_UNAVAILABLE_SHEET_MESSAGE
+OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE
+STICKER_UNAVAILABLE_SHEET_MESSAGE
+
+/* Backup plan */
+BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER
+CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP
+CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE
+
+/* Donations */
+DONATION_VIEW_MORE_SECTION_TITLE
+DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE
+
+/* Settings */
+SETTINGS_COPYRIGHT
+
+/* Link BAXS platform account */
+PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE
+LINK_BA_PLATFORM_ACCOUNT_TITLE
+LINK_BA_PLATFORM_LINKED_SECTION_TITLE
+LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE
+LINK_BA_PLATFORM_SCAN_FOOTER
+LINK_BA_PLATFORM_SCAN_QR_CODE
+LINK_BA_PLATFORM_SCAN_AGAIN
+LINK_BA_PLATFORM_OPERATOR_MOBILE
+LINK_BA_PLATFORM_OPERATOR_EMAIL
+LINK_BA_PLATFORM_USER_ID
+LINK_BA_PLATFORM_USER_NAME
+LINK_BA_PLATFORM_CONFIRM_TITLE
+LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT
+LINK_BA_PLATFORM_SUCCESS_TOAST
+LINK_BA_PLATFORM_INVALID_QR_TITLE
+LINK_BA_PLATFORM_INVALID_QR_MESSAGE
+LINK_BA_PLATFORM_CANNOT_LINK_TITLE
+LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON
+LINK_BA_PLATFORM_FAILED_TITLE
+LINK_BA_PLATFORM_FAILED_DEFAULT_REASON
+LINK_BA_PLATFORM_TIMEOUT_TITLE
+LINK_BA_PLATFORM_TIMEOUT_MESSAGE
+LINK_BA_PLATFORM_ERROR_TITLE
+```
+
+**合并上游时的处理：**
+1. 上游只会修改已有的 key，不会新增 `LINK_BA_*` 等自定义 key
+2. 合并后检查每个语言的 `Localizable.strings` 末尾是否还有 `/* ===== B&A Custom Strings ===== */` 块
+3. 若丢失，从上一个版本的分支（如 `bamain`）用以下命令恢复：
+   ```bash
+   git diff bamain -- Signal/translations/en.lproj/Localizable.strings | grep "^-\"" | grep -v "^---"
+   ```
+4. 恢复后确认所有 key 在代码里仍有引用（无引用的说明上游删了对应功能，不需要恢复）
 
 ---
 
@@ -1457,3 +1531,38 @@ end
    - `PBXGroup`（AppIcons group）中的 `AppIcon.icon` children 行
    - `PBXResourcesBuildPhase` 中的 `AppIcon.icon in Resources` 行
 3. 确认自定义图片 `Signal/AppIcon.xcassets/AppIcon.appiconset/icon_*.png` 未被替换（对比 git diff）
+
+## 161. 新增 "App Store Staging" build configuration
+
+**背景：** Signal-Staging scheme 打包时需要自动连接 staging 服务器，不能依赖运行时环境变量（Archive 时不生效）。通过独立的 build configuration + Swift 编译条件实现编译期切换。
+
+**改动一：`Signal.xcodeproj/project.pbxproj`**
+
+为以下 9 个 target 各新增一个 "App Store Staging" XCBuildConfiguration（完全继承自对应的 "App Store Release"，唯一区别是加了编译标志）：
+- Signal、SignalNSE、SignalUI、SignalShareExtension
+- SignalTests、SignalUITests、SignalServiceKit、SignalServiceKitTests
+- PBXProject（项目级）
+
+每个 staging configuration 的 `buildSettings` 里加了：
+```
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) SIGNAL_STAGING";
+```
+
+**改动二：`Signal.xcodeproj/xcshareddata/xcschemes/Signal-Staging.xcscheme`**
+
+`ArchiveAction` 的 `buildConfiguration` 从 `"App Store Release"` 改为 `"App Store Staging"`。
+
+**改动三：`SignalServiceKit/Environment/TSConstants.swift`**
+
+`environment` 判断逻辑改为编译期分支（见第 1 条）。
+
+**效果：**
+- Signal scheme 打包 → `App Store Release` → production
+- Signal-Staging scheme 打包 → `App Store Staging` → `#if SIGNAL_STAGING` 生效 → staging
+
+**合并上游时的处理：**
+1. `project.pbxproj`：检查是否仍有 "App Store Staging" configuration。若被覆盖，重新运行添加脚本（见 git log）或手动为每个 target 复制 "App Store Release" 并加 `SWIFT_ACTIVE_COMPILATION_CONDITIONS`
+2. 加完后执行 `pod install`，确保生成 `Pods-*.app store staging.xcconfig`
+3. `Signal-Staging.xcscheme`：确认 `ArchiveAction buildConfiguration="App Store Staging"`
+4. `TSConstants.swift`：确认 `#if SIGNAL_STAGING` 逻辑未被回退
+

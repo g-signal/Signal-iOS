@@ -9899,3 +9899,82 @@ Ga voordat je verder gaat na dat je op het nieuwe telefoonnummer sms-berichten o
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Je hebt de timer voor verdwijnende berichten op %1$@ ingesteld.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Dit spraakbericht is niet overgezet van je telefoon toen dit apparaat werd gekoppeld. Bestanden en media die ouder zijn dan 45 dagen op het moment dat het apparaat wordt gekoppeld, kunnen niet worden gesynchroniseerd.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Dit bestand is niet overgezet van je telefoon toen dit apparaat werd gekoppeld. Bestanden en media die ouder zijn dan 45 dagen op het moment dat het apparaat wordt gekoppeld, kunnen niet worden gesynchroniseerd.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Van dit bericht is niet de volledige tekst overgezet van je telefoon toen dit apparaat werd gekoppeld. Lange tekstberichten die ouder zijn dan 45 dagen op het moment dat een apparaat wordt gekoppeld, kunnen niet worden gesynchroniseerd.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Deze sticker is niet overgezet van je telefoon toen dit apparaat werd gekoppeld. Media en bestanden die ouder zijn dan 45 dagen op het moment dat het apparaat wordt gekoppeld, kunnen niet worden gesynchroniseerd.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Tekstberichten + 45 dagen media";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Media van de afgelopen 45 dagen";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Tekstberichten + 45 dagen media";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Meer";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Andere manieren om bij te dragen";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Auteursrecht B&A Messenger\nGelicentieerd onder de GPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Het lijkt erop dat je een BAXS-account probeert te koppelen. Tik op Doorgaan, vervolgens op 'QR-code scannen' en scan de QR-code opnieuw.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BA-platformaccount koppelen";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Gekoppeld BAXS-account";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA-platformaccount";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Scan de QR-code op het BA-betalingsplatform om uw account te koppelen.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR-code scannen";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Opnieuw scannen";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobiel";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "E-mail";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA-platformaccount koppelen";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Uw account koppelen aan \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA-platformaccount succesvol gekoppeld.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Ongeldige QR-code";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Deze QR-code is geen geldige BA-platformkoppelcode.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Kan niet koppelen";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Deze QR-code kan niet worden gebruikt voor koppeling.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Koppeling mislukt";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Het BA-platform heeft het koppelverzoek afgewezen.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Koppeling verlopen";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Het BA-platform reageerde niet op tijd. Probeer het opnieuw.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Fout";
+

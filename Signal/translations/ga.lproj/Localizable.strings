@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Shocraigh tú an tréimhse a mhaireann teachtaireachtaí gearrshaolacha go %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Níor aistríodh an glórphost seo ó do ghuthán nuair a nascadh an gléas seo. Comhaid agus meáin a bhí níos sine ná 45 lá ag an uair a nascadh an gléas, ní féidir iad a shioncronú.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Níor aistríodh an comhad seo ó do ghuthán nuair a nascadh do ghléas. Comhaid agus meáin atá níos sine ná 45 lá ag an uair a nasctar an gléas, ní féidir iad a shioncronú.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Níor aistríodh an téacs iomlán sa teachtaireacht seo ó do ghuthán nuair a nascadh do ghléas. Teachtaireachtaí téacs fada atá níos sine ná 45 lá ag an uair a nasctar an gléas, ní féidir iad a shioncronú.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Níor aistríodh an greamán seo ó do ghuthán nuair a nascadh an gléas seo. Meáin agus comhaid a bhí níos sine ná 45 lá ag an uair a nascadh an gléas, ní féidir iad a shioncronú.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Téacs + 45 lá de chúltaca meán";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Meáin le 45 lá anuas";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Téacs + meáin le 45 lá anuas";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Tuilleadh";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Bealaí Eile le hAirgead a Thabhairt";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Cóipcheart B&A Messenger\nCeadúnaithe faoi GPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Is cosúil go bhfuil tú ag iarraidh cuntas BAXS a nascadh. Tapáil \"Ar aghaidh\" agus ansin tapáil \"Scan Cód QR\" agus scan an cód QR athuair.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Nasc Cuntas Ardán BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Cuntas BAXS Nasctha";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Cuntas Ardán BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Scan an cód QR a thaispeántar ar ardán íocaíochta BA chun do chuntas a nascadh.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Scan Cód QR";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Scan Arís";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Fón Póca";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Seoladh r-phoist";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Nasc Cuntas Ardán BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Do chuntas a nascadh le \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Nascadh cuntas ardán BA go rathúil.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Cód QR Neamhbhailí";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Níl an cód QR seo ina chód nasctha bailí d'ardán BA.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Ní Féidir Nascadh";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Ní féidir an cód QR seo a úsáid chun nascadh.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Theip ar an Nascadh";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Dhiúltaigh ardán BA don iarratas nasctha.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Am Nasctha Caite";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Níor fhreagair ardán BA in am. Déan iarracht arís le do thoil.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Earráid";
+

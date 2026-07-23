@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Postavili ste da poruke nestaju za %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Ova glasovna poruka nije prenesena s vašeg telefona kad je ovaj uređaj povezan. Datoteke i medijske zapise starije od 45 dana u trenutku povezivanja uređaja nije moguće sinkronizirati.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Ova datoteka nije prenesena s vašeg telefona kad je ovaj uređaj povezan. Datoteke i medijske zapise starije od 45 dana u trenutku povezivanja uređaja nije moguće sinkronizirati.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Ova poruka nije prenesena u cijelosti s vašeg telefona kada je ovaj uređaj povezan. Duge poruke starije od 45 dana u trenutku povezivanja uređaja ne mogu se sinkronizirati.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Ova naljepnica nije prenesena s vašeg telefona kad je ovaj uređaj povezan. Datoteke i medijske zapise starije od 45 dana u trenutku povezivanja uređaja nije moguće sinkronizirati.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Poruke + medijski zapisi iz zadnjih 45 dana";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Medijski zapisi iz zadnjih 45 dana";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Poruke + medijski zapisi iz zadnjih 45 dana";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Više";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Drugi načini doniranja";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicenca AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Čini se da pokušavate povezati BAXS račun. Dodirnite „Nastavi“, zatim „Skeniraj QR kôd“ i ponovno skenirajte QR kôd.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Poveži račun BAXSe";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Povezani BAXS račun";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Račun BAXSe";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Skenirajte QR kod prikazan na BAXSi za plaćanje kako biste povezali svoj račun.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Skeniraj QR kod";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Skeniraj ponovo";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobitel";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "E-pošta";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Poveži račun BAXSe";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Povezati vaš račun s \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Račun BAXSe uspješno je povezan.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Nevažeći QR kod";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Ovaj QR kod nije valjani kod za povezivanje BAXSe.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Nije moguće povezati";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Ovaj QR kod ne može se koristiti za povezivanje.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Povezivanje nije uspjelo";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BAXSa odbila je zahtjev za povezivanje.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Isteklo vrijeme povezivanja";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BAXSa nije odgovorila na vrijeme. Pokušajte ponovo.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Pogreška";
+

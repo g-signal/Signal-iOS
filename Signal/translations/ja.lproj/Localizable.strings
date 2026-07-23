@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "消えるメッセージのタイマーを%1$@に設定しました。";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたときに、このボイスメッセージはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過したファイルとメディアは同期できません。";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたとき、このファイルはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過したファイルとメディアは同期できません。";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたとき、このメッセージの完全なテキストはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過した長いテキストメッセージは同期できません。";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたとき、このファイルはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過したメディアやファイルは同期できません。";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "テキストと45日間のメディアのバックアップ";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "過去45日間のメディア";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "テキスト+45日間のメディア";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "その他";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "その他の寄付の方法";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicensed under the GPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "BAXSアカウントをリンクするには、［続ける］→［QRコードをスキャン］をタップし、もう一度QRコードをスキャンしてください。";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BAプラットフォームアカウントを連携";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "連携済みBAXSアカウント";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BAプラットフォームアカウント";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "BA決済プラットフォームに表示されたQRコードをスキャンして、アカウントを連携してください。";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "QRコードをスキャン";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "再スキャン";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "携帯電話";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "メールアドレス";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BAプラットフォームアカウントを連携";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "\"%@\"にアカウントを連携しますか？";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BAプラットフォームアカウントを連携しました。";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "無効なQRコード";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "このQRコードは有効なBAプラットフォーム連携コードではありません。";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "連携できません";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "このQRコードは連携に使用できません。";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "連携に失敗しました";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BAプラットフォームが連携リクエストを拒否しました。";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "連携がタイムアウトしました";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BAプラットフォームが時間内に応答しませんでした。もう一度お試しください。";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "エラー";
+

@@ -9899,3 +9899,82 @@ Varmista ensin, että uuteen numeroon voi vastaanottaa tekstiviestejä tai puhel
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Asetit viestien katoamisajaksi %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Puheviestiä ei siirretty puhelimestasi, kun laite yhdistettiin. Yhdistämishetkellä yli 45 päivää vanhempia tiedostoja ja mediaa ei voida synkronoida.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Tätä tiedostoa ei siirretty puhelimestasi, kun laite yhdistettiin. Yhdistämishetkellä yli 45 päivää vanhempia tiedostoja ja mediaa ei voida synkronoida.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Tämän viestin tekstiä ei siirretty puhelimestasi kokonaisuudessaan, kun laite yhdistettiin. Yhdistämishetkellä yli 45 päivää vanhempia pitkiä tekstiviestejä ei voida synkronoida.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Tarraa ei siirretty puhelimestasi, kun laite yhdistettiin. Yhdistämishetkellä yli 45 päivää vanhempia mediaa ja tiedostoja ei voida synkronoida.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Teksti + mediasisältö 45 päivän ajalta";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Mediasisältö viimeisen 45 päivän ajalta";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Teksti ja mediasisältö viimeisen 45 päivän ajalta";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Lisää";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Muut lahjoitustavat";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLisensoitu AGPLv3-lisenssillä";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Vaikuttaa siltä, että yrität yhdistää BAXS-tilin. Napauta Jatka ja napauta sitten Skannaa QR-koodi ja skannaa QR-koodi uudelleen.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Yhdistä BA-alustatili";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Yhdistetty BAXS-tili";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA-alustatili";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Skannaa BA-maksupalvelun QR-koodi yhdistääksesi tilisi.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Skannaa QR-koodi";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Skannaa uudelleen";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Matkapuhelin";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Sähköposti";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Yhdistä BA-alustatili";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Yhdistetäänkö tilisi kohteeseen \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA-alustatili yhdistetty onnistuneesti.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Virheellinen QR-koodi";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Tämä QR-koodi ei ole kelvollinen BA-alustan yhdistämiskoodi.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Yhdistäminen ei onnistu";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Tätä QR-koodia ei voi käyttää yhdistämiseen.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Yhdistäminen epäonnistui";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA-alusta hylkäsi yhdistämispyynnön.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Yhdistäminen aikakatkaistiin";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA-alusta ei vastannut ajoissa. Yritä uudelleen.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Virhe";
+

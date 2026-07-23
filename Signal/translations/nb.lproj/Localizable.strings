@@ -9899,3 +9899,82 @@ Du kan aktivere Boost-merket på nytt i 30 dager ved å gi et engangsbeløp til 
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Du satte utløpstiden for meldinger til %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Denne talemeldingen ble ikke overført fra telefonen din da du koblet til denne enheten. Det er ikke mulig å synkronisere filer som er mer enn 45 dager gamle, når enheten kobles til.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Denne filen ble ikke overført fra telefonen din da du koblet til denne enheten. Det er ikke mulig å overføre filer som er mer enn 45 dager gamle, når enheten kobles til.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Resten av denne meldingen ble ikke overført fra telefonen din da du koblet til denne enheten. Det er ikke mulig å overføre lange meldinger som er mer enn 45 dager gamle, når enheten kobles til.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Dette klistremerket ble ikke overført fra telefonen din da du koblet til denne enheten. Det er ikke mulig å synkronisere mediefiler og andre filer som er mer enn 45 dager gamle, når enheten kobles til.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Sikkerhetskopiering av tekst og mediefiler fra de siste 45 dagene";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Mediefiler sendt de siste 45 dagene";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Tekst + mediefiler sendt de siste 45 dagene";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Mer";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Andre måter å bidra på";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Opphavsrett: B&A Messenger\nLisensiert under AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Det ser ut til at du prøver å koble til en BAXS-konto. Trykk på «Fortsett» og så «Skann QR-kode», og skann deretter QR-koden på nytt.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Koble til BA-plattformkonto";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Tilkoblet BAXS-konto";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA-plattformkonto";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Skann QR-koden som vises på BA-betalingsplattformen for å koble til kontoen din.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Skann QR-kode";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Skann igjen";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "E-post";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Koble til BA-plattformkonto";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Koble kontoen din til \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA-plattformkonto ble koblet til.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Ugyldig QR-kode";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Denne QR-koden er ikke en gyldig BA-plattformtilkoblingskode.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Kan ikke koble til";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Denne QR-koden kan ikke brukes til tilkobling.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Tilkobling mislyktes";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA-plattformen avviste tilkoblingsforespørselen.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Tilkobling tidsavbrutt";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA-plattformen svarte ikke i tide. Vennligst prøv igjen.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Feil";
+

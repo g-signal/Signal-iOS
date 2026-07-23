@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Ви встановили таймер тимчасових повідомлень: %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Коли ви зв'язали цей пристрій, голосове повідомлення не було перенесено з вашого телефону. Файли й медіафайли, надіслані чи отримані понад 45 днів тому, не буде синхронізовано після зв'язування нового пристрою.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Коли ви зв'язали цей пристрій, файл не було перенесено з вашого телефону. Файли й медіафайли, надіслані чи отримані понад 45 днів тому, не буде синхронізовано після зв'язування нового пристрою.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Коли ви зв'язали цей пристрій, повний текст повідомлення не було перенесено з вашого телефону. Довгі текстові повідомлення, надіслані чи отримані понад 45 днів тому, не буде синхронізовано після зв'язування нового пристрою.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Коли ви зв'язали цей пристрій, стікер не було перенесено з вашого телефону. Файли й медіафайли, надіслані чи отримані понад 45 днів тому, не буде синхронізовано після зв'язування нового пристрою.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Текст + медіафайли за минулі 45 днів";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Медіафайли за минулі 45 днів";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Текст + медіафайли за минулі 45 днів";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Докладніше";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Інші способи підтримки";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Авторські права належать B&A Messenger\nЛіцензія: AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Схоже, ви намагаєтеся зв’язати обліковий запис BAXS. Натисніть «Продовжити», потім натисніть «Сканувати QR-код» і зіскануйте QR-код знову.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Прив'язати акаунт платформи BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Прив'язаний акаунт BAXS";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Акаунт платформи BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Відскануйте QR-код, відображений на платіжній платформі BA, щоб прив'язати свій акаунт.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Сканувати QR-код";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Сканувати знову";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Мобільний";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Електронна пошта";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Прив'язати акаунт платформи BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Прив'язати ваш акаунт до \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Акаунт платформи BA успішно прив'язано.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Недійсний QR-код";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Цей QR-код не є дійсним кодом прив'язки платформи BA.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Неможливо прив'язати";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Цей QR-код не можна використовувати для прив'язки.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Прив'язка не вдалася";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Платформа BA відхилила запит на прив'язку.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Час прив'язки вийшов";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Платформа BA не відповіла вчасно. Будь ласка, спробуйте знову.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Помилка";
+

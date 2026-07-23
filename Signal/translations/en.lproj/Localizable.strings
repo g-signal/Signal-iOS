@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "You set disappearing message time to %@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "This voice message was not transferred from your phone when this device was linked. Files and media older than 45 days at the time of device linking can not be synced.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "This file was not transferred from your phone when this device was linked. Files and media older than 45 days at the time of device linking can not be synced.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "The complete text in this message was not transferred from your phone when this device was linked. Long text messages older than 45 days at the time of device linking can not be synced.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "This sticker was not transferred from your phone when this device was linked. Media and files older than 45 days at the time of device linking can not be synced.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Text + 45 days of media backup";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Last 45 days of media";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Text + 45 days of media";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "More";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Other Ways to Donate";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicensed under the AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "It looks like you're trying to link a BAXS account. Tap continue and then tap \"Scan QR Code\" and scan the QR code again.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Link BAXS Account";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Linked BAXS Account";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BAXS Account";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Scan the QR code displayed on BAXS to link your account.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Scan QR Code";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Scan Again";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobile";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Email";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Link BAXS Account";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Link your account to \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BAXS account linked successfully.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Invalid QR Code";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "This QR code is not a valid BAXS linking code.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Cannot Link";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "This QR code cannot be used for linking.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Linking Failed";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "The BAXS rejected the linking request.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Linking Timed Out";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "The BAXS did not respond in time. Please try again.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Error";
+

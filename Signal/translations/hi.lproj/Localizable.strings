@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "आपने मैसेज गायब होने का समय %1$@ पर सेट कर दिया है।";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "जब यह डिवाइस लिंक था, तब यह वॉइस संदेश आपके फ़ोन से ट्रांसफ़र नहीं हुआ था। डिवाइस लिंक करते समय, 45 दिनों से पुरानी फ़ाइलों और मीडिया को सिंक नहीं किया जा सकता।";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "जब यह डिवाइस लिंक था, तब यह फ़ाइल आपके फ़ोन से ट्रांसफ़र नहीं हुई थी। डिवाइस लिंक करते समय, 45 दिनों से पुरानी फ़ाइलों और मीडिया को सिंक नहीं किए जा सकता।";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "जब यह डिवाइस लिंक था, तब इस संदेश का पूरा टेक्स्ट आपके फ़ोन से ट्रांसफ़र नहीं हुआ था। डिवाइस लिंक करते समय, 45 दिनों से पुराने लंबे टेक्स्ट मैसेज सिंक नहीं किए जा सकते।";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "जब यह डिवाइस लिंक था, तब यह स्टिकर आपके फ़ोन से ट्रांसफ़र नहीं हुआ था। डिवाइस लिंक करते समय, 45 दिनों से पुराने मीडिया और फ़ाइलों को सिंक नहीं किया जा सकता।";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "टेक्स्ट + 45 दिनों के मीडिया का बैकअप";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "पिछले 45 दिनों का मीडिया";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "टेक्स्ट + 45 दिनों का मीडिया";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "अधिक";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "दान करने के अन्य तरीके";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "कॉपीराइट B&A मेसेंजर\nAGPLv3 के तहत लायसेंसीकृत";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "ऐसा लगता है कि आप BAXS अकाउंट को लिंक करने की कोशिश कर रहे हैं। 'जारी रखें' पर टैप करें और फिर \"QR कोड स्कैन करें\" पर टैप करें और QR कोड को फिर से स्कैन करें।";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BA प्लेटफ़ॉर्म खाता लिंक करें";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "लिंक किया गया BAXS खाता";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA प्लेटफ़ॉर्म खाता";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "अपना खाता लिंक करने के लिए BA भुगतान प्लेटफ़ॉर्म पर दिखाया गया QR कोड स्कैन करें।";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR कोड स्कैन करें";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "फिर से स्कैन करें";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "मोबाइल";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "ईमेल";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA प्लेटफ़ॉर्म खाता लिंक करें";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "\"%@\" से अपना खाता लिंक करें?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA प्लेटफ़ॉर्म खाता सफलतापूर्वक लिंक हो गया।";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "अमान्य QR कोड";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "यह QR कोड BA प्लेटफ़ॉर्म का वैध लिंकिंग कोड नहीं है।";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "लिंक नहीं किया जा सकता";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "इस QR कोड का उपयोग लिंकिंग के लिए नहीं किया जा सकता।";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "लिंकिंग विफल";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA प्लेटफ़ॉर्म ने लिंकिंग अनुरोध अस्वीकार कर दिया।";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "लिंकिंग का समय समाप्त";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA प्लेटफ़ॉर्म ने समय पर प्रतिक्रिया नहीं दी। कृपया पुनः प्रयास करें।";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "त्रुटि";
+

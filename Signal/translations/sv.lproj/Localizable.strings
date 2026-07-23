@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Du satte tid innan meddelanden försvinner till %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Det här röstmeddelandet överfördes inte från din telefon när den här enheten länkades. Filer och media som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Den här filen överfördes inte från din telefon när den här enheten länkades. Filer och media som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Hela texten i det här meddelandet överfördes inte från din telefon när den här enheten länkades. Långa textmeddelanden som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Det här klistermärket överfördes inte från din telefon när den här enheten länkades. Media och filer som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Säkerhetskopiering av textmeddelanden + senaste 45 dagars media";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Senaste 45 dagarnas media";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Textmeddelanden + senaste 45 dagarnas media";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Mer";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Andra sätt att donera";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicenserad under AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Det verkar som om du försöker länka ett BAXS-konto. Tryck på fortsätt och tryck sedan på Skanna QR-kod. Skanna sedan QR-koden igen.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Länka BA-plattformskonto";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Länkat BAXS-konto";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA-plattformskonto";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Skanna QR-koden som visas på BA-betalningsplattformen för att länka ditt konto.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Skanna QR-kod";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Skanna igen";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "E-post";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Länka BA-plattformskonto";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Länka ditt konto till \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA-plattformskonto länkat.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Ogiltig QR-kod";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Den här QR-koden är inte en giltig BA-plattformslänkningskod.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Kan inte länka";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Den här QR-koden kan inte användas för länkning.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Länkning misslyckades";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA-plattformen avvisade länkningsförfrågan.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Länkning tog för lång tid";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA-plattformen svarade inte i tid. Försök igen.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Fel";
+

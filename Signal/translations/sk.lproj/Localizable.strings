@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Nastavili ste časovač miznúcich správ na %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Táto hlasová správa nebola po prepojení zariadenia prenesená z vášho telefónu. Súbory a médiá, ktoré sú v čase prepojenia zariadenia staršie ako 45 dní, nie je možné synchronizovať.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Tento súbor nebol po prepojení zariadenia prenesený z vášho telefónu. Súbory a médiá, ktoré sú v čase prepojenia zariadenia staršie ako 45 dní, nie je možné synchronizovať.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Po prepojení zariadenia nebol z vášho telefónu prenesený celý text tejto správy. Dlhé textové správy, ktoré sú v čase prepojenia zariadenia staršie ako 45 dní, nie je možné synchronizovať.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Táto nálepka nebola po prepojení zariadenia prenesená z vášho telefónu. Médiá a súbory, ktoré sú v čase prepojenia zariadenia staršie ako 45 dní, nie je možné synchronizovať.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Zálohovanie všetkých správ + médiá z posledných 45 dní";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Posledných 45 dní médií";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Správy + 45 dní médií";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Viac";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Ďalšie spôsoby prispenia";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Autorské práva B&A Messenger\nLicencované pod GPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Vyzerá to, že sa snažíte prepojiť účet BAXS. Ťuknite na Pokračovať, potom na „Skenovať QR kód“ a znova naskenujte QR kód.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Prepojiť účet platformy BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Prepojený účet BAXS";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Účet platformy BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "Naskenujte QR kód zobrazený na platobnej platforme BA a prepojte svoj účet.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "Naskenovať QR kód";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "Skenovať znova";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Email";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Prepojiť účet platformy BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Prepojiť váš účet s \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Účet platformy BA bol úspešne prepojený.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Neplatný QR kód";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Tento QR kód nie je platným prepojovacím kódom platformy BA.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Nedá sa prepojiť";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Tento QR kód sa nedá použiť na prepojenie.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "Prepojenie zlyhalo";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Platforma BA odmietla žiadosť o prepojenie.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Prepojenie vypršalo";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Platforma BA neodpovedala včas. Skúste to prosím znova.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "Chyba";
+

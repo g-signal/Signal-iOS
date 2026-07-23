@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "ضبطتَ وقت إختفاء الرسائل على %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "هذه الرسالة الصوتية لم يتم تحويلُها من هاتفك عندما كان هذا الجهاز مُرتبِطًا. لا يمكن مُزامنة الملفات والوسائط التي تعود إلى أكثر من 45 يوم منذ الوقت الذي تمَّ فيه ربط الجهاز.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "لم يتم نقل هذا الملف من هاتفك عندما تمَّ ربط هذا الجهاز. لا يمكن مزامنة الملفات والوسائط التي مضى عليها أكثر من 45 يومًا من الوقت الذي تمَّ فيه ربط الجهاز.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "لم يتم نقل النص الكامل في هذه الرسالة من هاتفك عند ربط هذا الجهاز. لا يُمكن مزامنة الرسائل النصية الطويلة التي مضى عليها أكثر من 45 يومًا من الوقت الذي تمَّ فيه ربط الجهاز.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "هذا المُلصَق لم يتم تحويله من هاتفك عندما كان هذا الجهاز مُرتبِطًا. لا يمكن مُزامنة الملفات والوسائط التي تعود إلى أكثر من 45 يوم منذ الوقت الذي تمَّ فيه ربط الجهاز.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "النسخ الاحتياطي للنص و45 يوم من الوسائط";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "الأيام 45 الأخيرة من الوسائط";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "الرسائل النصية + 45 يومًا من الوسائط";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "المزيد";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "طُرُق أُخرَى لِلتَبرُّع";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "حقوق النشر محفوظة لتطبيق B&A للدردشة\nمُرخَّص بموجب AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "يبدو أنك تحاول ربط حساب BAXS. انقر على \"متابعة\" ثم انقر على \"مسح كود QR\" وامسح كود الـ QR من جديد.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "ربط حساب منصة BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "حساب BAXS المرتبط";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "حساب منصة BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "امسح رمز QR المعروض على منصة الدفع BA لربط حسابك.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "مسح رمز QR";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "مسح مجدداً";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "الجوال";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "البريد الإلكتروني";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "ربط حساب منصة BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "ربط حسابك بـ \"%@\"؟";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "تم ربط حساب منصة BA بنجاح.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "رمز QR غير صالح";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "رمز QR هذا ليس رمز ربط صالحاً لمنصة BA.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "تعذّر الربط";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "لا يمكن استخدام رمز QR هذا للربط.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "فشل الربط";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "رفضت منصة BA طلب الربط.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "انتهت مهلة الربط";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "لم تستجب منصة BA في الوقت المحدد. يرجى المحاولة مجدداً.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "خطأ";
+

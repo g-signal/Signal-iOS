@@ -9897,3 +9897,82 @@
 
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "הִגְדַּרְתָּ את זמן ההודעות הנעלמות אל %1$@.";
+
+/* ===== B&A Custom Strings ===== */
+
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "הודעה קולית זו לא הועברה מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שיותר ישנים מ–45 ימים בזמן קישור המכשיר.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "הקובץ הזה לא הועבר מהטלפון שלך כשהמכשיר הזה היה מקושר. לא ניתן לסנכרן קבצים ומדיה שיותר ישנים מ–45 ימים בזמן קישור המכשיר.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "הטקסט המלא בהודעה זו לא הועבר מהטלפון שלך כשהמכשיר הזה היה מקושר. לא ניתן לסנכרן הודעות טקסט ארוכות שיותר ישנות מ–45 ימים בזמן קישור המכשיר.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "סטיקר זה לא הועבר מהטלפון שלך כשהמכשיר הזה קושר. לא ניתן לסנכרן קבצים ומדיה שיותר ישנים מ–45 ימים בזמן קישור המכשיר.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "גיבוי טקסט + 45 יום של מדיה";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "45 ימים אחרונים של מדיה";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "טקסט + 45 ימים אחרונים של מדיה";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "עוד";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "דרכים אחרות לתרום";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "זכויות יוצרים B&A Messenger\nברישיון תחת AGPLv3";
+
+/* Link BAXS platform account */
+
+"PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "נראה שאת/ה מנסה לקשר חשבון BAXS. יש ללחוץ על המשך ואז ללחוץ על סריקת קוד QR ולסרוק שנית את קוד ה–QR.";
+
+"LINK_BA_PLATFORM_ACCOUNT_TITLE" = "קישור חשבון פלטפורמת BA";
+
+"LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "חשבון BAXS מקושר";
+
+"LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "חשבון פלטפורמת BA";
+
+"LINK_BA_PLATFORM_SCAN_FOOTER" = "סרוק את קוד ה-QR המוצג בפלטפורמת התשלומים BA כדי לקשר את חשבונך.";
+
+"LINK_BA_PLATFORM_SCAN_QR_CODE" = "סריקת קוד QR";
+
+"LINK_BA_PLATFORM_SCAN_AGAIN" = "סרוק שוב";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "נייד";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "דוא״ל";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "קישור חשבון פלטפורמת BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "לקשר את חשבונך אל \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "חשבון פלטפורמת BA קושר בהצלחה.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "קוד QR לא תקין";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "קוד QR זה אינו קוד קישור תקין לפלטפורמת BA.";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "לא ניתן לקשר";
+
+"LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "לא ניתן להשתמש בקוד QR זה לקישור.";
+
+"LINK_BA_PLATFORM_FAILED_TITLE" = "הקישור נכשל";
+
+"LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "פלטפורמת BA דחתה את בקשת הקישור.";
+
+"LINK_BA_PLATFORM_TIMEOUT_TITLE" = "פג תוקף הקישור";
+
+"LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "פלטפורמת BA לא הגיבה בזמן. אנא נסה שוב.";
+
+"LINK_BA_PLATFORM_ERROR_TITLE" = "שגיאה";
+
