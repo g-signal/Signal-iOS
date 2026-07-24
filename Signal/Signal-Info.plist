@@ -10,7 +10,16 @@
 		<string>LazyDatabaseMigratorTask</string>
 	</array>
 	<key>BuildDetails</key>
-	<dict/>
+	<dict>
+		<key>DateTime</key>
+		<string>Thu Jul 23 12:28:03 UTC 2026</string>
+		<key>SignalCommit</key>
+		<string>20074da0411d7acebb1ceafdde64c63ab56849cf Add App Store Staging config, restore B&amp;A custom translations</string>
+		<key>Timestamp</key>
+		<integer>1784809683</integer>
+		<key>XCodeVersion</key>
+		<string>2600.2660</string>
+	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

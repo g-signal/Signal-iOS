@@ -539,7 +539,7 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
 
         let newPollViewController = NewPollViewController()
         newPollViewController.sendDelegate = self
-        present(newPollViewController, animated: true)
+        present(OWSNavigationController(rootViewController: newPollViewController), animated: true)
     }
 
     public func didSelectRecentPhoto(asset: PHAsset, attachment: PreviewableAttachment, attachmentLimits: OutgoingAttachmentLimits) {
