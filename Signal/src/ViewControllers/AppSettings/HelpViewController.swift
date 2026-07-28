@@ -71,9 +71,12 @@ final class HelpViewController: OWSTableViewController2 {
 //            "SETTINGS_COPYRIGHT",
 //            comment: "Footer for the 'about' help section"
 //        )
+        let versionValue = TSConstants.isUsingProductionService
+            ? AppVersionImpl.shared.prettyAppVersion
+            : AppVersionImpl.shared.prettyAppVersion + " - staging"
         aboutSection.add(.copyableItem(
             label: OWSLocalizedString("SETTINGS_VERSION", comment: ""),
-            value: AppVersionImpl.shared.prettyAppVersion
+            value: versionValue
         ))
         aboutSection.add(.disclosureItem(
             withText: OWSLocalizedString("SETTINGS_LEGAL_TERMS_CELL", comment: ""),
