@@ -76,7 +76,7 @@ public struct SendableAttachment {
 
     /// A default filename to use if one isn't provided by the user.
     var defaultFilename: String {
-        let kDefaultAttachmentName = "signal"
+        let kDefaultAttachmentName = "ba"
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd-HHmmss"
