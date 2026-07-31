@@ -12,11 +12,11 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Thu Jul 23 12:28:03 UTC 2026</string>
+		<string>Wed Jul 29 11:21:17 UTC 2026</string>
 		<key>SignalCommit</key>
-		<string>20074da0411d7acebb1ceafdde64c63ab56849cf Add App Store Staging config, restore B&amp;A custom translations</string>
+		<string>ea31f867b9811a6c504613a063085dc0ca9b91eb Change default attachment filename prefix from signal to ba</string>
 		<key>Timestamp</key>
-		<integer>1784809683</integer>
+		<integer>1785324077</integer>
 		<key>XCodeVersion</key>
 		<string>2600.2660</string>
 	</dict>
