@@ -102,7 +102,7 @@ extension InstalledSticker {
             let contentType: String? = record.contentType
             let emojiString: String? = record.emojiString
             let infoSerialized: Data = record.info
-            let info: StickerInfo = try SDSDeserialization.unarchive(infoSerialized, name: "info")
+            let info: StickerInfo = try SDSDeserialization.unarchivedObject(ofClass: StickerInfo.self, from: infoSerialized)
 
             return InstalledSticker(grdbId: recordId,
                                     uniqueId: uniqueId,
@@ -299,17 +299,14 @@ public extension InstalledSticker {
 @objc
 public class InstalledStickerCursor: NSObject, SDSCursor {
     private let transaction: DBReadTransaction
-    private let cursor: RecordCursor<InstalledStickerRecord>?
+    private let cursor: RecordCursor<InstalledStickerRecord>
 
-    init(transaction: DBReadTransaction, cursor: RecordCursor<InstalledStickerRecord>?) {
+    init(transaction: DBReadTransaction, cursor: RecordCursor<InstalledStickerRecord>) {
         self.transaction = transaction
         self.cursor = cursor
     }
 
     public func next() throws -> InstalledSticker? {
-        guard let cursor = cursor else {
-            return nil
-        }
         guard let record = try cursor.next() else {
             return nil
         }
@@ -337,16 +334,9 @@ public extension InstalledSticker {
     @nonobjc
     class func grdbFetchCursor(transaction: DBReadTransaction) -> InstalledStickerCursor {
         let database = transaction.database
-        do {
+        return failIfThrows {
             let cursor = try InstalledStickerRecord.fetchCursor(database)
             return InstalledStickerCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \(error)")
-            return InstalledStickerCursor(transaction: transaction, cursor: nil)
         }
     }
 
@@ -417,44 +407,6 @@ public extension InstalledSticker {
                             })
     }
 
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        anyEnumerateUniqueIds(transaction: transaction, batched: false, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batched: Bool = false,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        let batchSize = batched ? Batching.kDefaultBatchSize : 0
-        anyEnumerateUniqueIds(transaction: transaction, batchSize: batchSize, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    //
-    // If batchSize > 0, the enumeration is performed in autoreleased batches.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batchSize: UInt,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        grdbEnumerateUniqueIds(transaction: transaction,
-                                sql: """
-                SELECT \(installedStickerColumn: .uniqueId)
-                FROM \(InstalledStickerRecord.databaseTableName)
-            """,
-            batchSize: batchSize,
-            block: block)
-    }
-
     // Does not order the results.
     class func anyFetchAll(transaction: DBReadTransaction) -> [InstalledSticker] {
         var result = [InstalledSticker]()
@@ -464,36 +416,8 @@ public extension InstalledSticker {
         return result
     }
 
-    // Does not order the results.
-    class func anyAllUniqueIds(transaction: DBReadTransaction) -> [String] {
-        var result = [String]()
-        anyEnumerateUniqueIds(transaction: transaction) { (uniqueId, _) in
-            result.append(uniqueId)
-        }
-        return result
-    }
-
     class func anyCount(transaction: DBReadTransaction) -> UInt {
         return InstalledStickerRecord.ows_fetchCount(transaction.database)
-    }
-
-    class func anyExists(
-        uniqueId: String,
-        transaction: DBReadTransaction
-    ) -> Bool {
-        assert(!uniqueId.isEmpty)
-
-        let sql = "SELECT EXISTS ( SELECT 1 FROM \(InstalledStickerRecord.databaseTableName) WHERE \(installedStickerColumn: .uniqueId) = ? )"
-        let arguments: StatementArguments = [uniqueId]
-        do {
-            return try Bool.fetchOne(transaction.database, sql: sql, arguments: arguments) ?? false
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFail("Missing instance.")
-        }
     }
 }
 
@@ -503,17 +427,10 @@ public extension InstalledSticker {
     class func grdbFetchCursor(sql: String,
                                arguments: StatementArguments = StatementArguments(),
                                transaction: DBReadTransaction) -> InstalledStickerCursor {
-        do {
+        return failIfThrows {
             let sqlRequest = SQLRequest<Void>(sql: sql, arguments: arguments, cached: true)
             let cursor = try InstalledStickerRecord.fetchCursor(transaction.database, sqlRequest)
             return InstalledStickerCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \(error)")
-            return InstalledStickerCursor(transaction: transaction, cursor: nil)
         }
     }
 

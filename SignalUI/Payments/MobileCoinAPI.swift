@@ -19,8 +19,10 @@ public class MobileCoinAPI {
         let result = MobileCoin.Mnemonic.mnemonic(fromEntropy: paymentsEntropy)
         switch result {
         case .success(let mnemonic):
-            return try PaymentsPassphrase.parse(passphrase: mnemonic,
-                                                validateWords: false)
+            return try PaymentsPassphrase.parse(
+                passphrase: mnemonic,
+                validateWords: false,
+            )
         case .failure(let error):
             owsFailDebug("Error: \(error)")
             let error = Self.convertMCError(error: error)
@@ -62,9 +64,11 @@ public class MobileCoinAPI {
 
     private let client: MobileCoinClient
 
-    private init(paymentsEntropy: Data,
-                 localAccount: MobileCoinAccount,
-                 client: MobileCoinClient) throws {
+    private init(
+        paymentsEntropy: Data,
+        localAccount: MobileCoinAccount,
+        client: MobileCoinClient,
+    ) throws {
 
         guard paymentsEntropy.count == PaymentsConstants.paymentsEntropyLength else {
             throw PaymentsError.invalidEntropy
@@ -80,8 +84,10 @@ public class MobileCoinAPI {
     // MARK: -
 
     public static func configureSDKLogging() {
-        if DebugFlags.internalLogging,
-           !CurrentAppContext().isRunningTests {
+        if
+            DebugFlags.internalLogging,
+            !CurrentAppContext().isRunningTests
+        {
             MobileCoinLogging.logSensitiveData = true
         }
     }
@@ -110,10 +116,7 @@ public class MobileCoinAPI {
         try Self.buildAccount(forPaymentsEntropy: paymentsEntropy)
     }
 
-    private static func parseAuthorizationResponse(responseObject: Any?) throws -> OWSAuthorization {
-        guard let params = ParamParser(responseObject: responseObject) else {
-            throw OWSAssertionError("Invalid responseObject.")
-        }
+    private static func parseAuthorizationResponse(params: ParamParser) throws -> OWSAuthorization {
         let username: String = try params.required(key: "username")
         let password: String = try params.required(key: "password")
         return OWSAuthorization(username: username, password: password)
@@ -125,10 +128,10 @@ public class MobileCoinAPI {
         }
         let request = OWSRequestFactory.paymentsAuthenticationCredentialRequest()
         let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(request)
-        guard let json = response.responseBodyJson else {
+        guard let params = response.responseBodyParamParser else {
             throw OWSAssertionError("Missing or invalid JSON")
         }
-        let signalAuthorization = try Self.parseAuthorizationResponse(responseObject: json)
+        let signalAuthorization = try Self.parseAuthorizationResponse(params: params)
         let localAccount = try Self.buildAccount(forPaymentsEntropy: paymentsEntropy)
         let client = try localAccount.buildClient(signalAuthorization: signalAuthorization)
         return try MobileCoinAPI(paymentsEntropy: paymentsEntropy, localAccount: localAccount, client: client)
@@ -215,9 +218,11 @@ public class MobileCoinAPI {
         let feeAmount: TSPaymentAmount
     }
 
-    func prepareTransaction(paymentAmount: TSPaymentAmount,
-                            recipientPublicAddress: MobileCoin.PublicAddress,
-                            shouldUpdateBalance: Bool) -> Promise<PreparedTransaction> {
+    func prepareTransaction(
+        paymentAmount: TSPaymentAmount,
+        recipientPublicAddress: MobileCoin.PublicAddress,
+        shouldUpdateBalance: Bool,
+    ) -> Promise<PreparedTransaction> {
         Logger.verbose("")
 
         Logger.verbose("paymentAmount: \(paymentAmount.picoMob)")
@@ -249,20 +254,28 @@ public class MobileCoinAPI {
 
             let (promise, future) = Promise<PreparedTransaction>.pending()
             // We don't need to support amountPicoMobHigh.
-            client.prepareTransaction(to: recipientPublicAddress,
-                                      amount: Amount(paymentAmount.picoMob, in: .MOB),
-                                      fee: estimatedFeeAmount.picoMob) { (result: Swift.Result<PendingSinglePayloadTransaction,
-                                                                                                TransactionPreparationError>) in
+            client.prepareTransaction(
+                to: recipientPublicAddress,
+                amount: Amount(paymentAmount.picoMob, in: .MOB),
+                fee: estimatedFeeAmount.picoMob,
+            ) { (result: Swift.Result<
+                PendingSinglePayloadTransaction,
+                TransactionPreparationError,
+            >) in
                 switch result {
                 case .success(let payload):
                     let transaction = payload.transaction
                     let receipt = payload.receipt
-                    let finalFeeAmount = TSPaymentAmount(currency: .mobileCoin,
-                                                         picoMob: transaction.fee)
+                    let finalFeeAmount = TSPaymentAmount(
+                        currency: .mobileCoin,
+                        picoMob: transaction.fee,
+                    )
                     owsAssertDebug(estimatedFeeAmount == finalFeeAmount)
-                    let preparedTransaction = PreparedTransaction(transaction: transaction,
-                                                                  receipt: receipt,
-                                                                  feeAmount: finalFeeAmount)
+                    let preparedTransaction = PreparedTransaction(
+                        transaction: transaction,
+                        receipt: receipt,
+                        feeAmount: finalFeeAmount,
+                    )
                     future.resolve(preparedTransaction)
                 case .failure(let error):
                     let error = Self.convertMCError(error: error)
@@ -288,9 +301,13 @@ public class MobileCoinAPI {
 
         return firstly(on: DispatchQueue.global()) { () -> Promise<Bool> in
             let (promise, future) = Promise<Bool>.pending()
-            client.requiresDefragmentation(toSendAmount: Amount(paymentAmount.picoMob, in: .MOB),
-                                           feeLevel: Self.feeLevel) { (result: Swift.Result<Bool,
-                                                                                            TransactionEstimationFetcherError>) in
+            client.requiresDefragmentation(
+                toSendAmount: Amount(paymentAmount.picoMob, in: .MOB),
+                feeLevel: Self.feeLevel,
+            ) { (result: Swift.Result<
+                Bool,
+                TransactionEstimationFetcherError,
+            >) in
                 switch result {
                 case .success(let shouldDefragment):
                     future.resolve(shouldDefragment)
@@ -315,9 +332,13 @@ public class MobileCoinAPI {
 
         return firstly(on: DispatchQueue.global()) { () throws -> Promise<[MobileCoin.Transaction]> in
             let (promise, future) = Promise<[MobileCoin.Transaction]>.pending()
-            client.prepareDefragmentationStepTransactions(toSendAmount: Amount(paymentAmount.picoMob, in: .MOB),
-                                                          feeLevel: Self.feeLevel) { (result: Swift.Result<[MobileCoin.Transaction],
-                                                                                                           MobileCoin.DefragTransactionPreparationError>) in
+            client.prepareDefragmentationStepTransactions(
+                toSendAmount: Amount(paymentAmount.picoMob, in: .MOB),
+                feeLevel: Self.feeLevel,
+            ) { (result: Swift.Result<
+                [MobileCoin.Transaction],
+                MobileCoin.DefragTransactionPreparationError,
+            >) in
                 switch result {
                 case .success(let transactions):
                     future.resolve(transactions)
@@ -368,8 +389,10 @@ public class MobileCoinAPI {
         try Self.paymentAmount(forReceipt: receipt, localAccount: localAccount)
     }
 
-    static func paymentAmount(forReceipt receipt: MobileCoin.Receipt,
-                              localAccount: MobileCoinAccount) throws -> TSPaymentAmount {
+    static func paymentAmount(
+        forReceipt receipt: MobileCoin.Receipt,
+        localAccount: MobileCoinAccount,
+    ) throws -> TSPaymentAmount {
         guard let picoMob = receipt.validateAndUnmaskValue(accountKey: localAccount.accountKey) else {
             // This can happen if the receipt was address to a different account.
             owsFailDebug("Receipt missing amount.")
@@ -396,22 +419,28 @@ public class MobileCoinAPI {
         }.map(on: DispatchQueue.global()) { (_: TSPaymentAmount) -> MCIncomingReceiptStatus in
             let paymentAmount: TSPaymentAmount
             do {
-                paymentAmount = try Self.paymentAmount(forReceipt: receipt,
-                                                       localAccount: localAccount)
+                paymentAmount = try Self.paymentAmount(
+                    forReceipt: receipt,
+                    localAccount: localAccount,
+                )
             } catch {
                 owsFailDebug("Error: \(error)")
-                return MCIncomingReceiptStatus(receiptStatus: .failed,
-                                               paymentAmount: .zeroMob,
-                                               txOutPublicKey: Data())
+                return MCIncomingReceiptStatus(
+                    receiptStatus: .failed,
+                    paymentAmount: .zeroMob,
+                    txOutPublicKey: Data(),
+                )
             }
             let txOutPublicKey: Data = receipt.txOutPublicKey
 
             let result = client.status(of: receipt)
             switch result {
             case .success(let receiptStatus):
-                return MCIncomingReceiptStatus(receiptStatus: receiptStatus,
-                                               paymentAmount: paymentAmount,
-                                               txOutPublicKey: txOutPublicKey)
+                return MCIncomingReceiptStatus(
+                    receiptStatus: receiptStatus,
+                    paymentAmount: paymentAmount,
+                    txOutPublicKey: txOutPublicKey,
+                )
             case .failure(let error):
                 let error = Self.convertMCError(error: error)
                 throw error
@@ -449,8 +478,10 @@ public class MobileCoinAPI {
 
 extension MobileCoin.PublicAddress {
     var asPaymentAddress: TSPaymentAddress {
-        return TSPaymentAddress(currency: .mobileCoin,
-                                mobileCoinPublicAddressData: serializedData)
+        return TSPaymentAddress(
+            currency: .mobileCoin,
+            mobileCoinPublicAddressData: serializedData,
+        )
     }
 }
 
@@ -711,10 +742,12 @@ public extension PaymentsError {
 // A variant of owsFailDebugUnlessNetworkFailure() that can handle
 // network failures from the MobileCoin SDK.
 @inlinable
-public func owsFailDebugUnlessMCNetworkFailure(_ error: Error,
-                                               file: String = #file,
-                                               function: String = #function,
-                                               line: Int = #line) {
+public func owsFailDebugUnlessMCNetworkFailure(
+    _ error: Error,
+    file: String = #file,
+    function: String = #function,
+    line: Int = #line,
+) {
     if let paymentsError = error as? PaymentsError {
         if paymentsError.isPaymentsNetworkFailure {
             // Log but otherwise ignore network failures.

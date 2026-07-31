@@ -1,1 +1,1 @@
-• Kijavítottunk egy hibát, amely miatt a Kamera üresen jelent meg új eszköz csatlakoztatásakor. A kereső mostantól csak akkor fog így kinézni, ha egy nagyon sötét szobában próbálsz új eszközt csatlakoztatni.
+• A rögzített üzenetek segítségével a fontos információk könnyen elérhetők maradhatnak. A leggyakrabban feltett kérdések, a vacsorafoglalások és a nyaralási útiterv már a fejedben vannak. Most már ezek lehetnek a csevegések témái is.

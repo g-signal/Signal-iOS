@@ -11,14 +11,11 @@ class MainAppContext: NSObject, AppContext {
 
     let appLaunchTime: Date
 
-    private(set) var appForegroundTime: Date
-
     override init() {
         _reportedApplicationState = AtomicValue(.inactive, lock: .init())
 
         let launchDate = Date()
         appLaunchTime = launchDate
-        appForegroundTime = launchDate
         _mainApplicationStateOnLaunch = UIApplication.shared.applicationState
 
         super.init()
@@ -29,25 +26,25 @@ class MainAppContext: NSObject, AppContext {
             self,
             selector: #selector(applicationWillEnterForeground),
             name: UIApplication.willEnterForegroundNotification,
-            object: nil
+            object: nil,
         )
         notificationCenter.addObserver(
             self,
             selector: #selector(applicationDidEnterBackground),
             name: UIApplication.didEnterBackgroundNotification,
-            object: nil
+            object: nil,
         )
         notificationCenter.addObserver(
             self,
             selector: #selector(applicationWillResignActive),
             name: UIApplication.willResignActiveNotification,
-            object: nil
+            object: nil,
         )
         notificationCenter.addObserver(
             self,
             selector: #selector(applicationDidBecomeActive),
             name: UIApplication.didBecomeActiveNotification,
-            object: nil
+            object: nil,
         )
     }
 
@@ -68,7 +65,6 @@ class MainAppContext: NSObject, AppContext {
         AssertIsOnMainThread()
 
         self.reportedApplicationState = .inactive
-        self.appForegroundTime = Date()
 
         BenchManager.bench(title: "Slow WillEnterForeground", logIfLongerThan: 0.2, logInProduction: true) {
             NotificationCenter.default.post(name: .OWSApplicationWillEnterForeground, object: nil)
@@ -136,11 +132,11 @@ class MainAppContext: NSObject, AppContext {
     func open(_ url: URL, completion: ((Bool) -> Void)? = nil) { UIApplication.shared.open(url, completionHandler: completion) }
 
     var isRunningTests: Bool {
-        #if TESTABLE_BUILD
+#if TESTABLE_BUILD
         return getenv("runningTests_dontStartApp") != nil
-        #else
+#else
         return false
-        #endif
+#endif
     }
 
     var frame: CGRect { self.mainWindow?.frame ?? .zero }
@@ -185,9 +181,4 @@ class MainAppContext: NSObject, AppContext {
     let hasUI: Bool = true
 
     var debugLogsDirPath: String { DebugLogger.mainAppDebugLogsDirPath }
-
-    @MainActor
-    func resetAppDataAndExit() -> Never {
-        SignalApp.resetAppDataAndExit(keyFetcher: SSKEnvironment.shared.databaseStorageRef.keyFetcher)
-    }
 }

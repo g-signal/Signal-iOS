@@ -34,10 +34,6 @@ final class ContactDiscoveryV2OperationTest: XCTestCase {
         }
     }
 
-    private class MockUDManager: ContactDiscoveryV2Operation<MockContactDiscoveryConnection>.Shims.UDManager {
-        func fetchAllAciUakPairsWithSneakyTransaction() -> [Aci: SMKUDAccessKey] { return [:] }
-    }
-
     private class MockContactDiscoveryV2PersistentState: ContactDiscoveryV2PersistentState {
         var token: Data?
         var prevE164s = Set<E164>()
@@ -73,11 +69,12 @@ final class ContactDiscoveryV2OperationTest: XCTestCase {
 
         let connection = MockContactDiscoveryConnection()
         let operation = ContactDiscoveryV2Operation(
+            db: InMemoryDB(),
             e164sToLookup: [try XCTUnwrap(E164("+16505550100"))],
             mode: .oneOffUserRequest,
-            udManager: MockUDManager(),
+            udManager: OWSMockUDManager(),
             connectionImpl: connection,
-            remoteAttestation: MockRemoteAttestation()
+            remoteAttestation: MockRemoteAttestation(),
         )
 
         // Prepare the server's responses to the client's request.
@@ -108,11 +105,12 @@ final class ContactDiscoveryV2OperationTest: XCTestCase {
     func testNotDiscoverable() async throws {
         let connection = MockContactDiscoveryConnection()
         let operation = ContactDiscoveryV2Operation(
+            db: InMemoryDB(),
             e164sToLookup: [try XCTUnwrap(E164("+16505550100"))],
             persistentState: nil,
-            udManager: MockUDManager(),
+            udManager: OWSMockUDManager(),
             connectionImpl: connection,
-            remoteAttestation: MockRemoteAttestation()
+            remoteAttestation: MockRemoteAttestation(),
         )
 
         // Prepare the server's responses to the client's request.
@@ -134,11 +132,12 @@ final class ContactDiscoveryV2OperationTest: XCTestCase {
     func testRateLimitError() async throws {
         let connection = MockContactDiscoveryConnection()
         let operation = ContactDiscoveryV2Operation(
+            db: InMemoryDB(),
             e164sToLookup: [try XCTUnwrap(E164("+16505550100"))],
             persistentState: persistentState,
-            udManager: MockUDManager(),
+            udManager: OWSMockUDManager(),
             connectionImpl: connection,
-            remoteAttestation: MockRemoteAttestation()
+            remoteAttestation: MockRemoteAttestation(),
         )
 
         // Establish the initial state.
@@ -176,11 +175,12 @@ final class ContactDiscoveryV2OperationTest: XCTestCase {
     func testInvalidTokenError() async throws {
         let connection = MockContactDiscoveryConnection()
         let operation = ContactDiscoveryV2Operation(
+            db: InMemoryDB(),
             e164sToLookup: [try XCTUnwrap(E164("+16505550100"))],
             persistentState: persistentState,
-            udManager: MockUDManager(),
+            udManager: OWSMockUDManager(),
             connectionImpl: connection,
-            remoteAttestation: MockRemoteAttestation()
+            remoteAttestation: MockRemoteAttestation(),
         )
 
         // Establish the initial state.

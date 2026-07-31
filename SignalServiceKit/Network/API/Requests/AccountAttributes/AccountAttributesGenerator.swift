@@ -17,7 +17,7 @@ public struct AccountAttributesGenerator {
         profileManager: ProfileManager,
         svrLocalStorage: SVRLocalStorage,
         tsAccountManager: TSAccountManager,
-        udManager: OWSUDManager
+        udManager: OWSUDManager,
     ) {
         self.accountKeyStore = accountKeyStore
         self.ows2FAManager = ows2FAManager
@@ -28,28 +28,31 @@ public struct AccountAttributesGenerator {
     }
 
     func generateForPrimary(
-        aciRegistrationId: UInt32,
-        pniRegistrationId: UInt32,
-        tx: DBReadTransaction
-    ) -> AccountAttributes {
+        capabilities: AccountAttributes.Capabilities,
+        tx: DBReadTransaction,
+    ) throws -> AccountAttributes {
         owsAssertDebug(tsAccountManager.registrationState(tx: tx).isPrimaryDevice == true)
 
-        let sdsTx: DBReadTransaction = SDSDB.shimOnlyBridge(tx)
+        guard
+            let aciRegistrationId = tsAccountManager.getRegistrationId(for: .aci, tx: tx),
+            let pniRegistrationId = tsAccountManager.getRegistrationId(for: .pni, tx: tx)
+        else {
+            throw OWSGenericError("couldn't fetch registration IDs")
+        }
 
         let isManualMessageFetchEnabled = tsAccountManager.isManualMessageFetchEnabled(tx: tx)
 
-        guard let profileKey = profileManager.localUserProfile(tx: sdsTx)?.profileKey else {
+        guard let profileKey = profileManager.localUserProfile(tx: tx)?.profileKey else {
             owsFail("Couldn't fetch local profile key.")
         }
         let udAccessKey = SMKUDAccessKey(profileKey: profileKey).keyData.base64EncodedString()
 
-        let allowUnrestrictedUD = udManager.shouldAllowUnrestrictedAccessLocal(transaction: sdsTx)
-        let hasSVRBackups = svrLocalStorage.getIsMasterKeyBackedUp(tx)
+        let allowUnrestrictedUD = udManager.shouldAllowUnrestrictedAccessLocal(transaction: tx)
 
         let reglockToken: String?
         if
             let _reglockToken = accountKeyStore.getMasterKey(tx: tx)?.data(for: .registrationLock),
-            ows2FAManager.isRegistrationLockV2Enabled(transaction: sdsTx)
+            ows2FAManager.isRegistrationLockV2Enabled(transaction: tx)
         {
             reglockToken = _reglockToken.canonicalStringRepresentation
         } else {
@@ -57,7 +60,7 @@ public struct AccountAttributesGenerator {
         }
 
         let registrationRecoveryPassword = accountKeyStore.getMasterKey(tx: tx)?.data(
-            for: .registrationRecoveryPassword
+            for: .registrationRecoveryPassword,
         ).canonicalStringRepresentation
 
         let phoneNumberDiscoverability = tsAccountManager.phoneNumberDiscoverability(tx: tx)
@@ -72,7 +75,7 @@ public struct AccountAttributesGenerator {
             registrationRecoveryPassword: registrationRecoveryPassword,
             encryptedDeviceName: nil,
             discoverableByPhoneNumber: phoneNumberDiscoverability,
-            hasSVRBackups: hasSVRBackups
+            capabilities: capabilities,
         )
     }
 }

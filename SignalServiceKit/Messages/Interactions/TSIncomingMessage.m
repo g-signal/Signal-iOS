@@ -4,7 +4,6 @@
 //
 
 #import "TSIncomingMessage.h"
-#import "OWSDisappearingMessagesConfiguration.h"
 #import "TSContactThread.h"
 #import "TSGroupThread.h"
 #import <SignalServiceKit/SignalServiceKit-Swift.h>
@@ -17,37 +16,62 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, getter=wasViewed) BOOL viewed;
 
 @property (nonatomic, nullable) NSNumber *serverTimestamp;
-@property (nonatomic, readonly) NSUInteger incomingMessageSchemaVersion;
 
 @end
 
 #pragma mark -
 
-const NSUInteger TSIncomingMessageSchemaVersion = 1;
-
 @implementation TSIncomingMessage
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    self = [super initWithCoder:coder];
-    if (!self) {
-        return self;
+    NSUInteger result = [super hash];
+    result ^= self.authorPhoneNumber.hash;
+    result ^= self.authorUUID.hash;
+    result ^= self.deprecated_sourceDeviceId.hash;
+    result ^= self.read;
+    result ^= self.serverDeliveryTimestamp;
+    result ^= self.serverGuid.hash;
+    result ^= self.serverTimestamp.hash;
+    result ^= self.viewed;
+    result ^= self.wasReceivedByUD;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
     }
-
-    if (_incomingMessageSchemaVersion < 1) {
-        _authorPhoneNumber = [coder decodeObjectForKey:@"authorId"];
-        if (_authorPhoneNumber == nil) {
-            _authorPhoneNumber = [TSContactThread legacyContactPhoneNumberFromThreadId:self.uniqueThreadId];
-        }
+    TSIncomingMessage *typedOther = (TSIncomingMessage *)other;
+    if (![NSObject isObject:self.authorPhoneNumber equalToObject:typedOther.authorPhoneNumber]) {
+        return NO;
     }
-
-    if (_authorUUID != nil) {
-        _authorPhoneNumber = nil;
+    if (![NSObject isObject:self.authorUUID equalToObject:typedOther.authorUUID]) {
+        return NO;
     }
-
-    _incomingMessageSchemaVersion = TSIncomingMessageSchemaVersion;
-
-    return self;
+    if (![NSObject isObject:self.deprecated_sourceDeviceId equalToObject:typedOther.deprecated_sourceDeviceId]) {
+        return NO;
+    }
+    if (self.read != typedOther.read) {
+        return NO;
+    }
+    if (self.serverDeliveryTimestamp != typedOther.serverDeliveryTimestamp) {
+        return NO;
+    }
+    if (![NSObject isObject:self.serverGuid equalToObject:typedOther.serverGuid]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.serverTimestamp equalToObject:typedOther.serverTimestamp]) {
+        return NO;
+    }
+    if (self.viewed != typedOther.viewed) {
+        return NO;
+    }
+    if (self.wasReceivedByUD != typedOther.wasReceivedByUD) {
+        return NO;
+    }
+    return YES;
 }
 
 - (instancetype)initIncomingMessageWithBuilder:(TSIncomingMessageBuilder *)incomingMessageBuilder
@@ -70,8 +94,6 @@ const NSUInteger TSIncomingMessageSchemaVersion = 1;
     _serverDeliveryTimestamp = incomingMessageBuilder.serverDeliveryTimestamp;
     _serverGuid = incomingMessageBuilder.serverGuid;
     _wasReceivedByUD = incomingMessageBuilder.wasReceivedByUD;
-
-    _incomingMessageSchemaVersion = TSIncomingMessageSchemaVersion;
 
     return self;
 }
@@ -220,9 +242,9 @@ const NSUInteger TSIncomingMessageSchemaVersion = 1;
                                             }];
 
     // readTimestamp may be earlier than now, so backdate the expiration if necessary.
-    [SSKEnvironment.shared.disappearingMessagesJobRef startAnyExpirationForMessage:self
-                                                               expirationStartedAt:readTimestamp
-                                                                       transaction:transaction];
+    [DisappearingMessagesExpirationJobObjcBridge startExpirationForMessage:self
+                                                       expirationStartedAt:readTimestamp
+                                                                        tx:transaction];
 
     [SSKEnvironment.shared.receiptManagerRef messageWasRead:self
                                                      thread:thread

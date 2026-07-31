@@ -4,6 +4,7 @@
 //
 
 import CoreServices
+public import LibSignalClient
 public import Photos
 public import SignalServiceKit
 public import SignalUI
@@ -18,6 +19,12 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
     public func isGroup() -> Bool {
         isGroupConversation
     }
+
+    public func viewForKeyboardLayoutGuide() -> UIView {
+        return view
+    }
+
+    public func viewForSuggestedStickersPanel() -> UIView { view }
 
     public func sendButtonPressed() {
         AssertIsOnMainThread()
@@ -267,6 +274,8 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
             owsFailDebug("InputToolbar not yet ready.")
             return
         }
+        // preview platter 模式下不创建 inputToolbar，静默跳过即可
+        guard !viewState.isInPreviewPlatter else { return }
         guard let inputToolbar = inputToolbar else {
             owsFailDebug("Missing inputToolbar.")
             return
@@ -364,46 +373,47 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
 
     @MainActor
     func tryToSendAttachments(
-        _ attachments: [SignalAttachment],
+        _ approvedAttachments: ApprovedAttachments,
         from viewController: UIViewController,
-        messageBody: MessageBody?
-    ) async throws(SendAttachmentError) {
-        try await tryToSendAttachments(
-            attachments,
-            from: viewController,
+        messageBody: MessageBody?,
+        attachmentLimits: OutgoingAttachmentLimits,
+    ) async throws -> Bool {
+        return try await tryToSendAttachments(
+            approvedAttachments,
             messageBody: messageBody,
+            from: viewController,
+            attachmentLimits: attachmentLimits,
             untrustedThreshold: Date().addingTimeInterval(-OWSIdentityManagerImpl.Constants.defaultUntrustedInterval)
         )
     }
 
-    enum SendAttachmentError: Error {
-        case inputToolbarNotReady
-        case inputToolbarMissing
-        case conversationBlocked
-        case untrustedContacts
-        case invalidAttachment(SignalAttachment)
-    }
-
     @MainActor
     private func tryToSendAttachments(
-        _ attachments: [SignalAttachment],
-        from viewController: UIViewController,
+        _ approvedAttachments: ApprovedAttachments,
         messageBody: MessageBody?,
+        from viewController: UIViewController,
+        attachmentLimits: OutgoingAttachmentLimits,
         untrustedThreshold: Date
-    ) async throws(SendAttachmentError) {
+    ) async throws -> Bool {
         AssertIsOnMainThread()
 
-        guard hasViewWillAppearEverBegun else {
-            throw .inputToolbarNotReady
+        guard hasViewWillAppearEverBegun, let inputToolbar else {
+            return false
         }
-        guard let inputToolbar = inputToolbar else {
-            throw .inputToolbarMissing
+
+        let imageQuality = approvedAttachments.imageQuality
+        let imageQualityLevel = ImageQualityLevel.resolvedValue(
+            imageQuality: imageQuality,
+            standardQualityLevel: attachmentLimits.standardQualityLevel
+        )
+        let sendableAttachments = try await approvedAttachments.attachments.mapAsync {
+            return try await SendableAttachment.forPreviewableAttachment($0, imageQualityLevel: imageQualityLevel)
         }
 
         if self.isBlockedConversation() {
             let isBlocked = await self.showUnblockConversationUI()
-            guard !isBlocked else {
-                throw .conversationBlocked
+            if isBlocked {
+                return false
             }
         }
 
@@ -415,22 +425,18 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
         )
 
         guard identityIsConfirmed else {
-            throw .untrustedContacts
-        }
-
-        if let attachment = attachments.first(where: \.hasError) {
-            throw .invalidAttachment(attachment)
+            return false
         }
 
         let didAddToProfileWhitelist = ThreadUtil.addThreadToProfileWhitelistIfEmptyOrPendingRequestAndSetDefaultTimerWithSneakyTransaction(self.thread)
 
-        let hasViewOnceAttachment = attachments.contains(where: { $0.isViewOnceAttachment })
+        let hasViewOnceAttachment = approvedAttachments.isViewOnce
         owsPrecondition(!hasViewOnceAttachment || messageBody == nil)
         owsPrecondition(!hasViewOnceAttachment || inputToolbar.quotedReplyDraft == nil)
 
         ThreadUtil.enqueueMessage(
             body: messageBody,
-            mediaAttachments: attachments,
+            attachments: (sendableAttachments, isViewOnce: approvedAttachments.isViewOnce),
             thread: self.thread,
             quotedReplyDraft: inputToolbar.quotedReplyDraft,
             persistenceCompletionHandler: {
@@ -446,6 +452,7 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
         }
 
         NotificationCenter.default.post(name: ChatListViewController.clearSearch, object: nil)
+        return true
     }
 
     // MARK: - Accessory View
@@ -524,7 +531,7 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
     public func pollButtonPressed() {
         AssertIsOnMainThread()
 
-        if !FeatureFlags.pollSend {
+        if !BuildFlags.pollSend {
             return
         }
 
@@ -532,10 +539,10 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
 
         let newPollViewController = NewPollViewController()
         newPollViewController.sendDelegate = self
-        present(newPollViewController, animated: true)
+        present(OWSNavigationController(rootViewController: newPollViewController), animated: true)
     }
 
-    public func didSelectRecentPhoto(asset: PHAsset, attachment: SignalAttachment) {
+    public func didSelectRecentPhoto(asset: PHAsset, attachment: PreviewableAttachment, attachmentLimits: OutgoingAttachmentLimits) {
         AssertIsOnMainThread()
 
         dismissKeyBoard()
@@ -544,6 +551,7 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
             asset: asset,
             attachment: attachment,
             hasQuotedReplyDraft: inputToolbar?.quotedReplyDraft != nil,
+            attachmentLimits: attachmentLimits,
             delegate: self,
             dataSource: self
         )
@@ -556,29 +564,26 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
 
 public extension ConversationViewController {
 
-    func showErrorAlert(forAttachment attachment: SignalAttachment?) {
+    func showErrorAlert(attachmentError: SignalAttachmentError?) {
         AssertIsOnMainThread()
-        owsAssertDebug(attachment == nil || attachment?.hasError == true)
 
-        let errorMessage = (attachment?.localizedErrorDescription
-                                ?? SignalAttachment.missingDataErrorMessage)
+        Logger.warn("\(attachmentError as Optional)")
+        let errorMessage = (attachmentError ?? .missingData).localizedDescription
 
-        Logger.error("\(errorMessage)")
-
-        OWSActionSheets.showActionSheet(title: OWSLocalizedString("ATTACHMENT_ERROR_ALERT_TITLE",
-                                                                 comment: "The title of the 'attachment error' alert."),
-                                        message: errorMessage)
+        OWSActionSheets.showActionSheet(
+            title: OWSLocalizedString("ATTACHMENT_ERROR_ALERT_TITLE", comment: "The title of the 'attachment error' alert."),
+            message: errorMessage,
+        )
     }
 
-    func showApprovalDialog(forAttachments attachments: [SignalAttachment]) {
+    func showApprovalDialog(forAttachments attachments: [PreviewableAttachment], attachmentLimits: OutgoingAttachmentLimits) {
         AssertIsOnMainThread()
 
         guard hasViewWillAppearEverBegun else {
             owsFailDebug("InputToolbar not yet ready.")
             return
         }
-        guard let inputToolbar = inputToolbar else {
-            owsFailDebug("Missing inputToolbar.")
+        guard let inputToolbar else {
             return
         }
 
@@ -586,9 +591,10 @@ public extension ConversationViewController {
             attachments: attachments,
             initialMessageBody: inputToolbar.messageBodyForSending,
             hasQuotedReplyDraft: inputToolbar.quotedReplyDraft != nil,
+            attachmentLimits: attachmentLimits,
             approvalDelegate: self,
             approvalDataSource: self,
-            stickerSheetDelegate: self
+            stickerSheetDelegate: self,
         )
         modal.modalPresentationStyle = .overCurrentContext
         let presenter = self.splitViewController ?? self
@@ -660,6 +666,7 @@ fileprivate extension ConversationViewController {
 
                 let pickerModal = SendMediaNavigationController.showingCameraFirst(
                     hasQuotedReplyDraft: self.inputToolbar?.quotedReplyDraft != nil,
+                    attachmentLimits: OutgoingAttachmentLimits.currentLimits(),
                 )
                 pickerModal.sendMediaNavDelegate = self
                 pickerModal.sendMediaNavDataSource = self
@@ -686,6 +693,7 @@ fileprivate extension ConversationViewController {
 
         let pickerModal = SendMediaNavigationController.showingNativePicker(
             hasQuotedReplyDraft: inputToolbar?.quotedReplyDraft != nil,
+            attachmentLimits: OutgoingAttachmentLimits.currentLimits(),
         )
         pickerModal.sendMediaNavDelegate = self
         pickerModal.sendMediaNavDataSource = self
@@ -720,7 +728,7 @@ extension ConversationViewController: LocationPickerDelegate {
         AssertIsOnMainThread()
 
         Task { @MainActor in
-            let attachment: SignalAttachment
+            let attachment: SendableAttachment
             do {
                 attachment = try await location.prepareAttachment()
             } catch {
@@ -734,7 +742,7 @@ extension ConversationViewController: LocationPickerDelegate {
 
             ThreadUtil.enqueueMessage(
                 body: MessageBody(text: location.messageText, ranges: .empty),
-                mediaAttachments: [attachment],
+                attachments: ([attachment], isViewOnce: false),
                 thread: self.thread,
                 persistenceCompletionHandler: {
                     AssertIsOnMainThread()
@@ -818,78 +826,64 @@ extension ConversationViewController: UIDocumentPickerDelegate {
                                      comment: "Generic filename for an attachment with no known name")
         }()
 
-        func buildDataSource() -> DataSource? {
-            do {
-                return try DataSourcePath(fileUrl: url, shouldDeleteOnDeallocation: false)
-            } catch {
-                owsFailDebug("Error: \(error).")
-                return nil
-            }
-        }
-        guard let dataSource = buildDataSource() else {
+        guard url.isFileURL else {
+            owsFailDebug("couldn't build data source")
             DispatchQueue.main.async {
-                OWSActionSheets.showActionSheet(title: OWSLocalizedString("ATTACHMENT_PICKER_DOCUMENTS_FAILED_ALERT_TITLE",
-                                                                         comment: "Alert title when picking a document fails for an unknown reason"))
+                OWSActionSheets.showActionSheet(
+                    title: OWSLocalizedString(
+                        "ATTACHMENT_PICKER_DOCUMENTS_FAILED_ALERT_TITLE",
+                        comment: "Alert title when picking a document fails for an unknown reason",
+                    ),
+                )
             }
             return
         }
+
+        let dataSource = DataSourcePath(fileUrl: url, ownership: .owned)
         dataSource.sourceFilename = filename
+
+        let attachmentLimits = OutgoingAttachmentLimits.currentLimits()
 
         // Although we want to be able to send higher quality attachments through the document picker
         // it's more important that we ensure the sent format is one all clients can accept (e.g. *not* quicktime .mov)
-        if SignalAttachment.isVideoThatNeedsCompression(dataSource: dataSource,
-                                                        dataUTI: contentType.identifier) {
-            self.showApprovalDialogAfterProcessingVideoURL(url, filename: filename)
+        if SignalAttachment.videoUTISet.contains(contentType.identifier) {
+            self.showApprovalDialogAfterProcessingVideo(dataSource: dataSource, attachmentLimits: attachmentLimits)
             return
         }
 
-        let attachment = SignalAttachment.attachment(dataSource: dataSource, dataUTI: contentType.identifier)
-        showApprovalDialog(forAttachments: [attachment])
+        let attachment: PreviewableAttachment
+        do {
+            attachment = try PreviewableAttachment.buildAttachment(dataSource: dataSource, dataUTI: contentType.identifier, attachmentLimits: attachmentLimits)
+        } catch {
+            DispatchQueue.main.async {
+                self.showErrorAlert(attachmentError: error as? SignalAttachmentError)
+            }
+            return
+        }
+
+        showApprovalDialog(forAttachments: [attachment], attachmentLimits: attachmentLimits)
     }
 
-    private func showApprovalDialogAfterProcessingVideoURL(_ movieURL: URL, filename: String?) {
+    private func showApprovalDialogAfterProcessingVideo(dataSource: DataSourcePath, attachmentLimits: OutgoingAttachmentLimits) {
         AssertIsOnMainThread()
 
-        ModalActivityIndicatorViewController.present(fromViewController: self,
-                                                     canCancel: true) { modalActivityIndicator in
-            let dataSource: DataSource
-            do {
-                dataSource = try DataSourcePath(fileUrl: movieURL, shouldDeleteOnDeallocation: false)
-            } catch {
-                owsFailDebug("Error: \(error).")
-
-                DispatchQueue.main.async {
-                    self.showErrorAlert(forAttachment: nil)
+        ModalActivityIndicatorViewController.present(
+            fromViewController: self,
+            canCancel: true,
+            asyncBlock: { modalActivityIndicator in
+                do {
+                    let attachment = try await PreviewableAttachment.compressVideoAsMp4(dataSource: dataSource, attachmentLimits: attachmentLimits)
+                    modalActivityIndicator.dismissIfNotCanceled(completionIfNotCanceled: {
+                        self.showApprovalDialog(forAttachments: [attachment], attachmentLimits: attachmentLimits)
+                    })
+                } catch {
+                    owsFailDebug("Error: \(error).")
+                    modalActivityIndicator.dismissIfNotCanceled(completionIfNotCanceled: {
+                        self.showErrorAlert(attachmentError: error as? SignalAttachmentError)
+                    })
                 }
-                return
-            }
-
-            dataSource.sourceFilename = filename
-            let promise = Promise.wrapAsync({
-                return try await SignalAttachment.compressVideoAsMp4(dataSource: dataSource,
-                                                                     dataUTI: UTType.mpeg4Movie.identifier)
-            })
-            promise.done(on: DispatchQueue.main) { (attachment: SignalAttachment) in
-                if modalActivityIndicator.wasCancelled {
-                    return
-                }
-                modalActivityIndicator.dismiss {
-                    if attachment.hasError {
-                        owsFailDebug("Invalid attachment: \(attachment.errorName ?? "Unknown error").")
-                        self.showErrorAlert(forAttachment: attachment)
-                    } else {
-                        self.showApprovalDialog(forAttachments: [attachment])
-                    }
-                }
-            }.catch(on: DispatchQueue.main) { error in
-                owsFailDebug("Error: \(error).")
-
-                modalActivityIndicator.dismiss {
-                    owsFailDebug("Invalid attachment.")
-                    self.showErrorAlert(forAttachment: nil)
-                }
-            }
-        }
+            },
+        )
     }
 }
 
@@ -903,14 +897,15 @@ extension ConversationViewController: SendMediaNavDelegate {
 
     func sendMediaNav(
         _ sendMediaNavigationController: SendMediaNavigationController,
-        didApproveAttachments attachments: [SignalAttachment],
+        didApproveAttachments approvedAttachments: ApprovedAttachments,
         messageBody: MessageBody?
     ) {
         Task { @MainActor in
             await self.sendAttachments(
-                attachments,
+                approvedAttachments,
+                messageBody: messageBody,
                 from: sendMediaNavigationController,
-                messageBody: messageBody
+                attachmentLimits: sendMediaNavigationController.attachmentLimits
             )
         }
     }
@@ -918,41 +913,40 @@ extension ConversationViewController: SendMediaNavDelegate {
     /// Attempts to send attachments. Handles prompting to unblock or un-verify safety numbers, as well as showing failure states.
     @MainActor
     func sendAttachments(
-        _ attachments: [SignalAttachment],
+        _ approvedAttachments: ApprovedAttachments,
+        messageBody: MessageBody?,
         from viewController: UIViewController,
-        messageBody: MessageBody?
+        attachmentLimits: OutgoingAttachmentLimits
     ) async {
-        do throws(SendAttachmentError) {
-            try await tryToSendAttachments(
-                attachments,
+        let didSend: Bool
+        do {
+            didSend = try await tryToSendAttachments(
+                approvedAttachments,
                 from: viewController,
-                messageBody: messageBody
+                messageBody: messageBody,
+                attachmentLimits: attachmentLimits
             )
-
-            if attachments.count == 1, let attachment = attachments.first, attachment.isBorderless {
-                // This looks like a sticker, we shouldn't clear the input toolbar.
-            } else {
-                inputToolbar?.clearTextMessage(animated: false)
-            }
-
-            // we want to already be at the bottom when the user returns, rather than have to watch
-            // the new message scroll into view.
-            scrollToBottomOfConversation(animated: true)
-            self.dismiss(animated: true)
         } catch {
-            switch error {
-            case .inputToolbarNotReady:
-                owsFailDebug("InputToolbar not yet ready.")
-            case .inputToolbarMissing:
-                owsFailDebug("Missing inputToolbar.")
-            case .conversationBlocked, .untrustedContacts:
-                // User was prompted but chose not to make changes. Stop here.
-                break
-            case .invalidAttachment(let attachment):
-                Logger.warn("Invalid attachment: \(attachment.errorName ?? "Missing data").")
-                self.showErrorAlert(forAttachment: attachment)
-            }
+            self.showErrorAlert(attachmentError: error as? SignalAttachmentError)
+            return
         }
+        guard didSend else {
+            return
+        }
+        if
+            approvedAttachments.attachments.count == 1,
+            let attachment = approvedAttachments.attachments.first,
+            attachment.rawValue.isBorderless
+        {
+            // This looks like a sticker, we shouldn't clear the input toolbar.
+        } else {
+            inputToolbar?.clearTextMessage(animated: false)
+        }
+
+        // we want to already be at the bottom when the user returns, rather than have to watch
+        // the new message scroll into view.
+        scrollToBottomOfConversation(animated: true)
+        self.dismiss(animated: true)
     }
 
     func sendMediaNav(_ sendMediaNavifationController: SendMediaNavigationController,
@@ -994,8 +988,8 @@ extension ConversationViewController: SendMediaNavDataSource {
         return [displayName]
     }
 
-    func sendMediaNavMentionableAddresses(tx: DBReadTransaction) -> [SignalServiceAddress] {
-        supportsMentions ? thread.recipientAddresses(with: SDSDB.shimOnlyBridge(tx)) : []
+    func sendMediaNavMentionableAcis(tx: DBReadTransaction) -> [Aci] {
+        supportsMentions ? thread.recipientAddresses(with: tx).compactMap(\.aci) : []
     }
 
     func sendMediaNavMentionCacheInvalidationKey() -> String {
@@ -1006,7 +1000,7 @@ extension ConversationViewController: SendMediaNavDataSource {
 // MARK: - StickerPickerSheetDelegate
 
 extension ConversationViewController: StickerPickerSheetDelegate {
-    public func makeManageStickersViewController() -> UIViewController {
+    public func makeManageStickersViewController(for stickerPickerSheet: StickerPickerSheet) -> UIViewController {
         let manageStickersView = ManageStickersViewController()
         let navigationController = OWSNavigationController(rootViewController: manageStickersView)
         return navigationController
@@ -1019,16 +1013,10 @@ extension ConversationViewController: PollSendDelegate {
     public func sendPoll(question: String, options: [String], allowMultipleVotes: Bool) {
         ThreadUtil.enqueueMessage(
             withPoll:
-                OWSPoll(
-                    // We don't know the pollID yet since it hasn't been inserted in the DB.
-                    // That is OK since this OWSPoll instance will not be used to re-render
-                    // the conversation view (when pollID is needed to determine equatability).
-                    pollId: 0,
+                CreatePollMessage(
                     question: question,
                     options: options,
-                    allowsMultiSelect: allowMultipleVotes,
-                    votes: [:],
-                    isEnded: false
+                    allowMultiple: allowMultipleVotes,
                 ),
             thread: self.thread
         )

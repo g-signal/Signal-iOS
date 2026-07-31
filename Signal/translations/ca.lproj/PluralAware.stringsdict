@@ -40,7 +40,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Missatge de veu d&apos;%1$d segon</string>
+			<string>Missatge de veu d'%1$d segon</string>
 			<key>other</key>
 			<string>Missatge de veu de %1$d segons</string>
 		</dict>
@@ -93,6 +93,22 @@
 			<string>Afegir nous membres</string>
 		</dict>
 	</dict>
+	<key>BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Còpia de seguretat de missatges de text + %1$d dia d'arxius multimèdia</string>
+			<key>other</key>
+			<string>Còpia de seguretat de missatges de text + %1$d dies d'arxius multimèdia</string>
+		</dict>
+	</dict>
 	<key>CALLS_TAB_DELETE_MULTIPLE_TITLE</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -120,9 +136,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>S&apos;afegirà %1$ld persona a la trucada.</string>
+			<string>S'afegirà %1$ld persona a la trucada.</string>
 			<key>other</key>
-			<string>S&apos;afegiran %1$ld persones a la trucada.</string>
+			<string>S'afegiran %1$ld persones a la trucada.</string>
 		</dict>
 	</dict>
 	<key>CALL_LINK_APPROVE_ALL_REQUESTS_CONFIRMATION_TITLE_%ld</key>
@@ -152,9 +168,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>No s&apos;afegirà %1$ld persona a la trucada.</string>
+			<string>No s'afegirà %1$ld persona a la trucada.</string>
 			<key>other</key>
-			<string>No s&apos;afegiran %1$ld persones a la trucada.</string>
+			<string>No s'afegiran %1$ld persones a la trucada.</string>
 		</dict>
 	</dict>
 	<key>CALL_LINK_DENY_ALL_REQUESTS_CONFIRMATION_TITLE_%ld</key>
@@ -280,9 +296,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Aquest color personalitzat s&apos;usa en %1$d xat. Vols eliminar-lo per a tots?</string>
+			<string>Aquest color personalitzat s'usa en %1$d xat. Vols eliminar-lo per a tots?</string>
 			<key>other</key>
-			<string>Aquest color personalitzat s&apos;usa en %1$d xats. Vols eliminar-lo per a tots?</string>
+			<string>Aquest color personalitzat s'usa en %1$d xats. Vols eliminar-lo per a tots?</string>
 		</dict>
 	</dict>
 	<key>CHAT_COLOR_SETTINGS_UPDATE_ALERT_MESSAGE_%d</key>
@@ -296,9 +312,57 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Aquest color s&apos;usa en %1$d xat. Vols desar els canvis per a tots?</string>
+			<string>Aquest color s'usa en %1$d xat. Vols desar els canvis per a tots?</string>
 			<key>other</key>
-			<string>Aquest color personalitzat s&apos;està utilitzant en %1$d xats. Vols desar els canvis per a tots?</string>
+			<string>Aquest color personalitzat s'està utilitzant en %1$d xats. Vols desar els canvis per a tots?</string>
+		</dict>
+	</dict>
+	<key>CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>El teu darrer %1$d dia d'arxius multimèdia</string>
+			<key>other</key>
+			<string>Els teus darrers %1$d dies d'arxius multimèdia</string>
+		</dict>
+	</dict>
+	<key>CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_MESSAGE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Si canvies de pla, tots els teus missatges de text i els continguts multimèdia del darrer %1$d dia s'inclouran en la còpia de seguretat.</string>
+			<key>other</key>
+			<string>Si canvies de pla, tots els teus missatges de text i els continguts multimèdia dels darrers %1$d dies s'inclouran en la còpia de seguretat.</string>
+		</dict>
+	</dict>
+	<key>CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Missatges + %1$d dia d'arxius multimèdia</string>
+			<key>other</key>
+			<string>Missatges + %1$d dies d'arxius multimèdia</string>
 		</dict>
 	</dict>
 	<key>CONVERSATION_DELETE_CONFIRMATIONS_ALERT_TITLE_%d</key>
@@ -328,9 +392,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Aquest xat s&apos;eliminarà de tots els teus dispositius.</string>
+			<string>Aquest xat s'eliminarà de tots els teus dispositius.</string>
 			<key>other</key>
-			<string>Aquests xats s&apos;eliminaran de tots els teus dispositius.</string>
+			<string>Aquests xats s'eliminaran de tots els teus dispositius.</string>
 		</dict>
 	</dict>
 	<key>CONVERSATION_PICKER_CAN_SELECT_NO_MORE_CONVERSATIONS_%d</key>
@@ -467,9 +531,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>S&apos;ha assolit el nombre màxim de membres del grup: %1$d.</string>
+			<string>S'ha assolit el nombre màxim de membres del grup: %1$d.</string>
 			<key>other</key>
-			<string>S&apos;ha assolit el nombre màxim de membres del grup: %1$d.</string>
+			<string>S'ha assolit el nombre màxim de membres del grup: %1$d.</string>
 		</dict>
 	</dict>
 	<key>EDIT_MESSAGE_SEND_TOO_MANY_EDITS_ERROR</key>
@@ -499,9 +563,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Els grups de Signal funcionen millor amb %1$d membre o menys. Afegir-n&apos;hi més causarà retards d&apos;enviament i recepció de missatges.</string>
+			<string>Els grups de B&amp;A funcionen millor amb %1$d membre o menys. Afegir-n'hi més causarà retards d'enviament i recepció de missatges.</string>
 			<key>other</key>
-			<string>Els grups de Signal funcionen millor amb %1$d membres o menys. Afegir-n&apos;hi més causarà retards d&apos;enviament i recepció de missatges.</string>
+			<string>Els grups de B&amp;A funcionen millor amb %1$d membres o menys. Afegir-n'hi més causarà retards d'enviament i recepció de missatges.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -515,9 +579,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>S&apos;ha assolit el nombre màxim d&apos;1 participant per a aquesta trucada. Torna-ho a provar més tard.</string>
+			<string>S'ha assolit el nombre màxim d'1 participant per a aquesta trucada. Torna-ho a provar més tard.</string>
 			<key>other</key>
-			<string>S&apos;ha assolit el nombre màxim de %1$d participants per a aquesta trucada. Torna-ho a provar més tard.</string>
+			<string>S'ha assolit el nombre màxim de %1$d participants per a aquesta trucada. Torna-ho a provar més tard.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_IS_RINGING_MANY_PEOPLE_%d</key>
@@ -595,9 +659,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%2$@, %3$@ i %1$d persona més s&apos;han afegit a la trucada</string>
+			<string>%2$@, %3$@ i %1$d persona més s'han afegit a la trucada</string>
 			<key>other</key>
-			<string>%2$@, %3$@ i %1$d persones més s&apos;han afegit a la trucada.</string>
+			<string>%2$@, %3$@ i %1$d persones més s'han afegit a la trucada.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_NOTIFICATION_MANY_LEFT_%d</key>
@@ -659,9 +723,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Signal trucarà a %2$@, %3$@ i %1$d més</string>
+			<string>B&amp;A trucarà a %2$@, %3$@ i %1$d més</string>
 			<key>other</key>
-			<string>Signal trucarà a %2$@, %3$@, i a %1$d persones més</string>
+			<string>B&amp;A trucarà a %2$@, %3$@, i a %1$d persones més</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -707,9 +771,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>S&apos;ha trobat %1$d conflicte de nom en aquest grup.</string>
+			<string>S'ha trobat %1$d conflicte de nom en aquest grup.</string>
 			<key>other</key>
-			<string>S&apos;han trobat %1$d conflictes de nom en aquest grup.</string>
+			<string>S'han trobat %1$d conflictes de nom en aquest grup.</string>
 		</dict>
 	</dict>
 	<key>GROUP_MEMBERSHIP_NAME_COLLISION_MEMBER_COUNT_%d</key>
@@ -739,9 +803,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>S&apos;ha trobat %1$d conflicte de nom en aquest grup. Revisa els membres més avall o pren mesures.</string>
+			<string>S'ha trobat %1$d conflicte de nom en aquest grup. Revisa els membres més avall o pren mesures.</string>
 			<key>other</key>
-			<string>S&apos;han trobat %1$d conflictes de nom en aquest grup. Revisa els membres més avall o pren mesures.</string>
+			<string>S'han trobat %1$d conflictes de nom en aquest grup. Revisa els membres més avall o pren mesures.</string>
 		</dict>
 	</dict>
 	<key>GROUP_MEMBERSHIP_NAME_SINGLE_COLLISION_HEADER_%d</key>
@@ -803,9 +867,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>S&apos;han convidat %1$d persona al grup.</string>
+			<string>S'han convidat %1$d persona al grup.</string>
 			<key>other</key>
-			<string>S&apos;han convidat %1$d persones al grup.</string>
+			<string>S'han convidat %1$d persones al grup.</string>
 		</dict>
 	</dict>
 	<key>GROUP_REMOTE_USER_INVITED_BY_REMOTE_USER_%d</key>
@@ -835,9 +899,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>S&apos;han revocat les invitacions al grup per a %1$d persona.</string>
+			<string>S'han revocat les invitacions al grup per a %1$d persona.</string>
 			<key>other</key>
-			<string>S&apos;han revocat les invitacions al grup per a %1$d persones.</string>
+			<string>S'han revocat les invitacions al grup per a %1$d persones.</string>
 		</dict>
 	</dict>
 	<key>GROUP_REMOTE_USER_INVITE_REVOKED_BY_REMOTE_USER_%d</key>
@@ -867,9 +931,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%2$@ ha sol·licitat i cancel·lat la seva sol·licitud d&apos;unir-se a través de l&apos;enllaç de grup.</string>
+			<string>%2$@ ha sol·licitat i cancel·lat la seva sol·licitud d'unir-se a través de l'enllaç de grup.</string>
 			<key>other</key>
-			<string>%2$@ ha sol·licitat i cancel·lat %1$d sol·licituds d&apos;unir-se a través de l&apos;enllaç de grup.</string>
+			<string>%2$@ ha sol·licitat i cancel·lat %1$d sol·licituds d'unir-se a través de l'enllaç de grup.</string>
 		</dict>
 	</dict>
 	<key>GROUP_STORY_VIEWERS_%d</key>
@@ -899,9 +963,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Un membre no s&apos;ha pogut afegir al grup nou i ha estat esborrat.</string>
+			<string>Un membre no s'ha pogut afegir al grup nou i ha estat esborrat.</string>
 			<key>other</key>
-			<string>%1$d membres no s&apos;han pogut afegir al grup nou i han estat esborrats.</string>
+			<string>%1$d membres no s'han pogut afegir al grup nou i han estat esborrats.</string>
 		</dict>
 	</dict>
 	<key>GROUP_WAS_MIGRATED_USERS_INVITED_%d</key>
@@ -915,9 +979,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Un membre no s&apos;ha pogut afegir al grup nou i se l&apos;ha convidat a afegir-s&apos;hi.</string>
+			<string>Un membre no s'ha pogut afegir al grup nou i se l'ha convidat a afegir-s'hi.</string>
 			<key>other</key>
-			<string>%1$d membres no s&apos;han pogut afegir al grup nou i se&apos;ls ha convidat a afegir-s&apos;hi.</string>
+			<string>%1$d membres no s'han pogut afegir al grup nou i se'ls ha convidat a afegir-s'hi.</string>
 		</dict>
 	</dict>
 	<key>IMAGE_PICKER_CAN_SELECT_NO_MORE_TOAST_%d</key>
@@ -931,7 +995,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>No pots compartir més d&apos;1 element.</string>
+			<string>No pots compartir més d'1 element.</string>
 			<key>other</key>
 			<string>No pots compartir més de %1$d elements.</string>
 		</dict>
@@ -947,9 +1011,25 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Per mantenir &quot;%2$@&quot; enllaçat, obre Signal al dispositiu en un termini d&apos;%1$d dia.</string>
+			<string>Per mantenir "%2$@" enllaçat, obre B&amp;A al dispositiu en un termini d'%1$d dia.</string>
 			<key>other</key>
-			<string>Per mantenir &quot;%2$@&quot; enllaçat, obre Signal al dispositiu en un termini de %1$d dies.</string>
+			<string>Per mantenir "%2$@" enllaçat, obre B&amp;A al dispositiu en un termini de %1$d dies.</string>
+		</dict>
+	</dict>
+	<key>LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Transfereix tots els missatges de text i l'últim %1$d dia d'arxius multimèdia</string>
+			<key>other</key>
+			<string>Transfereix tots els missatges de text i els últims %1$d dies d'arxius multimèdia</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -995,9 +1075,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>S&apos;ha eliminat un element</string>
+			<string>S'ha eliminat un element</string>
 			<key>other</key>
-			<string>S&apos;han eliminat %1$d elements</string>
+			<string>S'han eliminat %1$d elements</string>
 		</dict>
 	</dict>
 	<key>MEDIA_GALLERY_ITEM_IMAGE_COUNT_%d</key>
@@ -1046,22 +1126,6 @@
 			<string>Reenviar %1$d</string>
 			<key>other</key>
 			<string>Reenviar %1$d</string>
-		</dict>
-	</dict>
-	<key>MESSAGES_VIEW_GROUP_N_MEMBERS_BLOCKED_%d</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@caption@</string>
-		<key>caption</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>Has bloquejat %1$d membre d&apos;aquest grup.</string>
-			<key>other</key>
-			<string>Has bloquejat %1$d membres d&apos;aquest grup.</string>
 		</dict>
 	</dict>
 	<key>MESSAGE_ACTIONS_TOOLBAR_CAPTION_%d</key>
@@ -1155,9 +1219,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Totes les connexions de Signal · 1 espectador</string>
+			<string>Totes les connexions de B&amp;A · 1 espectador</string>
 			<key>other</key>
-			<string>Totes les connexions de Signal · %1$d espectadors</string>
+			<string>Totes les connexions de B&amp;A · %1$d espectadors</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1171,9 +1235,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Totes les connexions de Signal · 1 persona exclosa</string>
+			<string>Totes les connexions de B&amp;A · 1 persona exclosa</string>
 			<key>other</key>
-			<string>Totes les connexions de Signal · %1$d persones excloses</string>
+			<string>Totes les connexions de B&amp;A · %1$d persones excloses</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1267,9 +1331,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d sol·licitud d&apos;adhesió pendent.</string>
+			<string>%1$d sol·licitud d'adhesió pendent.</string>
 			<key>other</key>
-			<string>%1$d sol·licituds d&apos;adhesió pendents.</string>
+			<string>%1$d sol·licituds d'adhesió pendents.</string>
 		</dict>
 	</dict>
 	<key>PENDING_GROUP_MEMBERS_REVOKE_INVALID_INVITES_%d</key>
@@ -1382,22 +1446,6 @@
 			<string>%1$d intent</string>
 			<key>other</key>
 			<string>%1$d intents</string>
-		</dict>
-	</dict>
-	<key>STORIES_SHARESHEET_PARTIAL_SEND_SUBTITLE_%d</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%1$#@text@</string>
-		<key>text</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>No s&apos;han pogut enviar tots els elements a la història que has seleccionat perquè el tipus de fitxer no és compatible.</string>
-			<key>other</key>
-			<string>No s&apos;han pogut enviar tots els elements a les històries que has seleccionat perquè el tipus de fitxer no és compatible.</string>
 		</dict>
 	</dict>
 	<key>STORY_REPLIES_COUNT_%d</key>
@@ -1528,6 +1576,70 @@
 			<string>%1$ld més</string>
 		</dict>
 	</dict>
+	<key>UNAVAILABLE_ATTACHMENT_AUDIO_SHEET_MESSAGE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Aquest missatge de veu no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de %1$d dia d'antiguitat no es podran sincronitzar.</string>
+			<key>other</key>
+			<string>Aquest missatge de veu no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de %1$d dies d'antiguitat no es podran sincronitzar.</string>
+		</dict>
+	</dict>
+	<key>UNAVAILABLE_ATTACHMENT_FILE_SHEET_MESSAGE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Aquest arxiu no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de %1$d dia d'antiguitat no es podran sincronitzar.</string>
+			<key>other</key>
+			<string>Aquest arxiu no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de %1$d dies d'antiguitat no es podran sincronitzar.</string>
+		</dict>
+	</dict>
+	<key>UNAVAILABLE_ATTACHMENT_OVERSIZE_TEXT_SHEET_MESSAGE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>El text complet d'aquest missatge no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de %1$d dia d'antiguitat no es podran sincronitzar.</string>
+			<key>other</key>
+			<string>El text complet d'aquest missatge no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de %1$d dies d'antiguitat no es podran sincronitzar.</string>
+		</dict>
+	</dict>
+	<key>UNAVAILABLE_ATTACHMENT_STICKER_SHEET_MESSAGE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Aquest sticker no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de %1$d dia d'antiguitat no es podran sincronitzar.</string>
+			<key>other</key>
+			<string>Aquest sticker no es va transferir des del telèfon mentre aquest dispositiu estava enllaçat. Els arxius que en el moment de vincular el dispositiu tinguin més de %1$d dies d'antiguitat no es podran sincronitzar.</string>
+		</dict>
+	</dict>
 	<key>USERNAME_SELECTION_TOO_SHORT_ERROR_MESSAGE_%d</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -1539,7 +1651,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Els àlies han de començar amb un mínim d&apos;%1$d caràcter.</string>
+			<string>Els àlies han de començar amb un mínim d'%1$d caràcter.</string>
 			<key>other</key>
 			<string>Els àlies han de començar amb un mínim de %1$d caràcters.</string>
 		</dict>

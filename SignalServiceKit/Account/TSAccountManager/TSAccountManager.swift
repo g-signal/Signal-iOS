@@ -8,7 +8,7 @@ public import LibSignalClient
 
 public protocol TSAccountManager {
 
-    func warmCaches()
+    func warmCaches(tx: DBReadTransaction)
 
     // MARK: - Local Identifiers
 
@@ -49,7 +49,7 @@ public protocol TSAccountManager {
     func setRegistrationId(
         _ newRegistrationId: UInt32,
         for identity: OWSIdentity,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
     func getRegistrationId(for identity: OWSIdentity, tx: DBReadTransaction) -> UInt32?
     func clearRegistrationIds(tx: DBWriteTransaction)
@@ -65,9 +65,7 @@ public protocol TSAccountManager {
     func lastSetIsDiscoverableByPhoneNumber(tx: DBReadTransaction) -> Date
 }
 
-public struct NotRegisteredError: Error, IsRetryableProvider {
-    public let isRetryableProvider: Bool = false
-}
+public struct NotRegisteredError: Error {}
 
 /// It's *possible* (but implausible) that the local user's "device ID"
 /// isn't valid. These "device IDs" aren't supported on the server, so these
@@ -111,6 +109,20 @@ public enum LocalDeviceId: CustomStringConvertible {
 }
 
 extension TSAccountManager {
+    public func registeredStateWithMaybeSneakyTransaction() throws(NotRegisteredError) -> RegisteredState {
+        return try RegisteredState(
+            registrationState: self.registrationStateWithMaybeSneakyTransaction,
+            localIdentifiers: self.localIdentifiersWithMaybeSneakyTransaction,
+        )
+    }
+
+    public func registeredState(tx: DBReadTransaction) throws(NotRegisteredError) -> RegisteredState {
+        return try RegisteredState(
+            registrationState: self.registrationState(tx: tx),
+            localIdentifiers: self.localIdentifiers(tx: tx),
+        )
+    }
+
     public func localIdentifiersWithMaybeSneakyTransaction(authedAccount: AuthedAccount) throws -> LocalIdentifiers {
         switch authedAccount.info {
         case .explicit(let info):
@@ -154,7 +166,7 @@ public protocol LocalIdentifiersSetter {
         pni: Pni,
         deviceId: DeviceId,
         serverAuthToken: String,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     /// Change local identifiers after a change number operation.
@@ -164,7 +176,7 @@ public protocol LocalIdentifiersSetter {
         newE164: E164,
         aci: Aci,
         pni: Pni,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     /// Returns true if successful. Not successful iff the old value is the same as new value (no-op).
@@ -181,7 +193,7 @@ public protocol LocalIdentifiersSetter {
         localAci: Aci,
         discoverability: PhoneNumberDiscoverability?,
         wasPrimaryDevice: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     /// Returns true if value changed, false otherwise.

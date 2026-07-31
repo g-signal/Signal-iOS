@@ -80,9 +80,39 @@ NS_ASSUME_NONNULL_BEGIN
 
 // --- CODE GENERATION MARKER
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    return [super initWithCoder:coder];
+    NSUInteger result = [super hash];
+    result ^= self.creatorUuid.hash;
+    result ^= self.eraId.hash;
+    result ^= self.hasEnded;
+    result ^= self.joinedMemberUuids.hash;
+    result ^= self.read;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
+    }
+    OWSGroupCallMessage *typedOther = (OWSGroupCallMessage *)other;
+    if (![NSObject isObject:self.creatorUuid equalToObject:typedOther.creatorUuid]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.eraId equalToObject:typedOther.eraId]) {
+        return NO;
+    }
+    if (self.hasEnded != typedOther.hasEnded) {
+        return NO;
+    }
+    if (![NSObject isObject:self.joinedMemberUuids equalToObject:typedOther.joinedMemberUuids]) {
+        return NO;
+    }
+    if (self.read != typedOther.read) {
+        return NO;
+    }
+    return YES;
 }
 
 - (NSArray<AciObjC *> *)joinedMemberAcis

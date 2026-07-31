@@ -1,1 +1,1 @@
-• Wir haben einen Fehler behoben, der dazu führte, dass die Kamera bei dem Versuch, ein neues Gerät zu koppeln, leer angezeigt wurde. Jetzt sieht der Sucher nur dann so aus, wenn du versuchst, ein neues Gerät in einem echt dunklen Raum zu koppeln.
+• Mit fixierten Nachrichten hast du wichtige Infos immer griffbereit. Deine am häufigsten gestellten Fragen, Tischreservierungen und Urlaubspläne stehen schon ganz oben auf deiner Liste. Jetzt kannst du sie auch ganz oben im Chat fixieren.

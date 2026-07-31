@@ -21,6 +21,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
 
     typealias Action = CVMessageAction
     fileprivate var action: Action? { systemMessage.action }
+    fileprivate var expiration: CVComponentState.SystemMessage.Expiration? { systemMessage.expiration }
 
     init(itemModel: CVItemModel, systemMessage: CVComponentState.SystemMessage) {
         self.systemMessage = systemMessage
@@ -28,16 +29,20 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         super.init(itemModel: itemModel)
     }
 
-    public func configureCellRootComponent(cellView: UIView,
-                                           cellMeasurement: CVCellMeasurement,
-                                           componentDelegate: CVComponentDelegate,
-                                           messageSwipeActionState: CVMessageSwipeActionState,
-                                           componentView: CVComponentView) {
-        Self.configureCellRootComponent(rootComponent: self,
-                                        cellView: cellView,
-                                        cellMeasurement: cellMeasurement,
-                                        componentDelegate: componentDelegate,
-                                        componentView: componentView)
+    public func configureCellRootComponent(
+        cellView: UIView,
+        cellMeasurement: CVCellMeasurement,
+        componentDelegate: CVComponentDelegate,
+        messageSwipeActionState: CVMessageSwipeActionState,
+        componentView: CVComponentView,
+    ) {
+        Self.configureCellRootComponent(
+            rootComponent: self,
+            cellView: cellView,
+            cellMeasurement: cellMeasurement,
+            componentDelegate: componentDelegate,
+            componentView: componentView,
+        )
     }
 
     private var bubbleBackgroundColor: UIColor {
@@ -45,14 +50,27 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
     }
 
     private var outerHStackConfig: CVStackViewConfig {
-        let cellLayoutMargins = UIEdgeInsets(top: 0,
-                                             leading: conversationStyle.fullWidthGutterLeading,
-                                             bottom: 0,
-                                             trailing: conversationStyle.fullWidthGutterTrailing)
-        return CVStackViewConfig(axis: .horizontal,
-                                 alignment: .fill,
-                                 spacing: ConversationStyle.messageStackSpacing,
-                                 layoutMargins: cellLayoutMargins)
+        let cellLayoutMargins = UIEdgeInsets(
+            top: 0,
+            leading: conversationStyle.fullWidthGutterLeading,
+            bottom: 0,
+            trailing: conversationStyle.fullWidthGutterTrailing,
+        )
+        return CVStackViewConfig(
+            axis: .horizontal,
+            alignment: .fill,
+            spacing: ConversationStyle.messageStackSpacing,
+            layoutMargins: cellLayoutMargins,
+        )
+    }
+
+    private var innerHStackConfig: CVStackViewConfig {
+        return CVStackViewConfig(
+            axis: .horizontal,
+            alignment: .center,
+            spacing: 4,
+            layoutMargins: .zero,
+        )
     }
 
     private var innerVStackConfig: CVStackViewConfig {
@@ -64,20 +82,24 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
             layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
         }
 
-        return CVStackViewConfig(axis: .vertical,
-                                 alignment: .center,
-                                 spacing: 12,
-                                 layoutMargins: layoutMargins)
+        return CVStackViewConfig(
+            axis: .vertical,
+            alignment: .center,
+            spacing: 12,
+            layoutMargins: layoutMargins,
+        )
     }
 
     private var outerVStackConfig: CVStackViewConfig {
-        return CVStackViewConfig(axis: .vertical,
-                                 alignment: .center,
-                                 spacing: 0,
-                                 layoutMargins: .zero)
+        return CVStackViewConfig(
+            axis: .vertical,
+            alignment: .center,
+            spacing: 0,
+            layoutMargins: .zero,
+        )
     }
 
-    public override func wallpaperBlurView(componentView: CVComponentView) -> CVWallpaperBlurView? {
+    override public func wallpaperBlurView(componentView: CVComponentView) -> CVWallpaperBlurView? {
         guard let componentView = componentView as? CVComponentViewSystemMessage else {
             owsFailDebug("Unexpected componentView.")
             return nil
@@ -89,9 +111,11 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         CVComponentViewSystemMessage()
     }
 
-    public func configureForRendering(componentView: CVComponentView,
-                                      cellMeasurement: CVCellMeasurement,
-                                      componentDelegate: CVComponentDelegate) {
+    public func configureForRendering(
+        componentView: CVComponentView,
+        cellMeasurement: CVCellMeasurement,
+        componentDelegate: CVComponentDelegate,
+    ) {
         guard let componentView = componentView as? CVComponentViewSystemMessage else {
             owsFailDebug("Unexpected componentView.")
             return
@@ -102,24 +126,32 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         let wallpaperModeHasChanged = hasWallpaper != componentView.hasWallpaper
         let isFirstInCluster = itemModel.itemViewState.isFirstInCluster
         let isLastInCluster = itemModel.itemViewState.isLastInCluster
-        let hasClusteringChanges = (componentView.isFirstInCluster != isFirstInCluster ||
-                                        componentView.isLastInCluster != isLastInCluster)
-        let hasSelectionChanges = (componentView.isShowingSelectionUI != isShowingSelectionUI ||
-                                    componentView.wasShowingSelectionUI != wasShowingSelectionUI)
+        let hasClusteringChanges = (
+            componentView.isFirstInCluster != isFirstInCluster ||
+                componentView.isLastInCluster != isLastInCluster,
+        )
+        let hasSelectionChanges = (
+            componentView.isShowingSelectionUI != isShowingSelectionUI ||
+                componentView.wasShowingSelectionUI != wasShowingSelectionUI,
+        )
         var hasActionButton = false
-        if nil != action,
-           !itemViewState.shouldCollapseSystemMessageAction,
-           nil != cellMeasurement.size(key: Self.measurementKey_buttonSize) {
+        if
+            nil != action,
+            !itemViewState.shouldCollapseSystemMessageAction,
+            nil != cellMeasurement.size(key: Self.measurementKey_buttonSize)
+        {
             hasActionButton = true
         }
 
-        let isReusing = (componentView.rootView.superview != nil &&
-                            !themeHasChanged &&
-                            !wallpaperModeHasChanged &&
-                            !hasClusteringChanges &&
-                            !hasSelectionChanges &&
-                            !hasActionButton &&
-                            !componentView.hasActionButton)
+        let isReusing = (
+            componentView.rootView.superview != nil &&
+                !themeHasChanged &&
+                !wallpaperModeHasChanged &&
+                !hasClusteringChanges &&
+                !hasSelectionChanges &&
+                !hasActionButton &&
+                !componentView.hasActionButton,
+        )
         if !isReusing {
             componentView.reset(resetReusableState: true)
         }
@@ -132,39 +164,71 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         componentView.wasShowingSelectionUI = wasShowingSelectionUI
         componentView.hasActionButton = hasActionButton
 
+        let innerHStack = componentView.innerHStack
         let outerHStack = componentView.outerHStack
         let innerVStack = componentView.innerVStack
         let outerVStack = componentView.outerVStack
         let selectionView = componentView.selectionView
         let textLabel = componentView.textLabel
+        let messageTimerView = componentView.messageTimerView
 
         // Configuring the text label should happen in both reuse and non-reuse
         // scenarios
         textLabel.configureForRendering(config: textLabelConfig, spoilerAnimationManager: componentDelegate.spoilerState.animationManager)
-        textLabel.view.accessibilityLabel = textLabelConfig.text.accessibilityDescription
+        componentView.innerHStack.accessibilityLabel = textLabelConfig.text.accessibilityDescription
+        componentView.innerHStack.isAccessibilityElement = true
+
+        if let expiration {
+            messageTimerView.configure(
+                expirationTimestampMs: expiration.expirationTimestamp,
+                disappearingMessageInterval: expiration.expiresInSeconds,
+                tintColor: systemMessage.titleColor,
+            )
+        }
 
         if isReusing {
-            innerVStack.configureForReuse(config: innerVStackConfig,
-                                          cellMeasurement: cellMeasurement,
-                                          measurementKey: Self.measurementKey_innerVStack)
-            outerVStack.configureForReuse(config: outerVStackConfig,
-                                          cellMeasurement: cellMeasurement,
-                                          measurementKey: Self.measurementKey_outerVStack)
-            outerHStack.configureForReuse(config: outerHStackConfig,
-                                          cellMeasurement: cellMeasurement,
-                                          measurementKey: Self.measurementKey_outerHStack)
+            innerHStack.configureForReuse(
+                config: innerHStackConfig,
+                cellMeasurement: cellMeasurement,
+                measurementKey: Self.measurementKey_innerHStack,
+            )
+            innerVStack.configureForReuse(
+                config: innerVStackConfig,
+                cellMeasurement: cellMeasurement,
+                measurementKey: Self.measurementKey_innerVStack,
+            )
+            outerVStack.configureForReuse(
+                config: outerVStackConfig,
+                cellMeasurement: cellMeasurement,
+                measurementKey: Self.measurementKey_outerVStack,
+            )
+            outerHStack.configureForReuse(
+                config: outerHStackConfig,
+                cellMeasurement: cellMeasurement,
+                measurementKey: Self.measurementKey_outerHStack,
+            )
 
-            if hasWallpaper,
-               let wallpaperBlurView = componentView.wallpaperBlurView {
+            if
+                hasWallpaper,
+                let wallpaperBlurView = componentView.wallpaperBlurView
+            {
                 wallpaperBlurView.applyLayout()
                 wallpaperBlurView.updateIfNecessary()
             }
         } else {
+            var innerHStackViews: [UIView] = [
+                textLabel.view,
+            ]
+
+            if expiration != nil {
+                innerHStackViews.append(messageTimerView)
+            }
+
             var innerVStackViews: [UIView] = [
-                textLabel.view
+                innerHStack,
             ]
             let outerVStackViews = [
-                innerVStack
+                innerVStack,
             ]
             var outerHStackViews = [UIView]()
             if isShowingSelectionUI || wasShowingSelectionUI {
@@ -176,12 +240,14 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
             outerHStackViews.append(contentsOf: [
                 UIView.transparentSpacer(),
                 outerVStack,
-                UIView.transparentSpacer()
+                UIView.transparentSpacer(),
             ])
 
-            if let action = action,
-               !itemViewState.shouldCollapseSystemMessageAction,
-               let actionButtonSize = cellMeasurement.size(key: Self.measurementKey_buttonSize) {
+            if
+                let action,
+                !itemViewState.shouldCollapseSystemMessageAction,
+                let actionButtonSize = cellMeasurement.size(key: Self.measurementKey_buttonSize)
+            {
 
                 let buttonLabelConfig = self.buttonLabelConfig(action: action)
                 let button = OWSButton(title: action.title) {}
@@ -193,7 +259,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
                 if interaction is OWSGroupCallMessage {
                     button.backgroundColor = UIColor.ows_accentGreen
                 } else {
-                    if isDarkThemeEnabled && hasWallpaper {
+                    if isDarkThemeEnabled, hasWallpaper {
                         button.backgroundColor = .ows_gray65
                     } else {
                         button.backgroundColor = Theme.conversationButtonBackgroundColor
@@ -201,7 +267,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
 
                     switch action.action {
                     case .didTapActivatePayments, .didTapSendPayment:
-                        button.layer.borderColor = Theme.outlineColor.cgColor
+                        button.layer.borderColor = UIColor.Signal.opaqueSeparator.cgColor
                         button.layer.borderWidth = 1.5
                     default: break
                     }
@@ -212,18 +278,30 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
                 innerVStackViews.append(button)
             }
 
-            innerVStack.configure(config: innerVStackConfig,
-                                  cellMeasurement: cellMeasurement,
-                                  measurementKey: Self.measurementKey_innerVStack,
-                                  subviews: innerVStackViews)
-            outerVStack.configure(config: outerVStackConfig,
-                                  cellMeasurement: cellMeasurement,
-                                  measurementKey: Self.measurementKey_outerVStack,
-                                  subviews: outerVStackViews)
-            outerHStack.configure(config: outerHStackConfig,
-                                  cellMeasurement: cellMeasurement,
-                                  measurementKey: Self.measurementKey_outerHStack,
-                                  subviews: outerHStackViews)
+            innerHStack.configure(
+                config: innerHStackConfig,
+                cellMeasurement: cellMeasurement,
+                measurementKey: Self.measurementKey_innerHStack,
+                subviews: innerHStackViews,
+            )
+            innerVStack.configure(
+                config: innerVStackConfig,
+                cellMeasurement: cellMeasurement,
+                measurementKey: Self.measurementKey_innerVStack,
+                subviews: innerVStackViews,
+            )
+            outerVStack.configure(
+                config: outerVStackConfig,
+                cellMeasurement: cellMeasurement,
+                measurementKey: Self.measurementKey_outerVStack,
+                subviews: outerVStackViews,
+            )
+            outerHStack.configure(
+                config: outerHStackConfig,
+                cellMeasurement: cellMeasurement,
+                measurementKey: Self.measurementKey_outerHStack,
+                subviews: outerHStackViews,
+            )
 
             componentView.wallpaperBlurView?.removeFromSuperview()
             componentView.wallpaperBlurView = nil
@@ -235,9 +313,11 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
 
             if hasWallpaper {
                 let wallpaperBlurView = componentView.ensureWallpaperBlurView()
-                configureWallpaperBlurView(wallpaperBlurView: wallpaperBlurView,
-                                           maskCornerRadius: 0,
-                                           componentDelegate: componentDelegate)
+                configureWallpaperBlurView(
+                    wallpaperBlurView: wallpaperBlurView,
+                    maskCornerRadius: 0,
+                    componentDelegate: componentDelegate,
+                )
                 bubbleView = wallpaperBlurView
             } else {
                 let backgroundView = UIView()
@@ -246,7 +326,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
                 bubbleView = backgroundView
             }
 
-            if isFirstInCluster && isLastInCluster {
+            if isFirstInCluster, isLastInCluster {
                 innerVStack.addSubviewToFillSuperviewEdges(bubbleView)
                 innerVStack.sendSubviewToBack(bubbleView)
 
@@ -276,7 +356,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
             let layoutMargins = CurrentAppContext().isRTL ? outerHStackConfig.layoutMargins.right : outerHStackConfig.layoutMargins.left
             let selectionOffset = -(layoutMargins + selectionViewWidth)
             let outerVStackOffset = -(outerHStackConfig.spacing + selectionViewWidth - layoutMargins)
-            if isShowingSelectionUI && !wasShowingSelectionUI { // Animate in
+            if isShowingSelectionUI, !wasShowingSelectionUI { // Animate in
                 selectionView.addTransformBlock { view in
                     let animation = CABasicAnimation(keyPath: "transform.translation.x")
                     animation.fromValue = selectionOffset
@@ -294,7 +374,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
                     animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
                     view.layer.add(animation, forKey: "insert")
                 }
-            } else if !isShowingSelectionUI && wasShowingSelectionUI { // Animate out
+            } else if !isShowingSelectionUI, wasShowingSelectionUI { // Animate out
                 selectionView.addTransformBlock { view in
                     let animation = CABasicAnimation(keyPath: "transform.translation.x")
                     animation.fromValue = 0
@@ -331,7 +411,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
 
     private var textLabelConfig: CVTextLabel.Config {
         let selectionStyling: [NSAttributedString.Key: Any] = [
-            .backgroundColor: systemMessage.titleSelectionBackgroundColor
+            .backgroundColor: systemMessage.titleSelectionBackgroundColor,
         ]
 
         return CVTextLabel.Config(
@@ -343,7 +423,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
             textAlignment: .center,
             lineBreakMode: .byWordWrapping,
             items: systemMessage.namesInTitle.map { .referencedUser(referencedUserItem: $0) },
-            linkifyStyle: .underlined(bodyTextColor: systemMessage.titleColor)
+            linkifyStyle: .underlined(bodyTextColor: systemMessage.titleColor),
         )
     }
 
@@ -358,7 +438,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
             action.title,
             font: UIFont.dynamicTypeFootnote.semibold(),
             textColor: textColor,
-            textAlignment: .center
+            textAlignment: .center,
         )
     }
 
@@ -370,6 +450,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         UIFont.dynamicTypeFootnote
     }
 
+    private static let measurementKey_innerHStack = "CVComponentSystemMessage.measurementKey_innerHStack"
     private static let measurementKey_outerHStack = "CVComponentSystemMessage.measurementKey_outerHStack"
     private static let measurementKey_innerVStack = "CVComponentSystemMessage.measurementKey_innerVStack"
     private static let measurementKey_outerVStack = "CVComponentSystemMessage.measurementKey_outerVStack"
@@ -378,10 +459,14 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
     public func measure(maxWidth: CGFloat, measurementBuilder: CVCellMeasurement.Builder) -> CGSize {
         owsAssertDebug(maxWidth > 0)
 
-        var maxContentWidth = (maxWidth -
-                                (outerHStackConfig.layoutMargins.totalWidth +
-                                    outerVStackConfig.layoutMargins.totalWidth +
-                                    innerVStackConfig.layoutMargins.totalWidth))
+        var maxContentWidth = (
+            maxWidth -
+                (
+                    outerHStackConfig.layoutMargins.totalWidth +
+                        outerVStackConfig.layoutMargins.totalWidth +
+                        innerVStackConfig.layoutMargins.totalWidth
+                ),
+        )
 
         let selectionViewSize = CGSize(width: ConversationStyle.selectionViewWidth, height: 0)
         if isShowingSelectionUI || wasShowingSelectionUI {
@@ -396,31 +481,54 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
 
         let textSize = CVTextLabel.measureSize(
             config: textLabelConfig,
-            maxWidth: maxContentWidth
+            maxWidth: maxContentWidth,
+        )
+
+        var innerHStackSubviewInfos = [ManualStackSubviewInfo]()
+        innerHStackSubviewInfos.append(textSize.size.asManualSubviewInfo)
+
+        if let infoMessage = interaction as? TSInfoMessage, infoMessage.hasPerConversationExpiration {
+            let timerSize = MessageTimerView.measureSize
+            innerHStackSubviewInfos.append(timerSize.asManualSubviewInfo(hasFixedWidth: true))
+        }
+
+        let innerHStackMeasurement = ManualStackView.measure(
+            config: innerHStackConfig,
+            measurementBuilder: measurementBuilder,
+            measurementKey: Self.measurementKey_innerHStack,
+            subviewInfos: innerHStackSubviewInfos,
         )
 
         var innerVStackSubviewInfos = [ManualStackSubviewInfo]()
-        innerVStackSubviewInfos.append(textSize.size.asManualSubviewInfo)
-        if let action = action, !itemViewState.shouldCollapseSystemMessageAction {
+        innerVStackSubviewInfos.append(innerHStackMeasurement.measuredSize.asManualSubviewInfo)
+        if let action, !itemViewState.shouldCollapseSystemMessageAction {
             let buttonLabelConfig = self.buttonLabelConfig(action: action)
-            let actionButtonSize = (CVText.measureLabel(config: buttonLabelConfig,
-                                                       maxWidth: maxContentWidth) +
-                                        buttonContentEdgeInsets.asSize)
+            let actionButtonSize = (
+                CVText.measureLabel(
+                    config: buttonLabelConfig,
+                    maxWidth: maxContentWidth,
+                ) +
+                    buttonContentEdgeInsets.asSize,
+            )
             measurementBuilder.setSize(key: Self.measurementKey_buttonSize, size: actionButtonSize)
             innerVStackSubviewInfos.append(actionButtonSize.asManualSubviewInfo(hasFixedSize: true))
         }
-        let innerVStackMeasurement = ManualStackView.measure(config: innerVStackConfig,
-                                                             measurementBuilder: measurementBuilder,
-                                                             measurementKey: Self.measurementKey_innerVStack,
-                                                             subviewInfos: innerVStackSubviewInfos)
+        let innerVStackMeasurement = ManualStackView.measure(
+            config: innerVStackConfig,
+            measurementBuilder: measurementBuilder,
+            measurementKey: Self.measurementKey_innerVStack,
+            subviewInfos: innerVStackSubviewInfos,
+        )
 
         let outerVStackSubviewInfos: [ManualStackSubviewInfo] = [
-            innerVStackMeasurement.measuredSize.asManualSubviewInfo
+            innerVStackMeasurement.measuredSize.asManualSubviewInfo,
         ]
-        let outerVStackMeasurement = ManualStackView.measure(config: outerVStackConfig,
-                                                             measurementBuilder: measurementBuilder,
-                                                             measurementKey: Self.measurementKey_outerVStack,
-                                                             subviewInfos: outerVStackSubviewInfos)
+        let outerVStackMeasurement = ManualStackView.measure(
+            config: outerVStackConfig,
+            measurementBuilder: measurementBuilder,
+            measurementKey: Self.measurementKey_outerVStack,
+            subviewInfos: outerVStackSubviewInfos,
+        )
 
         var outerHStackSubviewInfos = [ManualStackSubviewInfo]()
         if isShowingSelectionUI || wasShowingSelectionUI {
@@ -429,13 +537,15 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         outerHStackSubviewInfos.append(contentsOf: [
             CGSize(width: minBubbleHMargin, height: 0).asManualSubviewInfo(hasFixedWidth: true),
             outerVStackMeasurement.measuredSize.asManualSubviewInfo,
-            CGSize(width: minBubbleHMargin, height: 0).asManualSubviewInfo(hasFixedWidth: true)
+            CGSize(width: minBubbleHMargin, height: 0).asManualSubviewInfo(hasFixedWidth: true),
         ])
-        let outerHStackMeasurement = ManualStackView.measure(config: outerHStackConfig,
-                                                             measurementBuilder: measurementBuilder,
-                                                             measurementKey: Self.measurementKey_outerHStack,
-                                                             subviewInfos: outerHStackSubviewInfos,
-                                                             maxWidth: maxWidth)
+        let outerHStackMeasurement = ManualStackView.measure(
+            config: outerHStackConfig,
+            measurementBuilder: measurementBuilder,
+            measurementKey: Self.measurementKey_outerHStack,
+            subviewInfos: outerHStackSubviewInfos,
+            maxWidth: maxWidth,
+        )
         return outerHStackMeasurement.measuredSize
     }
 
@@ -443,10 +553,12 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
 
     // MARK: - Events
 
-    public override func handleTap(sender: UIGestureRecognizer,
-                                   componentDelegate: CVComponentDelegate,
-                                   componentView: CVComponentView,
-                                   renderItem: CVRenderItem) -> Bool {
+    override public func handleTap(
+        sender: UIGestureRecognizer,
+        componentDelegate: CVComponentDelegate,
+        componentView: CVComponentView,
+        renderItem: CVRenderItem,
+    ) -> Bool {
 
         guard let componentView = componentView as? CVComponentViewSystemMessage else {
             owsFailDebug("Unexpected componentView.")
@@ -486,13 +598,17 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         return false
     }
 
-    public override func findLongPressHandler(sender: UIGestureRecognizer,
-                                              componentDelegate: CVComponentDelegate,
-                                              componentView: CVComponentView,
-                                              renderItem: CVRenderItem) -> CVLongPressHandler? {
-        return CVLongPressHandler(delegate: componentDelegate,
-                                  renderItem: renderItem,
-                                  gestureLocation: .systemMessage)
+    override public func findLongPressHandler(
+        sender: UIGestureRecognizer,
+        componentDelegate: CVComponentDelegate,
+        componentView: CVComponentView,
+        renderItem: CVRenderItem,
+    ) -> CVLongPressHandler? {
+        return CVLongPressHandler(
+            delegate: componentDelegate,
+            renderItem: renderItem,
+            gestureLocation: .systemMessage,
+        )
     }
 
     // MARK: -
@@ -501,10 +617,12 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
     // It could be the entire item or some part thereof.
     public class CVComponentViewSystemMessage: NSObject, CVComponentView {
 
+        fileprivate let innerHStack = ManualStackView(name: "systemMessage.innerHStack")
         fileprivate let outerHStack = ManualStackView(name: "systemMessage.outerHStack")
         fileprivate let innerVStack = ManualStackView(name: "systemMessage.innerVStack")
         fileprivate let outerVStack = ManualStackView(name: "systemMessage.outerVStack")
         fileprivate let selectionView = MessageSelectionView()
+        fileprivate let messageTimerView = MessageTimerView()
 
         fileprivate var wallpaperBlurView: CVWallpaperBlurView?
         fileprivate func ensureWallpaperBlurView() -> CVWallpaperBlurView {
@@ -551,7 +669,11 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
                 outerHStack.reset()
                 innerVStack.reset()
                 outerVStack.reset()
+                innerHStack.reset()
                 textLabel.reset()
+
+                messageTimerView.prepareForReuse()
+                messageTimerView.removeFromSuperview()
 
                 wallpaperBlurView?.removeFromSuperview()
                 wallpaperBlurView?.resetContentAndConfiguration()
@@ -581,34 +703,43 @@ extension CVComponentSystemMessage {
     static func buildComponentState(
         title: NSAttributedString,
         action: Action?,
+        expiration: CVComponentState.SystemMessage.Expiration?,
         titleColor: UIColor? = nil,
-        titleSelectionBackgroundColor: UIColor? = nil
+        titleSelectionBackgroundColor: UIColor? = nil,
     ) -> CVComponentState.SystemMessage {
         return CVComponentState.SystemMessage(
             title: title,
             titleColor: titleColor ?? defaultTextColor,
             titleSelectionBackgroundColor: titleSelectionBackgroundColor ?? defaultSelectionBackgroundColor,
-            action: action
+            action: action,
+            expiration: expiration,
         )
     }
 
-    static func buildComponentState(interaction: TSInteraction,
-                                    threadViewModel: ThreadViewModel,
-                                    currentGroupThreadCallGroupId: GroupIdentifier?,
-                                    transaction: DBReadTransaction) -> CVComponentState.SystemMessage {
+    static func buildComponentState(
+        interaction: TSInteraction,
+        threadViewModel: ThreadViewModel,
+        currentGroupThreadCallGroupId: GroupIdentifier?,
+        transaction: DBReadTransaction,
+    ) -> CVComponentState.SystemMessage {
 
         let title = Self.title(forInteraction: interaction, transaction: transaction)
         let maybeOverrideTitleColor = Self.overrideTextColor(forInteraction: interaction)
-        let action = Self.action(forInteraction: interaction,
-                                 threadViewModel: threadViewModel,
-                                 currentGroupThreadCallGroupId: currentGroupThreadCallGroupId,
-                                 transaction: transaction)
+        let action = Self.action(
+            forInteraction: interaction,
+            threadViewModel: threadViewModel,
+            currentGroupThreadCallGroupId: currentGroupThreadCallGroupId,
+            transaction: transaction,
+        )
+        let expiration = Self.expiration(forInteraction: interaction, transaction: transaction)
 
-        return buildComponentState(title: title, action: action, titleColor: maybeOverrideTitleColor)
+        return buildComponentState(title: title, action: action, expiration: expiration, titleColor: maybeOverrideTitleColor)
     }
 
-    private static func title(forInteraction interaction: TSInteraction,
-                              transaction: DBReadTransaction) -> NSAttributedString {
+    private static func title(
+        forInteraction interaction: TSInteraction,
+        transaction: DBReadTransaction,
+    ) -> NSAttributedString {
 
         let font = Self.textLabelFont
         let labelText = NSMutableAttributedString()
@@ -624,11 +755,11 @@ extension CVComponentSystemMessage {
             let infoMessage = interaction as? TSInfoMessage,
             infoMessage.messageType == .typeGroupUpdate,
             let localIdentifiers = DependenciesBridge.shared.tsAccountManager.localIdentifiers(
-                tx: transaction
+                tx: transaction,
             ),
             let displayableGroupUpdates = infoMessage.displayableGroupUpdateItems(
                 localIdentifiers: localIdentifiers,
-                tx: transaction
+                tx: transaction,
             ),
             !displayableGroupUpdates.isEmpty
         {
@@ -637,7 +768,7 @@ extension CVComponentSystemMessage {
                 labelText.appendTemplatedImage(
                     named: Self.iconName(displayableGroupUpdateItem: updateItem),
                     font: font,
-                    heightReference: ImageAttachmentHeightReference.lineHeight
+                    heightReference: ImageAttachmentHeightReference.lineHeight,
                 )
 
                 labelText.append("  ", attributes: [:])
@@ -657,15 +788,17 @@ extension CVComponentSystemMessage {
         }
 
         if let icon = icon(forInteraction: interaction) {
-            labelText.appendImage(icon.withRenderingMode(.alwaysTemplate),
-                                  font: font,
-                                  heightReference: ImageAttachmentHeightReference.lineHeight)
+            labelText.appendImage(
+                icon.withRenderingMode(.alwaysTemplate),
+                font: font,
+                heightReference: ImageAttachmentHeightReference.lineHeight,
+            )
             labelText.append("  ", attributes: [:])
         }
 
         let systemMessageText = Self.systemMessageText(
             forInteraction: interaction,
-            transaction: transaction
+            transaction: transaction,
         )
 
         owsAssertDebug(!systemMessageText.isEmpty)
@@ -682,7 +815,7 @@ extension CVComponentSystemMessage {
 
     private static func systemMessageText(
         forInteraction interaction: TSInteraction,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> String {
         if let errorMessage = interaction as? TSErrorMessage {
             return errorMessage.previewText(transaction: transaction)
@@ -691,22 +824,22 @@ extension CVComponentSystemMessage {
             case (true, true):
                 OWSLocalizedString(
                     "VERIFICATION_STATE_CHANGE_FORMAT_VERIFIED_LOCAL",
-                    comment: "Format for info message indicating that the verification state was verified on this device. Embeds {{user's name or phone number}}."
+                    comment: "Format for info message indicating that the verification state was verified on this device. Embeds {{user's name or phone number}}.",
                 )
             case (true, false):
                 OWSLocalizedString(
                     "VERIFICATION_STATE_CHANGE_FORMAT_NOT_VERIFIED_LOCAL",
-                    comment: "Format for info message indicating that the verification state was unverified on this device. Embeds {{user's name or phone number}}."
+                    comment: "Format for info message indicating that the verification state was unverified on this device. Embeds {{user's name or phone number}}.",
                 )
             case (false, true):
                 OWSLocalizedString(
                     "VERIFICATION_STATE_CHANGE_FORMAT_VERIFIED_OTHER_DEVICE",
-                    comment: "Format for info message indicating that the verification state was verified on another device. Embeds {{user's name or phone number}}."
+                    comment: "Format for info message indicating that the verification state was verified on another device. Embeds {{user's name or phone number}}.",
                 )
             case (false, false):
                 OWSLocalizedString(
                     "VERIFICATION_STATE_CHANGE_FORMAT_NOT_VERIFIED_OTHER_DEVICE",
-                    comment: "Format for info message indicating that the verification state was unverified on another device. Embeds {{user's name or phone number}}."
+                    comment: "Format for info message indicating that the verification state was unverified on another device. Embeds {{user's name or phone number}}.",
                 )
             }
 
@@ -770,8 +903,8 @@ extension CVComponentSystemMessage {
         } else if let infoMessage = interaction as? TSInfoMessage {
             switch infoMessage.messageType {
             case .userNotRegistered,
-                .typeLocalUserEndedSession,
-                .typeRemoteUserEndedSession,
+                 .typeLocalUserEndedSession,
+                 .typeRemoteUserEndedSession,
                  .typeUnsupportedMessage,
                  .addToContactsOffer,
                  .addUserToProfileWhitelistOffer,
@@ -833,6 +966,10 @@ extension CVComponentSystemMessage {
                 return Theme.iconImage(.threadCompact)
             case .acceptedMessageRequest:
                 return Theme.iconImage(.threadCompact)
+            case .typeEndPoll:
+                return Theme.iconImage(.poll)
+            case .typePinnedMessage:
+                return Theme.iconImage(.pin)
             }
         } else if let call = interaction as? TSCall {
             switch call.offerType {
@@ -852,145 +989,145 @@ extension CVComponentSystemMessage {
     private static func iconName(displayableGroupUpdateItem: DisplayableGroupUpdateItem) -> String {
         switch displayableGroupUpdateItem {
         case
-                .localUserLeft,
-                .otherUserLeft:
+            .localUserLeft,
+            .otherUserLeft:
             return Theme.iconName(.leave16)
         case
-                .localUserRemoved,
-                .localUserRemovedByUnknownUser,
-                .otherUserRemovedByLocalUser,
-                .otherUserRemoved,
-                .otherUserRemovedByUnknownUser:
+            .localUserRemoved,
+            .localUserRemovedByUnknownUser,
+            .otherUserRemovedByLocalUser,
+            .otherUserRemoved,
+            .otherUserRemovedByUnknownUser:
             return Theme.iconName(.memberRemove16)
         case
-                .unnamedUsersWereInvitedByLocalUser,
-                .unnamedUsersWereInvitedByOtherUser,
-                .unnamedUsersWereInvitedByUnknownUser,
-                .localUserWasInvitedByLocalUser,
-                .localUserWasInvitedByOtherUser,
-                .localUserWasInvitedByUnknownUser,
-                .otherUserWasInvitedByLocalUser,
-                .localUserAddedByLocalUser,
-                .localUserAddedByOtherUser,
-                .localUserAddedByUnknownUser,
-                .localUserAcceptedInviteFromUnknownUser,
-                .localUserAcceptedInviteFromInviter,
-                .localUserJoined,
-                .localUserJoinedViaInviteLink,
-                .localUserRequestApproved,
-                .localUserRequestApprovedByUnknownUser,
-                .otherUserAddedByLocalUser,
-                .otherUserAddedByOtherUser,
-                .otherUserAddedByUnknownUser,
-                .otherUserAcceptedInviteFromLocalUser,
-                .otherUserAcceptedInviteFromInviter,
-                .otherUserAcceptedInviteFromUnknownUser,
-                .otherUserJoined,
-                .otherUserJoinedViaInviteLink,
-                .otherUserRequestApprovedByLocalUser,
-                .otherUserRequestApproved,
-                .otherUserRequestApprovedByUnknownUser:
+            .unnamedUsersWereInvitedByLocalUser,
+            .unnamedUsersWereInvitedByOtherUser,
+            .unnamedUsersWereInvitedByUnknownUser,
+            .localUserWasInvitedByLocalUser,
+            .localUserWasInvitedByOtherUser,
+            .localUserWasInvitedByUnknownUser,
+            .otherUserWasInvitedByLocalUser,
+            .localUserAddedByLocalUser,
+            .localUserAddedByOtherUser,
+            .localUserAddedByUnknownUser,
+            .localUserAcceptedInviteFromUnknownUser,
+            .localUserAcceptedInviteFromInviter,
+            .localUserJoined,
+            .localUserJoinedViaInviteLink,
+            .localUserRequestApproved,
+            .localUserRequestApprovedByUnknownUser,
+            .otherUserAddedByLocalUser,
+            .otherUserAddedByOtherUser,
+            .otherUserAddedByUnknownUser,
+            .otherUserAcceptedInviteFromLocalUser,
+            .otherUserAcceptedInviteFromInviter,
+            .otherUserAcceptedInviteFromUnknownUser,
+            .otherUserJoined,
+            .otherUserJoinedViaInviteLink,
+            .otherUserRequestApprovedByLocalUser,
+            .otherUserRequestApproved,
+            .otherUserRequestApprovedByUnknownUser:
             return Theme.iconName(.memberAdded16)
         case
-                .createdByLocalUser,
-                .createdByOtherUser,
-                .createdByUnknownUser,
-                .genericUpdateByLocalUser,
-                .genericUpdateByOtherUser,
-                .genericUpdateByUnknownUser,
-                .localUserRequestedToJoin,
-                .localUserRequestCanceledByLocalUser,
-                .localUserRequestRejectedByUnknownUser,
-                .otherUserRequestedToJoin,
-                .otherUserRequestCanceledByOtherUser,
-                .otherUserRequestRejectedByLocalUser,
-                .otherUserRequestRejectedByOtherUser,
-                .otherUserRequestRejectedByUnknownUser,
-                .sequenceOfInviteLinkRequestAndCancels,
-                .inviteLinkResetByLocalUser,
-                .inviteLinkResetByOtherUser,
-                .inviteLinkResetByUnknownUser,
-                .inviteLinkDisabledByLocalUser,
-                .inviteLinkDisabledByOtherUser,
-                .inviteLinkDisabledByUnknownUser,
-                .inviteLinkEnabledWithApprovalByLocalUser,
-                .inviteLinkEnabledWithApprovalByOtherUser,
-                .inviteLinkEnabledWithApprovalByUnknownUser,
-                .inviteLinkEnabledWithoutApprovalByLocalUser,
-                .inviteLinkEnabledWithoutApprovalByOtherUser,
-                .inviteLinkEnabledWithoutApprovalByUnknownUser,
-                .inviteLinkApprovalEnabledByLocalUser,
-                .inviteLinkApprovalEnabledByOtherUser,
-                .inviteLinkApprovalEnabledByUnknownUser,
-                .inviteLinkApprovalDisabledByLocalUser,
-                .inviteLinkApprovalDisabledByOtherUser,
-                .inviteLinkApprovalDisabledByUnknownUser,
-                .inviteFriendsToNewlyCreatedGroup:
+            .createdByLocalUser,
+            .createdByOtherUser,
+            .createdByUnknownUser,
+            .genericUpdateByLocalUser,
+            .genericUpdateByOtherUser,
+            .genericUpdateByUnknownUser,
+            .localUserRequestedToJoin,
+            .localUserRequestCanceledByLocalUser,
+            .localUserRequestRejectedByUnknownUser,
+            .otherUserRequestedToJoin,
+            .otherUserRequestCanceledByOtherUser,
+            .otherUserRequestRejectedByLocalUser,
+            .otherUserRequestRejectedByOtherUser,
+            .otherUserRequestRejectedByUnknownUser,
+            .sequenceOfInviteLinkRequestAndCancels,
+            .inviteLinkResetByLocalUser,
+            .inviteLinkResetByOtherUser,
+            .inviteLinkResetByUnknownUser,
+            .inviteLinkDisabledByLocalUser,
+            .inviteLinkDisabledByOtherUser,
+            .inviteLinkDisabledByUnknownUser,
+            .inviteLinkEnabledWithApprovalByLocalUser,
+            .inviteLinkEnabledWithApprovalByOtherUser,
+            .inviteLinkEnabledWithApprovalByUnknownUser,
+            .inviteLinkEnabledWithoutApprovalByLocalUser,
+            .inviteLinkEnabledWithoutApprovalByOtherUser,
+            .inviteLinkEnabledWithoutApprovalByUnknownUser,
+            .inviteLinkApprovalEnabledByLocalUser,
+            .inviteLinkApprovalEnabledByOtherUser,
+            .inviteLinkApprovalEnabledByUnknownUser,
+            .inviteLinkApprovalDisabledByLocalUser,
+            .inviteLinkApprovalDisabledByOtherUser,
+            .inviteLinkApprovalDisabledByUnknownUser,
+            .inviteFriendsToNewlyCreatedGroup:
             return Theme.iconName(.group16)
         case
-                .unnamedUserInvitesWereRevokedByLocalUser,
-                .unnamedUserInvitesWereRevokedByOtherUser,
-                .unnamedUserInvitesWereRevokedByUnknownUser,
-                .localUserDeclinedInviteFromInviter,
-                .localUserDeclinedInviteFromUnknownUser,
-                .localUserInviteRevoked,
-                .localUserInviteRevokedByUnknownUser,
-                .otherUserDeclinedInviteFromLocalUser,
-                .otherUserDeclinedInviteFromInviter,
-                .otherUserDeclinedInviteFromUnknownUser,
-                .otherUserInviteRevokedByLocalUser:
+            .unnamedUserInvitesWereRevokedByLocalUser,
+            .unnamedUserInvitesWereRevokedByOtherUser,
+            .unnamedUserInvitesWereRevokedByUnknownUser,
+            .localUserDeclinedInviteFromInviter,
+            .localUserDeclinedInviteFromUnknownUser,
+            .localUserInviteRevoked,
+            .localUserInviteRevokedByUnknownUser,
+            .otherUserDeclinedInviteFromLocalUser,
+            .otherUserDeclinedInviteFromInviter,
+            .otherUserDeclinedInviteFromUnknownUser,
+            .otherUserInviteRevokedByLocalUser:
             return Theme.iconName(.memberDeclined16)
         case
-                .wasMigrated,
-                .localUserInvitedAfterMigration,
-                .otherUsersInvitedAfterMigration,
-                .otherUsersDroppedAfterMigration,
-                .attributesAccessChangedByLocalUser,
-                .attributesAccessChangedByOtherUser,
-                .attributesAccessChangedByUnknownUser,
-                .membersAccessChangedByLocalUser,
-                .membersAccessChangedByOtherUser,
-                .membersAccessChangedByUnknownUser,
-                .localUserWasGrantedAdministratorByLocalUser,
-                .localUserWasGrantedAdministratorByOtherUser,
-                .localUserWasGrantedAdministratorByUnknownUser,
-                .localUserWasRevokedAdministratorByLocalUser,
-                .localUserWasRevokedAdministratorByOtherUser,
-                .localUserWasRevokedAdministratorByUnknownUser,
-                .otherUserWasGrantedAdministratorByLocalUser,
-                .otherUserWasGrantedAdministratorByOtherUser,
-                .otherUserWasGrantedAdministratorByUnknownUser,
-                .otherUserWasRevokedAdministratorByLocalUser,
-                .otherUserWasRevokedAdministratorByOtherUser,
-                .otherUserWasRevokedAdministratorByUnknownUser,
-                .announcementOnlyEnabledByLocalUser,
-                .announcementOnlyEnabledByOtherUser,
-                .announcementOnlyEnabledByUnknownUser,
-                .announcementOnlyDisabledByLocalUser,
-                .announcementOnlyDisabledByOtherUser,
-                .announcementOnlyDisabledByUnknownUser:
+            .wasMigrated,
+            .localUserInvitedAfterMigration,
+            .otherUsersInvitedAfterMigration,
+            .otherUsersDroppedAfterMigration,
+            .attributesAccessChangedByLocalUser,
+            .attributesAccessChangedByOtherUser,
+            .attributesAccessChangedByUnknownUser,
+            .membersAccessChangedByLocalUser,
+            .membersAccessChangedByOtherUser,
+            .membersAccessChangedByUnknownUser,
+            .localUserWasGrantedAdministratorByLocalUser,
+            .localUserWasGrantedAdministratorByOtherUser,
+            .localUserWasGrantedAdministratorByUnknownUser,
+            .localUserWasRevokedAdministratorByLocalUser,
+            .localUserWasRevokedAdministratorByOtherUser,
+            .localUserWasRevokedAdministratorByUnknownUser,
+            .otherUserWasGrantedAdministratorByLocalUser,
+            .otherUserWasGrantedAdministratorByOtherUser,
+            .otherUserWasGrantedAdministratorByUnknownUser,
+            .otherUserWasRevokedAdministratorByLocalUser,
+            .otherUserWasRevokedAdministratorByOtherUser,
+            .otherUserWasRevokedAdministratorByUnknownUser,
+            .announcementOnlyEnabledByLocalUser,
+            .announcementOnlyEnabledByOtherUser,
+            .announcementOnlyEnabledByUnknownUser,
+            .announcementOnlyDisabledByLocalUser,
+            .announcementOnlyDisabledByOtherUser,
+            .announcementOnlyDisabledByUnknownUser:
             return Theme.iconName(.megaphone16)
         case
-                .nameChangedByLocalUser,
-                .nameChangedByOtherUser,
-                .nameChangedByUnknownUser,
-                .nameRemovedByLocalUser,
-                .nameRemovedByOtherUser,
-                .nameRemovedByUnknownUser,
-                .descriptionChangedByLocalUser,
-                .descriptionChangedByOtherUser,
-                .descriptionChangedByUnknownUser,
-                .descriptionRemovedByLocalUser,
-                .descriptionRemovedByOtherUser,
-                .descriptionRemovedByUnknownUser:
+            .nameChangedByLocalUser,
+            .nameChangedByOtherUser,
+            .nameChangedByUnknownUser,
+            .nameRemovedByLocalUser,
+            .nameRemovedByOtherUser,
+            .nameRemovedByUnknownUser,
+            .descriptionChangedByLocalUser,
+            .descriptionChangedByOtherUser,
+            .descriptionChangedByUnknownUser,
+            .descriptionRemovedByLocalUser,
+            .descriptionRemovedByOtherUser,
+            .descriptionRemovedByUnknownUser:
             return Theme.iconName(.compose16)
         case
-                .avatarChangedByLocalUser,
-                .avatarChangedByOtherUser,
-                .avatarChangedByUnknownUser,
-                .avatarRemovedByLocalUser,
-                .avatarRemovedByOtherUser,
-                .avatarRemovedByUnknownUser:
+            .avatarChangedByLocalUser,
+            .avatarChangedByOtherUser,
+            .avatarChangedByUnknownUser,
+            .avatarRemovedByLocalUser,
+            .avatarRemovedByOtherUser,
+            .avatarRemovedByUnknownUser:
             return Theme.iconName(.photo16)
         case
             .disappearingMessagesEnabledByLocalUser,
@@ -1010,7 +1147,7 @@ extension CVComponentSystemMessage {
     static func buildDefaultDisappearingMessageTimerState(
         interaction: TSInteraction,
         threadViewModel: ThreadViewModel,
-        transaction tx: DBReadTransaction
+        transaction tx: DBReadTransaction,
     ) -> CVComponentState.SystemMessage {
         let dmConfigurationStore = DependenciesBridge.shared.disappearingMessagesConfigurationStore
         let configuration = dmConfigurationStore.fetchOrBuildDefault(for: .universal, tx: tx)
@@ -1019,17 +1156,17 @@ extension CVComponentSystemMessage {
         labelText.appendImage(
             Theme.iconImage(.timer16).withRenderingMode(.alwaysTemplate),
             font: Self.textLabelFont,
-            heightReference: ImageAttachmentHeightReference.lineHeight
+            heightReference: ImageAttachmentHeightReference.lineHeight,
         )
         labelText.append("  ", attributes: [:])
 
         let titleFormat = OWSLocalizedString(
             "SYSTEM_MESSAGE_DEFAULT_DISAPPEARING_MESSAGE_TIMER_FORMAT",
-            comment: "Indicator that the default disappearing message timer will be applied when you send a message. Embeds {default disappearing message time}"
+            comment: "Indicator that the default disappearing message timer will be applied when you send a message. Embeds {default disappearing message time}",
         )
-        labelText.append(String(format: titleFormat, configuration.durationString))
+        labelText.append(String(format: titleFormat, configuration.durationString()))
 
-        return buildComponentState(title: labelText, action: nil)
+        return buildComponentState(title: labelText, action: nil, expiration: nil)
     }
 
     // MARK: - Actions
@@ -1038,7 +1175,7 @@ extension CVComponentSystemMessage {
         forInteraction interaction: TSInteraction,
         threadViewModel: ThreadViewModel,
         currentGroupThreadCallGroupId: GroupIdentifier?,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> Action? {
         if let errorMessage = interaction as? TSErrorMessage {
             return action(forErrorMessage: errorMessage)
@@ -1050,7 +1187,7 @@ extension CVComponentSystemMessage {
             return action(
                 forGroupCall: groupCall,
                 threadViewModel: threadViewModel,
-                currentGroupThreadCallGroupId: currentGroupThreadCallGroupId
+                currentGroupThreadCallGroupId: currentGroupThreadCallGroupId,
             )
         } else {
             owsFailDebug("Invalid interaction.")
@@ -1067,14 +1204,20 @@ extension CVComponentSystemMessage {
             }
 
             if message.wasIdentityVerified {
-                return Action(title: OWSLocalizedString("SYSTEM_MESSAGE_ACTION_VERIFY_SAFETY_NUMBER",
-                                                       comment: "Label for button to verify a user's safety number."),
-                              accessibilityIdentifier: "verify_safety_number",
-                              action: .didTapPreviouslyVerifiedIdentityChange(address: address))
+                return Action(
+                    title: OWSLocalizedString(
+                        "SYSTEM_MESSAGE_ACTION_VERIFY_SAFETY_NUMBER",
+                        comment: "Label for button to verify a user's safety number.",
+                    ),
+                    accessibilityIdentifier: "verify_safety_number",
+                    action: .didTapPreviouslyVerifiedIdentityChange(address: address),
+                )
             } else {
-                return Action(title: CommonStrings.learnMore,
-                              accessibilityIdentifier: "learn_more",
-                              action: .didTapUnverifiedIdentityChange(address: address))
+                return Action(
+                    title: CommonStrings.learnMore,
+                    accessibilityIdentifier: "learn_more",
+                    action: .didTapUnverifiedIdentityChange(address: address),
+                )
             }
         case .wrongTrustedIdentityKey:
             return nil
@@ -1082,18 +1225,26 @@ extension CVComponentSystemMessage {
              .missingKeyId,
              .noSession,
              .invalidMessage:
-            return Action(title: OWSLocalizedString("FINGERPRINT_SHRED_KEYMATERIAL_BUTTON",
-                                                   comment: "Label for button to reset a session."),
-                          accessibilityIdentifier: "reset_session",
-                          action: .didTapCorruptedMessage(errorMessage: message))
+            return Action(
+                title: OWSLocalizedString(
+                    "FINGERPRINT_SHRED_KEYMATERIAL_BUTTON",
+                    comment: "Label for button to reset a session.",
+                ),
+                accessibilityIdentifier: "reset_session",
+                action: .didTapCorruptedMessage(errorMessage: message),
+            )
         case .sessionRefresh:
-            return Action(title: CommonStrings.learnMore,
-                          accessibilityIdentifier: "learn_more",
-                          action: .didTapSessionRefreshMessage(errorMessage: message))
+            return Action(
+                title: CommonStrings.learnMore,
+                accessibilityIdentifier: "learn_more",
+                action: .didTapSessionRefreshMessage(errorMessage: message),
+            )
         case .decryptionFailure:
-            return Action(title: CommonStrings.learnMore,
-                          accessibilityIdentifier: "learn_more",
-                          action: .didTapDeliveryIssueWarning(errorMessage: message))
+            return Action(
+                title: CommonStrings.learnMore,
+                accessibilityIdentifier: "learn_more",
+                action: .didTapDeliveryIssueWarning(errorMessage: message),
+            )
         case .duplicateMessage,
              .invalidVersion:
             return nil
@@ -1101,14 +1252,18 @@ extension CVComponentSystemMessage {
             owsFailDebug("TSErrorMessageUnknownContactBlockOffer")
             return nil
         case .groupCreationFailed:
-            return Action(title: CommonStrings.retryButton,
-                          accessibilityIdentifier: "retry_send_group",
-                          action: .didTapResendGroupUpdate(errorMessage: message))
+            return Action(
+                title: CommonStrings.retryButton,
+                accessibilityIdentifier: "retry_send_group",
+                action: .didTapResendGroupUpdate(errorMessage: message),
+            )
         }
     }
 
-    private static func action(forInfoMessage infoMessage: TSInfoMessage,
-                               transaction: DBReadTransaction) -> Action? {
+    private static func action(
+        forInfoMessage infoMessage: TSInfoMessage,
+        transaction: DBReadTransaction,
+    ) -> Action? {
 
         switch infoMessage.messageType {
         case .userNotRegistered,
@@ -1137,7 +1292,7 @@ extension CVComponentSystemMessage {
                     .localIdentifiers(tx: transaction),
                 let items = infoMessage.computedGroupUpdateItems(
                     localIdentifiers: localIdentifiers,
-                    tx: transaction
+                    tx: transaction,
                 )
             else {
                 return nil
@@ -1146,7 +1301,7 @@ extension CVComponentSystemMessage {
                 items: items,
                 groupThread: thread,
                 contactsManager: SSKEnvironment.shared.contactManagerRef,
-                tx: transaction
+                tx: transaction,
             )
         case .typeGroupQuit:
             return nil
@@ -1158,10 +1313,14 @@ extension CVComponentSystemMessage {
             guard message.isProtocolVersionUnknown else {
                 return nil
             }
-            return Action(title: OWSLocalizedString("UNKNOWN_PROTOCOL_VERSION_UPGRADE_BUTTON",
-                                                   comment: "Label for button that lets users upgrade the app."),
-                          accessibilityIdentifier: "show_upgrade_app_ui",
-                          action: .didTapShowUpgradeAppUI)
+            return Action(
+                title: OWSLocalizedString(
+                    "UNKNOWN_PROTOCOL_VERSION_UPGRADE_BUTTON",
+                    comment: "Label for button that lets users upgrade the app.",
+                ),
+                accessibilityIdentifier: "show_upgrade_app_ui",
+                action: .didTapShowUpgradeAppUI,
+            )
         case .typeDisappearingMessagesUpdate,
              .verificationStateChange,
              .userJoinedSignal,
@@ -1205,9 +1364,8 @@ extension CVComponentSystemMessage {
             return Action(
                 title: OWSLocalizedString("UPDATE_CONTACT_ACTION", comment: "Action sheet item"),
                 accessibilityIdentifier: "update_contact",
-                action: .didTapUpdateSystemContact(address: profileChangeAddress, newNameComponents: profileChangesNewNameComponents)
+                action: .didTapUpdateSystemContact(address: profileChangeAddress, newNameComponents: profileChangesNewNameComponents),
             )
-
         case .phoneNumberChange:
             guard
                 let phoneNumberChangeInfo = infoMessage.phoneNumberChangeInfo(),
@@ -1240,8 +1398,8 @@ extension CVComponentSystemMessage {
                 action: .didTapPhoneNumberChange(
                     aci: phoneNumberChangeInfo.aci,
                     phoneNumberOld: phoneNumberOld,
-                    phoneNumberNew: phoneNumberNew
-                )
+                    phoneNumberNew: phoneNumberNew,
+                ),
             )
         case .paymentsActivationRequest:
             if
@@ -1251,10 +1409,10 @@ extension CVComponentSystemMessage {
                 return CVMessageAction(
                     title: OWSLocalizedString(
                         "SETTINGS_PAYMENTS_OPT_IN_ACTIVATE_BUTTON",
-                        comment: "Label for 'activate' button in the 'payments opt-in' view in the app settings."
+                        comment: "Label for 'activate' button in the 'payments opt-in' view in the app settings.",
                     ),
                     accessibilityIdentifier: "activate_payments",
-                    action: .didTapActivatePayments
+                    action: .didTapActivatePayments,
                 )
             } else {
                 return nil
@@ -1264,10 +1422,10 @@ extension CVComponentSystemMessage {
                 return CVMessageAction(
                     title: OWSLocalizedString(
                         "SETTINGS_PAYMENTS_SEND_PAYMENT",
-                        comment: "Label for 'send payment' button in the payment settings."
+                        comment: "Label for 'send payment' button in the payment settings.",
                     ),
                     accessibilityIdentifier: "send_payment",
-                    action: .didTapSendPayment
+                    action: .didTapSendPayment,
                 )
             } else {
                 return nil
@@ -1279,7 +1437,7 @@ extension CVComponentSystemMessage {
             return CVMessageAction(
                 title: CommonStrings.learnMore,
                 accessibilityIdentifier: "learn_more",
-                action: .didTapThreadMergeLearnMore(phoneNumber: phoneNumber)
+                action: .didTapThreadMergeLearnMore(phoneNumber: phoneNumber),
             )
         case .sessionSwitchover:
             return nil
@@ -1287,7 +1445,7 @@ extension CVComponentSystemMessage {
             return CVMessageAction(
                 title: CommonStrings.learnMore,
                 accessibilityIdentifier: "learn_more",
-                action: .didTapReportSpamLearnMore
+                action: .didTapReportSpamLearnMore,
             )
         case .learnedProfileName:
             return nil
@@ -1299,14 +1457,32 @@ extension CVComponentSystemMessage {
             return nil
         case .unblockedGroup:
             return nil
+        case .typePinnedMessage:
+            guard let pinnedMessageUniqueId = infoMessage.pinnedMessageUniqueId(transaction: transaction) else {
+                return nil
+            }
+            return CVMessageAction(
+                title: OWSLocalizedString("BUTTON_VIEW", comment: "Label for the 'view' button."),
+                accessibilityIdentifier: "view_button",
+                action: .didTapViewPinnedMessage(pinnedMessageUniqueId: pinnedMessageUniqueId),
+            )
+        case .typeEndPoll:
+            guard let pollInteractionUniqueId = infoMessage.pollInteractionUniqueId(transaction: transaction) else {
+                return nil
+            }
+            return CVMessageAction(
+                title: OWSLocalizedString("POLL_BUTTON_VIEW_POLL", comment: "Button to view a poll after its ended"),
+                accessibilityIdentifier: "view_poll",
+                action: .didTapViewPoll(pollInteractionUniqueId: pollInteractionUniqueId),
+            )
         case .acceptedMessageRequest:
             return CVMessageAction(
                 title: OWSLocalizedString(
                     "INFO_MESSAGE_ACCEPTED_MESSAGE_REQUEST_OPTIONS_BUTTON",
-                    comment: "Title for a button shown alongside an info message indicating you accepted a message request."
+                    comment: "Title for a button shown alongside an info message indicating you accepted a message request.",
                 ),
                 accessibilityIdentifier: "options",
-                action: .didTapMessageRequestAcceptedOptions
+                action: .didTapMessageRequestAcceptedOptions,
             )
         }
     }
@@ -1330,7 +1506,7 @@ extension CVComponentSystemMessage {
             return Action(
                 title: OWSLocalizedString("CALLBACK_BUTTON_TITLE", comment: "notification action"),
                 accessibilityIdentifier: "call_back",
-                action: .didTapIndividualCall(call: call)
+                action: .didTapIndividualCall(call: call),
             )
         case .outgoing,
              .outgoingMissed:
@@ -1341,7 +1517,7 @@ extension CVComponentSystemMessage {
             return Action(
                 title: OWSLocalizedString("CALL_AGAIN_BUTTON_TITLE", comment: "Label for button that lets users call a contact again."),
                 accessibilityIdentifier: "call_again",
-                action: .didTapIndividualCall(call: call)
+                action: .didTapIndividualCall(call: call),
             )
         case .incomingMissedBecauseBlockedSystemContact:
             if threadViewModel.isBlocked {
@@ -1350,7 +1526,7 @@ extension CVComponentSystemMessage {
             return Action(
                 title: CommonStrings.learnMore,
                 accessibilityIdentifier: "learn_more_call_blocked_system_contact",
-                action: .didTapLearnMoreMissedCallFromBlockedContact(call: call)
+                action: .didTapLearnMoreMissedCallFromBlockedContact(call: call),
             )
         case .outgoingIncomplete,
              .incomingIncomplete:
@@ -1364,7 +1540,7 @@ extension CVComponentSystemMessage {
     private static func action(
         forGroupCall groupCallMessage: OWSGroupCallMessage,
         threadViewModel: ThreadViewModel,
-        currentGroupThreadCallGroupId: GroupIdentifier?
+        currentGroupThreadCallGroupId: GroupIdentifier?,
     ) -> Action? {
         guard let groupThread = threadViewModel.threadRecord as? TSGroupThread else {
             return nil
@@ -1386,5 +1562,33 @@ extension CVComponentSystemMessage {
         let title = isCurrentCallForThread ? returnTitle : CallStrings.joinGroupCall
 
         return Action(title: title, accessibilityIdentifier: "group_call_button", action: .didTapGroupCall)
+    }
+
+    // MARK: - Expiration
+
+    static func expiration(
+        forInteraction interaction: TSInteraction,
+        transaction: DBReadTransaction,
+    ) -> CVComponentState.SystemMessage.Expiration? {
+        if let infoMessage = interaction as? TSInfoMessage {
+            return expiration(forInfoMessage: infoMessage, transaction: transaction)
+        } else {
+            // Expiration state not supported.
+            return nil
+        }
+    }
+
+    private static func expiration(
+        forInfoMessage infoMessage: TSInfoMessage,
+        transaction: DBReadTransaction,
+    ) -> CVComponentState.SystemMessage.Expiration? {
+        guard infoMessage.expiresAt > 0, infoMessage.expiresInSeconds > 0 else {
+            return nil
+        }
+
+        return CVComponentState.SystemMessage.Expiration(
+            expirationTimestamp: infoMessage.expiresAt,
+            expiresInSeconds: infoMessage.expiresInSeconds,
+        )
     }
 }

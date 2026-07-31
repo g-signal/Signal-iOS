@@ -17,7 +17,7 @@ public import LibSignalClient
 /// We also store the set of device IDs for each account on this record. If
 /// an account has at least one device, it's registered. If an account
 /// doesn't have any devices, then that user isn't registered.
-public final class SignalRecipient: NSObject, NSCopying, FetchableRecord, PersistableRecord, Codable {
+public struct SignalRecipient: FetchableRecord, PersistableRecord, Codable {
     public static let databaseTableName = "model_SignalRecipient"
 
     public enum Constants {
@@ -28,14 +28,19 @@ public final class SignalRecipient: NSObject, NSCopying, FetchableRecord, Persis
         public var stringValue: String
 
         /// Tracks whether or not this number is discoverable on CDS.
-        /// 
+        ///
         /// - Important: This property is usually stale on linked devices because
         /// they don't perform CDS syncs at regular intervals.
         public var isDiscoverable: Bool
     }
 
+    public enum Status: Int64, Codable {
+        case unspecified = 0
+        case whitelisted = 1
+    }
+
     public typealias RowId = Int64
-    public private(set) var id: RowId?
+    public let id: RowId
 
     public let uniqueId: String
     /// Represents the ACI for this SignalRecipient.
@@ -51,8 +56,9 @@ public final class SignalRecipient: NSObject, NSCopying, FetchableRecord, Persis
     /// it's safe to check it at time-of-fetch and throw an error.
     public var pni: Pni?
     public var phoneNumber: PhoneNumber?
-    fileprivate(set) public var deviceIds: [DeviceId]
-    fileprivate(set) public var unregisteredAtTimestamp: UInt64?
+    public fileprivate(set) var deviceIds: [DeviceId]
+    public fileprivate(set) var unregisteredAtTimestamp: UInt64?
+    public var status: Status
 
     public var aci: Aci? {
         get { Aci.parseFrom(aciString: aciString) }
@@ -70,132 +76,52 @@ public final class SignalRecipient: NSObject, NSCopying, FetchableRecord, Persis
         let normalizedAddress = NormalizedDatabaseRecordAddress(
             aci: aci,
             phoneNumber: phoneNumber?.stringValue,
-            pni: pni
+            pni: pni,
         )
         return SignalServiceAddress(
             serviceId: normalizedAddress?.serviceId,
-            phoneNumber: normalizedAddress?.phoneNumber
+            phoneNumber: normalizedAddress?.phoneNumber,
         )
     }
 
-    public convenience init(aci: Aci?, pni: Pni?, phoneNumber: E164?) {
-        self.init(aci: aci, pni: pni, phoneNumber: phoneNumber, deviceIds: [])
-    }
-
-    public convenience init(aci: Aci?, pni: Pni?, phoneNumber: E164?, deviceIds: [DeviceId]) {
-        self.init(
-            id: nil,
-            uniqueId: UUID().uuidString,
-            aciString: aci?.serviceIdUppercaseString,
-            pni: pni,
-            phoneNumber: phoneNumber.map { PhoneNumber(stringValue: $0.stringValue, isDiscoverable: false) },
-            deviceIds: deviceIds,
-            unregisteredAtTimestamp: deviceIds.isEmpty ? Constants.distantPastUnregisteredTimestamp : nil
-        )
-    }
-
-    static func buildEmptyRecipient(unregisteredAt timestamp: UInt64) -> Self {
-        let result = Self(aci: nil, pni: nil, phoneNumber: nil)
-        result.unregisteredAtTimestamp = timestamp
-        return result
-    }
-
-    public static func fromBackup(
-        _ backupContact: BackupArchive.ContactAddress,
-        isRegistered: Bool,
-        unregisteredAtTimestamp: UInt64?
-    ) -> Self {
-        let deviceIds: [DeviceId]
-        if isRegistered {
-            // If we think they are registered, just add the primary device id.
-            // When we try and send a message, the server will tell us about
-            // any other device ids.
-            // ...The server would tell us too if we sent an empty deviceIds array,
-            // so there's not really a material difference.
-            deviceIds = [.primary]
-        } else {
-            // Otherwise (including if we don't know if they're registered),
-            // use an empty device IDs array. This doesn't make any difference,
-            // the server will give us the deviceIds anyway and unregisteredAtTimestamp
-            // is the thing that actually drives unregistered state, but
-            // this is at least a better representation of what we know.
-            deviceIds = []
+    static func insertRecord(
+        aci: Aci? = nil,
+        phoneNumber: E164? = nil,
+        pni: Pni? = nil,
+        deviceIds: [DeviceId] = [],
+        unregisteredAtTimestamp: UInt64?? = nil,
+        status: Status = .unspecified,
+        tx: DBWriteTransaction,
+    ) throws(GRDB.DatabaseError) -> Self {
+        do {
+            return try SignalRecipient.fetchOne(
+                tx.database,
+                sql: """
+                INSERT INTO \(SignalRecipient.databaseTableName) (
+                    \(signalRecipientColumn: .recordType),
+                    \(signalRecipientColumn: .uniqueId),
+                    \(signalRecipientColumn: .aciString),
+                    \(signalRecipientColumn: .phoneNumber),
+                    \(signalRecipientColumn: .pni),
+                    \(signalRecipientColumn: .deviceIds),
+                    \(signalRecipientColumn: .unregisteredAtTimestamp),
+                    \(signalRecipientColumn: .status)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *
+                """,
+                arguments: [
+                    SDSRecordType.signalRecipient.rawValue,
+                    UUID().uuidString,
+                    aci?.serviceIdUppercaseString,
+                    phoneNumber?.stringValue,
+                    pni?.serviceIdUppercaseString,
+                    Data(deviceIds.map(\.uint8Value)),
+                    unregisteredAtTimestamp ?? (deviceIds.isEmpty ? Constants.distantPastUnregisteredTimestamp : nil),
+                    status.rawValue,
+                ],
+            )!
+        } catch {
+            throw error.forceCastToDatabaseError()
         }
-        return Self.init(
-            id: nil,
-            uniqueId: UUID().uuidString,
-            aciString: backupContact.aci?.serviceIdUppercaseString,
-            pni: backupContact.pni,
-            phoneNumber: backupContact.e164.map {
-                // Assume they're not discoverable. We'll learn the correct value for this
-                // property during the first CDS sync.
-                PhoneNumber(stringValue: $0.stringValue, isDiscoverable: false)
-            },
-            deviceIds: deviceIds,
-            unregisteredAtTimestamp: unregisteredAtTimestamp
-        )
-    }
-
-    private init(
-        id: RowId?,
-        uniqueId: String,
-        aciString: String?,
-        pni: Pni?,
-        phoneNumber: PhoneNumber?,
-        deviceIds: [DeviceId],
-        unregisteredAtTimestamp: UInt64?
-    ) {
-        self.id = id
-        self.uniqueId = uniqueId
-        self.aciString = aciString
-        self.pni = pni
-        self.phoneNumber = phoneNumber
-        self.deviceIds = deviceIds
-        self.unregisteredAtTimestamp = unregisteredAtTimestamp
-    }
-
-    public func copy(with zone: NSZone? = nil) -> Any {
-        return copyRecipient()
-    }
-
-    public func copyRecipient() -> SignalRecipient {
-        return SignalRecipient(
-            id: id,
-            uniqueId: uniqueId,
-            aciString: aciString,
-            pni: pni,
-            phoneNumber: phoneNumber,
-            deviceIds: deviceIds,
-            unregisteredAtTimestamp: unregisteredAtTimestamp
-        )
-    }
-
-    public override func isEqual(_ object: Any?) -> Bool {
-        guard let otherRecipient = object as? SignalRecipient else {
-            return false
-        }
-        guard id == otherRecipient.id else { return false }
-        guard uniqueId == otherRecipient.uniqueId else { return false }
-        guard aciString == otherRecipient.aciString else { return false }
-        guard pni == otherRecipient.pni else { return false }
-        guard phoneNumber?.stringValue == otherRecipient.phoneNumber?.stringValue else { return false }
-        guard phoneNumber?.isDiscoverable == otherRecipient.phoneNumber?.isDiscoverable else { return false }
-        guard deviceIds == otherRecipient.deviceIds else { return false }
-        guard unregisteredAtTimestamp == otherRecipient.unregisteredAtTimestamp else { return false }
-        return true
-    }
-
-    public override var hash: Int {
-        var hasher = Hasher()
-        hasher.combine(id)
-        hasher.combine(uniqueId)
-        hasher.combine(aciString)
-        hasher.combine(pni)
-        hasher.combine(phoneNumber?.stringValue)
-        hasher.combine(phoneNumber?.isDiscoverable)
-        hasher.combine(deviceIds)
-        hasher.combine(unregisteredAtTimestamp)
-        return hasher.finalize()
     }
 
     public enum CodingKeys: String, CodingKey, ColumnExpression, CaseIterable {
@@ -208,6 +134,7 @@ public final class SignalRecipient: NSObject, NSCopying, FetchableRecord, Persis
         case deviceIds = "devices"
         case unregisteredAtTimestamp
         case isPhoneNumberDiscoverable
+        case status
     }
 
     public init(from decoder: Decoder) throws {
@@ -219,14 +146,14 @@ public final class SignalRecipient: NSObject, NSCopying, FetchableRecord, Persis
             throw SDSError.invalidValue()
         }
 
-        id = try container.decodeIfPresent(RowId.self, forKey: .id)
+        id = try container.decode(RowId.self, forKey: .id)
         uniqueId = try container.decode(String.self, forKey: .uniqueId)
         aciString = try container.decodeIfPresent(String.self, forKey: .aciString)
         pni = try container.decodeIfPresent(String.self, forKey: .pni).map { try Pni.parseFrom(serviceIdString: $0) }
         if let phoneNumberStringValue = try container.decodeIfPresent(String.self, forKey: .phoneNumber) {
             phoneNumber = PhoneNumber(
                 stringValue: phoneNumberStringValue,
-                isDiscoverable: try container.decodeIfPresent(Bool.self, forKey: .isPhoneNumberDiscoverable) ?? false
+                isDiscoverable: try container.decodeIfPresent(Bool.self, forKey: .isPhoneNumberDiscoverable) ?? false,
             )
         } else {
             phoneNumber = nil
@@ -234,11 +161,12 @@ public final class SignalRecipient: NSObject, NSCopying, FetchableRecord, Persis
         let encodedDeviceIds = try container.decode(Data.self, forKey: .deviceIds)
         deviceIds = encodedDeviceIds.compactMap(DeviceId.init(validating:))
         unregisteredAtTimestamp = try container.decodeIfPresent(UInt64.self, forKey: .unregisteredAtTimestamp)
+        status = try container.decode(Status.self, forKey: .status)
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(id, forKey: .id)
+        try container.encode(id, forKey: .id)
         try container.encode(SDSRecordType.signalRecipient.rawValue, forKey: .recordType)
         try container.encode(uniqueId, forKey: .uniqueId)
         try container.encodeIfPresent(aciString, forKey: .aciString)
@@ -247,13 +175,13 @@ public final class SignalRecipient: NSObject, NSCopying, FetchableRecord, Persis
         try container.encodeIfPresent(phoneNumber?.isDiscoverable, forKey: .isPhoneNumberDiscoverable)
         try container.encode(Data(deviceIds.map(\.uint8Value)), forKey: .deviceIds)
         try container.encodeIfPresent(unregisteredAtTimestamp, forKey: .unregisteredAtTimestamp)
+        try container.encode(status, forKey: .status)
     }
 
     // MARK: - Fetching
 
     public var isRegistered: Bool { !deviceIds.isEmpty }
 
-    @objc
     public var addressComponentsDescription: String {
         SignalServiceAddress.addressComponentsDescription(uuidString: aciString, phoneNumber: phoneNumber?.stringValue)
     }
@@ -271,12 +199,6 @@ public final class SignalRecipient: NSObject, NSCopying, FetchableRecord, Persis
     public var isPhoneNumberDiscoverable: Bool {
         return isRegistered && phoneNumber?.isDiscoverable == true
     }
-
-    // MARK: - Database Hooks
-
-    public func didInsert(with rowID: Int64, for column: String?) {
-        self.id = rowID
-    }
 }
 
 // MARK: - SignalRecipientManagerImpl
@@ -284,23 +206,23 @@ public final class SignalRecipient: NSObject, NSCopying, FetchableRecord, Persis
 extension SignalRecipientManagerImpl {
     func setDeviceIds(
         _ deviceIds: Set<DeviceId>,
-        for recipient: SignalRecipient,
-        shouldUpdateStorageService: Bool
+        for recipient: inout SignalRecipient,
+        shouldUpdateStorageService: Bool,
     ) {
         recipient.deviceIds = deviceIds.sorted()
         // Clear the timestamp if we're registered. If we're unregistered, set it if we don't already have one.
         // TODO: Should we deleteAllSessionsForContact here?
         setUnregisteredAtTimestamp(
             recipient.isRegistered ? nil : (recipient.unregisteredAtTimestamp ?? NSDate.ows_millisecondTimeStamp()),
-            for: recipient,
-            shouldUpdateStorageService: shouldUpdateStorageService
+            for: &recipient,
+            shouldUpdateStorageService: shouldUpdateStorageService,
         )
     }
 
     func setUnregisteredAtTimestamp(
         _ unregisteredAtTimestamp: UInt64?,
-        for recipient: SignalRecipient,
-        shouldUpdateStorageService: Bool
+        for recipient: inout SignalRecipient,
+        shouldUpdateStorageService: Bool,
     ) {
         if recipient.unregisteredAtTimestamp == unregisteredAtTimestamp {
             return
@@ -319,6 +241,7 @@ public extension String.StringInterpolation {
     mutating func appendInterpolation(signalRecipientColumn column: SignalRecipient.CodingKeys) {
         appendLiteral(column.rawValue)
     }
+
     mutating func appendInterpolation(signalRecipientColumnFullyQualified column: SignalRecipient.CodingKeys) {
         appendLiteral("\(SignalRecipient.databaseTableName).\(column.rawValue)")
     }

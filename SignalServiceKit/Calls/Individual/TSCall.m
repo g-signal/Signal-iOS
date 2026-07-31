@@ -41,11 +41,7 @@ NSString *NSStringFromCallType(RPRecentCallType callType)
     }
 }
 
-NSUInteger TSCallCurrentSchemaVersion = 1;
-
 @interface TSCall ()
-
-@property (nonatomic, readonly) NSUInteger callSchemaVersion;
 
 @property (nonatomic) TSRecentCallOfferType offerType;
 
@@ -68,7 +64,6 @@ NSUInteger TSCallCurrentSchemaVersion = 1;
         return self;
     }
 
-    _callSchemaVersion = TSCallCurrentSchemaVersion;
     _callType = callType;
     _offerType = offerType;
 
@@ -127,21 +122,31 @@ NSUInteger TSCallCurrentSchemaVersion = 1;
 
 // --- CODE GENERATION MARKER
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    self = [super initWithCoder:coder];
-    if (!self) {
-        return self;
+    NSUInteger result = [super hash];
+    result ^= self.callType;
+    result ^= self.offerType;
+    result ^= self.read;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
     }
-
-    if (self.callSchemaVersion < 1) {
-        // Assume user has already seen any call that predate read-tracking
-        _read = YES;
+    TSCall *typedOther = (TSCall *)other;
+    if (self.callType != typedOther.callType) {
+        return NO;
     }
-
-    _callSchemaVersion = TSCallCurrentSchemaVersion;
-
-    return self;
+    if (self.offerType != typedOther.offerType) {
+        return NO;
+    }
+    if (self.read != typedOther.read) {
+        return NO;
+    }
+    return YES;
 }
 
 - (OWSInteractionType)interactionType

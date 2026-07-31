@@ -17,27 +17,20 @@ protocol RegistrationCaptchaPresenter: AnyObject {
 class RegistrationCaptchaViewController: OWSViewController {
     private weak var presenter: RegistrationCaptchaPresenter?
 
-    public init(presenter: RegistrationCaptchaPresenter) {
+    init(presenter: RegistrationCaptchaPresenter) {
         self.presenter = presenter
 
         super.init()
+
+        navigationItem.hidesBackButton = true
     }
 
     @available(*, unavailable)
-    public override init() {
+    override init() {
         owsFail("This should not be called")
     }
 
     // MARK: - Rendering
-
-    private lazy var titleLabel: UILabel = {
-        let result = UILabel.titleLabelForRegistration(text: OWSLocalizedString(
-            "REGISTRATION_CAPTCHA_TITLE",
-            comment: "During registration, users may be shown a CAPTCHA to verify that they're human. This text is shown above the CAPTCHA."
-        ))
-        result.accessibilityIdentifier = "registration.captcha.titleLabel"
-        return result
-    }()
 
     private lazy var captchaView: CaptchaView = {
         let result = CaptchaView(context: .registration)
@@ -45,52 +38,57 @@ class RegistrationCaptchaViewController: OWSViewController {
         return result
     }()
 
-    public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.setHidesBackButton(true, animated: false)
+        view.backgroundColor = .Signal.background
 
-        initialRender()
+        let titleLabel = UILabel.titleLabelForRegistration(text: OWSLocalizedString(
+            "REGISTRATION_CAPTCHA_TITLE",
+            comment: "During registration, users may be shown a CAPTCHA to verify that they're human. This text is shown above the CAPTCHA.",
+        ))
+        titleLabel.setContentHuggingHigh()
+        titleLabel.accessibilityIdentifier = "registration.captcha.titleLabel"
+
+        addStaticContentStackView(arrangedSubviews: [titleLabel, captchaView])
     }
 
-    public override func viewWillAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         captchaView.loadCaptcha()
-    }
-
-    public override func themeDidChange() {
-        super.themeDidChange()
-        render()
-    }
-
-    private func initialRender() {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, captchaView])
-        stackView.axis = .vertical
-        stackView.distribution = .fill
-        stackView.spacing = 12
-
-        titleLabel.setContentHuggingHigh()
-
-        view.addSubview(stackView)
-        stackView.autoPinEdgesToSuperviewMargins()
-
-        render()
-    }
-
-    private func render() {
-        view.backgroundColor = Theme.backgroundColor
-        titleLabel.textColor = .colorForRegistrationTitleLabel
     }
 }
 
 // MARK: - CaptchaViewDelegate
 
 extension RegistrationCaptchaViewController: CaptchaViewDelegate {
-    public func captchaView(_: CaptchaView, didCompleteCaptchaWithToken token: String) {
+    func captchaView(_: CaptchaView, didCompleteCaptchaWithToken token: String) {
         presenter?.submitCaptcha(token)
     }
 
-    public func captchaViewDidFailToCompleteCaptcha(_ captchaView: CaptchaView) {
+    func captchaViewDidFailToCompleteCaptcha(_ captchaView: CaptchaView) {
         captchaView.loadCaptcha()
     }
 }
+
+// MARK: -
+
+#if DEBUG
+
+private class PreviewRegistrationCaptchaPresenter: RegistrationCaptchaPresenter {
+    func submitCaptcha(_ token: String) {
+        print("submitCaptcha")
+    }
+}
+
+@available(iOS 17, *)
+#Preview {
+    let presenter = PreviewRegistrationCaptchaPresenter()
+    return UINavigationController(
+        rootViewController: RegistrationCaptchaViewController(
+            presenter: presenter,
+        ),
+    )
+}
+
+#endif

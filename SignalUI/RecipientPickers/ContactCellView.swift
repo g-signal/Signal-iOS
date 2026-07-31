@@ -53,6 +53,8 @@ public class ContactCellConfiguration: NSObject {
 
     public var avatarSizeClass: ConversationAvatarView.Configuration.SizeClass?
 
+    public var memberLabel: MemberLabel?
+
     public init(address: SignalServiceAddress, localUserDisplayMode: LocalUserDisplayMode) {
         self.dataSource = .address(address)
         self.localUserDisplayMode = localUserDisplayMode
@@ -104,7 +106,8 @@ public class ContactCellView: ManualStackView {
     private let avatarView = ConversationAvatarView(
         sizeClass: avatarSizeClass,
         localUserDisplayMode: .asUser,
-        useAutolayout: false)
+        useAutolayout: false,
+    )
 
     public var tooltipTailReferenceView: UIView { return avatarView }
 
@@ -151,16 +154,20 @@ public class ContactCellView: ManualStackView {
         subtitleLabel.textColor = (forceDarkAppearance ? Theme.darkThemeSecondaryTextAndIconColor : Theme.secondaryTextAndIconColor)
         accessoryLabel.textColor = Theme.isDarkThemeEnabled ? .ows_gray25 : .ows_gray45
 
-        if let nameLabelText = nameLabel.attributedText?.string.nilIfEmpty,
-           let nameLabelColor = nameLabel.textColor {
+        if
+            let nameLabelText = nameLabel.attributedText?.string.nilIfEmpty,
+            let nameLabelColor = nameLabel.textColor
+        {
             nameLabel.attributedText = nameLabelText.asAttributedString(attributes: [
-                .foregroundColor: nameLabelColor
+                .foregroundColor: nameLabelColor,
             ])
         }
     }
 
-    public func configure(configuration: ContactCellConfiguration,
-                          transaction: DBReadTransaction) {
+    public func configure(
+        configuration: ContactCellConfiguration,
+        transaction: DBReadTransaction,
+    ) {
         AssertIsOnMainThread()
         owsAssertDebug(!shouldDeactivateConstraints)
 
@@ -182,8 +189,10 @@ public class ContactCellView: ManualStackView {
             }
         }
 
-        if avatarDataSource?.isGroupAvatar ?? false,
-           let storyState = configuration.storyState {
+        if
+            avatarDataSource?.isGroupAvatar ?? false,
+            let storyState = configuration.storyState
+        {
             // Group story. Add badge
             avatarView.addSubview(groupStoryBadgeView)
             let badgeColor: UIColor
@@ -195,7 +204,7 @@ public class ContactCellView: ManualStackView {
             }
             let size: CGFloat = 20
             groupStoryBadgeView.backgroundColor = badgeColor
-            groupStoryBadgeView.layer.cornerRadius = size/2
+            groupStoryBadgeView.layer.cornerRadius = size / 2
             groupStoryBadgeView.layer.masksToBounds = true
             groupStoryBadgeView.autoSetDimensions(to: .square(size))
             groupStoryBadgeView.autoPinEdge(toSuperviewEdge: .bottom, withInset: -2)
@@ -212,17 +221,28 @@ public class ContactCellView: ManualStackView {
 
         // Configure self.
         do {
-            var rootStackSubviews: [UIView] = [ avatarView ]
+            var rootStackSubviews: [UIView] = [avatarView]
             let avatarSize = configuration.avatarSizeClass?.size ?? Self.avatarSizeClass.size
-            var rootStackSubviewInfos = [ avatarSize.asManualSubviewInfo(hasFixedSize: true) ]
+            var rootStackSubviewInfos = [avatarSize.asManualSubviewInfo(hasFixedSize: true)]
 
             // Configure textStack.
             do {
-                var textStackSubviews = [ nameLabel ]
+                var textStackSubviews: [UILabel] = [nameLabel]
                 let nameSize = nameLabel.sizeThatFits(.square(.greatestFiniteMagnitude))
-                var textStackSubviewInfos = [ nameSize.asManualSubviewInfo ]
+                var textStackSubviewInfos = [nameSize.asManualSubviewInfo]
 
-                if let attributedSubtitle = configuration.attributedSubtitle?.nilIfEmpty {
+                if
+                    let memberLabel = configuration.memberLabel
+                {
+                    let memberLabelLabel = CVMemberLabel(
+                        label: memberLabel.label,
+                        font: .dynamicTypeCaption1,
+                        backgroundColor: memberLabel.groupNameColor,
+                    )
+                    textStackSubviews.append(memberLabelLabel)
+                    let memberLabelSize = memberLabelLabel.sizeThatFits(.square(.greatestFiniteMagnitude))
+                    textStackSubviewInfos.append(memberLabelSize.asManualSubviewInfo)
+                } else if let attributedSubtitle = configuration.attributedSubtitle?.nilIfEmpty {
                     subtitleLabel.attributedText = attributedSubtitle
 
                     textStackSubviews.append(subtitleLabel)
@@ -230,13 +250,17 @@ public class ContactCellView: ManualStackView {
                     textStackSubviewInfos.append(subtitleSize.asManualSubviewInfo)
                 }
 
-                let textStackConfig = ManualStackView.Config(axis: .vertical,
-                                                             alignment: .leading,
-                                                             spacing: 0,
-                                                             layoutMargins: .zero)
-                let textStackMeasurement = textStack.configure(config: textStackConfig,
-                                                               subviews: textStackSubviews,
-                                                               subviewInfos: textStackSubviewInfos)
+                let textStackConfig = ManualStackView.Config(
+                    axis: .vertical,
+                    alignment: .leading,
+                    spacing: 0,
+                    layoutMargins: .zero,
+                )
+                let textStackMeasurement = textStack.configure(
+                    config: textStackConfig,
+                    subviews: textStackSubviews,
+                    subviewInfos: textStackSubviewInfos,
+                )
                 rootStackSubviews.append(textStack)
                 rootStackSubviewInfos.append(textStackMeasurement.measuredSize.asManualSubviewInfo)
             }
@@ -244,23 +268,31 @@ public class ContactCellView: ManualStackView {
             if let accessoryMessage = configuration.accessoryMessage {
                 accessoryLabel.text = accessoryMessage
                 let labelSize = accessoryLabel.sizeThatFits(.square(.greatestFiniteMagnitude))
-                configuration.accessoryView = ContactCellAccessoryView(accessoryView: accessoryLabel,
-                                                                       size: labelSize)
+                configuration.accessoryView = ContactCellAccessoryView(
+                    accessoryView: accessoryLabel,
+                    size: labelSize,
+                )
             }
             if let accessoryView = configuration.accessoryView {
                 rootStackSubviews.append(accessoryView.accessoryView)
                 rootStackSubviewInfos.append(accessoryView.size.asManualSubviewInfo(hasFixedSize: true))
             }
 
-            let rootStackConfig = ManualStackView.Config(axis: .horizontal,
-                                                         alignment: .center,
-                                                         spacing: Self.avatarTextHSpacing,
-                                                         layoutMargins: .zero)
-            let rootStackMeasurement = ManualStackView.measure(config: rootStackConfig,
-                                                               subviewInfos: rootStackSubviewInfos)
-            self.configure(config: rootStackConfig,
-                           measurement: rootStackMeasurement,
-                           subviews: rootStackSubviews)
+            let rootStackConfig = ManualStackView.Config(
+                axis: .horizontal,
+                alignment: .center,
+                spacing: Self.avatarTextHSpacing,
+                layoutMargins: .zero,
+            )
+            let rootStackMeasurement = ManualStackView.measure(
+                config: rootStackConfig,
+                subviewInfos: rootStackSubviewInfos,
+            )
+            self.configure(
+                config: rootStackConfig,
+                measurement: rootStackMeasurement,
+                subviews: rootStackSubviews,
+            )
         }
     }
 
@@ -269,10 +301,12 @@ public class ContactCellView: ManualStackView {
     private func ensureObservers() {
         NotificationCenter.default.removeObserver(self)
         if case .address = configuration?.dataSource {
-            NotificationCenter.default.addObserver(self,
-                                                   selector: #selector(otherUsersProfileChanged(notification:)),
-                                                   name: UserProfileNotifications.otherUsersProfileDidChange,
-                                                   object: nil)
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(otherUsersProfileChanged(notification:)),
+                name: UserProfileNotifications.otherUsersProfileDidChange,
+                object: nil,
+            )
         }
     }
 
@@ -284,8 +318,10 @@ public class ContactCellView: ManualStackView {
         }
     }
 
-    private func updateNameLabels(configuration: ContactCellConfiguration,
-                                  transaction: DBReadTransaction) {
+    private func updateNameLabels(
+        configuration: ContactCellConfiguration,
+        transaction: DBReadTransaction,
+    ) {
         AssertIsOnMainThread()
 
         let textColor = self.nameLabelColor(forceDarkAppearance: configuration.forceDarkAppearance)
@@ -301,7 +337,7 @@ public class ContactCellView: ManualStackView {
                     address,
                     localUserDisplayMode: configuration.localUserDisplayMode,
                     short: false,
-                    transaction: transaction
+                    transaction: transaction,
                 )
 
                 switch (address.isLocalAddress, configuration.localUserDisplayMode) {
@@ -311,7 +347,7 @@ public class ContactCellView: ManualStackView {
                     let verifiedIcon = NSAttributedString.with(
                         image: Theme.iconImage(.official),
                         font: .dynamicTypeSubheadline,
-                        centerVerticallyRelativeTo: .dynamicTypeBody
+                        centerVerticallyRelativeTo: .dynamicTypeBody,
                     )
                     return name.stringByAppendingString(" ").stringByAppendingString(verifiedIcon)
                 }
@@ -330,7 +366,7 @@ public class ContactCellView: ManualStackView {
                 dynamicTypeBaseSize: 14,
                 weight: .bold,
                 leadingCharacter: .space,
-                attributes: [.foregroundColor: textColor]
+                attributes: [.foregroundColor: textColor],
             )
             nameLabel.attributedText = nameString.stringByAppendingString(contactIcon)
         } else {
@@ -338,7 +374,7 @@ public class ContactCellView: ManualStackView {
         }
     }
 
-    public override func reset() {
+    override public func reset() {
         super.reset()
 
         NotificationCenter.default.removeObserver(self)
@@ -360,8 +396,10 @@ public class ContactCellView: ManualStackView {
         guard let configuration = self.configuration else {
             return
         }
-        guard let changedAddress = notification.userInfo?[UserProfileNotifications.profileAddressKey] as? SignalServiceAddress,
-              changedAddress.isValid else {
+        guard
+            let changedAddress = notification.userInfo?[UserProfileNotifications.profileAddressKey] as? SignalServiceAddress,
+            changedAddress.isValid
+        else {
             owsFailDebug("changedAddress was unexpectedly nil")
             return
         }

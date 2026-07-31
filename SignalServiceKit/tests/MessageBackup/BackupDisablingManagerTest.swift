@@ -16,8 +16,8 @@ struct BackupDisablingManagerTest {
         let mockBackupAttachmentDownloadQueueStatusManager = MockBackupAttachmentDownloadQueueStatusManager()
         let mockBackupCDNCredentialStore = BackupCDNCredentialStore()
         let mockBackupKeyService = MockBackupKeyService()
+        let mockBackupAttachmentCoordinator = MockBackupAttachmentCoordinator()
         let mockBackupPlanManager = MockBackupPlanManager()
-        let mockBackupListMediaManager = MockBackupListMediaManager()
         let mockDB = InMemoryDB()
         let mockBackupSettingsStore = BackupSettingsStore()
         let mockTSAccountManager = MockTSAccountManager()
@@ -25,14 +25,14 @@ struct BackupDisablingManagerTest {
         let disablingManager = BackupDisablingManager(
             accountEntropyPoolManager: mockAccountEntropyPoolManager,
             authCredentialStore: mockAuthCredentialStore,
+            backupAttachmentCoordinator: mockBackupAttachmentCoordinator,
             backupAttachmentDownloadQueueStatusManager: mockBackupAttachmentDownloadQueueStatusManager,
             backupCDNCredentialStore: mockBackupCDNCredentialStore,
             backupKeyService: mockBackupKeyService,
-            backupListMediaManager: mockBackupListMediaManager,
             backupPlanManager: mockBackupPlanManager,
             backupSettingsStore: mockBackupSettingsStore,
             db: mockDB,
-            tsAccountManager: mockTSAccountManager
+            tsAccountManager: mockTSAccountManager,
         )
 
         struct DeleteBackupError: Error {}
@@ -45,7 +45,7 @@ struct BackupDisablingManagerTest {
         }
 
         mockDB.write { tx in
-            try! mockBackupPlanManager.setBackupPlan(.free, tx: tx)
+            mockBackupPlanManager.setBackupPlan(.free, tx: tx)
             #expect(!disablingManager.disableRemotelyFailed(tx: tx))
         }
 

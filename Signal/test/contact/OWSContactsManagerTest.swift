@@ -23,7 +23,7 @@ class OWSContactsManagerTest: SignalBaseTest {
         SSKEnvironment.shared.databaseStorageRef.write { tx in
             (DependenciesBridge.shared.registrationStateChangeManager as! RegistrationStateChangeManagerImpl).registerForTests(
                 localIdentifiers: .forUnitTests,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -41,20 +41,14 @@ class OWSContactsManagerTest: SignalBaseTest {
             appReadiness: AppReadinessMock(),
             nicknameManager: mockNicknameManager,
             recipientDatabaseTable: mockRecipientDatabaseTable,
-            usernameLookupManager: mockUsernameLookupMananger
+            usernameLookupManager: mockUsernameLookupMananger,
         )
     }
 
     private func makeAndInsertRecipient(address: SignalServiceAddress) -> SignalRecipient {
-        let recipient = SignalRecipient(
-            aci: address.aci,
-            pni: nil,
-            phoneNumber: address.e164
-        )
-        self.dbV2.write { tx in
-            mockRecipientDatabaseTable.insertRecipient(recipient, transaction: tx)
+        return self.dbV2.write { tx in
+            return try! SignalRecipient.insertRecord(aci: address.aci, phoneNumber: address.e164, tx: tx)
         }
-        return recipient
     }
 
     private func createRecipients(_ serviceIds: [ServiceId]) {
@@ -62,10 +56,11 @@ class OWSContactsManagerTest: SignalBaseTest {
         let recipientManager = DependenciesBridge.shared.recipientManager
         self.dbV2.write { tx in
             for serviceId in serviceIds {
+                var recipient = recipientFetcher.fetchOrCreate(serviceId: serviceId, tx: tx)
                 recipientManager.markAsRegisteredAndSave(
-                    recipientFetcher.fetchOrCreate(serviceId: serviceId, tx: tx),
+                    &recipient,
                     shouldUpdateStorageService: false,
-                    tx: tx
+                    tx: tx,
                 )
             }
         }
@@ -82,7 +77,7 @@ class OWSContactsManagerTest: SignalBaseTest {
     private func makeAccount(
         serviceId: ServiceId,
         phoneNumber: E164,
-        fullName: String
+        fullName: String,
     ) -> SignalAccount {
         let parts = fullName.components(separatedBy: " ")
         return SignalAccount(
@@ -94,7 +89,7 @@ class OWSContactsManagerTest: SignalBaseTest {
             familyName: parts.dropFirst().first ?? "",
             nickname: "",
             fullName: fullName,
-            contactAvatarHash: nil
+            contactAvatarHash: nil,
         )
     }
 
@@ -114,7 +109,7 @@ class OWSContactsManagerTest: SignalBaseTest {
             badges: [],
             lastFetchDate: nil,
             lastMessagingDate: nil,
-            isPhoneNumberShared: nil
+            isPhoneNumberShared: nil,
         )
     }
 
@@ -134,13 +129,13 @@ class OWSContactsManagerTest: SignalBaseTest {
             recipientRowID: aliceRecipientRowID,
             givenName: "Alice",
             familyName: "Doe",
-            note: nil
+            note: nil,
         )
         let bobNickname = NicknameRecord(
             recipientRowID: bobRecipientRowID,
             givenName: "Bob",
             familyName: nil,
-            note: nil
+            note: nil,
         )
 
         self.dbV2.write { tx in
@@ -152,7 +147,7 @@ class OWSContactsManagerTest: SignalBaseTest {
             let contactsManager = SSKEnvironment.shared.contactManagerRef as! OWSContactsManager
             let actual = contactsManager.displayNames(
                 for: [aliceAddress, bobAddress],
-                tx: tx
+                tx: tx,
             ).map { $0.resolvedValue() }
             let expected = ["Alice Doe", "Bob"]
             XCTAssertEqual(actual, expected)
@@ -194,7 +189,7 @@ class OWSContactsManagerTest: SignalBaseTest {
     func testGetDisplayNamesWithPhoneNumbers() {
         let addresses = [
             SignalServiceAddress(phoneNumber: "+17035559900"),
-            SignalServiceAddress(phoneNumber: "+17035559901")
+            SignalServiceAddress(phoneNumber: "+17035559901"),
         ]
         // Prevent default fake name from being used.
         (SSKEnvironment.shared.profileManagerRef as! OWSFakeProfileManager).fakeUserProfiles = [:]
@@ -279,7 +274,7 @@ class OWSContactsManagerTest: SignalBaseTest {
             recipientRowID: feliciaRowID,
             givenName: "Felicia",
             familyName: "Felicity",
-            note: nil
+            note: nil,
         )
         dbV2.write { tx in
             mockNicknameManager.insert(feliciaNickname, tx: tx)

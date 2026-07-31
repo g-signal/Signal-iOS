@@ -1,6 +1,9 @@
 /* Button text to dismiss missing contacts permission alert */
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "ليس الآن";
 
+/* Footer for the 'about' help section. For non-English languages, exclude the word '501c3'. */
+"ABOUT_SECTION_FOOTER" = "حقوق النشر محفوظة لتطبيق سيجنال للدردشة\nمُرخَّص بموجب AGPLv3\nسيجنال شركة غير ربحية";
+
 /* Title for the 'about' help section */
 "ABOUT_SECTION_TITLE" = "حول B&A";
 
@@ -69,6 +72,12 @@
 
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "إرسال رسالة";
+
+/* Message shown in an action sheet when a generic error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_GENERIC_ERROR" = "حدث خطأ ما. يُرجى التواصل مع فريق الدعم.";
+
+/* Message shown in an action sheet when a network error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_NETWORK_ERROR" = "حدث خطأ ما. تحقَّق من اتصالك بالشبكة ثم حاوِل مرّة أخرى.";
 
 /* A label for 'tap to download' buttons. */
 "ACTION_TAP_TO_DOWNLOAD" = "انقر للتنزيل";
@@ -196,6 +205,12 @@
 /* notification body */
 "APN_Message" = "قد تكون لديك رسائل جديدة";
 
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. The embedded value is 'Update now' (translated via APP_EXPIRED_BOTTOM_UPDATE), and it will be formatted as a tappable link. */
+"APP_EXPIRED_BOTTOM" = "انتهت صلاحية هذا الإصدار من سيجنال. %1$@ لإرسال وتلقي الرسائل.";
+
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. This value is a tappable link embedded in a larger sentence. */
+"APP_EXPIRED_BOTTOM_UPDATE" = "حدِّث الآن";
+
 /* Default message for the 'app launch failed' alert. */
 "APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "يتعذَّر بدء B&A. لتمكيننا من مساعدتك في حل المشكلة، يُرجى إرسال سجل الأخطاء إلى بريد الدعم: support@baxs.com";
 
@@ -210,6 +225,15 @@
 
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "تعذَّر تحميل قاعدة البيانات";
+
+/* Message for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_MESSAGE" = "تعذَّر تشغيل سيجنال بسبب تلف في قاعدة البيانات. لم يحدث أي تأثير على أمان حسابك أو رسائلك.";
+
+/* Title for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_TITLE" = "حدث تلف في قاعدة البيانات";
+
+/* Action in an action sheet offering to attempt recovery of a corrupted database. */
+"APP_LAUNCH_FAILURE_DATABASE_RECOVERY_ACTION_TITLE" = "إصلاح";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "يُرجى التحديث لآخر إصدار من B&A.";
@@ -246,15 +270,6 @@
 
 /* Text prompting user to edit their profile name. */
 "APP_SETTINGS_EDIT_PROFILE_NAME_PROMPT" = "أدخِل اسمك";
-
-/* Label for the 'dismiss' button in the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_DISMISS_BUTTON" = "ليس الآن";
-
-/* Message format for the 'new app version available' alert. Embeds: {{The latest app version number}} */
-"APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "الإصدار %1$@ متاح الآن في متجر App Store.";
-
-/* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "هناك إصدار B&A جديد متوفِّر.";
 
 /* Label for the 'update' button in the 'new app version available' alert. */
 "APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "تحديث";
@@ -403,7 +418,7 @@
 /* A button to select a GIF from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_GIF" = "صورة متحركة";
 
-/* Text in chat attachment panel when B&A only has access to some photos/videos. This string is in a compact horizontal space, so it should be short if possible. */
+/* Text in chat attachment panel when Signal only has access to some photos/videos. This string is in a compact horizontal space, so it should be short if possible. */
 "ATTACHMENT_KEYBOARD_LIMITED_ACCESS" = "لدى B&A وصول محدود إلى الصور";
 
 /* A button to select a location from the Attachment Keyboard */
@@ -415,7 +430,7 @@
 /* First block of text in chat attachment panel when there's no recent photos to show. */
 "ATTACHMENT_KEYBOARD_NO_MEDIA_TITLE" = "لا توجد صور أو مقاطع فيديو";
 
-/* Text in chat attachment panel explaining that user needs to give B&A permission to access photos. */
+/* Text in chat attachment panel explaining that user needs to give Signal permission to access photos. */
 "ATTACHMENT_KEYBOARD_NO_PHOTO_ACCESS" = "لا يُمكن لB&A الوصول إلى صورك ومقاطع الفيديو الخاصة بك. لمنح الوصول، افتح \"الإعدادات\" وانقر على \"الصور\".";
 
 /* Button in chat attachment panel to let user open Settings app and give Signal persmission to access photos. */
@@ -426,6 +441,9 @@
 
 /* A button to open the photo picker from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_PHOTOS" = "الصور";
+
+/* A button to select a poll from the Attachment Keyboard */
+"ATTACHMENT_KEYBOARD_POLL" = "استطلاع";
 
 /* Accessibility label for attaching photos */
 "ATTACHMENT_LABEL" = "الملف المُرفَق";
@@ -487,14 +505,8 @@
 /* Message when trying to show a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_MESSAGE_LABEL" = "الرسالة الصوتية غير مُتوفِّرة";
 
-/* Message for sheet shown when tapping a voice message that has expired and is unavailable for download */
-"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "هذه الرسالة الصوتية لم يتم تحويلُها من هاتفك عندما كان هذا الجهاز مُرتبِطًا. لا يمكن مُزامنة الملفات والوسائط التي تعود إلى أكثر من 45 يوم منذ الوقت الذي تمَّ فيه ربط الجهاز.";
-
 /* Title for sheet shown when tapping a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "الرسالة الصوتية غير مُتوفِّرة";
-
-/* Username for backup key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "النسخ الاحتياطية على B&A";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "اختر لونًا";
@@ -556,7 +568,16 @@
 /* Toast indicating that the Recovery Key was correct. */
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "مفتاح النسخ الاحتياطي صحيح. حافِظ على مفتاحك في مكانٍ آمن.";
 
-/* Body for a sheet warning users to their 'Backup Key' safe. */
+/* Button label for action sheet to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_ACTION" = "مغادرة تثبيت النسخة الاحتياطية";
+
+/* Message for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_MESSAGE" = "لم تُنه إعداد النسخ الاحتياطية، ولم يتم إنشاء أي نسخة احتياطية. يمكنك تفعيل النسخ الاحتياطية في الإعدادات.";
+
+/* Title for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_TITLE" = "هل ترغبُ بمغادرة تثبيت النسخة الاحتياطية؟";
+
+/* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "لن يتمكّن B&A من مُساعدتك على استعادة نسختك الاحتياطية إذا فقدتَ مفتاحك. احتفِظ بمفتاحك في مكانٍ آمن، ولا تُشاركه مع أي أحد.";
 
 /* Title for a sheet warning users to their 'Recovery Key' safe. */
@@ -580,17 +601,41 @@
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "احذف نسختك الاحتياطية في أي وقت";
 
+/* A toast shown when 'Not Now' is tapped from the Backups onboarding intro. */
+"BACKUP_ONBOARDING_INTRO_NOT_NOW_TOAST" = "يمكنك تفعيل النسخ الاحتياطية في الإعدادات.";
+
 /* Subtitle for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "أنشِئ نسخة احتياطية من رسائلك ووسائطك باستخدام خدمة التخزين الآمنة المُشفَّرة من طرف لطرف من B&A. لا تفقد رسالة عندما تستخدم هاتفًا جديدًا أو تعيد تثبيت B&A.";
 
 /* Title for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_TITLE" = "النسخ الاحتياطية على B&A";
 
-/* Subtitle for a view introducing the 'Backup Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "مفتاح النسخة الاحتياطية الخاص بك هو كود مُكوَّن من 64 رقمًا يَسمح لك باستعادة نسختك الاحتياطية عندما تُعيد تثبيت B&A.\n\nإذا نسيتَ مفتاحك، لن تتمكَّن من استرجاع نسختك الاحتياطية. لا يُمكن لB&A مُساعدتك على استرجاع نسختك الاحتياطية.";
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "مفتاح الاستعادة هو عبارة عن كود مُكوَّن من 64 رمزًا، وتحتاجه لاستعادة نسختك الاحتياطية.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_2" = "احتفظ بمفتاح الاستعادة الخاص بك في مكان آمن مثل مدير لكلمات المرور، ولا تشاركه مع أي أحد.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_3" = "إذا فقدته، فلن تتمكّن من استعادة رسائلك.";
+
+/* Title for a continue button for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_CONTINUE_BUTTON_TITLE" = "عرض مفتاح الاستعادة";
 
 /* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "مفتاح النسخة الاحتياطية الخاص بك";
+
+/* Body for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY" = "انتهت صلاحية اشتراك النسخ الاحتياطي الخاص بك لأنه تعذَّر تجديده بواسطة طريقة الدفع الخاصة بك.\n\nلمواصلة النسخ الاحتياطي لوسائطك، يمكنك إعادة الاشتراك. سَيظل بإمكانك الوصول إلى خطة النسح الاحتياطي المجانية على سيجنال.";
+
+/* Body for a sheet shown when your Backup plan is downgraded because you stopped using TestFlight. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY_TESTFLIGHT" = "انتهت صلاحية اشتراك النسخ الاحتياطي الخاص بك لأنك لم تعد تستخدم TestFlight.\n\nلمواصلة النسخ الاحتياطي لوسائطك، يمكنك إعادة الاشتراك. سَيظل بإمكانك الوصول إلى خطة النسح الاحتياطي المجانية على سيجنال.";
+
+/* Primary button for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_PRIMARY_BUTTON" = "إدارة النسخ الاحتياطية";
+
+/* Title for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_TITLE" = "انتهتَ صلاحية اشتراك النسخ الاحتياطي الخاص بحسابك.";
 
 /* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "نسخ إلى الحافظة";
@@ -613,6 +658,21 @@
 /* Title for a progress spinner on a modal when restoring messages */
 "BACKUP_RESTORE_MODAL_TITLE" = "جارية استعادة الرسائل…";
 
+/* Message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "النسخ الاحتياطية التلقائية مُعطَّلة.  فعّل النسخ الاحتياطية التلقائية من خلال تحديث أذونات سيجنال.";
+
+/* Add-on to a message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE_UPDATE_NOW" = "حدِّث الآن";
+
+/* Title for a button that takes the users to Signal's iOS Settings page. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_GO_TO_SETTINGS_BUTTON" = "انتقِل إلى الإعدادات";
+
+/* Message for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_MESSAGE" = "للسماح لسيجنال بنسخ رسائلك تلقائيًا، انقر على \"انتقل إلى الإعدادات\" أسفله وفعِّل خاصية \"تحديث التطبيق في الخلفية\"";
+
+/* Title for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_TITLE" = "النسخ الاحتياطية التلقائية مُعطَّلة";
+
 /* Message for an action sheet explaining that performing a backup failed with a generic error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR" = "حدث خطأ ما أثناء إنشاء نسختك الاحتياطية. يُرجى المحاولة مرّة أخرى أو التواصل مع فريق الدعم.";
 
@@ -628,6 +688,9 @@
 /* Message for an action sheet explaining that performing a backup failed with a network error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR" = "حدث خطأ ما أثناء إنشاء نسختك الاحتياطية. تحقَّق من اتصالك بالإنترنت وحاوِل مُجدَّدًا.";
 
+/* Message for an action sheet explaining that you must be registered to make a Backup. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "يجب أن تكون مُسجلًا لإنشاء نسخة احتياطية.";
+
 /* Description for a progress bar tracking the optimizing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "جارٍ تحسين الوسائط...";
 
@@ -637,14 +700,26 @@
 /* Description for a progress bar tracking the processing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PROCESSING_MEDIA" = "جارٍ معالجة الوسائط...";
 
+/* Title for an action sheet action explaining the user can now scan a QR code to continue the restore. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_ACTION_TITLE" = "امسح ضوئيًا كود الـ QR";
+
+/* Body for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_BODY" = "استخدِم هذا الجهاز لِمسح كود الـ QR المعروض على الجهاز الذي تريد النقل إليه";
+
+/* Title for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_TITLE" = "جاهز للنقل";
+
+/* Message describing to the user that the last backup failed. */
+"BACKUP_SETTINGS_BACKUP_FAILED_MESSAGE" = "تعذَّر إتمام عملية النسخ الاحتياطي الأخيرة. انقر على \"إنشاء نسخة احتياطية الآن\" للمحاولة من جديد.";
+
 /* Title for a button allowing users to upgrade from a free to paid backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "ترقية";
 
+/* Text describing the user's free backup plan when they have Backups disabled. */
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_AND_DISABLED_DESCRIPTION" = "أوقفتَ النسخ الاحتياطية";
+
 /* Text describing the user's free backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_DESCRIPTION" = "خطة النسخ الاحتياطي الخاصة بك مجانية";
-
-/* Header describing what the free backup plan includes. */
-"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "النسخ الاحتياطي للنص و45 يوم من الوسائط";
 
 /* Message for a view indicating we failed to fetch someone's Backup plan due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_MESSAGE" = "حدث خطأ ما. يُرجى التواصل مع فريق الدعم.";
@@ -673,11 +748,26 @@
 /* Text explaining that a user's paid plan, which has been canceled, expired on a past date. Embeds {{ the formatted expiration date }}. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_PAST_EXPIRATION_FORMAT" = "انتهت الصلاحية في %1$@";
 
+/* Title for a button allowing users to manage a paid backup plan that failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_ACTION_BUTTON_TITLE" = "إدارة الاشتراك";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_1" = "طريقة الدفع مرفوضة.";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_2" = "تأكَّد من أن طريقة الدفع الخاصة بك مُحدَّثة.";
+
 /* Title for a button allowing users to manage their backup plan as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "إدارة الخطة";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "الخطة مدفوعة ولكن تبقى مجانية طالما أنك تختبر الخطة.";
+
+/* Title for a button allowing users to renew their backup subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_ACTION_BUTTON_TITLE" = "تجديد";
+
+/* Text describing that the user's paid backup plan did not correspond to a App Store subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_DESCRIPTION" = "تعذَّر العثور على اشتراكك على هذا الجهاز. جدِّد لمتابعة استخدام النسخ الاحتياطية على سيجنال.";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "النسخ الاحتياطي للنص وكل الوسائط";
@@ -717,6 +807,15 @@
 
 /* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "يجب أن تكون مُسجلًا لإنشاء مفتاح استعادة جديد.";
+
+/* Explanation text for a sheet warning users they've reached a rate limit for creating Recovery Key. {{ Embeds 1: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_BODY" = "إذا أنشأتَ مفتاح استعادة جديد، فلن تتمكَّن من تفعيل النسخ الاحتياطية لمدة %1$@. عدد المفاتيح التي يمكنك إنشاؤها محدود لمنع سوء الاستخدام.";
+
+/* Action in an action sheet allowing to continue to rotate their key */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_CONTINUE_ACTION" = "إنشاء مفتاح جديد";
+
+/* Title for a sheet warning users they've reached a rate limit for creating Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_TITLE" = "بلغتَ الحد الأقصى من مفاتيح الاستعادة المسموح بها";
 
 /* Toast shown when a new Recovery Key has been created successfully. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "تمَّ إنشاء مفتاح جديد!";
@@ -759,6 +858,15 @@
 
 /* Message shown in an action sheet when the user tries to disable Backups, but is not registered. */
 "BACKUP_SETTINGS_DISABLING_ERROR_NOT_REGISTERED" = "يجب أن تكون مُسجلًا لتمكين النسخ الاحتياطية.";
+
+/* Button for an action sheet shown when the user disables Backups, letting them manage their subscription. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MANAGE_SUBSCRIPTION_BUTTON" = "إدارة الاشتراك";
+
+/* Message for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MESSAGE" = "إذا كُنتَ تريد إلغاء اشتراكك، انقر على \"إدارة الاشتراك\" > سيجنال > إلغاء الاشتراك";
+
+/* Title for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_TITLE" = "لا تزال مُشترِكًا في خطة نسخ احتياطي مدفوعة";
 
 /* Title for a button shown in Backup Settings that lets a user cancel an in-progress download. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_CANCEL_DOWNLOAD" = "إلغاء التنزيل";
@@ -814,6 +922,15 @@
 /* Label for a menu item offering to show the user their recovery key. */
 "BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "عرض مفتاح النسخة الاحتياطية";
 
+/* Body for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_BODY" = "تعذَّرت استعادة اشتراكك على هذا الجهاز. يمكن أن يحدث هذا إذا كُنتَ قد سجَّلت الدخول على App Store بحساب Apple مختلف أو قُمتَ بالانتقال من هاتف أندرويد.\n\nإذا كان لديك اشتراك نشِط على هاتفك القديم، فكِّر في إلغائه قبل أن يتم تجديده.";
+
+/* Button for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_GOT_IT_BUTTON" = "تمَّ";
+
+/* Title for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_TITLE" = "تعذَّر العثور على اشتراك";
+
 /* Title for a button allowing users to trigger a manual backup. */
 "BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "إنشاء نسخة احتياطية الآن";
 
@@ -850,6 +967,12 @@
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "تحسين التخزين على الجهاز";
 
+/* Subtitle for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_SUBTITLE" = "بلغتَ الحد الأقصى لمساحة تخزين النسخ الاحتياطي الخاص بك. حرِّر مساحة في تطبيق سيجنال لمتابعة نسخ الدردشات والوسائط احتياطيًا.";
+
+/* Title for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_TITLE" = "مساحة تخزين النسخ الاحتياطي ممتلئة";
+
 /* Title for a button allowing users to re-enable Backups, after it had been previously disabled. */
 "BACKUP_SETTINGS_REENABLE_BACKUPS_BUTTON_TITLE" = "إعادة تفعيل النسخ الاحتياطية";
 
@@ -861,6 +984,21 @@
 
 /* Title for a sheet warning the user about skipping downloads. */
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "هل ترغبُ بتخطي التنزيل؟";
+
+/* Title for detail button in notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_DETAIL_BUTTON" = "التفاصيل";
+
+/* Title for notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_TITLE" = "تعذّر استرداد اشتراك النسخ الاحتياطية الخاص بحسابك";
+
+/* Body for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_BODY" = "اُستخدِمَت أجهزةٌ عديدة لاسترداد اشتراكك هذا الشهر.\n\nقد تكون أعدت تسجيل حساب سيجنال الخاص بك عدة مرّات، أو لديك عدة أجهزة تستخدم الاشتراك نفسه.";
+
+/* Button for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_GOT_IT_BUTTON" = "تمَّ";
+
+/* Title for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_TITLE" = "تعذّر استرداد اشتراك النسخ الاحتياطية الخاص بحسابك";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "التحميل متوقِّف مؤقتًا: بطارية الجهاز منخفضة";
@@ -874,6 +1012,9 @@
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "التحميل متوقِّف مؤقتًا: في انتظار الاتصال بالواي فاي";
 
+/* Subtitle for a progress bar tracking uploads that are paused because the user is out of remote storage space. Embeds 1:{{ total storage space provided, e.g. 100 GB }}; 2:{{ space the user needs to free up by deleting media, e.g. 1 GB }}. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_OUT_OF_STORAGE_SPACE_FORMAT" = "بلغتَ حد التخزين %1$@ المُضمَّن في خطة النسخ الاحتياطي الخاصة بك. لإنشاء نسخة احتياطية للدردشات والوسائط الجديدة، قُم بتحرير %2$@ في تطبيق سيجنال، ثم انقر على \"إنشاء نسخة احتياطية الآن\".";
+
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "جارٍ تحميل %1$@ من أصل %2$@ (%3$@)";
 
@@ -882,6 +1023,21 @@
 
 /* Title for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "مرحبًا بك في النسخ الاحتياطية على B&A. ابدأ النسخ الاحتياطي لديك الآن.";
+
+/* Message for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_MESSAGE" = "تأكَّد من أن طريقة الدفع الخاصة بك مُحدَّثة. انقر على \"إدارة الاشتراك\" > سيجنال > تحديث طريقة الدفع.";
+
+/* Primary button for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_PRIMARY_BUTTON" = "إدارة الاشتراك";
+
+/* Title for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "تعذَّر تجديد اشتراك النسخ الاحتياطي الخاص بحسابك.";
+
+/* Body for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "يُرجى أن تُرسل لنا سجلات التصحيح لنساعدك على حل المشكلة!";
+
+/* Title for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "حدث خطأ أثناء النسخ الاحتياطي لملفات وسائطك";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "النسخ الاحتياطية على B&A";
@@ -952,7 +1108,7 @@
 /* On the bank donation screen, show a link below the input form to show help about finding account info. */
 "BANK_DONATION_FOOTER_FIND_ACCOUNT_INFO" = "العثور على معلومات الحساب";
 
-/* On the bank transfer donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their bank information (2) tell them that B&A does not collect or store their personal information. */
+/* On the bank transfer donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their bank information (2) tell them that Signal does not collect or store their personal information. */
 "BANK_DONATION_SUBHEADER_TEXT" = "أدخِل معلومات مصرفك. لا يقوم B&A بجمع أو تخزين معلوماتك الشخصية.";
 
 /* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button to agree to the mandate. */
@@ -961,7 +1117,7 @@
 /* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button that shows more of the mandate if it is not all visible. */
 "BANK_MANDATE_READ_MORE" = "اقرأ المزيد";
 
-/* Users can donate to B&A with a bank account. We are required to show them a mandate with information about bank transfers. This is a subtitle about the payment processor Stripe above that mandate. */
+/* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a subtitle about the payment processor Stripe above that mandate. */
 "BANK_MANDATE_SUBTITLE" = "يُعالج Stripe التبرُّعات المقدمة لB&A. B&A لا يجمع ولا يُخزِّن معلوماتك الشخصية.";
 
 /* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is the title above that mandate. */
@@ -1041,9 +1197,6 @@
 
 /* An explanation of the consequences of blocking another user. */
 "BLOCK_USER_BEHAVIOR_EXPLANATION" = "لن يتمكن المُستخدِمون المحظورون من مكالمتك أو إرسال الرسائل إليك.";
-
-/* Tooltip highlighting the blur image editing tool. */
-"BLUR_TOOLTIP" = "جديد : قُم بتمويه الوجوه أو ارسم في أي مكان للتمويه.";
 
 /* Default text for the custom amount field of the boost view. */
 "BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "أدخِل مبلغ مُخَصَّص";
@@ -1186,7 +1339,7 @@
 /* Tappable label that appears below a user's name on a toast when they request to join a call link. */
 "CALL_LINK_JOIN_REQUEST_PROMPT" = "يرغب في الانضمام…";
 
-/* Shown in a message bubble when you send a call link in a B&A chat */
+/* Shown in a message bubble when you send a call link in a Signal chat */
 "CALL_LINK_LINK_PREVIEW_DESCRIPTION" = "اِستخدم هذا الرابط للانضمام إلى مكالمة B&A";
 
 /* Text that appears on a toast in a call lobby before joining a call link informing the user what information will be shared with other call members when they have phone number sharing turned off. */
@@ -1210,7 +1363,7 @@
 /* Name of a toggle switch to enable/disable admin approval for joining a Call Link. */
 "CALL_LINK_REQUIRE_APPROVAL" = "يتطلَّب موافقة المُشرِف";
 
-/* Button to open UI to share a Call Link with someone on B&A. */
+/* Button to open UI to share a Call Link with someone on Signal. */
 "CALL_LINK_SHARE_VIA_SIGNAL" = "مشاركة الرابط عبر B&A";
 
 /* Button to open the system share sheet to share a Call Link. */
@@ -1227,6 +1380,87 @@
 
 /* notification body */
 "CALL_MISSED_BECAUSE_OF_IDENTITY_CHANGE_NOTIFICATION_BODY" = "☎️ مُكالمة فائتة لأن رقم الأمان للمُتَّصِل قد تغيَّر.";
+
+/* Title for toast which appears after submitting a call quality survey */
+"CALL_QUALITY_SURVEY_COMPLETION_TOAST" = "شكرًا على ملاحظاتك!";
+
+/* Footer text explaining custom issue descriptions in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_FOOTER" = "يُرجى مشاركة كافة التفاصيل المتعلقة بالمشكلة. ستظل جميع المعلومات التي تشاركها هنا سرية، وسَتُستخدَم لتحسين مكالمات سيجنال فقط.";
+
+/* Placeholder text for the custom issue entry in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_PLACEHOLDER" = "صِف مشكلتك";
+
+/* Footer text explaining what debug logs contain in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER" = "المعلومات التي تتم مشاركتها معنا تقتصر على بيانات تقنية منخفضة المستوى خاصة بالتطبيق، ولا تشمل محتوى مكالماتك.";
+
+/* Header text explaining the purpose of sharing debug logs in the call quality survey. The text inside the <link> tags is tappable for viewing the diagnostic information. */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_HEADER" = "بإرسال السِجل، سَيتم مشاركة ملاحظاتك مع <link>معلومات التشخيص المتعلقة باتصالك</link>. يمكنك اختياريًا مشاركة سِجل تصحيح الأخطاء لمساعدتنا على تحسين جودة المكالمات.";
+
+/* Link text to open a preview of debug logs in the call quality survey. Appended to CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_PREVIEW_LINK" = "عرض سِجل الأخطاء";
+
+/* Title for the debug log sharing screen in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TITLE" = "ساعدنا على التطوير";
+
+/* Label for the toggle to share debug log in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TOGGLE" = "مشاركة سجل الأخطاء";
+
+/* Title for preview of the call diagnostic info that will be sent with the survey */
+"CALL_QUALITY_SURVEY_DIAGNOSTICS_TITLE" = "معلومات التشخيص";
+
+/* Button label for indicating the call did not have issues in the call quality survey */
+"CALL_QUALITY_SURVEY_GREAT_BUTTON" = "رائعة";
+
+/* Button label for indicating the call had issues in the call quality survey */
+"CALL_QUALITY_SURVEY_HAD_ISSUES_BUTTON" = "واجهت مشاكل";
+
+/* Label for audio issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO" = "مشكلة في الصوت";
+
+/* Label for audio dropout issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_DROP" = "انقطاع الصوت";
+
+/* Label for local echo issue option in call quality survey, indicating the user heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_LOCAL_ECHO" = "أسمع صدى";
+
+/* Label for remote echo issue option in call quality survey, indicating other participants heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_REMOTE_ECHO" = "سمع الآخرون صدى";
+
+/* Label for audio stuttering issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_STUTTERING" = "تقطَّع الصوت";
+
+/* Label for call dropped issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_CALL_DROPPED" = "انقطعت المكالمة";
+
+/* Label for custom issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_OTHER" = "شيء آخر";
+
+/* Label for video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO" = "مشكلة في الفيديو";
+
+/* Label for poor video quality issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_QUALITY" = "جودة الفيديو رديئة";
+
+/* Label for low resolution video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_RESOLUTION" = "دقة منخفضة";
+
+/* Label for camera not working issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_NO_CAMERA" = "لم تعمل الكاميرا";
+
+/* Header text on the call quality survey issues screen */
+"CALL_QUALITY_SURVEY_ISSUES_HEADER" = "حدِّد كل ما ينطبق";
+
+/* Title for the sheet in the call quality survey where issues with the call can be selected */
+"CALL_QUALITY_SURVEY_ISSUES_SHEET_TITLE" = "ما هي المشاكل التي واجهتك؟";
+
+/* Header text explaining the purpose of the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_HEADER" = "يساعدنا هذا على تحسين مكالمات سيجنال. لن يتم تخزين أي معلومات تعريف شخصية.";
+
+/* Title for the initial rating screen in the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_TITLE" = "كيف كانت مكالمتك؟";
+
+/* Button text to submit the call quality survey */
+"CALL_QUALITY_SURVEY_SUBMIT_BUTTON" = "تسليم";
 
 /* Label on button for raising hand in call. */
 "CALL_RAISE_HAND_BUTTON_LABEL" = "رفع اليد";
@@ -1501,7 +1735,7 @@
 /* On the credit/debit card donation screen, a small amount of information text is shown. Users can click this link to learn more information. */
 "CARD_DONATION_SUBHEADER_LEARN_MORE" = "اعرف المزيد";
 
-/* On the credit/debit card donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their credit/debit card information (2) tell them that B&A does not collect or store their personal information. */
+/* On the credit/debit card donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their credit/debit card information (2) tell them that Signal does not collect or store their personal information. */
 "CARD_DONATION_SUBHEADER_TEXT" = "أدخِل تفاصيل بطاقتك. لا يقوم B&A بجمع أو تخزين معلوماتك الشخصية.";
 
 /* Title for the 'censorship circumvention country' view. */
@@ -1579,17 +1813,8 @@
 /* Text for a bullet point in a list of Backup features, describing that all text messages are included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_TEXT_BACKUP" = "النسخ الاحتياطي الكامل للرسائل النصية";
 
-/* Text for a bullet point in a list of Backup features, describing that recent media is included. */
-"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "الأيام 45 الأخيرة من الوسائط";
-
-/* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
+/* Text for a bullet point in a list of Backup features, describing the amount of included storage. Embeds {{ the amount of storage preformatted as a localized byte count, e.g. '100 GB' }}. */
 "CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "مساحة تخزين 1 تيرابايت (~250 ألف صورة)";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "حدث خطأ ما. يُرجى التواصل مع فريق الدعم.";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a network error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NETWORK_ERROR" = "حدث خطأ ما. تحقَّق من اتصالك بالشبكة ثم حاوِل مرّة أخرى.";
 
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but is not registered. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED" = "يجب أن تكون مُسجلًا لتمكين النسخ الاحتياطية.";
@@ -1600,11 +1825,23 @@
 /* Message shown in an action sheet when the user tries to confirm selecting the paid plan, but encountered an error while redeeming their completed purchase. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_PURCHASE_REDEMPTION" = "حدث خطأ ما. يُرجى التواصل مع فريق الدعم.";
 
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED" = "نظرًا لأنك بلغت العدد الأقصى من مفاتيح الاسترداد الجديدة، و لمنع سوء الاستخدام، فإنك لن تتمكن من تفعيل النسخ الاحتياطية لمدة %1$@. انتظر %1$@ وحاوِل مُجدَّدًا.";
+
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. {{ Embeds 1 & 2: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED_TITLE" = "تعذَّر تفعيل النسخ الاحتياطية";
+
 /* A label indicating that a given Backup plan option is what the user has already enabled. */
 "CHOOSE_BACKUP_PLAN_CURRENT_PLAN_LABEL" = "الخطة الحالية";
 
-/* Subtitle for the free plan option, when choosing a Backup plan. */
-"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "الرسائل النصية + 45 يومًا من الوسائط";
+/* Text for a button that will downgrade the user from the paid Backup plan to the free one. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_BUTTON_TEXT" = "تغيير الخطة";
+
+/* Button for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_PROCEED_BUTTON" = "تغيير الخطة";
+
+/* Title for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_TITLE" = "هل تريد الانتقال إلى الخطة المجانية؟";
 
 /* Title for the free plan option, when choosing a Backup plan. */
 "CHOOSE_BACKUP_PLAN_FREE_PLAN_TITLE" = "مجانًا";
@@ -1623,6 +1860,9 @@
 
 /* Subtitle for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_SUBTITLE" = "كل النُسخ الاحتياطية مُشفَّرة من طرف لطرف. B&A شركة غير ربحية—الدفع مقابل النسخ الاحتياطية يُساعد في دعم مهمتنا.";
+
+/* Title for a label allowing users to view Signal's Terms & Conditions. */
+"CHOOSE_BACKUP_PLAN_TERM_AND_PRIVACY_POLICY_TEXT" = "الشروط وسياسة الخصوصية";
 
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "اختر خطة النسخ الاحتياطية التي تناسبك";
@@ -1996,6 +2236,9 @@
 /* Footer for the 'attributes access' section in conversation settings view. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "اختَر الأعضاء الذين يمكنهم تحرير اسم وصورة المجموعة ووصفها وكذلك مؤقِّت اختفاء الرسائل.";
 
+/* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "اختَر من يمكنه تعديل اسم وصورة المجموعة ووصفها ومؤقِّت اختفاء الرسائل وكذلك الرسائل المُثبَّتة.";
+
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "احصل على شارات لملفك الشخصي عن طريق دعم B&A. انقر على شارة لمعرفة المزيد.";
 
@@ -2052,6 +2295,9 @@
 
 /* Label for 'member requests & invites' action in conversation settings view. */
 "CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES" = "الطلبات والدعوات";
+
+/* Label for 'member label' action in conversation settings view. */
+"CONVERSATION_SETTINGS_MEMBER_TAG" = "دور العضو";
 
 /* label for 'always' option for mention notifications in conversation settings */
 "CONVERSATION_SETTINGS_MENTION_MODE_AlWAYS" = "نبِّه دومًا";
@@ -2251,22 +2497,10 @@
 /* Tooltip highlighting the custom chat color controls. */
 "CUSTOM_CHAT_COLOR_SETTINGS_TOOLTIP" = "اسحب لتغيير اتجاه التدرُّج اللوني";
 
-/* Button to run the database integrity check */
-"DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "تشغيل";
-
-/* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "سَيساعدنا هذا في حل مشكلتك وقد يستغرق استكماله عدة دقائق. يُمكنك إغلاق تطبيق B&A أثناء تشغيل هذا الفحص، ولكن يُرجى العودة لإرسال سِجلاتك.";
-
-/* Button to skip database integrity check step */
-"DATABASE_INTEGRITY_CHECK_SKIP" = "تخطّي";
-
-/* Title for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_TITLE" = "هل ترغبُ بتشغيل فحص قاعدة البيانات؟";
-
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so keep that in mind. This is the description on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_DESCRIPTION" = "قد يكون حدث تلف لبعض محفوظات رسائلك. لم يحدث أي تأثير على أمان حسابك أو رسائلك. انقر على \"متابعة\" لاستعادة بياناتك.";
 
-/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
+/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "حدث خطأ أثناء استعادة البيانات";
 
 /* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
@@ -2356,6 +2590,12 @@
 /* Accessibility label for the ? vector asset used to get info about debug logs */
 "DEBUG_LOG_INFO_BUTTON" = "معلومات عن سجل الأخطاء";
 
+/* Header text displayed above the debug log preview */
+"DEBUG_LOG_PREVIEW_HEADER" = "عند الإرسال، سيتم نشر سجلّك على الإنترنت لمدة 30 يومًا في عنوان URL فريد غير منشور.";
+
+/* Title for the debug log preview screen */
+"DEBUG_LOG_PREVIEW_TITLE" = "سجل الأخطاء";
+
 /* info message text in conversation view */
 "DECLINED_VIDEO_CALL" = "رفضتَ مكالمة فيديو";
 
@@ -2428,23 +2668,17 @@
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "سيتمُّ حذف هذه الرسالة من جميع أجهزتك.";
 
-/* Label for a button in an info sheet confirming that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_BUTTON" = "تم";
-
-/* Subtitle for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_SUBTITLE" = "عندما تحذف رسائل أو دردشات، سيتمُّ حذفها من هاتفك وكل أجهزتك المُتصلة.";
-
-/* Title for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_TITLE" = "عملية الحذف تتمُّ في تزامن عبر جميع أجهزتك الآن";
-
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "حساب محذوف";
 
 /* Notification warning the user that they have been de-registered. */
 "DEREGISTRATION_NOTIFICATION" = "تمَّ تسجيل خروجك من تطبيق B&A على هذا الجهاز.";
 
-/* Label for button that lets users re-register using the same phone number. */
-"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "أعِد تسجيل رقم الهاتف هذا";
+/* Button that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_BUTTON" = "إعادة-التسجيل";
+
+/* Title for prompt that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_PROMPT_TITLE" = "هل ترغبُ بإعادة تسجيل رقم الهاتف هذا؟";
 
 /* Label warning the user that they have been de-registered. */
 "DEREGISTRATION_WARNING" = "هذا الجهاز لم يَعُد مُسجلًا. هذا على الأرجح بسبب قيامك بتسجيل رقم هاتفك على B&A باستخدام جهازٍ مختلف.";
@@ -2485,23 +2719,14 @@
 /* The explanation for the device transfer 'choice' view when linking a device */
 "DEVICE_TRANSFER_CHOICE_LINKED_EXPLANATION" = "اختر طريقة تحويل سِجل رسائلك وبيانات حسابك";
 
-/* The body for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_BODY" = "استمرار دون نقل حسابك ورسائلك";
-
 /* The body for the device transfer 'choice' view 'register' option when linking a device when message syncing is available */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_BODY_LINK_AND_SYNC" = "سيكون لديك الخيار لتحويل رسائلك ووسائطك الأحدث من هاتفك.";
 
 /* The title for the device transfer 'choice' view 'register' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_TITLE" = "إضافة كجهاز جديد";
 
-/* The title for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_TITLE" = "سجِّل دون نقل";
-
 /* The title for the device transfer 'choice' view */
 "DEVICE_TRANSFER_CHOICE_TITLE" = "نقل الحساب والرسائل";
-
-/* The body for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_BODY" = "انقل حسابك وسِجل الرسائل من جهازك الـ iOS القديم";
 
 /* The body for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_BODY" = "انقل حسابك وسِجل الرسائل من جهاز iOS القديم الخاص بك";
@@ -2509,26 +2734,11 @@
 /* The title for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_TITLE" = "انقل من جهاز آيباد آخر";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_TITLE" = "انقل من جهاز iOS";
-
-/* Button shown to contract a QR code and exit the fullscreen view. */
-"DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "عرض بحجم أصغر";
-
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "تعذّر إتمام عملية النقل. احرص على إبقاء تطبيق B&A مفتوح في كلا الجهازين ثمَّ حاوِل مرّة أخرى.";
 
-/* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
-"DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "تعذَّر التحقُّق من جهازك الجديد. يُرجى المحاولة مرّة أخرى.";
-
 /* An error indicating that something went wrong with the transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_GENERIC" = "تعذّر إتمام عملية النقل. احرص على أن تكون أجهزتكَ بالقُرب من بعضها البعض ثمَّ حاوِل مرّة أخرى.";
-
-/* An error indicating the user must scan this code with a linked device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_LINKED" = "لإعداد جهاز الآي باد هذا كجهاز مُرتبِط، يجب إجراء المسح الضوي باستخدام جِهاز الآي باد القديم.";
-
-/* An error indicating the user must scan this code with a primary device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_PRIMARY" = "لنقل حسابك، يجب إجراء المسح الضوئي باستخدام الآي فون الخاص بك.";
 
 /* An error indicating that the user does not have enough free space on their device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "لا توجد مساحة خالية بشكلٍ كافٍ لإتمام النقل.";
@@ -2536,41 +2746,11 @@
 /* An error indicating the user must update their device before trying to transfer. */
 "DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "قُم بالتحديث إلى آخر إصدار مِن B&A ثم حاوِل مرّة أُخرى.";
 
-/* Button shown to expand a QR code and view it fullscreen. */
-"DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "عرض بحجم أكبر";
-
-/* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "انقل حساب B&A الخاص بك إلى جهاز iOS جديد. تأكَّد من أن جهازك الجديد قريب و قيد التشغيل.";
-
-/* The title on the acttion sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_TITLE" = "نقل الحساب";
-
-/* The explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION" = "ضع جهازك القديم بمكانٍ قريب، تأكَّد من أن الواي فاي والبلوتوث مُفعَّلين فيه، وامسح كود الـ QR هذا بواسطته.";
-
-/* The second explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION2" = "ضع كود الـ QR في إطار جِهاز iOS الآخر الخاص بك.";
-
-/* A prompt to provide further explanation if the user is not seeing the transfer on both devices. */
-"DEVICE_TRANSFER_QRCODE_NOT_SEEING" = "ألا يظهر التنبيه الفَوري في جهازك القديم؟";
-
-/* The title for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_TITLE" = "امسح ضوئيًا كود الـ QR";
-
 /* The explanation on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "أبقي الجهازين بالقرب من بعضهما البعض. لا تقُم بإيقاف تشغيل أيًا مِنهُما وحافِظ على B&A مفتوحًا. عمليات النقل مُشفَّرة من طرف لطرف.";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "جارٍ استقبال البيانات";
-
-/* Text indicating that we are connecting to the scanned device */
-"DEVICE_TRANSFER_SCANNING_CONNECTING" = "جارٍ الربط…";
-
-/* The explanation for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_EXPLANATION" = "ضع كود الـ QR ضمن الدائرة";
-
-/* The title for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_TITLE" = "ضع جهازك الجديد أمام الكاميرا";
 
 /* Status message on new device when cancelling transfer. */
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_CANCELLING" = "جارٍ إلغاء الاتصال بجهاز آيفون القديم…";
@@ -2608,11 +2788,8 @@
 /* Status message on old device when transfer is starting. */
 "DEVICE_TRANSFER_STATUS_OLD_DEVICE_STARTING" = "في انتظار الاتصال بجهاز آيفون الجديد…";
 
-/* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "أبقي الجهازين بالقرب من بعضهما البعض. لا تقُم بإيقاف تشغيل أيََا مِنهُما وأبقِ على B&A مفتوحًا.";
-
-/* The title on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_TITLE" = "جارٍ نقل البيانات";
+/* Action asking user to try again after transfer failure. */
+"DEVICE_TRANSFER_TRY_AGAIN_ACTION" = "حاوِل مُجدَّدًا";
 
 /* table cell label in conversation settings */
 "DISAPPEARING_MESSAGES" = "ميزة اختفاء الرسائل";
@@ -2893,17 +3070,17 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "قدَّم %1$@ تبرُّعًا لB&A نيابةً عنك! أظهِر دعمك لB&A على ملفك الشخصي.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "التراسل الخاص. تراسل خاص. بدون إعلانات، بدون مُتعقِّبات، بدون رقابة.";
+/* Body text for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BODY" = "بصفتها شركة غير ربحية،  سيجنال مُلتزمة بتقديم مراسلة ومكالمات خاصة. بدون إعلانات، وبدون تعقُّب، وبدون مراقبة. تبرَّع اليوم لدعم سيجنال.";
 
-/* There is a screen where users can read more about their donation to B&A. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "يتمُّ دعم B&A من خلال التبرُّعات، ممّا يعني أن خصوصيتك هي محور كل ما نقوم به. أُنشِئ تطبيق B&A من أجلك؛ لا لأجل بياناتك ولا لأجل الربح.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_1" = "احصل على شارة اختيارية على حسابك الشخصي عند التبرُّع";
 
-/* There is a screen where users can read more about their donation to B&A. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "إذا استطعت، يُرجى التبرُّع اليوم للحفاظ على تطبيق B&A مُمتعًا وموثوقًا به ومتاحًا للجميع.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_2" = "خصوصيتك هي مهمتنا";
 
-/* There is a screen where users can read more about their donation to B&A. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "B&A تطبيق مُختلف.";
+/* Bullet point for a sheet discussing donating to Signal. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
+"DONATION_READ_MORE_SHEET_BULLET_3" = "سيجنال شركة غير ربحية.";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "المبلغ";
@@ -3031,7 +3208,7 @@
 /* Title for the \"donate for a friend\" button on the donation view. */
 "DONATION_VIEW_DONATE_ON_BEHALF_OF_A_FRIEND" = "تبرَّع نيابةً عن صديق";
 
-/* Text describing to the user that they're going to pay a donation to B&A */
+/* Text describing to the user that they're going to pay a donation to Signal */
 "DONATION_VIEW_DONATION_TO_SIGNAL" = "التبرُّع لِB&A";
 
 /* Title for the 'Donor FAQ' button on the donation screen */
@@ -3043,23 +3220,20 @@
 /* Title for the 'Badges' button on the donation screen */
 "DONATION_VIEW_MANAGE_BADGES" = "الشارات";
 
-/* Text describing to the user that they're going to pay a monthly donation to B&A */
+/* Text describing to the user that they're going to pay a monthly donation to Signal */
 "DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "التبرُّع الشهري لB&A";
-
-/* Title for the 'more' section on the donation screen */
-"DONATION_VIEW_MORE_SECTION_TITLE" = "المزيد";
 
 /* Title for the 'my support' section in the donation view */
 "DONATION_VIEW_MY_SUPPORT_TITLE" = "الدعم الخاص بي";
 
-/* Title for the \"other ways to donate\" section on the donation view. */
-"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "طُرُق أُخرَى لِلتَبرُّع";
-
-/* Title on the 'Donate to B&A' screen */
+/* Title on the 'Donate to Signal' screen */
 "DONATION_VIEW_TITLE" = "تبرَّع لB&A";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "العملة";
+
+/* Label for a button that says 'Don't show again'. */
+"DONT_SHOW_AGAIN_BUTTON_TITLE" = "لا تُظهِر هذا مُجدَّدًا";
 
 /* Message for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_MESSAGE" = "انقر مرّتين بسرعة على رسائلك لتعديلها. يُمكنك تعديل رسائلك لمدة تصل إلى 24 ساعة بعد إرسالها.";
@@ -3070,7 +3244,7 @@
 /* Alert body for when the user has just tried to edit a contacts after declining to give Signal contacts permissions */
 "EDIT_CONTACT_WITHOUT_CONTACTS_PERMISSION_ALERT_BODY" = "يُمكِنُك تمكين الوصول من خلال تطبيق إعدادات iOS.";
 
-/* Alert title for when the user has just tried to edit a contacts after declining to give B&A contacts permissions */
+/* Alert title for when the user has just tried to edit a contacts after declining to give Signal contacts permissions */
 "EDIT_CONTACT_WITHOUT_CONTACTS_PERMISSION_ALERT_TITLE" = "يحتاج B&A صلاحية الوصول إلى جهات الاتصال من اجل تعديل البيانات الخاصة بجهة الإتصال";
 
 /* The navbar title for the 'update group' view. */
@@ -3103,10 +3277,10 @@
 /* Edit failed for an unexpected reason */
 "EDIT_MESSAGE_SEND_MESSAGE_UNKNOWN_ERROR" = "EDIT_MESSAGE_SEND_MESSAGE_UNKNOWN_ERROR";
 
-/* body of email sent to contacts when inviting to install B&A. Embeds {{link to install B&A}} and {{link to the B&A home page}} */
+/* body of email sent to contacts when inviting to install Signal. Embeds {{link to install Signal}} and {{link to the Signal home page}} */
 "EMAIL_INVITE_BODY" = "مرحبًا،\n\nمؤخّرًا كُنتُ أستخدِم B&A لإبقاء الدردشات على جهاز الآيفون خاصة. أريدُ منك القيام بتثبيته أيضًا، بحيث نكون واثقين من أنك أنت فقط وأنا يُمكننا قراءة رسائلنا أو سماع مكالماتنا.\n\nB&A مُتوفِّر للآيفون والأندرويد والكمبيوتر المكتبي. احصل عليه هنا: %1$@\n\n يعمل B&A مثل تطبيق المراسلة الحالي لديك. يُمكننا إرسال الصور ومقاطع الفيديو، وإجراء المكالمات، والبدء بالدردشات الجماعية. أفضل ما في الأمر هو أنه، لا يمكن لأي أحد آخر رؤية أي من تلك المراسلات، ولا حتى الأشخاص القائمين على B&A!\n\nيُمكنك قراءة المزيد حول B&A هنا: %2$@";
 
-/* subject of email sent to contacts when inviting to install B&A */
+/* subject of email sent to contacts when inviting to install Signal */
 "EMAIL_INVITE_SUBJECT" = "لننتقل إلى B&A";
 
 /* Description for the fallback support sheet if user cannot send email */
@@ -3316,9 +3490,6 @@
 /* Footer for message cell for documents/files when they are expired and unavailable for download */
 "FILE_UNAVAILABLE_FOOTER" = "الملف غير مُتوفِّر";
 
-/* Message for sheet shown when tapping a document/file that has expired and is unavailable for download */
-"FILE_UNAVAILABLE_SHEET_MESSAGE" = "لم يتم نقل هذا الملف من هاتفك عندما تمَّ ربط هذا الجهاز. لا يمكن مزامنة الملفات والوسائط التي مضى عليها أكثر من 45 يومًا من الوقت الذي تمَّ فيه ربط الجهاز.";
-
 /* Title for sheet shown when tapping a document/file that has expired and is unavailable for download */
 "FILE_UNAVAILABLE_SHEET_TITLE" = "الملف غير مُتوفِّر";
 
@@ -3352,12 +3523,6 @@
 /* Tooltip notifying users that the flip camera button moved to the picture-in-picture view of themselves in a call */
 "FLIP_CAMERA_BUTTON_MOVED_TO_PIP_TOOLTIP" = "نُقِل زر \"تغيير الكاميرا\" إلى هنا. انقر على الفيديو الخاص بك لتُجرِّبه.";
 
-/* Message for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_MESSAGE" = "أُرسِلت اﻵن الرسائل الموجَّهة فورًا.";
-
-/* Title for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_TITLE" = "إعادة توجيه أسرع";
-
 /* Indicates that a single message was forwarded. */
 "FORWARD_MESSAGE_MESSAGES_SENT_1" = "أُرسِلت الرسالة";
 
@@ -3385,11 +3550,11 @@
 /* Title for the 'Get Started' banner */
 "GET_STARTED_BANNER_TITLE" = "ابدأ";
 
-/* 'Get Started' button directing users to appearance */
-"GET_STARTED_CARD_APPEARANCE" = "المظهر";
-
 /* 'Get Started' button direction users to avatar builder */
 "GET_STARTED_CARD_AVATAR_BUILDER" = "إضافة صورة";
+
+/* 'Get Started' button directing users to Chat Color settings */
+"GET_STARTED_CARD_CHAT_COLOR" = "لون الدردشة";
 
 /* 'Get Started' button directing users to invite friends */
 "GET_STARTED_CARD_INVITE_FRIENDS" = "اُدْعُ الأصدقاء";
@@ -3595,9 +3760,6 @@
 /* Toast view text informing user about swiping to speaker view */
 "GROUP_CALL_SPEAKER_VIEW_TOAST" = "اسحب للأعلى لتغيير نمط العرض";
 
-/* Tooltip highlighting group calls. */
-"GROUP_CALL_START_TOOLTIP" = "انقر هُنا لبدء مُكالمة جماعية";
-
 /* Text explaining that you started a group call. */
 "GROUP_CALL_STARTED_BY_YOU" = "بدأتَ مُكالمة جماعية";
 
@@ -3736,6 +3898,12 @@
 /* Message indicating that 'announcement-only' mode was enabled by a remote user. Embeds {{ user who enabled 'announcement-only' mode }}. */
 "GROUP_IS_ANNOUNCEMENT_ONLY_ENABLED_BY_REMOTE_USER_FORMAT" = "غيَّر العضو %1$@ إعدادات المجموعة للسماح للمُشرِفين فقط بإرسال الرسائل.";
 
+/* Message text for the 'group invite link' action sheet. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE" = "هل تريد الانضمام إلى هذه المجموعة ومشاركة اسمك وصورتك مع أعضائها؟";
+
+/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE_W_REQUEST" = "عند تقديم طلب الانضمام، سيُشَارَك اسمك وصورتك مع أعضاء هذه المجموعة. يجب أن يوافق أحد المُشرِفين على طلبك.";
+
 /* Subtitle indicating that the local user has been blocked from joining the group */
 "GROUP_LINK_ACTION_SHEET_VIEW_BLOCKED_FROM_JOINING_SUBTITLE" = "لا يُمكنك الانضمام لهذه المجموعة من خلال رابط المجموعة لأن أحد المُشرفِين قام بإزالتك. تواصَل مع أحد المُشرِفين ليُضيفك إلى المجموعة من جديد.";
 
@@ -3754,14 +3922,8 @@
 /* Label indicating that the group info is being loaded in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_LOADING_TITLE" = "جارٍ التحميل…";
 
-/* Message text for the 'group invite link' action sheet. */
-"GROUP_LINK_ACTION_SHEET_VIEW_MESSAGE" = "هل تريد الانضمام إلى هذه المجموعة ومُشاركة اسمك وصورتك مع أعضائها؟";
-
 /* Label for the 'request to join' button in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_BUTTON" = "طلب للانضمام";
-
-/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
-"GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_MESSAGE" = "لتستطيع الانضمام إلى هذه المجموعة، يجب أن يوافق مُشرِف من هذه المجموعة على طلب انضمامك. عندما ترسل طلب انضمام، ستتمُّ مشاركة اسمك وصورتك مع أعضاء المجموعة.";
 
 /* Error message the attempt to request to join the group failed due to network connectivity. */
 "GROUP_LINK_COULD_NOT_REQUEST_TO_JOIN_GROUP_DUE_TO_NETWORK_ERROR_MESSAGE" = "تأكَّد من اتصالك بالإنترنت ثم حاوِل مرّة أُخرى.";
@@ -3832,7 +3994,7 @@
 /* Label for the 'share group link via QR code' button in the 'group link' view. */
 "GROUP_LINK_VIEW_SHARE_LINK_VIA_QR_CODE" = "كود الـ QR";
 
-/* Label for the 'share group link via B&A' button in the 'group link' view. */
+/* Label for the 'share group link via Signal' button in the 'group link' view. */
 "GROUP_LINK_VIEW_SHARE_LINK_VIA_SIGNAL" = "مشاركة عبر B&A";
 
 /* Message for the 'share group link' action sheet in the 'group link' view. */
@@ -4045,6 +4207,12 @@
 /* Name for a group story on the stories list. Embeds {author's name}, {group name} */
 "GROUP_STORY_NAME_FORMAT" = "%1$@ إلى %2$@";
 
+/* Text indicating you reacted to a group story (the header on the bubble says \"You\") */
+"GROUP_STORY_REPLY_REACTION_SECOND_PERSON" = "تفاعلتَ مع القصة";
+
+/* Text indicating someone else reacted to a group story (the header on the bubble says their name, e.g. \"Bob\") */
+"GROUP_STORY_REPLY_REACTION_THIRD_PERSON" = "تفاعلَ مع القصة";
+
 /* Button to delete the story on the 'group story settings' view */
 "GROUP_STORY_SETTINGS_DELETE_BUTTON" = "حذف قصة المجموعة";
 
@@ -4240,13 +4408,13 @@
 /* A prefix indicating that a message preview is a draft */
 "HOME_VIEW_DRAFT_PREFIX" = "مُسوَّدَة: ";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have 1 B&A contact.  Embeds {{The name of 1 of your B&A contacts}}. */
+/* Format string for a label offering to start a new conversation with your contacts, if you have 1 Signal contact.  Embeds {{The name of 1 of your Signal contacts}}. */
 "HOME_VIEW_FIRST_CONVERSATION_OFFER_1_CONTACT_FORMAT" = "بعض جهات اتصالك بالفعل في B&A، بما في ذلك %1$@.";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have 2 B&A contacts.  Embeds {{The names of 2 of your B&A contacts}}. */
+/* Format string for a label offering to start a new conversation with your contacts, if you have 2 Signal contacts.  Embeds {{The names of 2 of your Signal contacts}}. */
 "HOME_VIEW_FIRST_CONVERSATION_OFFER_2_CONTACTS_FORMAT" = "بعض جهات اتصالك بالفعل في B&A، بما في ذلك %1$@ و%2$@.";
 
-/* Format string for a label offering to start a new conversation with your contacts, if you have at least 3 B&A contacts.  Embeds {{The names of 3 of your B&A contacts}}. */
+/* Format string for a label offering to start a new conversation with your contacts, if you have at least 3 Signal contacts.  Embeds {{The names of 3 of your Signal contacts}}. */
 "HOME_VIEW_FIRST_CONVERSATION_OFFER_3_CONTACTS_FORMAT" = "بعض جهات اتصالك بالفعل في B&A، بما في ذلك %1$@، %2$@ و%3$@";
 
 /* A label offering to start a new conversation with your contacts, if you have no Signal contacts. */
@@ -4263,6 +4431,18 @@
 
 /* Title for the conversation list's 'archive' mode. */
 "HOME_VIEW_TITLE_ARCHIVE" = "الأرشيف";
+
+/* Title for the conversation list's backup storage full context menu action. */
+"HOME_VIEW_TITLE_BACKUP_OUT_OF_STORAGE_QUOTA" = "مساحة تخزين النسخ الاحتياطي ممتلئة";
+
+/* Title for the conversation list's failed to redeem backup subscription context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_FAILED_TO_REDEEM" = "خطأ في اشتراك النسخ الاحتياطي";
+
+/* Title for the conversation list's backup subscription not found locally context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_NOT_FOUND_LOCALLY" = "تعذَّر العثور على اشتراك النسخ الاحتياطي";
+
+/* Title for the conversation list's failed to backup context menu action. */
+"HOME_VIEW_TITLE_FAILED_TO_BACKUP" = "تعذَّر إتمام عملية النسخة الاحتياطية.";
 
 /* Title for the 'Select Chats' option in the ChatList. */
 "HOME_VIEW_TITLE_SELECT_CHATS" = "تحديد الدردشات";
@@ -4417,7 +4597,7 @@
 /* Indicates that another user has changed their phone number. Embeds: {{ the user's name}} */
 "INFO_MESSAGE_USER_CHANGED_PHONE_NUMBER_FORMAT" = "%1$@ غيَّرَ رقم هاتفِه.";
 
-/* Shown in inbox and conversation when a user joins B&A, embeds the new user's {{contact name}} */
+/* Shown in inbox and conversation when a user joins Signal, embeds the new user's {{contact name}} */
 "INFO_MESSAGE_USER_JOINED_SIGNAL_BODY_FORMAT" = "%1$@ متواجد على B&A!";
 
 /* Label at the top of the input text when editing a message */
@@ -4546,8 +4726,8 @@
 /* confirm the users intent to link a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TITLE" = "إنهاء الارتباط";
 
-/* subtitle for choosing to send message history when linking a new device */
-"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE" = "انقل رسائلك النصية وآخر 45 يومًا من الوسائط.";
+/* Subtitle for choosing to send message history when linking a new device, if you have the paid tier enabled. */
+"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_PAID_PLAN_SUBTITLE" = "انقل رسائلك النصية وكل ملفات الوسائط الخاصة بك";
 
 /* title for choosing to send message history when linking a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_TITLE" = "نقل سجلّ الرسائل";
@@ -4708,24 +4888,6 @@
 /* Shown to users while the app is loading, asking them not to close the app. */
 "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "لا تغلق التطبيق.";
 
-/* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "من أجل نقل حساب B&A الخاص بك، يجب عليك تفعيل الوصول إلى الشبكة المحلية في كلا الجهازين.";
-
-/* A button asking the user if they need further help getting their transfer working. */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "هل تحتاج لمُساعدة؟";
-
-/* First step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_ONE" = "على كل جهاز، افتح \"الإعدادات\"";
-
-/* Third step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "تشغيل \"الشبكة المحلية\"";
-
-/* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "انتقل إلى B&A";
-
-/* Title for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "تشغيل الوصول إلى الشبكة المحلية";
-
 /* A string indicating that the user can search for a location */
 "LOCATION_PICKER_SEARCH_PLACEHOLDER" = "البحث بحسب الاسم أو العنوان";
 
@@ -4830,6 +4992,24 @@
 
 /* toast indicating that we will remind the user later */
 "MEGAPHONE_WILL_REMIND_LATER" = "سوف نُذكِّرُك لاحقًا.";
+
+/* Label for an action to add a member label */
+"MEMBER_LABEL_ADD" = "أضِف دور للعضو";
+
+/* Heading shown above the preview of a message bubble with the edited member label. */
+"MEMBER_LABEL_PREVIEW_HEADING" = "مُعاينة";
+
+/* Text shown in the preview message bubble when a user is editing their member label. */
+"MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "مرحبًا!";
+
+/* Placeholder text in text field where user can edit their member label. */
+"MEMBER_LABEL_VIEW_PLACEHOLDER_TEXT" = "أضِف دورك";
+
+/* Subtitle for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_SUBTITLE" = "حدِّد دور عضو لتصف نفسك أو دورك في هذه المجموعة. أدوار العضو مرئية فقط داخل هذه المجموعة.";
+
+/* Title for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_TITLE" = "دور العضو";
 
 /* Action sheet button title */
 "MESSAGE_ACTION_COPY_TEXT" = "نسخ نصّ الرسالة";
@@ -5078,7 +5258,7 @@
 "MESSAGE_REQUEST_VIEW_BLOCK_BUTTON" = "حظر";
 
 /* A prompt notifying that the user must unblock this conversation to continue. Embeds {{contact name}}. */
-"MESSAGE_REQUEST_VIEW_BLOCKED_CONTACT_PROMPT_FORMAT" = "هل ترغبُ بالسماح لـ %1$@ بمُراسلتك وهل ترغبُ بمشاركة اسمك وصورتك معه؟ لن تستقبل أي رسائل حتى تزيل الحظر عنه.";
+"MESSAGE_REQUEST_VIEW_BLOCKED_CONTACT_PROMPT_FORMAT" = "هل ترغبُ بالسماح لجهة الاتصال %1$@ بمُراسلتك وهل ترغبُ بمشاركة اسمك وصورتك معها؟ لن تستقبل أي رسائل حتى تزيل الحظر عنها.";
 
 /* A prompt notifying that the user must unblock this group to continue. */
 "MESSAGE_REQUEST_VIEW_BLOCKED_GROUP_PROMPT" = "هل ترغبُ برفع الحظر عن هذه المجموعة ومشاركة اسمك وصورتك مع أعضاءها؟ لن تستقبل أي رسائل من المجموعة حتى تقوم برفع الحظر عنها.";
@@ -5099,7 +5279,7 @@
 "MESSAGE_REQUEST_VIEW_EXISTING_GROUP_PROMPT" = "هل ترغبُ بمتابعة دردشتك مع هذه المجموعة ومُشاركة اسمك وصورتك مع أعضاءها؟";
 
 /* A prompt asking if the user wants to accept a conversation invite. Embeds {{contact name}}. */
-"MESSAGE_REQUEST_VIEW_NEW_CONTACT_PROMPT_FORMAT" = "هل ترغبُ بالسماح لـ %1$@ بمُراسلتك وهل ترغبُ بمُشاركة اسمك وصورتك معه؟ لن يعلم أنك قد قرأتَ رسائله حتى تقوم بالقبول.";
+"MESSAGE_REQUEST_VIEW_NEW_CONTACT_PROMPT_FORMAT" = "هل ترغبُ بالسماح لجهة الاتصال %1$@ بمُراسلتك وهل ترغبُ بمُشاركة اسمك وصورتك معها؟ لن تعلم أنك قد قرأتَ رسائلها حتى تقوم بالقبول.";
 
 /* A prompt asking if the user wants to accept a group invite. */
 "MESSAGE_REQUEST_VIEW_NEW_GROUP_PROMPT" = "هل ترغبُ بالانضمام لهذه المجموعة ومُشاركة اسمك وصورتك مع أعضاءها؟ لن يعلموا أنك قد قرأتَ رسائلهم حتى تقوم بالقبول.";
@@ -5108,7 +5288,7 @@
 "MESSAGE_REQUEST_VIEW_NEW_GROUP_PROMPT_V2" = "هل ترغبُ بالانضمام لهذه المجموعة؟ لن يعلموا أنك قد قرأتَ رسائلهم حتى تقوم بالقبول.";
 
 /* A prompt asking if the user wants to accept a conversation invite from a person whom they previously removed. Embeds {{contact name}}. */
-"MESSAGE_REQUEST_VIEW_REMOVED_CONTACT_PROMPT_FORMAT" = "هل ترغبُ بالسماح لـ %1$@ بمراسلتك وهل ترغبُ بمشاركة اسمك وصورتك معه؟ حذفتَ هذا الشخص في الماضي.";
+"MESSAGE_REQUEST_VIEW_REMOVED_CONTACT_PROMPT_FORMAT" = "هل ترغبُ بالسماح لجهة الاتصال %1$@ بمراسلتك وهل ترغبُ بمشاركة اسمك وصورتك معها؟ حذفتَ هذا الشخص في الماضي.";
 
 /* incoming message request button text which reports a conversation as spam */
 "MESSAGE_REQUEST_VIEW_REPORT_BUTTON" = "الإبلاغ…";
@@ -5185,7 +5365,7 @@
 /* info message text in conversation view for when a call was dropped because the contact is blocked in iOS settings */
 "MISSED_CALL_BLOCKED_SYSTEM_CONTACT" = "مكالمة فائتة من جهة اتصال محظورة في إعدادات الهاتف";
 
-/* Action to block contact in B&A for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
+/* Action to block contact in Signal for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
 "MISSED_CALL_BLOCKED_SYSTEM_SETTINGS_SHEET_BLOCK_ACTION" = "احظر أيضًا جهة الاتصال على B&A";
 
 /* Message for sheet shown when the user taps a missed call from a contact blocked in iOS settings. */
@@ -5428,6 +5608,18 @@
 /* A string describing that the user has no groups in common other than the group implied by the current UI context */
 "NO_OTHER_GROUPS_IN_COMMON" = "لا توجد مجموعات مُشتركة أخرى.";
 
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-link' (translated via NOT_LINKED_BOTTOM_RELINK), and it will be formatted as a tappable link. */
+"NOT_LINKED_BOTTOM" = "لم يعد هذا الجهاز مُرتبطًا. %1$@ لمواصلة استخدام سيجنال على هذا الجهاز.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_LINKED_BOTTOM_RELINK" = "أعِد الربط";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-register' (translated via NOT_REGISTERED_BOTTOM_REREGISTER), and it will be formatted as a tappable link. */
+"NOT_REGISTERED_BOTTOM" = "هذا الجهاز لم يَعُد مُسجَّلًا. %1$@ لِمواصلة استخدام سيجنال.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_REGISTERED_BOTTOM_REREGISTER" = "أعِد التسجيل";
+
 /* Label for 1:1 conversation with yourself. */
 "NOTE_TO_SELF" = "الملاحظات الشخصية";
 
@@ -5515,20 +5707,35 @@
 /* Label for the 'skip and create new pin' button when reglock is disabled during onboarding. */
 "ONBOARDING_2FA_SKIP_AND_CREATE_NEW_PIN" = "تجاهُل وإنشاء رقم تعريف شخصي (PIN) جديد";
 
+/* Label for action to use Recovery Key instead of PIN for registration. */
+"ONBOARDING_2FA_SKIP_AND_USE_RECOVERY_KEY" = "استخدِم مفتاح الاستعادة";
+
 /* Explanation for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE" = "إذا كُنتَ لا تستطيع تذكُّر رقم التعريف الشخصي (PIN) الخاص بك، يُمكنك إنشاء واحد جديد. يُمكنك التسجيل واستخدام حسابك، لكن سوف تفقد بعض الإعدادات المحفوظة، مثل معلومات حسابك الشخصي.";
 
 /* Title for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "هل ترغبُ بتخطّي إدخال رقم التعريف الشخصي (PIN)؟";
 
-/* The body for the device transfer 'choice' view 'transfer' option */
+/* The body for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "استعِد رسائلك النصية والوسائط من خطة النسخ الاحتياطي المدفوعة لB&A الخاصة بك";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
+/* The title for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "استعادة النسخة الاحتياطية على B&A";
+
+/* Body for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_BODY" = "إذا قُمتَ بتخطي الاستعادة الآن، فلن تتمكَّن من الاستعادة لاحقًا. إذا فعّلتَ النسخ الاحتياطية من جديد في هذا الجهاز، فسيتم استبدال نسختك الاحتياطية الحالية بسِجل الرسائل الخاص بك الجديد.";
+
+/* Title for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_TITLE" = "هل ترغبُ بتخطِّي الاستعادة؟";
 
 /* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "اختر الطريقة التي تودّ أن تستعيد بها سِجل رسائلك وبيانات حسابك.";
+
+/* Message body displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_BODY" = "لأنك تنتقل من أندرويد إلى iOS، فإن الطريقة الوحيدة لنقل رسائلك ووسائطك هي من خلال تفعيل النسخ الاحتياطية على سيجنال على جهازك القديم.";
+
+/* Title displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_TITLE" = "لا تُوجد نسخة احتياطية للاستعادة";
 
 /* The body for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_BODY" = "متابعة دون نقل رسائلك والوسائط";
@@ -5659,6 +5866,9 @@
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "هاتفي القديم بحوزتي";
 
+/* Text indicating Signal is a nonprofit on the 'onboarding splash' view. For non-English languages, exclude the word '501c3'. */
+"ONBOARDING_SPLASH_NONPROFIT" = "سيجنال شركة غير ربحية";
+
 /* Button for restoring or transferring account in the 'onboarding splash' view. */
 "ONBOARDING_SPLASH_RESTORE_OR_TRANSFER_BUTTON_TITLE" = "استعادة أو نقل الحساب";
 
@@ -5687,7 +5897,7 @@
 "ONBOARDING_VERIFICATION_HELP_BULLET_2" = "قُم بتأكيد أنه يُمكنك تلقّي مكالمة هاتفية على هذا الرقم";
 
 /* Third bullet point for the explainer sheet for registering via verification code. */
-"ONBOARDING_VERIFICATION_HELP_BULLET_3" = "تحقَّق من إدخال رقم هاتفك بشكلٍ صحيح.";
+"ONBOARDING_VERIFICATION_HELP_BULLET_3" = "تحقَّق من إدخال رقم هاتفك بشكلٍ صحيح";
 
 /* Label for a button to get help entering a verification code when registering. */
 "ONBOARDING_VERIFICATION_HELP_LINK" = "هل تواجه مشكلة في التسجيل؟";
@@ -5710,19 +5920,19 @@
 /* Button text which opens the settings app */
 "OPEN_SETTINGS_BUTTON" = "الإعدادات";
 
-/* B&A doesn't support old versions of iOS and shows a warning if you're on unsupported version. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this text. */
+/* Signal doesn't support old versions of iOS and shows a warning if you're on unsupported version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. */
 "OS_EXPIRED_AND_CAN_UPGRADE_OS" = "لم يعُد تطبيق B&A يَعمل على هذا الجهاز. لاستخدام B&A مُجدَّدًا، يُرجى تحديث إصدار iOS على جهازك.";
 
-/* B&A doesn't support old devices. If that's the case, they'll be shown this action, and tapping it will open information about B&A's minimum supported operating systems. */
+/* Signal doesn't support old devices. If that's the case, they'll be shown this action, and tapping it will open information about Signal's minimum supported operating systems. */
 "OS_EXPIRED_AND_DEVICE_IS_STUCK" = "لم يعُد تطبيق B&A يَعمل على هذا الجهاز. لاستخدام B&A مُجدَّدًا، يُرجى الانتقال إلى جهاز أحدث.";
 
 /* Signal doesn't support old versions of iOS and shows a warning if you're on an old version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this action, and tapping it will open device update instructions. */
 "OS_SOON_TO_EXPIRE_ACTION_TITLE" = "حدِّث الآن";
 
-/* B&A doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
+/* Signal doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
 "OS_SOON_TO_EXPIRE_AND_CAN_UPGRADE_OS_FORMAT" = "سَيتوقف B&A عن دعم إصدار iOS على جهازك قريبًا. للاستمرار في استخدام B&A، قُم بتحديث إصدار iOS على جهازك قبل %1$@.";
 
-/* B&A doesn't support old versions of iOS and shows a warning if you're on an old version that will soon lose support. This is the text on that warning when users can't upgrade iOS without getting a new device. Embeds {{expiration date}}. */
+/* Signal doesn't support old versions of iOS and shows a warning if you're on an old version that will soon lose support. This is the text on that warning when users can't upgrade iOS without getting a new device. Embeds {{expiration date}}. */
 "OS_SOON_TO_EXPIRE_AND_DEVICE_WILL_BE_STUCK_FORMAT" = "سَيتوقَّف B&A عن دعم إصدار iOS على جهازك قريبًا. لمُواصلة استخدام B&A، قُم بتغيير جهازك إلى جهاز أحدث قبل %1$@.";
 
 /* Info Message when another user disabled disappearing messages. Embeds {{name of other user}}. */
@@ -5731,13 +5941,13 @@
 /* Info Message when another user enabled disappearing messages. Embeds {{name of other user}} and {{time amount}} before messages disappear. See the *_TIME_AMOUNT strings for context. */
 "OTHER_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "ضَبَطَ %1$@ وقت اختفاء الرسائل على %2$@.";
 
-/* Label warning the user that the B&A service may be down. */
+/* Label warning the user that the Signal service may be down. */
 "OUTAGE_WARNING" = "B&A يواجِهُ صُعوبات تَقنية. نعملُ بجد لاستعادة الخِدمة في أسرع وقتٍ ممكن.";
 
 /* Label for action link when the user has an outdated payment client */
 "OUTDATED_PAYMENT_CLIENT_ACTION_TITLE" = "حدِّث الآن";
 
-/* Label warning the user that they should update B&A to continue using payments. */
+/* Label warning the user that they should update Signal to continue using payments. */
 "OUTDATED_PAYMENT_CLIENT_REMINDER_TEXT" = "قُم بتحديث B&A للاستمرار في استخدام عمليات الدفع. قد لا يكون رصيدك مُحدَّثًا.";
 
 /* Body of prompt notifying restore was cancelled. */
@@ -5763,6 +5973,21 @@
 
 /* Title of prompt notifying restore failed for unknown reasons. */
 "OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_TITLE" = "خطأ غير معروف";
+
+/* Action button to backup before continuing. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_BACKUP_ACTION" = "إنشاء نسخة احتياطية الآن";
+
+/* Body text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_BODY" = "أنشِئ نسخة احتياطية الآن قبل النقل. قد تكون قد استلمتَ رسائل لم يتم نسخها احتياطيًا بعد.";
+
+/* Title text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_TITLE" = "جارٍ تجهيز جهازك";
+
+/* Action button to skip backup and continue. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_SKIP_ACTION" = "التخطّي والمتابعة";
+
+/* Description for form confirming restore from backup without size detail. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_RESTORE_DESCRIPTION" = "أُجريَت آخِر نسخة احتياطية في %1$@ عند الساعة %2$@.";
 
 /* Body of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "بدأ نقل حساب B&A الخاص بك ورسائلك إلى جهازك الآخر. B&A غير مُفعَّل الآن على هذا الجهاز.";
@@ -5800,7 +6025,7 @@
 /* info message text in conversation view */
 "OUTGOING_MISSED_VOICE_CALL" = "مكالمة صوتية لم يتم الرد عليها";
 
-/* Button for action sheet shown when device transfer completes; quits the B&A app immediately (does not automatically relaunch, but the user may choose to relaunch). */
+/* Button for action sheet shown when device transfer completes; quits the Signal app immediately (does not automatically relaunch, but the user may choose to relaunch). */
 "OUTGOING_TRANSFER_COMPLETE_EXIT_ACTION" = "مغادرة B&A";
 
 /* Message for action sheet shown when device transfer completes */
@@ -5817,9 +6042,6 @@
 
 /* Footer for message cell for long text when it is expired and unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_FOOTER" = "هذه الرسالة غير مُكتمِلة";
-
-/* Message for sheet shown when tapping oversized text that has expired and is unavailable for download */
-"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "لم يتم نقل النص الكامل في هذه الرسالة من هاتفك عند ربط هذا الجهاز. لا يُمكن مزامنة الرسائل النصية الطويلة التي مضى عليها أكثر من 45 يومًا من الوقت الذي تمَّ فيه ربط الجهاز.";
 
 /* Title for sheet shown when tapping oversized text that has expired and is unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_SHEET_TITLE" = "الرسالة الكاملة غير مُتوفِّرة";
@@ -6145,9 +6367,6 @@
 /* Message indicating that a request to join the group was successfully approved. Embeds {{ the name of the approved user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_APPROVED_FORMAT" = "تمَّت إضافة \"%1$@\".";
 
-/* Label for the 'view requests' button in the pending member requests banner. */
-"PENDING_GROUP_MEMBERS_REQUEST_BANNER_VIEW_REQUESTS" = "عرض الطلبات";
-
 /* Message indicating that a request to join the group was successfully denied. Embeds {{ the name of the denied user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_DENIED_FORMAT" = "تمَّ رفض \"%1$@\".";
 
@@ -6263,9 +6482,6 @@
 "PHOTO_CAPTURE_GENERIC_ERROR" = "تعذَّر التقاط الصورة.";
 
 /* alert title */
-"PHOTO_CAPTURE_UNABLE_TO_CAPTURE_IMAGE" = "تعذَّر التقاط الصورة.";
-
-/* alert title */
 "PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA" = "فشلت تهيئة الكاميرا.";
 
 /* Button label for opening the chat on a sheet presented from photo capture view indicating that a username QR code was found. */
@@ -6276,9 +6492,6 @@
 
 /* Title for sheet presented from photo capture view indicating that a username QR code was found. Embeds {{username}}. */
 "PHOTO_CAPTURE_USERNAME_QR_CODE_FOUND_TITLE_FORMAT" = "تمَّ العثور على %1$@";
-
-/* alert title, generic error preventing user from capturing a video that is too long */
-"PHOTO_CAPTURE_VIDEO_SIZE_ERROR" = "الفيديو طويل جدًا.";
 
 /* Pressing this button pins a thread */
 "PIN_ACTION" = "تثبيت";
@@ -6364,6 +6577,9 @@
 /* If the user is re-registering, they need to enter their PIN to restore all their data. In some cases, they can skip this entry and lose some data. This text is shown on a button that lets them begin to do this. */
 "PIN_ENTER_EXISTING_SKIP" = "تَخَطَّ رقم التعريف الشخصي (PIN)";
 
+/* If the user is re-registering, they need to enter their PIN to restore all their data. If they don't remember their PIN, they may remember their Recovery Key which can be used instead of a PIN. */
+"PIN_ENTER_EXISTING_USE_RECOVERY_KEY" = "استخدِم مفتاح الاستعادة";
+
 /* Error title indicating that the attempt to recreate a PIN failed. */
 "PIN_RECREATION_ERROR_TITLE" = "فشل إنشاء رقم التعريف الشخصي (PIN)";
 
@@ -6421,8 +6637,80 @@
 /* An explanation that you have already pinned the maximum number of conversations. */
 "PINNED_CONVERSATION_LIMIT" = "يُمكنك تثبيت ما يصل إلى 4 دردشات فقط.";
 
+/* Accessibility label prefix for banner showing a pinned message */
+"PINNED_MESSAGE_BANNER_AX_LABEL" = "الرسائل المُثبَّتة:";
+
+/* Shown when another user pins a message. Embeds {{ another user }}. */
+"PINNED_MESSAGE_CHAT_EVENT_OTHER" = "قام %1$@ بتثبيت رسالة";
+
+/* Shown when the local user pins a message. */
+"PINNED_MESSAGE_CHAT_EVENT_SELF" = "قُمتَ بتثبيت رسالة";
+
+/* Accessibility label for pin message button */
+"PINNED_MESSAGE_MENU_ACCESSIBILITY_LABEL" = "قائمة الرسائل المُثبَّتة";
+
+/* Label for button to pin a message */
+"PINNED_MESSAGE_PIN_ACTION_TITLE" = "تثبيت";
+
+/* Message for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BODY" = "سَتحل الرسالة المُثبَّتة مكان الرسالة الأقدم.";
+
+/* Option in pinned message action sheet to replace oldest pin. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BUTTON" = "استبدال";
+
+/* Title for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_TITLE" = "هل تريد استبدال التثبيت الأقدم؟";
+
+/* Body for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_BODY" = "تحقّق من اتصالك بالشبكة ثم حاوِل مرّة أخرى.";
+
+/* Title for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_TITLE" = "تعذَّر تثبيت الرسالة";
+
+/* Text to show on a toast when someone unpins a message */
+"PINNED_MESSAGE_TOAST" = "أُلغِي تثبيت الرسالة";
+
+/* Label for button to unpin a message */
+"PINNED_MESSAGE_UNPIN_ACTION_TITLE" = "إلغاء التثبيت";
+
+/* Option in pinned message action sheet to pin for 24 hours. */
+"PINNED_MESSAGES_24_HOURS" = "24 ساعة";
+
+/* Option in pinned message action sheet to pin for 30 days. */
+"PINNED_MESSAGES_30_DAYS" = "30 يومًا";
+
+/* Option in pinned message action sheet to pin for 7 days. */
+"PINNED_MESSAGES_7_DAYS" = "7 أيام";
+
+/* Title for Pinned Messages detail view */
+"PINNED_MESSAGES_DETAILS_TITLE" = "الرسائل المُثبَّتة";
+
+/* Title for an action sheet to indicate how long to keep the pin active */
+"PINNED_MESSAGES_EXPIRY_SHEET_TITLE" = "الاحتفاظ بالتثبيت لِمدة…";
+
+/* Option in pinned message action sheet to pin with no expiry. */
+"PINNED_MESSAGES_FOREVER" = "بشكل دائم";
+
+/* Action menu item to go to a message in the conversation view */
+"PINNED_MESSAGES_GO_TO_MESSAGE" = "انتقل إلى الرسالة";
+
+/* Action menu item to see all pinned messages */
+"PINNED_MESSAGES_SEE_ALL_MESSAGES" = "مشاهدة جميع الرسائل";
+
+/* Action menu item to unpin a message */
+"PINNED_MESSAGES_UNPIN" = "إلغاء التثبيت";
+
+/* Title for a button to unpin all pinned messages. */
+"PINNED_MESSAGES_UNPIN_ALL" = "إلغاء تثبيت الكل";
+
 /* The title for pinned conversation section on the conversation list */
 "PINNED_SECTION_TITLE" = "الدردشات المُثبَّتة";
+
+/* Body for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_BODY" = "سيُلغى تثبيت الرسائل المؤقَّتة عند انتهاء مؤقتها وإزالتها من الدردشة.";
+
+/* Title for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_TITLE" = "تثبيت الرسائل المؤقَّتة";
 
 /* Action text for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_ACTION" = "إنشاء رقم التعريف الشخصي (PIN)";
@@ -6439,11 +6727,35 @@
 /* Accessibility label for button to start media playback */
 "PLAY_BUTTON_ACCESSABILITY_LABEL" = "تشغيل الوسط";
 
+/* Accessibility label for poll message. Embeds {{ poll question }}. */
+"POLL_ACCESSIBILITY_LABEL" = "استطلاع: %1$@.";
+
+/* Accessibility label for a vote option that is not selected by the user. */
+"POLL_ACCESSIBILITY_LABEL_OPTION_PENDING" = "مُعلَّق";
+
+/* Title for a toggle allowing multiple votes for a poll. */
+"POLL_ALLOW_MULTIPLE_LABEL" = "السماح بالتصويت عدة مرّات";
+
+/* Button to view a poll after its ended */
+"POLL_BUTTON_VIEW_POLL" = "عرض الاستطلاع";
+
 /* Button to view poll results */
 "POLL_BUTTON_VIEW_RESULTS" = "عرض النتائج";
 
 /* Button to view poll votes */
 "POLL_BUTTON_VIEW_VOTES" = "عرض الأصوات";
+
+/* Toast telling user to add a question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION" = "أضِف سؤالًا";
+
+/* Toast telling user to add options and question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION_OR_ENOUGH_OPTIONS" = "أضِف سؤالًا وخيارين على الأقل";
+
+/* Toast telling user to add more options to poll. */
+"POLL_CREATE_ERROR_TOAST_NOT_ENOUGH_OPTIONS" = "أضِف خيارين على الأقل";
+
+/* Title of create poll pane */
+"POLL_CREATE_TITLE" = "استطلاع جديد";
 
 /* Label for button to end a poll */
 "POLL_DETAILS_END_POLL" = "إنهاء الاستطلاع";
@@ -6451,20 +6763,56 @@
 /* Title of poll details pane */
 "POLL_DETAILS_TITLE" = "تفاصيل الاستطلاع";
 
+/* Title for an action sheet confirming the user wants end a poll. */
+"POLL_END_CONFIRMATION" = "هل ترغبُ بإنهاء الاستطلاع؟";
+
+/* Message for an action sheet confirming the user wants to end a poll. */
+"POLL_END_CONFIRMATION_MESSAGE" = "لن يستطيع أعضاء المجموعة التصويت في هذا الاستطلاع بعد الآن.";
+
+/* Shown when another user ends a poll. Embeds {{ another user }} and {{ poll question }}. */
+"POLL_ENDED_BY_OTHER_CHAT_LIST_UPDATE" = "%1$@ أنهى الاستطلاع: \"%2$@\"";
+
+/* Shown when the local user ends a poll. Embeds {{ poll question }}. */
+"POLL_ENDED_BY_YOU_CHAT_LIST_UPDATE" = "أنهيتَ الاستطلاع: %1$@";
+
 /* Notification that {{contact}} ended a poll with question {{poll question}} */
 "POLL_ENDED_NOTIFICATION" = "%1$@ أنهى الاستطلاع \"%2$@\"";
+
+/* Label specifying the poll is finished and these are the final results */
+"POLL_FINAL_RESULTS_LABEL" = "النتائج النهائية";
 
 /* Label specifying the message type as a poll */
 "POLL_LABEL" = "استطلاع";
 
+/* String to display when a poll has no votes */
+"POLL_NO_VOTES" = "لا أصوات";
+
+/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
+"POLL_OPTION_PLACEHOLDER_PREFIX" = "Option";
+
+/* Header for the poll options text boxes when making a new poll */
+"POLL_OPTIONS_LABEL" = "الخيارات";
+
 /* Prefix for a poll preview */
 "POLL_PREFIX" = "استطلاع:";
+
+/* Header for the poll question text box when making a new poll */
+"POLL_QUESTION_LABEL" = "سؤال";
+
+/* Placeholder text for poll question */
+"POLL_QUESTION_PLACEHOLDER_TEXT" = "اطرَح سؤالًا";
+
+/* Title of poll details pane when poll is ended */
+"POLL_RESULTS_TITLE" = "نتائج الاستطلاع";
 
 /* Label specifying the user can select more than one option */
 "POLL_SELECT_LABEL_MULTIPLE" = "حدِّد خيارًا واحدًا أو أكثر";
 
 /* Label specifying the user can select one option */
 "POLL_SELECT_LABEL_SINGULAR" = "حدِّد خيارًا واحدًا";
+
+/* Notification that {{contact}} voted in a poll with question {{poll question}} */
+"POLL_VOTED_NOTIFICATION" = "%1$@ صوّت في استطلاع \"%2$@\"";
 
 /* Badge indicating that the user is verified. */
 "PRIVACY_IDENTITY_IS_VERIFIED_BADGE" = "مُتحقَّق منه";
@@ -6590,7 +6938,7 @@
 "PROFILE_SETTINGS_USERNAME_CORRUPTED_RESOLUTION_FIX_ACTION_TITLE" = "الإصلاح الآن";
 
 /* A message asking the user if they are sure they want to remove their username and explaining what will happen. Embeds {{ the user's current username }}. */
-"PROFILE_SETTINGS_USERNAME_DELETION_CONFIRMATION_ALERT_MESSAGE_FORMAT" = "سيُؤدِّي هذا إلى إزالة اسم المُستخدم الخاص بك وتعطيل كود الـ QR والرابط الخاصين بك. ستُصبح \"%1$@\" متوفِّرة للآخرين ليستفيدوا منها. هل أنت متأكِّد؟";
+"PROFILE_SETTINGS_USERNAME_DELETION_CONFIRMATION_ALERT_MESSAGE_FORMAT" = "سيُؤدِّي هذا إلى إزالة اسم المُستخدم الخاص بك وتعطيل كود الـ QR والرابط الخاصين بك. سيصبح اسم المستخدم \"%1$@\" متوفِّرًا للآخرين ليستخدموه. هل أنت متأكِّد؟";
 
 /* The title of an action sheet button that will delete a user's username. */
 "PROFILE_SETTINGS_USERNAME_DELETION_USERNAME_ACTION_TITLE" = "حذف اسم المُستخدِم";
@@ -6661,6 +7009,15 @@
 /* Title of alert shown when push tokens sync job succeeds. */
 "PUSH_REGISTER_SUCCESS" = "تمَّت إعادة التسجيل بنجاح في الإشعارات داخل التطبيق.";
 
+/* Body for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_BODY" = "استخدِم هذا الجهاز لِمسح كود الـ QR المعروض على الجهاز الذي تريد النقل إليه";
+
+/* Title for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_TITLE" = "امسح ضوئيًا كود الـ QR";
+
+/* Message for an action sheet telling users how to use quick restore, when trying to open an external quick restore URL. */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "لنقل هذا الحساب إلى حساب جديد، انقر على \"متابعة\" وامسح كود الـ QR باستخدام كاميرا سيجنال. تأكَّد من مسح كود الـ QR الصادر مباشرةً من سيجنال فقط.";
+
 /* Accessibility label stating the author of the message to which you are replying. Embeds: {{ the author of the message to which you are replying }}. */
 "QUOTED_REPLY_ACCESSIBILITY_LABEL_FORMAT" = "ردًا على %1$@.";
 
@@ -6676,11 +7033,11 @@
 /* Toast alert text shown when tapping on a quoted message which we cannot scroll to because the local copy of the message didn't exist when the quote was received. */
 "QUOTED_REPLY_ORIGINAL_MESSAGE_REMOTELY_SOURCED" = "لم يُعثَر على الرسالة الأصلية.";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to your own story. */
-"QUOTED_REPLY_REACTION_TO_OWN_STORY" = "تفاعلَ مع قصتك";
+/* Label explaining that the content of a quoted message includes you reacting to someone's story. Embeds {{ %1$@ the story author }}. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_SECOND_PERSON" = "تفاعلتَ مع قصة %1$@";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to a story. Embeds {{ story author name }} */
-"QUOTED_REPLY_REACTION_TO_STORY_FORMAT" = "تفاعَلَ مع قصة %1$@";
+/* Label explaining that the content of a quoted message includes someone reacting to your story. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_THIRD_PERSON" = "تفاعلَ مع قصتك";
 
 /* Message header when you are quoting a story. Embeds {{ story author name }} */
 "QUOTED_REPLY_STORY_AUTHOR_INDICATOR_FORMAT" = "قصة · %1$@";
@@ -6702,6 +7059,9 @@
 
 /* Indicates this message is a quoted reply to a video file. */
 "QUOTED_REPLY_TYPE_VIDEO" = "فيديو";
+
+/* Indicates this message is a quoted reply to a voice message. */
+"QUOTED_REPLY_TYPE_VOICE_MESSAGE" = "رسالة صوتية";
 
 /* Label for a button to lower your raised hand in a call. */
 "RAISED_HANDS_LOWER_HAND_BUTTON" = "خفض اليد";
@@ -6775,10 +7135,10 @@
 /* Button. Shown after selecting a phone number that isn't a Signal user. Tapping the button will open a view that allows the user to send an SMS message to specified phone number. */
 "RECIPIENT_PICKER_INVITE_ACTION" = "دعوة";
 
-/* Alert text. Shown after selecting a phone number that isn't a B&A user. */
+/* Alert text. Shown after selecting a phone number that isn't a Signal user. */
 "RECIPIENT_PICKER_INVITE_MESSAGE" = "لم يعُد %1$@ من مُستخدِمي B&A. هل تريد دعوة هذا الرقم؟";
 
-/* Alert title. Shown after selecting a phone number that isn't a B&A user. */
+/* Alert title. Shown after selecting a phone number that isn't a Signal user. */
 "RECIPIENT_PICKER_INVITE_TITLE" = "ادْعُ إلى B&A";
 
 /* Alert title explaining what happens if you forget your 'two-factor auth pin'. */
@@ -6841,6 +7201,9 @@
 /* Body for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
+/* Body for a sheet warning users about an incorrect recovery key and having hit a rate limit on retries. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_RATE_LIMIT_BODY" = "نفدَت محاولات إدخال مفتاح الاستعادة. من أجل أمانك، عدد المحاولات المسموح بها محدود. انتظر ساعة ثم حاوِل مجددًا.";
+
 /* Title for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "مفتاح النسخة الاحتياطية غير صحيح.";
 
@@ -6892,12 +7255,6 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "كود الدولة";
 
-/* If a user is installing B&A on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "الاستمرار سيُعطِّل B&A على الأجهزة الأُخرى المُسجَّلة حاليًا بنفس رقم الهاتف.";
-
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "نَقل الحساب والرسائل";
-
 /* Description for the screen that allows users to enter their recovery key. */
 "REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "مفتاح النسخة الاحتياطية الخاص بك هو كود مُكوَّن من 64 رقمًا، وهو مطلوب لاستعادة حسابك وبياناتك.";
 
@@ -6928,7 +7285,7 @@
 /* Title of button to tap if you do not have a recovery key during registration. */
 "REGISTRATION_NO_BACKUP_KEY_BUTTON_TITLE" = "ليس بمتناولك مفتاح النسخة الاحتياطية؟";
 
-/* Body text on a sheet with info for what to do if you don't have a backup key */
+/* Body text on a sheet with info for what to do if you don't have a recovery key */
 "REGISTRATION_NO_BACKUP_KEY_SHEET_BODY" = "لا يُمكن استرجاع النسخ الاحتياطية دون كود الاستعادة المُكوَّن من 64 رقمًا. إذا فقدت مفتاح النسخة الاحتياطية الخاص بك، فلا يُمكن لB&A مُساعدتك في استعادة نسختك الاحتياطية.\n\nإذا كُنتَ تستعمل جهازك القديم، يُمكنك عرض مفتاح النسخة الاحتياطية الخاص بك في \"الإعدادات\" > \"الدردشات\" > \"النسخ الاحتياطية على B&A\". ثم انقر على \"عرض مفتاح النسخة الاحتياطية\".";
 
 /* Title for sheet with info for what to do if you don't have a recovery key */
@@ -6939,6 +7296,9 @@
 
 /* During registration, users are asked to enter their phone number. This is the subtitle on that screen, which gives users some instructions. */
 "REGISTRATION_PHONE_NUMBER_SUBTITLE" = "أدخِل رقم هاتفك للبدء.";
+
+/* During re-registration, users are asked to confirm their phone number. This is the subtitle on that screen, which gives users some instructions. */
+"REGISTRATION_PHONE_NUMBER_SUBTITLE_2" = "سيُرسَل كود التحقُّق إلى هذا الرقم:";
 
 /* During registration, users are asked to enter their phone number. This is the title on that screen. */
 "REGISTRATION_PHONE_NUMBER_TITLE" = "رقم هاتفك";
@@ -6994,6 +7354,15 @@
 /* Error shown if an SMS/call service provider is temporarily unable to send a verification code to the provided number. */
 "REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "تعذَّر على B&A إرسال كود عبر رسالة نصية قصيرة نظرًا لمشاكل في مُزوِّد الرسائل القصيرة. حاوِل مرّة أخرى في بضع ساعات.";
 
+/* Third step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_ENABLE_BACKUPS" = "فعِّل النسخ الاحتياطية وانتظر حتى تكتمل عملية النسخ الاحتياطي";
+
+/* First step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_OPEN_SIGNAL" = "افتح تطبيق سيجنال على جهازك القديم";
+
+/* Second step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_TAP_SETTINGS" = "انقر على \"الإعدادات\" > \" النسخ الاحتياطية\"";
+
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "يجب عليك التسجيل قبل أن تتمكن من إرسال رسالة.";
 
@@ -7006,7 +7375,7 @@
 /* Title for screen containing QR code that users scan with their old phone when they want to transfer/restore their message history to a new device. */
 "REGISTRATION_SCAN_QR_CODE_TITLE" = "امسح هذا الكود ضوئيًا باستخدام جهازك القديم";
 
-/* Tutorial text describing the first step to scanning the restore/transfer QR code with your old phone: opening B&A */
+/* Tutorial text describing the first step to scanning the restore/transfer QR code with your old phone: opening Signal */
 "REGISTRATION_SCAN_QR_CODE_TUTORIAL_OPEN_SIGNAL" = "افتح تطبيق B&A على جهازك القديم";
 
 /* Tutorial text describing the third step to scanning the restore/transfer QR code with your old phone: scan the code */
@@ -7066,6 +7435,18 @@
 /* Label warning the user that something is wrong with their username link. */
 "REMINDER_VIEW_USERNAME_LINK_CORRUPTED_WARNING" = "حدثت مشكلة مع كود الـ QR ورابط اسم المُستخدم الخاص بك، ولم يعد صالحًا. أنشِئ رابطًا جديدًا للمشاركة مع الآخرين.";
 
+/* A message that displays when one person in a call remotely muted another participant. Embeds {{name}} {{name}} */
+"REMOTE_MUTE_TOAST_A_MUTED_B" = "%1$@ كتمَ صوت %2$@.";
+
+/* A message that displays when your microphone is remotely muted by another call participant. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_SOMEONE_MUTED_YOU" = "%1$@ كتمَ صوتك.";
+
+/* A message that displays when you remotely muted another call participant's microphone. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_YOU_MUTED_SOMEONE" = "كتمتَ صوت %1$@.";
+
+/* A message that displays when you joined a call on two devices and mute one from the other. */
+"REMOTE_MUTE_TOAST_YOU_MUTED_YOURSELF" = "كتمتَ صوتك من جهازٍ آخر.";
+
 /* Accessibility label for a button that removes the preview from a drafted message. */
 "REMOVE_PREVIEW" = "إزالة المعاينة";
 
@@ -7083,6 +7464,30 @@
 
 /* Configure reactions reset button text */
 "RESET" = "إعادة التعيين";
+
+/* Body for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_BODY" = "لم تكتمل استعادة ملفات الوسائط الخاصة بك. إذا اخترت الإلغاء الآن، يمكنك الاستعادة مُجدَّدًا من خلال إعادة ربط هذا الجهاز.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_PRIMARY_BUTTON" = "مواصلة الاستعادة";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_SECONDARY_BUTTON" = "إلغاء الاستعادة";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_TITLE" = "ملفات الوسائط الخاصة بك في طور الاستعادة";
+
+/* Message for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_MESSAGE" = "لم تكتمل استعادة ملفات الوسائط الخاصة بك. إذا اخترت الإلغاء الآن، يمكنك الاستعادة مُجدَّدًا من خلال إعادة ربط هذا الجهاز.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_PRIMARY_BUTTON" = "مواصلة الاستعادة";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_SECONDARY_BUTTON" = "إلغاء الاستعادة";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_TITLE" = "هل ترغبُ بإلغاء استعادة ملفات الوسائط؟";
 
 /* Button title shown on chat list banner for restoring media from a backup when paused because the device has insufficient disk space, to see a bottom sheet with more details about next steps. */
 "RESTORING_MEDIA_BANNER_DISK_SPACE_BUTTON" = "التفاصيل";
@@ -7252,13 +7657,13 @@
 /* Indicates that Touch ID/Face ID/Phone Passcode passcode is not set. */
 "SCREEN_LOCK_ERROR_LOCAL_AUTHENTICATION_PASSCODE_NOT_SET" = "يجب عليك تمكين رمز المرور في إعدادات iOS الخاصة بك من أجل استخدام قفل الشاشة.";
 
-/* Description of how and why B&A iOS uses Touch ID/Face ID/Phone Passcode to unlock 'screen lock'. */
+/* Description of how and why Signal iOS uses Touch ID/Face ID/Phone Passcode to unlock 'screen lock'. */
 "SCREEN_LOCK_REASON_UNLOCK_SCREEN_LOCK" = "قُم بالمصادقة لفتح تطبيق B&A.";
 
 /* Title for alert indicating that screen lock could not be unlocked. */
 "SCREEN_LOCK_UNLOCK_FAILED" = "فشلت المُصادَقة.";
 
-/* Label for button on lock screen that lets users unlock B&A. */
+/* Label for button on lock screen that lets users unlock Signal. */
 "SCREEN_LOCK_UNLOCK_SIGNAL" = "فتح قفل B&A";
 
 /* Placeholder text indicating the user can search for contacts by name, username, or phone number. */
@@ -7486,7 +7891,7 @@
 /* Table footer for the 'censorship circumvention' section shown when the app is not connected to the internet. */
 "SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_NO_CONNECTION" = "لا يمكن تفعيل تجاوز الرقابة إلّا عند الاتصال بالإنترنت.";
 
-/* Table footer for the 'censorship circumvention' section shown when the app is connected to the B&A service. */
+/* Table footer for the 'censorship circumvention' section shown when the app is connected to the Signal service. */
 "SETTINGS_ADVANCED_CENSORSHIP_CIRCUMVENTION_FOOTER_WEBSOCKET_CONNECTED" = "تجاوُز الرقابة ليس ضُروريًا؛ أنت بالفعل مُتصل بخدمة B&A.";
 
 /* Label for the 'advanced pin settings' button. */
@@ -7549,7 +7954,7 @@
 /* A label for the 'add phone number' button in the block list table. */
 "SETTINGS_BLOCK_LIST_ADD_BUTTON" = "احظُرأحد المُستخدِمين";
 
-/* A label that indicates the user has no B&A contacts that they haven't blocked. */
+/* A label that indicates the user has no Signal contacts that they haven't blocked. */
 "SETTINGS_BLOCK_LIST_NO_CONTACTS" = "ليس لديك جهات اتصال على B&A.";
 
 /* A label that indicates the user's search has no matching results. */
@@ -7605,9 +8010,6 @@
 
 /* No comment provided by engineer. */
 "SETTINGS_CLEAR_HISTORY" = "إزالة سجل الدردشة";
-
-/* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "حقوق النشر محفوظة لتطبيق B&A للدردشة\nمُرخَّص بموجب AGPLv3";
 
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "استخدام البيانات";
@@ -8392,7 +8794,7 @@
 /* Label for the 'enable registration lock' switch of the privacy settings. */
 "SETTINGS_TWO_FACTOR_AUTH_SWITCH_LABEL" = "قفل التسجيل";
 
-/* Footer for the 'two factor auth' section of the privacy settings when B&A PINs are available. */
+/* Footer for the 'two factor auth' section of the privacy settings when Signal PINs are available. */
 "SETTINGS_TWO_FACTOR_PINS_AUTH_FOOTER" = "رقم التعريف الشخصي (PIN) على B&A مطلوب لتسجيل رقم هاتفك مع B&A مرّة أُخرى.";
 
 /* Label for the 'typing indicators' setting. */
@@ -8455,7 +8857,7 @@
 /* Shown in the header when the user hasn't provided a custom name for a call. */
 "SIGNAL_CALL" = "مكالمة B&A";
 
-/* body sent to contacts when inviting to Install B&A */
+/* body sent to contacts when inviting to Install Signal */
 "SMS_INVITE_BODY" = "أدعوكَ لتثبيت تطبيق B&A! ها هو الرابط:";
 
 /* An error message generically indicating that something went wrong. */
@@ -8500,6 +8902,12 @@
 /* The name for the sticker category 'Featured' */
 "STICKER_CATEGORY_FEATURED_NAME" = "مُميَّزة";
 
+/* Subtitle of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_SUBTITLE" = "أرسِل مُلصَقًا وسيظهر هنا";
+
+/* Title of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_TITLE" = "لا توجد مُلصَقات حديثة";
+
 /* The name for the sticker category 'Recents' */
 "STICKER_CATEGORY_RECENTS_NAME" = "الأحدث";
 
@@ -8508,9 +8916,6 @@
 
 /* Message when trying to show a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_MESSAGE_LABEL" = "المُلصَق غير مُتوفِّر";
-
-/* Message for sheet shown when tapping a sticker that has expired and is unavailable for download */
-"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "هذا المُلصَق لم يتم تحويله من هاتفك عندما كان هذا الجهاز مُرتبِطًا. لا يمكن مُزامنة الملفات والوسائط التي تعود إلى أكثر من 45 يوم منذ الوقت الذي تمَّ فيه ربط الجهاز.";
 
 /* Title for sheet shown when tapping a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_SHEET_TITLE" = "المُلصَق غير مُتوفِّر";
@@ -8659,21 +9064,6 @@
 /* Context menu action to share the selected story */
 "STORIES_SHARE_STORY_ACTION" = "مشاركة";
 
-/* Section title shown when sending to non-story conversations but failing to send the file to stories. */
-"STORIES_SHARESHEET_PARTIAL_SEND_REMAINING_SECTION_TITLE" = "أُرسِلَت إلى";
-
-/* Section title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_STORIES_SECTION_TITLE" = "لم تُرسَل إلى";
-
-/* Title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_TITLE" = "تمَّ الإرسال جزئيًا";
-
-/* Subtitle shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_SUBTITLE" = "نوع الملف المُحدَّد غير مدعوم.";
-
-/* Title shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_TITLE" = "تعذَّر الإرسال";
-
 /* Title for the stories view. */
 "STORIES_TITLE" = "القصص";
 
@@ -8722,8 +9112,11 @@
 /* Title for the story privacy settings view */
 "STORY_PRIVACY_TITLE" = "إعدادات خصوصية القصة";
 
-/* inbox and notification text for a reaction to a story authored by the local user. Embeds {{reaction emoji}} */
-"STORY_REACTION_LOCAL_AUTHOR_PREVIEW_FORMAT" = "تفاعَلَ %1$@ مع قصتك";
+/* Text explaining that you reacted to someone else's story. Embeds {{ %1$@ reaction emoji, %2$@ story author name }}. */
+"STORY_REACTION_PREVIEW_FORMAT_SECOND_PERSON" = "تفاعلتَ بـ %1$@ مع قصة %2$@";
+
+/* Text explaining that someone reacted to your story. Embeds {{ %1$@ reaction emoji }}. */
+"STORY_REACTION_PREVIEW_FORMAT_THIRD_PERSON" = "تفاعلَ %1$@ مع قصتك";
 
 /* quote text for a reaction to a story by the user (the header on the bubble says \"You\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_SECOND_PERSON" = "تفاعَلَ %1$@ مع قصة";
@@ -8731,17 +9124,8 @@
 /* quote text for a reaction to a story by some other user (the header on the bubble says their name, e.g. \"Bob\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_THIRD_PERSON" = "تفاعَلَ %1$@ مع قصة";
 
-/* inbox and notification text for a reaction to a story authored by another user. Embeds {{ %1$@ reaction emoji, %2$@ story author name }} */
-"STORY_REACTION_REMOTE_AUTHOR_PREVIEW_FORMAT" = "تفاعَلَ %1$@ مع قصة %2$@";
-
 /* Button for replying to a story with no existing replies. */
 "STORY_REPLY_BUTTON" = "رد";
-
-/* Text indicating you reacted to a story (the header on the bubble says \"You\") */
-"STORY_REPLY_REACTION_SECOND_PERSON" = "تفاعلَ مع القصة";
-
-/* Text indicating someone else reacted to a story (the header on the bubble says their name, e.g. \"Bob\") */
-"STORY_REPLY_REACTION_THIRD_PERSON" = "تفاعلَ مع القصة";
 
 /* placeholder text for replying to a story */
 "STORY_REPLY_TEXT_FIELD_PLACEHOLDER" = "رد";
@@ -8965,35 +9349,23 @@
 /* Option in selected text edit menu to make text bold */
 "TEXT_MENU_BOLD" = "خط عريض";
 
-/* Option in selected text edit menu to clear all text formatting in the selected text range */
-"TEXT_MENU_CLEAR_FORMATTING" = "إزالة التنسيق";
-
 /* Option in selected text edit menu to view text formatting options */
 "TEXT_MENU_FORMAT" = "التنسيق";
 
 /* Option in selected text edit menu to make text italic */
 "TEXT_MENU_ITALIC" = "مائل";
 
-/* Option in selected text edit menu to look up word definitions */
-"TEXT_MENU_LOOK_UP" = "بحث عن";
-
 /* Option in selected text edit menu to make text monospace */
 "TEXT_MENU_MONOSPACE" = "موحَّد الأبعاد";
 
-/* Option in selected text edit menu to replace text with suggestions */
-"TEXT_MENU_REPLACE" = "استبدال";
-
-/* Option in selected text edit menu to share selected text */
-"TEXT_MENU_SHARE" = "مشاركة";
+/* Option in selected text edit menu to remove all text formatting in the selected text range */
+"TEXT_MENU_REMOVE_FORMATTING" = "إزالة التنسيق";
 
 /* Option in selected text edit menu to make text spoiler */
 "TEXT_MENU_SPOILER" = "مخفي";
 
 /* Option in selected text edit menu to make text strikethrough */
 "TEXT_MENU_STRIKETHROUGH" = "يتوسطه خط";
-
-/* Option in selected text edit menu to translate the word */
-"TEXT_MENU_TRANSLATE" = "ترجمة";
 
 /* text indicating the message was remotely deleted */
 "THIS_MESSAGE_WAS_DELETED" = "تمَّ حذف هذه الرسالة.";
@@ -9106,7 +9478,7 @@
 /* Label text below navbar button, embeds {{number of weeks}}. Must be very short, like 1 or 2 characters, The space is intentionally omitted between the text and the embedded duration so that we get, e.g. '5w' not '5 w'. See other *_TIME_AMOUNT strings */
 "TIME_AMOUNT_WEEKS_SHORT_FORMAT" = "%1$@أ";
 
-/* Button for bottom sheet shown when device transfer completes on the receiving device. Tapping will terminate the B&A app and trigger a notification to relaunch. */
+/* Button for bottom sheet shown when device transfer completes on the receiving device. Tapping will terminate the Signal app and trigger a notification to relaunch. */
 "TRANSFER_COMPLETE_SHEET_BUTTON" = "أغلِق B&A";
 
 /* Subtitle for bottom sheet shown when device transfer completes on the receiving device. */
@@ -9115,7 +9487,7 @@
 /* Title for bottom sheet shown when device transfer completes on the receiving device. */
 "TRANSFER_COMPLETE_SHEET_TITLE" = "اكتمَلَ النقل";
 
-/* Notification prompting the user to relaunch B&A after a device transfer completed. */
+/* Notification prompting the user to relaunch Signal after a device transfer completed. */
 "TRANSFER_RELAUNCH_NOTIFICATION" = "افتح تطبيق B&A للبدء في المراسلة";
 
 /* Label for the cancel button in an alert or action sheet. */
@@ -9224,7 +9596,7 @@
 "USE_PROXY_EXPLANATION" = "استخدِم البروكسي فقط إذا تعذَّر عليك الاتصال بB&A عبر بيانات الجوّال أو عبر شبكة الواي فاي.";
 
 /* Description of username links and QR codes on the username education sheet */
-"USERNAME_EDUCATION_LINK_DESCRIPTION" = "أسماء المُستخدِمين لها كودات QR فريدة يُمكنك مُشاركتُهما مع أصدقائك لكي يبدؤوا الدردشة معك.";
+"USERNAME_EDUCATION_LINK_DESCRIPTION" = "أسماء المُستخدِمين لها كودات QR فريدة يُمكنك مُشاركتُها مع أصدقائك لكي يبدؤوا الدردشة معك.";
 
 /* Title for the username links and QR codes section on the username education sheet */
 "USERNAME_EDUCATION_LINK_TITLE" = "روابط وكودات الـ QR";
@@ -9313,7 +9685,7 @@
 /* A message indicating that a username link the user attempted to query is no longer valid. */
 "USERNAME_LOOKUP_LINK_NO_LONGER_VALID_MESSAGE" = "رابط اسم المُستخدم لم يعد صالحًا.";
 
-/* A message indicating that the given username is not associated with a registered B&A account. Embeds {{ a username }}. */
+/* A message indicating that the given username is not associated with a registered Signal account. Embeds {{ a username }}. */
 "USERNAME_LOOKUP_NOT_FOUND_MESSAGE_FORMAT" = "%1$@ ليس مُستخدِم B&A. تأكَّد من إدخالك لاسم المُستخدِم الكامل.";
 
 /* Title for an action sheet indicating that the given username is not associated with a registered Signal account. */
@@ -9341,7 +9713,7 @@
 "USERNAME_SELECTION_INVALID_CHARACTERS_ERROR_MESSAGE" = "يُمكن أن تحتوي أسماء المُستخدِمين على حروف a-z، وأرقام 0-9 وشرطة سُفلية _ فقط.";
 
 /* An error message shown when the user has typed an invalid discriminator for their username. */
-"USERNAME_SELECTION_INVALID_DISCRIMINATOR_ERROR_MESSAGE" = "اسم مُستخدِم غير صحيح. أدخِل رقمين على الأقل.";
+"USERNAME_SELECTION_INVALID_DISCRIMINATOR_ERROR_MESSAGE" = "اسم مُستخدِم غير صحيح. أدخِل رقمين على الأقل";
 
 /* The message of a sheet that pops up when the user taps \"Learn More\" in text that explains how usernames work. This message help explain that the automatically-generated numeric suffix of their username helps keep their username private, to avoid them being contacted by people by whom they don't want to be contacted. */
 "USERNAME_SELECTION_LEARN_MORE_ACTION_SHEET_MESSAGE" = "تُساعد هذه الأرقام في الحفاظ على خصوصية اسم المُستخدِم الخاص بك حتى تتجنَّب الرسائل غير المرغوب فيها. شارِك اسم المُستخدِم الخاص بك فقط مع الأشخاص والمجموعات الذين ترغب في الدردشة معهم. إذا غيَّرتَ أسماء المُستخدِم الخاصة بك، فسَتحصل على مجموعة جديدة من الأرقام.";
@@ -9526,45 +9898,81 @@
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "ضبطتَ وقت إختفاء الرسائل على %1$@.";
 
-/* BA custom strings */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "جارٍ إنشاء نسخة احتياطية: %1$@";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "جارٍ تصدير النسخة الاحتياطية…";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "جارٍ تحميل النسخة الاحتياطية…";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "جارٍ تحميل ملفات وسائط النسخ الاحتياطية…";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "إنشاء نسخة احتياطية الآن";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "إجراء النسخ الاحتياطي لاحقًا";
-"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "العديد من الأخطاء مع جهة الاتصال هذه. يُرجى إعادة المحاولة لاحقًا.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "إيقاف";
-"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "لإيقاف رقم التعريف الشخصي (PIN) الخاص بك، عليك أولًا إيقاف قفل التسجيل.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "هل تُريد إيقاف قفل التسجيل؟";
-"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "أُنشِئَ رقم التعريف الشخصي (PIN) بنجاح، لكن قفل التسجيل تعذَّر تفعيله. تحقَّق من اتصالك وحاوِل مرّة أخرى.";
-"PIN_CREATION_REGLOCK_ERROR_TITLE" = "فشل تفعيل قفل التسجيل";
-"PIN_DISABLE_ERROR_MESSAGE" = "لم يكن بالإمكان تعطيل رقم التعريف الشخصي (PIN).";
-"PIN_DISABLE_ERROR_TITLE" = "فشل تعطيل رقم التعريف الشخصي (PIN)";
-"REGISTER_RATE_LIMITING_BODY" = "حاولتَ كثيرًا. يُرجى الانتظار لدقيقة واحدة قبل إعادة المحاولة.";
-"VOICE_MESSAGE_FILE_NAME" = "B&A";
+/* ===== B&A Custom Strings ===== */
 
-/* BA custom strings */
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "هذه الرسالة الصوتية لم يتم تحويلُها من هاتفك عندما كان هذا الجهاز مُرتبِطًا. لا يمكن مُزامنة الملفات والوسائط التي تعود إلى أكثر من 45 يوم منذ الوقت الذي تمَّ فيه ربط الجهاز.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "لم يتم نقل هذا الملف من هاتفك عندما تمَّ ربط هذا الجهاز. لا يمكن مزامنة الملفات والوسائط التي مضى عليها أكثر من 45 يومًا من الوقت الذي تمَّ فيه ربط الجهاز.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "لم يتم نقل النص الكامل في هذه الرسالة من هاتفك عند ربط هذا الجهاز. لا يُمكن مزامنة الرسائل النصية الطويلة التي مضى عليها أكثر من 45 يومًا من الوقت الذي تمَّ فيه ربط الجهاز.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "هذا المُلصَق لم يتم تحويله من هاتفك عندما كان هذا الجهاز مُرتبِطًا. لا يمكن مُزامنة الملفات والوسائط التي تعود إلى أكثر من 45 يوم منذ الوقت الذي تمَّ فيه ربط الجهاز.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "النسخ الاحتياطي للنص و45 يوم من الوسائط";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "الأيام 45 الأخيرة من الوسائط";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "الرسائل النصية + 45 يومًا من الوسائط";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "المزيد";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "طُرُق أُخرَى لِلتَبرُّع";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "حقوق النشر محفوظة لتطبيق B&A للدردشة\nمُرخَّص بموجب AGPLv3";
+
+/* Link BAXS platform account */
+
 "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "يبدو أنك تحاول ربط حساب BAXS. انقر على \"متابعة\" ثم انقر على \"مسح كود QR\" وامسح كود الـ QR من جديد.";
+
 "LINK_BA_PLATFORM_ACCOUNT_TITLE" = "ربط حساب منصة BA";
+
 "LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "حساب BAXS المرتبط";
+
 "LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "حساب منصة BA";
+
 "LINK_BA_PLATFORM_SCAN_FOOTER" = "امسح رمز QR المعروض على منصة الدفع BA لربط حسابك.";
+
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "مسح رمز QR";
-"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "الجوال";
-"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "البريد الإلكتروني";
-"LINK_BA_PLATFORM_USER_ID" = "User ID";
-"LINK_BA_PLATFORM_USER_NAME" = "User Name";
-"LINK_BA_PLATFORM_CONFIRM_TITLE" = "ربط حساب منصة BA";
-"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "ربط حسابك بـ \"%@\"؟";
-"LINK_BA_PLATFORM_SUCCESS_TOAST" = "تم ربط حساب منصة BA بنجاح.";
-"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "رمز QR غير صالح";
-"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "رمز QR هذا ليس رمز ربط صالحاً لمنصة BA.";
+
 "LINK_BA_PLATFORM_SCAN_AGAIN" = "مسح مجدداً";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "الجوال";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "البريد الإلكتروني";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "ربط حساب منصة BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "ربط حسابك بـ \"%@\"؟";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "تم ربط حساب منصة BA بنجاح.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "رمز QR غير صالح";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "رمز QR هذا ليس رمز ربط صالحاً لمنصة BA.";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "تعذّر الربط";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "لا يمكن استخدام رمز QR هذا للربط.";
+
 "LINK_BA_PLATFORM_FAILED_TITLE" = "فشل الربط";
+
 "LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "رفضت منصة BA طلب الربط.";
+
 "LINK_BA_PLATFORM_TIMEOUT_TITLE" = "انتهت مهلة الربط";
+
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "لم تستجب منصة BA في الوقت المحدد. يرجى المحاولة مجدداً.";
+
 "LINK_BA_PLATFORM_ERROR_TITLE" = "خطأ";
+

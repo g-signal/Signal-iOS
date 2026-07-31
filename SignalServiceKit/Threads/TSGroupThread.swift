@@ -9,7 +9,7 @@ extension TSGroupThread {
     func update(
         with newGroupModel: TSGroupModel,
         shouldUpdateChatListUi: Bool = true,
-        transaction tx: DBWriteTransaction
+        transaction tx: DBWriteTransaction,
     ) {
         let didAvatarChange = newGroupModel.avatarHash == groupModel.avatarHash
         let didNameChange = newGroupModel.groupNameOrDefault == groupModel.groupNameOrDefault
@@ -25,6 +25,7 @@ extension TSGroupThread {
                 }
             }
 
+            _ = newGroupModel as NSCopying
             groupThread.groupModel = newGroupModel.copy() as! TSGroupModel
         }
 
@@ -34,7 +35,7 @@ extension TSGroupThread {
         SSKEnvironment.shared.databaseStorageRef.touch(
             thread: self,
             shouldReindex: didNameChange,
-            tx: tx
+            tx: tx,
         )
 
         if didAvatarChange {
@@ -42,7 +43,7 @@ extension TSGroupThread {
                 NotificationCenter.default.postOnMainThread(
                     name: .TSGroupThreadAvatarChanged,
                     object: self.uniqueId,
-                    userInfo: [TSGroupThread_NotificationKey_UniqueId: self.uniqueId]
+                    userInfo: [TSGroupThread_NotificationKey_UniqueId: self.uniqueId],
                 )
             }
         }
@@ -91,7 +92,7 @@ extension TSGroupThread {
     public func updateWithStorySendEnabled(
         _ storySendEnabled: Bool,
         transaction: DBWriteTransaction,
-        updateStorageService: Bool = true
+        updateStorageService: Bool = true,
     ) {
         let wasStorySendEnabled = self.isStorySendExplicitlyEnabled
         updateWithStoryViewMode(storySendEnabled ? .explicit : .disabled, transaction: transaction)
@@ -109,7 +110,7 @@ extension TSGroupThread {
                 storyContextAssociatedData.update(
                     updateStorageService: updateStorageService,
                     isHidden: false,
-                    transaction: transaction
+                    transaction: transaction,
                 )
             }
         }
@@ -117,7 +118,7 @@ extension TSGroupThread {
 
     public func updateWithStoryViewMode(
         _ storyViewMode: TSThreadStoryViewMode,
-        transaction tx: DBWriteTransaction
+        transaction tx: DBWriteTransaction,
     ) {
         anyUpdate(transaction: tx) { thread in
             thread.storyViewMode = storyViewMode
@@ -137,7 +138,7 @@ extension TSGroupThread {
 
     override open func updateWithInsertedInteraction(
         _ interaction: TSInteraction,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         super.updateWithInsertedInteraction(interaction, tx: tx)
 
@@ -153,16 +154,20 @@ extension TSGroupThread {
 
         guard let senderAddress else { return }
 
-        guard let groupMember = TSGroupMember.groupMember(
-            for: senderAddress, in: uniqueId, transaction: tx
-        ) else {
+        guard
+            let groupMember = TSGroupMember.groupMember(
+                for: senderAddress,
+                in: uniqueId,
+                transaction: tx,
+            )
+        else {
             owsFailDebug("Unexpectedly missing group member record!")
             return
         }
 
         groupMember.anyUpdateWith(
             lastInteractionTimestamp: interaction.timestamp,
-            transaction: tx
+            transaction: tx,
         )
     }
 
@@ -171,31 +176,31 @@ extension TSGroupThread {
 #if TESTABLE_BUILD
     static func forUnitTest(
         groupId: UInt8 = 0,
-        groupMembers: [SignalServiceAddress] = []
+        groupMembers: [SignalServiceAddress] = [],
     ) -> TSGroupThread {
         return _forUnitTest(
             groupId: Data(repeating: groupId, count: 32),
             secretParamsData: Data(count: 1),
-            groupMembers: groupMembers
+            groupMembers: groupMembers,
         )
     }
 
     static func forUnitTest(
         masterKey: GroupMasterKey,
-        groupMembers: [SignalServiceAddress] = []
+        groupMembers: [SignalServiceAddress] = [],
     ) -> TSGroupThread {
         let secretParams = try! GroupSecretParams.deriveFromMasterKey(groupMasterKey: masterKey)
         return _forUnitTest(
             groupId: try! secretParams.getPublicParams().getGroupIdentifier().serialize(),
             secretParamsData: secretParams.serialize(),
-            groupMembers: groupMembers
+            groupMembers: groupMembers,
         )
     }
 
     private static func _forUnitTest(
         groupId: Data,
         secretParamsData: Data,
-        groupMembers: [SignalServiceAddress] = []
+        groupMembers: [SignalServiceAddress] = [],
     ) -> TSGroupThread {
         let groupThreadId = TSGroupThread.defaultThreadId(forGroupId: groupId)
         let groupThread = TSGroupThread(
@@ -234,8 +239,8 @@ extension TSGroupThread {
                 isJoinRequestPlaceholder: false,
                 wasJustMigrated: false,
                 didJustAddSelfViaGroupLink: false,
-                addedByAddress: nil
-            )
+                addedByAddress: nil,
+            ),
         )
         groupThread.clearRowId()
         return groupThread

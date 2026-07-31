@@ -33,7 +33,7 @@ extension ProfileFetcher {
     public func fetchProfile(
         for serviceId: ServiceId,
         context: ProfileFetchContext = ProfileFetchContext(),
-        authedAccount: AuthedAccount = .implicit()
+        authedAccount: AuthedAccount = .implicit(),
     ) async throws -> FetchedProfile {
         return try await fetchProfileImpl(for: serviceId, context: context, authedAccount: authedAccount)
     }
@@ -41,22 +41,15 @@ extension ProfileFetcher {
     func fetchProfileSync(
         for serviceId: ServiceId,
         context: ProfileFetchContext = ProfileFetchContext(),
-        authedAccount: AuthedAccount = .implicit()
+        authedAccount: AuthedAccount = .implicit(),
     ) -> Task<FetchedProfile, Error> {
         return fetchProfileSyncImpl(for: serviceId, context: context, authedAccount: authedAccount)
     }
 }
 
-public enum ProfileFetcherError: Error, IsRetryableProvider {
+public enum ProfileFetcherError: Error {
     case skippingOpportunisticFetch
     case couldNotFetchCredential
-
-    public var isRetryableProvider: Bool {
-        switch self {
-        case .skippingOpportunisticFetch: false
-        case .couldNotFetchCredential: false
-        }
-    }
 }
 
 public actor ProfileFetcherImpl: ProfileFetcher {
@@ -74,6 +67,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
             case requestFailure(ProfileRequestError)
             case otherFailure
         }
+
         let completionDate: MonotonicDate
 
         init(outcome: Outcome, completionDate: MonotonicDate) {
@@ -103,7 +97,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
         syncManager: any SyncManagerProtocol,
         tsAccountManager: any TSAccountManager,
         udManager: any OWSUDManager,
-        versionedProfiles: any VersionedProfiles
+        versionedProfiles: any VersionedProfiles,
     ) {
         self.reachabilityManager = reachabilityManager
         self.tsAccountManager = tsAccountManager
@@ -123,7 +117,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
                 syncManager: syncManager,
                 tsAccountManager: tsAccountManager,
                 udManager: udManager,
-                versionedProfiles: versionedProfiles
+                versionedProfiles: versionedProfiles,
             )
         }
         SwiftSingletons.register(self)
@@ -139,7 +133,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
 
     private nonisolated func finalizeFetchState(
         serviceId: ServiceId,
-        fetchState: FetchState
+        fetchState: FetchState,
     ) {
         self.inProgressFetches.update {
             $0[serviceId, default: []].removeAll(where: { $0 === fetchState })
@@ -152,7 +146,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
     public nonisolated func fetchProfileSyncImpl(
         for serviceId: ServiceId,
         context: ProfileFetchContext,
-        authedAccount: AuthedAccount
+        authedAccount: AuthedAccount,
     ) -> Task<FetchedProfile, Error> {
         // Insert this before starting the Task to ensure we've denoted the pending
         // fetch before returning control to the caller.
@@ -162,7 +156,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
                 serviceId: serviceId,
                 fetchState: fetchState,
                 context: context,
-                authedAccount: authedAccount
+                authedAccount: authedAccount,
             )
         }
     }
@@ -170,7 +164,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
     public func fetchProfileImpl(
         for serviceId: ServiceId,
         context: ProfileFetchContext,
-        authedAccount: AuthedAccount
+        authedAccount: AuthedAccount,
     ) async throws -> FetchedProfile {
         // We're already running concurrently with other code, so no new race
         // conditions are introduced by calling `insertFetchState` inline.
@@ -178,7 +172,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
             serviceId: serviceId,
             fetchState: insertFetchState(serviceId: serviceId),
             context: context,
-            authedAccount: authedAccount
+            authedAccount: authedAccount,
         )
     }
 
@@ -186,13 +180,13 @@ public actor ProfileFetcherImpl: ProfileFetcher {
         serviceId: ServiceId,
         fetchState: FetchState,
         context: ProfileFetchContext,
-        authedAccount: AuthedAccount
+        authedAccount: AuthedAccount,
     ) async throws -> FetchedProfile {
         let result = await Result {
             try await fetchProfileWithOptions(
                 serviceId: serviceId,
                 context: context,
-                authedAccount: authedAccount
+                authedAccount: authedAccount,
             )
         }
         finalizeFetchState(serviceId: serviceId, fetchState: fetchState)
@@ -202,7 +196,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
     private func fetchProfileWithOptions(
         serviceId: ServiceId,
         context: ProfileFetchContext,
-        authedAccount: AuthedAccount
+        authedAccount: AuthedAccount,
     ) async throws -> FetchedProfile {
         if context.isOpportunistic {
             if !CurrentAppContext().isMainApp {
@@ -216,7 +210,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
     private func fetchProfileOpportunistically(
         serviceId: ServiceId,
         context: ProfileFetchContext,
-        authedAccount: AuthedAccount
+        authedAccount: AuthedAccount,
     ) async throws -> FetchedProfile {
         if CurrentAppContext().isRunningTests {
             throw ProfileFetcherError.skippingOpportunisticFetch
@@ -252,7 +246,7 @@ public actor ProfileFetcherImpl: ProfileFetcher {
     private func fetchProfileUrgently(
         serviceId: ServiceId,
         context: ProfileFetchContext,
-        authedAccount: AuthedAccount
+        authedAccount: AuthedAccount,
     ) async throws -> FetchedProfile {
         let result = await Result { try await jobCreator(serviceId, context.groupId, context.mustFetchNewCredential, authedAccount).run() }
         let outcome: FetchResult.Outcome

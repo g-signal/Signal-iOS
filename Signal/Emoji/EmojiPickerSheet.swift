@@ -6,16 +6,13 @@
 import SignalServiceKit
 import SignalUI
 
-class EmojiPickerSheet: InteractiveSheetViewController {
-    override var interactiveScrollViews: [UIScrollView] { [collectionView] }
+// MARK: - EmojiPickerSheet
 
+class EmojiPickerSheet: OWSViewController {
     let completionHandler: (EmojiWithSkinTones?) -> Void
 
     let collectionView: EmojiPickerCollectionView
-    lazy var sectionToolbar = EmojiPickerSectionToolbar(
-        delegate: self,
-        forceDarkTheme: self.forceDarkTheme
-    )
+    lazy var sectionToolbar = EmojiPickerSectionToolbar(delegate: self)
 
     let allowReactionConfiguration: Bool
 
@@ -31,57 +28,44 @@ class EmojiPickerSheet: InteractiveSheetViewController {
         let button = UIButton()
 
         button.setImage(Theme.iconImage(.emojiSettings), for: .normal)
-        button.tintColor = self.forceDarkTheme ? Theme.darkThemeNavbarIconColor : Theme.primaryIconColor
+        button.tintColor = UIColor.Signal.label
 
         button.addTarget(self, action: #selector(didSelectConfigureButton), for: .touchUpInside)
         return button
     }()
 
-    private let forceDarkTheme: Bool
-
     private let reactionPickerConfigurationListener: ReactionPickerConfigurationListener?
-
-    override var sheetBackgroundColor: UIColor {
-        (Theme.isDarkThemeEnabled || forceDarkTheme) ? .ows_gray80 : .ows_white
-    }
 
     init(
         message: TSMessage?,
         allowReactionConfiguration: Bool = true,
-        forceDarkTheme: Bool = false,
         reactionPickerConfigurationListener: ReactionPickerConfigurationListener? = nil,
-        completionHandler: @escaping (EmojiWithSkinTones?) -> Void
+        completionHandler: @escaping (EmojiWithSkinTones?) -> Void,
     ) {
         self.allowReactionConfiguration = allowReactionConfiguration
-        self.forceDarkTheme = forceDarkTheme
         self.reactionPickerConfigurationListener = reactionPickerConfigurationListener
         self.completionHandler = completionHandler
-        self.collectionView = EmojiPickerCollectionView(
-            message: message,
-            forceDarkTheme: forceDarkTheme
-        )
+        self.collectionView = EmojiPickerCollectionView(message: message)
         super.init()
 
-        if !allowReactionConfiguration {
-            self.backdropColor = .clear
-        }
-
-        self.animationsShouldBeInterruptible = true
-        super.allowsExpansion = true
-    }
-
-    override func willDismissInteractively() {
-        super.willDismissInteractively()
-        completionHandler(nil)
+        sheetPresentationController?.detents = [.medium(), .large()]
+        sheetPresentationController?.prefersGrabberVisible = true
+        sheetPresentationController?.delegate = self
     }
 
     // MARK: -
 
-    override public func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
 
-        if self.forceDarkTheme {
-            self.overrideUserInterfaceStyle = .dark
+        if #available(iOS 17.0, *), self.overrideUserInterfaceStyle == .dark {
+            sheetPresentationController?.traitOverrides.userInterfaceStyle = .dark
+        }
+
+        if #available(iOS 26, *) {
+            view.backgroundColor = nil
+        } else {
+            view.backgroundColor = .tertiarySystemBackground
         }
 
         let topStackView = UIStackView()
@@ -94,58 +78,50 @@ class EmojiPickerSheet: InteractiveSheetViewController {
         } else {
             topStackView.addArrangedSubview(searchBar)
         }
-        contentView.addSubview(topStackView)
+
+        view.addSubview(topStackView)
         topStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            topStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            topStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            topStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            topStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 23),
+            topStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            topStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
         ])
 
         collectionView.pickerDelegate = self
         collectionView.alwaysBounceVertical = true
-        contentView.addSubview(collectionView)
+        view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: topStackView.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
 
-        contentView.addSubview(sectionToolbar)
+        view.addSubview(sectionToolbar)
         sectionToolbar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            sectionToolbar.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            sectionToolbar.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            sectionToolbar.bottomAnchor.constraint(equalTo: contentView.keyboardLayoutGuide.topAnchor),
+            sectionToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            sectionToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            sectionToolbar.bottomAnchor.constraint(equalTo: keyboardLayoutGuide.topAnchor, constant: -8),
         ])
 
-#if compiler(>=6.2)
         // Obscures content underneath the emoji section toolbar to improve legibility.
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) {
             let scrollInteraction = UIScrollEdgeElementContainerInteraction()
             scrollInteraction.scrollView = collectionView
             scrollInteraction.edge = .bottom
             sectionToolbar.addInteraction(scrollInteraction)
         }
-#endif
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { _ in
-            self.collectionView.reloadData()
-        }, completion: nil)
-    }
-
-    public override func viewDidLayoutSubviews() {
+    override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
         // Ensure the scrollView's layout has completed
         // as we're about to use its bounds to calculate
         // the masking view and contentOffset.
-        contentView.layoutIfNeeded()
+        view.layoutIfNeeded()
 
         // Ensure you can scroll to the last emoji without
         // them being stuck behind the toolbar.
@@ -158,13 +134,23 @@ class EmojiPickerSheet: InteractiveSheetViewController {
     @objc
     private func didSelectConfigureButton(sender: UIButton) {
         let configVC = EmojiReactionPickerConfigViewController(
-            forceDarkTheme: self.forceDarkTheme,
-            reactionPickerConfigurationListener: self.reactionPickerConfigurationListener
+            reactionPickerConfigurationListener: self.reactionPickerConfigurationListener,
         )
         let navController = UINavigationController(rootViewController: configVC)
+        if overrideUserInterfaceStyle == .dark {
+            navController.overrideUserInterfaceStyle = .dark
+        }
         self.present(navController, animated: true)
     }
+
+    private func maximizeHeight() {
+        sheetPresentationController?.animateChanges {
+            sheetPresentationController?.selectedDetentIdentifier = .large
+        }
+    }
 }
+
+// MARK: - EmojiPickerSectionToolbarDelegate
 
 extension EmojiPickerSheet: EmojiPickerSectionToolbarDelegate {
     func emojiPickerSectionToolbar(_ sectionToolbar: EmojiPickerSectionToolbar, didSelectSection section: Int) {
@@ -199,6 +185,8 @@ extension EmojiPickerSheet: EmojiPickerSectionToolbarDelegate {
     }
 }
 
+// MARK: - EmojiPickerCollectionViewDelegate
+
 extension EmojiPickerSheet: EmojiPickerCollectionViewDelegate {
     func emojiPicker(_ emojiPicker: EmojiPickerCollectionView, didSelectEmoji emoji: EmojiWithSkinTones) {
         ImpactHapticFeedback.impactOccurred(style: .light)
@@ -218,6 +206,16 @@ extension EmojiPickerSheet: EmojiPickerCollectionViewDelegate {
         }
     }
 }
+
+// MARK: - UISheetPresentationControllerDelegate
+
+extension EmojiPickerSheet: UISheetPresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        completionHandler(nil)
+    }
+}
+
+// MARK: - UISearchBarDelegate
 
 extension EmojiPickerSheet: UISearchBarDelegate {
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {

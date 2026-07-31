@@ -1,6 +1,9 @@
 /* Button text to dismiss missing contacts permission alert */
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "Ahora no";
 
+/* Footer for the 'about' help section. For non-English languages, exclude the word '501c3'. */
+"ABOUT_SECTION_FOOTER" = "Copyright B&A Messenger\nLicencia AGPLv3\nB&A es una organización sin ánimo de lucro";
+
 /* Title for the 'about' help section */
 "ABOUT_SECTION_TITLE" = "Acerca de B&A";
 
@@ -69,6 +72,12 @@
 
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "Enviar mensaje";
+
+/* Message shown in an action sheet when a generic error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_GENERIC_ERROR" = "Se ha producido un error. Contacta con el equipo de Asistencia.";
+
+/* Message shown in an action sheet when a network error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_NETWORK_ERROR" = "Se ha producido un error. Comprueba tu conexión e inténtalo de nuevo.";
 
 /* A label for 'tap to download' buttons. */
 "ACTION_TAP_TO_DOWNLOAD" = "Toca para descargar";
@@ -196,6 +205,12 @@
 /* notification body */
 "APN_Message" = "Es posible que tengas mensajes nuevos";
 
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. The embedded value is 'Update now' (translated via APP_EXPIRED_BOTTOM_UPDATE), and it will be formatted as a tappable link. */
+"APP_EXPIRED_BOTTOM" = "Esta versión de B&A ha caducado. %1$@ para seguir enviando y recibiendo mensajes.";
+
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. This value is a tappable link embedded in a larger sentence. */
+"APP_EXPIRED_BOTTOM_UPDATE" = "Actualiza B&A ahora";
+
 /* Default message for the 'app launch failed' alert. */
 "APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A no puede iniciarse. Envía un registro de depuración a support@baxs.com para que podamos solucionar el problema.";
 
@@ -210,6 +225,15 @@
 
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "No se ha podido cargar la base de datos";
+
+/* Message for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_MESSAGE" = "B&A no puede iniciarse porque la base de datos está dañada. Esto no ha afectado a la seguridad de tu cuenta ni de tus mensajes.";
+
+/* Title for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_TITLE" = "Base de datos dañada";
+
+/* Action in an action sheet offering to attempt recovery of a corrupted database. */
+"APP_LAUNCH_FAILURE_DATABASE_RECOVERY_ACTION_TITLE" = "Reparar";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "Actualiza a la versión más reciente de B&A.";
@@ -246,15 +270,6 @@
 
 /* Text prompting user to edit their profile name. */
 "APP_SETTINGS_EDIT_PROFILE_NAME_PROMPT" = "Introduce tu nombre";
-
-/* Label for the 'dismiss' button in the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_DISMISS_BUTTON" = "Ahora no";
-
-/* Message format for the 'new app version available' alert. Embeds: {{The latest app version number}} */
-"APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "La versión %1$@ ya está disponible en App Store.";
-
-/* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "Hay una nueva versión de B&A disponible";
 
 /* Label for the 'update' button in the 'new app version available' alert. */
 "APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "Actualizar";
@@ -427,6 +442,9 @@
 /* A button to open the photo picker from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_PHOTOS" = "Fotos";
 
+/* A button to select a poll from the Attachment Keyboard */
+"ATTACHMENT_KEYBOARD_POLL" = "Encuesta";
+
 /* Accessibility label for attaching photos */
 "ATTACHMENT_LABEL" = "Archivo adjunto";
 
@@ -487,14 +505,8 @@
 /* Message when trying to show a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_MESSAGE_LABEL" = "Mensaje de voz no disponible";
 
-/* Message for sheet shown when tapping a voice message that has expired and is unavailable for download */
-"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Este mensaje de voz no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de 45 días de antigüedad.";
-
 /* Title for sheet shown when tapping a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "Mensaje de voz no disponible";
-
-/* Username for recovery key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "Copias de seguridad de B&A";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "Selecciona un color";
@@ -556,6 +568,15 @@
 /* Toast indicating that the Recovery Key was correct. */
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "Clave de copia de seguridad correcta. Guarda bien tu clave.";
 
+/* Button label for action sheet to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_ACTION" = "Salir de ajustes";
+
+/* Message for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_MESSAGE" = "No has terminado de configurar tus copias de seguridad y no se ha creado ninguna copia de seguridad. Puedes habilitar las copias de seguridad en Ajustes.";
+
+/* Title for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_TITLE" = "¿Salir de los ajustes de las copias de seguridad?";
+
 /* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "B&A no podrá ayudarte a restaurar tu copia de seguridad si pierdes tu clave. Guárdala en un lugar seguro y no la compartas con otras personas.";
 
@@ -580,17 +601,41 @@
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "Copias de seguridad que puedes eliminar en cualquier momento";
 
+/* A toast shown when 'Not Now' is tapped from the Backups onboarding intro. */
+"BACKUP_ONBOARDING_INTRO_NOT_NOW_TOAST" = "Puedes habilitar las copias de seguridad en Ajustes.";
+
 /* Subtitle for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "Haz una copia de seguridad de tus mensajes y archivos multimedia utilizando el servicio de almacenamiento seguro y cifrado de extremo a extremo de B&A. No perderás ningún mensaje si cambias de teléfono o vuelves a instalar B&A.";
 
 /* Title for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_TITLE" = "Copias de seguridad de B&A";
 
-/* Subtitle for a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "La clave de tu copia de seguridad es un código de 64 caracteres que te permite restaurar tu copia de seguridad cuando vuelves a instalar B&A.\n\nSi olvidas tu clave, no podrás restaurar tu copia de seguridad. B&A no puede ayudarte a recuperar tu copia de seguridad.";
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "Tu clave de recuperación es un código de 64 caracteres que necesitarás para recuperar tu copia de seguridad.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_2" = "Guarda tu clave de recuperación en un lugar seguro, como un gestor de contraseñas, y no la compartas con nadie.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_3" = "Si la pierdes, no podrás recuperar tus mensajes.";
+
+/* Title for a continue button for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_CONTINUE_BUTTON_TITLE" = "Ver clave de recuperación";
 
 /* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "Clave de tu copia de seguridad";
+
+/* Body for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY" = "Tu suscripción a las copias de seguridad ha caducado porque no se ha podido renovar con tu método de pago.\n\nPara continuar haciendo copias de seguridad de tus archivos, necesitas volver a suscribirte. Seguirás teniendo acceso al plan gratuito de copias de seguridad de B&A.";
+
+/* Body for a sheet shown when your Backup plan is downgraded because you stopped using TestFlight. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY_TESTFLIGHT" = "Tu suscripción a las copias de seguridad ha caducado porque ya no usas TestFlight.\n\nPara continuar haciendo copias de seguridad de tus archivos, necesitas volver a suscribirte. Seguirás teniendo acceso al plan gratuito de copias de seguridad de B&A.";
+
+/* Primary button for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_PRIMARY_BUTTON" = "Gestionar copias de seguridad";
+
+/* Title for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_TITLE" = "Tu suscripción a las copias de seguridad ha caducado";
 
 /* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "Copiar al portapapeles";
@@ -613,8 +658,23 @@
 /* Title for a progress spinner on a modal when restoring messages */
 "BACKUP_RESTORE_MODAL_TITLE" = "Restaurando mensajes…";
 
+/* Message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "Las copias de seguridad automáticas están desactivadas. Actualiza los permisos de B&A para activarlas.";
+
+/* Add-on to a message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE_UPDATE_NOW" = "Actualizar ahora";
+
+/* Title for a button that takes the users to Signal's iOS Settings page. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_GO_TO_SETTINGS_BUTTON" = "Ir a Ajustes";
+
+/* Message for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_MESSAGE" = "Para permitir las copias de seguridad automáticas de tus mensajes en B&A, toca \"Ir a Ajustes\" y activa \"Actualización en segundo plano\".";
+
+/* Title for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_TITLE" = "Copias de seguridad automáticas desactivadas";
+
 /* Message for an action sheet explaining that performing a backup failed with a generic error. */
-"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR" = "No se ha podido crear tu copia de seguridad. Inténtalo de nuevo o contacta con nuestro equipo de asistencia.";
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR" = "No se ha podido crear tu copia de seguridad. Inténtalo de nuevo o contacta con nuestro equipo de Asistencia.";
 
 /* Title for a button in an action sheet allowing users to perform a backup, ignoring that WiFi is required. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NEED_WIFI_ACTION" = "Permitir copias de seguridad con datos móviles";
@@ -628,6 +688,9 @@
 /* Message for an action sheet explaining that performing a backup failed with a network error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR" = "No se ha podido crear tu copia de seguridad. Comprueba tu conexión a Internet e inténtalo de nuevo.";
 
+/* Message for an action sheet explaining that you must be registered to make a Backup. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "Debes registrarte para poder crear una copia de seguridad.";
+
 /* Description for a progress bar tracking the optimizing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "Optimizando archivos…";
 
@@ -637,17 +700,29 @@
 /* Description for a progress bar tracking the processing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PROCESSING_MEDIA" = "Procesando archivos…";
 
+/* Title for an action sheet action explaining the user can now scan a QR code to continue the restore. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_ACTION_TITLE" = "Escanear código QR";
+
+/* Body for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_BODY" = "Usa este dispositivo para escanear el código QR que se muestra en el dispositivo al que quieres transferir tus datos.";
+
+/* Title for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_TITLE" = "Todo listo para la transferencia";
+
+/* Message describing to the user that the last backup failed. */
+"BACKUP_SETTINGS_BACKUP_FAILED_MESSAGE" = "No se ha podido completar tu última copia de seguridad. Toca \"Iniciar copia\" para volver a intentarlo.";
+
 /* Title for a button allowing users to upgrade from a free to paid backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "Actualizar";
+
+/* Text describing the user's free backup plan when they have Backups disabled. */
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_AND_DISABLED_DESCRIPTION" = "Has desactivado las copias de seguridad";
 
 /* Text describing the user's free backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_DESCRIPTION" = "Tu plan de copia de seguridad es gratuito";
 
-/* Header describing what the free backup plan includes. */
-"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Mensajes de texto + 45 días de archivos multimedia";
-
 /* Message for a view indicating we failed to fetch someone's Backup plan due to an unexpected error. */
-"BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_MESSAGE" = "Se ha producido un error. Contacta con el equipo de asistencia.";
+"BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_MESSAGE" = "Se ha producido un error. Contacta con el equipo de Asistencia.";
 
 /* Title for a view indicating we failed to fetch someone's Backup plan due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_TITLE" = "No se ha podido recuperar tu plan de copia de seguridad";
@@ -673,11 +748,26 @@
 /* Text explaining that a user's paid plan, which has been canceled, expired on a past date. Embeds {{ the formatted expiration date }}. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_PAST_EXPIRATION_FORMAT" = "Caducó el %1$@";
 
+/* Title for a button allowing users to manage a paid backup plan that failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_ACTION_BUTTON_TITLE" = "Gestionar suscripción";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_1" = "Método de pago rechazado";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_2" = "Asegúrate de que tu método de pago esté actualizado";
+
 /* Title for a button allowing users to manage their backup plan as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "Gestionar plan";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "De pago (pero gratis mientras sigas siendo tester)";
+
+/* Title for a button allowing users to renew their backup subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_ACTION_BUTTON_TITLE" = "Renovar";
+
+/* Text describing that the user's paid backup plan did not correspond to a App Store subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_DESCRIPTION" = "No se ha encontrado tu suscripción en este dispositivo. Renuévala para seguir usando las copias de seguridad de B&A.";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "Mensajes de texto + todos tus archivos multimedia";
@@ -695,7 +785,7 @@
 "BACKUP_SETTINGS_BACKUPS_DISABLING_DOWNLOADING_MEDIA_PROGRESS_VIEW_DESCRIPTION" = "Se han desactivado las copias de seguridad: en este momento se están descargando los archivos multimedia que no se encuentren en el dispositivo. Una vez descargados, tus datos se eliminarán del servicio de almacenamiento seguro de B&A.";
 
 /* Message for a view indicating we failed to delete the user's Backup due to an unexpected error. */
-"BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_MESSAGE" = "Se ha producido un error. Contacta con el equipo de asistencia.";
+"BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_MESSAGE" = "Se ha producido un error. Contacta con el equipo de Asistencia.";
 
 /* Header for a menu section related to settings for when disabling Backups encountered an unexpected error. */
 "BACKUP_SETTINGS_BACKUPS_DISABLING_GENERIC_ERROR_SECTION_HEADER" = "No se han podido eliminar tus datos del servicio de almacenamiento seguro de B&A.";
@@ -716,7 +806,16 @@
 "BACKUP_SETTINGS_BETA_NOTICE_HEADER" = "Esta es una función beta que seguiremos mejorando.";
 
 /* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
-"BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "Debes registrarte para crear una nueva clave de recuperación.";
+"BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "Debes registrarte para poder crear una nueva clave de recuperación.";
+
+/* Explanation text for a sheet warning users they've reached a rate limit for creating Recovery Key. {{ Embeds 1: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_BODY" = "Si creas una nueva clave de recuperación, deberás esperar %1$@ para poder habilitar las copias de seguridad. El número de claves que puedes crear está limitado para evitar usos indebidos.";
+
+/* Action in an action sheet allowing to continue to rotate their key */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_CONTINUE_ACTION" = "Crear nueva clave";
+
+/* Title for a sheet warning users they've reached a rate limit for creating Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_TITLE" = "Se ha alcanzado el límite de claves de recuperación";
 
 /* Toast shown when a new Recovery Key has been created successfully. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "¡Se ha creado una nueva clave!";
@@ -758,7 +857,16 @@
 "BACKUP_SETTINGS_DISABLING_ERROR_GENERIC_ERROR_ACTION_SHEET_TITLE" = "No se ha podido eliminar tu copia de seguridad";
 
 /* Message shown in an action sheet when the user tries to disable Backups, but is not registered. */
-"BACKUP_SETTINGS_DISABLING_ERROR_NOT_REGISTERED" = "Tu dispositivo debe estar registrado para poder deshabilitar las copias de seguridad.";
+"BACKUP_SETTINGS_DISABLING_ERROR_NOT_REGISTERED" = "Debes registrarte para poder deshabilitar las copias de seguridad.";
+
+/* Button for an action sheet shown when the user disables Backups, letting them manage their subscription. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MANAGE_SUBSCRIPTION_BUTTON" = "Gestionar suscripción";
+
+/* Message for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MESSAGE" = "Si quieres cancelar tu suscripción, toca Gestionar suscripción > B&A > Cancelar suscripción";
+
+/* Title for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_TITLE" = "Todavía tienes una suscripción a un plan de pago de copias de seguridad";
 
 /* Title for a button shown in Backup Settings that lets a user cancel an in-progress download. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_CANCEL_DOWNLOAD" = "Cancelar descarga";
@@ -814,6 +922,15 @@
 /* Label for a menu item offering to show the user their recovery key. */
 "BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "Ver clave de copia de seguridad";
 
+/* Body for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_BODY" = "No se ha podido restaurar tu suscripción en este dispositivo. Esto puede ocurrir si has iniciado sesión en el App Store con otra cuenta de Apple o si has transferido tu cuenta desde un teléfono Android.\n\nSi tienes una suscripción activa en tu teléfono anterior, quizá quieras cancelarla antes de que se renueve.";
+
+/* Button for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_GOT_IT_BUTTON" = "Entendido";
+
+/* Title for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_TITLE" = "Suscripción no encontrada";
+
 /* Title for a button allowing users to trigger a manual backup. */
 "BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "Iniciar copia";
 
@@ -836,10 +953,10 @@
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TESTER_WARNING_SHEET_MESSAGE" = "Los archivos multimedia que se eliminen del dispositivo estarán disponibles mientras sigas siendo tester. Asegúrate de descargar todos tus archivos antes de salir del programa de pruebas.";
 
 /* Title for an action sheet warning users who are testers about the Optimize Local Storage feature. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TESTER_WARNING_SHEET_TITLE" = "Probar la optimización del almacenamiento";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TESTER_WARNING_SHEET_TITLE" = "Estás probando la optimización del almacenamiento";
 
 /* Footer for a toggle allowing users to change the Optimize Local Storage setting, if the toggle is available. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE" = "Los archivos multimedia no utilizados se eliminarán del dispositivo, pero podrás descargarlos desde tu copia de seguridad en cualquier momento.";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE" = "Los archivos multimedia que no uses se eliminarán del dispositivo, pero podrás descargarlos desde tu copia de seguridad en cualquier momento.";
 
 /* Footer for a toggle allowing users to change the Optimize Local Storage setting, if the toggle is available and they are a tester. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_AVAILABLE_FOR_TESTERS" = "Los archivos multimedia no utilizados se eliminarán del dispositivo, pero podrás descargarlos desde tu copia de seguridad en cualquier momento mientras sigas siendo tester de la versión beta.";
@@ -849,6 +966,12 @@
 
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "Optimizar almacenamiento en el dispositivo";
+
+/* Subtitle for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_SUBTITLE" = "Has alcanzado el límite de almacenamiento de las copias de seguridad. Libera espacio en B&A para seguir haciendo copias de seguridad de tus chats y archivos multimedia.";
+
+/* Title for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_TITLE" = "Almacenamiento de copia de seguridad lleno";
 
 /* Title for a button allowing users to re-enable Backups, after it had been previously disabled. */
 "BACKUP_SETTINGS_REENABLE_BACKUPS_BUTTON_TITLE" = "Volver a habilitar copias";
@@ -862,6 +985,21 @@
 /* Title for a sheet warning the user about skipping downloads. */
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "¿Omitir descarga?";
 
+/* Title for detail button in notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_DETAIL_BUTTON" = "Detalles";
+
+/* Title for notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_TITLE" = "No se ha podido validar tu suscripción a las copias de seguridad";
+
+/* Body for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_BODY" = "Se ha intentado validar tu suscripción desde demasiados dispositivos este mes.\n\nPuede que hayas vuelto a registrar tu cuenta de B&A demasiadas veces o que tengas demasiados dispositivos usando la misma suscripción.";
+
+/* Button for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_GOT_IT_BUTTON" = "Entendido";
+
+/* Title for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_TITLE" = "No se ha podido validar tu suscripción a las copias de seguridad";
+
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "Carga en pausa: tu dispositivo tiene poca batería";
 
@@ -874,6 +1012,9 @@
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "Carga en pausa: esperando red Wi-Fi…";
 
+/* Subtitle for a progress bar tracking uploads that are paused because the user is out of remote storage space. Embeds 1:{{ total storage space provided, e.g. 100 GB }}; 2:{{ space the user needs to free up by deleting media, e.g. 1 GB }}. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_OUT_OF_STORAGE_SPACE_FORMAT" = "Has alcanzado el límite de almacenamiento (%1$@) incluido en tu plan de copias de seguridad. Para hacer copias de seguridad de nuevos chats y archivos, libera %2$@ de espacio en B&A y toca \"Iniciar copia\".";
+
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "Subiendo %1$@ de %2$@ (%3$@)";
 
@@ -882,6 +1023,21 @@
 
 /* Title for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "Te damos la bienvenida a las copias de seguridad de B&A. Ya puedes iniciar tu copia de seguridad.";
+
+/* Message for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_MESSAGE" = "Asegúrate de que tu método de pago esté actualizado. Toca Gestionar suscripción > B&A > Actualizar método de pago.";
+
+/* Primary button for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_PRIMARY_BUTTON" = "Gestionar suscripción";
+
+/* Title for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "No se ha renovado tu suscripción a las copias de seguridad";
+
+/* Body for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "Envíanos tus registros de depuración para ayudarnos a resolver el problema. ¡Gracias!";
+
+/* Title for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "Se ha producido un error al hacer una copia de seguridad de tus archivos multimedia";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "Copias de seguridad de B&A";
@@ -911,7 +1067,9 @@
 "BADGE_EXPIRED_BOOST_BODY" = "Tu insignia Apoyo B&A ha caducado y ya no se muestra en tu perfil.\n\nPuedes seguir usando B&A, pero si quieres apoyar una tecnología creada para ti, considera optar por una suscripción mensual.";
 
 /* String explaining to the user that their boost badge has expired while they are a current subscription sustainer on the badge expiry sheet. */
-"BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "Tu insignia Apoyo B&A ha caducado y ya no se muestra en tu perfil.\n\nPuedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 días más.";
+"BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "Tu insignia Apoyo B&A ha caducado y ya no se muestra en tu perfil.
+
+Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 días más.";
 
 /* Title for boost on the badge expiration sheet. */
 "BADGE_EXPIRED_BOOST_TITLE" = "Insignia caducada";
@@ -1042,11 +1200,8 @@
 /* An explanation of the consequences of blocking another user. */
 "BLOCK_USER_BEHAVIOR_EXPLANATION" = "Las personas que bloquees no podrán llamarte ni enviarte mensajes.";
 
-/* Tooltip highlighting the blur image editing tool. */
-"BLUR_TOOLTIP" = "¡Nuevo! Difumina caras o partes de tus fotos.";
-
 /* Default text for the custom amount field of the boost view. */
-"BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "Introduce una cantidad personalizada";
+"BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "Introduce un importe personalizado";
 
 /* Label for the 'add' button. */
 "BUTTON_ADD" = "Añadir";
@@ -1175,7 +1330,7 @@
 "CALL_LINK_EDIT_NAME" = "Editar el nombre de la llamada";
 
 /* Description of sheet presented when joining call from call link sheet fails. */
-"CALL_LINK_JOIN_CALL_FAILURE_SHEET_DESCRIPTION" = "No se ha podido entrar en la llamada. Comprueba tu conexión a Internet e inténtalo de nuevo.";
+"CALL_LINK_JOIN_CALL_FAILURE_SHEET_DESCRIPTION" = "No has podido unirte a la llamada. Comprueba tu conexión a Internet e inténtalo de nuevo.";
 
 /* Button on an action sheet to approve a request to join a call link. */
 "CALL_LINK_JOIN_REQUEST_APPROVE_BUTTON" = "Aprobar solicitud";
@@ -1227,6 +1382,87 @@
 
 /* notification body */
 "CALL_MISSED_BECAUSE_OF_IDENTITY_CHANGE_NOTIFICATION_BODY" = "☎️ Llamada perdida debido a cambios en el número de seguridad.";
+
+/* Title for toast which appears after submitting a call quality survey */
+"CALL_QUALITY_SURVEY_COMPLETION_TOAST" = "¡Gracias por tus comentarios!";
+
+/* Footer text explaining custom issue descriptions in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_FOOTER" = "Incluye cualquier detalle relevante sobre el problema. Garantizamos la privacidad de toda la información que compartas aquí. Solo se usará para ayudarnos a mejorar las llamadas en B&A.";
+
+/* Placeholder text for the custom issue entry in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_PLACEHOLDER" = "Describe tu problema";
+
+/* Footer text explaining what debug logs contain in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER" = "La información que compartes con nosotros contiene únicamente datos técnicos de la aplicación y nunca incluye el contenido de tus llamadas.";
+
+/* Header text explaining the purpose of sharing debug logs in the call quality survey. The text inside the <link> tags is tappable for viewing the diagnostic information. */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_HEADER" = "Si seleccionas Enviar, se compartirán tus comentarios junto con la <link>información de diagnóstico de tu llamada</link>. De manera opcional, puedes compartir tu registro de depuración para ayudarnos a mejorar la calidad de las llamadas.";
+
+/* Link text to open a preview of debug logs in the call quality survey. Appended to CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_PREVIEW_LINK" = "Ver registro de depuración";
+
+/* Title for the debug log sharing screen in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TITLE" = "Ayúdanos a mejorar";
+
+/* Label for the toggle to share debug log in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TOGGLE" = "Compartir registro de depuración";
+
+/* Title for preview of the call diagnostic info that will be sent with the survey */
+"CALL_QUALITY_SURVEY_DIAGNOSTICS_TITLE" = "Información de diagnóstico";
+
+/* Button label for indicating the call did not have issues in the call quality survey */
+"CALL_QUALITY_SURVEY_GREAT_BUTTON" = "Ha ido genial";
+
+/* Button label for indicating the call had issues in the call quality survey */
+"CALL_QUALITY_SURVEY_HAD_ISSUES_BUTTON" = "He tenido problemas";
+
+/* Label for audio issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO" = "Problema de audio";
+
+/* Label for audio dropout issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_DROP" = "El audio se detuvo";
+
+/* Label for local echo issue option in call quality survey, indicating the user heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_LOCAL_ECHO" = "Oía un eco";
+
+/* Label for remote echo issue option in call quality survey, indicating other participants heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_REMOTE_ECHO" = "Otras personas oían eco";
+
+/* Label for audio stuttering issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_STUTTERING" = "Audio entrecortado";
+
+/* Label for call dropped issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_CALL_DROPPED" = "La llamada se cortó";
+
+/* Label for custom issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_OTHER" = "Otro motivo";
+
+/* Label for video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO" = "Problema de vídeo";
+
+/* Label for poor video quality issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_QUALITY" = "Mala calidad del vídeo";
+
+/* Label for low resolution video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_RESOLUTION" = "Baja resolución";
+
+/* Label for camera not working issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_NO_CAMERA" = "La cámara no funcionaba";
+
+/* Header text on the call quality survey issues screen */
+"CALL_QUALITY_SURVEY_ISSUES_HEADER" = "Selecciona todas las opciones que correspondan";
+
+/* Title for the sheet in the call quality survey where issues with the call can be selected */
+"CALL_QUALITY_SURVEY_ISSUES_SHEET_TITLE" = "¿Qué problemas has tenido?";
+
+/* Header text explaining the purpose of the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_HEADER" = "Tu opinión nos ayuda a mejorar las llamadas en B&A. No se almacenará ningún dato de identificación personal.";
+
+/* Title for the initial rating screen in the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_TITLE" = "¿Qué tal ha ido tu llamada?";
+
+/* Button text to submit the call quality survey */
+"CALL_QUALITY_SURVEY_SUBMIT_BUTTON" = "Enviar";
 
 /* Label on button for raising hand in call. */
 "CALL_RAISE_HAND_BUTTON_LABEL" = "Levantar la mano";
@@ -1574,25 +1810,16 @@
 "CHAT_LIST_UNREAD_FILTER_NO_CHATS" = "No hay chats sin leer";
 
 /* Text for a bullet point in a list of Backup features, describing that all media is included. */
-"CHOOSE_BACKUP_PLAN_BULLET_FULL_MEDIA_BACKUP" = "Copia de todos tus archivos multimedia";
+"CHOOSE_BACKUP_PLAN_BULLET_FULL_MEDIA_BACKUP" = "Copia de seguridad de todos tus archivos multimedia";
 
 /* Text for a bullet point in a list of Backup features, describing that all text messages are included. */
-"CHOOSE_BACKUP_PLAN_BULLET_FULL_TEXT_BACKUP" = "Copia de todos tus mensajes de texto";
+"CHOOSE_BACKUP_PLAN_BULLET_FULL_TEXT_BACKUP" = "Copia de seguridad de todos tus mensajes de texto";
 
-/* Text for a bullet point in a list of Backup features, describing that recent media is included. */
-"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Últimos 45 días de archivos multimedia";
-
-/* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
+/* Text for a bullet point in a list of Backup features, describing the amount of included storage. Embeds {{ the amount of storage preformatted as a localized byte count, e.g. '100 GB' }}. */
 "CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "1 TB de espacio de almacenamiento (~250.000 fotos)";
 
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "Se ha producido un error. Contacta con el equipo de asistencia.";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a network error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NETWORK_ERROR" = "Se ha producido un error. Comprueba tu conexión e inténtalo de nuevo.";
-
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but is not registered. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED" = "Debes haberte registrado para poder habilitar las copias de seguridad.";
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED" = "Debes registrarte para poder habilitar las copias de seguridad.";
 
 /* Message shown in an action sheet when the user tries to confirm selecting the paid plan, but encountered an error from Apple while purchasing. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_PURCHASE" = "Se ha producido un error. Inténtalo de nuevo.";
@@ -1600,11 +1827,23 @@
 /* Message shown in an action sheet when the user tries to confirm selecting the paid plan, but encountered an error while redeeming their completed purchase. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_PURCHASE_REDEMPTION" = "Se ha producido un error. Contacta con el equipo de asistencia.";
 
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED" = "Has alcanzado tu límite de creación de claves de recuperación. Para evitar usos inadecuados, deberás esperar %1$@ antes de poder habilitar las copias de seguridad. Espera %1$@ y vuelve a intentarlo.";
+
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. {{ Embeds 1 & 2: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED_TITLE" = "No se han podido habilitar las copias de seguridad";
+
 /* A label indicating that a given Backup plan option is what the user has already enabled. */
 "CHOOSE_BACKUP_PLAN_CURRENT_PLAN_LABEL" = "Plan actual";
 
-/* Subtitle for the free plan option, when choosing a Backup plan. */
-"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Mensajes de texto + 45 días de archivos multimedia";
+/* Text for a button that will downgrade the user from the paid Backup plan to the free one. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_BUTTON_TEXT" = "Cambiar plan";
+
+/* Button for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_PROCEED_BUTTON" = "Cambiar plan";
+
+/* Title for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_TITLE" = "¿Cambiar al plan gratuito?";
 
 /* Title for the free plan option, when choosing a Backup plan. */
 "CHOOSE_BACKUP_PLAN_FREE_PLAN_TITLE" = "Gratis";
@@ -1623,6 +1862,9 @@
 
 /* Subtitle for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_SUBTITLE" = "Todas las copias de seguridad están cifradas de extremo a extremo. B&A es una organización sin ánimo de lucro: el pago de las copias de seguridad nos ayuda a llevar a cabo nuestra misión.";
+
+/* Title for a label allowing users to view Signal's Terms & Conditions. */
+"CHOOSE_BACKUP_PLAN_TERM_AND_PRIVACY_POLICY_TEXT" = "Términos y Política de privacidad";
 
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "Elige tu plan de copias de seguridad";
@@ -1985,7 +2227,7 @@
 "CONVERSATION_SETTINGS_ADD_MEMBERS" = "Añadir participantes";
 
 /* Label for 'new contact' button in conversation settings view. */
-"CONVERSATION_SETTINGS_ADD_TO_EXISTING_CONTACT" = "Añadir a contacto existente";
+"CONVERSATION_SETTINGS_ADD_TO_EXISTING_CONTACT" = "Añadir a un contacto";
 
 /* button in conversation settings view. */
 "CONVERSATION_SETTINGS_ADD_TO_SYSTEM_CONTACTS" = "Añadir a contactos del teléfono";
@@ -1995,6 +2237,9 @@
 
 /* Footer for the 'attributes access' section in conversation settings view. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "Elige quién puede modificar el nombre, descripción e imagen del grupo y la duración de los mensajes temporales.";
+
+/* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "Elige quién puede modificar el nombre, la descripción y la imagen del grupo, la duración de los mensajes temporales y los mensajes fijados.";
 
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "Apoya a B&A y consigue insignias para mostrar en tu perfil. Toca sobre una insignia para obtener más información.";
@@ -2053,8 +2298,11 @@
 /* Label for 'member requests & invites' action in conversation settings view. */
 "CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES" = "Solicitudes e invitaciones";
 
+/* Label for 'member label' action in conversation settings view. */
+"CONVERSATION_SETTINGS_MEMBER_TAG" = "Categoría de participante";
+
 /* label for 'always' option for mention notifications in conversation settings */
-"CONVERSATION_SETTINGS_MENTION_MODE_AlWAYS" = "Notificar siempre";
+"CONVERSATION_SETTINGS_MENTION_MODE_AlWAYS" = "Notificarme siempre";
 
 /* label for 'never' option for mention notifications in conversation settings */
 "CONVERSATION_SETTINGS_MENTION_MODE_NEVER" = "No notificar en chat silenciado";
@@ -2251,22 +2499,10 @@
 /* Tooltip highlighting the custom chat color controls. */
 "CUSTOM_CHAT_COLOR_SETTINGS_TOOLTIP" = "Desliza para cambiar la dirección del degradado";
 
-/* Button to run the database integrity check */
-"DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "Ejecutar";
-
-/* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "Esto nos ayudará a solucionar tu problema y puede llevar varios minutos en completarse. Puedes cerrar B&A mientras realizamos esta verificación, pero recuerda regresar para enviar tus registros.";
-
-/* Button to skip database integrity check step */
-"DATABASE_INTEGRITY_CHECK_SKIP" = "Omitir";
-
-/* Title for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_TITLE" = "¿Realizar diagnóstico de la base de datos?";
-
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so keep that in mind. This is the description on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_DESCRIPTION" = "Es posible que parte de tu historial de mensajes esté dañado. Esto no ha afectado a la seguridad de tu cuenta ni de tus mensajes. Toca \"Continuar\" para recuperar tus datos.";
 
-/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
+/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "Problema al recuperar los datos";
 
 /* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
@@ -2356,6 +2592,12 @@
 /* Accessibility label for the ? vector asset used to get info about debug logs */
 "DEBUG_LOG_INFO_BUTTON" = "Acerca de los registros de depuración";
 
+/* Header text displayed above the debug log preview */
+"DEBUG_LOG_PREVIEW_HEADER" = "Una vez enviado, tu registro estará disponible en línea durante 30 días en una URL única y no publicada.";
+
+/* Title for the debug log preview screen */
+"DEBUG_LOG_PREVIEW_TITLE" = "Registro de depuración";
+
 /* info message text in conversation view */
 "DECLINED_VIDEO_CALL" = "Has rechazado una videollamada";
 
@@ -2428,23 +2670,17 @@
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "Se eliminará este mensaje de todos tus dispositivos.";
 
-/* Label for a button in an info sheet confirming that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_BUTTON" = "Entendido";
-
-/* Subtitle for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_SUBTITLE" = "Cuando elimines mensajes o chats, se eliminarán de tu teléfono y de todos los dispositivos vinculados.";
-
-/* Title for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_TITLE" = "Ahora, la eliminación de mensajes se sincroniza en todos tus dispositivos";
-
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "Cuenta eliminada";
 
 /* Notification warning the user that they have been de-registered. */
 "DEREGISTRATION_NOTIFICATION" = "Se ha cerrado tu sesión de B&A en este dispositivo.";
 
-/* Label for button that lets users re-register using the same phone number. */
-"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "Volver a registrar este número";
+/* Button that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_BUTTON" = "Volver a registrar";
+
+/* Title for prompt that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_PROMPT_TITLE" = "¿Quieres volver a registrar este número?";
 
 /* Label warning the user that they have been de-registered. */
 "DEREGISTRATION_WARNING" = "Este dispositivo ya no está registrado. Probablemente se deba a que has registrado tu número de teléfono en B&A con un dispositivo diferente.";
@@ -2485,23 +2721,14 @@
 /* The explanation for the device transfer 'choice' view when linking a device */
 "DEVICE_TRANSFER_CHOICE_LINKED_EXPLANATION" = "Elige cómo quieres transferir tu historial de mensajes y los datos de tu cuenta";
 
-/* The body for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_BODY" = "Continúa sin transferir tu cuenta ni tus mensajes";
-
 /* The body for the device transfer 'choice' view 'register' option when linking a device when message syncing is available */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_BODY_LINK_AND_SYNC" = "Tendrás la opción de transferir todos tus mensajes y tus archivos multimedia recientes desde tu teléfono";
 
 /* The title for the device transfer 'choice' view 'register' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_TITLE" = "Añadir como dispositivo nuevo";
 
-/* The title for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_TITLE" = "Registrarme sin transferir";
-
 /* The title for the device transfer 'choice' view */
 "DEVICE_TRANSFER_CHOICE_TITLE" = "Transferir cuenta y mensajes";
-
-/* The body for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_BODY" = "Transfiere tu cuenta e historial de mensajes desde tu dispositivo iOS anterior";
 
 /* The body for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_BODY" = "Transfiere tu cuenta e historial de mensajes desde tu dispositivo iOS anterior";
@@ -2509,26 +2736,11 @@
 /* The title for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_TITLE" = "Transferir desde otro iPad";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_TITLE" = "Transferir desde dispositivo iOS";
-
-/* Button shown to contract a QR code and exit the fullscreen view. */
-"DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "Reducir";
-
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "No se ha podido completar la transferencia. Asegúrate de que la aplicación B&A esté abierta en ambos dispositivos e inténtalo de nuevo.";
 
-/* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
-"DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "No se ha podido verificar tu nuevo dispositivo. Inténtalo de nuevo.";
-
 /* An error indicating that something went wrong with the transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_GENERIC" = "No se ha podido completar la transferencia. Asegúrate de que tus dispositivos estén cerca uno del otro e inténtalo de nuevo.";
-
-/* An error indicating the user must scan this code with a linked device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_LINKED" = "Para configurar este iPad como dispositivo vinculado, debes escanear el código con tu iPad anterior";
-
-/* An error indicating the user must scan this code with a primary device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_PRIMARY" = "Para transferir tu cuenta, debes escanear el código con tu iPhone";
 
 /* An error indicating that the user does not have enough free space on their device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "No hay suficiente espacio de almacenamiento para completar la transferencia";
@@ -2536,41 +2748,11 @@
 /* An error indicating the user must update their device before trying to transfer. */
 "DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "Actualiza a la última versión de B&A e inténtalo de nuevo";
 
-/* Button shown to expand a QR code and view it fullscreen. */
-"DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "Ampliar";
-
-/* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "Transfiere tu cuenta de B&A a un nuevo dispositivo de iOS. Asegúrate de que tu nuevo dispositivo esté cerca y encendido.";
-
-/* The title on the acttion sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_TITLE" = "Transferir cuenta";
-
-/* The explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION" = "Acerca tu dispositivo anterior, asegúrate de que Wi-Fi y Bluetooth estén habilitados y escanea este código QR.";
-
-/* The second explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION2" = "Escanea este código QR con la cámara de tu otro dispositivo iOS.";
-
-/* A prompt to provide further explanation if the user is not seeing the transfer on both devices. */
-"DEVICE_TRANSFER_QRCODE_NOT_SEEING" = "¿No aparece el aviso en tu dispositivo anterior?";
-
-/* The title for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_TITLE" = "Escanear código QR";
-
 /* The explanation on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "Mantén ambos dispositivos cerca uno del otro. No los apagues y mantén la aplicación B&A abierta. Las transferencias están cifradas de extremo a extremo.";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "Recibiendo datos";
-
-/* Text indicating that we are connecting to the scanned device */
-"DEVICE_TRANSFER_SCANNING_CONNECTING" = "Conectando…";
-
-/* The explanation for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_EXPLANATION" = "Coloca el código QR dentro el círculo";
-
-/* The title for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_TITLE" = "Mantén tu nuevo dispositivo delante de la cámara";
 
 /* Status message on new device when cancelling transfer. */
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_CANCELLING" = "Cancelando la conexión al iPhone anterior…";
@@ -2585,10 +2767,10 @@
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_STARTING" = "Esperando para conectar al iPhone anterior…";
 
 /* Description in the progress view displayed after failure of device transfer. */
-"DEVICE_TRANSFER_STATUS_NEW_DEVICE_TRANSFER_FAILED_BODY" = "No se ha podido realizar la transferencia al nuevo dispositivo. Acerca tu dispositivo anterior y vuelve a intentarlo.";
+"DEVICE_TRANSFER_STATUS_NEW_DEVICE_TRANSFER_FAILED_BODY" = "No se ha podido completar la transferencia al nuevo dispositivo. Acerca tu dispositivo anterior y vuelve a intentarlo.";
 
 /* Title for a progress view displayed after failure of device transfer. */
-"DEVICE_TRANSFER_STATUS_NEW_DEVICE_TRANSFER_FAILED_TITLE" = "No se ha podido realizar la transferencia";
+"DEVICE_TRANSFER_STATUS_NEW_DEVICE_TRANSFER_FAILED_TITLE" = "No se ha podido completar la transferencia";
 
 /* Title for a progress view displayed during device transfer. */
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_TRANSFERRING" = "Transferencia en curso";
@@ -2608,11 +2790,8 @@
 /* Status message on old device when transfer is starting. */
 "DEVICE_TRANSFER_STATUS_OLD_DEVICE_STARTING" = "Esperando para conectar al nuevo iPhone…";
 
-/* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "Mantén ambos dispositivos cerca uno del otro. No los apagues y mantén la aplicación B&A abierta.";
-
-/* The title on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_TITLE" = "Transfiriendo datos";
+/* Action asking user to try again after transfer failure. */
+"DEVICE_TRANSFER_TRY_AGAIN_ACTION" = "Reintentar";
 
 /* table cell label in conversation settings */
 "DISAPPEARING_MESSAGES" = "Mensajes temporales";
@@ -2663,10 +2842,10 @@
 "DISCARD_DRAFT_CONFIRMATION_TITLE" = "¿Descartar borrador?";
 
 /* Short text to dismiss current modal / actionsheet / screen */
-"DISMISS_BUTTON_TEXT" = "Ignorar";
+"DISMISS_BUTTON_TEXT" = "Cerrar";
 
 /* Dismiss context menu accessibility label */
-"DISMISS_CONTEXT_MENU" = "Ocultar menú contextual";
+"DISMISS_CONTEXT_MENU" = "Cerrar menú contextual";
 
 /* Title for switch to enable sharing of badges publicly */
 "DISPLAY_BADGES_ON_PROFILE_SETTING" = "Mostrar insignias en mi perfil";
@@ -2738,7 +2917,7 @@
 "DONATE_SCREEN_ERROR_MESSAGE_FORMAT_BANK_TRANSFER_AMOUNT_TOO_LARGE" = "Puedes enviar hasta %1$@ mediante transferencia bancaria. Prueba con otro importe o un método de pago.";
 
 /* Message in an alert presented when the user tries to make a donation, but already has a donation that is currently processing via non-bank payment. */
-"DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_MAKING_ANOTHER_DONATION" = "Tu donación aún se está procesando. Este proceso puede llevar unos minutos dependiendo de tu conexión. Espera hasta que se complete esta donación antes de realizar otra.";
+"DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_MAKING_ANOTHER_DONATION" = "Tu donación aún se está procesando. Este proceso puede llevar unos minutos dependiendo de tu conexión. Espera hasta que se complete esta donación antes de hacer otra.";
 
 /* Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently processing via non-bank payment. */
 "DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_UPDATING_YOUR_SUBSCRIPTION" = "Tu donación aún se está procesando. Este proceso puede llevar unos minutos dependiendo de tu conexión. Espera hasta que se complete esta donación antes de actualizar tu suscripción.";
@@ -2792,7 +2971,7 @@
 "DONATION_BADGE_ISSUE_SHEET_BANK_PAYMENT_PROCESSING_TITLE" = "Donación pendiente";
 
 /* Message for a sheet explaining that a one-time donation via bank payment is pending, and how that will affect the user's badge. Embeds {{ the name of the badge }}. Will have a 'learn more' link appended, when it is rendered. */
-"DONATION_BADGE_ISSUE_SHEET_ONE_TIME_BANK_PAYMENT_PROCESSING_MESSAGE" = "Tu donación única está pendiente. Cuando la recibamos, podrás mostrar la insignia %1$@ en tu perfil.\n\nLas transferencias bancarias pueden tardar entre 1 y 14 días hábiles en procesarse.";
+"DONATION_BADGE_ISSUE_SHEET_ONE_TIME_BANK_PAYMENT_PROCESSING_MESSAGE" = "Tu donación está pendiente. Cuando la recibamos, podrás mostrar la insignia %1$@ en tu perfil.\n\nLas transferencias bancarias pueden tardar entre 1 y 14 días hábiles en procesarse.";
 
 /* Message for a sheet explaining that a recurring donation via bank payment is pending, and how that will affect the user's badge. Embeds {{ the name of the badge }}. Will have a 'learn more' link appended, when it is rendered. */
 "DONATION_BADGE_ISSUE_SHEET_RECURRING_BANK_PAYMENT_PROCESSING_MESSAGE" = "Tu donación mensual está pendiente. Cuando la recibamos, podrás mostrar la insignia %1$@ en tu perfil.\n\nLas transferencias bancarias pueden tardar entre 1 y 14 días hábiles en procesarse.";
@@ -2849,7 +3028,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_SUCCEEDED_BUT_MESSAGE_FAILED_ERROR_BODY" = "Tu pago se ha procesado, pero B&A no ha podido enviar tu mensaje de donación. Contacta con el equipo de asistencia.";
 
 /* Users can donate on a friend's behalf. If the payment was processed but the donation failed to send, an error dialog will be shown. This is the title of that dialog. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_SUCCEEDED_BUT_MESSAGE_FAILED_ERROR_TITLE" = "No se ha podido realizar la donación";
+"DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_SUCCEEDED_BUT_MESSAGE_FAILED_ERROR_TITLE" = "No se ha podido hacer la donación";
 
 /* A friend has donated on your behalf. This text is shown in the list of chats, when the most recent message is one of these donations. Embeds {friend's short display name}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_PREVIEW_INCOMING" = "✨ %1$@ ha hecho una donación en tu nombre";
@@ -2864,7 +3043,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_RECIPIENT_IS_BLOCKED_ERROR_BODY" = "No puedes hacer una donación en nombre de esta persona porque la has bloqueado.";
 
 /* Users can donate on a friend's behalf. This is the title for an error message that appears if the try to do this, but the recipient is blocked. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_RECIPIENT_IS_BLOCKED_ERROR_TITLE" = "No se puede realizar la donación";
+"DONATION_ON_BEHALF_OF_A_FRIEND_RECIPIENT_IS_BLOCKED_ERROR_TITLE" = "No se puede hacer la donación";
 
 /* Label for a button used to redeem a badge that was received as a donation on your behalf. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_REDEEM_BADGE" = "Canjear";
@@ -2893,17 +3072,17 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "¡%1$@ ha hecho una donación a B&A en tu nombre! Muestra tu insignia de apoyo a B&A en tu perfil.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "Mensajería privada. Sin anuncios, sin seguimiento, sin vigilancia.";
+/* Body text for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BODY" = "Como organización independiente sin ánimo de lucro, B&A tiene el firme compromiso de proteger la privacidad del contenido de todos tus mensajes y llamadas. Sin anuncios, sin seguimiento, sin vigilancia. Haz una donación hoy para apoyar a B&A.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "B&A se financia con donaciones de personas como tú, con lo que tu privacidad es nuestra máxima prioridad. B&A está diseñada para ti, no para obtener datos ni ganancias.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_1" = "Con tu donación consigues una insignia que puedes mostrar en tu perfil";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "Si puedes apoyar nuestra misión, haz una donación hoy para que B&A siga siendo una aplicación segura, confiable y accesible para todo el mundo.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_2" = "Tu privacidad es nuestra misión";
 
-/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "B&A es diferente.";
+/* Bullet point for a sheet discussing donating to Signal. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
+"DONATION_READ_MORE_SHEET_BULLET_3" = "B&A es una organización sin ánimo de lucro";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "Importe";
@@ -3046,20 +3225,17 @@
 /* Text describing to the user that they're going to pay a monthly donation to Signal */
 "DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "Donación mensual a B&A";
 
-/* Title for the 'more' section on the donation screen */
-"DONATION_VIEW_MORE_SECTION_TITLE" = "Más";
-
 /* Title for the 'my support' section in the donation view */
 "DONATION_VIEW_MY_SUPPORT_TITLE" = "Mi contribución";
-
-/* Title for the \"other ways to donate\" section on the donation view. */
-"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Otras formas de donar";
 
 /* Title on the 'Donate to Signal' screen */
 "DONATION_VIEW_TITLE" = "Haz una donación a B&A";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "Moneda";
+
+/* Label for a button that says 'Don't show again'. */
+"DONT_SHOW_AGAIN_BUTTON_TITLE" = "No volver a mostrar";
 
 /* Message for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_MESSAGE" = "Toca rápidamente dos veces tus mensajes para editarlos. Puedes editar tus mensajes hasta 24 horas después de haberlos enviado.";
@@ -3284,7 +3460,7 @@
 "EXPIRATION_ERROR" = "Esta versión de B&A ha caducado. Actualízala para seguir enviando y recibiendo mensajes.";
 
 /* If the user's app is too old, they'll be shown a warning asking them to upgrade. This is the text on the warning, and tapping it will open the App Store page for Signal. */
-"EXPIRATION_WARNING_ACTION_TITLE" = "Actualizar ahora";
+"EXPIRATION_WARNING_ACTION_TITLE" = "Actualizar ahora";
 
 /* Label warning the user that the app will expire soon. Embeds {{date}}. */
 "EXPIRATION_WARNING_SOON" = "Esta versión de B&A caduca el %1$@. Actualízala para seguir chateando.";
@@ -3315,9 +3491,6 @@
 
 /* Footer for message cell for documents/files when they are expired and unavailable for download */
 "FILE_UNAVAILABLE_FOOTER" = "Archivo no disponible";
-
-/* Message for sheet shown when tapping a document/file that has expired and is unavailable for download */
-"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Este archivo no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de 45 días de antigüedad.";
 
 /* Title for sheet shown when tapping a document/file that has expired and is unavailable for download */
 "FILE_UNAVAILABLE_SHEET_TITLE" = "Archivo no disponible";
@@ -3352,12 +3525,6 @@
 /* Tooltip notifying users that the flip camera button moved to the picture-in-picture view of themselves in a call */
 "FLIP_CAMERA_BUTTON_MOVED_TO_PIP_TOOLTIP" = "El botón para cambiar de cámara ahora está aquí. Toca el vídeo para probarlo.";
 
-/* Message for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_MESSAGE" = "Los mensajes que reenvías ahora se envían al instante.";
-
-/* Title for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_TITLE" = "Tus mensajes ya no esperan";
-
 /* Indicates that a single message was forwarded. */
 "FORWARD_MESSAGE_MESSAGES_SENT_1" = "Mensaje enviado";
 
@@ -3385,11 +3552,11 @@
 /* Title for the 'Get Started' banner */
 "GET_STARTED_BANNER_TITLE" = "Primeros pasos";
 
-/* 'Get Started' button directing users to appearance */
-"GET_STARTED_CARD_APPEARANCE" = "Apariencia";
-
 /* 'Get Started' button direction users to avatar builder */
 "GET_STARTED_CARD_AVATAR_BUILDER" = "Añadir foto";
+
+/* 'Get Started' button directing users to Chat Color settings */
+"GET_STARTED_CARD_CHAT_COLOR" = "Color del chat";
 
 /* 'Get Started' button directing users to invite friends */
 "GET_STARTED_CARD_INVITE_FRIENDS" = "Invitar";
@@ -3595,9 +3762,6 @@
 /* Toast view text informing user about swiping to speaker view */
 "GROUP_CALL_SPEAKER_VIEW_TOAST" = "Desliza hacia arriba para cambiar la vista";
 
-/* Tooltip highlighting group calls. */
-"GROUP_CALL_START_TOOLTIP" = "Toca aquí para iniciar una llamada grupal";
-
 /* Text explaining that you started a group call. */
 "GROUP_CALL_STARTED_BY_YOU" = "Has iniciado una llamada grupal";
 
@@ -3605,7 +3769,7 @@
 "GROUP_CALL_STARTED_MESSAGE_FORMAT" = "%1$@ ha iniciado una llamada grupal";
 
 /* Text displayed when trying to turn on ringing when calling a large group. */
-"GROUP_CALL_TOO_LARGE_TO_RING" = "No se puede realizar la llamada porque el grupo es demasiado grande.";
+"GROUP_CALL_TOO_LARGE_TO_RING" = "No se puede hacer la llamada porque el grupo es demasiado grande.";
 
 /* Text explaining that there are two people in the group call. Embeds {{ %1$@ participant1, %2$@ participant2 }} */
 "GROUP_CALL_TWO_PEOPLE_HERE_FORMAT" = "%1$@ y %2$@ están en esta llamada";
@@ -3736,6 +3900,12 @@
 /* Message indicating that 'announcement-only' mode was enabled by a remote user. Embeds {{ user who enabled 'announcement-only' mode }}. */
 "GROUP_IS_ANNOUNCEMENT_ONLY_ENABLED_BY_REMOTE_USER_FORMAT" = "%1$@ ha cambiado los ajustes del grupo para que solo admins puedan enviar mensajes.";
 
+/* Message text for the 'group invite link' action sheet. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE" = "¿Quieres unirte a este grupo y compartir tu nombre y foto de perfil con sus participantes?";
+
+/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE_W_REQUEST" = "Cuando solicites unirte, tu nombre y tu foto se compartirán con los participantes de este grupo. Alguien con permisos de admin debe aprobar tu solicitud.";
+
 /* Subtitle indicating that the local user has been blocked from joining the group */
 "GROUP_LINK_ACTION_SHEET_VIEW_BLOCKED_FROM_JOINING_SUBTITLE" = "No puedes volver a unirte a este grupo usando el enlace porque alguien con permisos de admin te ha eliminado. Ponte en contacto con un admin para que te vuelva a añadir al grupo.";
 
@@ -3754,14 +3924,8 @@
 /* Label indicating that the group info is being loaded in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_LOADING_TITLE" = "Cargando…";
 
-/* Message text for the 'group invite link' action sheet. */
-"GROUP_LINK_ACTION_SHEET_VIEW_MESSAGE" = "¿Quieres unirte a este grupo y compartir tu nombre y foto de perfil con sus participantes?";
-
 /* Label for the 'request to join' button in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_BUTTON" = "Solicitar unirse";
-
-/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
-"GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_MESSAGE" = "Alguien que sea admin de este grupo debe aprobar tu solicitud antes de poder unirte. Al solicitar unirte al grupo, tu nombre y foto de perfil se compartirán con sus participantes.";
 
 /* Error message the attempt to request to join the group failed due to network connectivity. */
 "GROUP_LINK_COULD_NOT_REQUEST_TO_JOIN_GROUP_DUE_TO_NETWORK_ERROR_MESSAGE" = "Comprueba que tienes conexión e inténtalo de nuevo.";
@@ -4045,6 +4209,12 @@
 /* Name for a group story on the stories list. Embeds {author's name}, {group name} */
 "GROUP_STORY_NAME_FORMAT" = "%1$@ para \"%2$@\"";
 
+/* Text indicating you reacted to a group story (the header on the bubble says \"You\") */
+"GROUP_STORY_REPLY_REACTION_SECOND_PERSON" = "Has reaccionado a la historia";
+
+/* Text indicating someone else reacted to a group story (the header on the bubble says their name, e.g. \"Bob\") */
+"GROUP_STORY_REPLY_REACTION_THIRD_PERSON" = "Ha reaccionado a la historia";
+
 /* Button to delete the story on the 'group story settings' view */
 "GROUP_STORY_SETTINGS_DELETE_BUTTON" = "Eliminar historia de grupo";
 
@@ -4263,6 +4433,18 @@
 
 /* Title for the conversation list's 'archive' mode. */
 "HOME_VIEW_TITLE_ARCHIVE" = "Archivados";
+
+/* Title for the conversation list's backup storage full context menu action. */
+"HOME_VIEW_TITLE_BACKUP_OUT_OF_STORAGE_QUOTA" = "Almacenamiento de copia de seguridad lleno";
+
+/* Title for the conversation list's failed to redeem backup subscription context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_FAILED_TO_REDEEM" = "Error de suscripción a las copias de seguridad";
+
+/* Title for the conversation list's backup subscription not found locally context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_NOT_FOUND_LOCALLY" = "No se ha encontrado tu suscripción a las copias de seguridad";
+
+/* Title for the conversation list's failed to backup context menu action. */
+"HOME_VIEW_TITLE_FAILED_TO_BACKUP" = "Error al crear la copia de seguridad";
 
 /* Title for the 'Select Chats' option in the ChatList. */
 "HOME_VIEW_TITLE_SELECT_CHATS" = "Seleccionar chats";
@@ -4546,8 +4728,8 @@
 /* confirm the users intent to link a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TITLE" = "Completar vinculación";
 
-/* subtitle for choosing to send message history when linking a new device */
-"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE" = "Transfiere todos tus mensajes de texto, así como tus archivos multimedia de los últimos 45 días";
+/* Subtitle for choosing to send message history when linking a new device, if you have the paid tier enabled. */
+"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_PAID_PLAN_SUBTITLE" = "Transfiere tus mensajes de texto y todos tus archivos multimedia";
 
 /* title for choosing to send message history when linking a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_TITLE" = "Transferir historial de mensajes";
@@ -4708,24 +4890,6 @@
 /* Shown to users while the app is loading, asking them not to close the app. */
 "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "No cierres B&A.";
 
-/* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "Para transferir tu cuenta de B&A, necesitas permitir el acceso a la red local en ambos dispositivos.";
-
-/* A button asking the user if they need further help getting their transfer working. */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "¿Necesitas ayuda?";
-
-/* First step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_ONE" = "En los dos dispositivos, ve a \"Ajustes\"";
-
-/* Third step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "Activa \"Red local\"";
-
-/* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "Desliza hasta B&A";
-
-/* Title for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "Activar el acceso a la red local";
-
 /* A string indicating that the user can search for a location */
 "LOCATION_PICKER_SEARCH_PLACEHOLDER" = "Buscar por nombre o dirección";
 
@@ -4831,6 +4995,24 @@
 /* toast indicating that we will remind the user later */
 "MEGAPHONE_WILL_REMIND_LATER" = "Te lo recordaremos más tarde.";
 
+/* Label for an action to add a member label */
+"MEMBER_LABEL_ADD" = "Añadir categoría de participante";
+
+/* Heading shown above the preview of a message bubble with the edited member label. */
+"MEMBER_LABEL_PREVIEW_HEADING" = "Vista previa";
+
+/* Text shown in the preview message bubble when a user is editing their member label. */
+"MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "Hola!";
+
+/* Placeholder text in text field where user can edit their member label. */
+"MEMBER_LABEL_VIEW_PLACEHOLDER_TEXT" = "Añade tu categoría";
+
+/* Subtitle for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_SUBTITLE" = "Añade una categoría de participante que te describa a ti o a tu rol dentro del grupo. La categoría que elijas solo se mostrará dentro de este grupo.";
+
+/* Title for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_TITLE" = "Categoría de participante";
+
 /* Action sheet button title */
 "MESSAGE_ACTION_COPY_TEXT" = "Copiar mensaje";
 
@@ -4910,7 +5092,7 @@
 "MESSAGE_ACTION_SAVE_MEDIA" = "Guardar";
 
 /* Action sheet accessibility label */
-"MESSAGE_ACTION_SELECT_MESSAGE" = "Selección múltiple";
+"MESSAGE_ACTION_SELECT_MESSAGE" = "Seleccionar mensajes";
 
 /* Action sheet button title */
 "MESSAGE_ACTION_SHARE_MEDIA" = "Compartir archivos";
@@ -5012,7 +5194,7 @@
 "MESSAGE_REQUEST_BLOCK_AND_DELETE_ACTION" = "Bloquear y eliminar";
 
 /* Action sheet action to confirm blocking and reporting spam for a thread via a message request. */
-"MESSAGE_REQUEST_BLOCK_AND_REPORT_SPAM_ACTION" = "Denunciar como spam y bloquear";
+"MESSAGE_REQUEST_BLOCK_AND_REPORT_SPAM_ACTION" = "Denunciar spam y bloquear";
 
 /* Action sheet message to confirm blocking a conversation via a message request. */
 "MESSAGE_REQUEST_BLOCK_CONVERSATION_MESSAGE" = "Las personas que bloquees no podrán llamarte ni enviarte mensajes.";
@@ -5102,7 +5284,7 @@
 "MESSAGE_REQUEST_VIEW_NEW_CONTACT_PROMPT_FORMAT" = "¿Permitir que %1$@ te envíe mensajes y compartir tu nombre y foto de perfil con esta persona? No sabrá que has visto sus mensajes hasta que aceptes.";
 
 /* A prompt asking if the user wants to accept a group invite. */
-"MESSAGE_REQUEST_VIEW_NEW_GROUP_PROMPT" = "¿Unirte a este grupo y compartir tu nombre y foto de perfil con sus participantes? No sabrán que has visto sus mensajes hasta que aceptes.";
+"MESSAGE_REQUEST_VIEW_NEW_GROUP_PROMPT" = "¿Quieres unirte a este grupo y compartir tu nombre y foto de perfil con sus participantes? No sabrán que has visto sus mensajes hasta que aceptes.";
 
 /* A prompt asking if the user wants to accept a group invite. */
 "MESSAGE_REQUEST_VIEW_NEW_GROUP_PROMPT_V2" = "¿Unirte a este grupo? Sus participantes no sabrán que has visto sus mensajes hasta que aceptes.";
@@ -5270,7 +5452,7 @@
 "NAVIGATION_ITEM_SKIP_BUTTON" = "Omitir";
 
 /* String representing only the cellular interface */
-"NETWORK_INTERFACE_SET_CELLULAR" = "Solo red celular";
+"NETWORK_INTERFACE_SET_CELLULAR" = "Solo datos móviles";
 
 /* String representing the 'never' condition of having no supported network interfaces */
 "NETWORK_INTERFACE_SET_NEVER" = "Nunca";
@@ -5428,6 +5610,18 @@
 /* A string describing that the user has no groups in common other than the group implied by the current UI context */
 "NO_OTHER_GROUPS_IN_COMMON" = "No tienes otros grupos en común.";
 
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-link' (translated via NOT_LINKED_BOTTOM_RELINK), and it will be formatted as a tappable link. */
+"NOT_LINKED_BOTTOM" = "Este dispositivo ya no está vinculado. %1$@ para seguir usando B&A en este dispositivo.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_LINKED_BOTTOM_RELINK" = "Vuelve a vincularlo";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-register' (translated via NOT_REGISTERED_BOTTOM_REREGISTER), and it will be formatted as a tappable link. */
+"NOT_REGISTERED_BOTTOM" = "Este dispositivo ya no está registrado. %1$@ para seguir usando B&A.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_REGISTERED_BOTTOM_REREGISTER" = "Vuelve a registrarte";
+
 /* Label for 1:1 conversation with yourself. */
 "NOTE_TO_SELF" = "Notas privadas";
 
@@ -5474,7 +5668,7 @@
 "NOTIFICATIONS_FOOTER_WARNING" = "Las acciones incluyen \"Marcar como leído\", \"Responder\" y \"Devolver la llamada\".";
 
 /* No comment provided by engineer. */
-"NOTIFICATIONS_NONE" = "Ni nombre ni contenido";
+"NOTIFICATIONS_NONE" = "Ni nombre ni mensaje";
 
 /* Table cell switch label. When disabled, Signal will not play notification sounds while the app is in the foreground. */
 "NOTIFICATIONS_SECTION_INAPP" = "Sonar si la app está abierta";
@@ -5483,7 +5677,7 @@
 "NOTIFICATIONS_SECTION_SOUNDS_ADD_CUSTOM_SOUND" = "Añadir sonido personalizado…";
 
 /* No comment provided by engineer. */
-"NOTIFICATIONS_SENDER_AND_MESSAGE" = "Nombre, contenido y acciones";
+"NOTIFICATIONS_SENDER_AND_MESSAGE" = "Nombre, mensaje y acciones";
 
 /* No comment provided by engineer. */
 "NOTIFICATIONS_SENDER_ONLY" = "Solo nombre";
@@ -5515,20 +5709,35 @@
 /* Label for the 'skip and create new pin' button when reglock is disabled during onboarding. */
 "ONBOARDING_2FA_SKIP_AND_CREATE_NEW_PIN" = "Omitir y crear nuevo PIN";
 
+/* Label for action to use Recovery Key instead of PIN for registration. */
+"ONBOARDING_2FA_SKIP_AND_USE_RECOVERY_KEY" = "Usar clave de recuperación";
+
 /* Explanation for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE" = "Si olvidas tu PIN, puedes crear uno nuevo. Podrás registrarte y usar tu cuenta, pero se perderán algunos ajustes ya guardados, como tu información de perfil.";
 
 /* Title for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "¿Omitir PIN?";
 
-/* The body for the device transfer 'choice' view 'transfer' option */
+/* The body for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "Restaura tus mensajes y archivos multimedia desde tu plan de pago de copias de seguridad de B&A";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
+/* The title for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "Restaurar copia de seguridad de B&A";
+
+/* Body for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_BODY" = "Si no restauras tu copia de seguridad ahora, no podrás hacerlo más adelante. Si vuelves a habilitar las copias de seguridad en este dispositivo, B&A eliminará tu copia de seguridad actual y creará una nueva que no incluirá tus mensajes anteriores.";
+
+/* Title for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_TITLE" = "¿Omitir restauración?";
 
 /* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "Elige cómo quieres restaurar tu historial de mensajes y los datos de tu cuenta.";
+
+/* Message body displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_BODY" = "Debido a que estás cambiando de Android a iOS, la única forma de transferir tus mensajes y archivos multimedia es habilitando las copias de seguridad de B&A en tu dispositivo anterior.";
+
+/* Title displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_TITLE" = "No hay copia de seguridad para restaurar";
 
 /* The body for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_BODY" = "Continúa sin transferir tus mensajes ni archivos multimedia";
@@ -5659,6 +5868,9 @@
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "Tengo mi teléfono anterior";
 
+/* Text indicating Signal is a nonprofit on the 'onboarding splash' view. For non-English languages, exclude the word '501c3'. */
+"ONBOARDING_SPLASH_NONPROFIT" = "B&A es una organización sin ánimo de lucro";
+
 /* Button for restoring or transferring account in the 'onboarding splash' view. */
 "ONBOARDING_SPLASH_RESTORE_OR_TRANSFER_BUTTON_TITLE" = "Restaurar o transferir cuenta";
 
@@ -5702,7 +5914,7 @@
 "ONBOARDING_VERIFICATION_TITLE_DEFAULT_FORMAT" = "Introduce el código que hemos enviado al %1$@";
 
 /* Title label for the onboarding verification page */
-"ONBOARDING_VERIFICATION_TITLE_LABEL" = "Código de verificación";
+"ONBOARDING_VERIFICATION_TITLE_LABEL" = "Clave de verificación";
 
 /* Title for button which opens the in-app settings */
 "OPEN_APP_SETTINGS_BUTTON" = "Ajustes";
@@ -5717,7 +5929,7 @@
 "OS_EXPIRED_AND_DEVICE_IS_STUCK" = "B&A ya no funciona en este dispositivo. Para seguir usando B&A, cambia tu dispositivo por otro más nuevo.";
 
 /* Signal doesn't support old versions of iOS and shows a warning if you're on an old version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this action, and tapping it will open device update instructions. */
-"OS_SOON_TO_EXPIRE_ACTION_TITLE" = "Actualizar ahora";
+"OS_SOON_TO_EXPIRE_ACTION_TITLE" = "Actualizar ahora";
 
 /* Signal doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
 "OS_SOON_TO_EXPIRE_AND_CAN_UPGRADE_OS_FORMAT" = "B&A pronto dejará de ser compatible con la versión de iOS de tu dispositivo. Para seguir usando B&A, actualiza tu dispositivo a una versión más reciente de iOS antes del %1$@.";
@@ -5735,7 +5947,7 @@
 "OUTAGE_WARNING" = "B&A está teniendo dificultades técnicas. Estamos trabajando para restablecer el servicio lo antes posible.";
 
 /* Label for action link when the user has an outdated payment client */
-"OUTDATED_PAYMENT_CLIENT_ACTION_TITLE" = "Actualizar ahora";
+"OUTDATED_PAYMENT_CLIENT_ACTION_TITLE" = "Actualizar ahora";
 
 /* Label warning the user that they should update Signal to continue using payments. */
 "OUTDATED_PAYMENT_CLIENT_REMINDER_TEXT" = "Actualiza B&A para seguir usando pagos. Es posible que tu saldo no esté actualizado.";
@@ -5763,6 +5975,21 @@
 
 /* Title of prompt notifying restore failed for unknown reasons. */
 "OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_TITLE" = "Error desconocido";
+
+/* Action button to backup before continuing. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_BACKUP_ACTION" = "Iniciar copia";
+
+/* Body text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_BODY" = "Haz una copia de seguridad ahora antes de comenzar la transferencia. Puede que hayas recibido mensajes de los que aún no tengas copia de seguridad.";
+
+/* Title text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_TITLE" = "Preparando tu dispositivo";
+
+/* Action button to skip backup and continue. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_SKIP_ACTION" = "Omitir y continuar";
+
+/* Description for form confirming restore from backup without size detail. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_RESTORE_DESCRIPTION" = "Última copia de seguridad: %2$@ del %1$@.";
 
 /* Body of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "Se ha iniciado la transferencia de tu cuenta y tus mensajes de B&A a tu otro dispositivo. B&A ahora está inactivo en este dispositivo.";
@@ -5817,9 +6044,6 @@
 
 /* Footer for message cell for long text when it is expired and unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_FOOTER" = "Este mensaje está incompleto";
-
-/* Message for sheet shown when tapping oversized text that has expired and is unavailable for download */
-"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "El texto completo de este mensaje no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los mensajes de texto largos que en el momento de vinculación del dispositivo tengan más de 45 días de antigüedad.";
 
 /* Title for sheet shown when tapping oversized text that has expired and is unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_SHEET_TITLE" = "Mensaje completo no disponible";
@@ -6145,9 +6369,6 @@
 /* Message indicating that a request to join the group was successfully approved. Embeds {{ the name of the approved user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_APPROVED_FORMAT" = "Se ha añadido a %1$@.";
 
-/* Label for the 'view requests' button in the pending member requests banner. */
-"PENDING_GROUP_MEMBERS_REQUEST_BANNER_VIEW_REQUESTS" = "Ver solicitudes";
-
 /* Message indicating that a request to join the group was successfully denied. Embeds {{ the name of the denied user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_DENIED_FORMAT" = "Se ha rechazado a %1$@.";
 
@@ -6224,7 +6445,7 @@
 "PHONE_NUMBER_SHARING_NOBODY" = "Nadie";
 
 /* A user-friendly description of the 'nobody' phone number sharing mode when phone number discovery is set to 'everybody'. */
-"PHONE_NUMBER_SHARING_NOBODY_DESCRIPTION_DISCOVERABILITY_EVERYBODY" = "Tu número de teléfono no será visible para nadie a menos que lo tenga guardado en los contactos de su teléfono.";
+"PHONE_NUMBER_SHARING_NOBODY_DESCRIPTION_DISCOVERABILITY_EVERYBODY" = "Tu número de teléfono no será visible para nadie a menos que lo tenga guardado en su teléfono.";
 
 /* A user-friendly description of the 'nobody' phone number sharing mode when phone number discovery is set to 'nobody'. */
 "PHONE_NUMBER_SHARING_NOBODY_DESCRIPTION_DISCOVERABILITY_NOBODY" = "Tu número de teléfono no será visible para nadie.";
@@ -6263,9 +6484,6 @@
 "PHOTO_CAPTURE_GENERIC_ERROR" = "No se ha podido capturar la imagen.";
 
 /* alert title */
-"PHOTO_CAPTURE_UNABLE_TO_CAPTURE_IMAGE" = "No se ha podido capturar la imagen.";
-
-/* alert title */
 "PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA" = "No se ha podido configurar la cámara.";
 
 /* Button label for opening the chat on a sheet presented from photo capture view indicating that a username QR code was found. */
@@ -6276,9 +6494,6 @@
 
 /* Title for sheet presented from photo capture view indicating that a username QR code was found. Embeds {{username}}. */
 "PHOTO_CAPTURE_USERNAME_QR_CODE_FOUND_TITLE_FORMAT" = "Hemos encontrado a %1$@";
-
-/* alert title, generic error preventing user from capturing a video that is too long */
-"PHOTO_CAPTURE_VIDEO_SIZE_ERROR" = "El vídeo es demasiado largo.";
 
 /* Pressing this button pins a thread */
 "PIN_ACTION" = "Fijar";
@@ -6364,6 +6579,9 @@
 /* If the user is re-registering, they need to enter their PIN to restore all their data. In some cases, they can skip this entry and lose some data. This text is shown on a button that lets them begin to do this. */
 "PIN_ENTER_EXISTING_SKIP" = "Omitir PIN";
 
+/* If the user is re-registering, they need to enter their PIN to restore all their data. If they don't remember their PIN, they may remember their Recovery Key which can be used instead of a PIN. */
+"PIN_ENTER_EXISTING_USE_RECOVERY_KEY" = "Usar clave de recuperación";
+
 /* Error title indicating that the attempt to recreate a PIN failed. */
 "PIN_RECREATION_ERROR_TITLE" = "No se ha podido crear el PIN";
 
@@ -6421,8 +6639,80 @@
 /* An explanation that you have already pinned the maximum number of conversations. */
 "PINNED_CONVERSATION_LIMIT" = "Solo puedes fijar un máximo de 4 chats.";
 
+/* Accessibility label prefix for banner showing a pinned message */
+"PINNED_MESSAGE_BANNER_AX_LABEL" = "Mensaje fijado:";
+
+/* Shown when another user pins a message. Embeds {{ another user }}. */
+"PINNED_MESSAGE_CHAT_EVENT_OTHER" = "%1$@ ha fijado un mensaje";
+
+/* Shown when the local user pins a message. */
+"PINNED_MESSAGE_CHAT_EVENT_SELF" = "Has fijado un mensaje";
+
+/* Accessibility label for pin message button */
+"PINNED_MESSAGE_MENU_ACCESSIBILITY_LABEL" = "Menú de mensajes fijados";
+
+/* Label for button to pin a message */
+"PINNED_MESSAGE_PIN_ACTION_TITLE" = "Fijar";
+
+/* Message for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BODY" = "Si fijas este mensaje, se reemplazará el más antiguo.";
+
+/* Option in pinned message action sheet to replace oldest pin. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BUTTON" = "Reemplazar";
+
+/* Title for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_TITLE" = "¿Reemplazar el mensaje fijado más antiguo?";
+
+/* Body for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_BODY" = "Comprueba tu conexión e inténtalo de nuevo.";
+
+/* Title for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_TITLE" = "No se ha podido fijar el mensaje";
+
+/* Text to show on a toast when someone unpins a message */
+"PINNED_MESSAGE_TOAST" = "Mensaje desfijado";
+
+/* Label for button to unpin a message */
+"PINNED_MESSAGE_UNPIN_ACTION_TITLE" = "Desfijar";
+
+/* Option in pinned message action sheet to pin for 24 hours. */
+"PINNED_MESSAGES_24_HOURS" = "24 horas";
+
+/* Option in pinned message action sheet to pin for 30 days. */
+"PINNED_MESSAGES_30_DAYS" = "30 días";
+
+/* Option in pinned message action sheet to pin for 7 days. */
+"PINNED_MESSAGES_7_DAYS" = "7 días";
+
+/* Title for Pinned Messages detail view */
+"PINNED_MESSAGES_DETAILS_TITLE" = "Mensajes fijados";
+
+/* Title for an action sheet to indicate how long to keep the pin active */
+"PINNED_MESSAGES_EXPIRY_SHEET_TITLE" = "Fijar mensaje…";
+
+/* Option in pinned message action sheet to pin with no expiry. */
+"PINNED_MESSAGES_FOREVER" = "para siempre";
+
+/* Action menu item to go to a message in the conversation view */
+"PINNED_MESSAGES_GO_TO_MESSAGE" = "Ir al mensaje";
+
+/* Action menu item to see all pinned messages */
+"PINNED_MESSAGES_SEE_ALL_MESSAGES" = "Ver todos los mensajes";
+
+/* Action menu item to unpin a message */
+"PINNED_MESSAGES_UNPIN" = "Desfijar";
+
+/* Title for a button to unpin all pinned messages. */
+"PINNED_MESSAGES_UNPIN_ALL" = "Desfijar todo";
+
 /* The title for pinned conversation section on the conversation list */
 "PINNED_SECTION_TITLE" = "Fijados";
+
+/* Body for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_BODY" = "Los mensajes temporales permanecerán fijados hasta que la duración establecida finalice y el mensaje desaparezca del chat.";
+
+/* Title for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_TITLE" = "Fijar mensajes temporales";
 
 /* Action text for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_ACTION" = "Crear PIN";
@@ -6439,11 +6729,35 @@
 /* Accessibility label for button to start media playback */
 "PLAY_BUTTON_ACCESSABILITY_LABEL" = "Reproducir archivo";
 
+/* Accessibility label for poll message. Embeds {{ poll question }}. */
+"POLL_ACCESSIBILITY_LABEL" = "Encuesta: %1$@";
+
+/* Accessibility label for a vote option that is not selected by the user. */
+"POLL_ACCESSIBILITY_LABEL_OPTION_PENDING" = "pendiente";
+
+/* Title for a toggle allowing multiple votes for a poll. */
+"POLL_ALLOW_MULTIPLE_LABEL" = "Permitir varios votos";
+
+/* Button to view a poll after its ended */
+"POLL_BUTTON_VIEW_POLL" = "Ver encuesta";
+
 /* Button to view poll results */
 "POLL_BUTTON_VIEW_RESULTS" = "Ver resultados";
 
 /* Button to view poll votes */
 "POLL_BUTTON_VIEW_VOTES" = "Ver votos";
+
+/* Toast telling user to add a question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION" = "Añade una pregunta";
+
+/* Toast telling user to add options and question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION_OR_ENOUGH_OPTIONS" = "Añade una pregunta y al menos dos opciones";
+
+/* Toast telling user to add more options to poll. */
+"POLL_CREATE_ERROR_TOAST_NOT_ENOUGH_OPTIONS" = "Añade al menos dos opciones";
+
+/* Title of create poll pane */
+"POLL_CREATE_TITLE" = "Nueva encuesta";
 
 /* Label for button to end a poll */
 "POLL_DETAILS_END_POLL" = "Finalizar encuesta";
@@ -6451,20 +6765,56 @@
 /* Title of poll details pane */
 "POLL_DETAILS_TITLE" = "Detalles de la encuesta";
 
+/* Title for an action sheet confirming the user wants end a poll. */
+"POLL_END_CONFIRMATION" = "¿Finalizar encuesta?";
+
+/* Message for an action sheet confirming the user wants to end a poll. */
+"POLL_END_CONFIRMATION_MESSAGE" = "Los participantes del grupo ya no podrán votar en esta encuesta.";
+
+/* Shown when another user ends a poll. Embeds {{ another user }} and {{ poll question }}. */
+"POLL_ENDED_BY_OTHER_CHAT_LIST_UPDATE" = "%1$@ ha finalizado la encuesta \"%2$@\"";
+
+/* Shown when the local user ends a poll. Embeds {{ poll question }}. */
+"POLL_ENDED_BY_YOU_CHAT_LIST_UPDATE" = "Has finalizado la encuesta \"%1$@\"";
+
 /* Notification that {{contact}} ended a poll with question {{poll question}} */
 "POLL_ENDED_NOTIFICATION" = "%1$@ ha finalizado la encuesta \"%2$@\"";
+
+/* Label specifying the poll is finished and these are the final results */
+"POLL_FINAL_RESULTS_LABEL" = "Resultados finales";
 
 /* Label specifying the message type as a poll */
 "POLL_LABEL" = "Encuesta";
 
+/* String to display when a poll has no votes */
+"POLL_NO_VOTES" = "Sin votos";
+
+/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
+"POLL_OPTION_PLACEHOLDER_PREFIX" = "Opción";
+
+/* Header for the poll options text boxes when making a new poll */
+"POLL_OPTIONS_LABEL" = "Opciones";
+
 /* Prefix for a poll preview */
 "POLL_PREFIX" = "Encuesta:";
 
+/* Header for the poll question text box when making a new poll */
+"POLL_QUESTION_LABEL" = "Pregunta";
+
+/* Placeholder text for poll question */
+"POLL_QUESTION_PLACEHOLDER_TEXT" = "Escribe aquí tu pregunta";
+
+/* Title of poll details pane when poll is ended */
+"POLL_RESULTS_TITLE" = "Resultados de la encuesta";
+
 /* Label specifying the user can select more than one option */
-"POLL_SELECT_LABEL_MULTIPLE" = "Selecciona una o más opciones";
+"POLL_SELECT_LABEL_MULTIPLE" = "Elige una o más opciones";
 
 /* Label specifying the user can select one option */
 "POLL_SELECT_LABEL_SINGULAR" = "Elige una opción";
+
+/* Notification that {{contact}} voted in a poll with question {{poll question}} */
+"POLL_VOTED_NOTIFICATION" = "%1$@ ha votado en la encuesta \"%2$@\"";
 
 /* Badge indicating that the user is verified. */
 "PRIVACY_IDENTITY_IS_VERIFIED_BADGE" = "Identidad verificada";
@@ -6661,6 +7011,15 @@
 /* Title of alert shown when push tokens sync job succeeds. */
 "PUSH_REGISTER_SUCCESS" = "Se han reactivado las notificaciones push.";
 
+/* Body for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_BODY" = "Usa este dispositivo para escanear el código QR que se muestra en el dispositivo al que quieres transferir tus datos.";
+
+/* Title for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_TITLE" = "Escanear código QR";
+
+/* Message for an action sheet telling users how to use quick restore, when trying to open an external quick restore URL. */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "Para transferir esta cuenta a un nuevo dispositivo, toca \"Continuar\" y escanea el código QR con la cámara en B&A. Asegúrate de escanear solo códigos QR que provengan directamente de B&A.";
+
 /* Accessibility label stating the author of the message to which you are replying. Embeds: {{ the author of the message to which you are replying }}. */
 "QUOTED_REPLY_ACCESSIBILITY_LABEL_FORMAT" = "Respuesta a %1$@";
 
@@ -6676,11 +7035,11 @@
 /* Toast alert text shown when tapping on a quoted message which we cannot scroll to because the local copy of the message didn't exist when the quote was received. */
 "QUOTED_REPLY_ORIGINAL_MESSAGE_REMOTELY_SOURCED" = "No se ha encontrado el mensaje original.";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to your own story. */
-"QUOTED_REPLY_REACTION_TO_OWN_STORY" = "Ha reaccionado a tu historia";
+/* Label explaining that the content of a quoted message includes you reacting to someone's story. Embeds {{ %1$@ the story author }}. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_SECOND_PERSON" = "Has reaccionado a la historia de %1$@";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to a story. Embeds {{ story author name }} */
-"QUOTED_REPLY_REACTION_TO_STORY_FORMAT" = "Ha reaccionado a la historia de %1$@";
+/* Label explaining that the content of a quoted message includes someone reacting to your story. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_THIRD_PERSON" = "Ha reaccionado a tu historia";
 
 /* Message header when you are quoting a story. Embeds {{ story author name }} */
 "QUOTED_REPLY_STORY_AUTHOR_INDICATOR_FORMAT" = "Historia de %1$@";
@@ -6702,6 +7061,9 @@
 
 /* Indicates this message is a quoted reply to a video file. */
 "QUOTED_REPLY_TYPE_VIDEO" = "Vídeo";
+
+/* Indicates this message is a quoted reply to a voice message. */
+"QUOTED_REPLY_TYPE_VOICE_MESSAGE" = "Mensaje de voz";
 
 /* Label for a button to lower your raised hand in a call. */
 "RAISED_HANDS_LOWER_HAND_BUTTON" = "Bajar";
@@ -6841,11 +7203,14 @@
 /* Body for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
+/* Body for a sheet warning users about an incorrect recovery key and having hit a rate limit on retries. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_RATE_LIMIT_BODY" = "Has agotado los intentos para confirmar tu clave de recuperación. Por tu seguridad, tienes un número limitado de intentos. Espera una hora y vuelve a intentarlo.";
+
 /* Title for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "Clave de copia de seguridad incorrecta";
 
 /* Body for a sheet warning users about a network error during backup restore. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_NETWORK_BODY" = "En estos momentos no se puede restaurar tu copia de seguridad. Comprueba tu conexión a Internet e inténtalo de nuevo.";
+"REGISTRATION_BACKUP_RESTORE_ERROR_NETWORK_BODY" = "En este momento no se puede restaurar tu copia de seguridad. Comprueba tu conexión a Internet e inténtalo de nuevo.";
 
 /* Title for a sheet warning users about a network error during backup restore. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_NETWORK_TITLE" = "No se puede restaurar la copia de seguridad";
@@ -6860,10 +7225,10 @@
 "REGISTRATION_BACKUP_RESTORE_ERROR_SKIP_RESTORE_ACTION" = "Omitir restauración";
 
 /* Try again action label for backup restore error recovery. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_TRY_AGAIN_ACTION" = "Inténtalo de nuevo";
+"REGISTRATION_BACKUP_RESTORE_ERROR_TRY_AGAIN_ACTION" = "Reintentar";
 
 /* Body for a sheet telling users restoring a backup unrecoverably failed. */
-"REGISTRATION_BACKUP_RESTORE_ERROR_UNRETRYABLE_SERVER_ERROR_BODY" = "Se ha producido un error al restaurar tu copia de seguridad. Tu copia de seguridad no se puede recuperar. Contacta con el equipo de asistencia para obtener ayuda.";
+"REGISTRATION_BACKUP_RESTORE_ERROR_UNRETRYABLE_SERVER_ERROR_BODY" = "Se ha producido un error al restaurar tu copia de seguridad. Tu copia de seguridad no se puede recuperar. Contacta con el equipo de Asistencia para obtener ayuda.";
 
 /* Title for a sheet telling users restoring a backup unrecoverably failed. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_UNRETRYABLE_SERVER_ERROR_TITLE" = "No se puede restaurar la copia de seguridad";
@@ -6891,12 +7256,6 @@
 
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "Código de país";
-
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "Si continúas, se desactivará B&A en otros dispositivos registrados con el mismo número de teléfono.";
-
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "Transferir cuenta y mensajes";
 
 /* Description for the screen that allows users to enter their recovery key. */
 "REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "La clave de tu copia de seguridad es un código de 64 caracteres que necesitarás para recuperar tu cuenta y tus datos.";
@@ -6939,6 +7298,9 @@
 
 /* During registration, users are asked to enter their phone number. This is the subtitle on that screen, which gives users some instructions. */
 "REGISTRATION_PHONE_NUMBER_SUBTITLE" = "Introduce tu número de teléfono para comenzar.";
+
+/* During re-registration, users are asked to confirm their phone number. This is the subtitle on that screen, which gives users some instructions. */
+"REGISTRATION_PHONE_NUMBER_SUBTITLE_2" = "Se enviará una clave de verificación a este número:";
 
 /* During registration, users are asked to enter their phone number. This is the title on that screen. */
 "REGISTRATION_PHONE_NUMBER_TITLE" = "Tu número de teléfono";
@@ -6994,6 +7356,15 @@
 /* Error shown if an SMS/call service provider is temporarily unable to send a verification code to the provided number. */
 "REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "B&A no ha podido enviarte un código SMS debido a problemas con el proveedor de SMS. Vuelve a intentarlo dentro de unas horas.";
 
+/* Third step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_ENABLE_BACKUPS" = "Habilita las copias de seguridad y espera hasta que se complete tu copia de seguridad";
+
+/* First step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_OPEN_SIGNAL" = "Abre B&A en tu dispositivo anterior";
+
+/* Second step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_TAP_SETTINGS" = "Toca Ajustes > Copias de seguridad";
+
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "Debes registrarte para poder enviar un mensaje.";
 
@@ -7019,7 +7390,7 @@
 "REGISTRATION_SMS_CODE_FAILED_TRY_VOICE_BUTTON" = "Llamada";
 
 /* Error message when sending a verification code via sms failed, but resending via voice call might succeed. */
-"REGISTRATION_SMS_CODE_FAILED_TRY_VOICE_ERROR" = "No hemos podido enviarte el código de verificación por SMS. Intenta recibir tu código mediante llamada.";
+"REGISTRATION_SMS_CODE_FAILED_TRY_VOICE_ERROR" = "No hemos podido enviarte la clave de verificación por SMS. Intenta recibir tu clave mediante llamada.";
 
 /* Alert shown when running out of attempts at submitting a verification code. */
 "REGISTRATION_SUBMIT_CODE_ATTEMPTS_EXHAUSTED_ALERT" = "Has realizado demasiados intentos para introducir el código. Vuelve a solicitar el código e inténtalo de nuevo.";
@@ -7037,7 +7408,7 @@
 "REGISTRATION_VIEW_INVALID_PHONE_NUMBER_ALERT_TITLE" = "Número de teléfono no válido";
 
 /* Message for confirmation alert during phone number registration. */
-"REGISTRATION_VIEW_PHONE_NUMBER_CONFIRMATION_ALERT_MESSAGE" = "Enviaremos un código de verificación a este número. ¿El número de teléfono anterior es correcto?";
+"REGISTRATION_VIEW_PHONE_NUMBER_CONFIRMATION_ALERT_MESSAGE" = "Enviaremos una clave de verificación a este número. ¿El número de teléfono anterior es correcto?";
 
 /* Title for confirmation alert during phone number registration. Embeds {{phone number}}. */
 "REGISTRATION_VIEW_PHONE_NUMBER_CONFIRMATION_ALERT_TITLE_FORMAT" = "Confirmación de número: %1$@";
@@ -7052,7 +7423,7 @@
 "REGISTRATION_VOICE_CODE_FAILED_TRY_SMS_BUTTON" = "Enviar SMS";
 
 /* Error message when sending a verification code via voice call failed, but resending via sms might succeed. */
-"REGISTRATION_VOICE_CODE_FAILED_TRY_SMS_ERROR" = "No hemos podido enviarte el código de verificación mediante llamada. Intenta recibir tu código por SMS.";
+"REGISTRATION_VOICE_CODE_FAILED_TRY_SMS_ERROR" = "No hemos podido enviarte la clave de verificación mediante llamada. Intenta recibir tu clave por SMS.";
 
 /* Button below the warning to fix a corrupted username. */
 "REMINDER_VIEW_USERNAME_CORRUPTED_FIX_BUTTON" = "Corregir ahora";
@@ -7065,6 +7436,18 @@
 
 /* Label warning the user that something is wrong with their username link. */
 "REMINDER_VIEW_USERNAME_LINK_CORRUPTED_WARNING" = "Ha habido un problema con el código QR y el enlace de tu alias, por lo que ya no son válidos. Crea un nuevo enlace para compartir con otras personas.";
+
+/* A message that displays when one person in a call remotely muted another participant. Embeds {{name}} {{name}} */
+"REMOTE_MUTE_TOAST_A_MUTED_B" = "%1$@ ha silenciado a %2$@.";
+
+/* A message that displays when your microphone is remotely muted by another call participant. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_SOMEONE_MUTED_YOU" = "%1$@ te ha silenciado.";
+
+/* A message that displays when you remotely muted another call participant's microphone. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_YOU_MUTED_SOMEONE" = "Has silenciado a %1$@.";
+
+/* A message that displays when you joined a call on two devices and mute one from the other. */
+"REMOTE_MUTE_TOAST_YOU_MUTED_YOURSELF" = "Te has silenciado desde otro dispositivo.";
 
 /* Accessibility label for a button that removes the preview from a drafted message. */
 "REMOVE_PREVIEW" = "Eliminar vista previa";
@@ -7083,6 +7466,30 @@
 
 /* Configure reactions reset button text */
 "RESET" = "Restablecer";
+
+/* Body for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_BODY" = "La restauración de tus archivos multimedia aún no se ha completado. Si decides cancelarla, podrás iniciarla de nuevo volviendo a vincular este dispositivo.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_PRIMARY_BUTTON" = "Continuar restauración";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_SECONDARY_BUTTON" = "Cancelar restauración";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_TITLE" = "Tus archivos se están restaurando";
+
+/* Message for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_MESSAGE" = "La restauración de tus archivos multimedia aún no se ha completado. Si decides cancelarla, podrás iniciarla de nuevo volviendo a vincular este dispositivo.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_PRIMARY_BUTTON" = "Continuar restauración";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_SECONDARY_BUTTON" = "Cancelar restauración";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_TITLE" = "¿Cancelar la restauración de archivos?";
 
 /* Button title shown on chat list banner for restoring media from a backup when paused because the device has insufficient disk space, to see a bottom sheet with more details about next steps. */
 "RESTORING_MEDIA_BANNER_DISK_SPACE_BUTTON" = "Detalles";
@@ -7199,13 +7606,13 @@
 "SAFETY_TIPS_FAKE_NAMES_TITLE" = "Cuentas y nombres falsos";
 
 /* Message describing safety tips for group conversations. */
-"SAFETY_TIPS_GROUPS_HEADER_MESSAGE" = "Revisa detenidamente esta solicitud. Ninguno de tus contactos o personas con las que chateas están en este grupo. Aquí hay algunas cosas a tener en cuenta:";
+"SAFETY_TIPS_GROUPS_HEADER_MESSAGE" = "Revisa detenidamente esta solicitud. Ninguno de tus contactos o personas con las que chateas están en este grupo. Aquí hay algunas recomendaciones a tener en cuenta:";
 
 /* Title for Safety Tips education screen. */
 "SAFETY_TIPS_HEADER_TITLE" = "Consejos de seguridad";
 
 /* Message describing safety tips for 1:1 conversations. */
-"SAFETY_TIPS_INDIVIDUAL_HEADER_MESSAGE" = "Ten cuidado al aceptar solicitudes de mensajes de personas que no conoces. Presta atención a lo siguiente:";
+"SAFETY_TIPS_INDIVIDUAL_HEADER_MESSAGE" = "Ten cuidado al aceptar solicitudes de mensaje de personas que no conoces. Aquí hay algunas recomendaciones a tener en cuenta:";
 
 /* Message contents for the unknown links in messages safety tip. */
 "SAFETY_TIPS_MESSAGE_LINKS_BODY" = "Ten cuidado con los mensajes de personas que no conoces y que tienen enlaces a sitios web. Nunca abras enlaces de personas en las que no confías.";
@@ -7262,7 +7669,7 @@
 "SCREEN_LOCK_UNLOCK_SIGNAL" = "Desbloquear B&A";
 
 /* Placeholder text indicating the user can search for contacts by name, username, or phone number. */
-"SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "Nombre de perfil, alias o número";
+"SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "Nombre, alias o número";
 
 /* Placeholder text indicating the user can search for contacts by name or phone number. */
 "SEARCH_BYNAMEORNUMBER_PLACEHOLDER_TEXT" = "Buscar por nombre o número";
@@ -7547,7 +7954,7 @@
 "SETTINGS_BACKUPS" = "Copias de seguridad";
 
 /* A label for the 'add phone number' button in the block list table. */
-"SETTINGS_BLOCK_LIST_ADD_BUTTON" = "Añadir persona bloqueada";
+"SETTINGS_BLOCK_LIST_ADD_BUTTON" = "Añadir a lista de bloqueados";
 
 /* A label that indicates the user has no Signal contacts that they haven't blocked. */
 "SETTINGS_BLOCK_LIST_NO_CONTACTS" = "No tienes contactos en B&A.";
@@ -7574,7 +7981,9 @@
 "SETTINGS_CHANGE_PHONE_NUMBER_CONFIRM_BUTTON" = "Cambiar número";
 
 /* Format for the description text in the 'change phone number splash' view. Embeds: {{ %1$@ the old phone number, %2$@ the new phone number }}. */
-"SETTINGS_CHANGE_PHONE_NUMBER_CONFIRM_DESCRIPTION_FORMAT" = "Vas a cambiar tu número de teléfono en B&A de %1$@ a %2$@.\n\nAntes de continuar, comprueba que el número a continuación es correcto.";
+"SETTINGS_CHANGE_PHONE_NUMBER_CONFIRM_DESCRIPTION_FORMAT" = "Vas a cambiar tu número de teléfono en B&A de %1$@ a %2$@.
+
+Antes de continuar, comprueba que el número a continuación es correcto.";
 
 /* Label for the 'country code' row in the 'change phone number' settings. */
 "SETTINGS_CHANGE_PHONE_NUMBER_COUNTRY_CODE_FIELD" = "Código de país";
@@ -7605,9 +8014,6 @@
 
 /* No comment provided by engineer. */
 "SETTINGS_CLEAR_HISTORY" = "Eliminar historial de chat";
-
-/* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicencia AGPLv3";
 
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "Uso de datos";
@@ -7724,7 +8130,7 @@
 "SETTINGS_MEDIA_DOWNLOAD_TYPE_DOCUMENT" = "Documentos";
 
 /* Label for the 'photo' attachment type in the media download settings. */
-"SETTINGS_MEDIA_DOWNLOAD_TYPE_PHOTO" = "Fotos";
+"SETTINGS_MEDIA_DOWNLOAD_TYPE_PHOTO" = "Imágenes";
 
 /* Label for the 'video' attachment type in the media download settings. */
 "SETTINGS_MEDIA_DOWNLOAD_TYPE_VIDEO" = "Vídeos";
@@ -7739,7 +8145,7 @@
 "SETTINGS_NOTIFICATION_BADGE_COUNT_INCLUDES_MUTED_CONVERSATIONS" = "Incluir chats silenciados";
 
 /* table section header */
-"SETTINGS_NOTIFICATION_BADGE_COUNT_TITLE" = "Globo de notificaciones";
+"SETTINGS_NOTIFICATION_BADGE_COUNT_TITLE" = "Globo de notificación";
 
 /* table section footer */
 "SETTINGS_NOTIFICATION_CONTENT_DESCRIPTION" = "Las notificaciones de llamadas y mensajes pueden mostrarse cuando el teléfono está bloqueado.";
@@ -8309,7 +8715,7 @@
 "SETTINGS_REGISTRATION_LOCK_TURN_OFF" = "Desactivar";
 
 /* Message shown in an action sheet when attempting to enable registration lock, but encountering a generic error. */
-"SETTINGS_REGISTRATION_LOCK_TURN_OFF_ERROR_GENERIC" = "No se ha podido desactivar el bloqueo de registro. Contacta con el equipo de asistencia.";
+"SETTINGS_REGISTRATION_LOCK_TURN_OFF_ERROR_GENERIC" = "No se ha podido desactivar el bloqueo de registro. Contacta con el equipo de Asistencia.";
 
 /* Message shown in an action sheet when attempting to enable registration lock, but encountering a network error. */
 "SETTINGS_REGISTRATION_LOCK_TURN_OFF_ERROR_NETWORK" = "No se ha podido desactivar el bloqueo de registro. Comprueba tu conexión a Internet e inténtalo de nuevo.";
@@ -8321,7 +8727,7 @@
 "SETTINGS_REGISTRATION_LOCK_TURN_ON" = "Activar";
 
 /* Message shown in an action sheet when attempting to enable registration lock, but encountering a generic error. */
-"SETTINGS_REGISTRATION_LOCK_TURN_ON_ERROR_GENERIC" = "No se ha podido activar el bloqueo de registro. Contacta con el equipo de asistencia.";
+"SETTINGS_REGISTRATION_LOCK_TURN_ON_ERROR_GENERIC" = "No se ha podido activar el bloqueo de registro. Contacta con el equipo de Asistencia.";
 
 /* Message shown in an action sheet when attempting to enable registration lock, but encountering a network error. */
 "SETTINGS_REGISTRATION_LOCK_TURN_ON_ERROR_NETWORK" = "No se ha podido activar el bloqueo de registro. Comprueba tu conexión a Internet e inténtalo de nuevo.";
@@ -8500,6 +8906,12 @@
 /* The name for the sticker category 'Featured' */
 "STICKER_CATEGORY_FEATURED_NAME" = "Destacados";
 
+/* Subtitle of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_SUBTITLE" = "Los stickers que envíes aparecerán aquí.";
+
+/* Title of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_TITLE" = "No hay stickers recientes";
+
 /* The name for the sticker category 'Recents' */
 "STICKER_CATEGORY_RECENTS_NAME" = "Recientes";
 
@@ -8508,9 +8920,6 @@
 
 /* Message when trying to show a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_MESSAGE_LABEL" = "Sticker no disponible";
-
-/* Message for sheet shown when tapping a sticker that has expired and is unavailable for download */
-"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Este sticker no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de 45 días de antigüedad.";
 
 /* Title for sheet shown when tapping a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_SHEET_TITLE" = "Sticker no disponible";
@@ -8659,21 +9068,6 @@
 /* Context menu action to share the selected story */
 "STORIES_SHARE_STORY_ACTION" = "Compartir";
 
-/* Section title shown when sending to non-story conversations but failing to send the file to stories. */
-"STORIES_SHARESHEET_PARTIAL_SEND_REMAINING_SECTION_TITLE" = "Enviado a";
-
-/* Section title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_STORIES_SECTION_TITLE" = "No enviado a";
-
-/* Title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_TITLE" = "Enviado parcialmente";
-
-/* Subtitle shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_SUBTITLE" = "El tipo de archivo seleccionado no es compatible.";
-
-/* Title shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_TITLE" = "No se ha podido enviar";
-
 /* Title for the stories view. */
 "STORIES_TITLE" = "Historias";
 
@@ -8722,8 +9116,11 @@
 /* Title for the story privacy settings view */
 "STORY_PRIVACY_TITLE" = "Privacidad de mis historias";
 
-/* inbox and notification text for a reaction to a story authored by the local user. Embeds {{reaction emoji}} */
-"STORY_REACTION_LOCAL_AUTHOR_PREVIEW_FORMAT" = "Ha reaccionado con %1$@ a tu historia";
+/* Text explaining that you reacted to someone else's story. Embeds {{ %1$@ reaction emoji, %2$@ story author name }}. */
+"STORY_REACTION_PREVIEW_FORMAT_SECOND_PERSON" = "Has reaccionado con %1$@ a la historia de %2$@";
+
+/* Text explaining that someone reacted to your story. Embeds {{ %1$@ reaction emoji }}. */
+"STORY_REACTION_PREVIEW_FORMAT_THIRD_PERSON" = "Ha reaccionado con %1$@ a tu historia";
 
 /* quote text for a reaction to a story by the user (the header on the bubble says \"You\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_SECOND_PERSON" = "Has reaccionado con %1$@ a una historia";
@@ -8731,17 +9128,8 @@
 /* quote text for a reaction to a story by some other user (the header on the bubble says their name, e.g. \"Bob\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_THIRD_PERSON" = "Ha reaccionado con %1$@ a una historia";
 
-/* inbox and notification text for a reaction to a story authored by another user. Embeds {{ %1$@ reaction emoji, %2$@ story author name }} */
-"STORY_REACTION_REMOTE_AUTHOR_PREVIEW_FORMAT" = "Has reaccionado con %1$@ a la historia de %2$@";
-
 /* Button for replying to a story with no existing replies. */
 "STORY_REPLY_BUTTON" = "Responder";
-
-/* Text indicating you reacted to a story (the header on the bubble says \"You\") */
-"STORY_REPLY_REACTION_SECOND_PERSON" = "Has reaccionado a la historia";
-
-/* Text indicating someone else reacted to a story (the header on the bubble says their name, e.g. \"Bob\") */
-"STORY_REPLY_REACTION_THIRD_PERSON" = "Ha reaccionado a la historia";
 
 /* placeholder text for replying to a story */
 "STORY_REPLY_TEXT_FIELD_PLACEHOLDER" = "Responder";
@@ -8906,7 +9294,7 @@
 "SUSTAINER_VIEW_CANCEL_SUBSCRIPTION_CONFIRMATION_TITLE" = "¿Confirmar cancelación?";
 
 /* Action sheet message for Couldn't Add Badge sheet */
-"SUSTAINER_VIEW_CANT_ADD_BADGE_MESSAGE" = "No se ha podido añadir la insignia a tu perfil. Contacta con el equipo de asistencia.";
+"SUSTAINER_VIEW_CANT_ADD_BADGE_MESSAGE" = "No se ha podido añadir la insignia a tu perfil. Contacta con el equipo de Asistencia.";
 
 /* Action sheet title for Couldn't Add Badge sheet */
 "SUSTAINER_VIEW_CANT_ADD_BADGE_TITLE" = "No se ha podido añadir tu insignia";
@@ -8965,35 +9353,23 @@
 /* Option in selected text edit menu to make text bold */
 "TEXT_MENU_BOLD" = "Negrita";
 
-/* Option in selected text edit menu to clear all text formatting in the selected text range */
-"TEXT_MENU_CLEAR_FORMATTING" = "Eliminar formato";
-
 /* Option in selected text edit menu to view text formatting options */
 "TEXT_MENU_FORMAT" = "Formato";
 
 /* Option in selected text edit menu to make text italic */
 "TEXT_MENU_ITALIC" = "Cursiva";
 
-/* Option in selected text edit menu to look up word definitions */
-"TEXT_MENU_LOOK_UP" = "Buscar";
-
 /* Option in selected text edit menu to make text monospace */
 "TEXT_MENU_MONOSPACE" = "Monoespaciado";
 
-/* Option in selected text edit menu to replace text with suggestions */
-"TEXT_MENU_REPLACE" = "Reemplazar";
-
-/* Option in selected text edit menu to share selected text */
-"TEXT_MENU_SHARE" = "Compartir";
+/* Option in selected text edit menu to remove all text formatting in the selected text range */
+"TEXT_MENU_REMOVE_FORMATTING" = "Quitar formato";
 
 /* Option in selected text edit menu to make text spoiler */
 "TEXT_MENU_SPOILER" = "Spoiler";
 
 /* Option in selected text edit menu to make text strikethrough */
 "TEXT_MENU_STRIKETHROUGH" = "Tachado";
-
-/* Option in selected text edit menu to translate the word */
-"TEXT_MENU_TRANSLATE" = "Traducir";
 
 /* text indicating the message was remotely deleted */
 "THIS_MESSAGE_WAS_DELETED" = "Se ha eliminado este mensaje.";
@@ -9464,10 +9840,10 @@
 "WALLPAPER_SETTINGS_DIM_WALLPAPER" = "Atenuar fondo con tema oscuro";
 
 /* An error indicating to the user that we failed to clear the wallpaper. */
-"WALLPAPER_SETTINGS_FAILED_TO_CLEAR" = "No se ha podido eliminar el fondo de pantalla. Inténtalo de nuevo más tarde o contacta con el equipo de asistencia si el problema persiste.";
+"WALLPAPER_SETTINGS_FAILED_TO_CLEAR" = "No se ha podido eliminar el fondo de pantalla. Inténtalo de nuevo más tarde o contacta con el equipo de Asistencia si el problema persiste.";
 
 /* An error indicating to the user that we failed to reset all wallpapers. */
-"WALLPAPER_SETTINGS_FAILED_TO_RESET" = "No se han podido restablecer todos los fondos de pantalla. Inténtalo de nuevo más tarde o contacta con el equipo de asistencia si el problema persiste.";
+"WALLPAPER_SETTINGS_FAILED_TO_RESET" = "No se han podido restablecer todos los fondos de pantalla. Inténtalo de nuevo más tarde o contacta con el equipo de Asistencia si el problema persiste.";
 
 /* Label for 'reset all chat colors' action in the global wallpaper settings. */
 "WALLPAPER_SETTINGS_RESET_ALL_CHAT_COLORS" = "Restablecer todos";
@@ -9526,45 +9902,81 @@
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Has establecido la duración de los mensajes temporales en %1$@.";
 
-/* BA custom strings */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "Creando copia de seguridad: %1$@";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "Exportando copia de seguridad…";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "Cargando copia de seguridad…";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "Cargando archivos de la copia de seguridad…";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "Iniciar copia";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "Crear copia más tarde";
-"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "Se han producido demasiados errores con este contacto. Inténtalo de nuevo más tarde.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "Desactivar";
-"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "Para desactivar tu PIN, desactiva primero el bloqueo de registro.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "¿Desactivar el bloqueo de registro?";
-"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "El PIN se ha creado correctamente, pero no se ha podido activar el bloqueo de registro. Comprueba tu conexión e inténtalo de nuevo.";
-"PIN_CREATION_REGLOCK_ERROR_TITLE" = "No se ha podido activar el bloqueo de registro";
-"PIN_DISABLE_ERROR_MESSAGE" = "No se ha podido desactivar tu PIN.";
-"PIN_DISABLE_ERROR_TITLE" = "No se ha podido desactivar el PIN";
-"REGISTER_RATE_LIMITING_BODY" = "Lo has intentado demasiadas veces. Espera un minuto antes de intentarlo de nuevo.";
-"VOICE_MESSAGE_FILE_NAME" = "B&A";
+/* ===== B&A Custom Strings ===== */
 
-/* BA custom strings */
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Este mensaje de voz no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de 45 días de antigüedad.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Este archivo no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de 45 días de antigüedad.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "El texto completo de este mensaje no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los mensajes de texto largos que en el momento de vinculación del dispositivo tengan más de 45 días de antigüedad.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Este sticker no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de 45 días de antigüedad.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Mensajes de texto + 45 días de archivos multimedia";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Últimos 45 días de archivos multimedia";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Mensajes de texto + 45 días de archivos multimedia";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Más";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Otras formas de donar";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicencia AGPLv3";
+
+/* Link BAXS platform account */
+
 "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Parece que estás intentando vincular una cuenta de BAXS. Toca \"Continuar\", selecciona \"Escanear código QR\" y vuelve a escanear el código QR.";
+
 "LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Vincular cuenta de la plataforma BA";
+
 "LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Cuenta BAXS vinculada";
+
 "LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Cuenta de la plataforma BA";
+
 "LINK_BA_PLATFORM_SCAN_FOOTER" = "Escanea el código QR que aparece en la plataforma de pago BA para vincular tu cuenta.";
+
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "Escanear código QR";
-"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Móvil";
-"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Correo electrónico";
-"LINK_BA_PLATFORM_USER_ID" = "User ID";
-"LINK_BA_PLATFORM_USER_NAME" = "User Name";
-"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Vincular cuenta de la plataforma BA";
-"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "¿Vincular tu cuenta a \"%@\"?";
-"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Cuenta de la plataforma BA vinculada correctamente.";
-"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Código QR no válido";
-"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Este código QR no es un código de vinculación válido de la plataforma BA.";
+
 "LINK_BA_PLATFORM_SCAN_AGAIN" = "Escanear de nuevo";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Móvil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Correo electrónico";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Vincular cuenta de la plataforma BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "¿Vincular tu cuenta a \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Cuenta de la plataforma BA vinculada correctamente.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Código QR no válido";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Este código QR no es un código de vinculación válido de la plataforma BA.";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "No se puede vincular";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Este código QR no se puede usar para vincular.";
+
 "LINK_BA_PLATFORM_FAILED_TITLE" = "Error al vincular";
+
 "LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "La plataforma BA rechazó la solicitud de vinculación.";
+
 "LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Tiempo de vinculación agotado";
+
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "La plataforma BA no respondió a tiempo. Por favor, inténtalo de nuevo.";
+
 "LINK_BA_PLATFORM_ERROR_TITLE" = "Error";
+

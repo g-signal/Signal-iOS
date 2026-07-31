@@ -40,8 +40,8 @@ public protocol SyncManagerProtocolSwift {
     func processIncomingFetchLatestSyncMessage(_ syncMessage: SSKProtoSyncMessageFetchLatest, transaction: DBWriteTransaction)
     func processIncomingMessageRequestResponseSyncMessage(
         _ syncMessage: SSKProtoSyncMessageMessageRequestResponse,
-        transaction: DBWriteTransaction
+        transaction: DBWriteTransaction,
     )
-    func sendMessageRequestResponseSyncMessage(thread: TSThread, responseType: OWSSyncMessageRequestResponseType)
-    func sendMessageRequestResponseSyncMessage(thread: TSThread, responseType: OWSSyncMessageRequestResponseType, transaction: DBWriteTransaction)
+    func sendMessageRequestResponseSyncMessage(thread: TSThread, responseType: OutgoingMessageRequestResponseSyncMessage.ResponseType)
+    func sendMessageRequestResponseSyncMessage(thread: TSThread, responseType: OutgoingMessageRequestResponseSyncMessage.ResponseType, transaction: DBWriteTransaction)
 }

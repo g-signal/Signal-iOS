@@ -11,13 +11,9 @@
 public struct BackupArchiveExportProgress {
     private let progressSource: OWSProgressSource
 
-    private init(progressSource: OWSProgressSource) {
-        self.progressSource = progressSource
-    }
-
     public static func prepare(
         sink: OWSProgressSink,
-        db: any DB
+        db: any DB,
     ) async throws -> Self {
         var estimatedFrameCount = try db.read { tx in
             // Get all the major things we iterate over. It doesn't have
@@ -39,7 +35,7 @@ public struct BackupArchiveExportProgress {
 
         let progressSource = await sink.addSource(
             withLabel: "Backup Export",
-            unitCount: UInt64(estimatedFrameCount)
+            unitCount: UInt64(estimatedFrameCount),
         )
         return BackupArchiveExportProgress(progressSource: progressSource)
     }
@@ -65,24 +61,18 @@ public struct BackupArchiveExportProgress {
 public struct BackupArchiveImportFramesProgress {
     private let progressSource: OWSProgressSource
 
-    private init(progressSource: OWSProgressSource) {
-        self.progressSource = progressSource
-    }
-
     public static func prepare(
         sink: OWSProgressSink,
-        fileUrl: URL
+        fileUrl: URL,
     ) async throws -> Self {
-        guard let totalByteCount = OWSFileSystem.fileSize(of: fileUrl)?.uint64Value else {
-            throw OWSAssertionError("Unable to read file size")
-        }
+        let totalByteCount = try OWSFileSystem.fileSize(of: fileUrl)
 
         let progressSource = await sink.addSource(
             withLabel: "Backup Import: Frame Restore",
-            unitCount: totalByteCount
+            unitCount: totalByteCount,
         )
         return BackupArchiveImportFramesProgress(
-            progressSource: progressSource
+            progressSource: progressSource,
         )
     }
 
@@ -113,14 +103,14 @@ public class BackupArchiveImportRecreateIndexesProgress {
     }
 
     public static func prepare(
-        sink: OWSProgressSink
+        sink: OWSProgressSink,
     ) async -> BackupArchiveImportRecreateIndexesProgress {
         let progressSource = await sink.addSource(
             withLabel: "Backup Import: Recreate Indexes",
-            unitCount: Constants.progressSourceUnitCount
+            unitCount: Constants.progressSourceUnitCount,
         )
         return BackupArchiveImportRecreateIndexesProgress(
-            progressSource: progressSource
+            progressSource: progressSource,
         )
     }
 

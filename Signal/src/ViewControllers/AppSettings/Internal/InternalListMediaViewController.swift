@@ -10,6 +10,9 @@ import SignalUI
 
 class InternalListMediaViewController: OWSTableViewController2 {
 
+    private var deviceSleepManager: DeviceSleepManager? { DependenciesBridge.shared.deviceSleepManager }
+    private var sleepBlockObject: DeviceSleepBlockObject?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -19,16 +22,25 @@ class InternalListMediaViewController: OWSTableViewController2 {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        self.sleepBlockObject = DeviceSleepBlockObject(blockReason: "InternalListMedia")
+        deviceSleepManager?.addBlock(blockObject: self.sleepBlockObject!)
+
         ModalActivityIndicatorViewController.present(
             fromViewController: self,
             asyncBlock: { [weak self] modal in
-                try? await DependenciesBridge.shared.backupListMediaManager.queryListMediaIfNeeded()
+                try? await DependenciesBridge.shared.backupAttachmentCoordinator.queryListMediaIfNeeded()
                 await MainActor.run {
                     self?.updateTableContents()
                 }
                 modal.dismiss(animated: true)
-            }
+            },
         )
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.sleepBlockObject.take().map { self.deviceSleepManager?.removeBlock(blockObject: $0) }
     }
 
     func updateTableContents() {
@@ -41,19 +53,19 @@ class InternalListMediaViewController: OWSTableViewController2 {
             lastListMediaFailure,
             lastListMediaResult,
         ) = DependenciesBridge.shared.db.read { tx in
-            return (
-                try! QueuedBackupAttachmentUpload
+            return failIfThrows { (
+                try QueuedBackupAttachmentUpload
                     .filter(Column(QueuedBackupAttachmentUpload.CodingKeys.state) == QueuedBackupAttachmentUpload.State.ready.rawValue)
                     .filter(Column(QueuedBackupAttachmentUpload.CodingKeys.isFullsize) == true)
                     .fetchCount(tx.database),
-                try! QueuedBackupAttachmentUpload
+                try QueuedBackupAttachmentUpload
                     .filter(Column(QueuedBackupAttachmentUpload.CodingKeys.state) == QueuedBackupAttachmentUpload.State.ready.rawValue)
                     .filter(Column(QueuedBackupAttachmentUpload.CodingKeys.isFullsize) == false)
                     .fetchCount(tx.database),
-                try! OrphanedBackupAttachment.fetchCount(tx.database),
-                try! DependenciesBridge.shared.backupListMediaManager.getLastFailingIntegrityCheckResult(tx: tx),
-                try! DependenciesBridge.shared.backupListMediaManager.getMostRecentIntegrityCheckResult(tx: tx)
-            )
+                try OrphanedBackupAttachment.fetchCount(tx.database),
+                DependenciesBridge.shared.backupListMediaStore.getLastFailingIntegrityCheckResult(tx: tx),
+                DependenciesBridge.shared.backupListMediaStore.getMostRecentIntegrityCheckResult(tx: tx),
+            ) }
         }
 
         let pendingUploadSection = OWSTableSection(title: "Pending upload")
@@ -74,18 +86,19 @@ class InternalListMediaViewController: OWSTableViewController2 {
         }
         lastResultSection.add(.actionItem(withText: "Perform remote integrity check", actionBlock: { [weak self] in
             guard let self else { return }
-            let vc = ActionSheetController(
-                title: "This will schedule the integrity check to run on next app launch, then exit the app. "
-                    + "After tapping \"Okay\", please relaunch the app and return to this screen to check the results."
+            ModalActivityIndicatorViewController.present(
+                fromViewController: self,
+                asyncBlock: { [weak self] _ in
+                    await DependenciesBridge.shared.db.awaitableWrite { tx in
+                        DependenciesBridge.shared.backupListMediaStore.setManualNeedsListMedia(true, tx: tx)
+                    }
+                    try? await DependenciesBridge.shared.backupAttachmentCoordinator.queryListMediaIfNeeded()
+                    await MainActor.run {
+                        self?.updateTableContents()
+                        self?.dismiss(animated: false)
+                    }
+                },
             )
-            vc.addAction(.init(title: "Okay", handler: { _ in
-                DependenciesBridge.shared.db.write { tx in
-                    DependenciesBridge.shared.backupListMediaManager.setManualNeedsListMedia(tx: tx)
-                }
-                exit(0)
-            }))
-            vc.addAction(.cancel)
-            present(vc, animated: true)
         }))
         contents.add(lastResultSection)
 
@@ -98,30 +111,32 @@ class InternalListMediaViewController: OWSTableViewController2 {
         section.add(.copyableItem(
             label: "Ineligible count: Fullsize",
             subtitle: "e.g. DMs, view once, etc",
-            value: "\(listMediaResult.fullsize.ineligibleCount)"
+            value: "\(listMediaResult.fullsize.ineligibleCount)",
         ))
         section.add(.copyableItem(
             label: "Missing count: Fullsize",
             subtitle: "Bad if > 0",
-            value: "\(listMediaResult.fullsize.missingFromCdnCount)"
+            value: "\(listMediaResult.fullsize.missingFromCdnCount)",
         ))
+        section.add(.copyableItem(label: "Unscheduled count: Fullsize", value: "\(listMediaResult.fullsize.notScheduledForUploadCount ?? 0)"))
         section.add(.copyableItem(label: "Discovered count: Fullsize", value: "\(listMediaResult.fullsize.discoveredOnCdnCount)"))
         section.add(.copyableItem(label: "Uploaded count: Thumbnail", value: "\(listMediaResult.thumbnail.uploadedCount)"))
         section.add(.copyableItem(
             label: "Ineligible count: Thumbnail",
             subtitle: "e.g. DMs, view once, etc",
-            value: "\(listMediaResult.thumbnail.ineligibleCount)"
+            value: "\(listMediaResult.thumbnail.ineligibleCount)",
         ))
         section.add(.copyableItem(
             label: "Missing count: Thumbnail",
             subtitle: "Not good if > 0, but nbd",
-            value: "\(listMediaResult.thumbnail.missingFromCdnCount)"
+            value: "\(listMediaResult.thumbnail.missingFromCdnCount)",
         ))
+        section.add(.copyableItem(label: "Unscheduled count: Thumbnail", value: "\(listMediaResult.thumbnail.notScheduledForUploadCount ?? 0)"))
         section.add(.copyableItem(label: "Discovered count: Thumbnail", value: "\(listMediaResult.thumbnail.discoveredOnCdnCount)"))
         section.add(.copyableItem(
             label: "Orphan count",
             subtitle: "Should roughy match pending deletion",
-            value: "\(listMediaResult.orphanedObjectCount)"
+            value: "\(listMediaResult.orphanedObjectCount)",
         ))
     }
 }

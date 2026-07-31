@@ -7,8 +7,8 @@ PODS:
   - GRDB.swift/SQLCipher (5.26.0):
     - SQLCipher (>= 3.4.0)
   - libPhoneNumber-iOS (1.2.0)
-  - LibSignalClient (0.81.1-BA)
-  - LibSignalClient/Tests (0.81.1-BA)
+  - LibSignalClient (0.86.15-BA)
+  - LibSignalClient/Tests (0.86.15-BA)
   - libwebp (1.5.0):
     - libwebp/demux (= 1.5.0)
     - libwebp/mux (= 1.5.0)
@@ -22,9 +22,6 @@ PODS:
   - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
   - lottie-ios (4.4.3)
-  - Mantle (2.1.0):
-    - Mantle/extobjc (= 2.1.0)
-  - Mantle/extobjc (2.1.0)
   - PureLayout (3.1.4)
   - Reachability (3.7.6)
   - SDWebImage (5.21.2):
@@ -33,15 +30,15 @@ PODS:
   - SDWebImageWebPCoder (0.14.6):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
-  - SignalRingRTC (2.57.1):
-    - SignalRingRTC/WebRTC (= 2.57.1)
-  - SignalRingRTC/WebRTC (2.57.1)
+  - SignalRingRTC (2.63.0):
+    - SignalRingRTC/WebRTC (= 2.63.0)
+  - SignalRingRTC/WebRTC (2.63.0)
   - SQLCipher (4.6.1):
     - SQLCipher/standard (= 4.6.1)
   - SQLCipher/common (4.6.1)
   - SQLCipher/standard (4.6.1):
     - SQLCipher/common
-  - SwiftProtobuf (1.30.0)
+  - SwiftProtobuf (1.31.1)
 
 DEPENDENCIES:
   - blurhash (from `./ThirdParty/blurhash.podspec`)
@@ -49,18 +46,17 @@ DEPENDENCIES:
   - CocoaLumberjack
   - GRDB.swift/SQLCipher
   - libPhoneNumber-iOS (from `https://github.com/signalapp/libPhoneNumber-iOS`, branch `signal-master`)
-  - LibSignalClient (from `https://github.com/g-signal/libsignal.git`, tag `v0.81.1-BA`)
-  - LibSignalClient/Tests (from `https://github.com/g-signal/libsignal.git`, tag `v0.81.1-BA`)
+  - LibSignalClient (from `https://github.com/g-signal/libsignal.git`, tag `v0.86.15-BA`)
+  - LibSignalClient/Tests (from `https://github.com/g-signal/libsignal.git`, tag `v0.86.15-BA`)
   - libwebp
   - lottie-ios
-  - Mantle (from `https://github.com/signalapp/Mantle`, branch `signal-master`)
   - PureLayout
   - Reachability
   - SDWebImage
   - SDWebImageWebPCoder
-  - SignalRingRTC (from `https://github.com/signalapp/ringrtc`, tag `v2.57.1`)
+  - SignalRingRTC (from `https://github.com/signalapp/ringrtc`, tag `v2.63.0`)
   - SQLCipher (from `https://github.com/signalapp/sqlcipher.git`, tag `v4.6.1-f_barrierfsync`)
-  - SwiftProtobuf (= 1.30.0)
+  - SwiftProtobuf (= 1.31.1)
 
 SPEC REPOS:
   trunk:
@@ -83,13 +79,10 @@ EXTERNAL SOURCES:
     :git: https://github.com/signalapp/libPhoneNumber-iOS
   LibSignalClient:
     :git: https://github.com/g-signal/libsignal.git
-    :tag: v0.81.1-BA
-  Mantle:
-    :branch: signal-master
-    :git: https://github.com/signalapp/Mantle
+    :tag: v0.86.15-BA
   SignalRingRTC:
     :git: https://github.com/signalapp/ringrtc
-    :tag: v2.57.1
+    :tag: v2.63.0
   SQLCipher:
     :git: https://github.com/signalapp/sqlcipher.git
     :tag: v4.6.1-f_barrierfsync
@@ -103,13 +96,10 @@ CHECKOUT OPTIONS:
     :git: https://github.com/signalapp/libPhoneNumber-iOS
   LibSignalClient:
     :git: https://github.com/g-signal/libsignal.git
-    :tag: v0.81.1-BA
-  Mantle:
-    :commit: e7e46253bb01ce39525d90aa69ed9e85e758bfc4
-    :git: https://github.com/signalapp/Mantle
+    :tag: v0.86.15-BA
   SignalRingRTC:
     :git: https://github.com/signalapp/ringrtc
-    :tag: v2.57.1
+    :tag: v2.63.0
   SQLCipher:
     :git: https://github.com/signalapp/sqlcipher.git
     :tag: v4.6.1-f_barrierfsync
@@ -120,18 +110,17 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   GRDB.swift: 1395cb3556df6b16ed69dfc74c3886abc75d2825
   libPhoneNumber-iOS: 1a34106b49dc6e12a7f37eb9aee7c64011509547
-  LibSignalClient: b4331035c67d17d1ef1eeebc332e30b5b6b7b8ed
+  LibSignalClient: bfddf5178b6fa301c7612a94a96f32ff040a8fd3
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   lottie-ios: fcb5e73e17ba4c983140b7d21095c834b3087418
-  Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
   Reachability: fd0ecd23705e2599e4cceeb943222ae02296cbc6
   SDWebImage: 9f177d83116802728e122410fb25ad88f5c7608a
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
-  SignalRingRTC: be4ad58e35c0fa7f1a33b115b7a59c60f601a3fa
+  SignalRingRTC: 402ef5fb252e3c04f38ec59eefb277979dce988b
   SQLCipher: ff2f045b20d675a73a70f7329395ddd4a2580063
-  SwiftProtobuf: 3697407f0d5b23bedeba9c2eaaf3ec6fdff69349
+  SwiftProtobuf: e02f51c8c2df5845657aee2d4de9d61bf50ef788
 
-PODFILE CHECKSUM: a6306384874b6e54a768c5bedfea97ee35e1910a
+PODFILE CHECKSUM: c340eefd6cb1f7504c75336d50f9db38e2174b87
 
 COCOAPODS: 1.15.2

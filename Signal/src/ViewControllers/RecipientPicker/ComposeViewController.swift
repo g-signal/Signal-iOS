@@ -20,16 +20,11 @@ class ComposeViewController: RecipientPickerContainerViewController {
         recipientPicker.shouldShowNewGroup = true
         recipientPicker.groupsToShow = .groupsThatUserIsMemberOfWhenSearching
         recipientPicker.shouldHideLocalRecipient = false
-
         recipientPicker.delegate = self
-        addChild(recipientPicker)
-        view.addSubview(recipientPicker.view)
-        recipientPicker.view.autoPin(toTopLayoutGuideOf: self, withInset: 0)
-        recipientPicker.view.autoPinEdge(toSuperviewEdge: .leading)
-        recipientPicker.view.autoPinEdge(toSuperviewEdge: .trailing)
-        recipientPicker.view.autoPinEdge(toSuperviewEdge: .bottom)
 
-        navigationItem.leftBarButtonItem = .cancelButton(dismissingFrom: self)
+        addRecipientPicker()
+
+        navigationItem.rightBarButtonItem = .cancelButton(dismissingFrom: self)
     }
 
     /// Presents the conversation for the given address and dismisses this
@@ -39,8 +34,10 @@ class ComposeViewController: RecipientPickerContainerViewController {
         owsAssertDebug(address.isValid)
 
         let thread = SSKEnvironment.shared.databaseStorageRef.write { transaction in
-            TSContactThread.getOrCreateThread(withContactAddress: address,
-                                              transaction: transaction)
+            TSContactThread.getOrCreateThread(
+                withContactAddress: address,
+                transaction: transaction,
+            )
         }
         self.newConversation(thread: thread)
     }
@@ -57,7 +54,7 @@ class ComposeViewController: RecipientPickerContainerViewController {
                     SignalApp.shared.presentConversationForThread(
                         threadUniqueId: thread.uniqueId,
                         action: .compose,
-                        animated: false
+                        animated: false,
                     )
                 }
             }
@@ -67,7 +64,7 @@ class ComposeViewController: RecipientPickerContainerViewController {
             SignalApp.shared.presentConversationForThread(
                 threadUniqueId: thread.uniqueId,
                 action: .compose,
-                animated: false
+                animated: false,
             )
         }
     }
@@ -82,14 +79,14 @@ extension ComposeViewController: RecipientPickerDelegate, UsernameLinkScanDelega
     func recipientPicker(
         _ recipientPickerViewController: RecipientPickerViewController,
         selectionStyleForRecipient recipient: PickedRecipient,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> UITableViewCell.SelectionStyle {
         return .default
     }
 
     func recipientPicker(
         _ recipientPickerViewController: RecipientPickerViewController,
-        didSelectRecipient recipient: PickedRecipient
+        didSelectRecipient recipient: PickedRecipient,
     ) {
         switch recipient.identifier {
         case .address(let address):
@@ -102,7 +99,7 @@ extension ComposeViewController: RecipientPickerDelegate, UsernameLinkScanDelega
     func recipientPicker(
         _ recipientPickerViewController: RecipientPickerViewController,
         accessoryMessageForRecipient recipient: PickedRecipient,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> String? {
         switch recipient.identifier {
         case .address:
@@ -113,9 +110,11 @@ extension ComposeViewController: RecipientPickerDelegate, UsernameLinkScanDelega
         }
     }
 
-    func recipientPicker(_ recipientPickerViewController: RecipientPickerViewController,
-                         attributedSubtitleForRecipient recipient: PickedRecipient,
-                         transaction: DBReadTransaction) -> NSAttributedString? {
+    func recipientPicker(
+        _ recipientPickerViewController: RecipientPickerViewController,
+        attributedSubtitleForRecipient recipient: PickedRecipient,
+        transaction: DBReadTransaction,
+    ) -> NSAttributedString? {
         switch recipient.identifier {
         case .address(let address):
             guard !address.isLocalAddress else {

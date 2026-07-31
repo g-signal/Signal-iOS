@@ -93,7 +93,7 @@ class RegistrationProfileViewController: OWSViewController {
 //                return StringStyle.Part.link(profilesFAQURL)
 //            }())
         ])
-        result.font = .fontForRegistrationExplanationLabel
+        result.font = .dynamicTypeSubheadlineClamped
         result.textAlignment = .center
         result.delegate = self
         return result
@@ -189,7 +189,7 @@ class RegistrationProfileViewController: OWSViewController {
 
     private lazy var textFieldStrokes: [UIView] = [givenNameTextField, familyNameTextField].map {
         // This color will be swiftly updated during renders.
-        $0.addBottomStroke(color: Theme.hairlineColor, strokeWidth: .hairlineWidth)
+        $0.addBottomStroke(color: UIColor.Signal.opaqueSeparator, strokeWidth: .hairlineWidth)
     }
 
     private enum NameOrder {
@@ -304,8 +304,8 @@ class RegistrationProfileViewController: OWSViewController {
 
         view.backgroundColor = Theme.backgroundColor
         nextBarButton.tintColor = Theme.accentBlueColor
-        titleLabel.textColor = .colorForRegistrationTitleLabel
-        explanationView.textColor = .colorForRegistrationExplanationLabel
+        titleLabel.textColor = Theme.primaryTextColor
+        explanationView.textColor = Theme.secondaryTextAndIconColor
         explanationView.linkTextAttributes = [
             .foregroundColor: Theme.accentBlueColor,
             .underlineColor: UIColor.clear
@@ -313,7 +313,7 @@ class RegistrationProfileViewController: OWSViewController {
         cameraImageView.tintColor = Theme.secondaryTextAndIconColor
         cameraImageWrapperView.backgroundColor = Theme.backgroundColor
         [givenNameTextField, familyNameTextField].forEach { $0.textColor = Theme.primaryTextColor }
-        textFieldStrokes.forEach { $0.backgroundColor = Theme.hairlineColor }
+        textFieldStrokes.forEach { $0.backgroundColor = UIColor.Signal.opaqueSeparator }
 
         phoneNumberDisclosureView.render()
     }

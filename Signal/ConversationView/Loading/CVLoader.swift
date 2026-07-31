@@ -4,6 +4,7 @@
 //
 
 public import Foundation
+import LibSignalClient
 public import SignalServiceKit
 public import SignalUI
 
@@ -22,7 +23,7 @@ public class CVLoader: NSObject {
         viewStateSnapshot: CVViewStateSnapshot,
         spoilerState: SpoilerRenderState,
         prevRenderState: CVRenderState,
-        messageLoader: MessageLoader
+        messageLoader: MessageLoader,
     ) {
         self.threadUniqueId = threadUniqueId
         self.loadRequest = loadRequest
@@ -65,6 +66,10 @@ public class CVLoader: NSObject {
                     return ConversationViewModel.load(for: thread, tx: transaction)
                 }()
 
+                guard let localAci = DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: transaction)?.aci else {
+                    throw OWSAssertionError("User not registered")
+                }
+
                 let loadContext = CVLoadContext(
                     loadRequest: loadRequest,
                     threadViewModel: threadViewModel,
@@ -72,7 +77,8 @@ public class CVLoader: NSObject {
                     spoilerState: spoilerState,
                     messageLoader: messageLoader,
                     prevRenderState: prevRenderState,
-                    transaction: transaction
+                    localAci: localAci,
+                    transaction: transaction,
                 )
 
                 // Don't cache in the reset() case.
@@ -91,17 +97,19 @@ public class CVLoader: NSObject {
                     }
                     let groupDescriptionDidChange = (groupModel as? TSGroupModelV2)?.descriptionText
                         != (prevGroupModel as? TSGroupModelV2)?.descriptionText
-                    return (groupModel.groupName != prevGroupModel.groupName ||
-                                groupDescriptionDidChange ||
-                                groupModel.avatarHash != prevGroupModel.avatarHash ||
-                                groupModel.groupMembership.fullMembers.count != prevGroupModel.groupMembership.fullMembers.count)
+                    return groupModel.groupName != prevGroupModel.groupName ||
+                        groupDescriptionDidChange ||
+                        groupModel.avatarHash != prevGroupModel.avatarHash ||
+                        groupModel.groupMembership.fullMembers.count != prevGroupModel.groupMembership.fullMembers.count
                 }()
 
                 // If the thread details did change, reload the thread details
                 // item if one is in the load window.
-                if didThreadDetailsChange,
-                   let prevFirstRenderItem = prevRenderState.items.first,
-                   prevFirstRenderItem.interactionType == .threadDetails {
+                if
+                    didThreadDetailsChange,
+                    let prevFirstRenderItem = prevRenderState.items.first,
+                    prevFirstRenderItem.interactionType == .threadDetails
+                {
                     updatedInteractionIds.insert(prevFirstRenderItem.interactionUniqueId)
                 }
 
@@ -124,38 +132,38 @@ public class CVLoader: NSObject {
                             focusMessageId: focusMessageIdOnOpen,
                             reusableInteractions: [:],
                             deletedInteractionIds: [],
-                            tx: transaction
+                            tx: transaction,
                         )
                     case .loadSameLocation:
                         try messageLoader.loadSameLocation(
                             reusableInteractions: reusableInteractions,
                             deletedInteractionIds: deletedInteractionIds,
-                            tx: transaction
+                            tx: transaction,
                         )
                     case .loadOlder:
                         try messageLoader.loadOlderMessagePage(
                             reusableInteractions: reusableInteractions,
                             deletedInteractionIds: deletedInteractionIds,
-                            tx: transaction
+                            tx: transaction,
                         )
                     case .loadNewer:
                         try messageLoader.loadNewerMessagePage(
                             reusableInteractions: reusableInteractions,
                             deletedInteractionIds: deletedInteractionIds,
-                            tx: transaction
+                            tx: transaction,
                         )
                     case .loadNewest:
                         try messageLoader.loadNewestMessagePage(
                             reusableInteractions: reusableInteractions,
                             deletedInteractionIds: deletedInteractionIds,
-                            tx: transaction
+                            tx: transaction,
                         )
                     case .loadPageAroundInteraction(let interactionId, _):
                         try messageLoader.loadMessagePage(
                             aroundInteractionId: interactionId,
                             reusableInteractions: reusableInteractions,
                             deletedInteractionIds: deletedInteractionIds,
-                            tx: transaction
+                            tx: transaction,
                         )
                     }
                 } catch {
@@ -166,7 +174,11 @@ public class CVLoader: NSObject {
                 return LoadState(
                     threadViewModel: threadViewModel,
                     conversationViewModel: conversationViewModel,
-                    items: self.buildRenderItems(loadContext: loadContext, updatedInteractionIds: updatedInteractionIds)
+                    items: self.buildRenderItems(
+                        loadContext: loadContext,
+                        updatedInteractionIds: updatedInteractionIds,
+                        localAci: localAci,
+                    ),
                 )
             }
 
@@ -178,13 +190,13 @@ public class CVLoader: NSObject {
                 canLoadOlderItems: messageLoader.canLoadOlder,
                 canLoadNewerItems: messageLoader.canLoadNewer,
                 viewStateSnapshot: viewStateSnapshot,
-                loadType: loadRequest.loadType
+                loadType: loadRequest.loadType,
             )
 
             let update = CVUpdate.build(
                 renderState: renderState,
                 prevRenderState: prevRenderState,
-                loadRequest: loadRequest
+                loadRequest: loadRequest,
             )
 
             return update
@@ -193,14 +205,16 @@ public class CVLoader: NSObject {
 
     // MARK: -
 
-    private func buildRenderItems(loadContext: CVLoadContext,
-                                  updatedInteractionIds: Set<String>) -> [CVRenderItem] {
+    private func buildRenderItems(
+        loadContext: CVLoadContext,
+        updatedInteractionIds: Set<String>,
+        localAci: Aci,
+    ) -> [CVRenderItem] {
 
         let conversationStyle = loadContext.conversationStyle
 
         // Don't cache in the reset() case.
-        let canReuseState = (loadRequest.canReuseComponentStates &&
-                                conversationStyle.isEqualForCellRendering(prevRenderState.conversationStyle))
+        let canReuseState = loadRequest.canReuseComponentStates && conversationStyle == prevRenderState.conversationStyle
 
         var itemModelBuilder = CVItemModelBuilder(loadContext: loadContext)
 
@@ -211,15 +225,21 @@ public class CVLoader: NSObject {
         // * We're do a "reset" reload where we deliberately reload everything, e.g.
         //   in response to an error or a cross-process write, etc.
         if canReuseState {
-            itemModelBuilder.reuseComponentStates(prevRenderState: prevRenderState,
-                                                  updatedInteractionIds: updatedInteractionIds)
+            itemModelBuilder.reuseComponentStates(
+                prevRenderState: prevRenderState,
+                updatedInteractionIds: updatedInteractionIds,
+            )
         }
-        let itemModels: [CVItemModel] = itemModelBuilder.buildItems()
+        let itemModels: [CVItemModel] = itemModelBuilder.buildItems(localAci: localAci)
 
         var renderItems = [CVRenderItem]()
         for itemModel in itemModels {
-            guard let renderItem = buildRenderItem(itemBuildingContext: loadContext,
-                                                   itemModel: itemModel) else {
+            guard
+                let renderItem = buildRenderItem(
+                    itemBuildingContext: loadContext,
+                    itemModel: itemModel,
+                )
+            else {
                 continue
             }
             renderItems.append(renderItem)
@@ -228,20 +248,24 @@ public class CVLoader: NSObject {
         return renderItems
     }
 
-    private func buildRenderItem(itemBuildingContext: CVItemBuildingContext,
-                                 itemModel: CVItemModel) -> CVRenderItem? {
-        Self.buildRenderItem(itemBuildingContext: itemBuildingContext,
-                             itemModel: itemModel)
+    private func buildRenderItem(
+        itemBuildingContext: CVItemBuildingContext,
+        itemModel: CVItemModel,
+    ) -> CVRenderItem? {
+        Self.buildRenderItem(
+            itemBuildingContext: itemBuildingContext,
+            itemModel: itemModel,
+        )
     }
 
-    #if USE_DEBUG_UI
+#if USE_DEBUG_UI
 
     public static func debugui_buildStandaloneRenderItem(
         interaction: TSInteraction,
         thread: TSThread,
         threadAssociatedData: ThreadAssociatedData,
         containerView: UIView,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> CVRenderItem? {
         buildStandaloneRenderItem(
             interaction: interaction,
@@ -249,11 +273,11 @@ public class CVLoader: NSObject {
             threadAssociatedData: threadAssociatedData,
             containerView: containerView,
             spoilerState: SpoilerRenderState(),
-            transaction: transaction
+            transaction: transaction,
         )
     }
 
-    #endif
+#endif
 
     public static func buildStandaloneRenderItem(
         interaction: TSInteraction,
@@ -261,11 +285,11 @@ public class CVLoader: NSObject {
         threadAssociatedData: ThreadAssociatedData,
         containerView: UIView,
         spoilerState: SpoilerRenderState,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> CVRenderItem? {
         let chatColor = DependenciesBridge.shared.chatColorSettingStore.resolvedChatColor(
             for: thread,
-            tx: transaction
+            tx: transaction,
         )
         let conversationStyle = ConversationStyle(
             type: .`default`,
@@ -273,17 +297,19 @@ public class CVLoader: NSObject {
             viewWidth: containerView.width,
             hasWallpaper: false,
             isWallpaperPhoto: false,
-            chatColor: chatColor
+            chatColor: chatColor,
         )
-        let coreState = CVCoreState(conversationStyle: conversationStyle,
-                                    mediaCache: CVMediaCache())
+        let coreState = CVCoreState(
+            conversationStyle: conversationStyle,
+            mediaCache: CVMediaCache(),
+        )
         return CVLoader.buildStandaloneRenderItem(
             interaction: interaction,
             thread: thread,
             threadAssociatedData: threadAssociatedData,
             coreState: coreState,
             spoilerState: spoilerState,
-            transaction: transaction
+            transaction: transaction,
         )
     }
 
@@ -293,11 +319,11 @@ public class CVLoader: NSObject {
         threadAssociatedData: ThreadAssociatedData,
         conversationStyle: ConversationStyle,
         spoilerState: SpoilerRenderState,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> CVRenderItem? {
         let coreState = CVCoreState(
             conversationStyle: conversationStyle,
-            mediaCache: CVMediaCache()
+            mediaCache: CVMediaCache(),
         )
         return CVLoader.buildStandaloneRenderItem(
             interaction: interaction,
@@ -305,7 +331,7 @@ public class CVLoader: NSObject {
             threadAssociatedData: threadAssociatedData,
             coreState: coreState,
             spoilerState: spoilerState,
-            transaction: transaction
+            transaction: transaction,
         )
     }
 
@@ -315,41 +341,56 @@ public class CVLoader: NSObject {
         threadAssociatedData: ThreadAssociatedData,
         coreState: CVCoreState,
         spoilerState: SpoilerRenderState,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> CVRenderItem? {
         AssertIsOnMainThread()
 
-        let threadViewModel = ThreadViewModel(thread: thread,
-                                              forChatList: false,
-                                              transaction: transaction)
+        guard let localAci = DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: transaction)?.aci else {
+            owsFailDebug("User not registered")
+            return nil
+        }
+
+        let threadViewModel = ThreadViewModel(
+            thread: thread,
+            forChatList: false,
+            transaction: transaction,
+        )
         let viewStateSnapshot = CVViewStateSnapshot.mockSnapshotForStandaloneItems(
             coreState: coreState,
-            spoilerReveal: spoilerState.revealState
+            spoilerReveal: spoilerState.revealState,
         )
         let avatarBuilder = CVAvatarBuilder(transaction: transaction)
         let itemBuildingContext = CVItemBuildingContextImpl(
+            prevRenderState: nil,
             threadViewModel: threadViewModel,
             viewStateSnapshot: viewStateSnapshot,
             transaction: transaction,
-            avatarBuilder: avatarBuilder
+            avatarBuilder: avatarBuilder,
+            localAci: localAci,
         )
-        guard let itemModel = CVItemModelBuilder.buildStandaloneItem(interaction: interaction,
-                                                                     thread: thread,
-                                                                     threadAssociatedData: threadAssociatedData,
-                                                                     threadViewModel: threadViewModel,
-                                                                     itemBuildingContext: itemBuildingContext,
-                                                                     transaction: transaction) else {
+        guard
+            let itemModel = CVItemModelBuilder.buildStandaloneItem(
+                interaction: interaction,
+                thread: thread,
+                threadAssociatedData: threadAssociatedData,
+                threadViewModel: threadViewModel,
+                itemBuildingContext: itemBuildingContext,
+                transaction: transaction,
+            )
+        else {
             owsFailDebug("Couldn't build item model.")
             return nil
         }
-        return Self.buildRenderItem(itemBuildingContext: itemBuildingContext,
-                                    itemModel: itemModel)
+        return Self.buildRenderItem(
+            itemBuildingContext: itemBuildingContext,
+            itemModel: itemModel,
+        )
     }
 
     public static func buildStandaloneComponentState(
         interaction: TSInteraction,
         spoilerState: SpoilerRenderState,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> CVComponentState? {
         AssertIsOnMainThread()
 
@@ -358,9 +399,14 @@ public class CVLoader: NSObject {
             return nil
         }
 
+        guard let localAci = DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: transaction)?.aci else {
+            owsFailDebug("User not registered")
+            return nil
+        }
+
         let chatColor = DependenciesBridge.shared.chatColorSettingStore.resolvedChatColor(
             for: thread,
-            tx: transaction
+            tx: transaction,
         )
         let mockViewWidth: CGFloat = 800
         let conversationStyle = ConversationStyle(
@@ -369,35 +415,45 @@ public class CVLoader: NSObject {
             viewWidth: mockViewWidth,
             hasWallpaper: false,
             isWallpaperPhoto: false,
-            chatColor: chatColor
+            chatColor: chatColor,
         )
-        let coreState = CVCoreState(conversationStyle: conversationStyle,
-                                    mediaCache: CVMediaCache())
-        let threadViewModel = ThreadViewModel(thread: thread,
-                                              forChatList: false,
-                                              transaction: transaction)
+        let coreState = CVCoreState(
+            conversationStyle: conversationStyle,
+            mediaCache: CVMediaCache(),
+        )
+        let threadViewModel = ThreadViewModel(
+            thread: thread,
+            forChatList: false,
+            transaction: transaction,
+        )
         let viewStateSnapshot = CVViewStateSnapshot.mockSnapshotForStandaloneItems(
             coreState: coreState,
-            spoilerReveal: spoilerState.revealState
+            spoilerReveal: spoilerState.revealState,
         )
         let avatarBuilder = CVAvatarBuilder(transaction: transaction)
         let itemBuildingContext = CVItemBuildingContextImpl(
+            prevRenderState: nil,
             threadViewModel: threadViewModel,
             viewStateSnapshot: viewStateSnapshot,
             transaction: transaction,
-            avatarBuilder: avatarBuilder
+            avatarBuilder: avatarBuilder,
+            localAci: localAci,
         )
         do {
-            return try CVComponentState.build(interaction: interaction,
-                                              itemBuildingContext: itemBuildingContext)
+            return try CVComponentState.build(
+                interaction: interaction,
+                itemBuildingContext: itemBuildingContext,
+            )
         } catch {
             owsFailDebug("Error: \(error)")
             return nil
         }
     }
 
-    private static func buildRenderItem(itemBuildingContext: CVItemBuildingContext,
-                                        itemModel: CVItemModel) -> CVRenderItem? {
+    private static func buildRenderItem(
+        itemBuildingContext: CVItemBuildingContext,
+        itemModel: CVItemModel,
+    ) -> CVRenderItem? {
 
         let conversationStyle = itemBuildingContext.conversationStyle
 
@@ -408,8 +464,10 @@ public class CVLoader: NSObject {
                 owsFailDebug("Missing dateHeader.")
                 return nil
             }
-            rootComponent = CVComponentDateHeader(itemModel: itemModel,
-                                                  dateHeaderState: dateHeaderState)
+            rootComponent = CVComponentDateHeader(
+                itemModel: itemModel,
+                dateHeaderState: dateHeaderState,
+            )
         case .unreadIndicator:
             rootComponent = CVComponentUnreadIndicator(itemModel: itemModel)
         case .threadDetails:
@@ -423,27 +481,33 @@ public class CVLoader: NSObject {
                 owsFailDebug("Missing unknownThreadWarning.")
                 return nil
             }
-            rootComponent = CVComponentSystemMessage(itemModel: itemModel,
-                                                     systemMessage: unknownThreadWarning)
+            rootComponent = CVComponentSystemMessage(
+                itemModel: itemModel,
+                systemMessage: unknownThreadWarning,
+            )
         case .defaultDisappearingMessageTimer:
             guard let defaultDisappearingMessageTimer = itemModel.componentState.defaultDisappearingMessageTimer else {
                 owsFailDebug("Missing unknownThreadWarning.")
                 return nil
             }
-            rootComponent = CVComponentSystemMessage(itemModel: itemModel,
-                                                     systemMessage: defaultDisappearingMessageTimer)
+            rootComponent = CVComponentSystemMessage(
+                itemModel: itemModel,
+                systemMessage: defaultDisappearingMessageTimer,
+            )
         case .textOnlyMessage, .audio, .genericAttachment, .paymentAttachment, .archivedPaymentAttachment,
-                .undownloadableAttachment,
-                .contactShare, .bodyMedia, .viewOnce, .stickerMessage, .quoteOnlyMessage,
-                .giftBadge, .poll:
+             .undownloadableAttachment,
+             .contactShare, .bodyMedia, .viewOnce, .stickerMessage, .quoteOnlyMessage,
+             .giftBadge, .poll:
             rootComponent = CVComponentMessage(itemModel: itemModel)
         case .typingIndicator:
             guard let typingIndicator = itemModel.componentState.typingIndicator else {
                 owsFailDebug("Missing typingIndicator.")
                 return nil
             }
-            rootComponent = CVComponentTypingIndicator(itemModel: itemModel,
-                                                       typingIndicator: typingIndicator)
+            rootComponent = CVComponentTypingIndicator(
+                itemModel: itemModel,
+                typingIndicator: typingIndicator,
+            )
         case .systemMessage:
             guard let systemMessage = itemModel.componentState.systemMessage else {
                 owsFailDebug("Missing systemMessage.")
@@ -455,23 +519,31 @@ public class CVLoader: NSObject {
             return nil
         }
 
-        let cellMeasurement = buildCellMeasurement(rootComponent: rootComponent,
-                                                   conversationStyle: conversationStyle)
+        let cellMeasurement = buildCellMeasurement(
+            rootComponent: rootComponent,
+            conversationStyle: conversationStyle,
+        )
 
-        return CVRenderItem(itemModel: itemModel,
-                            rootComponent: rootComponent,
-                            cellMeasurement: cellMeasurement)
+        return CVRenderItem(
+            itemModel: itemModel,
+            rootComponent: rootComponent,
+            cellMeasurement: cellMeasurement,
+        )
     }
 
     private static func buildEmptyCellMeasurement() -> CVCellMeasurement {
         CVCellMeasurement.Builder().build()
     }
 
-    private static func buildCellMeasurement(rootComponent: CVRootComponent,
-                                             conversationStyle: ConversationStyle) -> CVCellMeasurement {
+    private static func buildCellMeasurement(
+        rootComponent: CVRootComponent,
+        conversationStyle: ConversationStyle,
+    ) -> CVCellMeasurement {
         let measurementBuilder = CVCellMeasurement.Builder()
-        measurementBuilder.cellSize = rootComponent.measure(maxWidth: conversationStyle.viewWidth,
-                                                            measurementBuilder: measurementBuilder)
+        measurementBuilder.cellSize = rootComponent.measure(
+            maxWidth: conversationStyle.viewWidth,
+            measurementBuilder: measurementBuilder,
+        )
         let cellMeasurement = measurementBuilder.build()
         owsAssertDebug(cellMeasurement.cellSize.width <= conversationStyle.viewWidth)
         return cellMeasurement

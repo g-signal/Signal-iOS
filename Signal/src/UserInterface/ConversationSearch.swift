@@ -11,11 +11,15 @@ public import SignalUI
 
 public protocol ConversationSearchControllerDelegate: UISearchControllerDelegate {
 
-    func conversationSearchController(_ conversationSearchController: ConversationSearchController,
-                                      didUpdateSearchResults resultSet: ConversationScreenSearchResultSet?)
+    func conversationSearchController(
+        _ conversationSearchController: ConversationSearchController,
+        didUpdateSearchResults resultSet: ConversationScreenSearchResultSet?,
+    )
 
-    func conversationSearchController(_ conversationSearchController: ConversationSearchController,
-                                      didSelectMessageId: String)
+    func conversationSearchController(
+        _ conversationSearchController: ConversationSearchController,
+        didSelectMessageId: String,
+    )
 }
 
 // MARK: -
@@ -24,7 +28,7 @@ public class ConversationSearchController: NSObject {
 
     public static let kMinimumSearchTextLength: UInt = 2
 
-    public let uiSearchController =  UISearchController(searchResultsController: nil)
+    public let uiSearchController = UISearchController(searchResultsController: nil)
 
     public weak var delegate: ConversationSearchControllerDelegate?
 
@@ -47,16 +51,10 @@ public class ConversationSearchController: NSObject {
 
         uiSearchController.hidesNavigationBarDuringPresentation = true
         uiSearchController.obscuresBackgroundDuringPresentation = false
-
-        applyTheme()
     }
 
     var searchBar: UISearchBar {
         return uiSearchController.searchBar
-    }
-
-    func applyTheme() {
-        OWSSearchBar.applyTheme(to: uiSearchController.searchBar)
     }
 }
 
@@ -131,9 +129,11 @@ extension ConversationSearchController: UISearchResultsUpdating {
 }
 
 extension ConversationSearchController: SearchResultsBarDelegate {
-    func searchResultsBar(_ searchResultsBar: SearchResultsBar,
-                          setCurrentIndex currentIndex: Int,
-                          resultSet: ConversationScreenSearchResultSet) {
+    func searchResultsBar(
+        _ searchResultsBar: SearchResultsBar,
+        setCurrentIndex currentIndex: Int,
+        resultSet: ConversationScreenSearchResultSet,
+    ) {
         guard let searchResult = resultSet.messages[safe: currentIndex] else {
             owsFailDebug("messageId was unexpectedly nil")
             return
@@ -144,9 +144,11 @@ extension ConversationSearchController: SearchResultsBarDelegate {
 }
 
 protocol SearchResultsBarDelegate: AnyObject {
-    func searchResultsBar(_ searchResultsBar: SearchResultsBar,
-                          setCurrentIndex currentIndex: Int,
-                          resultSet: ConversationScreenSearchResultSet)
+    func searchResultsBar(
+        _ searchResultsBar: SearchResultsBar,
+        setCurrentIndex currentIndex: Int,
+        resultSet: ConversationScreenSearchResultSet,
+    )
 }
 
 public class SearchResultsBar: UIView {
@@ -164,37 +166,39 @@ public class SearchResultsBar: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.layoutMargins = .zero
+        layoutMargins = .zero
 
-        // When presenting or dismissing the keyboard, there may be a slight
-        // gap between the keyboard and the bottom of the input bar during
-        // the animation. Extend the background below the toolbar's bounds
-        // by this much to mask that extra space.
-        let backgroundExtension: CGFloat = 100
+        let isLegacyLayout: Bool = if #unavailable(iOS 26) { true } else { false }
 
-        if UIAccessibility.isReduceTransparencyEnabled {
-            self.backgroundColor = Theme.toolbarBackgroundColor
+        if isLegacyLayout {
+            if UIAccessibility.isReduceTransparencyEnabled {
+                backgroundColor = Theme.toolbarBackgroundColor
 
-            let extendedBackground = UIView()
-            extendedBackground.backgroundColor = Theme.toolbarBackgroundColor
-            addSubview(extendedBackground)
-            extendedBackground.autoPinWidthToSuperview()
-            extendedBackground.autoPinEdge(.top, to: .bottom, of: self)
-            extendedBackground.autoSetDimension(.height, toSize: backgroundExtension)
-        } else {
-            let alpha: CGFloat = OWSNavigationBar.backgroundBlurMutingFactor
-            backgroundColor = Theme.toolbarBackgroundColor.withAlphaComponent(alpha)
+                let extendedBackground = UIView()
+                extendedBackground.backgroundColor = Theme.toolbarBackgroundColor
+                addSubview(extendedBackground)
+                extendedBackground.autoPinEdgesToSuperviewEdges()
+            } else {
+                let alpha: CGFloat = OWSNavigationBar.backgroundBlurMutingFactor
+                backgroundColor = Theme.toolbarBackgroundColor.withAlphaComponent(alpha)
 
-            let blurEffectView = UIVisualEffectView(effect: Theme.barBlurEffect)
-            blurEffectView.layer.zPosition = -1
-            addSubview(blurEffectView)
-            blurEffectView.autoPinWidthToSuperview()
-            blurEffectView.autoPinEdge(toSuperviewEdge: .top)
-            blurEffectView.autoPinEdge(toSuperviewEdge: .bottom, withInset: -backgroundExtension)
+                let blurEffectView = UIVisualEffectView(effect: Theme.barBlurEffect)
+                blurEffectView.layer.zPosition = -1
+                addSubview(blurEffectView)
+                blurEffectView.autoPinEdgesToSuperviewEdges()
+            }
         }
 
         addSubview(toolbar)
-        toolbar.autoPinEdgesToSuperviewMargins()
+        toolbar.translatesAutoresizingMaskIntoConstraints = false
+        let vMargin: CGFloat = isLegacyLayout ? 0 : 6
+        let hMargin: CGFloat = 0
+        addConstraints([
+            toolbar.topAnchor.constraint(equalTo: topAnchor, constant: vMargin),
+            toolbar.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: hMargin),
+            toolbar.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -hMargin),
+            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -vMargin),
+        ])
 
         let leftExteriorChevronMargin: CGFloat
         let leftInteriorChevronMargin: CGFloat
@@ -206,18 +210,28 @@ public class SearchResultsBar: UIView {
             leftInteriorChevronMargin = 8
         }
 
-        showLessRecentButton = UIBarButtonItem(image: Theme.iconImage(.chevronUp), style: .plain, target: self, action: #selector(didTapShowLessRecent))
+        showLessRecentButton = UIBarButtonItem(
+            image: Theme.iconImage(.chevronUp),
+            primaryAction: UIAction { [weak self] _ in
+                self?.didTapShowLessRecent()
+            },
+        )
         showLessRecentButton.imageInsets = UIEdgeInsets(top: 2, left: leftExteriorChevronMargin, bottom: 2, right: leftInteriorChevronMargin)
-        showLessRecentButton.tintColor = Theme.accentBlueColor
 
-        showMoreRecentButton = UIBarButtonItem(image: Theme.iconImage(.chevronDown), style: .plain, target: self, action: #selector(didTapShowMoreRecent))
+        showMoreRecentButton = UIBarButtonItem(
+            image: Theme.iconImage(.chevronDown),
+            primaryAction: UIAction { [weak self] _ in
+                self?.didTapShowMoreRecent()
+            },
+        )
         showMoreRecentButton.imageInsets = UIEdgeInsets(top: 2, left: leftInteriorChevronMargin, bottom: 2, right: leftExteriorChevronMargin)
-        showMoreRecentButton.tintColor = Theme.accentBlueColor
+
+        if isLegacyLayout {
+            showLessRecentButton.tintColor = .Signal.accent
+            showMoreRecentButton.tintColor = .Signal.accent
+        }
 
         toolbar.items = [showLessRecentButton, showMoreRecentButton, .flexibleSpace(), labelItem, .flexibleSpace()]
-
-        self.autoresizingMask = .flexibleHeight
-        self.translatesAutoresizingMaskIntoConstraints = false
 
         updateBarItems()
     }
@@ -226,15 +240,14 @@ public class SearchResultsBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc
     private func didTapShowLessRecent() {
         Logger.debug("")
-        guard let resultSet = resultSet else {
+        guard let resultSet else {
             owsFailDebug("resultSet was unexpectedly nil")
             return
         }
 
-        guard let currentIndex = currentIndex else {
+        guard let currentIndex else {
             owsFailDebug("currentIndex was unexpectedly nil")
             return
         }
@@ -250,15 +263,14 @@ public class SearchResultsBar: UIView {
         resultsBarDelegate?.searchResultsBar(self, setCurrentIndex: newIndex, resultSet: resultSet)
     }
 
-    @objc
     private func didTapShowMoreRecent() {
         Logger.debug("")
-        guard let resultSet = resultSet else {
+        guard let resultSet else {
             owsFailDebug("resultSet was unexpectedly nil")
             return
         }
 
-        guard let currentIndex = currentIndex else {
+        guard let currentIndex else {
             owsFailDebug("currentIndex was unexpectedly nil")
             return
         }
@@ -277,7 +289,7 @@ public class SearchResultsBar: UIView {
     var currentIndex: Int?
 
     func updateResults(resultSet: ConversationScreenSearchResultSet?) {
-        if let resultSet = resultSet {
+        if let resultSet {
             if resultSet.messages.count > 0 {
                 currentIndex = min(currentIndex ?? 0, resultSet.messages.count - 1)
             } else {
@@ -290,13 +302,23 @@ public class SearchResultsBar: UIView {
         self.resultSet = resultSet
 
         updateBarItems()
-        if let currentIndex = currentIndex, let resultSet = resultSet {
+        if let currentIndex, let resultSet {
             resultsBarDelegate?.searchResultsBar(self, setCurrentIndex: currentIndex, resultSet: resultSet)
         }
     }
 
     func updateBarItems() {
-        guard let resultSet = resultSet else {
+        defer {
+            if #available(iOS 26, *) {
+                if labelItem.title.isEmptyOrNil {
+                    toolbar.items = [showLessRecentButton, showMoreRecentButton, .flexibleSpace()]
+                } else {
+                    toolbar.items = [showLessRecentButton, showMoreRecentButton, .flexibleSpace(), labelItem, .flexibleSpace()]
+                }
+            }
+        }
+
+        guard let resultSet else {
             labelItem.title = nil
             showMoreRecentButton.isEnabled = false
             showLessRecentButton.isEnabled = false
@@ -306,17 +328,20 @@ public class SearchResultsBar: UIView {
         if resultSet.messages.count == 0 {
             labelItem.title = OWSLocalizedString("CONVERSATION_SEARCH_NO_RESULTS", comment: "keyboard toolbar label when no messages match the search string")
         } else {
-            let format = OWSLocalizedString("CONVERSATION_SEARCH_RESULTS_%d_%d", tableName: "PluralAware",
-                                           comment: "keyboard toolbar label when more than one or more messages matches the search string. Embeds {{number/position of the 'currently viewed' result}} and the {{total number of results}}")
+            let format = OWSLocalizedString(
+                "CONVERSATION_SEARCH_RESULTS_%d_%d",
+                tableName: "PluralAware",
+                comment: "keyboard toolbar label when more than one or more messages matches the search string. Embeds {{number/position of the 'currently viewed' result}} and the {{total number of results}}",
+            )
 
-            guard let currentIndex = currentIndex else {
+            guard let currentIndex else {
                 owsFailDebug("currentIndex was unexpectedly nil")
                 return
             }
             labelItem.title = String.localizedStringWithFormat(format, currentIndex + 1, resultSet.messages.count)
         }
 
-        if let currentIndex = currentIndex {
+        if let currentIndex {
             showMoreRecentButton.isEnabled = currentIndex > 0
             showLessRecentButton.isEnabled = currentIndex + 1 < resultSet.messages.count
         } else {
@@ -324,4 +349,8 @@ public class SearchResultsBar: UIView {
             showLessRecentButton.isEnabled = false
         }
     }
+}
+
+extension SearchResultsBar: ConversationBottomBar {
+    var shouldAttachToKeyboardLayoutGuide: Bool { true }
 }

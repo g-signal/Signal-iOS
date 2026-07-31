@@ -29,7 +29,7 @@ public class BackupArchivePostFrameRestoreActionManager {
         preferences: BackupArchive.Shims.Preferences,
         recipientDatabaseTable: RecipientDatabaseTable,
         sskPreferences: BackupArchive.Shims.SSKPreferences,
-        threadStore: BackupArchiveThreadStore
+        threadStore: BackupArchiveThreadStore,
     ) {
         self.avatarFetcher = avatarFetcher
         self.dateProvider = dateProvider
@@ -47,13 +47,8 @@ public class BackupArchivePostFrameRestoreActionManager {
         recipientActions: SharedMap<RecipientId, RecipientActions>,
         chatActions: SharedMap<ChatId, ChatActions>,
         bencher: BackupArchive.RestoreBencher,
-        chatItemContext: BackupArchive.ChatItemRestoringContext
+        chatItemContext: BackupArchive.ChatItemRestoringContext,
     ) throws {
-        // Proactively mark the group call tooltip shown; we don't know
-        // definitively if it was shown prior to restore, but it's a good
-        // guess that it was and its annoying to see again.
-        preferences.setWasGroupCallTooltipShown(tx: chatItemContext.tx)
-
         for (recipientId, actions) in recipientActions {
             if actions.insertContactHiddenInfoMessage {
                 try bencher.benchPostFrameRestoreAction(.InsertContactHiddenInfoMessage) {
@@ -81,7 +76,7 @@ public class BackupArchivePostFrameRestoreActionManager {
                     try threadStore.markVisible(
                         thread: thread,
                         lastInteractionRowId: actions.lastVisibleInteractionRowId,
-                        context: chatItemContext.chatContext
+                        context: chatItemContext.chatContext,
                     )
                 }
                 if
@@ -95,10 +90,10 @@ public class BackupArchivePostFrameRestoreActionManager {
                     lastVisibleInteractionStore.setLastVisibleInteraction(
                         TSThread.LastVisibleInteraction(
                             sortId: lastVisibleInteractionRowId,
-                            onScreenPercentage: 1
+                            onScreenPercentage: 1,
                         ),
                         for: thread.tsThread,
-                        tx: chatItemContext.tx
+                        tx: chatItemContext.tx,
                     )
                 }
                 switch thread.threadType {
@@ -108,7 +103,7 @@ public class BackupArchivePostFrameRestoreActionManager {
                     try updateLastInteractionTimestamps(
                         for: groupThread,
                         actions: actions,
-                        context: chatItemContext.chatContext
+                        context: chatItemContext.chatContext,
                     )
                 }
             }
@@ -143,7 +138,7 @@ public class BackupArchivePostFrameRestoreActionManager {
                         currentTimestamp: avatarFetchTimestamp,
                         lastVisibleInteractionRowIdInContactThread: getLastVisibleInteractionRowId(),
                         localIdentifiers: chatItemContext.recipientContext.localIdentifiers,
-                        tx: chatItemContext.tx
+                        tx: chatItemContext.tx,
                     )
                 case .contact(let contactAddress):
                     guard let serviceId: ServiceId = contactAddress.aci ?? contactAddress.pni else {
@@ -154,7 +149,7 @@ public class BackupArchivePostFrameRestoreActionManager {
                         currentTimestamp: avatarFetchTimestamp,
                         lastVisibleInteractionRowIdInContactThread: getLastVisibleInteractionRowId(),
                         localIdentifiers: chatItemContext.recipientContext.localIdentifiers,
-                        tx: chatItemContext.tx
+                        tx: chatItemContext.tx,
                     )
                 case .group(let groupId):
                     guard let groupThread = chatItemContext.recipientContext[groupId] else {
@@ -165,7 +160,7 @@ public class BackupArchivePostFrameRestoreActionManager {
                         currentTimestamp: avatarFetchTimestamp,
                         lastVisibleInteractionRowIdInGroupThread: getLastVisibleInteractionRowId(),
                         localIdentifiers: chatItemContext.recipientContext.localIdentifiers,
-                        tx: chatItemContext.tx
+                        tx: chatItemContext.tx,
                     )
                 }
             }
@@ -176,7 +171,7 @@ public class BackupArchivePostFrameRestoreActionManager {
     /// `SignalRecipient` SQLite row ID.
     private func insertContactHiddenInfoMessage(
         recipientId: BackupArchive.RecipientId,
-        chatItemContext: BackupArchive.ChatItemRestoringContext
+        chatItemContext: BackupArchive.ChatItemRestoringContext,
     ) throws {
         guard
             let chatId = chatItemContext.chatContext[recipientId],
@@ -195,9 +190,7 @@ public class BackupArchivePostFrameRestoreActionManager {
             infoMessage,
             in: chatThread,
             chatId: chatId,
-            // This info message is directionless
-            directionalDetails: .directionless(BackupProto_ChatItem.DirectionlessMessageDetails()),
-            context: chatItemContext
+            context: chatItemContext,
         )
     }
 
@@ -215,7 +208,7 @@ public class BackupArchivePostFrameRestoreActionManager {
     private func updateLastInteractionTimestamps(
         for groupThread: TSGroupThread,
         actions: ChatActions,
-        context: BackupArchive.ChatRestoringContext
+        context: BackupArchive.ChatRestoringContext,
     ) throws {
         for memberAddress in groupThread.groupMembership.fullMembers {
             guard let memberAci = memberAddress.aci else {
@@ -229,12 +222,12 @@ public class BackupArchivePostFrameRestoreActionManager {
             let groupMember = try TSGroupMember.groupMember(
                 for: memberAci,
                 in: groupThread,
-                tx: context.tx
+                tx: context.tx,
             )
 
             try groupMember?.updateWith(
                 lastInteractionTimestamp: latestTimestamp,
-                tx: context.tx
+                tx: context.tx,
             )
         }
     }

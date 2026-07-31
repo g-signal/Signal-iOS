@@ -39,7 +39,7 @@ class NSECallMessageHandler: CallMessageHandler {
         sentAtTimestamp: UInt64,
         serverReceivedTimestamp: UInt64,
         serverDeliveryTimestamp: UInt64,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         let bufferSecondsForMainAppToAnswerRing: UInt64 = 10
 
@@ -56,7 +56,7 @@ class NSECallMessageHandler: CallMessageHandler {
                 identityManager: identityManager,
                 notificationPresenter: notificationPresenter,
                 profileManager: profileManager,
-                tsAccountManager: tsAccountManager
+                tsAccountManager: tsAccountManager,
             )
             let partialResult = callOfferHandler.startHandlingOffer(
                 caller: caller.aci,
@@ -65,7 +65,7 @@ class NSECallMessageHandler: CallMessageHandler {
                 callId: offer.id,
                 callType: offer.type ?? .offerAudioCall,
                 sentAtTimestamp: sentAtTimestamp,
-                tx: tx
+                tx: tx,
             )
             guard let partialResult else {
                 return
@@ -79,7 +79,7 @@ class NSECallMessageHandler: CallMessageHandler {
             let isValid = isValidOfferMessage(
                 opaque: opaque,
                 messageAgeSec: messageAgeForRingRtc,
-                callMediaType: callType
+                callMediaType: callType,
             )
             guard isValid else {
                 NSELogger.uncorrelated.warn("missed a call because it's not valid (according to RingRTC)")
@@ -89,7 +89,7 @@ class NSECallMessageHandler: CallMessageHandler {
                     outcome: .incomingMissed,
                     callType: partialResult.offerMediaType,
                     sentAtTimestamp: sentAtTimestamp,
-                    tx: tx
+                    tx: tx,
                 )
                 return
             }
@@ -112,11 +112,13 @@ class NSECallMessageHandler: CallMessageHandler {
                         return false
                     }
 
-                    guard GroupMessageProcessorManager.discardMode(
-                        forMessageFrom: caller.aci,
-                        groupId: groupId,
-                        tx: transaction
-                    ) == .doNotDiscard else {
+                    guard
+                        GroupMessageProcessorManager.discardMode(
+                            forMessageFrom: caller.aci,
+                            groupId: groupId,
+                            tx: transaction,
+                        ) == .doNotDiscard
+                    else {
                         NSELogger.uncorrelated.warn("discarding group ring \(ringId) from \(caller.aci)")
                         return false
                     }
@@ -140,7 +142,7 @@ class NSECallMessageHandler: CallMessageHandler {
                 return isValidOpaqueRing(
                     opaqueCallMessage: opaqueData,
                     messageAgeSec: messageAgeForRingRtc,
-                    validateGroupRing: validateGroupRing
+                    validateGroupRing: validateGroupRing,
                 )
             }()
             guard shouldHandleExternally else {
@@ -158,7 +160,7 @@ class NSECallMessageHandler: CallMessageHandler {
             plaintextData: plaintextData,
             wasReceivedByUD: wasReceivedByUD,
             serverDeliveryTimestamp: serverDeliveryTimestamp,
-            tx: tx
+            tx: tx,
         )
     }
 
@@ -167,7 +169,7 @@ class NSECallMessageHandler: CallMessageHandler {
         plaintextData: Data,
         wasReceivedByUD: Bool,
         serverDeliveryTimestamp: UInt64,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         do {
             let payload = try CallMessageRelay.enqueueCallMessageForMainApp(
@@ -175,7 +177,7 @@ class NSECallMessageHandler: CallMessageHandler {
                 plaintextData: plaintextData,
                 wasReceivedByUD: wasReceivedByUD,
                 serverDeliveryTimestamp: serverDeliveryTimestamp,
-                transaction: tx
+                transaction: tx,
             )
 
             // We don't want to risk consuming any call messages that the main app needs to perform the call
@@ -193,7 +195,7 @@ class NSECallMessageHandler: CallMessageHandler {
 //                    NSELogger.uncorrelated.info("Successfully notified main app of call message.")
 //                }
 //            }
-            
+
             self.sendVoipPushViaServer(payload: payload)
         } catch {
             owsFailDebug("Failed to create relay voip payload for call message \(error)")
@@ -220,7 +222,7 @@ class NSECallMessageHandler: CallMessageHandler {
 
     private func requestVoipPushFromServer(payloadId: String) async throws {
         // Get server URL from TSConstants or configuration
-        let baseURL = TSConstants.mainServiceIdentifiedURL
+        let baseURL = TSConstants.mainServiceURL
         guard let serverURL = URL(string: "\(baseURL)/v1/voip/push") else {
             throw NSError(domain: "InvalidURL", code: 1, userInfo: nil)
         }
@@ -281,14 +283,14 @@ class NSECallMessageHandler: CallMessageHandler {
     func receivedGroupCallUpdateMessage(
         _ updateMessage: SSKProtoDataMessageGroupCallUpdate,
         forGroupId groupId: GroupIdentifier,
-        serverReceivedTimestamp: UInt64
+        serverReceivedTimestamp: UInt64,
     ) async {
         await groupCallManager.peekGroupCallAndUpdateThread(
             forGroupId: groupId,
             peekTrigger: .receivedGroupUpdateMessage(
                 eraId: updateMessage.eraID,
-                messageTimestamp: serverReceivedTimestamp
-            )
+                messageTimestamp: serverReceivedTimestamp,
+            ),
         )
     }
 }

@@ -18,7 +18,7 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
     init(
         itemModel: CVItemModel,
         archivedPaymentAttachment: CVComponentState.ArchivedPaymentAttachment,
-        messageStatus: MessageReceiptStatus?
+        messageStatus: MessageReceiptStatus?,
     ) {
         self.archivedPaymentAttachment = archivedPaymentAttachment
 
@@ -44,7 +44,7 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
     public func configureForRendering(
         componentView componentViewParam: CVComponentView,
         cellMeasurement: CVCellMeasurement,
-        componentDelegate: CVComponentDelegate
+        componentDelegate: CVComponentDelegate,
     ) {
         guard let componentView = componentViewParam as? CVComponentViewArchivedPayment else {
             owsFailDebug("Unexpected componentView.")
@@ -73,19 +73,19 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
             hInnerSubviews = [
                 componentView.leftSpace,
                 componentView.bigAmountLabel,
-                componentView.rightSpace
+                componentView.rightSpace,
             ]
         case .failed:
             componentView.leftSpace.addSubview(self.createFailureIcon())
             hInnerSubviews = [
                 componentView.leftSpace,
-                componentView.bigAmountLabel
+                componentView.bigAmountLabel,
             ]
         default:
             hInnerSubviews = [
                 componentView.leftSpace,
                 componentView.bigAmountLabel,
-                componentView.rightSpace
+                componentView.rightSpace,
             ]
         }
 
@@ -93,7 +93,7 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
             config: hStackConfig,
             cellMeasurement: cellMeasurement,
             measurementKey: .measurementKey_hStack,
-            subviews: hInnerSubviews
+            subviews: hInnerSubviews,
         )
 
         let vStackView = componentView.vStackView
@@ -110,15 +110,17 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
             config: vStackConfig,
             cellMeasurement: cellMeasurement,
             measurementKey: .measurementKey_vStack,
-            subviews: vInnerSubviews
+            subviews: vInnerSubviews,
         )
     }
 
     private func createLoadingSpinner() -> CustomView {
         // Recreate each time in-case theme changes
-        let animationName = (isIncoming && !isDarkThemeEnabled
-                             ? "indeterminate_spinner_blue"
-                             : "indeterminate_spinner_white")
+        let animationName = (
+            isIncoming && !isDarkThemeEnabled
+                ? "indeterminate_spinner_blue"
+                : "indeterminate_spinner_white",
+        )
 
         let animationView = mediaCache.buildLottieAnimationView(name: animationName)
         owsAssertDebug(animationView.animation != nil)
@@ -134,14 +136,15 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
         let tintColor = conversationStyle.bubbleTextColor(isIncoming: isIncoming)
         return CustomView.wrapperFor(
             view: UIImageView.createFailureIcon(tintColor: tintColor),
-            dimension: .failureIconDimension)
+            dimension: .failureIconDimension,
+        )
     }
 
     private func formatPaymentAmount(status: MessageReceiptStatus) -> NSAttributedString {
         guard let amount = archivedPaymentAttachment.amount else {
             let text = OWSLocalizedString(
                 "PAYMENTS_INFO_UNAVAILABLE_MESSAGE",
-                comment: "Status indicator for invalid payments which could not be processed."
+                comment: "Status indicator for invalid payments which could not be processed.",
             )
             return NSAttributedString(string: text)
         }
@@ -161,7 +164,7 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
             axis: .horizontal,
             alignment: .center,
             spacing: .innerHStackSpacing,
-            layoutMargins: UIEdgeInsets(top: 25, leading: 8, bottom: 25, trailing: 16)
+            layoutMargins: UIEdgeInsets(top: 25, leading: 8, bottom: 25, trailing: 16),
         )
     }
 
@@ -170,7 +173,7 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
             axis: .vertical,
             alignment: .leading,
             spacing: 8,
-            layoutMargins: UIEdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0)
+            layoutMargins: UIEdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0),
         )
     }
 
@@ -180,13 +183,13 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
             text: .attributedText(formatPaymentAmount(status: messageStatus)),
             displayConfig: .forUnstyledText(
                 font: font,
-                textColor: conversationStyle.bubbleTextColor(isIncoming: isIncoming)
+                textColor: conversationStyle.bubbleTextColor(isIncoming: isIncoming),
             ),
             font: font,
             textColor: conversationStyle.bubbleTextColor(isIncoming: isIncoming),
             numberOfLines: messageStatus.bigAmountLabelNumberOfLines,
             lineBreakMode: .byWordWrapping,
-            textAlignment: messageStatus.bigAmountLabelTextAlignment
+            textAlignment: messageStatus.bigAmountLabelTextAlignment,
         )
     }
 
@@ -197,26 +200,26 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
         case (.incomingMessage, _):
             let format = OWSLocalizedString(
                 "PAYMENTS_PAYMENT_STATUS_IN_CHAT_SENT_YOU",
-                comment: "Payment status context with contact name, incoming. Embeds {{ Name of sending contact }}"
+                comment: "Payment status context with contact name, incoming. Embeds {{ Name of sending contact }}",
             )
             text = String(format: format, archivedPaymentAttachment.otherUserShortName)
         case (.outgoingMessage, .failed):
             let format = OWSLocalizedString(
                 "PAYMENTS_PAYMENT_STATUS_IN_CHAT_PAYMENT_TO",
-                comment: "Payment status context with contact name, failed. Embeds {{ Name of receiving contact }}"
+                comment: "Payment status context with contact name, failed. Embeds {{ Name of receiving contact }}",
             )
             text = String(format: format, archivedPaymentAttachment.otherUserShortName)
         case (.outgoingMessage, _):
             let format = OWSLocalizedString(
                 "PAYMENTS_PAYMENT_STATUS_IN_CHAT_YOU_SENT",
-                comment: "Payment status context with contact name, sent. Embeds {{ Name of receiving contact }}"
+                comment: "Payment status context with contact name, sent. Embeds {{ Name of receiving contact }}",
             )
             text = String(format: format, archivedPaymentAttachment.otherUserShortName)
         default:
             // default to failed text because it doesn't imply success
             let format = OWSLocalizedString(
                 "PAYMENTS_PAYMENT_STATUS_IN_CHAT_PAYMENT_TO",
-                comment: "Payment status context with contact name, failed. Embeds {{ Name of receiving contact }}"
+                comment: "Payment status context with contact name, failed. Embeds {{ Name of receiving contact }}",
             )
             text = String(format: format, archivedPaymentAttachment.otherUserShortName)
         }
@@ -225,11 +228,11 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
             text: .text(text),
             displayConfig: .forUnstyledText(
                 font: .dynamicTypeBody,
-                textColor: conversationStyle.bubbleTextColor(isIncoming: isIncoming)
+                textColor: conversationStyle.bubbleTextColor(isIncoming: isIncoming),
             ),
             font: UIFont.dynamicTypeBody,
             textColor: conversationStyle.bubbleTextColor(isIncoming: isIncoming),
-            lineBreakMode: .byTruncatingMiddle
+            lineBreakMode: .byTruncatingMiddle,
         )
     }
 
@@ -238,18 +241,18 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
             text: .text(archivedPaymentAttachment.note ?? ""),
             displayConfig: .forUnstyledText(
                 font: .dynamicTypeBody,
-                textColor: conversationStyle.bubbleTextColor(isIncoming: isIncoming)
+                textColor: conversationStyle.bubbleTextColor(isIncoming: isIncoming),
             ),
             font: UIFont.dynamicTypeBody,
             textColor: conversationStyle.bubbleTextColor(isIncoming: isIncoming),
             numberOfLines: 0,
-            lineBreakMode: .byTruncatingMiddle
+            lineBreakMode: .byTruncatingMiddle,
         )
     }
 
     public func measure(
         maxWidth: CGFloat,
-        measurementBuilder: CVCellMeasurement.Builder
+        measurementBuilder: CVCellMeasurement.Builder,
     ) -> CGSize {
         owsAssertDebug(maxWidth > 0)
 
@@ -257,17 +260,19 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
 
         let maxBigLabelWidth: CGFloat = {
             let nonLabelWidth =
-            (hStackConfig.layoutMargins.totalWidth
-             + messageStatus.hStackCumulativeSpacing
-             + vStackConfig.layoutMargins.totalWidth
-             + messageStatus.spacersTotalWidth)
+                (
+                    hStackConfig.layoutMargins.totalWidth
+                        + messageStatus.hStackCumulativeSpacing
+                        + vStackConfig.layoutMargins.totalWidth
+                        + messageStatus.spacersTotalWidth,
+                )
 
             return max(0, maxWidth - nonLabelWidth)
         }()
 
         let bigAmountLabelSize = CVText.measureLabel(
             config: bigAmountLabelConfig,
-            maxWidth: maxBigLabelWidth
+            maxWidth: maxBigLabelWidth,
         )
         let statusIconSize = CGSize(square: messageStatus.statusIconDimension)
 
@@ -282,7 +287,7 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
             measurementBuilder: measurementBuilder,
             measurementKey: .measurementKey_hStack,
             subviewInfos: hSubviewInfos,
-            maxWidth: maxWidth
+            maxWidth: maxWidth,
         )
 
         let maxTopLabelWidth = min(maxLabelWidth, hStackMeasurement.measuredSize.width)
@@ -290,7 +295,7 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
         let topLabelSize = CVText.measureLabel(config: topLabelConfig, maxWidth: maxTopLabelWidth)
         let noteLabelSize = CVText.measureLabel(
             config: noteLabelConfig,
-            maxWidth: maxNoteLabelWidth
+            maxWidth: maxNoteLabelWidth,
         )
 
         var vSubviewInfos = [ManualStackSubviewInfo]()
@@ -305,7 +310,7 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
             config: vStackConfig,
             measurementBuilder: measurementBuilder,
             measurementKey: .measurementKey_vStack,
-            subviewInfos: vSubviewInfos
+            subviewInfos: vSubviewInfos,
         )
 
         return vStackMeasurement.measuredSize
@@ -348,23 +353,25 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
         }
     }
 
-    public override func handleTap(
+    override public func handleTap(
         sender: UIGestureRecognizer,
         componentDelegate: CVComponentDelegate,
         componentView: CVComponentView,
-        renderItem: CVRenderItem
+        renderItem: CVRenderItem,
     ) -> Bool {
         guard let contactAddress = (thread as? TSContactThread)?.contactAddress else {
             owsFailDebug("Should be contact thread")
             return false
         }
         guard let archivedPayment = archivedPaymentAttachment.archivedPayment else { return false }
-        guard let item = ArchivedPaymentHistoryItem(
-            archivedPayment: archivedPayment,
-            address: contactAddress,
-            displayName: archivedPaymentAttachment.otherUserShortName,
-            interaction: interaction
-        ) else {
+        guard
+            let item = ArchivedPaymentHistoryItem(
+                archivedPayment: archivedPayment,
+                address: contactAddress,
+                displayName: archivedPaymentAttachment.otherUserShortName,
+                interaction: interaction,
+            )
+        else {
             return false
         }
         componentDelegate.didTapPayment(item)
@@ -374,7 +381,7 @@ public class CVComponentArchivedPayment: CVComponentBase, CVComponent {
 
 // MARK: - Constants & Utils
 
-fileprivate extension String {
+private extension String {
     static let measurementKey_hStack = "CVComponentArchivedPayment.measurementKey_hStack"
     static let measurementKey_vStack = "CVComponentArchivedPayment.measurementKey_vStack"
 }
@@ -385,7 +392,7 @@ extension CVComponentArchivedPayment: CVAccessibilityComponent {
     }
 }
 
-fileprivate extension UIView {
+private extension UIView {
     @discardableResult
     func addBlur(style: UIBlurEffect.Style = .extraLight) -> UIVisualEffectView {
         let blurEffect = UIBlurEffect(style: style)
@@ -424,7 +431,7 @@ private class CustomView: UIView {
         wrapper.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             wrapper.heightAnchor.constraint(equalToConstant: dimension),
-            wrapper.widthAnchor.constraint(equalTo: wrapper.heightAnchor, multiplier: 1)
+            wrapper.widthAnchor.constraint(equalTo: wrapper.heightAnchor, multiplier: 1),
         ])
 
         return wrapper
@@ -437,7 +444,7 @@ extension CGFloat {
     fileprivate static let innerHStackSpacing: CGFloat = 9
 }
 
-fileprivate extension MessageReceiptStatus {
+private extension MessageReceiptStatus {
     var bigAmountLabelAlpha: CGFloat {
         self == .sending ? 0.5 : 1
     }
@@ -463,7 +470,7 @@ fileprivate extension MessageReceiptStatus {
     }
 }
 
-fileprivate extension ManualStackView {
+private extension ManualStackView {
     func addBlurBackgroundExactlyOnce(isIncoming: Bool) {
         var subviewsToCheck = self.subviews
         while let subviewToCheck = subviewsToCheck.popLast() {
@@ -492,7 +499,7 @@ fileprivate extension ManualStackView {
     }
 }
 
-fileprivate extension UIImageView {
+private extension UIImageView {
     static func createFailureIcon(tintColor: UIColor) -> UIImageView {
         let sendFailureBadge = UIImageView(frame: .zero)
         sendFailureBadge.contentMode = .center

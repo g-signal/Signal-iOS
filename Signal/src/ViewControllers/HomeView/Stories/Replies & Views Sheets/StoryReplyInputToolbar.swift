@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import LibSignalClient
 import SignalServiceKit
 import SignalUI
 import UIKit
@@ -12,10 +13,9 @@ let kMaxMessageBodyCharacterCount = 2000
 
 protocol StoryReplyInputToolbarDelegate: MessageReactionPickerDelegate {
     func storyReplyInputToolbarDidTapSend(_ storyReplyInputToolbar: StoryReplyInputToolbar) async throws
-    func storyReplyInputToolbarDidTapReact(_ storyReplyInputToolbar: StoryReplyInputToolbar)
     func storyReplyInputToolbarDidBeginEditing(_ storyReplyInputToolbar: StoryReplyInputToolbar)
     func storyReplyInputToolbarHeightDidChange(_ storyReplyInputToolbar: StoryReplyInputToolbar)
-    func storyReplyInputToolbarMentionPickerPossibleAddresses(_ storyReplyInputToolbar: StoryReplyInputToolbar, tx: DBReadTransaction) -> [SignalServiceAddress]
+    func storyReplyInputToolbarMentionPickerPossibleAcis(_ storyReplyInputToolbar: StoryReplyInputToolbar, tx: DBReadTransaction) -> [Aci]
     func storyReplyInputToolbarMentionCacheInvalidationKey() -> String
     func storyReplyInputToolbarMentionPickerReferenceView(_ storyReplyInputToolbar: StoryReplyInputToolbar) -> UIView?
     func storyReplyInputToolbarMentionPickerParentView(_ storyReplyInputToolbar: StoryReplyInputToolbar) -> UIView?
@@ -30,6 +30,7 @@ class StoryReplyInputToolbar: UIView {
             reactionPicker.delegate = delegate
         }
     }
+
     let isGroupStory: Bool
     let quotedReplyModel: QuotedReplyModel?
 
@@ -57,6 +58,7 @@ class StoryReplyInputToolbar: UIView {
         // Otherwise we risk obscuring too much of the content.
         return UIDevice.current.orientation.isPortrait ? 160 : 100
     }
+
     private var textViewHeightConstraint: NSLayoutConstraint?
 
     // MARK: - Initializers
@@ -64,7 +66,7 @@ class StoryReplyInputToolbar: UIView {
     init(
         isGroupStory: Bool,
         quotedReplyModel: QuotedReplyModel? = nil,
-        spoilerState: SpoilerRenderState
+        spoilerState: SpoilerRenderState,
     ) {
         self.isGroupStory = isGroupStory
         self.quotedReplyModel = quotedReplyModel
@@ -117,6 +119,7 @@ class StoryReplyInputToolbar: UIView {
         containerView.autoPinEdge(toSuperviewSafeArea: .bottom)
 
         containerView.addSubview(reactionPicker)
+        reactionPicker.overrideUserInterfaceStyle = .dark
         reactionPicker.autoPinEdges(toSuperviewEdgesExcludingEdge: .bottom)
 
         containerView.addSubview(textContainer)
@@ -209,7 +212,7 @@ class StoryReplyInputToolbar: UIView {
         textView.resignFirstResponder()
     }
 
-    private lazy var reactionPicker: MessageReactionPicker = MessageReactionPicker(selectedEmoji: nil, delegate: delegate, style: .inline, forceDarkTheme: true)
+    private lazy var reactionPicker: MessageReactionPicker = MessageReactionPicker(selectedEmoji: nil, delegate: delegate, style: .inline)
 
     private lazy var placeholderTextView: UITextView = {
         let placeholderTextView = buildTextView()
@@ -218,12 +221,12 @@ class StoryReplyInputToolbar: UIView {
             if isGroupStory {
                 return OWSLocalizedString(
                     "STORY_REPLY_TO_GROUP_TEXT_FIELD_PLACEHOLDER",
-                    comment: "placeholder text for replying to a group story"
+                    comment: "placeholder text for replying to a group story",
                 )
             } else if let quotedReplyModel {
                 let format = OWSLocalizedString(
                     "STORY_REPLY_TO_PRIVATE_TEXT_FIELD_PLACEHOLDER",
-                    comment: "placeholder text for replying to a private story. Embeds {{author name}}"
+                    comment: "placeholder text for replying to a private story. Embeds {{author name}}",
                 )
                 let authorName = SSKEnvironment.shared.databaseStorageRef.read { tx in
                     return SSKEnvironment.shared.contactManagerRef.displayName(for: quotedReplyModel.originalMessageAuthorAddress, tx: tx).resolvedValue()
@@ -232,7 +235,7 @@ class StoryReplyInputToolbar: UIView {
             } else {
                 return OWSLocalizedString(
                     "STORY_REPLY_TEXT_FIELD_PLACEHOLDER",
-                    comment: "placeholder text for replying to a story"
+                    comment: "placeholder text for replying to a story",
                 )
             }
         }()
@@ -290,10 +293,6 @@ class StoryReplyInputToolbar: UIView {
         }
     }
 
-    private func didTapReact() {
-        delegate?.storyReplyInputToolbarDidTapReact(self)
-    }
-
     // MARK: - Helpers
 
     private func updateContent(animated: Bool) {
@@ -342,7 +341,7 @@ class StoryReplyInputToolbar: UIView {
             let animator = UIViewPropertyAnimator(
                 duration: ConversationInputToolbar.heightChangeAnimationDuration,
                 springDamping: 1,
-                springResponse: 0.25
+                springResponse: 0.25,
             )
             animator.addAnimations {
                 textViewHeightConstraint.constant = newHeight
@@ -370,28 +369,28 @@ extension StoryReplyInputToolbar: BodyRangesTextViewDelegate {
         delegate?.storyReplyInputToolbarMentionPickerReferenceView(self)
     }
 
-    func textViewMentionPickerPossibleAddresses(_ textView: BodyRangesTextView, tx: DBReadTransaction) -> [SignalServiceAddress] {
-        delegate?.storyReplyInputToolbarMentionPickerPossibleAddresses(self, tx: tx) ?? []
+    func textViewMentionPickerPossibleAcis(_ textView: BodyRangesTextView, tx: DBReadTransaction) -> [Aci] {
+        delegate?.storyReplyInputToolbarMentionPickerPossibleAcis(self, tx: tx) ?? []
     }
 
     func textViewMentionCacheInvalidationKey(_ textView: BodyRangesTextView) -> String {
         return delegate?.storyReplyInputToolbarMentionCacheInvalidationKey() ?? UUID().uuidString
     }
 
-    public func textViewDisplayConfiguration(_ textView: BodyRangesTextView) -> HydratedMessageBody.DisplayConfiguration {
+    func textViewDisplayConfiguration(_ textView: BodyRangesTextView) -> HydratedMessageBody.DisplayConfiguration {
         return .composingGroupStoryReply()
     }
 
-    public func mentionPickerStyle(_ textView: BodyRangesTextView) -> MentionPickerStyle {
+    func mentionPickerStyle(_ textView: BodyRangesTextView) -> MentionPickerStyle {
         return .groupReply
     }
 
-    public func textViewDidChange(_ textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         updateHeight(textView: textView)
         updateContent(animated: true)
     }
 
-    public func textViewDidBeginEditing(_ textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
         delegate?.storyReplyInputToolbarDidBeginEditing(self)
     }
 }

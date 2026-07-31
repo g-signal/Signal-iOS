@@ -69,7 +69,7 @@ extension BackupArchive {
             /// Check, though, that the value didn't drift just in case.
             owsAssertBeta(
                 TSPrivateStoryThread.myStoryUniqueId == "00000000-0000-0000-0000-000000000000",
-                "My Story hardcoded id drifted; legacy backups may now be invalid"
+                "My Story hardcoded id drifted; legacy backups may now be invalid",
             )
             self.isMyStoryId = value.uuidString == TSPrivateStoryThread.myStoryUniqueId
         }
@@ -111,13 +111,14 @@ extension BackupArchive {
         }
 
         let localRecipientId: RecipientId
+        let localSignalRecipientRowId: SignalRecipient.RowId
         let localIdentifiers: LocalIdentifiers
 
         var localRecipientAddress: ContactAddress {
             return .init(
                 aci: localIdentifiers.aci,
                 pni: localIdentifiers.pni,
-                e164: E164(localIdentifiers.phoneNumber)
+                e164: E164(localIdentifiers.phoneNumber),
             )
         }
 
@@ -132,17 +133,19 @@ extension BackupArchive {
         private let callLinkIdMap = SharedMap<CallLinkRecordId, RecipientId>()
 
         init(
-            bencher: BackupArchive.ArchiveBencher,
-            attachmentByteCounter: BackupArchiveAttachmentByteCounter,
-            currentBackupAttachmentUploadEra: String,
-            includedContentFilter: IncludedContentFilter,
             localIdentifiers: LocalIdentifiers,
             localRecipientId: RecipientId,
-            startTimestampMs: UInt64,
-            tx: DBReadTransaction
+            localSignalRecipientRowId: SignalRecipient.RowId,
+            startDate: Date,
+            remoteConfig: RemoteConfig,
+            bencher: BackupArchive.ArchiveBencher,
+            attachmentByteCounter: BackupArchiveAttachmentByteCounter,
+            includedContentFilter: IncludedContentFilter,
+            tx: DBReadTransaction,
         ) {
             self.localIdentifiers = localIdentifiers
             self.localRecipientId = localRecipientId
+            self.localSignalRecipientRowId = localSignalRecipientRowId
 
             // Start after the local recipient id.
             currentRecipientId = RecipientId(value: localRecipientId.value + 1)
@@ -158,12 +161,12 @@ extension BackupArchive {
             }
 
             super.init(
+                startDate: startDate,
+                remoteConfig: remoteConfig,
                 bencher: bencher,
                 attachmentByteCounter: attachmentByteCounter,
-                currentBackupAttachmentUploadEra: currentBackupAttachmentUploadEra,
                 includedContentFilter: includedContentFilter,
-                startTimestampMs: startTimestampMs,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -200,34 +203,61 @@ extension BackupArchive {
         }
 
         subscript(_ address: Address) -> RecipientId? {
-            // swiftlint:disable:next implicit_getter
-            get {
-                switch address {
-                case .releaseNotesChannel:
-                    return releaseNotesChannelRecipientId
-                case .group(let groupId):
-                    return groupIdMap[groupId]
-                case .distributionList(let distributionId):
-                    return distributionIdMap[distributionId]
-                case .contact(let contactAddress):
-                    // Go down identifiers in priority order, return the first we have.
-                    if let aci = contactAddress.aci {
-                        return contactAciMap[aci]
-                    } else if let e164 = contactAddress.e164 {
-                        return contactE164Map[e164]
-                    } else if let pni = contactAddress.pni {
-                        return contactPniMap[pni]
-                    } else {
-                        return nil
-                    }
-                case .callLink(let callLinkId):
-                    return callLinkIdMap[callLinkId]
+            switch address {
+            case .releaseNotesChannel:
+                return releaseNotesChannelRecipientId
+            case .group(let groupId):
+                return groupIdMap[groupId]
+            case .distributionList(let distributionId):
+                return distributionIdMap[distributionId]
+            case .contact(let contactAddress):
+                // Go down identifiers in priority order, return the first we have.
+                if let aci = contactAddress.aci {
+                    return contactAciMap[aci]
+                } else if let e164 = contactAddress.e164 {
+                    return contactE164Map[e164]
+                } else if let pni = contactAddress.pni {
+                    return contactPniMap[pni]
+                } else {
+                    return nil
                 }
+            case .callLink(let callLinkId):
+                return callLinkIdMap[callLinkId]
             }
         }
 
         func recipientId(forRecipientDbRowId recipientDbRowId: SignalRecipient.RowId) -> RecipientId? {
+            if localSignalRecipientRowId == recipientDbRowId {
+                return localRecipientId
+            }
             return recipientDbRowIdMap[recipientDbRowId]
+        }
+
+        enum RecipientIdResult {
+            case found(BackupArchive.RecipientId)
+            case missing(BackupArchive.ArchiveFrameError<BackupArchive.InteractionUniqueId>)
+        }
+
+        func getRecipientId(
+            aci: Aci,
+            forInteraction interaction: TSInteraction,
+            file: StaticString = #file,
+            function: StaticString = #function,
+            line: UInt = #line,
+        ) -> RecipientIdResult {
+            let contactAddress = BackupArchive.ContactAddress(aci: aci)
+
+            if let recipientId = self[.contact(contactAddress)] {
+                return .found(recipientId)
+            }
+
+            return .missing(.archiveFrameError(
+                .referencedRecipientIdMissing(.contact(contactAddress)),
+                BackupArchive.InteractionUniqueId(interaction: interaction),
+                file: file,
+                function: function,
+                line: line,
+            ))
         }
     }
 
@@ -242,6 +272,7 @@ extension BackupArchive {
         }
 
         let localIdentifiers: LocalIdentifiers
+        var localSignalRecipientRowId: SignalRecipient.RowId?
 
         private let map = SharedMap<RecipientId, Address>()
         private let recipientDbRowIdCache = SharedMap<RecipientId, SignalRecipient.RowId>()
@@ -253,17 +284,19 @@ extension BackupArchive {
 
         init(
             localIdentifiers: LocalIdentifiers,
-            startTimestampMs: UInt64,
+            startDate: Date,
+            remoteConfig: RemoteConfig,
             attachmentByteCounter: BackupArchiveAttachmentByteCounter,
             isPrimaryDevice: Bool,
-            tx: DBWriteTransaction
+            tx: DBWriteTransaction,
         ) {
             self.localIdentifiers = localIdentifiers
             super.init(
-                startTimestampMs: startTimestampMs,
+                startDate: startDate,
+                remoteConfig: remoteConfig,
                 attachmentByteCounter: attachmentByteCounter,
                 isPrimaryDevice: isPrimaryDevice,
-                tx: tx
+                tx: tx,
             )
         }
 

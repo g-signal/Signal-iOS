@@ -17,8 +17,6 @@
 	"properties_to_ignore": [
 		"TSYapDatabaseObject.grdbId",
 		"OWSDynamicOutgoingMessage.block",
-		"OWSDisappearingMessagesConfiguration.originalDictionaryValue",
-		"OWSDisappearingMessagesConfiguration.newRecord",
 		"TSThread.isArchivedByLegacyTimestampForSorting",
 		"TSContactThread.contactThreadSchemaVersion",
 		"TSCall.callSchemaVersion",
@@ -45,23 +43,25 @@
 	},
 	"class_to_skip_serialization": [
 		"OWSContactOffersInteraction",
-		"OWSOutgoingSyncMessage",
-		"OWSOutgoingReactionMessage",
-		"OWSEndSessionMessage",
-		"OWSStaticOutgoingMessage",
-		"OWSDynamicOutgoingMessage",
 		"OWSDisappearingMessagesConfigurationMessage",
+		"OWSDynamicOutgoingMessage",
+		"OWSEndSessionMessage",
 		"OWSGroupInfoRequestMessage",
-		"OWSProfileKeyMessage",
-		"OWSOutgoingNullMessage",
 		"OWSOutgoingCallMessage",
 		"OWSOutgoingGroupCallMessage",
-		"OWSOutgoingSenderKeyDistributionMessage",
+		"OWSOutgoingNullMessage",
+		"OWSOutgoingReactionMessage",
 		"OWSOutgoingResendRequest",
+		"OWSOutgoingResendResponse",
+		"OWSOutgoingSenderKeyDistributionMessage",
+		"OWSOutgoingSyncMessage",
+		"OWSPaymentActivationRequestFinishedMessage",
+		"OWSPaymentActivationRequestMessage",
+		"OWSProfileKeyMessage",
 		"OWSReceiptsForSenderMessage",
+		"OWSStaticOutgoingMessage",
 		"OWSUnknownDBObject",
-		"TSOutgoingDeleteMessage",
-		"OWSOutgoingResendResponse"
+		"TSOutgoingDeleteMessage"
 	],
 	"manually_typed_fields": {
 		"TSThread.conversationColorName": {
@@ -111,9 +111,7 @@
 		"TSIncomingMessage.read": "wasRead",
 		"TSCall.read": "wasRead",
 		"OWSGroupCallMessage.read": "wasRead",
-		"TSIncomingMessage.viewed": "wasViewed",
-		"OWSDisappearingMessagesConfiguration.enabled": "isEnabled",
-		"OWSDisappearingMessagesConfiguration.newRecord": "isNewRecord"
+		"TSIncomingMessage.viewed": "wasViewed"
 	},
 	"custom_column_names": {
 		"TSInteraction.uniqueThreadId": "threadUniqueId",

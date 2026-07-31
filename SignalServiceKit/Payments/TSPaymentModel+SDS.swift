@@ -141,9 +141,9 @@ extension TSPaymentModel {
             let mcTransactionData: Data? = SDSDeserialization.optionalData(record.mcTransactionData, name: "mcTransactionData")
             let memoMessage: String? = record.memoMessage
             let mobileCoinSerialized: Data? = record.mobileCoin
-            let mobileCoin: MobileCoinPayment? = try SDSDeserialization.optionalUnarchive(mobileCoinSerialized, name: "mobileCoin")
+            let mobileCoin: MobileCoinPayment? = try mobileCoinSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MobileCoinPayment.self, from: $0) })
             let paymentAmountSerialized: Data? = record.paymentAmount
-            let paymentAmount: TSPaymentAmount? = try SDSDeserialization.optionalUnarchive(paymentAmountSerialized, name: "paymentAmount")
+            let paymentAmount: TSPaymentAmount? = try paymentAmountSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: TSPaymentAmount.self, from: $0) })
             guard let paymentFailure: TSPaymentFailure = record.paymentFailure else {
                throw SDSError.missingRequiredField()
             }
@@ -415,17 +415,14 @@ public extension TSPaymentModel {
 @objc
 public class TSPaymentModelCursor: NSObject, SDSCursor {
     private let transaction: DBReadTransaction
-    private let cursor: RecordCursor<PaymentModelRecord>?
+    private let cursor: RecordCursor<PaymentModelRecord>
 
-    init(transaction: DBReadTransaction, cursor: RecordCursor<PaymentModelRecord>?) {
+    init(transaction: DBReadTransaction, cursor: RecordCursor<PaymentModelRecord>) {
         self.transaction = transaction
         self.cursor = cursor
     }
 
     public func next() throws -> TSPaymentModel? {
-        guard let cursor = cursor else {
-            return nil
-        }
         guard let record = try cursor.next() else {
             return nil
         }
@@ -451,16 +448,9 @@ public extension TSPaymentModel {
     @nonobjc
     class func grdbFetchCursor(transaction: DBReadTransaction) -> TSPaymentModelCursor {
         let database = transaction.database
-        do {
+        return failIfThrows {
             let cursor = try PaymentModelRecord.fetchCursor(database)
             return TSPaymentModelCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \(error)")
-            return TSPaymentModelCursor(transaction: transaction, cursor: nil)
         }
     }
 
@@ -517,44 +507,6 @@ public extension TSPaymentModel {
                             })
     }
 
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        anyEnumerateUniqueIds(transaction: transaction, batched: false, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batched: Bool = false,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        let batchSize = batched ? Batching.kDefaultBatchSize : 0
-        anyEnumerateUniqueIds(transaction: transaction, batchSize: batchSize, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    //
-    // If batchSize > 0, the enumeration is performed in autoreleased batches.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batchSize: UInt,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        grdbEnumerateUniqueIds(transaction: transaction,
-                                sql: """
-                SELECT \(paymentModelColumn: .uniqueId)
-                FROM \(PaymentModelRecord.databaseTableName)
-            """,
-            batchSize: batchSize,
-            block: block)
-    }
-
     // Does not order the results.
     class func anyFetchAll(transaction: DBReadTransaction) -> [TSPaymentModel] {
         var result = [TSPaymentModel]()
@@ -564,36 +516,8 @@ public extension TSPaymentModel {
         return result
     }
 
-    // Does not order the results.
-    class func anyAllUniqueIds(transaction: DBReadTransaction) -> [String] {
-        var result = [String]()
-        anyEnumerateUniqueIds(transaction: transaction) { (uniqueId, _) in
-            result.append(uniqueId)
-        }
-        return result
-    }
-
     class func anyCount(transaction: DBReadTransaction) -> UInt {
         return PaymentModelRecord.ows_fetchCount(transaction.database)
-    }
-
-    class func anyExists(
-        uniqueId: String,
-        transaction: DBReadTransaction
-    ) -> Bool {
-        assert(!uniqueId.isEmpty)
-
-        let sql = "SELECT EXISTS ( SELECT 1 FROM \(PaymentModelRecord.databaseTableName) WHERE \(paymentModelColumn: .uniqueId) = ? )"
-        let arguments: StatementArguments = [uniqueId]
-        do {
-            return try Bool.fetchOne(transaction.database, sql: sql, arguments: arguments) ?? false
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFail("Missing instance.")
-        }
     }
 }
 
@@ -603,17 +527,10 @@ public extension TSPaymentModel {
     class func grdbFetchCursor(sql: String,
                                arguments: StatementArguments = StatementArguments(),
                                transaction: DBReadTransaction) -> TSPaymentModelCursor {
-        do {
+        return failIfThrows {
             let sqlRequest = SQLRequest<Void>(sql: sql, arguments: arguments, cached: true)
             let cursor = try PaymentModelRecord.fetchCursor(transaction.database, sqlRequest)
             return TSPaymentModelCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \(error)")
-            return TSPaymentModelCursor(transaction: transaction, cursor: nil)
         }
     }
 

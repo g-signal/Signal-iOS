@@ -1,6 +1,9 @@
 /* Button text to dismiss missing contacts permission alert */
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "Később";
 
+/* Footer for the 'about' help section. For non-English languages, exclude the word '501c3'. */
+"ABOUT_SECTION_FOOTER" = "Copyright B&A Messenger\n AGPLv3 licenc alatt\n A B&A egy nonprofit szervezet.";
+
 /* Title for the 'about' help section */
 "ABOUT_SECTION_TITLE" = "Az alkalmazásról";
 
@@ -69,6 +72,12 @@
 
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "Üzenet küldése";
+
+/* Message shown in an action sheet when a generic error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_GENERIC_ERROR" = "Probléma merült fel! Kérjük, vedd fel a kapcsolatot az ügyfélszolgálattal!";
+
+/* Message shown in an action sheet when a network error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_NETWORK_ERROR" = "Probléma merült fel! Ellenőrizd az internetkapcsolatod, és próbáld újra!";
 
 /* A label for 'tap to download' buttons. */
 "ACTION_TAP_TO_DOWNLOAD" = "Koppints a letöltéshez";
@@ -196,6 +205,12 @@
 /* notification body */
 "APN_Message" = "Új üzenet érkezett";
 
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. The embedded value is 'Update now' (translated via APP_EXPIRED_BOTTOM_UPDATE), and it will be formatted as a tappable link. */
+"APP_EXPIRED_BOTTOM" = "A B&A jelenlegi verziója lejárt. %1$@ üzenetek küldéséhez és fogadásához.";
+
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. This value is a tappable link embedded in a larger sentence. */
+"APP_EXPIRED_BOTTOM_UPDATE" = "Frissítés most";
+
 /* Default message for the 'app launch failed' alert. */
 "APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A indítási hiba. Kérlek küldj egy hibanapló fájlt a support@baxs.com címre, hogy megvizsgálhassuk, mi történt.";
 
@@ -210,6 +225,15 @@
 
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "Adatbázis-betöltési hiba";
+
+/* Message for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_MESSAGE" = "A B&A nem indítható el, mert az adatbázis sérült. Ez semmilyen hatással nincs a fiókod vagy az üzeneteid biztonságára.";
+
+/* Title for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_TITLE" = "Adatbázis sérült";
+
+/* Action in an action sheet offering to attempt recovery of a corrupted database. */
+"APP_LAUNCH_FAILURE_DATABASE_RECOVERY_ACTION_TITLE" = "Javítás";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "Kérlek frissíts a legújabb B&A verzióra.";
@@ -246,15 +270,6 @@
 
 /* Text prompting user to edit their profile name. */
 "APP_SETTINGS_EDIT_PROFILE_NAME_PROMPT" = "Név megadása";
-
-/* Label for the 'dismiss' button in the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_DISMISS_BUTTON" = "Később";
-
-/* Message format for the 'new app version available' alert. Embeds: {{The latest app version number}} */
-"APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "A %1$@ verzió elérhető az App Store-ban.";
-
-/* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "Új B&A verzió elérhető";
 
 /* Label for the 'update' button in the 'new app version available' alert. */
 "APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "Frissítés";
@@ -427,6 +442,9 @@
 /* A button to open the photo picker from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_PHOTOS" = "Fotók";
 
+/* A button to select a poll from the Attachment Keyboard */
+"ATTACHMENT_KEYBOARD_POLL" = "Szavazás";
+
 /* Accessibility label for attaching photos */
 "ATTACHMENT_LABEL" = "Melléklet";
 
@@ -487,14 +505,8 @@
 /* Message when trying to show a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_MESSAGE_LABEL" = "Hangüzenet nem érhető el";
 
-/* Message for sheet shown when tapping a voice message that has expired and is unavailable for download */
-"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Ez a hangüzenet nem lett átmásolva a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi fájlok és médiafájlok nem szinkronizálhatók.";
-
 /* Title for sheet shown when tapping a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "Hangüzenet nem érhető el";
-
-/* Username for recovery key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "A B&A biztonsági mentései";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "Szín kiválasztása";
@@ -556,6 +568,15 @@
 /* Toast indicating that the Recovery Key was correct. */
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "A biztonsági mentési kulcs helyes. Tartsd biztonságban a kulcsodat.";
 
+/* Button label for action sheet to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_ACTION" = "Kilépés a biztonsági mentés beállításából";
+
+/* Message for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_MESSAGE" = "Nem fejezted be a biztonsági mentések beállítását, és nem jött létre biztonsági mentés. A biztonsági mentéseket a Beállításokban engedélyezheted.";
+
+/* Title for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_TITLE" = "Kilépsz a biztonsági mentés beállításából?";
+
 /* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "Ha elveszíted a kulcsod, a B&A nem tud segíteni a biztonsági másolat helyreállításában. Tárold biztonságos helyen, és ne oszd meg másokkal.";
 
@@ -580,17 +601,41 @@
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "A biztonsági másolatok bármikor törölhetők";
 
+/* A toast shown when 'Not Now' is tapped from the Backups onboarding intro. */
+"BACKUP_ONBOARDING_INTRO_NOT_NOW_TOAST" = "A biztonsági mentéseket a Beállításokban engedélyezheted.";
+
 /* Subtitle for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "Készíts biztonsági másolatot az üzeneteidről és a médiafájljaidról, és használd a B&A biztonságos, végpontok közötti titkosított tárolási szolgáltatását. Soha ne veszíts el egy üzenetet sem új telefon vásárlásakor vagy a B&A újratelepítésekor.";
 
 /* Title for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_TITLE" = "A B&A biztonsági mentései";
 
-/* Subtitle for a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "A biztonsági kulcs egy 64 számjegyű kód, amely lehetővé teszi a biztonsági másolat visszaállítását a B&A újratelepítésekor.\n\nHa elfelejted a kulcsodat, nem tudod visszaállítani a biztonsági másolatot. A B&A nem tud segíteni a biztonsági másolat helyreállításában.";
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "A biztonsági kulcs egy 64 jegyű kód, amely a biztonsági mentés visszaállításához szükséges.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_2" = "A biztonsági kulcsot tárold biztonságos helyen, például egy jelszókezelőben, és ne oszd meg senkivel.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_3" = "Ha elveszíted, nem tudod helyreállítani az üzeneteidet.";
+
+/* Title for a continue button for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_CONTINUE_BUTTON_TITLE" = "Helyreállítási kulcs megtekintése";
 
 /* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "A biztonsági kulcsod";
+
+/* Body for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY" = "A biztonsági mentésre szóló előfizetésed lejárt, mert nem sikerült megújítani a fizetési módoddal.\n\nA médiafájlok biztonsági mentésének folytatásához újra előfizethetsz. Továbbra is hozzáférhetsz az ingyenes B&A Biztonsági mentések csomaghoz.";
+
+/* Body for a sheet shown when your Backup plan is downgraded because you stopped using TestFlight. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY_TESTFLIGHT" = "A biztonsági mentésre szóló előfizetésed lejárt, mert már nem használod a TestFlight szolgáltatást.\n\nA médiafájlok biztonsági mentésének folytatásához újra előfizethetsz. Továbbra is hozzáférhetsz az ingyenes B&A Biztonsági mentések csomaghoz.";
+
+/* Primary button for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_PRIMARY_BUTTON" = "Biztonsági mentések kezelése";
+
+/* Title for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_TITLE" = "A biztonsági mentésre vonatkozó előfizetésed lejárt";
 
 /* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "Másolás vágólapra";
@@ -613,6 +658,21 @@
 /* Title for a progress spinner on a modal when restoring messages */
 "BACKUP_RESTORE_MODAL_TITLE" = "Üzenetek visszaállítása…";
 
+/* Message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "Az automatikus biztonsági mentések le vannak tiltva. Engedélyezd az automatikus biztonsági mentéseket a B&A engedélyeinek frissítésével.";
+
+/* Add-on to a message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE_UPDATE_NOW" = "Frissítés most";
+
+/* Title for a button that takes the users to Signal's iOS Settings page. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_GO_TO_SETTINGS_BUTTON" = "Ugrás a Beállításokhoz";
+
+/* Message for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_MESSAGE" = "Ha engedélyezni szeretnéd, hogy a B&A automatikusan biztonsági másolatot készítsen az üzeneteidről, koppints az alábbi „Beállítások megnyitása” elemre, és engedélyezd az „Alkalmazásfrissítés háttérben” lehetőséget.";
+
+/* Title for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_TITLE" = "Automatikus biztonsági mentések letiltva";
+
 /* Message for an action sheet explaining that performing a backup failed with a generic error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR" = "Hiba történt a biztonsági mentés létrehozásakor. Próbáld újra, vagy vedd fel a kapcsolatot a támogatással!";
 
@@ -628,6 +688,9 @@
 /* Message for an action sheet explaining that performing a backup failed with a network error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR" = "Hiba történt a biztonsági mentés létrehozásakor. Ellenőrizd az internetkapcsolatodat, és próbáld újra.";
 
+/* Message for an action sheet explaining that you must be registered to make a Backup. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "Biztonsági mentés létrehozásához regisztrálnia kell.";
+
 /* Description for a progress bar tracking the optimizing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "Médiafájl optimalizálása...";
 
@@ -637,14 +700,26 @@
 /* Description for a progress bar tracking the processing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PROCESSING_MEDIA" = "Médiafájl feldolgozása...";
 
+/* Title for an action sheet action explaining the user can now scan a QR code to continue the restore. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_ACTION_TITLE" = "QR-kód beolvasása";
+
+/* Body for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_BODY" = "Ezzel az eszközzel olvasd be a QR-kódot azon az eszközön, amelyre át szeretnéd vinni az adatokat.";
+
+/* Title for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_TITLE" = "Átvitelre kész";
+
+/* Message describing to the user that the last backup failed. */
+"BACKUP_SETTINGS_BACKUP_FAILED_MESSAGE" = "Az utolsó biztonsági mentést nem lehetett befejezni. Az újbóli próbálkozáshoz koppints a „Biztonsági mentés most” gombra.";
+
 /* Title for a button allowing users to upgrade from a free to paid backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "Frissítés";
 
+/* Text describing the user's free backup plan when they have Backups disabled. */
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_AND_DISABLED_DESCRIPTION" = "Kikapcsoltad a biztonsági mentéseket";
+
 /* Text describing the user's free backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_DESCRIPTION" = "A biztonsági terv ingyenes";
-
-/* Header describing what the free backup plan includes. */
-"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Szöveg és médiafájlok biztonsági mentése 45 napra";
 
 /* Message for a view indicating we failed to fetch someone's Backup plan due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_MESSAGE" = "Hiba lépett fel! Kérjük, vedd fel a kapcsolatot az ügyfélszolgálattal!";
@@ -673,11 +748,26 @@
 /* Text explaining that a user's paid plan, which has been canceled, expired on a past date. Embeds {{ the formatted expiration date }}. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_PAST_EXPIRATION_FORMAT" = "%1$@ dátummal lejár";
 
+/* Title for a button allowing users to manage a paid backup plan that failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_ACTION_BUTTON_TITLE" = "Előfizetés kezelése";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_1" = "Fizetési mód elutasítva";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_2" = "Ellenőrizd, hogy a megadott fizetési mód naprakész-e.";
+
 /* Title for a button allowing users to manage their backup plan as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "Csomag kezelése";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "Fizetős, de ingyenes, amíg tesztelő maradsz";
+
+/* Title for a button allowing users to renew their backup subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_ACTION_BUTTON_TITLE" = "Megújítás";
+
+/* Text describing that the user's paid backup plan did not correspond to a App Store subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_DESCRIPTION" = "Az előfizetésed nem található ezen az eszközön. Annak érdekében, hogy tovább használhasd a B&A biztonsági mentéseit, újítsd meg.";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "Szöveg és minden médiafájl biztonsági mentése";
@@ -717,6 +807,15 @@
 
 /* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "Új helyreállítási kulcs létrehozásához regisztrálnod kell.";
+
+/* Explanation text for a sheet warning users they've reached a rate limit for creating Recovery Key. {{ Embeds 1: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_BODY" = "Ha új helyreállítási kulcsot hozol létre, nem fogod tudni engedélyezni a biztonsági mentéseket eddig: %1$@. A létrehozható kulcsok száma korlátozott a visszaélések megelőzése érdekében.";
+
+/* Action in an action sheet allowing to continue to rotate their key */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_CONTINUE_ACTION" = "Új kulcs létrehozása";
+
+/* Title for a sheet warning users they've reached a rate limit for creating Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_TITLE" = "Elérted a helyreállítási kulcsok korlátját";
 
 /* Toast shown when a new Recovery Key has been created successfully. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "Új kulcs létrehozva!";
@@ -759,6 +858,15 @@
 
 /* Message shown in an action sheet when the user tries to disable Backups, but is not registered. */
 "BACKUP_SETTINGS_DISABLING_ERROR_NOT_REGISTERED" = "A biztonsági mentések letiltásához regisztrálnod kell.";
+
+/* Button for an action sheet shown when the user disables Backups, letting them manage their subscription. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MANAGE_SUBSCRIPTION_BUTTON" = "Előfizetés kezelése";
+
+/* Message for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MESSAGE" = "Ha le szeretnéd mondani az előfizetésedet, koppints az Előfizetés kezelése > B&A > Előfizetés lemondása lehetőségre";
+
+/* Title for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_TITLE" = "Még mindig fizetős biztonsági mentési csomagra vagy előfizetve";
 
 /* Title for a button shown in Backup Settings that lets a user cancel an in-progress download. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_CANCEL_DOWNLOAD" = "Letöltés megszakítása";
@@ -814,6 +922,15 @@
 /* Label for a menu item offering to show the user their recovery key. */
 "BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "Biztonsági kulcs megtekintése";
 
+/* Body for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_BODY" = "Az előfizetésed nem állítható vissza ezen az eszközön. Ez akkor fordulhat elő, ha egy másik Apple-fiókkal vagy bejelentkezve az App Store-ba, vagy ha Android-telefonról váltottál az alkalmazásra.\n\nHa a régi telefonodon aktív előfizetésed van, fontold meg annak lemondását, mielőtt megújítanád.";
+
+/* Button for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_GOT_IT_BUTTON" = "Rendben";
+
+/* Title for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_TITLE" = "Az előfizetés nem található";
+
 /* Title for a button allowing users to trigger a manual backup. */
 "BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "Biztonsági mentés készítése";
 
@@ -850,6 +967,12 @@
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "Az eszköz tárhelyének optimalizálása";
 
+/* Subtitle for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_SUBTITLE" = "Elérted a biztonsági mentések tárhelykorlátját. A csevegések és médiafájlok biztonsági mentésének folytatásához szabadíts fel tárhelyet a B&Aban.";
+
+/* Title for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_TITLE" = "A biztonsági mentések tárhelye megtelt";
+
 /* Title for a button allowing users to re-enable Backups, after it had been previously disabled. */
 "BACKUP_SETTINGS_REENABLE_BACKUPS_BUTTON_TITLE" = "Engedélyezd újra a biztonsági mentéseket";
 
@@ -861,6 +984,21 @@
 
 /* Title for a sheet warning the user about skipping downloads. */
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "Letöltés kihagyása?";
+
+/* Title for detail button in notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_DETAIL_BUTTON" = "Részletek";
+
+/* Title for notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_TITLE" = "Nem sikerült aktiválni a biztonsági mentésre vonatkozó előfizetésedet";
+
+/* Body for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_BODY" = "Ebben a hónapban túl sok eszköz próbálta aktiválni az előfizetésedet.\n\nLehet, hogy túl sokszor regisztráltad újra a B&A fiókodat, vagy túl sok eszközöd használja ugyanazt az előfizetést.";
+
+/* Button for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_GOT_IT_BUTTON" = "Rendben";
+
+/* Title for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_TITLE" = "Nem sikerült aktiválni a biztonsági mentésre vonatkozó előfizetésedet";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "Feltöltés szünetel: az eszköz akkumulátor-töltöttsége alacsony";
@@ -874,14 +1012,32 @@
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "Feltöltés szünetel: wifi-re vár";
 
+/* Subtitle for a progress bar tracking uploads that are paused because the user is out of remote storage space. Embeds 1:{{ total storage space provided, e.g. 100 GB }}; 2:{{ space the user needs to free up by deleting media, e.g. 1 GB }}. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_OUT_OF_STORAGE_SPACE_FORMAT" = "Elérted a biztonsági mentési csomagodban foglalt %1$@ tárhelykorlátot. Az új csevegések és médiatartalmak biztonsági mentéséhez szabadíts fel %2$@ tárhelyet a B&Aban, majd koppints a „Biztonsági mentés most” lehetőségre!";
+
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
-"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "Feltöltés: %1$@/%2$@ (%3$@%%)";
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "Feltöltés: %1$@/%2$@ (%3$@)";
 
 /* Message for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE" = "A biztonsági másolat méretétől függően ez sokáig eltarthat. A biztonsági mentés közben a szokásos módon használhatod a telefonodat.";
 
 /* Title for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "Üdvözlünk, ezek a B&A biztonsági mentései! Kezdd el a biztonsági mentést most.";
+
+/* Message for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_MESSAGE" = "Ellenőrizd, hogy a megadott fizetési mód naprakész-e. Koppints az Előfizetés kezelése > B&A > Fizetési mód frissítése lehetőségre.";
+
+/* Primary button for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_PRIMARY_BUTTON" = "Előfizetés kezelése";
+
+/* Title for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "Nem sikerült megújítani a biztonsági mentésre vonatkozó előfizetésedet";
+
+/* Body for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "Kérjük, hogy a probléma megoldásához küldd el nekünk a hibanaplókat!";
+
+/* Title for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "Hiba történt a médiafájl biztonsági mentése során";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "A B&A biztonsági mentései";
@@ -1041,9 +1197,6 @@
 
 /* An explanation of the consequences of blocking another user. */
 "BLOCK_USER_BEHAVIOR_EXPLANATION" = "A letiltott felhasználók nem fognak tudni sem üzenetet küldeni neked, sem pedig felhívni.";
-
-/* Tooltip highlighting the blur image editing tool. */
-"BLUR_TOOLTIP" = "Új: Homályosíts ki arcokat vagy más fénykép részeket.";
 
 /* Default text for the custom amount field of the boost view. */
 "BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "Egyedi összeg";
@@ -1227,6 +1380,87 @@
 
 /* notification body */
 "CALL_MISSED_BECAUSE_OF_IDENTITY_CHANGE_NOTIFICATION_BODY" = "Nem fogadott hívás. A hívó biztonsági azonosítója megváltozott.";
+
+/* Title for toast which appears after submitting a call quality survey */
+"CALL_QUALITY_SURVEY_COMPLETION_TOAST" = "Köszönjük a visszajelzésedet!";
+
+/* Footer text explaining custom issue descriptions in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_FOOTER" = "Kérjük, add meg a problémához kapcsolódó összes részletet. Amit itt megosztottál, az bizalmas marad, és csak a B&A-hívások fejlesztésére használjuk fel.";
+
+/* Placeholder text for the custom issue entry in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_PLACEHOLDER" = "Írd le a problémádat";
+
+/* Footer text explaining what debug logs contain in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER" = "A velünk megosztott információk alacsony szintű alkalmazásinformációkat tartalmaznak, és nem szerepel bennük a hívásaid tartalma.";
+
+/* Header text explaining the purpose of sharing debug logs in the call quality survey. The text inside the <link> tags is tappable for viewing the diagnostic information. */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_HEADER" = "A beküldéssel megosztod a visszajelzésedet a hívással kapcsolatos <link>diagnosztikai információkkal</link> együtt. Opcionálisan megoszthatsz egy hibanaplót, amely segít nekünk a hívásminőség javításában.";
+
+/* Link text to open a preview of debug logs in the call quality survey. Appended to CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_PREVIEW_LINK" = "Hibanapló megtekintése";
+
+/* Title for the debug log sharing screen in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TITLE" = "Segíts nekünk fejlődni";
+
+/* Label for the toggle to share debug log in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TOGGLE" = "Hibanapló megosztása";
+
+/* Title for preview of the call diagnostic info that will be sent with the survey */
+"CALL_QUALITY_SURVEY_DIAGNOSTICS_TITLE" = "Diagnosztikai információk";
+
+/* Button label for indicating the call did not have issues in the call quality survey */
+"CALL_QUALITY_SURVEY_GREAT_BUTTON" = "Nagyszerű";
+
+/* Button label for indicating the call had issues in the call quality survey */
+"CALL_QUALITY_SURVEY_HAD_ISSUES_BUTTON" = "Problémákba ütköztem";
+
+/* Label for audio issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO" = "Hangprobléma";
+
+/* Label for audio dropout issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_DROP" = "Hangkimaradás";
+
+/* Label for local echo issue option in call quality survey, indicating the user heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_LOCAL_ECHO" = "Visszhangot hallottam";
+
+/* Label for remote echo issue option in call quality survey, indicating other participants heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_REMOTE_ECHO" = "Mások visszhangot hallottak";
+
+/* Label for audio stuttering issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_STUTTERING" = "Akadozó hang";
+
+/* Label for call dropped issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_CALL_DROPPED" = "Megszakadt a hívás";
+
+/* Label for custom issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_OTHER" = "Egyéb";
+
+/* Label for video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO" = "Videóval kapcsolatos probléma";
+
+/* Label for poor video quality issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_QUALITY" = "Rossz videóminőség";
+
+/* Label for low resolution video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_RESOLUTION" = "Alacsony felbontás";
+
+/* Label for camera not working issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_NO_CAMERA" = "A kamera nem működött";
+
+/* Header text on the call quality survey issues screen */
+"CALL_QUALITY_SURVEY_ISSUES_HEADER" = "Jelöld be az összes megfelelőt";
+
+/* Title for the sheet in the call quality survey where issues with the call can be selected */
+"CALL_QUALITY_SURVEY_ISSUES_SHEET_TITLE" = "Milyen problémáid voltak?";
+
+/* Header text explaining the purpose of the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_HEADER" = "Ez segít nekünk a B&A-hívások jobbá tételében. Személyazonosításra alkalmas adatokat nem tárolunk.";
+
+/* Title for the initial rating screen in the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_TITLE" = "Milyen volt a hívás minősége?";
+
+/* Button text to submit the call quality survey */
+"CALL_QUALITY_SURVEY_SUBMIT_BUTTON" = "Küldés";
 
 /* Label on button for raising hand in call. */
 "CALL_RAISE_HAND_BUTTON_LABEL" = "Kéz felemelése";
@@ -1579,17 +1813,8 @@
 /* Text for a bullet point in a list of Backup features, describing that all text messages are included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_TEXT_BACKUP" = "Teljes szöveges üzenet biztonsági mentése";
 
-/* Text for a bullet point in a list of Backup features, describing that recent media is included. */
-"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Médiafájl az elmúlt 45 napban";
-
-/* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
+/* Text for a bullet point in a list of Backup features, describing the amount of included storage. Embeds {{ the amount of storage preformatted as a localized byte count, e.g. '100 GB' }}. */
 "CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "1 TB tárhely (~250 ezer fotó)";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "Probléma merült fel! Kérjük, vedd fel a kapcsolatot az ügyfélszolgálattal!";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a network error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NETWORK_ERROR" = "Probléma merült fel! Ellenőrizd az internetkapcsolatod, és próbáld újra!";
 
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but is not registered. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED" = "A biztonsági mentések engedélyezéséhez regisztrálnod kell.";
@@ -1600,11 +1825,23 @@
 /* Message shown in an action sheet when the user tries to confirm selecting the paid plan, but encountered an error while redeeming their completed purchase. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_PURCHASE_REDEMPTION" = "Probléma merült fel! Kérjük, vedd fel a kapcsolatot az ügyfélszolgálattal!";
 
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED" = "Mivel elérted az új helyreállítási kulcsok maximális számát, a visszaélések megelőzése érdekében nem fogod tudni engedélyezni a biztonsági mentéseket eddig: %1$@. Várj eddig: %1$@, és próbáld újra!";
+
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. {{ Embeds 1 & 2: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED_TITLE" = "Nem sikerült engedélyezni a biztonsági mentéseket";
+
 /* A label indicating that a given Backup plan option is what the user has already enabled. */
 "CHOOSE_BACKUP_PLAN_CURRENT_PLAN_LABEL" = "Jelenlegi csomag";
 
-/* Subtitle for the free plan option, when choosing a Backup plan. */
-"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Szöveg + 45 napnyi médiafájl";
+/* Text for a button that will downgrade the user from the paid Backup plan to the free one. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_BUTTON_TEXT" = "Csomag módosítása";
+
+/* Button for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_PROCEED_BUTTON" = "Csomag módosítása";
+
+/* Title for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_TITLE" = "Ingyenes verzióra váltasz?";
 
 /* Title for the free plan option, when choosing a Backup plan. */
 "CHOOSE_BACKUP_PLAN_FREE_PLAN_TITLE" = "Ingyenes";
@@ -1623,6 +1860,9 @@
 
 /* Subtitle for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_SUBTITLE" = "Minden biztonsági mentés végponttól végpontig titkosított. A B&A egy nonprofit szervezet – azzal, hogy fizetsz a biztonsági mentésekért, segíted küldetésünket.";
+
+/* Title for a label allowing users to view Signal's Terms & Conditions. */
+"CHOOSE_BACKUP_PLAN_TERM_AND_PRIVACY_POLICY_TEXT" = "Adatvédelmi és Általános Szerződési Feltételek";
 
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "Válassz csomagot a biztonsági mentéshez!";
@@ -1996,6 +2236,9 @@
 /* Footer for the 'attributes access' section in conversation settings view. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "Add meg, hogy ki szerkeszthesse a csoportnevet, az avatárt, a csoportleírást és az eltűnő üzenetek időzítőjét.";
 
+/* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "Válaszd ki, hogy kik szerkeszthetik a csoport nevét, fotóját, leírását, az eltűnő üzenetek időzítőjét és a rögzített üzeneteket.";
+
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "Szerezz kitűzőket profilképedre a B&A anyagi támogatásával. Koppints az egyik kitűzőre a további tudnivalókért.";
 
@@ -2052,6 +2295,9 @@
 
 /* Label for 'member requests & invites' action in conversation settings view. */
 "CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES" = "Kérelmek és meghívók";
+
+/* Label for 'member label' action in conversation settings view. */
+"CONVERSATION_SETTINGS_MEMBER_TAG" = "Tagsági címke";
 
 /* label for 'always' option for mention notifications in conversation settings */
 "CONVERSATION_SETTINGS_MENTION_MODE_AlWAYS" = "Mindig értesítsen";
@@ -2251,22 +2497,10 @@
 /* Tooltip highlighting the custom chat color controls. */
 "CUSTOM_CHAT_COLOR_SETTINGS_TOOLTIP" = "Húzd a színátmenet változtatásához";
 
-/* Button to run the database integrity check */
-"DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "Indítás";
-
-/* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "Ez segít megoldani a problémát, és néhány percet is igénybe vehet. Addig bezárhatod a B&At, amíg ez az ellenőrzés fut, de a naplók elküldéséhez, kérjük, térj vissza később.";
-
-/* Button to skip database integrity check step */
-"DATABASE_INTEGRITY_CHECK_SKIP" = "Kihagyás";
-
-/* Title for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_TITLE" = "Adatbázis-diagnosztika futtatása?";
-
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so keep that in mind. This is the description on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_DESCRIPTION" = "Az üzenet-előzményeid egy része lehet, hogy megsérült. Ez semmilyen hatással nincs a fiókod vagy az üzeneteid biztonságára. Az adatok helyreállításához koppints a „Tovább” lehetőségre.";
 
-/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
+/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "Probléma az adatok lekérésekor";
 
 /* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
@@ -2356,6 +2590,12 @@
 /* Accessibility label for the ? vector asset used to get info about debug logs */
 "DEBUG_LOG_INFO_BUTTON" = "Bővebben a hibanaplóról";
 
+/* Header text displayed above the debug log preview */
+"DEBUG_LOG_PREVIEW_HEADER" = "A beküldést követően a napló 30 napig lesz elérhető online egy egyedi, nem publikus URL-címen.";
+
+/* Title for the debug log preview screen */
+"DEBUG_LOG_PREVIEW_TITLE" = "Fejlesztői napló";
+
 /* info message text in conversation view */
 "DECLINED_VIDEO_CALL" = "Elutasítottál egy videóhívást";
 
@@ -2428,23 +2668,17 @@
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "Ez az üzenet minden eszközödön törlésre kerül.";
 
-/* Label for a button in an info sheet confirming that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_BUTTON" = "Rendben";
-
-/* Subtitle for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_SUBTITLE" = "Amikor üzeneteket vagy csevegéseket törölsz, azok a telefonodról és az összes kapcsolt eszközről is törlésre kerülnek.";
-
-/* Title for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_TITLE" = "A törlés mostantól az összes eszközödön szinkronizálva van";
-
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "Fiók törlése";
 
 /* Notification warning the user that they have been de-registered. */
 "DEREGISTRATION_NOTIFICATION" = "Kijelentkeztél a B&Aból ezen a készüléken.";
 
-/* Label for button that lets users re-register using the same phone number. */
-"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "Telefonszám újraregisztrálása";
+/* Button that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_BUTTON" = "Újraregisztrálás";
+
+/* Title for prompt that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_PROMPT_TITLE" = "Telefonszám újraregisztrálása?";
 
 /* Label warning the user that they have been de-registered. */
 "DEREGISTRATION_WARNING" = "Ez az eszköz már nincs regisztrálva. Ennek valószínűleg az az oka, hogy egy másik eszközön regisztráltad a telefonszámod a B&Aon.";
@@ -2485,23 +2719,14 @@
 /* The explanation for the device transfer 'choice' view when linking a device */
 "DEVICE_TRANSFER_CHOICE_LINKED_EXPLANATION" = "Válaszd ki, hogyan szeretnéd átvinni az üzenetelőzményeket és a fiókadatokat";
 
-/* The body for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_BODY" = "Folytatás az azonosító és régi üzenetek átmozgatása nélkül";
-
 /* The body for the device transfer 'choice' view 'register' option when linking a device when message syncing is available */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_BODY_LINK_AND_SYNC" = "Lehetőséged lesz az üzenetek és a legutóbbi médiafájlok átvitelére a telefonodról";
 
 /* The title for the device transfer 'choice' view 'register' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_TITLE" = "Hozzáadás új eszközként";
 
-/* The title for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_TITLE" = "Regisztrálás adatmozgatás nélkül";
-
 /* The title for the device transfer 'choice' view */
 "DEVICE_TRANSFER_CHOICE_TITLE" = "Azonosító és üzenetek átmozgatása";
-
-/* The body for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_BODY" = "Fiókod és üzenet-előzményeid áthelyezése régi iOS-eszközödről";
 
 /* The body for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_BODY" = "Fiókod és üzenet-előzményeid áthelyezése régi iOS-eszközödről";
@@ -2509,26 +2734,11 @@
 /* The title for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_TITLE" = "Átmozgatás másik iPad-ről";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_TITLE" = "Átmozgatás iOS eszközről";
-
-/* Button shown to contract a QR code and exit the fullscreen view. */
-"DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "Kisebb méret";
-
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "Az átvitelt nem sikerült befejezni. Győződj meg róla, hogy mindkét eszközön nyitva van a B&A, majd próbáld újra.";
 
-/* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
-"DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "Nem sikerült ellenőrizni az eszközödet. Kérjük próbáld újra!";
-
 /* An error indicating that something went wrong with the transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_GENERIC" = "Az átvitelt nem sikerült befejezni. Győződj meg róla, hogy az eszközök közel vannak egymáshoz, és próbáld újra.";
-
-/* An error indicating the user must scan this code with a linked device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_LINKED" = "Ahhoz, hogy az új iPad-edet csatlakozott eszközként beállíthasd, be kell olvasnod a régi iPad-eddel";
-
-/* An error indicating the user must scan this code with a primary device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_PRIMARY" = "A fiókod átmozgatásához be kell olvasnod az iPhone-oddal";
 
 /* An error indicating that the user does not have enough free space on their device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "Nincs elég szabad terület a teljes átmozgatáshoz";
@@ -2536,41 +2746,11 @@
 /* An error indicating the user must update their device before trying to transfer. */
 "DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "Frissíts a legújabb B&A verzióra és próbáld újra!";
 
-/* Button shown to expand a QR code and view it fullscreen. */
-"DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "Nagyobb méret";
-
-/* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "B&A fiókod átvitele új iOS eszközre. Figyelj rá, hogy az eszköz a közelben legyen és be legyen kapcsolva.";
-
-/* The title on the acttion sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_TITLE" = "Fiók átmozgatása";
-
-/* The explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION" = "Vidd közelebb a régi eszközödet, győződj meg róla, hogy a wifi és a Bluetooth be van kapcsolva, és olvasd be vele ezt a QR-kódot.";
-
-/* The second explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION2" = "Igazítsd a QR-kódot a keretbe a másik iOS eszközödön.";
-
-/* A prompt to provide further explanation if the user is not seeing the transfer on both devices. */
-"DEVICE_TRANSFER_QRCODE_NOT_SEEING" = "Nem látod a feliratot a régi eszközödön?";
-
-/* The title for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_TITLE" = "QR kód beolvasása";
-
 /* The explanation on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "Tartsd a két eszközt egymás közelében. Ne kapcsold ki egyik eszközt sem és tartsd a B&At nyitva. Az adatvitel végpontok között titkosított.";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "Adat fogadása";
-
-/* Text indicating that we are connecting to the scanned device */
-"DEVICE_TRANSFER_SCANNING_CONNECTING" = "Csatlakozás…";
-
-/* The explanation for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_EXPLANATION" = "Igazítsd a QR kódot a körön belülre";
-
-/* The title for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_TITLE" = "Tartsd fel új eszközödet a kamera elé";
 
 /* Status message on new device when cancelling transfer. */
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_CANCELLING" = "Kapcsolat megszakítása a régi iPhone-nal…";
@@ -2608,11 +2788,8 @@
 /* Status message on old device when transfer is starting. */
 "DEVICE_TRANSFER_STATUS_OLD_DEVICE_STARTING" = "Várakozás az új iPhone-hoz való csatlakozásra…";
 
-/* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "Tartsd a két eszközt egymás közelében. Ne kapcsold ki egyik eszközt sem és tartsd a B&At nyitva.";
-
-/* The title on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_TITLE" = "Adat átvitele";
+/* Action asking user to try again after transfer failure. */
+"DEVICE_TRANSFER_TRY_AGAIN_ACTION" = "Újrapróbálkozás";
 
 /* table cell label in conversation settings */
 "DISAPPEARING_MESSAGES" = "Eltűnő üzenetek";
@@ -2893,17 +3070,17 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ adományozott a B&Anak a nevedben! Mutasd meg a profilodon, hogy támogatod a B&At!";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "Privát üzenetküldés. Nincsenek hirdetések, nincsenek nyomkövetők, és nincs megfigyelés.";
+/* Body text for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BODY" = "Független nonprofit szervezetként a B&A elkötelezett a privát üzenetek és hívások iránt. Nincsenek hirdetések, nincsenek nyomkövetők és nincs megfigyelés. Adományozz még ma, és támogasd a B&At!";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "A B&At adományokkal támogatják, ami azt jelenti, hogy minden tevékenységünk középpontjában az adataid védelme áll. A B&A neked készült; nem pedig az adataid megszerzése és haszonszerzés céljából.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_1" = "Szerezz opcionális jelvényt a profilodra, amikor adományozol";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "Ha teheted, adományozz még ma, hogy a B&A szórakoztató, megbízható és mindenki számára elérhető maradjon.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_2" = "Az adataid védelme a küldetésünk";
 
-/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "A B&A más.";
+/* Bullet point for a sheet discussing donating to Signal. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
+"DONATION_READ_MORE_SHEET_BULLET_3" = "A B&A egy nonprofit szervezet .";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "Összeg";
@@ -3046,20 +3223,17 @@
 /* Text describing to the user that they're going to pay a monthly donation to Signal */
 "DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "Havi adomány a B&A számára";
 
-/* Title for the 'more' section on the donation screen */
-"DONATION_VIEW_MORE_SECTION_TITLE" = "Tovább";
-
 /* Title for the 'my support' section in the donation view */
 "DONATION_VIEW_MY_SUPPORT_TITLE" = "Támogatásaim";
-
-/* Title for the \"other ways to donate\" section on the donation view. */
-"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Az adományozás egyéb módjai";
 
 /* Title on the 'Donate to Signal' screen */
 "DONATION_VIEW_TITLE" = "Adomány a B&A számára";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "Pénznem";
+
+/* Label for a button that says 'Don't show again'. */
+"DONT_SHOW_AGAIN_BUTTON_TITLE" = "Ne jelenjen meg újra";
 
 /* Message for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_MESSAGE" = "Üzenet szerkesztéséhez koppints gyorsan kétszer az üzenetre. Az üzeneteidet az elküldésük után 24 óráig szerkesztheted.";
@@ -3316,9 +3490,6 @@
 /* Footer for message cell for documents/files when they are expired and unavailable for download */
 "FILE_UNAVAILABLE_FOOTER" = "A fájl nem érhető el";
 
-/* Message for sheet shown when tapping a document/file that has expired and is unavailable for download */
-"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Ez a fájl nem lett átmásolva a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi fájlok és médiafájlok nem szinkronizálhatók.";
-
 /* Title for sheet shown when tapping a document/file that has expired and is unavailable for download */
 "FILE_UNAVAILABLE_SHEET_TITLE" = "A fájl nem érhető el";
 
@@ -3352,12 +3523,6 @@
 /* Tooltip notifying users that the flip camera button moved to the picture-in-picture view of themselves in a call */
 "FLIP_CAMERA_BUTTON_MOVED_TO_PIP_TOOLTIP" = "A Flip Camera átkerült ide. Koppints a videódra a kipróbáláshoz";
 
-/* Message for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_MESSAGE" = "A továbbított üzenetek azonnal elküldésre kerülnek.";
-
-/* Title for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_TITLE" = "Gyorsabb továbbítás";
-
 /* Indicates that a single message was forwarded. */
 "FORWARD_MESSAGE_MESSAGES_SENT_1" = "Üzenet elküldve";
 
@@ -3385,11 +3550,11 @@
 /* Title for the 'Get Started' banner */
 "GET_STARTED_BANNER_TITLE" = "Kezdés";
 
-/* 'Get Started' button directing users to appearance */
-"GET_STARTED_CARD_APPEARANCE" = "Megjelenés";
-
 /* 'Get Started' button direction users to avatar builder */
 "GET_STARTED_CARD_AVATAR_BUILDER" = "Képfeltöltés";
+
+/* 'Get Started' button directing users to Chat Color settings */
+"GET_STARTED_CARD_CHAT_COLOR" = "Csevegés színe";
 
 /* 'Get Started' button directing users to invite friends */
 "GET_STARTED_CARD_INVITE_FRIENDS" = "Meghívás";
@@ -3595,9 +3760,6 @@
 /* Toast view text informing user about swiping to speaker view */
 "GROUP_CALL_SPEAKER_VIEW_TOAST" = "Nézetváltás felfelé suhintással";
 
-/* Tooltip highlighting group calls. */
-"GROUP_CALL_START_TOOLTIP" = "Csoporthívás indítás itt";
-
 /* Text explaining that you started a group call. */
 "GROUP_CALL_STARTED_BY_YOU" = "Elindítottad a csoporthívást";
 
@@ -3736,6 +3898,12 @@
 /* Message indicating that 'announcement-only' mode was enabled by a remote user. Embeds {{ user who enabled 'announcement-only' mode }}. */
 "GROUP_IS_ANNOUNCEMENT_ONLY_ENABLED_BY_REMOTE_USER_FORMAT" = "%1$@ megváltoztatta a csoportbeállításokat: mostantól csak adminok küldhetnek üzenetet a csoportba.";
 
+/* Message text for the 'group invite link' action sheet. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE" = "Csatlakozol ehhez a csoporthoz, és megosztod a nevedet és a fotódat a tagjaival?";
+
+/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE_W_REQUEST" = "Amikor csatlakozási kérelmet küldesz, a nevedet és a fotódat megosztjuk a csoport tagjaival. Egy adminisztrátornak jóvá kell hagynia a kérelmedet.";
+
 /* Subtitle indicating that the local user has been blocked from joining the group */
 "GROUP_LINK_ACTION_SHEET_VIEW_BLOCKED_FROM_JOINING_SUBTITLE" = "Egy admin távolított el, így már nem tudsz csoporthivatkozás használatával csatlakozni ehhez a csoporthoz. Lépj kapcsolatba egy adminisztrátorral, hogy újra felvegyenek a csoportba.";
 
@@ -3754,14 +3922,8 @@
 /* Label indicating that the group info is being loaded in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_LOADING_TITLE" = "Betöltés…";
 
-/* Message text for the 'group invite link' action sheet. */
-"GROUP_LINK_ACTION_SHEET_VIEW_MESSAGE" = "Szeretnél belépni a csoportba? Ezzel profilod láthatóvá is válik.";
-
 /* Label for the 'request to join' button in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_BUTTON" = "Csatlakozási igény benyújtása";
-
-/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
-"GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_MESSAGE" = "A csoportba történő belépéshez a csoport egy adminjának jóváhagyása szükséges. A csatlakozási igény elküldésével neved és képed láthatóvá válik a csoport tagjai számára.";
 
 /* Error message the attempt to request to join the group failed due to network connectivity. */
 "GROUP_LINK_COULD_NOT_REQUEST_TO_JOIN_GROUP_DUE_TO_NETWORK_ERROR_MESSAGE" = "Ellenőrizd az internetkapcsolatodat, majd próbálkozz újra.";
@@ -4045,6 +4207,12 @@
 /* Name for a group story on the stories list. Embeds {author's name}, {group name} */
 "GROUP_STORY_NAME_FORMAT" = "%1$@ @ %2$@";
 
+/* Text indicating you reacted to a group story (the header on the bubble says \"You\") */
+"GROUP_STORY_REPLY_REACTION_SECOND_PERSON" = "Reagált a történetre";
+
+/* Text indicating someone else reacted to a group story (the header on the bubble says their name, e.g. \"Bob\") */
+"GROUP_STORY_REPLY_REACTION_THIRD_PERSON" = "Reagált a történetre";
+
 /* Button to delete the story on the 'group story settings' view */
 "GROUP_STORY_SETTINGS_DELETE_BUTTON" = "Csoport Történet eltávolítása";
 
@@ -4263,6 +4431,18 @@
 
 /* Title for the conversation list's 'archive' mode. */
 "HOME_VIEW_TITLE_ARCHIVE" = "Archív";
+
+/* Title for the conversation list's backup storage full context menu action. */
+"HOME_VIEW_TITLE_BACKUP_OUT_OF_STORAGE_QUOTA" = "A biztonsági mentések tárhelye megtelt";
+
+/* Title for the conversation list's failed to redeem backup subscription context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_FAILED_TO_REDEEM" = "Biztonsági mentési előfizetési hiba";
+
+/* Title for the conversation list's backup subscription not found locally context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_NOT_FOUND_LOCALLY" = "A biztonsági mentési előfizetés nem található";
+
+/* Title for the conversation list's failed to backup context menu action. */
+"HOME_VIEW_TITLE_FAILED_TO_BACKUP" = "Nem sikerült biztonsági mentést készíteni";
 
 /* Title for the 'Select Chats' option in the ChatList. */
 "HOME_VIEW_TITLE_SELECT_CHATS" = "Kiválasztás";
@@ -4546,8 +4726,8 @@
 /* confirm the users intent to link a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TITLE" = "Társítás véglegesítése";
 
-/* subtitle for choosing to send message history when linking a new device */
-"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE" = "Helyezd át a szöveges üzeneteidet és az elmúlt 45 nap médiatartalmát";
+/* Subtitle for choosing to send message history when linking a new device, if you have the paid tier enabled. */
+"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_PAID_PLAN_SUBTITLE" = "Helyezd át a szöveges üzeneteidet és az összes médiafájlodat";
 
 /* title for choosing to send message history when linking a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_TITLE" = "Üzenetelőzmények áthelyezése";
@@ -4708,24 +4888,6 @@
 /* Shown to users while the app is loading, asking them not to close the app. */
 "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "Ne zárd be az alkalmazást.";
 
-/* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "Hogy át tudd mozgatni B&A azonosítódat, mindkét eszközön engedélyezd a helyi hálózathoz való hozzáférést.";
-
-/* A button asking the user if they need further help getting their transfer working. */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "Segítség?";
-
-/* First step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_ONE" = "Mindkét eszközön nyisd meg a Beállításokat";
-
-/* Third step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "Kapcsold be: \"Helyi hálózat\"";
-
-/* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "Keresd meg a B&A alkalmazást";
-
-/* Title for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "Helyi hálózati hozzáférés bekapcsolása";
-
 /* A string indicating that the user can search for a location */
 "LOCATION_PICKER_SEARCH_PLACEHOLDER" = "Keresés név, vagy cím alapján";
 
@@ -4830,6 +4992,24 @@
 
 /* toast indicating that we will remind the user later */
 "MEGAPHONE_WILL_REMIND_LATER" = "Később újra emlékeztetünk.";
+
+/* Label for an action to add a member label */
+"MEMBER_LABEL_ADD" = "Tagsági címke hozzáadása";
+
+/* Heading shown above the preview of a message bubble with the edited member label. */
+"MEMBER_LABEL_PREVIEW_HEADING" = "Előnézet";
+
+/* Text shown in the preview message bubble when a user is editing their member label. */
+"MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "Szia!";
+
+/* Placeholder text in text field where user can edit their member label. */
+"MEMBER_LABEL_VIEW_PLACEHOLDER_TEXT" = "Add hozzá a címkédet";
+
+/* Subtitle for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_SUBTITLE" = "Állíts be egy tagsági címkét, amely jellemez téged vagy a csoportban betöltött szerepedet. A tagsági címkék csak ezen a csoporton belül láthatók.";
+
+/* Title for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_TITLE" = "Tagsági címke";
 
 /* Action sheet button title */
 "MESSAGE_ACTION_COPY_TEXT" = "Szöveg másolása";
@@ -5428,6 +5608,18 @@
 /* A string describing that the user has no groups in common other than the group implied by the current UI context */
 "NO_OTHER_GROUPS_IN_COMMON" = "Nincs egyéb közös csoportotok.";
 
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-link' (translated via NOT_LINKED_BOTTOM_RELINK), and it will be formatted as a tappable link. */
+"NOT_LINKED_BOTTOM" = "Az eszköz társítása megszűnt. %1$@ a B&A használatának folytatásához ezen az eszközön.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_LINKED_BOTTOM_RELINK" = "Újratársítás";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-register' (translated via NOT_REGISTERED_BOTTOM_REREGISTER), and it will be formatted as a tappable link. */
+"NOT_REGISTERED_BOTTOM" = "Ez az eszköz már nincs regisztrálva. %1$@ a B&A használatának folytatásához.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_REGISTERED_BOTTOM_REREGISTER" = "Újraregisztrálás";
+
 /* Label for 1:1 conversation with yourself. */
 "NOTE_TO_SELF" = "Privát feljegyzés";
 
@@ -5515,20 +5707,35 @@
 /* Label for the 'skip and create new pin' button when reglock is disabled during onboarding. */
 "ONBOARDING_2FA_SKIP_AND_CREATE_NEW_PIN" = "Kihagyás és új PIN létrehozása";
 
+/* Label for action to use Recovery Key instead of PIN for registration. */
+"ONBOARDING_2FA_SKIP_AND_USE_RECOVERY_KEY" = "Helyreállítási kulcs használata";
+
 /* Explanation for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE" = "Ha nem emlékszel PIN kódodra, készíthetsz újat. Regisztrálhatsz, majd használhatod a fiókodat, de mentett beállításaid egy része, mint profil információid elvesznek.";
 
 /* Title for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "Kihagyod a PIN bevitelét?";
 
-/* The body for the device transfer 'choice' view 'transfer' option */
+/* The body for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "Állítsd helyre szöveges üzeneteidet és médiatartalmaidat a fizetett B&A biztonsági mentési csomaggal";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
+/* The title for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "B&A biztonsági mentésének visszaállítása";
+
+/* Body for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_BODY" = "Ha most kihagyod a visszaállítást, később nem fogod tudni visszaállítani. Ha újra engedélyezed a biztonsági mentéseket ezen az eszközön, a jelenlegi biztonsági mentést az új üzenetküldési előzmények felülírják.";
+
+/* Title for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_TITLE" = "Visszaállítás kihagyása?";
 
 /* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "Válaszd ki, hogyan szeretnéd helyreállítani az üzenet-előzményeket és a fiókadatokat.";
+
+/* Message body displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_BODY" = "Mivel Androidról iOS-re váltasz, az üzenetek és médiafájlok átvitelének egyetlen módja a B&A Biztonsági mentések engedélyezése a régi eszközödön.";
+
+/* Title displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_TITLE" = "Nincs biztonsági mentés a visszaállításhoz";
 
 /* The body for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_BODY" = "Folytatás az üzenetek és a médiafájlok átvitele nélkül";
@@ -5659,6 +5866,9 @@
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "Nálam van a régi telefonom";
 
+/* Text indicating Signal is a nonprofit on the 'onboarding splash' view. For non-English languages, exclude the word '501c3'. */
+"ONBOARDING_SPLASH_NONPROFIT" = "A B&A egy nonprofit szervezet";
+
 /* Button for restoring or transferring account in the 'onboarding splash' view. */
 "ONBOARDING_SPLASH_RESTORE_OR_TRANSFER_BUTTON_TITLE" = "Fiók visszaállítása vagy átvitele";
 
@@ -5764,6 +5974,21 @@
 /* Title of prompt notifying restore failed for unknown reasons. */
 "OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_TITLE" = "Ismeretlen hiba";
 
+/* Action button to backup before continuing. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_BACKUP_ACTION" = "Biztonsági mentés készítése";
+
+/* Body text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_BODY" = "Biztonsági másolat készítése most az átvitel előtt. Lehetséges, hogy olyan üzeneteket kaptál, amelyekről még nem készült biztonsági mentés.";
+
+/* Title text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_TITLE" = "Az eszköz előkészítése";
+
+/* Action button to skip backup and continue. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_SKIP_ACTION" = "Kihagyás és folytatás";
+
+/* Description for form confirming restore from backup without size detail. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_RESTORE_DESCRIPTION" = "Az utolsó biztonsági mentés dátuma: %1$@, %2$@.";
+
 /* Body of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "A B&A-fiók és az üzenetek átvitele megkezdődött a másik eszközre. A B&A most inaktív ezen az eszközön.";
 
@@ -5817,9 +6042,6 @@
 
 /* Footer for message cell for long text when it is expired and unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_FOOTER" = "Ez az üzenet hiányos";
-
-/* Message for sheet shown when tapping oversized text that has expired and is unavailable for download */
-"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Az üzenetben szereplő teljes szöveg nem került át a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi hosszú szöveges üzenetek nem szinkronizálhatók.";
 
 /* Title for sheet shown when tapping oversized text that has expired and is unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_SHEET_TITLE" = "A teljes üzenet nem érhető el";
@@ -6145,9 +6367,6 @@
 /* Message indicating that a request to join the group was successfully approved. Embeds {{ the name of the approved user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_APPROVED_FORMAT" = "„%1$@” hozzáadva.";
 
-/* Label for the 'view requests' button in the pending member requests banner. */
-"PENDING_GROUP_MEMBERS_REQUEST_BANNER_VIEW_REQUESTS" = "Kérések mutatása";
-
 /* Message indicating that a request to join the group was successfully denied. Embeds {{ the name of the denied user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_DENIED_FORMAT" = "„%1$@” elutasítva.";
 
@@ -6263,9 +6482,6 @@
 "PHOTO_CAPTURE_GENERIC_ERROR" = "Képkészítés sikertelen";
 
 /* alert title */
-"PHOTO_CAPTURE_UNABLE_TO_CAPTURE_IMAGE" = "Képkészítés sikertelen";
-
-/* alert title */
 "PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA" = "Kamerabeállítás sikertelen";
 
 /* Button label for opening the chat on a sheet presented from photo capture view indicating that a username QR code was found. */
@@ -6276,9 +6492,6 @@
 
 /* Title for sheet presented from photo capture view indicating that a username QR code was found. Embeds {{username}}. */
 "PHOTO_CAPTURE_USERNAME_QR_CODE_FOUND_TITLE_FORMAT" = "Megtaláltuk: %1$@";
-
-/* alert title, generic error preventing user from capturing a video that is too long */
-"PHOTO_CAPTURE_VIDEO_SIZE_ERROR" = "A videó túl hosszú.";
 
 /* Pressing this button pins a thread */
 "PIN_ACTION" = "Rögzít";
@@ -6364,6 +6577,9 @@
 /* If the user is re-registering, they need to enter their PIN to restore all their data. In some cases, they can skip this entry and lose some data. This text is shown on a button that lets them begin to do this. */
 "PIN_ENTER_EXISTING_SKIP" = "PIN-kód kihagyása";
 
+/* If the user is re-registering, they need to enter their PIN to restore all their data. If they don't remember their PIN, they may remember their Recovery Key which can be used instead of a PIN. */
+"PIN_ENTER_EXISTING_USE_RECOVERY_KEY" = "Helyreállítási kulcs használata";
+
 /* Error title indicating that the attempt to recreate a PIN failed. */
 "PIN_RECREATION_ERROR_TITLE" = "PIN létrehozása sikertelen.";
 
@@ -6421,8 +6637,80 @@
 /* An explanation that you have already pinned the maximum number of conversations. */
 "PINNED_CONVERSATION_LIMIT" = "Maximum 4 csevegést rögzíthetsz.";
 
+/* Accessibility label prefix for banner showing a pinned message */
+"PINNED_MESSAGE_BANNER_AX_LABEL" = "Rögzített üzenetek:";
+
+/* Shown when another user pins a message. Embeds {{ another user }}. */
+"PINNED_MESSAGE_CHAT_EVENT_OTHER" = "%1$@ rögzített egy üzenetet";
+
+/* Shown when the local user pins a message. */
+"PINNED_MESSAGE_CHAT_EVENT_SELF" = "Rögzítettél egy üzenetet";
+
+/* Accessibility label for pin message button */
+"PINNED_MESSAGE_MENU_ACCESSIBILITY_LABEL" = "Rögzített üzenet menü";
+
+/* Label for button to pin a message */
+"PINNED_MESSAGE_PIN_ACTION_TITLE" = "Rögzít";
+
+/* Message for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BODY" = "A rögzített üzenet felülírja a legrégebbit.";
+
+/* Option in pinned message action sheet to replace oldest pin. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BUTTON" = "Csere";
+
+/* Title for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_TITLE" = "Cseréled a legrégebbi rögzített üzenetet?";
+
+/* Body for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_BODY" = "Ellenőrizd az internetkapcsolatodat, és próbáld újra!";
+
+/* Title for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_TITLE" = "Nem sikerült rögzíteni az üzenetet";
+
+/* Text to show on a toast when someone unpins a message */
+"PINNED_MESSAGE_TOAST" = "Üzenet rögzítésének feloldása";
+
+/* Label for button to unpin a message */
+"PINNED_MESSAGE_UNPIN_ACTION_TITLE" = "Felold";
+
+/* Option in pinned message action sheet to pin for 24 hours. */
+"PINNED_MESSAGES_24_HOURS" = "24 óra";
+
+/* Option in pinned message action sheet to pin for 30 days. */
+"PINNED_MESSAGES_30_DAYS" = "30 nap";
+
+/* Option in pinned message action sheet to pin for 7 days. */
+"PINNED_MESSAGES_7_DAYS" = "7 nap";
+
+/* Title for Pinned Messages detail view */
+"PINNED_MESSAGES_DETAILS_TITLE" = "Rögzített üzenetek";
+
+/* Title for an action sheet to indicate how long to keep the pin active */
+"PINNED_MESSAGES_EXPIRY_SHEET_TITLE" = "Maradjon rögzítve";
+
+/* Option in pinned message action sheet to pin with no expiry. */
+"PINNED_MESSAGES_FOREVER" = "örökké";
+
+/* Action menu item to go to a message in the conversation view */
+"PINNED_MESSAGES_GO_TO_MESSAGE" = "Ugrás az Üzenetekhez";
+
+/* Action menu item to see all pinned messages */
+"PINNED_MESSAGES_SEE_ALL_MESSAGES" = "Összes üzenet megtekintése";
+
+/* Action menu item to unpin a message */
+"PINNED_MESSAGES_UNPIN" = "Felold";
+
+/* Title for a button to unpin all pinned messages. */
+"PINNED_MESSAGES_UNPIN_ALL" = "Összes rögzítésének feloldása";
+
 /* The title for pinned conversation section on the conversation list */
 "PINNED_SECTION_TITLE" = "Rögzítve";
+
+/* Body for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_BODY" = "Az eltűnő üzenetek rögzítése akkor lesz feloldva, amikor az időzítőjük lejár, és az üzenet eltávolításra kerül a csevegésből.";
+
+/* Title for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_TITLE" = "Eltűnő üzenetek rögzítése";
 
 /* Action text for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_ACTION" = "PIN létrehozása";
@@ -6439,11 +6727,35 @@
 /* Accessibility label for button to start media playback */
 "PLAY_BUTTON_ACCESSABILITY_LABEL" = "Média lejátszása";
 
+/* Accessibility label for poll message. Embeds {{ poll question }}. */
+"POLL_ACCESSIBILITY_LABEL" = "Szavazás: %1$@";
+
+/* Accessibility label for a vote option that is not selected by the user. */
+"POLL_ACCESSIBILITY_LABEL_OPTION_PENDING" = "Folyamatban";
+
+/* Title for a toggle allowing multiple votes for a poll. */
+"POLL_ALLOW_MULTIPLE_LABEL" = "Több szavazat engedélyezése";
+
+/* Button to view a poll after its ended */
+"POLL_BUTTON_VIEW_POLL" = "Szavazás megtekintése";
+
 /* Button to view poll results */
 "POLL_BUTTON_VIEW_RESULTS" = "Eredmények megtekintése";
 
 /* Button to view poll votes */
 "POLL_BUTTON_VIEW_VOTES" = "Szavazatok megtekintése";
+
+/* Toast telling user to add a question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION" = "Kérdés hozzáadása";
+
+/* Toast telling user to add options and question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION_OR_ENOUGH_OPTIONS" = "Adj hozzá egy kérdést és legalább 2 lehetőséget";
+
+/* Toast telling user to add more options to poll. */
+"POLL_CREATE_ERROR_TOAST_NOT_ENOUGH_OPTIONS" = "Adj hozzá legalább 2 lehetőséget";
+
+/* Title of create poll pane */
+"POLL_CREATE_TITLE" = "Új szavazás";
 
 /* Label for button to end a poll */
 "POLL_DETAILS_END_POLL" = "Szavazás befejezése";
@@ -6451,20 +6763,56 @@
 /* Title of poll details pane */
 "POLL_DETAILS_TITLE" = "Szavazás részletei";
 
+/* Title for an action sheet confirming the user wants end a poll. */
+"POLL_END_CONFIRMATION" = "Szavazás befejezése?";
+
+/* Message for an action sheet confirming the user wants to end a poll. */
+"POLL_END_CONFIRMATION_MESSAGE" = "A csoport tagjai a továbbiakban nem tudnak majd szavazni ebben a szavazásban.";
+
+/* Shown when another user ends a poll. Embeds {{ another user }} and {{ poll question }}. */
+"POLL_ENDED_BY_OTHER_CHAT_LIST_UPDATE" = "%1$@ befejezte a(z) „%2$@” szavazást";
+
+/* Shown when the local user ends a poll. Embeds {{ poll question }}. */
+"POLL_ENDED_BY_YOU_CHAT_LIST_UPDATE" = "Befejezted a szavazást: %1$@";
+
 /* Notification that {{contact}} ended a poll with question {{poll question}} */
 "POLL_ENDED_NOTIFICATION" = "%1$@ befejezte a(z) „%2$@” szavazást";
+
+/* Label specifying the poll is finished and these are the final results */
+"POLL_FINAL_RESULTS_LABEL" = "Végeredmények";
 
 /* Label specifying the message type as a poll */
 "POLL_LABEL" = "Szavazás";
 
+/* String to display when a poll has no votes */
+"POLL_NO_VOTES" = "Nincs szavazat";
+
+/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
+"POLL_OPTION_PLACEHOLDER_PREFIX" = "Opció";
+
+/* Header for the poll options text boxes when making a new poll */
+"POLL_OPTIONS_LABEL" = "Opciók";
+
 /* Prefix for a poll preview */
 "POLL_PREFIX" = "Szavazás:";
+
+/* Header for the poll question text box when making a new poll */
+"POLL_QUESTION_LABEL" = "Kérdés";
+
+/* Placeholder text for poll question */
+"POLL_QUESTION_PLACEHOLDER_TEXT" = "Tegyél fel egy kérdést";
+
+/* Title of poll details pane when poll is ended */
+"POLL_RESULTS_TITLE" = "Szavazási eredmények";
 
 /* Label specifying the user can select more than one option */
 "POLL_SELECT_LABEL_MULTIPLE" = "Válassz legalább egyet";
 
 /* Label specifying the user can select one option */
 "POLL_SELECT_LABEL_SINGULAR" = "Válassz egyet";
+
+/* Notification that {{contact}} voted in a poll with question {{poll question}} */
+"POLL_VOTED_NOTIFICATION" = "%1$@ szavazott a(z) „%2$@” szavazáson";
 
 /* Badge indicating that the user is verified. */
 "PRIVACY_IDENTITY_IS_VERIFIED_BADGE" = "Ellenőrizve";
@@ -6661,6 +7009,15 @@
 /* Title of alert shown when push tokens sync job succeeds. */
 "PUSH_REGISTER_SUCCESS" = "Push értesítések újraregisztrálása sikeresen megtörtént.";
 
+/* Body for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_BODY" = "Ezzel az eszközzel olvasd be a QR-kódot azon az eszközön, amelyre át szeretnéd vinni az adatokat.";
+
+/* Title for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_TITLE" = "QR-kód beolvasása";
+
+/* Message for an action sheet telling users how to use quick restore, when trying to open an external quick restore URL. */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "A fiók új eszközre való átviteléhez koppints a „Folytatás” gombra, és olvasd be a QR-kódot a B&A kamerával. Ügyelj rá, hogy csak közvetlenül a B&Atól származó QR-kódokat olvass be.";
+
 /* Accessibility label stating the author of the message to which you are replying. Embeds: {{ the author of the message to which you are replying }}. */
 "QUOTED_REPLY_ACCESSIBILITY_LABEL_FORMAT" = "Válasz %1$@ számára.";
 
@@ -6676,11 +7033,11 @@
 /* Toast alert text shown when tapping on a quoted message which we cannot scroll to because the local copy of the message didn't exist when the quote was received. */
 "QUOTED_REPLY_ORIGINAL_MESSAGE_REMOTELY_SOURCED" = "Eredeti üzenet nem található";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to your own story. */
-"QUOTED_REPLY_REACTION_TO_OWN_STORY" = "Reagált a Történetedre";
+/* Label explaining that the content of a quoted message includes you reacting to someone's story. Embeds {{ %1$@ the story author }}. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_SECOND_PERSON" = "Reagált %1$@ történetére";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to a story. Embeds {{ story author name }} */
-"QUOTED_REPLY_REACTION_TO_STORY_FORMAT" = "Reagált %1$@ Történetére";
+/* Label explaining that the content of a quoted message includes someone reacting to your story. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_THIRD_PERSON" = "Reagált a történetedre";
 
 /* Message header when you are quoting a story. Embeds {{ story author name }} */
 "QUOTED_REPLY_STORY_AUTHOR_INDICATOR_FORMAT" = "%1$@ · Történet";
@@ -6702,6 +7059,9 @@
 
 /* Indicates this message is a quoted reply to a video file. */
 "QUOTED_REPLY_TYPE_VIDEO" = "Videó";
+
+/* Indicates this message is a quoted reply to a voice message. */
+"QUOTED_REPLY_TYPE_VOICE_MESSAGE" = "Hangüzenet";
 
 /* Label for a button to lower your raised hand in a call. */
 "RAISED_HANDS_LOWER_HAND_BUTTON" = "Letétel";
@@ -6841,6 +7201,9 @@
 /* Body for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
+/* Body for a sheet warning users about an incorrect recovery key and having hit a rate limit on retries. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_RATE_LIMIT_BODY" = "Elfogytak a helyreállítási kulcs megadásának lehetőségei. Biztonságod érdekében a próbálkozások száma korlátozott. Várj egy órát, és próbáld újra!";
+
 /* Title for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "Helytelen biztonsági kulcs";
 
@@ -6892,12 +7255,6 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "Országkód";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "A folytatással letiltod a B&At a másik eszközön, ami ugyanezzel a telefonszámmal került regisztrálásra.";
-
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "Fiók és üzenetek áthelyezése";
-
 /* Description for the screen that allows users to enter their recovery key. */
 "REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "A biztonsági kulcs egy 64 számjegyű kód, amely a fiók és az adatok helyreállításához szükséges.";
 
@@ -6939,6 +7296,9 @@
 
 /* During registration, users are asked to enter their phone number. This is the subtitle on that screen, which gives users some instructions. */
 "REGISTRATION_PHONE_NUMBER_SUBTITLE" = "A kezdéshez add meg a telefonszámod.";
+
+/* During re-registration, users are asked to confirm their phone number. This is the subtitle on that screen, which gives users some instructions. */
+"REGISTRATION_PHONE_NUMBER_SUBTITLE_2" = "Az ellenőrző kódot erre a számra küldjük:";
 
 /* During registration, users are asked to enter their phone number. This is the title on that screen. */
 "REGISTRATION_PHONE_NUMBER_TITLE" = "Telefonszámod";
@@ -6993,6 +7353,15 @@
 
 /* Error shown if an SMS/call service provider is temporarily unable to send a verification code to the provided number. */
 "REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "A B&A nem tudott SMS-kódot küldeni az SMS-szolgáltatóval kapcsolatos problémák miatt. Próbáld újra néhány óra múlva.";
+
+/* Third step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_ENABLE_BACKUPS" = "Engedélyezd a biztonsági mentéseket, és várd meg, amíg a biztonsági mentés befejeződik";
+
+/* First step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_OPEN_SIGNAL" = "Nyisd meg a B&At a régi eszközödön";
+
+/* Second step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_TAP_SETTINGS" = "Koppints a Beállítások > Biztonsági mentések lehetőségre";
 
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "Üzenetküldés csak regisztráció után lehetséges.";
@@ -7066,6 +7435,18 @@
 /* Label warning the user that something is wrong with their username link. */
 "REMINDER_VIEW_USERNAME_LINK_CORRUPTED_WARNING" = "Hiba történt a felhasználónevedhez tartozó QR-kóddal és a hivatkozással, ezért azok már nem érvényesek. Hozz létre egy új hivatkozást és oszd meg másokkal.";
 
+/* A message that displays when one person in a call remotely muted another participant. Embeds {{name}} {{name}} */
+"REMOTE_MUTE_TOAST_A_MUTED_B" = "%1$@ elnémította %2$@ felhasználót.";
+
+/* A message that displays when your microphone is remotely muted by another call participant. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_SOMEONE_MUTED_YOU" = "%1$@ elnémított téged.";
+
+/* A message that displays when you remotely muted another call participant's microphone. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_YOU_MUTED_SOMEONE" = "%1$@ elnémításra került.";
+
+/* A message that displays when you joined a call on two devices and mute one from the other. */
+"REMOTE_MUTE_TOAST_YOU_MUTED_YOURSELF" = "Elnémítottad magadat egy másik eszközről.";
+
 /* Accessibility label for a button that removes the preview from a drafted message. */
 "REMOVE_PREVIEW" = "Előnézet eltávolítása";
 
@@ -7083,6 +7464,30 @@
 
 /* Configure reactions reset button text */
 "RESET" = "Visszaállítás";
+
+/* Body for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_BODY" = "A médiafájl visszaállítása nem fejeződött be. Ha úgy döntesz, hogy megszakítod, az eszköz újbóli összekapcsolásával visszaállíthatod.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_PRIMARY_BUTTON" = "Visszaállítás folytatása";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_SECONDARY_BUTTON" = "Visszaállítás megszakítása";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_TITLE" = "A médiafájlod visszaállítása folyamatban van";
+
+/* Message for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_MESSAGE" = "A médiafájl visszaállítása nem fejeződött be. Ha úgy döntesz, hogy megszakítod, az eszköz újbóli összekapcsolásával visszaállíthatod.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_PRIMARY_BUTTON" = "Visszaállítás folytatása";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_SECONDARY_BUTTON" = "Visszaállítás megszakítása";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_TITLE" = "Médiafájl visszaállításának megszakítása?";
 
 /* Button title shown on chat list banner for restoring media from a backup when paused because the device has insufficient disk space, to see a bottom sheet with more details about next steps. */
 "RESTORING_MEDIA_BANNER_DISK_SPACE_BUTTON" = "Részletek";
@@ -7592,7 +7997,9 @@
 "SETTINGS_CHANGE_PHONE_NUMBER_PHONE_NUMBER_FIELD" = "Telefonszám";
 
 /* Description text in the 'change phone number splash' view. */
-"SETTINGS_CHANGE_PHONE_NUMBER_SPLASH_DESCRIPTION" = "Itt a B&A által regisztrált, aktuálisan használt telefonszámodat változtathatod meg egy másikra. Ez a művelet nem vonható vissza.\n\nKezdés előtt győződj meg róla, hogy az új számon tudsz SMS-t, vagy hívást fogadni!";
+"SETTINGS_CHANGE_PHONE_NUMBER_SPLASH_DESCRIPTION" = "Itt a B&A által regisztrált, aktuálisan használt telefonszámodat változtathatod meg egy másikra. Ez a művelet nem vonható vissza.
+
+Kezdés előtt győződj meg róla, hogy az új számon tudsz SMS-t, vagy hívást fogadni!";
 
 /* Title text in the 'change phone number splash' view. */
 "SETTINGS_CHANGE_PHONE_NUMBER_SPLASH_TITLE" = "Telefonszám cseréje";
@@ -7605,9 +8012,6 @@
 
 /* No comment provided by engineer. */
 "SETTINGS_CLEAR_HISTORY" = "Összes csevegési előzmény törlése";
-
-/* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicenc típusa: AGPLv3";
 
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "Adathasználat";
@@ -8500,6 +8904,12 @@
 /* The name for the sticker category 'Featured' */
 "STICKER_CATEGORY_FEATURED_NAME" = "Kiemelt";
 
+/* Subtitle of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_SUBTITLE" = "Küldj egy matricát, és az itt fog megjelenni";
+
+/* Title of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_TITLE" = "Nincsenek újabb matricák";
+
 /* The name for the sticker category 'Recents' */
 "STICKER_CATEGORY_RECENTS_NAME" = "Előzmények";
 
@@ -8508,9 +8918,6 @@
 
 /* Message when trying to show a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_MESSAGE_LABEL" = "Matrica nem elérhető";
-
-/* Message for sheet shown when tapping a sticker that has expired and is unavailable for download */
-"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Ez a matrica nem lett átmásolva a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi médiafájlok és fájlok nem szinkronizálhatók.";
 
 /* Title for sheet shown when tapping a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_SHEET_TITLE" = "Matrica nem elérhető";
@@ -8659,21 +9066,6 @@
 /* Context menu action to share the selected story */
 "STORIES_SHARE_STORY_ACTION" = "Megosztás";
 
-/* Section title shown when sending to non-story conversations but failing to send the file to stories. */
-"STORIES_SHARESHEET_PARTIAL_SEND_REMAINING_SECTION_TITLE" = "Elküldve";
-
-/* Section title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_STORIES_SECTION_TITLE" = "Nincs elküldve a következőnek:";
-
-/* Title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_TITLE" = "Részben elküldve";
-
-/* Subtitle shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_SUBTITLE" = "A kiválasztott fájltípus nem támogatott.";
-
-/* Title shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_TITLE" = "Küldés sikertelen";
-
 /* Title for the stories view. */
 "STORIES_TITLE" = "Történetek";
 
@@ -8722,8 +9114,11 @@
 /* Title for the story privacy settings view */
 "STORY_PRIVACY_TITLE" = "Történet adatvédelmi beállításai";
 
-/* inbox and notification text for a reaction to a story authored by the local user. Embeds {{reaction emoji}} */
-"STORY_REACTION_LOCAL_AUTHOR_PREVIEW_FORMAT" = "Így reagált a Történetedre: %1$@";
+/* Text explaining that you reacted to someone else's story. Embeds {{ %1$@ reaction emoji, %2$@ story author name }}. */
+"STORY_REACTION_PREVIEW_FORMAT_SECOND_PERSON" = "Így reagáltál %2$@ történetére: %1$@";
+
+/* Text explaining that someone reacted to your story. Embeds {{ %1$@ reaction emoji }}. */
+"STORY_REACTION_PREVIEW_FORMAT_THIRD_PERSON" = "Így reagált a történetedre: %1$@";
 
 /* quote text for a reaction to a story by the user (the header on the bubble says \"You\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_SECOND_PERSON" = "Így reagált egy történetre: %1$@";
@@ -8731,17 +9126,8 @@
 /* quote text for a reaction to a story by some other user (the header on the bubble says their name, e.g. \"Bob\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_THIRD_PERSON" = "Így reagált egy történetre: %1$@";
 
-/* inbox and notification text for a reaction to a story authored by another user. Embeds {{ %1$@ reaction emoji, %2$@ story author name }} */
-"STORY_REACTION_REMOTE_AUTHOR_PREVIEW_FORMAT" = "Így reagált %1$@ Történetére: %1$@";
-
 /* Button for replying to a story with no existing replies. */
 "STORY_REPLY_BUTTON" = "Válasz";
-
-/* Text indicating you reacted to a story (the header on the bubble says \"You\") */
-"STORY_REPLY_REACTION_SECOND_PERSON" = "Reagált a történetre";
-
-/* Text indicating someone else reacted to a story (the header on the bubble says their name, e.g. \"Bob\") */
-"STORY_REPLY_REACTION_THIRD_PERSON" = "Reagált a történetre";
 
 /* placeholder text for replying to a story */
 "STORY_REPLY_TEXT_FIELD_PLACEHOLDER" = "Válasz";
@@ -8965,35 +9351,23 @@
 /* Option in selected text edit menu to make text bold */
 "TEXT_MENU_BOLD" = "Félkövér";
 
-/* Option in selected text edit menu to clear all text formatting in the selected text range */
-"TEXT_MENU_CLEAR_FORMATTING" = "Formázás törlése";
-
 /* Option in selected text edit menu to view text formatting options */
 "TEXT_MENU_FORMAT" = "Formátum";
 
 /* Option in selected text edit menu to make text italic */
 "TEXT_MENU_ITALIC" = "Dőlt";
 
-/* Option in selected text edit menu to look up word definitions */
-"TEXT_MENU_LOOK_UP" = "Keresés";
-
 /* Option in selected text edit menu to make text monospace */
 "TEXT_MENU_MONOSPACE" = "Monospace";
 
-/* Option in selected text edit menu to replace text with suggestions */
-"TEXT_MENU_REPLACE" = "Csere";
-
-/* Option in selected text edit menu to share selected text */
-"TEXT_MENU_SHARE" = "Megosztás";
+/* Option in selected text edit menu to remove all text formatting in the selected text range */
+"TEXT_MENU_REMOVE_FORMATTING" = "Formázás eltávolítása";
 
 /* Option in selected text edit menu to make text spoiler */
 "TEXT_MENU_SPOILER" = "Kitakarás";
 
 /* Option in selected text edit menu to make text strikethrough */
 "TEXT_MENU_STRIKETHROUGH" = "Áthúzott";
-
-/* Option in selected text edit menu to translate the word */
-"TEXT_MENU_TRANSLATE" = "Fordítás";
 
 /* text indicating the message was remotely deleted */
 "THIS_MESSAGE_WAS_DELETED" = "Ez az üzenet törölve lett.";
@@ -9526,45 +9900,81 @@
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Beállítottad az eltűnő üzenetek idejét erre: %1$@.";
 
-/* BA custom strings */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "Biztonsági mentés létrehozása: %1$@";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "Biztonsági mentés exportálása...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "Biztonsági mentés feltöltése...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "Biztonsági mentett médiafájl feltöltése...";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "Biztonsági mentés készítése";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "Biztonsági mentés később";
-"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "Túl sok sikertelen küldési kísérlet. Kérlek próbáld újra később.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "Kikapcsolás";
-"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "A PIN letiltásához először ki kell kapcsolnod a Regisztrációs zár funkciót.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "Kikapcsolod a regisztrációs zárat?";
-"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "A B&A PIN létrehozása sikeres volt, viszont a regisztrációs zár engedélyezése nem sikerült. Ellenőrizd a netkapcsolatod és próbáld újra.";
-"PIN_CREATION_REGLOCK_ERROR_TITLE" = "Regisztrációs zár engedélyezése sikertelen";
-"PIN_DISABLE_ERROR_MESSAGE" = "A PIN-kódod letiltása nem sikerült.";
-"PIN_DISABLE_ERROR_TITLE" = "PIN letiltása sikertelen";
-"REGISTER_RATE_LIMITING_BODY" = "Túl gyakran próbálkoztál. Kérlek várj egy percet mielőtt újra nekifutnál.";
-"VOICE_MESSAGE_FILE_NAME" = "B&A";
+/* ===== B&A Custom Strings ===== */
 
-/* BA custom strings */
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Ez a hangüzenet nem lett átmásolva a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi fájlok és médiafájlok nem szinkronizálhatók.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Ez a fájl nem lett átmásolva a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi fájlok és médiafájlok nem szinkronizálhatók.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Az üzenetben szereplő teljes szöveg nem került át a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi hosszú szöveges üzenetek nem szinkronizálhatók.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Ez a matrica nem lett átmásolva a telefonodról az eszköz összekapcsolásakor. Az eszköz összekapcsolásakor 45 napnál régebbi médiafájlok és fájlok nem szinkronizálhatók.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Szöveg és médiafájlok biztonsági mentése 45 napra";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Médiafájl az elmúlt 45 napban";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Szöveg + 45 napnyi médiafájl";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Tovább";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Az adományozás egyéb módjai";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicenc típusa: AGPLv3";
+
+/* Link BAXS platform account */
+
 "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Úgy tűnik, hogy egy BAXS-fiókot próbálsz összekapcsolni. Koppints a Folytatás, majd a „QR-kód beolvasása“ elemre, és olvasd be újra a QR-kódot.";
+
 "LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BAXS fiók összekapcsolása";
+
 "LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Összekapcsolt BAXS fiók";
+
 "LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BAXS fiók";
+
 "LINK_BA_PLATFORM_SCAN_FOOTER" = "Olvassa be a BA fizetési platformon megjelenő QR-kódot a fiókja összekapcsolásához.";
+
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR-kód beolvasása";
-"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
-"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Email";
-"LINK_BA_PLATFORM_USER_ID" = "User ID";
-"LINK_BA_PLATFORM_USER_NAME" = "User Name";
-"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BAXS fiók összekapcsolása";
-"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Összekapcsolja fiókját a következővel: \"%@\"?";
-"LINK_BA_PLATFORM_SUCCESS_TOAST" = "A BAXS fiók sikeresen összekapcsolva.";
-"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Érvénytelen QR-kód";
-"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Ez a QR-kód nem érvényes BAXS összekapcsolási kód.";
+
 "LINK_BA_PLATFORM_SCAN_AGAIN" = "Újra beolvasás";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Email";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BAXS fiók összekapcsolása";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Összekapcsolja fiókját a következővel: \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "A BAXS fiók sikeresen összekapcsolva.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Érvénytelen QR-kód";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Ez a QR-kód nem érvényes BAXS összekapcsolási kód.";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Nem lehet összekapcsolni";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Ez a QR-kód nem használható összekapcsoláshoz.";
+
 "LINK_BA_PLATFORM_FAILED_TITLE" = "Összekapcsolás sikertelen";
+
 "LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "A BAXS elutasította az összekapcsolási kérelmet.";
+
 "LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Összekapcsolás időtúllépés";
+
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "A BAXS nem válaszolt időben. Kérjük, próbálja újra.";
+
 "LINK_BA_PLATFORM_ERROR_TITLE" = "Hiba";
+

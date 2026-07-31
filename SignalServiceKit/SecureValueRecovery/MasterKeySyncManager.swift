@@ -30,14 +30,14 @@ class MasterKeySyncManagerImpl: MasterKeySyncManager {
     private let dateProvider: DateProvider
     private let keyValueStore: KeyValueStore
     private let svr: SecureValueRecovery
-    private let syncManager: Shims.SyncManager
+    private let syncManager: SyncManagerProtocolSwift
     private let tsAccountManager: TSAccountManager
 
     init(
         dateProvider: @escaping DateProvider,
         svr: SecureValueRecovery,
-        syncManager: Shims.SyncManager,
-        tsAccountManager: TSAccountManager
+        syncManager: SyncManagerProtocolSwift,
+        tsAccountManager: TSAccountManager,
     ) {
         self.dateProvider = dateProvider
         self.keyValueStore = KeyValueStore(collection: StoreConstants.collectionName)
@@ -47,27 +47,25 @@ class MasterKeySyncManagerImpl: MasterKeySyncManager {
     }
 
     func runStartupJobs(tx: DBWriteTransaction) {
-        switch tsAccountManager.registrationState(tx: tx) {
-        case .registered:
-            runStartupJobsForPrimaryDevice(tx: tx)
-        case .provisioned:
-            runStartupJobsForLinkedDevice(tx: tx)
-        case .delinked, .deregistered, .unregistered, .transferred,
-                .transferringIncoming, .transferringLinkedOutgoing,
-                .transferringPrimaryOutgoing,
-                .reregistering, .relinking:
-            logger.info("Skipping; not registered")
+        guard let registeredState = try? tsAccountManager.registeredState(tx: tx) else {
             return
+        }
+        if registeredState.isPrimary {
+            runStartupJobsForPrimaryDevice(tx: tx)
+        } else {
+            runStartupJobsForLinkedDevice(tx: tx)
         }
     }
 
     private func runStartupJobsForPrimaryDevice(tx: DBWriteTransaction) {
         let key = StoreConstants.hasDistributedAEP
-        guard !keyValueStore.getBool(
-            key,
-            defaultValue: false,
-            transaction: tx
-        ) else {
+        guard
+            !keyValueStore.getBool(
+                key,
+                defaultValue: false,
+                transaction: tx,
+            )
+        else {
             return
         }
 
@@ -77,7 +75,7 @@ class MasterKeySyncManagerImpl: MasterKeySyncManager {
         self.keyValueStore.setBool(
             true,
             key: key,
-            transaction: tx
+            transaction: tx,
         )
     }
 
@@ -89,7 +87,7 @@ class MasterKeySyncManagerImpl: MasterKeySyncManager {
 
         let lastRequestDate = keyValueStore.getDate(
             StoreConstants.lastKeysSyncRequestMessageDateKey,
-            transaction: tx
+            transaction: tx,
         ) ?? .distantPast
 
         guard dateProvider().timeIntervalSince(lastRequestDate) >= 60 * 60 * 24 else {
@@ -98,47 +96,12 @@ class MasterKeySyncManagerImpl: MasterKeySyncManager {
         }
 
         logger.info("Requesting keys sync message")
-        syncManager.sendKeysSyncRequestMessage(tx: tx)
+        syncManager.sendKeysSyncRequestMessage(transaction: tx)
 
         keyValueStore.setDate(
             dateProvider(),
             key: StoreConstants.lastKeysSyncRequestMessageDateKey,
-            transaction: tx
+            transaction: tx,
         )
-    }
-}
-
-// MARK: - Dependencies
-
-extension MasterKeySyncManagerImpl {
-    enum Shims {
-        public typealias SyncManager = _MasterKeySyncManagerImpl_SyncManager_Shim
-    }
-
-    enum Wrappers {
-        public typealias SyncManager = _MasterKeySyncManagerImpl_SyncManager_Wrapper
-    }
-}
-
-// MARK: SyncManager
-
-protocol _MasterKeySyncManagerImpl_SyncManager_Shim {
-    func sendKeysSyncMessage(tx: DBWriteTransaction)
-    func sendKeysSyncRequestMessage(tx: DBWriteTransaction)
-}
-
-class _MasterKeySyncManagerImpl_SyncManager_Wrapper: _MasterKeySyncManagerImpl_SyncManager_Shim {
-    private let syncManager: SyncManagerProtocolSwift
-
-    init(_ syncManager: SyncManagerProtocolSwift) {
-        self.syncManager = syncManager
-    }
-
-    func sendKeysSyncMessage(tx: DBWriteTransaction) {
-        syncManager.sendKeysSyncMessage(tx: SDSDB.shimOnlyBridge(tx))
-    }
-
-    func sendKeysSyncRequestMessage(tx: DBWriteTransaction) {
-        syncManager.sendKeysSyncRequestMessage(transaction: SDSDB.shimOnlyBridge(tx))
     }
 }

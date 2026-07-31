@@ -1,6 +1,9 @@
 /* Button text to dismiss missing contacts permission alert */
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "ھازىر ئەمەس";
 
+/* Footer for the 'about' help section. For non-English languages, exclude the word '501c3'. */
+"ABOUT_SECTION_FOOTER" = "B&A Messenger نەشر ھوقۇقىغا \n AGPLv3 بويىچە ئىجازەتنامە بېرىلگەن \n B&A پايدا ئالمايدىغان بىر تەشكىلات";
+
 /* Title for the 'about' help section */
 "ABOUT_SECTION_TITLE" = "‫B&A ھەققىدە";
 
@@ -69,6 +72,12 @@
 
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "ئۇچۇر يوللا";
+
+/* Message shown in an action sheet when a generic error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_GENERIC_ERROR" = "خاتالىق كۆرۈلدى. ياردەمچى خادىم بىلەن ئالاقىلىشىڭ.";
+
+/* Message shown in an action sheet when a network error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_NETWORK_ERROR" = "خاتالىق كۆرۈلدى. تور ئۇلىنىشىڭىزنى تەكشۈرۈپ قايتا سىناڭ.";
 
 /* A label for 'tap to download' buttons. */
 "ACTION_TAP_TO_DOWNLOAD" = "چېكىلسە چۈشۈرىدۇ";
@@ -196,6 +205,12 @@
 /* notification body */
 "APN_Message" = "يېڭى ئۇچۇرىڭىز بار";
 
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. The embedded value is 'Update now' (translated via APP_EXPIRED_BOTTOM_UPDATE), and it will be formatted as a tappable link. */
+"APP_EXPIRED_BOTTOM" = "B&Aنىڭ بۇ نەشرىنىڭ ۋاقتى ئ‍ۆتكەن. ئۇچۇر ئەۋەتىش ۋە قوبۇل قىلىش ئۈچۈن %1$@ ئىشلىتىڭ.";
+
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. This value is a tappable link embedded in a larger sentence. */
+"APP_EXPIRED_BOTTOM_UPDATE" = "ھازىر يېڭىلاڭ";
+
 /* Default message for the 'app launch failed' alert. */
 "APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "‫B&A قوزغىلالمىدى. support@baxs.com غا سازلاش خاتىرىسى ئەۋەتىپ بۇ كاشىلىنى ھەل قىلىشىمىزغا ياردەم قىلىڭ.";
 
@@ -210,6 +225,15 @@
 
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "سانداننى يۈكلىيەلمىدى";
+
+/* Message for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_MESSAGE" = "سانلىق مەلۇمات ئامبىرى بۇزۇلغانلىقى ئۈچۈن B&A قوزغىتىلمىدى. ھېساباتىڭىز ياكى ئۇچۇرلىرىڭىزنىڭ بىخەتەرلىكىگە ھېچقانداق تەسىر يەتمىدى.";
+
+/* Title for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_TITLE" = "سانلىق مەلۇمات ئامبىرى بۇزۇلغان";
+
+/* Action in an action sheet offering to attempt recovery of a corrupted database. */
+"APP_LAUNCH_FAILURE_DATABASE_RECOVERY_ACTION_TITLE" = "رېمونت قىلىش";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "ئەڭ يېڭى نەشرىدىكى B&A غا يۈكسەلتىڭ.";
@@ -246,15 +270,6 @@
 
 /* Text prompting user to edit their profile name. */
 "APP_SETTINGS_EDIT_PROFILE_NAME_PROMPT" = "ئاتىڭىزنى كىرگۈزۈڭ";
-
-/* Label for the 'dismiss' button in the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_DISMISS_BUTTON" = "ھازىر ئەمەس";
-
-/* Message format for the 'new app version available' alert. Embeds: {{The latest app version number}} */
-"APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "%1$@ نەشرىنى App Store دىن چۈشۈرۈشكە بولىدۇ.";
-
-/* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "يېڭى نەشرىدىكى B&A نى ئىشلىتەلەيسىز.";
 
 /* Label for the 'update' button in the 'new app version available' alert. */
 "APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "يېڭىلا";
@@ -427,6 +442,9 @@
 /* A button to open the photo picker from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_PHOTOS" = "رەسىم";
 
+/* A button to select a poll from the Attachment Keyboard */
+"ATTACHMENT_KEYBOARD_POLL" = "ئشلەتكۈچىلەرنىڭ رايىنى سىناش";
+
 /* Accessibility label for attaching photos */
 "ATTACHMENT_LABEL" = "قوشۇمچە";
 
@@ -487,14 +505,8 @@
 /* Message when trying to show a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_MESSAGE_LABEL" = "ئاۋازلىق ئۇچۇرنى ئىشلەتكىلى بولمايدۇ";
 
-/* Message for sheet shown when tapping a voice message that has expired and is unavailable for download */
-"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "بۇ ئۈسكۈنە ئۇلانغان ۋاقىتتا بۇ ئاۋازلىق ئۇچۇر تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلانغان ۋاقىتتا ، 45 كۈندىن ئاشقان ھۆججەتلەر ۋە مېدىيانى ماسقەدەملىگىلى بولمايدۇ.";
-
 /* Title for sheet shown when tapping a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "ئاۋازلىق ئۇچۇرنى ئىشلەتكىلى بولمايدۇ";
-
-/* Username for recovery key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "B&A زاپاسلانمىسى";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "رەڭ تاللاڭ";
@@ -556,6 +568,15 @@
 /* Toast indicating that the Recovery Key was correct. */
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "زاپاسلاش ئاچقۇچى توغرا. ئاچقۇچىڭىزنى بىخەتەر ساقلاڭ.";
 
+/* Button label for action sheet to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_ACTION" = "زاپاسلاشنى قۇرۇشتىن چېكىنىش";
+
+/* Message for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_MESSAGE" = "زاپاسلاشنى قۇرۇشنى تاماملاپ بولالمىدىڭىز، ھېچقانداق زاپاسلاش قۇرۇلمىدى. «تەڭشەك»تىن زاپاسلاشنى قوزغىتالايسىز.";
+
+/* Title for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_TITLE" = "زاپاسلاشنى قۇرۇشتىن چېكىنەمىسىز؟";
+
 /* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "ئەگەر ئاچقۇچڭىزنى يوقىتىپ قويسىڭىز ، سىگنال ياردەملىشىپ زاپاسلاشنى ئەسلىگە كەلتۈرەلمەيدۇ. ئۇنى بىخەتەر جايدا ساقلاڭ ، ھەمدە باشقىلار بىلەن ئورتاقلاشماڭ.";
 
@@ -580,17 +601,41 @@
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "زاپاس مەلۇماتلار خالىغان ۋاقىتتا ئۆچۈرەلەيسىز";
 
+/* A toast shown when 'Not Now' is tapped from the Backups onboarding intro. */
+"BACKUP_ONBOARDING_INTRO_NOT_NOW_TOAST" = "«تەڭشەك»تىن زاپاسلاشنى قوزغىتالايسىز.";
+
 /* Subtitle for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "ئۇچۇرلىرىڭىزنى ۋە مېدىيانى B&Aنىڭ بىخەتەر ، ئاخىرىغىچە مەخپىيلەشتۈرۈلگەن ساقلاش مۇلازىمىتىنى ئىشلىتىپ زاپاسلاڭ. يېڭى تېلېفون ئالغاندا ياكى B&Aنى قايتا قاچىلىغاندا ھەرقانداق ئۇچۇرنى يۈتتۈرۈپ قويمايسىز.";
 
 /* Title for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_TITLE" = "B&A زاپاسلانمىسى";
 
-/* Subtitle for a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "سىزنىڭ زاپاسلاش ئاچقۇچىڭىز بولسا سىگنالنى قايتا قاچىلىغاندا ياردەم قىلىپ زاپاسلاشنى ئەسلىگە كەلتۈرىدىغان 64 خانىلىق كود.\n\nئەگەر ئاچقۇچنى ئۇنتۇپ قالسىڭىز ، زاپاسلاشنى ئەسلىگە كەلتۈرەلمەيسىز. سىگنال زاپاسلاشنى ئەسلىگە كەلتۈرۈشىڭىزگە ياردەم قىلالمىدى.";
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "ئەسلىگە كەلتۈرۈش ئاچقۇچىڭىز، زاپاسلاشنى ئەسلىگە كەلتۈرۈش ئۈچۈن ئىشلىتىلىدىغان 64 خانىلىق كود.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_2" = "ئەسلىگە كەلتۈرۈش ئاچقۇچىڭىزنى، بىخەتەر دەپ قارىغان پارول باشقۇرغۇچىدا ساقلاڭ ھەمدە باشقىلار بىلەن ئورتاقلاشماڭ.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_3" = "ئەگەر ئۇنى يوقىتىپ قويسىڭىز، ئۇچۇرلىرىڭىزنى ئەسلىگە كەلتۈرەلمەيسىز.";
+
+/* Title for a continue button for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_CONTINUE_BUTTON_TITLE" = "ئەسلىگە كەلتۈرۈش ئاچقۇچىنى كۆرۈش";
 
 /* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "زاپاسلاش ئاچقۇچىڭىز";
+
+/* Body for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY" = "زاپاسلاش مۇشتەرىلىكىڭىزنىڭ ۋاقتى ئۆتتى، چۈنكى پۇل تۆلەش ئۇسۇلىڭىز بىلەن يېڭىلىغىلى بولمىدى.\n\nمېدىيانى زاپاسلاشنى داۋاملاشتۇرۇش ئۈچۈن قايتا مۇشتەرى بولۇڭ. ھەقسىز B&A زاپاسلانمىسى پىلانىنى داۋاملىق زىيارەت قىلالايسىز.";
+
+/* Body for a sheet shown when your Backup plan is downgraded because you stopped using TestFlight. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY_TESTFLIGHT" = "TestFlightنى داۋاملىق ئىشلەتمىگەچكە زاپاسلاش مۇشتەرىلىكىڭىزنىڭ ۋاقتى ئۆتكەن.\n\nمېدىيانى زاپاسلاشنى داۋاملاشتۇرۇش ئۈچۈن قايتا مۇشتەرى بولۇڭ. ھەقسىز B&A زاپاسلانمىسى پىلانىنى داۋاملىق زىيارەت قىلالايسىز.";
+
+/* Primary button for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_PRIMARY_BUTTON" = "زاپاسلارنى باشقۇرۇش";
+
+/* Title for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_TITLE" = "زاپاسلاش مۇشتەرىلىكىڭىزنىڭ ۋاقتى ئۆتۈپ كەتتى";
 
 /* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "چاپلاش تاختىسىغا كۆچۈر";
@@ -613,6 +658,21 @@
 /* Title for a progress spinner on a modal when restoring messages */
 "BACKUP_RESTORE_MODAL_TITLE" = "ئۇچۇرلارنى ئەسلىگە كەلتۈرىۋاتىدۇ…";
 
+/* Message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "ئاپتوماتىك زاپاسلاش چەكلەنگەن. B&Aنىڭ ئىجازەت دائىرىسىنى يېڭىلاش ئارقىلىق ئاپتوماتىك زاپاسلاشنى قوزغىتىڭ.";
+
+/* Add-on to a message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE_UPDATE_NOW" = "دەرھال يېڭىلاش";
+
+/* Title for a button that takes the users to Signal's iOS Settings page. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_GO_TO_SETTINGS_BUTTON" = "تەڭشەكلەرگە يۆتكەل";
+
+/* Message for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_MESSAGE" = "B&Aنىڭ ئۇچۇرلىرىڭىزنى ئاپتوماتىك زاپاسلىشىغا رۇخسەت قىلىش ئۈچۈن ئاستىدىكى «تەڭشەكلەرگە كىرىش»نى چېكىڭ ۋە «ئارقا سۇپىدا ئەپ يېڭىلاش»نى قوزغىتىڭ";
+
+/* Title for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_TITLE" = "ئاپتوماتىك زاپاسلاش چەكلەنگەن";
+
 /* Message for an action sheet explaining that performing a backup failed with a generic error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR" = "زاپاسلىشىڭىزنى قۇرۇشتا خاتالىق كۆرۈلدى. قايتا سىناڭ ياكى ياردەمچى خادىمى بىلەن ئالاقىلىشىڭ.";
 
@@ -628,6 +688,9 @@
 /* Message for an action sheet explaining that performing a backup failed with a network error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR" = "زاپاسلىشىڭىزنى قۇرۇشتا خاتالىق كۆرۈلدى. تور ئۇلىنىشىڭىزنى تەكشۈرۈپ قايتا سىناپ بېقىڭ.";
 
+/* Message for an action sheet explaining that you must be registered to make a Backup. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "بىر زاپاسلاشنى قۇرۇش ئۈچۈن چوقۇم تىزىمغا ئېلىنغان بولۇشىڭىز كېرەك.";
+
 /* Description for a progress bar tracking the optimizing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "مېدىيانى ئەلالاشتۇرۇۋاتىدۇ...";
 
@@ -637,14 +700,26 @@
 /* Description for a progress bar tracking the processing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PROCESSING_MEDIA" = "مېدىيانى بىر تەرەپ قىلىۋاتىدۇ...";
 
+/* Title for an action sheet action explaining the user can now scan a QR code to continue the restore. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_ACTION_TITLE" = "QR كودى تارا";
+
+/* Body for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_BODY" = "بۇ ئۈسكۈنىنى ئىشلىتىپ سىز يۆتكەلمەكچى بولغان ئۈسكۈنىدىكى QR كودىنى سكاننېرلاڭ";
+
+/* Title for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_TITLE" = "يۆتكەشكە تەييار";
+
+/* Message describing to the user that the last backup failed. */
+"BACKUP_SETTINGS_BACKUP_FAILED_MESSAGE" = "ئاخىرقى زاپاسلىشىڭىزنى تاماملىيالمىدى. «ھازىر زاپاسلاش» نى چېكىپ قايتا سىناڭ.";
+
 /* Title for a button allowing users to upgrade from a free to paid backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "يېڭىلاش";
 
+/* Text describing the user's free backup plan when they have Backups disabled. */
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_AND_DISABLED_DESCRIPTION" = "زاپاسلاشلارنى ئېتىۋەتتىڭىز";
+
 /* Text describing the user's free backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_DESCRIPTION" = "زاپاسلاش پىلانىڭىز ھەقسىز";
-
-/* Header describing what the free backup plan includes. */
-"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "تېكىست + 45 كۈنلۈك مېدىيانى زاپاسلاش";
 
 /* Message for a view indicating we failed to fetch someone's Backup plan due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_MESSAGE" = "بىر خاتالىق كۆرۈلدى. ياردەمچى خادىم بىلەن ئالاقىلىشىڭ.";
@@ -673,11 +748,26 @@
 /* Text explaining that a user's paid plan, which has been canceled, expired on a past date. Embeds {{ the formatted expiration date }}. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_PAST_EXPIRATION_FORMAT" = "%1$@ مۇددىتى توشقان";
 
+/* Title for a button allowing users to manage a paid backup plan that failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_ACTION_BUTTON_TITLE" = "مۇشتەرىلىكنى باشقۇرۇش";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_1" = "پۇل تۆلەش ئۇسۇلى رەت قىلىندى";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_2" = "پۇل تۆلەش ئۇسۇلىڭىزنىڭ ئەڭ يېڭى ئىكەنلىكىنى جەزملەشتۈرۈڭ";
+
 /* Title for a button allowing users to manage their backup plan as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "باشقۇرۇش پىلانى";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "ھەقلىق ، ئەمما سىز بىر سىناق قىلغۇچى سۈپىتىدە قوللانسىڭىز ھەقسىز";
+
+/* Title for a button allowing users to renew their backup subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_ACTION_BUTTON_TITLE" = "يېڭىلاش";
+
+/* Text describing that the user's paid backup plan did not correspond to a App Store subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_DESCRIPTION" = "مۇشتەرىلىكىڭىز بۇ ئۈسكۈنىدە تېپىلمىدى. B&A زاپاسلانمىسىنى ئشلىتىش ئۈچۈن يېڭىلاڭ.";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "تېكىست + بارلىق مېدىيانى زاپاسلاش";
@@ -717,6 +807,15 @@
 
 /* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "يېڭى ئەسلىگە كەلتۈرۈش ئاچقۇچى قۇرۇش ئۈچۈن چوقۇم تىزىملىتىشىڭىز كېرەك.";
+
+/* Explanation text for a sheet warning users they've reached a rate limit for creating Recovery Key. {{ Embeds 1: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_BODY" = "ئەگەر يېڭىدىن بىر ئەسلىگە كەلتۈرۈش ئاچقۇچى قۇرسىڭىز، %1$@گىچە زاپاسلاشنى قوزغىتالمايسىز. قالايمىقان ئىشلىتىشنىڭ ئالدىنى ئېلىش ئۈچۈن، ئاچقۇچلارنى قۇرۇش قېتىم سانى چەكلىك.";
+
+/* Action in an action sheet allowing to continue to rotate their key */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_CONTINUE_ACTION" = "يېڭى ئاچقۇچ قۇرۇڭ";
+
+/* Title for a sheet warning users they've reached a rate limit for creating Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_TITLE" = "ئەسلىگە كەلتۈرۈش ئاچقۇچىنى ئۆزگەرتىش قېتىم سانى چېكىگە يەتتى";
 
 /* Toast shown when a new Recovery Key has been created successfully. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "يېڭى ئاچقۇچ قۇرۇلدى!";
@@ -759,6 +858,15 @@
 
 /* Message shown in an action sheet when the user tries to disable Backups, but is not registered. */
 "BACKUP_SETTINGS_DISABLING_ERROR_NOT_REGISTERED" = "زاپاسلاشنى چەكلەش ئۈچۈن چوقۇم تىزىملىتىشىڭىز كېرەك.";
+
+/* Button for an action sheet shown when the user disables Backups, letting them manage their subscription. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MANAGE_SUBSCRIPTION_BUTTON" = "مۇشتەرىلىكنى باشقۇرۇش";
+
+/* Message for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MESSAGE" = "مۇشتەرىلىكىڭىزنى ئەمەلدىن قالدۇرماقچى بولسىڭىز «مۇشتەرىلىكنى باشقۇرۇش>B&A > مۇشتەرىلىكنى بىكار قىلىش»نى چېكىڭ";
+
+/* Title for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_TITLE" = "سىز يەنىلا ھەقلىق زاپاسلاش پىلانىغا مۇشتەرى";
 
 /* Title for a button shown in Backup Settings that lets a user cancel an in-progress download. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_CANCEL_DOWNLOAD" = "چۈشۈرۈشنى بىكار قىلىش";
@@ -814,6 +922,15 @@
 /* Label for a menu item offering to show the user their recovery key. */
 "BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "زاپاسلاش ئاچقۇچىنى كۆرۈڭ";
 
+/* Body for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_BODY" = "مۇشتەرىلىكىڭىزنى بۇ ئۈسكۈنىدە ئەسلىگە كەلتۈرگىلى بولمىدى. ئەگەر سىز باشقا Apple ھېساباتى بىلەن App دۇكىنىغا تىزىملاتقان ياكى ئاندىرويىد تېلېفونىدىن يۆتكىگەن بولسىڭىز بۇ ئەھۋال يۈز بېرىشى مۇمكىن.\n\nئەگەر كونا تېلېفونىڭىزدا ئاكتىپ مۇشتەرىلىكىڭىز بولسا يېڭىلىنىشتىن بۇرۇن ئۇنى ئەمەلدىن قالدۇرۇڭ.";
+
+/* Button for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_GOT_IT_BUTTON" = "بىلدىم";
+
+/* Title for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_TITLE" = "مۇشتەرىلىك تېپىلمىدى";
+
 /* Title for a button allowing users to trigger a manual backup. */
 "BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "ھازىر زاپاسلا";
 
@@ -850,6 +967,12 @@
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "ئۈسكۈنىدىكى ساقلاش بوشلۇقىنى ئەلالاشتۇرۇش";
 
+/* Subtitle for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_SUBTITLE" = "زاپاسلاش ئامبىرىڭىزنىڭ چېكىگە يەتتىڭىز. پاراڭلار ۋە مېدىيانى داۋاملىق زاپاسلاش ئۈچۈن B&Aدا بوشلۇق ھازىرلاڭ.";
+
+/* Title for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_TITLE" = "زاپاسلاش ئامبىرى چېكىگە يەتتى";
+
 /* Title for a button allowing users to re-enable Backups, after it had been previously disabled. */
 "BACKUP_SETTINGS_REENABLE_BACKUPS_BUTTON_TITLE" = "زاپاسلاشنى قايتا قوزغىتىش";
 
@@ -861,6 +984,21 @@
 
 /* Title for a sheet warning the user about skipping downloads. */
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "چۈشۈرۈشتىن ۋاز كېچەمسىز؟";
+
+/* Title for detail button in notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_DETAIL_BUTTON" = "تەپسىلاتى";
+
+/* Title for notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_TITLE" = "زاپاسلاش مۇشتەرىلىكىڭىزنى ئەسلىگە كەلتۈرەلمىدى";
+
+/* Body for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_BODY" = "بەك كۆپ ئۈسكۈنىلەر بۇ ئايدا مۇشتەرىلىكىڭىزنى ئەسلىگە كەلتۈرۈشكە ئۇرۇندى.\n\nسىز B&A ھېساباتىڭىزنى قايتا-قايتا تىزىملاتقان بولۇشىڭىز ياكى ئوخشاش مۇشتەرىلىكنى ئىشلىتىۋاتقان ئۈسكۈنىلىرىڭىز بەك كۆپ بولۇپ كەتكەن بولۇشى مۇمكىن.";
+
+/* Button for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_GOT_IT_BUTTON" = "بىلدىم";
+
+/* Title for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_TITLE" = "زاپاسلاش مۇشتەرىلىكىڭىزنى ئەسلىگە كەلتۈرەلمىدى";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "يۈكلەش ۋاقىتلىق توختىتىلدى: ئۈسكۈنىنىڭ باتارېيەسى تۆۋەن";
@@ -874,14 +1012,32 @@
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "يۈكلەش ۋاقىتلىق توختىتىلدى: Wi-Fi نى ساقلاۋاتىدۇ";
 
+/* Subtitle for a progress bar tracking uploads that are paused because the user is out of remote storage space. Embeds 1:{{ total storage space provided, e.g. 100 GB }}; 2:{{ space the user needs to free up by deleting media, e.g. 1 GB }}. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_OUT_OF_STORAGE_SPACE_FORMAT" = "زاپاسلاش پىلانىڭىزنى ئۆز ئىچىگە ئالغان %1$@لىق ساقلاش چېكىگە يەتتىڭىز. يېڭى پاراڭلار ۋە مېدىيانى زاپاسلاش ئۈچۈن، B&Aدا %2$@ بوشلۇق ھازىرلاڭ، ئاندىن كېيىن «ھازىر زاپاسلاش» نى چېكىڭ.";
+
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
-"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "%2$@ نىڭ %1$@ تى يۈكلىنىۋاتىدۇ(%%%3$@)";
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "%2$@ نىڭ %1$@ تى يۈكلىنىۋاتىدۇ(%3$@)";
 
 /* Message for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE" = "زاپاسلايدىغان مەلۇماتلارنىڭ ھەجىمىگە قارىتا ، بۇنىڭغا ئۇزۇن ۋاقىت كېتىشى مۇمكىن. زاپاسلاش ئېلىپ بېرىلۋاتقاندىمۇ تېلېفونىڭىزنى ئادەتتىكىدەكلا ئىشلىتەلەيسىز.";
 
 /* Title for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "«B&A زاپاسلاشلىرى»نى ئىشلىتىشىڭىزنى قارشى ئالىمىز. زاپاسلاشنى ھازىرلا باشلاڭ.";
+
+/* Message for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_MESSAGE" = "پۇل تۆلەش ئۇسۇلىڭىزنىڭ ئەڭ يېڭى ئىكەنلىكىنى جەزملەشتۈرۈڭ. «مۇشتەرىلىكنى باشقۇرۇش> B&A> ھەق تۆلەش ئۇسۇلىنى يېڭىلاش»نى چېكىڭ.";
+
+/* Primary button for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_PRIMARY_BUTTON" = "مۇشتەرىلىكنى باشقۇرۇش";
+
+/* Title for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "زاپاسلاش مۇشتەرىلىكىڭىز يېڭىلىنىشنى تاماملىيالمىدى";
+
+/* Body for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "بۇ مەسىلىنى ياردەملىشىپ ھەل قىلىشىمىز ئۈچۈن بىزگە كاشىلا ھەل قىلىش خاتىرىسىنى ئەۋەتىپ بېرىڭ!";
+
+/* Title for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "مېدىيانى زاپاسلاۋاتقاندا بىر خاتالىق كۆرۈلدى";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "B&A زاپاسلانمىسى";
@@ -1041,9 +1197,6 @@
 
 /* An explanation of the consequences of blocking another user. */
 "BLOCK_USER_BEHAVIOR_EXPLANATION" = "چەكلەنگەن ئىشلەتكۈچىلەر سىزگە تېلېفون قىلالمايدۇ ياكى ئۇچۇر ئەۋەتەلمەيدۇ.";
-
-/* Tooltip highlighting the blur image editing tool. */
-"BLUR_TOOLTIP" = "يېڭى: چىراي ياكى خالىغان جاي سىزىلسا تۇتۇقلىشىدۇ.";
 
 /* Default text for the custom amount field of the boost view. */
 "BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "ئىختىيارىچە سومما كىرگۈزۈڭ";
@@ -1227,6 +1380,87 @@
 
 /* notification body */
 "CALL_MISSED_BECAUSE_OF_IDENTITY_CHANGE_NOTIFICATION_BODY" = "☎️ جاۋابسىز چاقىرىش چۈنكى چاقىرغۇچىنىڭ بىخەتەرلىك نومۇرى ئۆزگەرگەن.";
+
+/* Title for toast which appears after submitting a call quality survey */
+"CALL_QUALITY_SURVEY_COMPLETION_TOAST" = "ئىنكاسىڭىزغا رەھمەت!";
+
+/* Footer text explaining custom issue descriptions in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_FOOTER" = "مەسىلىگە مۇناسىۋەتلىك قانداق تەپسىلاتلار بولسا قوشۇپ قويۇڭ. بۇ يەردە ھەمبەھىرلىگەن ھەر قانداق مەزمۇن شەخسىي ھالەتتە ساقلىنىدۇ ھەمدە B&Aدىكى تېلېفونلىشىش سۈپىتىنى ياردەملىشىپ ياخشىلاشقا ئىشلىتىلىدۇ.";
+
+/* Placeholder text for the custom issue entry in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_PLACEHOLDER" = "بايقىغان مەسىلىنى تەسۋىرلەڭ";
+
+/* Footer text explaining what debug logs contain in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER" = "بىز بىلەن ئورتاقلاشقان ئۇچۇرلار تۆۋەن دەرىجىلىك ئەپ ئۇچۇرلىرىنى ئۆز ئىچىگە ئالىدۇ ئەمما سىز تېلېفونلاشقاندىكى مەزمۇنلارنى ئۆز ئىچىگە ئالمايدۇ.";
+
+/* Header text explaining the purpose of sharing debug logs in the call quality survey. The text inside the <link> tags is tappable for viewing the diagnostic information. */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_HEADER" = "يوللاش ئارقىلىق <link> تېلېفونىڭىز ھەققىدىكى دىئاگنوزتىكلىق ئۇچۇرلار</link> سىزنىڭ پىكىر-تەكلىپلىرىڭىز بىلەن بىرلىكتە ئورتاقلىشىلىدۇ. بىزگە ياردەملىشىپ تېلېفونلىشىش سۈپىتىنى ياخشىلاش ئۈچۈن، سىز ئىختىيارىي ھالدا كاشىلا ھەل قىلىش خاتىرىسىنى ئورتاقلىشالايسىز.";
+
+/* Link text to open a preview of debug logs in the call quality survey. Appended to CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_PREVIEW_LINK" = "كاشىلا ھەل قىلىش خاتىرىسىنى كۆرۈش";
+
+/* Title for the debug log sharing screen in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TITLE" = "بىزنىڭ تېخىمۇ ياخشىلىنىشىمىزغا ياردەم قىلىڭ";
+
+/* Label for the toggle to share debug log in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TOGGLE" = "كاشىلا ھەل قىلىش خاتىرىسىنى ئورتاقلىشىش";
+
+/* Title for preview of the call diagnostic info that will be sent with the survey */
+"CALL_QUALITY_SURVEY_DIAGNOSTICS_TITLE" = "دىئاگنوستىكلىق ئۇچۇر";
+
+/* Button label for indicating the call did not have issues in the call quality survey */
+"CALL_QUALITY_SURVEY_GREAT_BUTTON" = "ناھايىتى ياخشى";
+
+/* Button label for indicating the call had issues in the call quality survey */
+"CALL_QUALITY_SURVEY_HAD_ISSUES_BUTTON" = "مەسىلىلەرگە يولۇقتىۇم";
+
+/* Label for audio issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO" = "تېلفۇنلاشقاندىكى ئاۋاز مەسىلىسى";
+
+/* Label for audio dropout issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_DROP" = "ئاۋاز ئۈزۈلۈپ قالدى";
+
+/* Label for local echo issue option in call quality survey, indicating the user heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_LOCAL_ECHO" = "ئەكىس سادانى ئاڭلىدىم";
+
+/* Label for remote echo issue option in call quality survey, indicating other participants heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_REMOTE_ECHO" = "باشقىلار ئەكىس سادانى ئاڭلاپتۇ";
+
+/* Label for audio stuttering issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_STUTTERING" = "ئۈن كېكەشلەپ چىقىش";
+
+/* Label for call dropped issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_CALL_DROPPED" = "تېلېفون ئۈزۈلۈپ قالدى";
+
+/* Label for custom issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_OTHER" = "باشقا يەنە";
+
+/* Label for video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO" = "سىن مەسىلىسى";
+
+/* Label for poor video quality issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_QUALITY" = "سىن سۈپىتىنىڭ ناچار بولۇشى";
+
+/* Label for low resolution video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_RESOLUTION" = "ئېنىقلىق دەرىجىسى تۆۋەن";
+
+/* Label for camera not working issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_NO_CAMERA" = "كامېرا ئىشلىمىدى";
+
+/* Header text on the call quality survey issues screen */
+"CALL_QUALITY_SURVEY_ISSUES_HEADER" = "ماس كەلگەننىڭ ھەممىسىنى تاللاڭ";
+
+/* Title for the sheet in the call quality survey where issues with the call can be selected */
+"CALL_QUALITY_SURVEY_ISSUES_SHEET_TITLE" = "سىز قانداق مەسىلىلەرنى بايقىدىڭىز؟";
+
+/* Header text explaining the purpose of the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_HEADER" = "بۇ بىزنىڭ B&Aدىكى تېلېفونلىشىش سۈپىتىنى ياخشىلىشىمىزغا ياردەم بېرىدۇ. شەخسىي سالاھىيەتكە باغلىنىشلىق ئۇچۇرلار ساقلانمايدۇ.";
+
+/* Title for the initial rating screen in the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_TITLE" = "تېلېفونلىشىش جەريانى قانداق بولدى؟";
+
+/* Button text to submit the call quality survey */
+"CALL_QUALITY_SURVEY_SUBMIT_BUTTON" = "تاپشۇر";
 
 /* Label on button for raising hand in call. */
 "CALL_RAISE_HAND_BUTTON_LABEL" = "قول كۆتۈرۈش";
@@ -1579,17 +1813,8 @@
 /* Text for a bullet point in a list of Backup features, describing that all text messages are included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_TEXT_BACKUP" = "تولۇق تېكىست ئۇچۇرىنى زاپاسلاش";
 
-/* Text for a bullet point in a list of Backup features, describing that recent media is included. */
-"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "ئەڭ ئاخىرقى 45 كۈنلۈك مېدىيا";
-
-/* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
+/* Text for a bullet point in a list of Backup features, describing the amount of included storage. Embeds {{ the amount of storage preformatted as a localized byte count, e.g. '100 GB' }}. */
 "CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "1TB ساقلاش بوشلۇقى (~ 250 مىڭ پارچە سۈرەتلەر)";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "خاتالىق كۆرۈلدى. ياردەمچى خادىم بىلەن ئالاقىلىشىڭ.";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a network error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NETWORK_ERROR" = "خاتالىق كۆرۈلدى. تور ئۇلىنىشىڭىزنى تەكشۈرۈپ قايتا سىناڭ.";
 
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but is not registered. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED" = "زاپاسلاشنى چەكلەش ئۈچۈن چوقۇم تىزىملىتىشىڭىز كېرەك.";
@@ -1600,11 +1825,23 @@
 /* Message shown in an action sheet when the user tries to confirm selecting the paid plan, but encountered an error while redeeming their completed purchase. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_PURCHASE_REDEMPTION" = "خاتالىق كۆرۈلدى. ياردەمچى خادىم بىلەن ئالاقىلىشىڭ.";
 
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED" = "يېڭى ئەسلىگە كەلتۈرۈش ئاچقۇچى قۇرۇشنىڭ قېتىم سانى چېكىگە يەتكەنلىكىڭىز سەۋەپلىك، قالايمىقان ئىشلىتىشنىڭ ئالدىنى ئېلىش ئۈچۈن، %1$@گىچە زاپاسلاشنى قوزغىتالمايسىز. %1$@ ساقلاپ قايتا سىناڭ.";
+
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. {{ Embeds 1 & 2: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED_TITLE" = "زاپاسلاشنى قوزغىتالمىدى";
+
 /* A label indicating that a given Backup plan option is what the user has already enabled. */
 "CHOOSE_BACKUP_PLAN_CURRENT_PLAN_LABEL" = "نۆۋەتتىكى پىلان";
 
-/* Subtitle for the free plan option, when choosing a Backup plan. */
-"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "تېكىست + 45 كۈنلۈك مېدىيا";
+/* Text for a button that will downgrade the user from the paid Backup plan to the free one. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_BUTTON_TEXT" = "پىلاننى ئۆزگەرتىش";
+
+/* Button for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_PROCEED_BUTTON" = "پىلاننى ئۆزگەرتىش";
+
+/* Title for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_TITLE" = "ھەقسىز باسقۇچقا چۈشۈرەمسىز؟";
 
 /* Title for the free plan option, when choosing a Backup plan. */
 "CHOOSE_BACKUP_PLAN_FREE_PLAN_TITLE" = "ھەقسىز";
@@ -1623,6 +1860,9 @@
 
 /* Subtitle for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_SUBTITLE" = "بارلىق زاپاسلاشلار ئاخىرىغىچە مەخپىيلەشتۈرۈلگەن. سىگنال پايدا ئالمايدىغان ئەپ - زاپاسلاش ھەققى تۆلەش بىزنى قوللاشقا ياردەم بېرىدۇ.";
+
+/* Title for a label allowing users to view Signal's Terms & Conditions. */
+"CHOOSE_BACKUP_PLAN_TERM_AND_PRIVACY_POLICY_TEXT" = "شەرتلەر &  مەخپىيەتلىك تۈزۈمى";
 
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "زاپاسلاش پىلانىڭىزنى تاللاڭ";
@@ -1996,6 +2236,9 @@
 /* Footer for the 'attributes access' section in conversation settings view. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "گۇرۇپپىنىڭ ئىسمى، سۈرىتى، تونۇشتۇرۇشى ۋە كۆرۈن-غايىب ئۇچۇرنىڭ ۋاقىت خاتىرىلىگۈچىنى كىم ئۆزگەرتەلەيدىغانلىقىنى تاللاڭ.";
 
+/* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "گۇرۇپپا نامى، رەسىم، چۈشەندۈرۈش، غايىب بولغان ئۇچۇرلار ۋاقىت خاتىرلىگۈچى ۋە مىخلانغان ئۇچۇرلارنى كىمنىڭ تەھرىرلىيەلەيدىغانلىقىنى تاللاڭ.";
+
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "B&A نى قوللاپ، ئارخىپىڭىزدا ئىزنەكلەرگە ئېرىشىڭ. تەپسىلاتى ئۈچۈن خالىغان ئىزنەكنى چېكىڭ.";
 
@@ -2053,6 +2296,9 @@
 /* Label for 'member requests & invites' action in conversation settings view. */
 "CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES" = "ئىلتىماس ۋە تەكلىپ";
 
+/* Label for 'member label' action in conversation settings view. */
+"CONVERSATION_SETTINGS_MEMBER_TAG" = "ئەزا بەلگىسى";
+
 /* label for 'always' option for mention notifications in conversation settings */
 "CONVERSATION_SETTINGS_MENTION_MODE_AlWAYS" = "ھەمىشە ئەسكەرت";
 
@@ -2075,7 +2321,7 @@
 "CONVERSATION_SETTINGS_MUTE_ALWAYS_ACTION" = "ھەمىشە";
 
 /* Button to mute the chat */
-"CONVERSATION_SETTINGS_MUTE_BUTTON" = "ئۈنسىز";
+"CONVERSATION_SETTINGS_MUTE_BUTTON" = "ئۈنسىزلاش";
 
 /* Label for button to mute a thread for eight hours. */
 "CONVERSATION_SETTINGS_MUTE_EIGHT_HOUR_ACTION" = "8 سائەت";
@@ -2251,22 +2497,10 @@
 /* Tooltip highlighting the custom chat color controls. */
 "CUSTOM_CHAT_COLOR_SETTINGS_TOOLTIP" = "گىرادۇس يۆنىلىشىنى ئۆزگەرتىش ئۈچۈن سۆرەڭ";
 
-/* Button to run the database integrity check */
-"DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "ئىجرا قىلىش";
-
-/* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "بۇ بىزنىڭ مەسىلىڭىزنى ھەل قىلىشىمىزغا ياردەم بېرىدۇ. بۇ جەريانغا بىر قانچە مىنۇت كېتىشى مۇمكىن. بۇ تەكشۈرۈش جەريانىدا B&A نى ئەتسىڭىز بولىدۇ، لېكىن قايتا كىرىپ خاتىرىڭىزنى تاپشۇرۇڭ.";
-
-/* Button to skip database integrity check step */
-"DATABASE_INTEGRITY_CHECK_SKIP" = "ئاتلا";
-
-/* Title for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_TITLE" = "سانلىق مەلۇمات تەكشۈرۈشىنى ئىجرا قىلامسىز؟";
-
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so keep that in mind. This is the description on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_DESCRIPTION" = "بەزى ئۇچۇرلىشىش خاتىرىڭىز بۇزۇلغان بولۇشى مۇمكىن. بۇ سىزنىڭ ھېساباتىڭىز ياكى ئۇچۇرلىرىڭىزنىڭ بىخەتەرلىكىگە تەسىر كۆرسەتمەيدۇ. سانلىق مەلۇماتىڭىزنى ئەسلىگە كەلتۈرۈش ئۈچۈن «داۋاملاشتۇرۇش» نى چېكىڭ.";
 
-/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
+/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "ئۇچۇرلىشىش خاتىرىسىنى ئەسلىگە كەلتۈرۈش مەسىلىسى";
 
 /* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
@@ -2356,6 +2590,12 @@
 /* Accessibility label for the ? vector asset used to get info about debug logs */
 "DEBUG_LOG_INFO_BUTTON" = "سازلاش خاتىرىسى ھەققىدىكى ئۇچۇر";
 
+/* Header text displayed above the debug log preview */
+"DEBUG_LOG_PREVIEW_HEADER" = "يوللانغاندىن كېيىن، خاتىرىڭىز توردا 30 كۈن ئۆزگىچە ۋە نەشىر قىلىنمىغان URL ئادرېسىدا ئېلان قىلىنىدۇ.";
+
+/* Title for the debug log preview screen */
+"DEBUG_LOG_PREVIEW_TITLE" = "سازلاش خاتىرىسى";
+
 /* info message text in conversation view */
 "DECLINED_VIDEO_CALL" = "بىر ۋىدېيولۇق چاقىرىقنى رەت قىلدىڭىز";
 
@@ -2428,23 +2668,17 @@
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "بۇ ئۇچۇرلار بارلىق ئۈسكۈنىڭىزدىن ئۆچۈرۈلىدۇ.";
 
-/* Label for a button in an info sheet confirming that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_BUTTON" = "بىلدىم";
-
-/* Subtitle for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_SUBTITLE" = "ئۇچۇر ياكى پاراڭلارنى ئ‍ۆچۈرسىڭىز، ئۇلار تېلېفونىڭىزدىن ۋە بارلىق ئۇلانغان ئۈسكۈنىلەردىن ئ‍ۆچۈرۈلىدۇ.";
-
-/* Title for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_TITLE" = "ئۆچۈرۈش ھازىر بارلىق ئۈسكۈنىلىرىڭىزدە ماسقەدەملىنىدۇ";
-
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "ھېساباتنى ئۆچۈرۈش";
 
 /* Notification warning the user that they have been de-registered. */
 "DEREGISTRATION_NOTIFICATION" = "سىز بۇ ئۈسكۈنىدە B&A دىن چېكىنىپ چىققان.";
 
-/* Label for button that lets users re-register using the same phone number. */
-"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "بۇ تېلېفون نومۇرنى قايتا تىزىملات";
+/* Button that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_BUTTON" = "قايتا تىزىملاش";
+
+/* Title for prompt that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_PROMPT_TITLE" = "بۇ تېلېفون نومۇرىنى قايتا تىزىملىتامسىز؟";
 
 /* Label warning the user that they have been de-registered. */
 "DEREGISTRATION_WARNING" = "بۇ ئۈسكۈنە تىزىملاشتىن چىقىپ كەتكەن. بۇنىڭ سەۋەبى سىز تېلېفون نومۇرىڭىز بىلەن B&A نى باشقا بىر ئۈسكۈنىدە تىزىملاتقان بولۇشىڭىز مۇمكىن.";
@@ -2485,23 +2719,14 @@
 /* The explanation for the device transfer 'choice' view when linking a device */
 "DEVICE_TRANSFER_CHOICE_LINKED_EXPLANATION" = "ئۇچۇرلىشىش تارىخى ۋە ھېسابات ئۇچۇرلىرىڭىزنى قانداق يۆتكەشنى خالايدىغانلىقىڭىزنى تاللاڭ";
 
-/* The body for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_BODY" = "ھېسابات ۋە ئۇچۇرلىرىڭىزنى يۆتكىمەي داۋاملاشتۇرىدۇ";
-
 /* The body for the device transfer 'choice' view 'register' option when linking a device when message syncing is available */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_BODY_LINK_AND_SYNC" = "تېلېفونىڭىزدىن ئۇچۇرلار ۋە يېقىنقى مېدىيانى يۆتكەيدىغان تاللىشىڭىز بار";
 
 /* The title for the device transfer 'choice' view 'register' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_TITLE" = "يېڭى ئۈسكۈنە سۈپىتىدە قوش";
 
-/* The title for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_TITLE" = "تىزىملاپ يۆتكىمەيدۇ";
-
 /* The title for the device transfer 'choice' view */
 "DEVICE_TRANSFER_CHOICE_TITLE" = "ھېسابات ۋە ئۇچۇرلارنى يۆتكەيدۇ";
-
-/* The body for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_BODY" = "كونا iOS ئۈسكۈنىڭىزدىن ھېسابات ۋە سۆھبەت خاتىرىڭىزنى يۆتكەيدۇ";
 
 /* The body for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_BODY" = "كونا iOS ئۈسكۈنىڭىزدىن ھېسابات ۋە سۆھبەت خاتىرىڭىزنى يۆتكەيدۇ";
@@ -2509,26 +2734,11 @@
 /* The title for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_TITLE" = "باشقا  iPad تىن يۆتكەيدۇ";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_TITLE" = "iOS ئۈسكۈنىسىدىن يۆتكەيدۇ";
-
-/* Button shown to contract a QR code and exit the fullscreen view. */
-"DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "كىچىكرەك كۆرۈڭ";
-
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "پۇل يۆتكەشنى تاماملىيالمىدى. ئىككىلى ئۈسكۈنىدە B&A نىڭ بار بولۇشىغا كاپالەتلىك قىلىپ قايتا سىناڭ.";
 
-/* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
-"DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "يېڭى ئۈسكۈنىڭىزنى دەلىللىيەلمىدى. قايتا سىناڭ.";
-
 /* An error indicating that something went wrong with the transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_GENERIC" = "پۇل يۆتكەشنى تاماملىيالمىدى. ئۈسكۈنىلەرنى يېقىن كەلتۈرۈپ قايتا سىناڭ.";
-
-/* An error indicating the user must scan this code with a linked device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_LINKED" = "بۇ iPad نى باغلانغان ئۈسكۈنە قىلىپ تەڭشەشتە، كونا iPad تە تارىشىڭىز زۆرۈر.";
-
-/* An error indicating the user must scan this code with a primary device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_PRIMARY" = "ھېساباتىڭىزنى يۆتكەشتە،  iPhone نىڭىزدا تاراڭ.";
 
 /* An error indicating that the user does not have enough free space on their device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "يۆتكەشنى تاماملاشقا يېتەرلىك بوشلۇق يوق";
@@ -2536,41 +2746,11 @@
 /* An error indicating the user must update their device before trying to transfer. */
 "DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "‫B&A نىڭ ئەڭ يېڭى نەشرىگە يېڭىلاپ ئاندىن قايتا سىناڭ";
 
-/* Button shown to expand a QR code and view it fullscreen. */
-"DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "چوڭراق كۆرۈڭ";
-
-/* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "‫B&A ھېساباتىڭىزنى يېڭى iOS ئۈسكۈنىسىگە يۆتكەيدۇ. يېڭى ئۈسكۈنىڭىزنى يېقىن ئەتراپتا قويۇپ ئوچۇق ھالەتتە ئىكەنلىكىگە كاپالەتلىك قىلىڭ.";
-
-/* The title on the acttion sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_TITLE" = "ھېساباتنى يۆتكە";
-
-/* The explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION" = "كونا ئۈسكۈنىڭىزنى قېشىغا ئېلىپ كېلىڭ، Wi-fi ۋە كۆكچىش ئوچۇق بولسۇن، ۋە ئۇنىڭ بىلەن بۇ QR كودىنى سكاننېرلاڭ.";
-
-/* The second explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION2" = "باشقا بىر iOS ئۈسكۈنىڭىزدە رامكىدىكى QR كودنى تاراڭ.";
-
-/* A prompt to provide further explanation if the user is not seeing the transfer on both devices. */
-"DEVICE_TRANSFER_QRCODE_NOT_SEEING" = "كونا ئۈسكۈنىڭىزدە ئەسكەرتىش كۆرۈنمىدىمۇ؟";
-
-/* The title for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_TITLE" = "QR كودى تارا";
-
 /* The explanation on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "ئىككى ئۈسكۈنىنى يېقىنلاشتۇرۇڭ. ئۈسكۈتە ۋە B&A ئوچۇق تۇرسۇن. يۆتكەنش نۇقتىدىن نۇقتىغا شىفىرلانغان.";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "مەلۇمات قوبۇللىنىۋاتىدۇ";
-
-/* Text indicating that we are connecting to the scanned device */
-"DEVICE_TRANSFER_SCANNING_CONNECTING" = "باغلىنىۋاتىدۇ…";
-
-/* The explanation for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_EXPLANATION" = "چىپار كودنى دائىرىگە قويۇڭ";
-
-/* The title for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_TITLE" = "يېڭى ئۈسكىنىڭىزنى كامېراغا توغرۇلاڭ";
 
 /* Status message on new device when cancelling transfer. */
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_CANCELLING" = "كونا ئايفونغا ئۇلىنىشنى بىكار قىلىۋاتىدۇ…";
@@ -2608,11 +2788,8 @@
 /* Status message on old device when transfer is starting. */
 "DEVICE_TRANSFER_STATUS_OLD_DEVICE_STARTING" = "يېڭى ئايفونغا ئۇلىنىشنى ساقلاۋاتىدۇ…";
 
-/* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "ئىككى ئۈسكىنىنى يېقىن تۇتۇڭ. ئۈسكۈنىلەر ئېتىلىپ قالمىسۇن، B&A ئوچۇق ھالەتتە تۇرسۇن. يۆتكەش ئۇچتىن-ئۇچقا شىفرىلىنىدۇ.";
-
-/* The title on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_TITLE" = "مەلۇمات يۆتكىلىۋاتىدۇ";
+/* Action asking user to try again after transfer failure. */
+"DEVICE_TRANSFER_TRY_AGAIN_ACTION" = "قايتا سىنا";
 
 /* table cell label in conversation settings */
 "DISAPPEARING_MESSAGES" = "غايىب ئۇچۇرلار";
@@ -2893,17 +3070,17 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ سىزنىڭ ئورنىڭىزدا B&A غا ئىئانە قىلدى! B&A غا بولغان قوللىشىڭىزنى ئارخىپىڭىزدا نامايەن قىلىڭ.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "ئۇچۇرلىشىش بىخەتەر. ئېلان يوق، ئىز قوغلاش يوق، نازارەت يوق.";
+/* Body text for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BODY" = "مۇستەقىل پايدا ئالمايدىغان تەشكىلات بولۇش سۈپىتى بىلەن،   B&A شەخسىي ئۇچۇر ۋە تېلېفونلىشىشقا كاپالەتلىك قىلىدۇ. ئېلان، ئىز قوغلاش، نازارەت قىلىنىشتىن خالىي. B&Aنى قوللاش ئۈچۈن بۈگۈنلا ئىئانە قىلىڭ.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "B&A نىڭ بارلىق تىرىشچانلىقى سىزنىڭ مەخپىيەتلىكىڭىز ئۈچۈن. B&A سىزنىڭ سانلىق مەلۇماتىڭىزنى دەپ ئەمەس، سىزنى دەپ قۇرۇلغان؛ B&A پايدا بىلەن ئەمەس، ئىئانە بىلەن يۈرۈشىدۇ.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_1" = "ئىئانە قىلىش ئارقىلىق قوشۇمچە بىر ئىزنەك تاپشۇرۇۋالىسىز";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "ئەگەر شارائىتىڭىز يار بەرسە، B&A نى قىزىقارلىق، ئىشەنچىلىك، ئاممىباب قىلىش ئۈچۈن بۈگۈنلا ئىئانە قىلىڭ.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_2" = "سىزنىڭ مەخپىيەتلىكىڭىزنى قوغداش بىزنىڭ ۋەزىپىمىز";
 
-/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "B&A باشقىچە.";
+/* Bullet point for a sheet discussing donating to Signal. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
+"DONATION_READ_MORE_SHEET_BULLET_3" = "B&A پايدا ئالمايدىغان بىر تەشكىلات. B&A پايدا ئالمايدىغان بىر تەشكىلات.";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "سومما";
@@ -3046,20 +3223,17 @@
 /* Text describing to the user that they're going to pay a monthly donation to Signal */
 "DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "B&A غا ئايلىق ئىئانە قىلىش";
 
-/* Title for the 'more' section on the donation screen */
-"DONATION_VIEW_MORE_SECTION_TITLE" = "تېخىمۇ كۆپ";
-
 /* Title for the 'my support' section in the donation view */
 "DONATION_VIEW_MY_SUPPORT_TITLE" = "قوللىشىم";
-
-/* Title for the \"other ways to donate\" section on the donation view. */
-"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "باشقا يول بىلەن ئىئانە قىلىش";
 
 /* Title on the 'Donate to Signal' screen */
 "DONATION_VIEW_TITLE" = "‫B&A غا ئىئانە قىلىڭ";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "پۇل تۈرى";
+
+/* Label for a button that says 'Don't show again'. */
+"DONT_SHOW_AGAIN_BUTTON_TITLE" = "قايتا كۆرسەتمەسلىك";
 
 /* Message for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_MESSAGE" = "ئۇچۇرلىرىڭىزنى تەھرىرلەش ئۈچۈن ئۇلارنى قوش چېكىڭ. ئۇچۇرلىرىڭىز يوللىنىپ 24 سائەت ئىچىدە ئۇلارنى تەھرىرلىيەلەيسىز.";
@@ -3316,9 +3490,6 @@
 /* Footer for message cell for documents/files when they are expired and unavailable for download */
 "FILE_UNAVAILABLE_FOOTER" = "ھۆججەتنى ئىشلەتكىلى بولمايدۇ";
 
-/* Message for sheet shown when tapping a document/file that has expired and is unavailable for download */
-"FILE_UNAVAILABLE_SHEET_MESSAGE" = "بۇ ھۆججەت بۇ ئۈسكۈنە ئۇلانغان ۋاقىتتا تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلانغان ۋاقىتتا ، 45 كۈندىن ئاشقان ھۆججەتلەر ۋە مېدىيانى ماسقەدەملىگىلى بولمايدۇ.";
-
 /* Title for sheet shown when tapping a document/file that has expired and is unavailable for download */
 "FILE_UNAVAILABLE_SHEET_TITLE" = "ھۆججەتنى ئىشلەتكىلى بولمايدۇ";
 
@@ -3352,12 +3523,6 @@
 /* Tooltip notifying users that the flip camera button moved to the picture-in-picture view of themselves in a call */
 "FLIP_CAMERA_BUTTON_MOVED_TO_PIP_TOOLTIP" = "كامېرا ئالماشتۇرۇش كۇنۇپكىسى بۇ يەرگە يۆتكەلدى، ۋىدېيونى چېكىپ ئۇنى سىناپ بېقىڭ";
 
-/* Message for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_MESSAGE" = "ئۇلاپ يوللانغان ئۇچۇرلار ئەمدى دەرھال ئەۋەتىلىدۇ.";
-
-/* Title for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_TITLE" = "تېزراق ئۇلاپ يوللاش";
-
 /* Indicates that a single message was forwarded. */
 "FORWARD_MESSAGE_MESSAGES_SENT_1" = "ئۇچۇر يوللاندى";
 
@@ -3385,11 +3550,11 @@
 /* Title for the 'Get Started' banner */
 "GET_STARTED_BANNER_TITLE" = "ئىشلىتىشكە باشلاش";
 
-/* 'Get Started' button directing users to appearance */
-"GET_STARTED_CARD_APPEARANCE" = "كۆرۈنۈش";
-
 /* 'Get Started' button direction users to avatar builder */
 "GET_STARTED_CARD_AVATAR_BUILDER" = "رەسىم قوشۇش";
+
+/* 'Get Started' button directing users to Chat Color settings */
+"GET_STARTED_CARD_CHAT_COLOR" = "پاراڭ رەڭگى";
 
 /* 'Get Started' button directing users to invite friends */
 "GET_STARTED_CARD_INVITE_FRIENDS" = "دوست تەكلىپى";
@@ -3595,9 +3760,6 @@
 /* Toast view text informing user about swiping to speaker view */
 "GROUP_CALL_SPEAKER_VIEW_TOAST" = "ئۈستىگە سۈرۈلسە ئۆزگىرىشنى كۆرسىتىدۇ";
 
-/* Tooltip highlighting group calls. */
-"GROUP_CALL_START_TOOLTIP" = "بۇ يەر چېكىلسە گۇرۇپپا چاقىرىش باشلىنىدۇ";
-
 /* Text explaining that you started a group call. */
 "GROUP_CALL_STARTED_BY_YOU" = "سىز گۇرۇپپا چاقىرىقىنى باشلىدىڭىز";
 
@@ -3736,6 +3898,12 @@
 /* Message indicating that 'announcement-only' mode was enabled by a remote user. Embeds {{ user who enabled 'announcement-only' mode }}. */
 "GROUP_IS_ANNOUNCEMENT_ONLY_ENABLED_BY_REMOTE_USER_FORMAT" = "‏%1$@ گۇرۇپپا تەڭشىكىنى پەقەت باشقۇرغۇچىلارلا ئۇچۇر يوللىيالايدىغان قىلىپ ئۆزگەرتتى.";
 
+/* Message text for the 'group invite link' action sheet. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE" = "بۇ گۇرۇپپىغا قوشۇلۇپ ئىسىم ۋە رەسىمىڭىزنى گۇرۇپپىدىكىلەر بىلەن ئورتاقلىشامسىز؟";
+
+/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE_W_REQUEST" = "گۇرۇپپىغا كىرىشنى تەلەپ قىلغاندا، ئىسمىڭىز ۋە سۈرىتىڭىز گۇرۇپپا ئەزالىرى بىلەن ئورتاقلىشىلىدۇ. بىر باشقۇرغۇچى سىزنىڭ تەلىپىڭىزنى تەستىقلىشى كېرەك.";
+
 /* Subtitle indicating that the local user has been blocked from joining the group */
 "GROUP_LINK_ACTION_SHEET_VIEW_BLOCKED_FROM_JOINING_SUBTITLE" = "بىر باشقۇرغۇچى سىزنى چىقىرىۋەتكەچكە ، بۇ گۇرۇپپىغا گۇرۇپپا ئۇلانمىسى بىلەن قوشۇلالمايسىز. گۇرۇپپىغا قايتا قوشۇلۇش ئۈچۈن بىر باشقۇرغۇچى بىلەن ئالاقىلىشىڭ.";
 
@@ -3754,14 +3922,8 @@
 /* Label indicating that the group info is being loaded in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_LOADING_TITLE" = "قاچىلىنىۋاتىدۇ…";
 
-/* Message text for the 'group invite link' action sheet. */
-"GROUP_LINK_ACTION_SHEET_VIEW_MESSAGE" = "گۇرۇپپىغا قوشۇلۇپ ئىسىم ۋە سۈرىتىڭىزنى گۇرۇپپا ئەزالىرى بىلەن ھەمبەھىرلىنەمسىز؟";
-
 /* Label for the 'request to join' button in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_BUTTON" = "گۇرۇپپىغا قوشۇلۇش ئىلتىماسى";
-
-/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
-"GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_MESSAGE" = "بۇ گۇرۇپپىنىڭ باشقۇرغۇچىسى دەلىللىگەندىن كېيىن ئاندىن گۇرۇپپىغا قوشۇلالايسىز، سىز گۇرۇپپىغا كىرىشنى ئىلتىماس قىلغاندا، ئىسىم ۋە سۈرىتىڭىز ئۇنىڭ ئەزالىرى بىلەن ھەمبەھىرلىنىدۇ.";
 
 /* Error message the attempt to request to join the group failed due to network connectivity. */
 "GROUP_LINK_COULD_NOT_REQUEST_TO_JOIN_GROUP_DUE_TO_NETWORK_ERROR_MESSAGE" = "تورنى تەكشۈرۈپ ئاندىن قايتا سىناڭ.";
@@ -4045,6 +4207,12 @@
 /* Name for a group story on the stories list. Embeds {author's name}, {group name} */
 "GROUP_STORY_NAME_FORMAT" = "%1$@ دىن%2$@ غىچە";
 
+/* Text indicating you reacted to a group story (the header on the bubble says \"You\") */
+"GROUP_STORY_REPLY_REACTION_SECOND_PERSON" = "ھېكايىگە ئىنكاس قايتۇردىڭىز";
+
+/* Text indicating someone else reacted to a group story (the header on the bubble says their name, e.g. \"Bob\") */
+"GROUP_STORY_REPLY_REACTION_THIRD_PERSON" = "ھېكايىگە ئىنكاس قايتۇردى";
+
 /* Button to delete the story on the 'group story settings' view */
 "GROUP_STORY_SETTINGS_DELETE_BUTTON" = "گۇرۇپپا ھېكايىسىنى ئۆچۈرۈش";
 
@@ -4263,6 +4431,18 @@
 
 /* Title for the conversation list's 'archive' mode. */
 "HOME_VIEW_TITLE_ARCHIVE" = "ئارخىپ";
+
+/* Title for the conversation list's backup storage full context menu action. */
+"HOME_VIEW_TITLE_BACKUP_OUT_OF_STORAGE_QUOTA" = "زاپاسلاش ئامبىرى چېكىگە يەتتى";
+
+/* Title for the conversation list's failed to redeem backup subscription context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_FAILED_TO_REDEEM" = "زاپاسلاش مۇشتەرىلىك خاتالىقى";
+
+/* Title for the conversation list's backup subscription not found locally context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_NOT_FOUND_LOCALLY" = "زاپاسلاش مۇشتەرىلىكى تېپىلمىدى";
+
+/* Title for the conversation list's failed to backup context menu action. */
+"HOME_VIEW_TITLE_FAILED_TO_BACKUP" = "زاپاسلاش مەغلۇب بولدى";
 
 /* Title for the 'Select Chats' option in the ChatList. */
 "HOME_VIEW_TITLE_SELECT_CHATS" = "پاراڭلارنى تاللاش";
@@ -4546,8 +4726,8 @@
 /* confirm the users intent to link a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TITLE" = "باغلاش تامام";
 
-/* subtitle for choosing to send message history when linking a new device */
-"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE" = "تېكىست ئۇچۇرلىرىڭىزنى ۋە يېقىنقى 45 كۈنلۈك مېدىيالىرىڭىزنى يۆتكەڭ";
+/* Subtitle for choosing to send message history when linking a new device, if you have the paid tier enabled. */
+"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_PAID_PLAN_SUBTITLE" = "قىسقا ئۇچۇرلىرىڭىزنى ۋە بارلىق مېدىيانى يۆتكەڭ";
 
 /* title for choosing to send message history when linking a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_TITLE" = "ئۇچۇر تارىخىنى يۆتكەش";
@@ -4708,24 +4888,6 @@
 /* Shown to users while the app is loading, asking them not to close the app. */
 "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "B&A نى ياپماڭ.";
 
-/* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "‫B&A ھېساباتىڭىزنى يۆتكەش ئۈچۈن، ئىككى ئۈسكۈنىدە يەرلىك تور زىيارەت ھوقۇقىنى قوزغىتىشىڭىز كېرەك.";
-
-/* A button asking the user if they need further help getting their transfer working. */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "ياردەم كېرەكمۇ؟";
-
-/* First step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_ONE" = "ھەر بىر ئۈسكۈنىدە، تەڭشەكلەرنى ئېچىڭ";
-
-/* Third step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "«يەرلىك تور» نى قوزغىتىڭ";
-
-/* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "‫B&A نى تېپىڭ";
-
-/* Title for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "يەرلىك تور زىيارەت ھوقۇقىنى قوزغىتىڭ";
-
 /* A string indicating that the user can search for a location */
 "LOCATION_PICKER_SEARCH_PLACEHOLDER" = "ئات ياكى ئادرېس بويىچە ئىزدەيدۇ";
 
@@ -4830,6 +4992,24 @@
 
 /* toast indicating that we will remind the user later */
 "MEGAPHONE_WILL_REMIND_LATER" = "كېيىنرەك سىزنى قايتا ئەسكەرتىمىز.";
+
+/* Label for an action to add a member label */
+"MEMBER_LABEL_ADD" = "ئەزا بەلگىسى قوشۇش";
+
+/* Heading shown above the preview of a message bubble with the edited member label. */
+"MEMBER_LABEL_PREVIEW_HEADING" = "ئالدىن كۆر";
+
+/* Text shown in the preview message bubble when a user is editing their member label. */
+"MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "ياخشىمۇسىز!";
+
+/* Placeholder text in text field where user can edit their member label. */
+"MEMBER_LABEL_VIEW_PLACEHOLDER_TEXT" = "ئەزالىق رولىڭىزنى قوشۇڭ";
+
+/* Subtitle for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_SUBTITLE" = "بۇ گۇرۇپپىدا ئۆزىڭىزنى ياكى رولىڭىزنى تەسۋىرلەش ئۈچۈن ئەزا بەلگىسىنى تەڭشەڭ. ئەزا بەلگىلىرى پەقەت بۇ گۇرۇپپىدىلا كۆرۈنىدۇ.";
+
+/* Title for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_TITLE" = "ئەزا بەلگىسى";
 
 /* Action sheet button title */
 "MESSAGE_ACTION_COPY_TEXT" = "ئۇچۇر تېكىستىنى كۆچۈرۈڭ";
@@ -5428,6 +5608,18 @@
 /* A string describing that the user has no groups in common other than the group implied by the current UI context */
 "NO_OTHER_GROUPS_IN_COMMON" = "باشقا ئورتاق گۇرۇپپا يوق";
 
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-link' (translated via NOT_LINKED_BOTTOM_RELINK), and it will be formatted as a tappable link. */
+"NOT_LINKED_BOTTOM" = "بۇ ئۈسكۈنە ئەمدى ئۇلانمايدۇ. بۇ ئۈسكۈنىدە B&Aنى ئىشلىتىشنى داۋاملاشتۇرۇش ئۈچۈن %1$@ بېسىڭ.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_LINKED_BOTTOM_RELINK" = "قايتا باغلاڭ";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-register' (translated via NOT_REGISTERED_BOTTOM_REREGISTER), and it will be formatted as a tappable link. */
+"NOT_REGISTERED_BOTTOM" = "بۇ ئۈسكۈنە تىزىملاشتىن قالغان. B&Aنى ئىشلىتىشنى داۋاملاشتۇرۇش ئۈچۈن %1$@ بېسىڭ.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_REGISTERED_BOTTOM_REREGISTER" = "قايتا تىزىملىتىش";
+
 /* Label for 1:1 conversation with yourself. */
 "NOTE_TO_SELF" = "ئۆزۈمگە ئەسلەتمە";
 
@@ -5515,20 +5707,35 @@
 /* Label for the 'skip and create new pin' button when reglock is disabled during onboarding. */
 "ONBOARDING_2FA_SKIP_AND_CREATE_NEW_PIN" = "ئاتلاڭ ۋە يېڭى PIN كىرگۈزۈڭ";
 
+/* Label for action to use Recovery Key instead of PIN for registration. */
+"ONBOARDING_2FA_SKIP_AND_USE_RECOVERY_KEY" = "ئەسلىگە كەلتۈرۈش ئاچقۇچىنى ئىشلىتىڭ";
+
 /* Explanation for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE" = "ئەگەر PIN نى ئەسلىيەلمىسىڭىز، يېڭىدىن بىرنى قۇرسىڭىز بولىدۇ. ھېساباتىڭىزنى تىزىملىتالايسىز ۋە ئىشلىتەلەيسىز، ئەمما ئارخىپ ئۇچۇرلىرىڭىزغا ئوخشاش ساقلانغان تەڭشەكلەرنى يوقىتىپ قويىسىز.";
 
 /* Title for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "PIN كىرگۈزۈشتىن ئاتلاپ كېتەمسىز؟";
 
-/* The body for the device transfer 'choice' view 'transfer' option */
+/* The body for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "ھەقلىق سىگنال زاپاسلاش پىلانىڭىزدىن قىسقا ئۇچۇرلار ۋە مېدىيانى ئەسلىگە كەلتۈرۈڭ";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
+/* The title for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "B&A نى زاپاستىن ئەسلىگە كەلتۈرۈش";
+
+/* Body for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_BODY" = "ئەگەر ھازىر ئەسلىگە كەلتۈرۈشنى ئاتلىسىڭىز، كېيىن ئەسلىگە كەلتۈرەلمەيسىز. ئەگەر بۇ ئۈسكۈنىدە زاپاسلاشنى قايتا قوزغاتسىڭىز، نۆۋەتتىكى زاپاسلاش، يېڭى ئۇچۇر تارىخىڭىزغا ئالماشتۇرۇلىدۇ.";
+
+/* Title for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_TITLE" = "ئەسلىگە كەلتۈرۈشتى ئاتلامسىز؟";
 
 /* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "ئۇچۇر تارىخىڭىز ۋە ھېسابات سانلىق-مەلۇماتلىرىڭىزنى قانداق ئەسلىگە كەلتۈرۈشنى خالايدىغانلىقىڭىزنى تاللاڭ.";
+
+/* Message body displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_BODY" = "سىز ئاندىرويىدتىن iOS قا يۆتكىلىۋاتقانلىقىڭىز ئۈچۈن، ئۇچۇر ۋە مېدىيانى يۆتكەشنىڭ بىردىنبىر ئۇسۇلى كونا ئۈسكۈنىڭىزدە B&A زاپاسلانمىسىنى قوزغىتىش.";
+
+/* Title displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_TITLE" = "ئەسلىگە كەلتۈرىدىغان زاپاسلاش يوق";
 
 /* The body for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_BODY" = "ئۇچۇر ۋە مېدىيالارنى يۆتكىمەي تۇرۇپلا داۋاملاشتۇرۇش";
@@ -5659,6 +5866,9 @@
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "مېنىڭ كونا تېلېفونىم بار";
 
+/* Text indicating Signal is a nonprofit on the 'onboarding splash' view. For non-English languages, exclude the word '501c3'. */
+"ONBOARDING_SPLASH_NONPROFIT" = "B&A پايدا ئالمايدىغان بىر تەشكىلات";
+
 /* Button for restoring or transferring account in the 'onboarding splash' view. */
 "ONBOARDING_SPLASH_RESTORE_OR_TRANSFER_BUTTON_TITLE" = "ھېساباتنى ئەسلىگە كەلتۈرۈش ياكى يۆتكەش";
 
@@ -5764,6 +5974,21 @@
 /* Title of prompt notifying restore failed for unknown reasons. */
 "OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_TITLE" = "نامەلۇم خاتالىق";
 
+/* Action button to backup before continuing. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_BACKUP_ACTION" = "ھازىر زاپاسلا";
+
+/* Body text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_BODY" = "يۆتكەشتىن بۇرۇن ھازىرلا زاپاسلاڭ. سىز تېخى زاپاسلىنىپ بولالمىغان ئۇچۇرلارنى تاپشۇرۇۋالغان بولۇشىڭىز مۇمكىن.";
+
+/* Title text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_TITLE" = "ئۈسكۈنىڭىزنى تەييارلاندۇرىۋاتىمىز";
+
+/* Action button to skip backup and continue. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_SKIP_ACTION" = "ئاتلاپ ئۆتۈش ۋە داۋاملاشتۇرۇش";
+
+/* Description for form confirming restore from backup without size detail. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_RESTORE_DESCRIPTION" = "ئاخىرقى قېتىملىق زاپاسلاش %1$@ %2$@ دە ئېلىپ بېرىلغان.";
+
 /* Body of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "سىگنال ھېساباتىڭىز ۋە ئۇچۇرلىرىڭىز باشقا ئۈسكۈنىڭىزگە يۆتكىلىشكە باشلىدى. سىگنال ئەمدى بۇ ئۈسكۈنىدە ئىشلىمەيدۇ.";
 
@@ -5817,9 +6042,6 @@
 
 /* Footer for message cell for long text when it is expired and unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_FOOTER" = "بۇ ئۇچۇر تولۇق ئەمەس";
-
-/* Message for sheet shown when tapping oversized text that has expired and is unavailable for download */
-"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "بۇئۈسكۈنە ئۇلانغان ۋاقىتتا ، بۇ ئۇچۇردىكى تولۇق تېكىست تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلانغان ۋاقىتتا ، 45 كۈندىن ئاشقان ئۇزۇن تېكىستلىك ئۇچۇرلارنى ماسقەدەملىگىلى بولمايدۇ.";
 
 /* Title for sheet shown when tapping oversized text that has expired and is unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_SHEET_TITLE" = "تولۇق ئۇچۇرنى ئىشلەتكىلى بولمايدۇ";
@@ -6145,9 +6367,6 @@
 /* Message indicating that a request to join the group was successfully approved. Embeds {{ the name of the approved user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_APPROVED_FORMAT" = "«%1$@» قوشۇلدى.";
 
-/* Label for the 'view requests' button in the pending member requests banner. */
-"PENDING_GROUP_MEMBERS_REQUEST_BANNER_VIEW_REQUESTS" = "تەلەپلەرنى كۆرۈڭ";
-
 /* Message indicating that a request to join the group was successfully denied. Embeds {{ the name of the denied user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_DENIED_FORMAT" = "«%1$@» رەت قىلىندى.";
 
@@ -6263,9 +6482,6 @@
 "PHOTO_CAPTURE_GENERIC_ERROR" = "سۈرەتنى تۇتالمىدى.";
 
 /* alert title */
-"PHOTO_CAPTURE_UNABLE_TO_CAPTURE_IMAGE" = "سۈرەتنى تۇتالمىدى.";
-
-/* alert title */
 "PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA" = "كامېرا سەپلەنمىدى.";
 
 /* Button label for opening the chat on a sheet presented from photo capture view indicating that a username QR code was found. */
@@ -6276,9 +6492,6 @@
 
 /* Title for sheet presented from photo capture view indicating that a username QR code was found. Embeds {{username}}. */
 "PHOTO_CAPTURE_USERNAME_QR_CODE_FOUND_TITLE_FORMAT" = "%1$@ بايقالدى";
-
-/* alert title, generic error preventing user from capturing a video that is too long */
-"PHOTO_CAPTURE_VIDEO_SIZE_ERROR" = "سىن بەك ئۇزۇن.";
 
 /* Pressing this button pins a thread */
 "PIN_ACTION" = "مىخلاش";
@@ -6364,6 +6577,9 @@
 /* If the user is re-registering, they need to enter their PIN to restore all their data. In some cases, they can skip this entry and lose some data. This text is shown on a button that lets them begin to do this. */
 "PIN_ENTER_EXISTING_SKIP" = "PIN كىرگۈزۈشتىن ئاتلاش";
 
+/* If the user is re-registering, they need to enter their PIN to restore all their data. If they don't remember their PIN, they may remember their Recovery Key which can be used instead of a PIN. */
+"PIN_ENTER_EXISTING_USE_RECOVERY_KEY" = "ئەسلىگە كەلتۈرۈش ئاچقۇچىنى ئىشلىتىڭ";
+
 /* Error title indicating that the attempt to recreate a PIN failed. */
 "PIN_RECREATION_ERROR_TITLE" = "PIN قۇرۇش مەغلۇب بولدى";
 
@@ -6421,8 +6637,80 @@
 /* An explanation that you have already pinned the maximum number of conversations. */
 "PINNED_CONVERSATION_LIMIT" = "كۆپ بولغاندا 4 پاراڭنى مىخلىيالايسىز.";
 
+/* Accessibility label prefix for banner showing a pinned message */
+"PINNED_MESSAGE_BANNER_AX_LABEL" = "مىقلانغان ئۇچۇر:";
+
+/* Shown when another user pins a message. Embeds {{ another user }}. */
+"PINNED_MESSAGE_CHAT_EVENT_OTHER" = "%1$@ بىر ئۇچۇرنى مىقلاپ قويدى";
+
+/* Shown when the local user pins a message. */
+"PINNED_MESSAGE_CHAT_EVENT_SELF" = "سىز بىر ئۇچۇرنى مىقلاپ قويدىڭىز";
+
+/* Accessibility label for pin message button */
+"PINNED_MESSAGE_MENU_ACCESSIBILITY_LABEL" = "مىقلانغان ئۇچۇر تىزىملىكى";
+
+/* Label for button to pin a message */
+"PINNED_MESSAGE_PIN_ACTION_TITLE" = "مىخلاش";
+
+/* Message for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BODY" = "مىقلانغان ئۇچۇر ئەڭ كونىسىنىڭ ئورنىنى ئالىدۇ.";
+
+/* Option in pinned message action sheet to replace oldest pin. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BUTTON" = "ئالماشتۇرۇش";
+
+/* Title for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_TITLE" = "ئەڭ بېشىدا مىقلاپ قويغان ئۇچۇرنى ئالماشتۇرامسىز؟";
+
+/* Body for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_BODY" = "تور ئۇلىنىشىڭىزنى تەكشۈرۈپ قايتا سىناڭ.";
+
+/* Title for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_TITLE" = "ئۇچۇرنى مىقلىيالمىدى";
+
+/* Text to show on a toast when someone unpins a message */
+"PINNED_MESSAGE_TOAST" = "ئۇچۇرنىڭ مىقى ئېلىۋېتىلدى";
+
+/* Label for button to unpin a message */
+"PINNED_MESSAGE_UNPIN_ACTION_TITLE" = "قوندۇرما";
+
+/* Option in pinned message action sheet to pin for 24 hours. */
+"PINNED_MESSAGES_24_HOURS" = "24 سائەت";
+
+/* Option in pinned message action sheet to pin for 30 days. */
+"PINNED_MESSAGES_30_DAYS" = "30 كۈن";
+
+/* Option in pinned message action sheet to pin for 7 days. */
+"PINNED_MESSAGES_7_DAYS" = "7 كۈن";
+
+/* Title for Pinned Messages detail view */
+"PINNED_MESSAGES_DETAILS_TITLE" = "مىقلانغان ئۇچۇرلار";
+
+/* Title for an action sheet to indicate how long to keep the pin active */
+"PINNED_MESSAGES_EXPIRY_SHEET_TITLE" = "مىقلانغان ئۇچۇرنىڭ ساقلىنىش ۋاقتى ...";
+
+/* Option in pinned message action sheet to pin with no expiry. */
+"PINNED_MESSAGES_FOREVER" = "مەڭگۈ";
+
+/* Action menu item to go to a message in the conversation view */
+"PINNED_MESSAGES_GO_TO_MESSAGE" = "«ئۇچۇر»غا ئۆتۈڭ";
+
+/* Action menu item to see all pinned messages */
+"PINNED_MESSAGES_SEE_ALL_MESSAGES" = "بارلىق ئۇچۇرلارنى كۆرۈش";
+
+/* Action menu item to unpin a message */
+"PINNED_MESSAGES_UNPIN" = "قوندۇرما";
+
+/* Title for a button to unpin all pinned messages. */
+"PINNED_MESSAGES_UNPIN_ALL" = "ھەممىسىنىڭ مىقىنى ئېلىۋېتىش";
+
 /* The title for pinned conversation section on the conversation list */
 "PINNED_SECTION_TITLE" = "قوندۇرۇلدى";
+
+/* Body for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_BODY" = "غايىب بولۇش ئالدىدىكى ئۇچۇرلار ۋاقىت خاتىرلىگۈچتىكى ۋاقتى توشقاندا مىقىدىن ئېلىۋېتىلىدۇ ھەمدە سۆھبەتتىن ئۆچۈرۈۋېتىلىدۇ.";
+
+/* Title for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_TITLE" = "غايىب بولۇش ئالدىدىكى ئۇچۇرلارنى مىقلاش";
 
 /* Action text for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_ACTION" = "PIN قۇر";
@@ -6439,11 +6727,35 @@
 /* Accessibility label for button to start media playback */
 "PLAY_BUTTON_ACCESSABILITY_LABEL" = "ۋاسىتە قوي";
 
+/* Accessibility label for poll message. Embeds {{ poll question }}. */
+"POLL_ACCESSIBILITY_LABEL" = "راي سىناش: %1$@.";
+
+/* Accessibility label for a vote option that is not selected by the user. */
+"POLL_ACCESSIBILITY_LABEL_OPTION_PENDING" = "كۈتۈۋاتىدۇ…";
+
+/* Title for a toggle allowing multiple votes for a poll. */
+"POLL_ALLOW_MULTIPLE_LABEL" = "كۆپ بېلەت چۈشۈشكە يول قويۇش";
+
+/* Button to view a poll after its ended */
+"POLL_BUTTON_VIEW_POLL" = "راي سىناشنى كۆرۈش";
+
 /* Button to view poll results */
 "POLL_BUTTON_VIEW_RESULTS" = "نەتىجىلەرنى كۆرۈش";
 
 /* Button to view poll votes */
 "POLL_BUTTON_VIEW_VOTES" = "بېلەتلەرنى كۆرۈش";
+
+/* Toast telling user to add a question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION" = "بىر سۇئال قوشۇش";
+
+/* Toast telling user to add options and question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION_OR_ENOUGH_OPTIONS" = "بىر سۇئال ۋە كەم دېگەندە 2 تاللاش قوشۇش";
+
+/* Toast telling user to add more options to poll. */
+"POLL_CREATE_ERROR_TOAST_NOT_ENOUGH_OPTIONS" = "كەم دېگەندە 2 تاللاش قوشۇش";
+
+/* Title of create poll pane */
+"POLL_CREATE_TITLE" = "يېڭى راي سىناش";
 
 /* Label for button to end a poll */
 "POLL_DETAILS_END_POLL" = "راي سىناشنى توختىتىش";
@@ -6451,20 +6763,56 @@
 /* Title of poll details pane */
 "POLL_DETAILS_TITLE" = "راي سىناش تەپسىلاتلىرى";
 
+/* Title for an action sheet confirming the user wants end a poll. */
+"POLL_END_CONFIRMATION" = "راي سىناشنى ئاخىرلاشتۇرامسىز؟";
+
+/* Message for an action sheet confirming the user wants to end a poll. */
+"POLL_END_CONFIRMATION_MESSAGE" = "گۇرۇپپا ئەزالىرى ئەمدى بۇ راي سىناشقا بېلەت تاشلىيالمايدۇ.";
+
+/* Shown when another user ends a poll. Embeds {{ another user }} and {{ poll question }}. */
+"POLL_ENDED_BY_OTHER_CHAT_LIST_UPDATE" = "%1$@ راي سىناشنى ئاخىرلاشتۇردى: %2$@";
+
+/* Shown when the local user ends a poll. Embeds {{ poll question }}. */
+"POLL_ENDED_BY_YOU_CHAT_LIST_UPDATE" = "%1$@: راي سىنىقىنى ئاخىرلاشتۇردىڭىز";
+
 /* Notification that {{contact}} ended a poll with question {{poll question}} */
 "POLL_ENDED_NOTIFICATION" = "%1$@ راي سىناشنى ئاخىرلاشتۇردى «%2$@»";
+
+/* Label specifying the poll is finished and these are the final results */
+"POLL_FINAL_RESULTS_LABEL" = "ئاخىرقى نەتىجىلەر";
 
 /* Label specifying the message type as a poll */
 "POLL_LABEL" = "ئشلەتكۈچىلەرنىڭ رايىنى سىناش";
 
+/* String to display when a poll has no votes */
+"POLL_NO_VOTES" = "بېلەت تاشلانمىدى";
+
+/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
+"POLL_OPTION_PLACEHOLDER_PREFIX" = "Option";
+
+/* Header for the poll options text boxes when making a new poll */
+"POLL_OPTIONS_LABEL" = "تاللاشلار";
+
 /* Prefix for a poll preview */
 "POLL_PREFIX" = "راي سىناش:";
+
+/* Header for the poll question text box when making a new poll */
+"POLL_QUESTION_LABEL" = "سوئال";
+
+/* Placeholder text for poll question */
+"POLL_QUESTION_PLACEHOLDER_TEXT" = "سۇئال سوراڭ";
+
+/* Title of poll details pane when poll is ended */
+"POLL_RESULTS_TITLE" = "راي سىناش نەتىجىللىرى";
 
 /* Label specifying the user can select more than one option */
 "POLL_SELECT_LABEL_MULTIPLE" = "بىر ياكى بىرقانچىنى تاللاڭ";
 
 /* Label specifying the user can select one option */
 "POLL_SELECT_LABEL_SINGULAR" = "بىرنى تاللاڭ";
+
+/* Notification that {{contact}} voted in a poll with question {{poll question}} */
+"POLL_VOTED_NOTIFICATION" = "%1$@ «%2$@» راي سىناش سۇئالىغا بېلەت تاشلىدى";
 
 /* Badge indicating that the user is verified. */
 "PRIVACY_IDENTITY_IS_VERIFIED_BADGE" = "دەلىللەندى";
@@ -6661,6 +7009,15 @@
 /* Title of alert shown when push tokens sync job succeeds. */
 "PUSH_REGISTER_SUCCESS" = "تەۋسىيە ئۇقتۇرۇشى مۇۋەپپەقىيەتلىك ھالدا قايتا تىزىملىتىلدى.";
 
+/* Body for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_BODY" = "بۇ ئۈسكۈنىنى ئىشلىتىپ سىز يۆتكەلمەكچى بولغان ئۈسكۈنىدىكى QR كودىنى سكاننېرلاڭ";
+
+/* Title for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_TITLE" = "QR كودى تارا";
+
+/* Message for an action sheet telling users how to use quick restore, when trying to open an external quick restore URL. */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "بۇ ھېساباتنى يېڭى ئۈسكۈنىگە يۆتكەش ئۈچۈن «داۋاملاشتۇرۇش» نى چېكىپ، B&A كامېراسى ئارقىلىق QR كودىنى قايتا سكاننېرلاڭ. پەقەت B&A دىنلا كەلگەن QR كودىنى سكاننېرلاڭ.";
+
 /* Accessibility label stating the author of the message to which you are replying. Embeds: {{ the author of the message to which you are replying }}. */
 "QUOTED_REPLY_ACCESSIBILITY_LABEL_FORMAT" = "%1$@ غا جاۋاب قايتۇرۇۋاتىدۇ.";
 
@@ -6676,11 +7033,11 @@
 /* Toast alert text shown when tapping on a quoted message which we cannot scroll to because the local copy of the message didn't exist when the quote was received. */
 "QUOTED_REPLY_ORIGINAL_MESSAGE_REMOTELY_SOURCED" = "ئەسلى ئۇچۇر تېپىلمىدى.";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to your own story. */
-"QUOTED_REPLY_REACTION_TO_OWN_STORY" = "ھېكايىڭىزگە ئىنكاس قايتۇردى";
+/* Label explaining that the content of a quoted message includes you reacting to someone's story. Embeds {{ %1$@ the story author }}. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_SECOND_PERSON" = "%1$@نىڭ ھېكايىسىگە ئىنكاس قايتۇردىڭىز";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to a story. Embeds {{ story author name }} */
-"QUOTED_REPLY_REACTION_TO_STORY_FORMAT" = "«%1$@» نىڭ ھېكايىسىگە ئىنكاس قايتۇردى";
+/* Label explaining that the content of a quoted message includes someone reacting to your story. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_THIRD_PERSON" = "ھېكايىڭىزگە ئىنكاس قايتۇردى";
 
 /* Message header when you are quoting a story. Embeds {{ story author name }} */
 "QUOTED_REPLY_STORY_AUTHOR_INDICATOR_FORMAT" = "%1$@ •ھېكايە";
@@ -6702,6 +7059,9 @@
 
 /* Indicates this message is a quoted reply to a video file. */
 "QUOTED_REPLY_TYPE_VIDEO" = "سىن";
+
+/* Indicates this message is a quoted reply to a voice message. */
+"QUOTED_REPLY_TYPE_VOICE_MESSAGE" = "ئاۋازلىق ئۇچۇر";
 
 /* Label for a button to lower your raised hand in a call. */
 "RAISED_HANDS_LOWER_HAND_BUTTON" = "چۈشۈرۈش";
@@ -6841,6 +7201,9 @@
 /* Body for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
+/* Body for a sheet warning users about an incorrect recovery key and having hit a rate limit on retries. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_RATE_LIMIT_BODY" = "ئەسلىگە كەلتۈرۈش ئاچقۇچى سىناقلىرىڭىز تۈگىدى. بىخەتەرلىكىڭىز ئۈچۈن، سىز قىلالايدىغان سىناقلارنىڭ سانى چەكلىك. 1 سائەت ساقلاپ قايتا سىناڭ.";
+
 /* Title for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "ناتوغرا زاپاسلاش ئاچقۇچى";
 
@@ -6892,12 +7255,6 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "دۆلەت كودى";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "بۇ مەشغۇلات داۋاملاشسا ئوخشاش نومۇر بىلەن تىزىملىتىلغان باشقا ئۈسكۈنىدىكى B&A چەكلىنىدۇ.";
-
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "ھېسابات ۋە ئۇچۇرلارنى يۆتكەش";
-
 /* Description for the screen that allows users to enter their recovery key. */
 "REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "زاپاسلاش ئاچقۇچىڭىز ھېساباتىڭىز ۋە سانلىق مەلۇماتلىرىڭىزنى ئەسلىگە كەلتۈرۈش ئۈچۈن تەلەپ قىلىنىدىغان 64 خانىلىق كود.";
 
@@ -6939,6 +7296,9 @@
 
 /* During registration, users are asked to enter their phone number. This is the subtitle on that screen, which gives users some instructions. */
 "REGISTRATION_PHONE_NUMBER_SUBTITLE" = "باشلاش ئۈچۈن تېلېفون نومۇرىڭىزنى كىرگۈزۈڭ.";
+
+/* During re-registration, users are asked to confirm their phone number. This is the subtitle on that screen, which gives users some instructions. */
+"REGISTRATION_PHONE_NUMBER_SUBTITLE_2" = "دەلىللەش كودى بۇ نومۇرغا ئەۋەتىلىدۇ:";
 
 /* During registration, users are asked to enter their phone number. This is the title on that screen. */
 "REGISTRATION_PHONE_NUMBER_TITLE" = "تېلېفون نومۇرىڭىز";
@@ -6993,6 +7353,15 @@
 
 /* Error shown if an SMS/call service provider is temporarily unable to send a verification code to the provided number. */
 "REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "سىگنال ، قىسقا ئۇچۇر(SMS) تەمىنلىگۈچىدە مەسىلە كۆرۈلگەنلىكى ئۈچۈن قىسقا ئۇچۇردا كود ئەۋەتەلمەيدۇ. بىر نەچچە سائەتتىن كېيىن قايتا سىناڭ.";
+
+/* Third step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_ENABLE_BACKUPS" = "زاپاسلاشنى قوزغىتىڭ ھەمدە زاپاسلاش تاماملانغۇچە ساقلاڭ";
+
+/* First step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_OPEN_SIGNAL" = "كونا ئۈسكۈنىڭىزدە سىگنالنى ئېچىڭ";
+
+/* Second step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_TAP_SETTINGS" = "تەڭشەك> زاپاسلاش نى چېكىڭ";
 
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "ئۇچۇر يوللاشتىن ئىلگىرى تىزىملىتىشىڭىز كېرەك.";
@@ -7066,6 +7435,18 @@
 /* Label warning the user that something is wrong with their username link. */
 "REMINDER_VIEW_USERNAME_LINK_CORRUPTED_WARNING" = "سىزنىڭ ئىشلەتكۈى نامىڭىز، QR كودىڭىز ۋە ئۇلانمىڭىزدا بەزى مەسىلىلەر بار، بۇنىڭدىن كىيىن كۈچكە ئىگە ئەمەس. باشقىلار بىلەن ئورتاقلىشىش ئۈچۈن يېڭى بىر ئۇلانما تۈزۈڭ.";
 
+/* A message that displays when one person in a call remotely muted another participant. Embeds {{name}} {{name}} */
+"REMOTE_MUTE_TOAST_A_MUTED_B" = "%1$@ %2$@ نى ئۈنسىزلاندۇردى.";
+
+/* A message that displays when your microphone is remotely muted by another call participant. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_SOMEONE_MUTED_YOU" = "%1$@ سىزنى ئۈنسىزلاندۇردى.";
+
+/* A message that displays when you remotely muted another call participant's microphone. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_YOU_MUTED_SOMEONE" = "%1$@ نى ئۈنسىزلاندۇردىڭىز.";
+
+/* A message that displays when you joined a call on two devices and mute one from the other. */
+"REMOTE_MUTE_TOAST_YOU_MUTED_YOURSELF" = "ئۆزىڭىزنى باشقا ئۈسكۈنىدىن ئۈنسىزلاندۇردىڭىز.";
+
 /* Accessibility label for a button that removes the preview from a drafted message. */
 "REMOVE_PREVIEW" = "ئالدىن كۆزىتىشنى چىقىرىۋەت";
 
@@ -7083,6 +7464,30 @@
 
 /* Configure reactions reset button text */
 "RESET" = "ئەسلىگە قايتۇر";
+
+/* Body for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_BODY" = "مېدىيارىڭىز ئەسلىگە كەلتۈرۈشنى تاماملىمىغان. ئەگەر بىكار قىلىشنى تاللىسىڭىز، بۇ ئۈسكۈنىنى قايتا ئۇلاش ئارقىلىق ئەسلىگە كەلتۈرەلەيسىز.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_PRIMARY_BUTTON" = "ئەسلىگە كەلتۈرۈشنى داۋاملاشتۇرۇش";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_SECONDARY_BUTTON" = "ئەسلىگە كەلتۈرۈشنى ئەمەلدىن قالدۇرۇش";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_TITLE" = "مېدىيا ئەسلىگە كېلىۋاتىدۇ";
+
+/* Message for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_MESSAGE" = "مېدىيارىڭىز ئەسلىگە كەلتۈرۈشنى تاماملىمىغان. ئەگەر بىكار قىلىشنى تاللىسىڭىز، بۇ ئۈسكۈنىنى قايتا ئۇلاش ئارقىلىق ئەسلىگە كەلتۈرەلەيسىز.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_PRIMARY_BUTTON" = "ئەسلىگە كەلتۈرۈشنى داۋاملاشتۇرۇش";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_SECONDARY_BUTTON" = "ئەسلىگە كەلتۈرۈشنى ئەمەلدىن قالدۇرۇش";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_TITLE" = "مېدىيانى ئەسلىگە كەلتۈرۈشنى بىكار قىلامسىز؟";
 
 /* Button title shown on chat list banner for restoring media from a backup when paused because the device has insufficient disk space, to see a bottom sheet with more details about next steps. */
 "RESTORING_MEDIA_BANNER_DISK_SPACE_BUTTON" = "تەپسىلاتى";
@@ -7262,7 +7667,7 @@
 "SCREEN_LOCK_UNLOCK_SIGNAL" = "B&A نى ئاجرىتىڭ";
 
 /* Placeholder text indicating the user can search for contacts by name, username, or phone number. */
-"SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "نام، ئىشلەتكۈچى نامى ياكى تېلېفون نومۇرى";
+"SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "نام، ئىشلەتكۈچى نامى، تېلېفون";
 
 /* Placeholder text indicating the user can search for contacts by name or phone number. */
 "SEARCH_BYNAMEORNUMBER_PLACEHOLDER_TEXT" = "ئات ياكى نومۇر بويىچە ئىزدەيدۇ";
@@ -7605,9 +8010,6 @@
 
 /* No comment provided by engineer. */
 "SETTINGS_CLEAR_HISTORY" = "سۆھبەت خاتىرەسىنى تازىلا";
-
-/* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "‫B&A Messenger نەشر ھوقۇقىغا ئىگە\nGPLv3 ئىجازىتىدە تارقىتىلدى";
 
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "مەلۇمات ئىشلىتىلىشى";
@@ -8500,6 +8902,12 @@
 /* The name for the sticker category 'Featured' */
 "STICKER_CATEGORY_FEATURED_NAME" = "ئالاھىدە";
 
+/* Subtitle of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_SUBTITLE" = "بىر چاپلاق ئەۋەتىڭ، ئۇ بۇ يەردە كۆرۈنىدۇ";
+
+/* Title of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_TITLE" = "يېقىنقى چاپلاقلار يوق";
+
 /* The name for the sticker category 'Recents' */
 "STICKER_CATEGORY_RECENTS_NAME" = "يېقىنقى";
 
@@ -8508,9 +8916,6 @@
 
 /* Message when trying to show a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_MESSAGE_LABEL" = "چاپلاقنى ئىشلەتكىلى بولمايدۇ";
-
-/* Message for sheet shown when tapping a sticker that has expired and is unavailable for download */
-"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "بۇ چاپلاق بۇ ئۈسكۈنە ئۇلانغان ۋاقىتتا تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلىنىۋاتقان ۋاقىتتا ، 45 كۈندىن ئاشقان ھۆججەتلەر ۋە مېدىيانى ماسقەدەملىگىلى بولمايدۇ.";
 
 /* Title for sheet shown when tapping a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_SHEET_TITLE" = "چاپلاقنى ئىشلەتكىلى بولمايدۇ";
@@ -8659,21 +9064,6 @@
 /* Context menu action to share the selected story */
 "STORIES_SHARE_STORY_ACTION" = "ھەمبەھىرلە";
 
-/* Section title shown when sending to non-story conversations but failing to send the file to stories. */
-"STORIES_SHARESHEET_PARTIAL_SEND_REMAINING_SECTION_TITLE" = "يوللانغۇچى";
-
-/* Section title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_STORIES_SECTION_TITLE" = "يوللانمىغانلار";
-
-/* Title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_TITLE" = "قىسمەن ئەۋەتىلدى";
-
-/* Subtitle shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_SUBTITLE" = "تاللىغان ھۆججەت تىپىنى قوللىمايدۇ.";
-
-/* Title shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_TITLE" = "يوللىيالمىدى";
-
 /* Title for the stories view. */
 "STORIES_TITLE" = "ھېكايىلەر";
 
@@ -8722,8 +9112,11 @@
 /* Title for the story privacy settings view */
 "STORY_PRIVACY_TITLE" = "ھېكايە مەخپىيەتلىكى";
 
-/* inbox and notification text for a reaction to a story authored by the local user. Embeds {{reaction emoji}} */
-"STORY_REACTION_LOCAL_AUTHOR_PREVIEW_FORMAT" = "ھېكايىڭىزگە ئىنكاس %1$@";
+/* Text explaining that you reacted to someone else's story. Embeds {{ %1$@ reaction emoji, %2$@ story author name }}. */
+"STORY_REACTION_PREVIEW_FORMAT_SECOND_PERSON" = "سىز %2$@نىڭ ھېكايىسىگە %1$@ ئارقىلىق ئىنكاس قايتۇردىڭىز";
+
+/* Text explaining that someone reacted to your story. Embeds {{ %1$@ reaction emoji }}. */
+"STORY_REACTION_PREVIEW_FORMAT_THIRD_PERSON" = "ھېكايىڭىزگە %1$@ ئىنكاسى قايتۇرۇلدى";
 
 /* quote text for a reaction to a story by the user (the header on the bubble says \"You\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_SECOND_PERSON" = "ھېكايىگە %1$@ ئىنكاسى قايتۇردى";
@@ -8731,17 +9124,8 @@
 /* quote text for a reaction to a story by some other user (the header on the bubble says their name, e.g. \"Bob\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_THIRD_PERSON" = "ھېكايىگە %1$@ ئىنكاسى قايتۇردى";
 
-/* inbox and notification text for a reaction to a story authored by another user. Embeds {{ %1$@ reaction emoji, %2$@ story author name }} */
-"STORY_REACTION_REMOTE_AUTHOR_PREVIEW_FORMAT" = "«%2$@» نىڭ ھېكايىسىگە ئىنكاس %1$@";
-
 /* Button for replying to a story with no existing replies. */
 "STORY_REPLY_BUTTON" = "جاۋاب";
-
-/* Text indicating you reacted to a story (the header on the bubble says \"You\") */
-"STORY_REPLY_REACTION_SECOND_PERSON" = "ھېكايىگە ئىنكاس قايتۇردى";
-
-/* Text indicating someone else reacted to a story (the header on the bubble says their name, e.g. \"Bob\") */
-"STORY_REPLY_REACTION_THIRD_PERSON" = "ھېكايىگە ئىنكاس قايتۇردى";
 
 /* placeholder text for replying to a story */
 "STORY_REPLY_TEXT_FIELD_PLACEHOLDER" = "جاۋاب";
@@ -8965,35 +9349,23 @@
 /* Option in selected text edit menu to make text bold */
 "TEXT_MENU_BOLD" = "توم";
 
-/* Option in selected text edit menu to clear all text formatting in the selected text range */
-"TEXT_MENU_CLEAR_FORMATTING" = "فورماتلاشنى تازىلاش";
-
 /* Option in selected text edit menu to view text formatting options */
 "TEXT_MENU_FORMAT" = "فورمات";
 
 /* Option in selected text edit menu to make text italic */
 "TEXT_MENU_ITALIC" = "يانتۇ";
 
-/* Option in selected text edit menu to look up word definitions */
-"TEXT_MENU_LOOK_UP" = "تەكشۈرۈش";
-
 /* Option in selected text edit menu to make text monospace */
 "TEXT_MENU_MONOSPACE" = "يەككە بوشلۇق";
 
-/* Option in selected text edit menu to replace text with suggestions */
-"TEXT_MENU_REPLACE" = "ئالماشتۇرۇش";
-
-/* Option in selected text edit menu to share selected text */
-"TEXT_MENU_SHARE" = "ھەمبەھىرلە";
+/* Option in selected text edit menu to remove all text formatting in the selected text range */
+"TEXT_MENU_REMOVE_FORMATTING" = "فورماتلاشنى چىقىرىۋېتىش";
 
 /* Option in selected text edit menu to make text spoiler */
 "TEXT_MENU_SPOILER" = "غۇۋا ئۇسلۇب";
 
 /* Option in selected text edit menu to make text strikethrough */
 "TEXT_MENU_STRIKETHROUGH" = "سىزىۋېتىلگەن";
-
-/* Option in selected text edit menu to translate the word */
-"TEXT_MENU_TRANSLATE" = "تەرجىمە قىلىڭ";
 
 /* text indicating the message was remotely deleted */
 "THIS_MESSAGE_WAS_DELETED" = "بۇ ئۇچۇر ئۆچۈرۈلگەن";
@@ -9526,45 +9898,81 @@
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "ئۇچۇرنىڭ ئۆچۈرۈلۈش ۋاقتىنى %1$@ قىلىپ تەڭشىدىڭىز.";
 
-/* BA custom strings */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "زاپاسلاش قۇرۇلىۋاتىدۇ:%1$@";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "زاپاسنى ئېكسپورتلاۋاتىدۇ...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "زاپاسنى يۈكلەۋاتىدۇ...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "زاپاس مېدىيانى يۈكلەۋاتىدۇ...";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "ھازىر زاپاسلا";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "كېيىن زاپاسلاڭ";
-"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "بۇ ئالاقەداش بىلەن ئالاقە قىلغاندا كۆپ خاتالىق كۆرۈلدى، سەل تۇرۇپ قايتا سىناڭ.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "ئېتىش";
-"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "PIN نى چەكلەش ئۈچۈن، ئالدى بىلەن تىزىملىتىش قۇلۇپىنى تاقىشىڭىز كېرەك.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "تىزىملىتىش قۇلۇپىنى ئېتەمسىز؟";
-"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "PIN قۇرۇلدى، لېكىن تىزىملىتىش قۇلۇپىنى قوزغىتالمىدى. تور ئۇلىنىشىڭىزنى تەكشۈرۈپ قايتا سىناڭ.";
-"PIN_CREATION_REGLOCK_ERROR_TITLE" = "تىزىملىتىش قۇلۇپىنى قوزغىتالمىدى";
-"PIN_DISABLE_ERROR_MESSAGE" = "PIN نومۇرىڭىزنى چەكلىيەلمىدى.";
-"PIN_DISABLE_ERROR_TITLE" = "PIN چەكلەش مەغلۇب بولدى";
-"REGISTER_RATE_LIMITING_BODY" = "سىز بەك كۆپ قېتىم سىناپ بولدىڭىز. قايتا سىناپ بېقىشتىن بۇرۇن بىر مىنۇتتەك ساقلاڭ.";
-"VOICE_MESSAGE_FILE_NAME" = "B&A";
+/* ===== B&A Custom Strings ===== */
 
-/* BA custom strings */
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "بۇ ئۈسكۈنە ئۇلانغان ۋاقىتتا بۇ ئاۋازلىق ئۇچۇر تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلانغان ۋاقىتتا ، 45 كۈندىن ئاشقان ھۆججەتلەر ۋە مېدىيانى ماسقەدەملىگىلى بولمايدۇ.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "بۇ ھۆججەت بۇ ئۈسكۈنە ئۇلانغان ۋاقىتتا تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلانغان ۋاقىتتا ، 45 كۈندىن ئاشقان ھۆججەتلەر ۋە مېدىيانى ماسقەدەملىگىلى بولمايدۇ.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "بۇئۈسكۈنە ئۇلانغان ۋاقىتتا ، بۇ ئۇچۇردىكى تولۇق تېكىست تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلانغان ۋاقىتتا ، 45 كۈندىن ئاشقان ئۇزۇن تېكىستلىك ئۇچۇرلارنى ماسقەدەملىگىلى بولمايدۇ.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "بۇ چاپلاق بۇ ئۈسكۈنە ئۇلانغان ۋاقىتتا تېلېفونىڭىزدىن يۆتكەلمىگەن. ئۈسكۈنە ئۇلىنىۋاتقان ۋاقىتتا ، 45 كۈندىن ئاشقان ھۆججەتلەر ۋە مېدىيانى ماسقەدەملىگىلى بولمايدۇ.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "تېكىست + 45 كۈنلۈك مېدىيانى زاپاسلاش";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "ئەڭ ئاخىرقى 45 كۈنلۈك مېدىيا";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "تېكىست + 45 كۈنلۈك مېدىيا";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "تېخىمۇ كۆپ";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "باشقا يول بىلەن ئىئانە قىلىش";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "‫B&A Messenger نەشر ھوقۇقىغا ئىگە\nGPLv3 ئىجازىتىدە تارقىتىلدى";
+
+/* Link BAXS platform account */
+
 "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "BAXS ھېساباتىنى ئۇلىماقچى بولغاندەك تۇرىسىز. داۋاملاشتۇرۇشنى چېكىپ ئاندىن «QR كودىنى سىكانېرلاش» نى چېكىڭ ھەمدە QR كودىنى قايتا سىكانېرلاڭ.";
+
 "LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BA سۇپا ھېساباتىنى باغلاش";
+
 "LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "باغلانغان BAXS ھېسابات";
+
 "LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA سۇپا ھېسابات";
+
 "LINK_BA_PLATFORM_SCAN_FOOTER" = "ھېساباتىڭىزنى باغلاش ئۈچۈن BA تۆلەم سۇپىسىدا كۆرسىتىلگەن QR كودنى سايىلاڭ.";
+
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR كودنى سايىلاش";
-"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "موبىل";
-"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "ئېلخەت";
-"LINK_BA_PLATFORM_USER_ID" = "User ID";
-"LINK_BA_PLATFORM_USER_NAME" = "User Name";
-"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA سۇپا ھېساباتىنى باغلاش";
-"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "ھېساباتىڭىزنى \"%@\" غا باغلامسىز؟";
-"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA سۇپا ھېسابات مۇۋەپپەقىيەتلىك باغلاندى.";
-"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "ئىناۋەتسىز QR كود";
-"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "بۇ QR كود ئىناۋەتلىك BA سۇپا باغلاش كودى ئەمەس.";
+
 "LINK_BA_PLATFORM_SCAN_AGAIN" = "قايتا سايىلاش";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "موبىل";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "ئېلخەت";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA سۇپا ھېساباتىنى باغلاش";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "ھېساباتىڭىزنى \"%@\" غا باغلامسىز؟";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA سۇپا ھېسابات مۇۋەپپەقىيەتلىك باغلاندى.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "ئىناۋەتسىز QR كود";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "بۇ QR كود ئىناۋەتلىك BA سۇپا باغلاش كودى ئەمەس.";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "باغلىيالمايدۇ";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "بۇ QR كودنى باغلاش ئۈچۈن ئىشلەتكىلى بولمايدۇ.";
+
 "LINK_BA_PLATFORM_FAILED_TITLE" = "باغلاش مەغلۇب بولدى";
+
 "LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA سۇپىسى باغلاش تەلىپىنى رەت قىلدى.";
+
 "LINK_BA_PLATFORM_TIMEOUT_TITLE" = "باغلاش ۋاقتى ئۆتتى";
+
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA سۇپىسى ۋاقتىدا جاۋاب بەرمىدى. قايتا سىناپ بېقىڭ.";
+
 "LINK_BA_PLATFORM_ERROR_TITLE" = "خاتالىق";
+

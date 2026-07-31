@@ -1,6 +1,9 @@
 /* Button text to dismiss missing contacts permission alert */
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "Inte nu";
 
+/* Footer for the 'about' help section. For non-English languages, exclude the word '501c3'. */
+"ABOUT_SECTION_FOOTER" = "Copyright B&A Messenger\nLicensierad under AGPLv33\nB&A är en ideell organisation";
+
 /* Title for the 'about' help section */
 "ABOUT_SECTION_TITLE" = "Om B&A";
 
@@ -69,6 +72,12 @@
 
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "Skicka meddelande";
+
+/* Message shown in an action sheet when a generic error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_GENERIC_ERROR" = "Något gick fel. Kontakta supporten.";
+
+/* Message shown in an action sheet when a network error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_NETWORK_ERROR" = "Något gick fel. Kontrollera din anslutning och försök igen.";
 
 /* A label for 'tap to download' buttons. */
 "ACTION_TAP_TO_DOWNLOAD" = "Tryck för att hämta";
@@ -196,6 +205,12 @@
 /* notification body */
 "APN_Message" = "Du kanske har nya meddelanden";
 
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. The embedded value is 'Update now' (translated via APP_EXPIRED_BOTTOM_UPDATE), and it will be formatted as a tappable link. */
+"APP_EXPIRED_BOTTOM" = "Denna version av B&A har upphört att gälla. %1$@ för att skicka och ta emot meddelanden.";
+
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. This value is a tappable link embedded in a larger sentence. */
+"APP_EXPIRED_BOTTOM_UPDATE" = "Uppdatera nu";
+
 /* Default message for the 'app launch failed' alert. */
 "APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A kan inte startas. Skicka en felsökningslogg till support@baxs.com så att vi kan felsöka problemet.";
 
@@ -210,6 +225,15 @@
 
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "Det gick inte att läsa in databasen";
+
+/* Message for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_MESSAGE" = "B&A kan inte startas eftersom databasen är skadad. Säkerheten för ditt konto eller dina meddelanden har inte påverkats.";
+
+/* Title for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_TITLE" = "Databasen är skadad";
+
+/* Action in an action sheet offering to attempt recovery of a corrupted database. */
+"APP_LAUNCH_FAILURE_DATABASE_RECOVERY_ACTION_TITLE" = "Reparera";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "Uppgradera till den senaste versionen av B&A.";
@@ -246,15 +270,6 @@
 
 /* Text prompting user to edit their profile name. */
 "APP_SETTINGS_EDIT_PROFILE_NAME_PROMPT" = "Ange ditt namn";
-
-/* Label for the 'dismiss' button in the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_DISMISS_BUTTON" = "Inte nu";
-
-/* Message format for the 'new app version available' alert. Embeds: {{The latest app version number}} */
-"APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "Versionen %1$@ finns nu tillgänglig i App Store.";
-
-/* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "En ny version av B&A är tillgänglig";
 
 /* Label for the 'update' button in the 'new app version available' alert. */
 "APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "Uppdatera";
@@ -427,6 +442,9 @@
 /* A button to open the photo picker from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_PHOTOS" = "Foton";
 
+/* A button to select a poll from the Attachment Keyboard */
+"ATTACHMENT_KEYBOARD_POLL" = "Omröstning";
+
 /* Accessibility label for attaching photos */
 "ATTACHMENT_LABEL" = "Bilaga";
 
@@ -487,14 +505,8 @@
 /* Message when trying to show a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_MESSAGE_LABEL" = "Röstmeddelandet är inte tillgängligt";
 
-/* Message for sheet shown when tapping a voice message that has expired and is unavailable for download */
-"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Det här röstmeddelandet överfördes inte från din telefon när den här enheten länkades. Filer och media som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
-
 /* Title for sheet shown when tapping a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "Röstmeddelandet är inte tillgängligt";
-
-/* Username for recovery key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "Säkerhetskopiering av B&A";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "Välj en färg";
@@ -556,6 +568,15 @@
 /* Toast indicating that the Recovery Key was correct. */
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "Säkerhetskopieringsnyckeln är korrekt. Förvara din nyckel säkert.";
 
+/* Button label for action sheet to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_ACTION" = "Avsluta säkerhetskopieringsinställning";
+
+/* Message for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_MESSAGE" = "Du har inte slutfört konfigureringen av säkerhetskopior, och ingen säkerhetskopia har skapats. Du kan aktivera säkerhetskopiering i Inställningar.";
+
+/* Title for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_TITLE" = "Avsluta säkerhetskopieringsinställning?";
+
 /* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "B&A kommer inte att kunna hjälpa dig att återställa din säkerhetskopia om du förlorar din nyckel. Spara den någonstans säkert och dela den inte med andra.";
 
@@ -580,17 +601,41 @@
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "Ta bort din säkerhetskopia när som helst";
 
+/* A toast shown when 'Not Now' is tapped from the Backups onboarding intro. */
+"BACKUP_ONBOARDING_INTRO_NOT_NOW_TOAST" = "Du kan aktivera säkerhetskopiering i Inställningar.";
+
 /* Subtitle for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "Säkerhetskopiera dina meddelanden och media med B&As säkra, totalsträckskrypterade lagringstjänst. Förlora aldrig ett meddelande när du skaffar en ny telefon eller installerar om B&A.";
 
 /* Title for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_TITLE" = "Säkerhetskopiering av B&A";
 
-/* Subtitle for a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "Din säkerhetskopieringsnyckel är en kod på 64 tecken som låter dig återställa din säkerhetskopia när du installerar om B&A.\n\nOm du glömmer din nyckel kommer du inte att kunna återställa din säkerhetskopia. B&A kan inte hjälpa dig att återställa din säkerhetskopia.";
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "Din återställningsnyckel är en kod på 64 tecken som du behöver för att återställa din säkerhetskopia.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_2" = "Förvara din återställningsnyckel någonstans säkert, till exempel i en lösenordshanterare, och dela den inte med någon.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_3" = "Om du förlorar den kommer du inte att kunna återställa dina meddelanden.";
+
+/* Title for a continue button for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_CONTINUE_BUTTON_TITLE" = "Visa återställningsnyckel";
 
 /* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "Din säkerhetskopieringsnyckel";
+
+/* Body for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY" = "Ditt abonnemang för säkerhetskopiering har löpt ut eftersom den inte kunde förnyas med din betalningsmetod.\n\nFör att fortsätta säkerhetskopiera media kan du abonnera igen. Du kommer fortfarande att ha tillgång till den kostnadsfria planen av Säkerhetskopiering av B&A.";
+
+/* Body for a sheet shown when your Backup plan is downgraded because you stopped using TestFlight. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY_TESTFLIGHT" = "Ditt abonnemang för säkerhetskopiering har löpt ut eftersom du inte längre använder TestFlight.\n\nFör att fortsätta säkerhetskopiera media kan du abonnera igen. Du kommer fortfarande att ha tillgång till det kostnadsfria abonnemanget av Säkerhetskopiering av B&A.";
+
+/* Primary button for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_PRIMARY_BUTTON" = "Hantera säkerhetskopiering";
+
+/* Title for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_TITLE" = "Ditt abonnemang för säkerhetskopiering har upphört";
 
 /* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "Kopiera till urklipp";
@@ -613,6 +658,21 @@
 /* Title for a progress spinner on a modal when restoring messages */
 "BACKUP_RESTORE_MODAL_TITLE" = "Återställer meddelanden …";
 
+/* Message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "Automatiska säkerhetskopior är inaktiverade. Aktivera automatiska säkerhetskopior genom att uppdatera B&As behörigheter.";
+
+/* Add-on to a message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE_UPDATE_NOW" = "Uppdatera nu";
+
+/* Title for a button that takes the users to Signal's iOS Settings page. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_GO_TO_SETTINGS_BUTTON" = "Gå till inställningar";
+
+/* Message for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_MESSAGE" = "För att tillåta att B&A automatiskt säkerhetskopierar dina meddelanden, tryck på \"Gå till Inställningar\" nedan och aktivera \"Uppdatera appar i bakgrunden\"";
+
+/* Title for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_TITLE" = "Automatiska säkerhetskopior inaktiverade";
+
 /* Message for an action sheet explaining that performing a backup failed with a generic error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR" = "Något gick fel när din säkerhetskopia skapades. Försök igen eller kontakta support.";
 
@@ -628,6 +688,9 @@
 /* Message for an action sheet explaining that performing a backup failed with a network error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR" = "Något gick fel när din säkerhetskopia skapades. Kontrollera din internetanslutning och försök igen.";
 
+/* Message for an action sheet explaining that you must be registered to make a Backup. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "Du måste vara registrerad för att skapa en säkerhetskopia.";
+
 /* Description for a progress bar tracking the optimizing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "Optimerar media …";
 
@@ -637,14 +700,26 @@
 /* Description for a progress bar tracking the processing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PROCESSING_MEDIA" = "Bearbetar media …";
 
+/* Title for an action sheet action explaining the user can now scan a QR code to continue the restore. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_ACTION_TITLE" = "Skanna QR-kod";
+
+/* Body for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_BODY" = "Använd den här enheten för att skanna QR-koden på den enhet du vill överföra till";
+
+/* Title for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_TITLE" = "Klar att överföras";
+
+/* Message describing to the user that the last backup failed. */
+"BACKUP_SETTINGS_BACKUP_FAILED_MESSAGE" = "Din senaste säkerhetskopiering kunde inte slutföras. Tryck på \"Säkerhetskopiera nu\" för att försöka igen.";
+
 /* Title for a button allowing users to upgrade from a free to paid backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "Uppgradera";
 
+/* Text describing the user's free backup plan when they have Backups disabled. */
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_AND_DISABLED_DESCRIPTION" = "Du stängde av säkerhetskopiering";
+
 /* Text describing the user's free backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_DESCRIPTION" = "Din säkerhetskopieringsplan är gratis";
-
-/* Header describing what the free backup plan includes. */
-"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Säkerhetskopiering av textmeddelanden + senaste 45 dagars media";
 
 /* Message for a view indicating we failed to fetch someone's Backup plan due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_MESSAGE" = "Ett fel inträffade. Kontakta supporten.";
@@ -673,11 +748,26 @@
 /* Text explaining that a user's paid plan, which has been canceled, expired on a past date. Embeds {{ the formatted expiration date }}. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_PAST_EXPIRATION_FORMAT" = "Upphörde %1$@";
 
+/* Title for a button allowing users to manage a paid backup plan that failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_ACTION_BUTTON_TITLE" = "Hantera abonnemang";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_1" = "Betalningsmetod avvisad";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_2" = "Kontrollera att din betalningsmetod är uppdaterad";
+
 /* Title for a button allowing users to manage their backup plan as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "Hantera plan";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "Betald, men gratis så länge du är testare";
+
+/* Title for a button allowing users to renew their backup subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_ACTION_BUTTON_TITLE" = "Förnya";
+
+/* Text describing that the user's paid backup plan did not correspond to a App Store subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_DESCRIPTION" = "Ditt abonnemang hittades inte på den här enheten. Förnya för att fortsätta använda Säkerhetskopiering av B&A.";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "Säkerhetskopiering av textmeddelanden + alla mediefiler";
@@ -717,6 +807,15 @@
 
 /* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "Du måste vara registrerad för att skapa en ny återställningsnyckel.";
+
+/* Explanation text for a sheet warning users they've reached a rate limit for creating Recovery Key. {{ Embeds 1: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_BODY" = "Om du skapar en ny återställningsnyckel kommer du inte att kunna aktivera säkerhetskopior under %1$@. Antalet nycklar du kan skapa är begränsat för att förhindra missbruk.";
+
+/* Action in an action sheet allowing to continue to rotate their key */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_CONTINUE_ACTION" = "Skapa ny nyckel";
+
+/* Title for a sheet warning users they've reached a rate limit for creating Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_TITLE" = "Gränsen för återställningsnycklar har nåtts";
 
 /* Toast shown when a new Recovery Key has been created successfully. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "Ny nyckel skapad";
@@ -759,6 +858,15 @@
 
 /* Message shown in an action sheet when the user tries to disable Backups, but is not registered. */
 "BACKUP_SETTINGS_DISABLING_ERROR_NOT_REGISTERED" = "Du måste vara registrerad för att inaktivera säkerhetskopior.";
+
+/* Button for an action sheet shown when the user disables Backups, letting them manage their subscription. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MANAGE_SUBSCRIPTION_BUTTON" = "Hantera abonnemang";
+
+/* Message for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MESSAGE" = "Om du vill avsluta ditt abonnemang trycker du på Hantera prenumeration > B&A > Avsluta abonnemang";
+
+/* Title for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_TITLE" = "Du prenumererar fortfarande på en betald säkerhetskopieringsplan";
 
 /* Title for a button shown in Backup Settings that lets a user cancel an in-progress download. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_CANCEL_DOWNLOAD" = "Avbryt nedladdning";
@@ -814,6 +922,15 @@
 /* Label for a menu item offering to show the user their recovery key. */
 "BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "Visa säkerhetskopieringsnyckel";
 
+/* Body for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_BODY" = "Ditt abonnemang kunde inte återställas på den här enheten. Detta kan hända om du är inloggad i App Store med ett annat Apple-konto eller om du har överfört från en Android-telefon.\n\nOm du har ett aktivt abonnemang på din gamla telefon bör du överväga att säga upp det innan det förnyas.";
+
+/* Button for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_GOT_IT_BUTTON" = "Uppfattat";
+
+/* Title for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_TITLE" = "Abonnemanget hittades inte";
+
 /* Title for a button allowing users to trigger a manual backup. */
 "BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "Säkerhetskopiera nu";
 
@@ -850,6 +967,12 @@
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "Optimera lagring på enheten";
 
+/* Subtitle for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_SUBTITLE" = "Du har nått din gräns för säkerhetskopiering. Frigör utrymme i B&A för att fortsätta säkerhetskopiera chattar och media.";
+
+/* Title for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_TITLE" = "Lagringsutrymmet för säkerhetskopior är fullt";
+
 /* Title for a button allowing users to re-enable Backups, after it had been previously disabled. */
 "BACKUP_SETTINGS_REENABLE_BACKUPS_BUTTON_TITLE" = "Återaktivera säkerhetskopiering";
 
@@ -861,6 +984,21 @@
 
 /* Title for a sheet warning the user about skipping downloads. */
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "Hoppa över nedladdning?";
+
+/* Title for detail button in notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_DETAIL_BUTTON" = "Detaljer";
+
+/* Title for notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_TITLE" = "Det går inte att hämta ditt abonnemang för säkerhetskopiering";
+
+/* Body for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_BODY" = "För många enheter har försökt hämta ditt abonnemang den här månaden.\n\nDu kanske har omregistrerat ditt B&A-konto för många gånger, eller så har du för många enheter som använder samma abonnemang.";
+
+/* Button for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_GOT_IT_BUTTON" = "Uppfattat";
+
+/* Title for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_TITLE" = "Det går inte att hämta ditt abonnemang för säkerhetskopiering";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "Uppladdning pausad: enheten har låg batterinivå";
@@ -874,6 +1012,9 @@
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "Uppladdning pausad: väntar på wifi";
 
+/* Subtitle for a progress bar tracking uploads that are paused because the user is out of remote storage space. Embeds 1:{{ total storage space provided, e.g. 100 GB }}; 2:{{ space the user needs to free up by deleting media, e.g. 1 GB }}. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_OUT_OF_STORAGE_SPACE_FORMAT" = "Du har nått lagringsgränsen på %1$@ som ingår i din säkerhetskopieringsplan. För att säkerhetskopiera nya chattar och media, frigör %2$@ i B&A och tryck sedan på Säkerhetskopiera nu.";
+
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "Laddar upp %1$@ av %2$@ (%3$@)";
 
@@ -882,6 +1023,21 @@
 
 /* Title for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "Välkommen till Säkerhetskopiering av B&A. Starta din säkerhetskopiering nu.";
+
+/* Message for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_MESSAGE" = "Kontrollera att din betalningsmetod är uppdaterad. Tryck på Hantera abonnemang > B&A > Uppdatera betalningsmetod.";
+
+/* Primary button for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_PRIMARY_BUTTON" = "Hantera abonnemang";
+
+/* Title for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "Ditt abonnemang för säkerhetskopiering kunde inte förnyas";
+
+/* Body for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "Skicka oss felsökningsloggar så att vi kan lösa problemet.";
+
+/* Title for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "Ett fel uppstod när du säkerhetskopierade dina media";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "Säkerhetskopiering av B&A";
@@ -1041,9 +1197,6 @@
 
 /* An explanation of the consequences of blocking another user. */
 "BLOCK_USER_BEHAVIOR_EXPLANATION" = "Blockerade användare kommer inte att kunna ringa eller skicka meddelanden till dig.";
-
-/* Tooltip highlighting the blur image editing tool. */
-"BLUR_TOOLTIP" = "Nytt: Oskärpa ansikten eller dra var som helst för att oskärpa.";
 
 /* Default text for the custom amount field of the boost view. */
 "BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "Ange anpassat belopp";
@@ -1227,6 +1380,87 @@
 
 /* notification body */
 "CALL_MISSED_BECAUSE_OF_IDENTITY_CHANGE_NOTIFICATION_BODY" = "☎️ Missade samtalet för att den andra personens säkerhetsnummer har ändrats.";
+
+/* Title for toast which appears after submitting a call quality survey */
+"CALL_QUALITY_SURVEY_COMPLETION_TOAST" = "Tack för din feedback!";
+
+/* Footer text explaining custom issue descriptions in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_FOOTER" = "Inkludera alla detaljer som är relevanta för problemet. Allt du delar här kommer att hållas privat och kommer endast att användas för att förbättra samtal i B&A.";
+
+/* Placeholder text for the custom issue entry in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_PLACEHOLDER" = "Beskriv ditt problem";
+
+/* Footer text explaining what debug logs contain in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER" = "Information som delas med oss innehåller appinformation på låg nivå och inkluderar inte innehållet i dina samtal.";
+
+/* Header text explaining the purpose of sharing debug logs in the call quality survey. The text inside the <link> tags is tappable for viewing the diagnostic information. */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_HEADER" = "När du skickar in delas din feedback tillsammans med <link>diagnostisk information om ditt samtal</link>. Du kan välja att dela en felsökningslogg för att hjälpa oss att förbättra samtalskvaliteten.";
+
+/* Link text to open a preview of debug logs in the call quality survey. Appended to CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_PREVIEW_LINK" = "Visa felsökningslogg";
+
+/* Title for the debug log sharing screen in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TITLE" = "Hjälp oss att förbättra oss";
+
+/* Label for the toggle to share debug log in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TOGGLE" = "Dela felsökningslogg";
+
+/* Title for preview of the call diagnostic info that will be sent with the survey */
+"CALL_QUALITY_SURVEY_DIAGNOSTICS_TITLE" = "Diagnostisk information";
+
+/* Button label for indicating the call did not have issues in the call quality survey */
+"CALL_QUALITY_SURVEY_GREAT_BUTTON" = "Bra";
+
+/* Button label for indicating the call had issues in the call quality survey */
+"CALL_QUALITY_SURVEY_HAD_ISSUES_BUTTON" = "Hade problem";
+
+/* Label for audio issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO" = "Ljudproblem";
+
+/* Label for audio dropout issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_DROP" = "Ljudavbrott";
+
+/* Label for local echo issue option in call quality survey, indicating the user heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_LOCAL_ECHO" = "Jag hörde eko";
+
+/* Label for remote echo issue option in call quality survey, indicating other participants heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_REMOTE_ECHO" = "Andra hörde eko";
+
+/* Label for audio stuttering issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_STUTTERING" = "Ljudet hackar";
+
+/* Label for call dropped issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_CALL_DROPPED" = "Samtalet avbröts";
+
+/* Label for custom issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_OTHER" = "Något annat";
+
+/* Label for video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO" = "Videoproblem";
+
+/* Label for poor video quality issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_QUALITY" = "Dålig videokvalitet";
+
+/* Label for low resolution video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_RESOLUTION" = "Låg upplösning";
+
+/* Label for camera not working issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_NO_CAMERA" = "Kameran fungerade inte";
+
+/* Header text on the call quality survey issues screen */
+"CALL_QUALITY_SURVEY_ISSUES_HEADER" = "Markera alla som gäller";
+
+/* Title for the sheet in the call quality survey where issues with the call can be selected */
+"CALL_QUALITY_SURVEY_ISSUES_SHEET_TITLE" = "Vilka problem hade du?";
+
+/* Header text explaining the purpose of the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_HEADER" = "Detta hjälper oss att förbättra samtal i B&A. Ingen personligt identifierbar information kommer att lagras.";
+
+/* Title for the initial rating screen in the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_TITLE" = "Hur var ditt samtal?";
+
+/* Button text to submit the call quality survey */
+"CALL_QUALITY_SURVEY_SUBMIT_BUTTON" = "Skicka";
 
 /* Label on button for raising hand in call. */
 "CALL_RAISE_HAND_BUTTON_LABEL" = "Räck upp handen";
@@ -1579,17 +1813,8 @@
 /* Text for a bullet point in a list of Backup features, describing that all text messages are included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_TEXT_BACKUP" = "Fullständig säkerhetskopiering av textmeddelanden";
 
-/* Text for a bullet point in a list of Backup features, describing that recent media is included. */
-"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Senaste 45 dagarnas media";
-
-/* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
+/* Text for a bullet point in a list of Backup features, describing the amount of included storage. Embeds {{ the amount of storage preformatted as a localized byte count, e.g. '100 GB' }}. */
 "CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "1 TB lagringsutrymme (~250 000 foton)";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "Något gick fel. Kontakta supporten.";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a network error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NETWORK_ERROR" = "Något gick fel. Kontrollera din anslutning och försök igen.";
 
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but is not registered. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED" = "Du måste vara registrerad för att aktivera säkerhetskopior.";
@@ -1600,11 +1825,23 @@
 /* Message shown in an action sheet when the user tries to confirm selecting the paid plan, but encountered an error while redeeming their completed purchase. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_PURCHASE_REDEMPTION" = "Något gick fel. Kontakta supporten.";
 
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED" = "Eftersom du har nått din gräns för nya återställningsnycklar kommer du inte att kunna aktivera säkerhetskopior under %1$@ för att förhindra missbruk. Vänta %1$@ och försök igen.";
+
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. {{ Embeds 1 & 2: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED_TITLE" = "Det gick inte att aktivera säkerhetskopior";
+
 /* A label indicating that a given Backup plan option is what the user has already enabled. */
 "CHOOSE_BACKUP_PLAN_CURRENT_PLAN_LABEL" = "Nuvarande plan";
 
-/* Subtitle for the free plan option, when choosing a Backup plan. */
-"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Textmeddelanden + senaste 45 dagarnas media";
+/* Text for a button that will downgrade the user from the paid Backup plan to the free one. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_BUTTON_TEXT" = "Ändra plan";
+
+/* Button for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_PROCEED_BUTTON" = "Ändra plan";
+
+/* Title for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_TITLE" = "Nedgradera till Gratis?";
 
 /* Title for the free plan option, when choosing a Backup plan. */
 "CHOOSE_BACKUP_PLAN_FREE_PLAN_TITLE" = "Gratis";
@@ -1623,6 +1860,9 @@
 
 /* Subtitle for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_SUBTITLE" = "Alla säkerhetskopior är totalsträckskrypterade. B&A är en ideell organisation – att betala för säkerhetskopior hjälper till att stödja vårt uppdrag.";
+
+/* Title for a label allowing users to view Signal's Terms & Conditions. */
+"CHOOSE_BACKUP_PLAN_TERM_AND_PRIVACY_POLICY_TEXT" = "Villkor & integritetspolicy";
 
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "Välj din säkerhetskopieringsplan";
@@ -1996,6 +2236,9 @@
 /* Footer for the 'attributes access' section in conversation settings view. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "Välj vem som kan redigera gruppens namn, foto, beskrivning och tidsgräns för försvinnande meddelanden.";
 
+/* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "Välj vem som kan redigera gruppnamn, bild, beskrivning, timer för försvinnande meddelanden och nålade meddelanden.";
+
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "Få märken för din profil genom att stöda B&A. Tryck på ett märke om du vill veta mer.";
 
@@ -2052,6 +2295,9 @@
 
 /* Label for 'member requests & invites' action in conversation settings view. */
 "CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES" = "Förfrågningar & inbjudningar";
+
+/* Label for 'member label' action in conversation settings view. */
+"CONVERSATION_SETTINGS_MEMBER_TAG" = "Medlemsetikett";
 
 /* label for 'always' option for mention notifications in conversation settings */
 "CONVERSATION_SETTINGS_MENTION_MODE_AlWAYS" = "Meddela alltid";
@@ -2251,22 +2497,10 @@
 /* Tooltip highlighting the custom chat color controls. */
 "CUSTOM_CHAT_COLOR_SETTINGS_TOOLTIP" = "Dra för att ändra lutningens riktning";
 
-/* Button to run the database integrity check */
-"DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "Kör";
-
-/* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "Det här hjälper oss att lösa ditt problem och det kan ta flera minuter att slutföra. Du kan avsluta B&A medan kontrollen körs men kom tillbaka för att skicka dina loggar.";
-
-/* Button to skip database integrity check step */
-"DATABASE_INTEGRITY_CHECK_SKIP" = "Hoppa över";
-
-/* Title for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_TITLE" = "Kör databasdiagnostik?";
-
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so keep that in mind. This is the description on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_DESCRIPTION" = "En del av din meddelandehistorik kan vara skadad. Säkerheten för ditt konto eller dina meddelanden har inte påverkats. Tryck på Fortsätt för att återställa dina data.";
 
-/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
+/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "Problem med att hämta data";
 
 /* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
@@ -2356,6 +2590,12 @@
 /* Accessibility label for the ? vector asset used to get info about debug logs */
 "DEBUG_LOG_INFO_BUTTON" = "Information om felsökningsloggar";
 
+/* Header text displayed above the debug log preview */
+"DEBUG_LOG_PREVIEW_HEADER" = "När den har skickats in publiceras din logg online i 30 dagar via en unik, opublicerad URL.";
+
+/* Title for the debug log preview screen */
+"DEBUG_LOG_PREVIEW_TITLE" = "Felsökningslogg";
+
 /* info message text in conversation view */
 "DECLINED_VIDEO_CALL" = "Du avböjde ett videosamtal";
 
@@ -2428,23 +2668,17 @@
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "Det här meddelandet kommer att raderas från alla dina enheter.";
 
-/* Label for a button in an info sheet confirming that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_BUTTON" = "Uppfattat";
-
-/* Subtitle for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_SUBTITLE" = "När du raderar meddelanden eller chattar kommer de att raderas från din telefon och alla länkade enheter.";
-
-/* Title for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_TITLE" = "Radering synkroniseras nu mellan alla dina enheter";
-
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "Raderat konto";
 
 /* Notification warning the user that they have been de-registered. */
 "DEREGISTRATION_NOTIFICATION" = "Du har loggats ut från B&A på den här enheten.";
 
-/* Label for button that lets users re-register using the same phone number. */
-"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "Registrera detta telefonnummer igen";
+/* Button that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_BUTTON" = "Registrera igen";
+
+/* Title for prompt that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_PROMPT_TITLE" = "Registrera detta telefonnummer igen?";
 
 /* Label warning the user that they have been de-registered. */
 "DEREGISTRATION_WARNING" = "Den här enheten är inte längre registrerad. Detta beror troligen på att du registrerade ditt telefonnummer med B&A på en annan enhet.";
@@ -2485,23 +2719,14 @@
 /* The explanation for the device transfer 'choice' view when linking a device */
 "DEVICE_TRANSFER_CHOICE_LINKED_EXPLANATION" = "Välj hur du vill överföra din meddelandehistorik och dina kontouppgifter";
 
-/* The body for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_BODY" = "Fortsätt utan att överföra ditt konto och dina meddelanden";
-
 /* The body for the device transfer 'choice' view 'register' option when linking a device when message syncing is available */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_BODY_LINK_AND_SYNC" = "Du har möjlighet att överföra meddelanden och senaste media från din telefon";
 
 /* The title for the device transfer 'choice' view 'register' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_TITLE" = "Lägg till som en ny enhet";
 
-/* The title for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_TITLE" = "Registrera dig utan att överföra";
-
 /* The title for the device transfer 'choice' view */
 "DEVICE_TRANSFER_CHOICE_TITLE" = "Överför konto & meddelanden";
-
-/* The body for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_BODY" = "Överför ditt konto och meddelandehistorik från din gamla iOS-enhet";
 
 /* The body for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_BODY" = "Överför ditt konto och meddelandehistorik från din gamla iOS-enhet";
@@ -2509,26 +2734,11 @@
 /* The title for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_TITLE" = "Överför från en annan iPad";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_TITLE" = "Överför från iOS-enhet";
-
-/* Button shown to contract a QR code and exit the fullscreen view. */
-"DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "Visa mindre";
-
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "Överföringen kunde inte slutföras. Se till att båda enheterna har B&A öppet och försök igen.";
 
-/* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
-"DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "Det gick inte att verifiera din nya enhet, försök igen";
-
 /* An error indicating that something went wrong with the transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_GENERIC" = "Överföringen kunde inte slutföras. Se till att dina enheter är nära varandra och försök igen.";
-
-/* An error indicating the user must scan this code with a linked device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_LINKED" = "Om du vill ställa in denna iPad som en länkad enhet måste du skanna med din gamla iPad";
-
-/* An error indicating the user must scan this code with a primary device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_PRIMARY" = "Om du vill överföra ditt konto måste du skanna med din iPhone";
 
 /* An error indicating that the user does not have enough free space on their device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "Inte tillräckligt med ledigt utrymme för att slutföra överföringen";
@@ -2536,41 +2746,11 @@
 /* An error indicating the user must update their device before trying to transfer. */
 "DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "Uppdatera till den senaste versionen av B&A och försök igen";
 
-/* Button shown to expand a QR code and view it fullscreen. */
-"DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "Visa större";
-
-/* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "Överför ditt B&A-konto till en ny iOS-enhet. Se till att din nya enhet är i närheten och påslagen.";
-
-/* The title on the acttion sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_TITLE" = "Överför konto";
-
-/* The explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION" = "Ha din gamla enhet i närheten, se till att Wi-Fi och Bluetooth är aktiverade på den och skanna den här QR-koden med den.";
-
-/* The second explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION2" = "Placera denna QR-kod i ramen på din andra iOS-enhet.";
-
-/* A prompt to provide further explanation if the user is not seeing the transfer on both devices. */
-"DEVICE_TRANSFER_QRCODE_NOT_SEEING" = "Ser du inte meddelandet på din gamla enhet?";
-
-/* The title for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_TITLE" = "Skanna QR-kod";
-
 /* The explanation on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "Håll båda enheterna nära varandra. Stäng inte av någon av enheterna och håll B&A öppen. Överföringar är ände-till-ände-krypterade.";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "Tar emot data";
-
-/* Text indicating that we are connecting to the scanned device */
-"DEVICE_TRANSFER_SCANNING_CONNECTING" = "Ansluter …";
-
-/* The explanation for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_EXPLANATION" = "Placera QR-koden i cirkeln";
-
-/* The title for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_TITLE" = "Håll upp din nya enhet mot kameran";
 
 /* Status message on new device when cancelling transfer. */
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_CANCELLING" = "Avbryter anslutning till gammal iPhone …";
@@ -2608,11 +2788,8 @@
 /* Status message on old device when transfer is starting. */
 "DEVICE_TRANSFER_STATUS_OLD_DEVICE_STARTING" = "Väntar på att ansluta till ny iPhone …";
 
-/* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "Håll båda enheterna nära varandra. Stäng inte av någon av enheterna och håll B&A öppen.";
-
-/* The title on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_TITLE" = "Överför data";
+/* Action asking user to try again after transfer failure. */
+"DEVICE_TRANSFER_TRY_AGAIN_ACTION" = "Försök igen";
 
 /* table cell label in conversation settings */
 "DISAPPEARING_MESSAGES" = "Försvinnande meddelanden";
@@ -2893,17 +3070,17 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ har donerat till B&A å dina vägnar. Visa ditt stöd för B&A på din profil.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "Privata meddelanden. Inga annonser, inga spårare, ingen övervakning.";
+/* Body text for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BODY" = "Som en oberoende ideell organisation är B&A engagerad i privata meddelanden och samtal. Inga annonser, inga spårare, ingen övervakning. Donera idag för att stödja B&A.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "B&A stöds av donationer, vilket innebär att din integritet står i centrum för allt vi gör. B&A är byggd för dig; inte dina data och inte för profit.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_1" = "Få ett valfritt märke på din profil när du donerar";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "Om du kan, vänligen donera idag för att hålla B&A kul, pålitligt och tillgängligt för alla.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_2" = "Din integritet är vårt uppdrag";
 
-/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "B&A är annorlunda.";
+/* Bullet point for a sheet discussing donating to Signal. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
+"DONATION_READ_MORE_SHEET_BULLET_3" = "B&A är en ideell organisation.";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "Belopp";
@@ -3046,20 +3223,17 @@
 /* Text describing to the user that they're going to pay a monthly donation to Signal */
 "DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "Månatlig donation till B&A";
 
-/* Title for the 'more' section on the donation screen */
-"DONATION_VIEW_MORE_SECTION_TITLE" = "Mer";
-
 /* Title for the 'my support' section in the donation view */
 "DONATION_VIEW_MY_SUPPORT_TITLE" = "Mitt stöd";
-
-/* Title for the \"other ways to donate\" section on the donation view. */
-"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Andra sätt att donera";
 
 /* Title on the 'Donate to Signal' screen */
 "DONATION_VIEW_TITLE" = "Donera till B&A";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "Valuta";
+
+/* Label for a button that says 'Don't show again'. */
+"DONT_SHOW_AGAIN_BUTTON_TITLE" = "Visa inte igen";
 
 /* Message for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_MESSAGE" = "Tryck snabbt två gånger på dina meddelanden för att redigera dem. Du kan redigera dina meddelanden upp till 24 timmar efter att de har skickats.";
@@ -3316,9 +3490,6 @@
 /* Footer for message cell for documents/files when they are expired and unavailable for download */
 "FILE_UNAVAILABLE_FOOTER" = "Filen är inte tillgänglig";
 
-/* Message for sheet shown when tapping a document/file that has expired and is unavailable for download */
-"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Den här filen överfördes inte från din telefon när den här enheten länkades. Filer och media som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
-
 /* Title for sheet shown when tapping a document/file that has expired and is unavailable for download */
 "FILE_UNAVAILABLE_SHEET_TITLE" = "Filen är inte tillgänglig";
 
@@ -3352,12 +3523,6 @@
 /* Tooltip notifying users that the flip camera button moved to the picture-in-picture view of themselves in a call */
 "FLIP_CAMERA_BUTTON_MOVED_TO_PIP_TOOLTIP" = "Vänd kamera har flyttats hit. Tryck på din video för att prova";
 
-/* Message for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_MESSAGE" = "Vidarebefordrade meddelanden skickas nu omedelbart.";
-
-/* Title for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_TITLE" = "Snabbare vidarebefordringar";
-
 /* Indicates that a single message was forwarded. */
 "FORWARD_MESSAGE_MESSAGES_SENT_1" = "Meddelande skickat";
 
@@ -3385,11 +3550,11 @@
 /* Title for the 'Get Started' banner */
 "GET_STARTED_BANNER_TITLE" = "Komma igång";
 
-/* 'Get Started' button directing users to appearance */
-"GET_STARTED_CARD_APPEARANCE" = "Utseende";
-
 /* 'Get Started' button direction users to avatar builder */
 "GET_STARTED_CARD_AVATAR_BUILDER" = "Välj foto";
+
+/* 'Get Started' button directing users to Chat Color settings */
+"GET_STARTED_CARD_CHAT_COLOR" = "Chattfärg";
 
 /* 'Get Started' button directing users to invite friends */
 "GET_STARTED_CARD_INVITE_FRIENDS" = "Bjud in";
@@ -3595,9 +3760,6 @@
 /* Toast view text informing user about swiping to speaker view */
 "GROUP_CALL_SPEAKER_VIEW_TOAST" = "Svep uppåt för att ändra vyer";
 
-/* Tooltip highlighting group calls. */
-"GROUP_CALL_START_TOOLTIP" = "Tryck här för att starta ett gruppsamtal";
-
 /* Text explaining that you started a group call. */
 "GROUP_CALL_STARTED_BY_YOU" = "Du startade ett gruppsamtal";
 
@@ -3736,6 +3898,12 @@
 /* Message indicating that 'announcement-only' mode was enabled by a remote user. Embeds {{ user who enabled 'announcement-only' mode }}. */
 "GROUP_IS_ANNOUNCEMENT_ONLY_ENABLED_BY_REMOTE_USER_FORMAT" = "%1$@ ändrade gruppinställningarna så att endast administratörer tillåts skicka meddelanden.";
 
+/* Message text for the 'group invite link' action sheet. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE" = "Gå med i den här gruppen och dela ditt namn och foto med dess medlemmar?";
+
+/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE_W_REQUEST" = "När du begär att gå med kommer ditt namn och foto att delas med medlemmarna i den här gruppen. En administratör måste godkänna din begäran.";
+
 /* Subtitle indicating that the local user has been blocked from joining the group */
 "GROUP_LINK_ACTION_SHEET_VIEW_BLOCKED_FROM_JOINING_SUBTITLE" = "Du kan inte gå med i den här gruppen via grupplänken eftersom en administratör tog bort dig. Kontakta en administratör för att läggas till i gruppen igen.";
 
@@ -3754,14 +3922,8 @@
 /* Label indicating that the group info is being loaded in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_LOADING_TITLE" = "Läser in …";
 
-/* Message text for the 'group invite link' action sheet. */
-"GROUP_LINK_ACTION_SHEET_VIEW_MESSAGE" = "Vill du gå med i denna grupp och dela ditt namn och foto med dess medlemmar?";
-
 /* Label for the 'request to join' button in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_BUTTON" = "Begär att gå med";
-
-/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
-"GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_MESSAGE" = "En administratör av denna grupp måste godkänna din förfrågan innan du kan gå med i denna grupp. När du begär att gå med kommer ditt namn och foto att delas med medlemmarna.";
 
 /* Error message the attempt to request to join the group failed due to network connectivity. */
 "GROUP_LINK_COULD_NOT_REQUEST_TO_JOIN_GROUP_DUE_TO_NETWORK_ERROR_MESSAGE" = "Kontrollera att du är ansluten och försök igen.";
@@ -4045,6 +4207,12 @@
 /* Name for a group story on the stories list. Embeds {author's name}, {group name} */
 "GROUP_STORY_NAME_FORMAT" = "%1$@ till %2$@";
 
+/* Text indicating you reacted to a group story (the header on the bubble says \"You\") */
+"GROUP_STORY_REPLY_REACTION_SECOND_PERSON" = "Reagerade på storyn";
+
+/* Text indicating someone else reacted to a group story (the header on the bubble says their name, e.g. \"Bob\") */
+"GROUP_STORY_REPLY_REACTION_THIRD_PERSON" = "Reagerade på storyn";
+
 /* Button to delete the story on the 'group story settings' view */
 "GROUP_STORY_SETTINGS_DELETE_BUTTON" = "Ta bort gruppstory";
 
@@ -4263,6 +4431,18 @@
 
 /* Title for the conversation list's 'archive' mode. */
 "HOME_VIEW_TITLE_ARCHIVE" = "Arkiv";
+
+/* Title for the conversation list's backup storage full context menu action. */
+"HOME_VIEW_TITLE_BACKUP_OUT_OF_STORAGE_QUOTA" = "Lagringsutrymmet för säkerhetskopior är fullt";
+
+/* Title for the conversation list's failed to redeem backup subscription context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_FAILED_TO_REDEEM" = "Fel på abonnemang för säkerhetskopiering";
+
+/* Title for the conversation list's backup subscription not found locally context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_NOT_FOUND_LOCALLY" = "Abonnemanget för säkerhetskopiering hittades inte";
+
+/* Title for the conversation list's failed to backup context menu action. */
+"HOME_VIEW_TITLE_FAILED_TO_BACKUP" = "Det gick inte att säkerhetskopiera";
 
 /* Title for the 'Select Chats' option in the ChatList. */
 "HOME_VIEW_TITLE_SELECT_CHATS" = "Välj chattar";
@@ -4546,8 +4726,8 @@
 /* confirm the users intent to link a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TITLE" = "Klar med länkning";
 
-/* subtitle for choosing to send message history when linking a new device */
-"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE" = "Överför dina textmeddelanden och dina senaste 45 dagars media";
+/* Subtitle for choosing to send message history when linking a new device, if you have the paid tier enabled. */
+"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_PAID_PLAN_SUBTITLE" = "Överför dina textmeddelanden och alla dina media";
 
 /* title for choosing to send message history when linking a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_TITLE" = "Överför meddelandehistorik";
@@ -4708,24 +4888,6 @@
 /* Shown to users while the app is loading, asking them not to close the app. */
 "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "Stäng inte B&A.";
 
-/* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "För att överföra ditt B&A-konto måste du aktivera lokalt nätverksåtkomst på båda enheterna.";
-
-/* A button asking the user if they need further help getting their transfer working. */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "Behöver du hjälp?";
-
-/* First step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_ONE" = "Öppna Inställningar på varje enhet";
-
-/* Third step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "Aktivera \"Lokalt nätverk\"";
-
-/* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "Navigera till B&A";
-
-/* Title for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "Aktivera åtkomst till lokalt nätverk";
-
 /* A string indicating that the user can search for a location */
 "LOCATION_PICKER_SEARCH_PLACEHOLDER" = "Sök efter namn eller adress";
 
@@ -4830,6 +4992,24 @@
 
 /* toast indicating that we will remind the user later */
 "MEGAPHONE_WILL_REMIND_LATER" = "Vi påminner dig senare.";
+
+/* Label for an action to add a member label */
+"MEMBER_LABEL_ADD" = "Lägg till en medlemsetikett";
+
+/* Heading shown above the preview of a message bubble with the edited member label. */
+"MEMBER_LABEL_PREVIEW_HEADING" = "Förhandsvisning";
+
+/* Text shown in the preview message bubble when a user is editing their member label. */
+"MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "Hej!";
+
+/* Placeholder text in text field where user can edit their member label. */
+"MEMBER_LABEL_VIEW_PLACEHOLDER_TEXT" = "Lägg till din etikett";
+
+/* Subtitle for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_SUBTITLE" = "Ange en medlemsetikett för att beskriva dig själv eller din roll i gruppen. Medlemsetiketter visas bara inom den här gruppen.";
+
+/* Title for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_TITLE" = "Medlemsetikett";
 
 /* Action sheet button title */
 "MESSAGE_ACTION_COPY_TEXT" = "Kopiera meddelandetext";
@@ -5428,6 +5608,18 @@
 /* A string describing that the user has no groups in common other than the group implied by the current UI context */
 "NO_OTHER_GROUPS_IN_COMMON" = "Inga andra grupper gemensamt.";
 
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-link' (translated via NOT_LINKED_BOTTOM_RELINK), and it will be formatted as a tappable link. */
+"NOT_LINKED_BOTTOM" = "Den här enheten är inte längre länkad. %1$@ för att fortsätta använda B&A på den här enheten.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_LINKED_BOTTOM_RELINK" = "Länka igen";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-register' (translated via NOT_REGISTERED_BOTTOM_REREGISTER), and it will be formatted as a tappable link. */
+"NOT_REGISTERED_BOTTOM" = "Den här enheten är inte längre registrerad. %1$@ för att fortsätta använda B&A.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_REGISTERED_BOTTOM_REREGISTER" = "Registrera igen";
+
 /* Label for 1:1 conversation with yourself. */
 "NOTE_TO_SELF" = "Egen anteckning";
 
@@ -5515,20 +5707,35 @@
 /* Label for the 'skip and create new pin' button when reglock is disabled during onboarding. */
 "ONBOARDING_2FA_SKIP_AND_CREATE_NEW_PIN" = "Hoppa över och skapa ny PIN-kod";
 
+/* Label for action to use Recovery Key instead of PIN for registration. */
+"ONBOARDING_2FA_SKIP_AND_USE_RECOVERY_KEY" = "Använd återställningsnyckel";
+
 /* Explanation for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE" = "Om du inte kommer ihåg din PIN-kod kan du skapa en ny. Du kan registrera och använda ditt konto men du kommer att förlora några sparade inställningar som din profilinformation.";
 
 /* Title for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "Hoppa över PIN-kodsposten?";
 
-/* The body for the device transfer 'choice' view 'transfer' option */
+/* The body for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "Återställ dina textmeddelanden och media från din betalda plan för Säkerhetskopiering av B&A";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
+/* The title for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "Återställ säkerhetskopiering av B&A";
+
+/* Body for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_BODY" = "Om du hoppar över återställningen nu kommer du inte att kunna återställa senare. Om du återaktiverar säkerhetskopior på den här enheten kommer din nuvarande säkerhetskopia att ersättas med din nya meddelandehistorik.";
+
+/* Title for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_TITLE" = "Hoppa över återställning?";
 
 /* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "Välj hur du vill återställa din meddelandehistorik och dina kontodata.";
+
+/* Message body displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_BODY" = "Eftersom du byter från Android till iOS är det enda sättet att överföra dina meddelanden och media att aktivera Säkerhetskopiering av B&A på din gamla enhet.";
+
+/* Title displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_TITLE" = "Ingen säkerhetskopiering att återställa";
 
 /* The body for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_BODY" = "Fortsätt utan att överföra dina meddelanden och media";
@@ -5659,6 +5866,9 @@
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "Jag har min gamla telefon";
 
+/* Text indicating Signal is a nonprofit on the 'onboarding splash' view. For non-English languages, exclude the word '501c3'. */
+"ONBOARDING_SPLASH_NONPROFIT" = "B&A är en ideell organisation";
+
 /* Button for restoring or transferring account in the 'onboarding splash' view. */
 "ONBOARDING_SPLASH_RESTORE_OR_TRANSFER_BUTTON_TITLE" = "Återställ eller överför konto";
 
@@ -5764,6 +5974,21 @@
 /* Title of prompt notifying restore failed for unknown reasons. */
 "OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_TITLE" = "Okänt fel";
 
+/* Action button to backup before continuing. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_BACKUP_ACTION" = "Säkerhetskopiera nu";
+
+/* Body text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_BODY" = "Säkerhetskopiera nu innan överföring. Du kan ha fått meddelanden som inte har säkerhetskopierats än.";
+
+/* Title text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_TITLE" = "Förbereda din enhet";
+
+/* Action button to skip backup and continue. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_SKIP_ACTION" = "Hoppa över och fortsätt";
+
+/* Description for form confirming restore from backup without size detail. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_RESTORE_DESCRIPTION" = "Din senaste säkerhetskopia gjordes den %1$@ kl %2$@.";
+
 /* Body of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "Ditt B&A-konto och dina meddelanden har börjat överföras till din andra enhet. B&A är nu inaktivt på den här enheten.";
 
@@ -5817,9 +6042,6 @@
 
 /* Footer for message cell for long text when it is expired and unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_FOOTER" = "Det här meddelandet är ofullständigt";
-
-/* Message for sheet shown when tapping oversized text that has expired and is unavailable for download */
-"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Hela texten i det här meddelandet överfördes inte från din telefon när den här enheten länkades. Långa textmeddelanden som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
 
 /* Title for sheet shown when tapping oversized text that has expired and is unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_SHEET_TITLE" = "Hela meddelandet är ej tillgängligt";
@@ -6145,9 +6367,6 @@
 /* Message indicating that a request to join the group was successfully approved. Embeds {{ the name of the approved user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_APPROVED_FORMAT" = "Lagt till %1$@.";
 
-/* Label for the 'view requests' button in the pending member requests banner. */
-"PENDING_GROUP_MEMBERS_REQUEST_BANNER_VIEW_REQUESTS" = "Visa förfrågningar";
-
 /* Message indicating that a request to join the group was successfully denied. Embeds {{ the name of the denied user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_DENIED_FORMAT" = "Avvisade %1$@.";
 
@@ -6263,9 +6482,6 @@
 "PHOTO_CAPTURE_GENERIC_ERROR" = "Det går inte att ta bilden.";
 
 /* alert title */
-"PHOTO_CAPTURE_UNABLE_TO_CAPTURE_IMAGE" = "Det går inte att ta bilden.";
-
-/* alert title */
 "PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA" = "Det gick inte att konfigurera kameran.";
 
 /* Button label for opening the chat on a sheet presented from photo capture view indicating that a username QR code was found. */
@@ -6276,9 +6492,6 @@
 
 /* Title for sheet presented from photo capture view indicating that a username QR code was found. Embeds {{username}}. */
 "PHOTO_CAPTURE_USERNAME_QR_CODE_FOUND_TITLE_FORMAT" = "%1$@ hittades";
-
-/* alert title, generic error preventing user from capturing a video that is too long */
-"PHOTO_CAPTURE_VIDEO_SIZE_ERROR" = "Videon är för lång.";
 
 /* Pressing this button pins a thread */
 "PIN_ACTION" = "Nåla";
@@ -6364,6 +6577,9 @@
 /* If the user is re-registering, they need to enter their PIN to restore all their data. In some cases, they can skip this entry and lose some data. This text is shown on a button that lets them begin to do this. */
 "PIN_ENTER_EXISTING_SKIP" = "Hoppa över pinkod";
 
+/* If the user is re-registering, they need to enter their PIN to restore all their data. If they don't remember their PIN, they may remember their Recovery Key which can be used instead of a PIN. */
+"PIN_ENTER_EXISTING_USE_RECOVERY_KEY" = "Använd återställningsnyckel";
+
 /* Error title indicating that the attempt to recreate a PIN failed. */
 "PIN_RECREATION_ERROR_TITLE" = "Det gick inte att skapa PIN-kod";
 
@@ -6421,8 +6637,80 @@
 /* An explanation that you have already pinned the maximum number of conversations. */
 "PINNED_CONVERSATION_LIMIT" = "Du kan bara nåla upp till fyra chattar.";
 
+/* Accessibility label prefix for banner showing a pinned message */
+"PINNED_MESSAGE_BANNER_AX_LABEL" = "Nålat meddelande:";
+
+/* Shown when another user pins a message. Embeds {{ another user }}. */
+"PINNED_MESSAGE_CHAT_EVENT_OTHER" = "%1$@ fäste ett meddelande";
+
+/* Shown when the local user pins a message. */
+"PINNED_MESSAGE_CHAT_EVENT_SELF" = "Du har fäst ett meddelande";
+
+/* Accessibility label for pin message button */
+"PINNED_MESSAGE_MENU_ACCESSIBILITY_LABEL" = "Meny för nålat meddelande";
+
+/* Label for button to pin a message */
+"PINNED_MESSAGE_PIN_ACTION_TITLE" = "Nåla";
+
+/* Message for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BODY" = "Meddelandet som fästs ersätter det äldsta.";
+
+/* Option in pinned message action sheet to replace oldest pin. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BUTTON" = "Ersätt";
+
+/* Title for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_TITLE" = "Ersätt det äldsta fästa meddelandet?";
+
+/* Body for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_BODY" = "Kontrollera din anslutning och försök igen.";
+
+/* Title for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_TITLE" = "Det gick inte att fästa meddelandet";
+
+/* Text to show on a toast when someone unpins a message */
+"PINNED_MESSAGE_TOAST" = "Meddelandet har lösgjorts";
+
+/* Label for button to unpin a message */
+"PINNED_MESSAGE_UNPIN_ACTION_TITLE" = "Lösgör";
+
+/* Option in pinned message action sheet to pin for 24 hours. */
+"PINNED_MESSAGES_24_HOURS" = "24 timmar";
+
+/* Option in pinned message action sheet to pin for 30 days. */
+"PINNED_MESSAGES_30_DAYS" = "30 dagar";
+
+/* Option in pinned message action sheet to pin for 7 days. */
+"PINNED_MESSAGES_7_DAYS" = "7 dagar";
+
+/* Title for Pinned Messages detail view */
+"PINNED_MESSAGES_DETAILS_TITLE" = "Fästa meddelanden";
+
+/* Title for an action sheet to indicate how long to keep the pin active */
+"PINNED_MESSAGES_EXPIRY_SHEET_TITLE" = "Håll fäst i …";
+
+/* Option in pinned message action sheet to pin with no expiry. */
+"PINNED_MESSAGES_FOREVER" = "För alltid";
+
+/* Action menu item to go to a message in the conversation view */
+"PINNED_MESSAGES_GO_TO_MESSAGE" = "Gå till Meddelande";
+
+/* Action menu item to see all pinned messages */
+"PINNED_MESSAGES_SEE_ALL_MESSAGES" = "Se alla meddelanden";
+
+/* Action menu item to unpin a message */
+"PINNED_MESSAGES_UNPIN" = "Lösgör";
+
+/* Title for a button to unpin all pinned messages. */
+"PINNED_MESSAGES_UNPIN_ALL" = "Lösgör alla";
+
 /* The title for pinned conversation section on the conversation list */
 "PINNED_SECTION_TITLE" = "Nålade";
+
+/* Body for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_BODY" = "Försvinnande meddelanden tas bort när timern löper ut och meddelandet tas bort från chatten.";
+
+/* Title for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_TITLE" = "Fäster försvinnande meddelanden";
 
 /* Action text for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_ACTION" = "Skapa PIN-kod";
@@ -6439,11 +6727,35 @@
 /* Accessibility label for button to start media playback */
 "PLAY_BUTTON_ACCESSABILITY_LABEL" = "Spela media";
 
+/* Accessibility label for poll message. Embeds {{ poll question }}. */
+"POLL_ACCESSIBILITY_LABEL" = "Omröstning: %1$@.";
+
+/* Accessibility label for a vote option that is not selected by the user. */
+"POLL_ACCESSIBILITY_LABEL_OPTION_PENDING" = "Väntar";
+
+/* Title for a toggle allowing multiple votes for a poll. */
+"POLL_ALLOW_MULTIPLE_LABEL" = "Tillåt flera röster";
+
+/* Button to view a poll after its ended */
+"POLL_BUTTON_VIEW_POLL" = "Visa omröstning";
+
 /* Button to view poll results */
 "POLL_BUTTON_VIEW_RESULTS" = "Visa resultat";
 
 /* Button to view poll votes */
 "POLL_BUTTON_VIEW_VOTES" = "Visa röster";
+
+/* Toast telling user to add a question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION" = "Lägg till en fråga";
+
+/* Toast telling user to add options and question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION_OR_ENOUGH_OPTIONS" = "Lägg till en fråga och minst två alternativ";
+
+/* Toast telling user to add more options to poll. */
+"POLL_CREATE_ERROR_TOAST_NOT_ENOUGH_OPTIONS" = "Lägg till minst två alternativ";
+
+/* Title of create poll pane */
+"POLL_CREATE_TITLE" = "Ny omröstning";
 
 /* Label for button to end a poll */
 "POLL_DETAILS_END_POLL" = "Avsluta omröstning";
@@ -6451,20 +6763,56 @@
 /* Title of poll details pane */
 "POLL_DETAILS_TITLE" = "Omröstningsdetaljer";
 
+/* Title for an action sheet confirming the user wants end a poll. */
+"POLL_END_CONFIRMATION" = "Avsluta omröstningen?";
+
+/* Message for an action sheet confirming the user wants to end a poll. */
+"POLL_END_CONFIRMATION_MESSAGE" = "Gruppmedlemmar kommer inte längre att kunna rösta i den här omröstningen.";
+
+/* Shown when another user ends a poll. Embeds {{ another user }} and {{ poll question }}. */
+"POLL_ENDED_BY_OTHER_CHAT_LIST_UPDATE" = "%1$@ avslutade omröstningen: %2$@";
+
+/* Shown when the local user ends a poll. Embeds {{ poll question }}. */
+"POLL_ENDED_BY_YOU_CHAT_LIST_UPDATE" = "Du avslutade omröstningen: %1$@";
+
 /* Notification that {{contact}} ended a poll with question {{poll question}} */
 "POLL_ENDED_NOTIFICATION" = "%1$@ avslutade omröstningen “%2$@”";
+
+/* Label specifying the poll is finished and these are the final results */
+"POLL_FINAL_RESULTS_LABEL" = "Slutresultat";
 
 /* Label specifying the message type as a poll */
 "POLL_LABEL" = "Omröstning";
 
+/* String to display when a poll has no votes */
+"POLL_NO_VOTES" = "Inga röster";
+
+/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
+"POLL_OPTION_PLACEHOLDER_PREFIX" = "Alternativ";
+
+/* Header for the poll options text boxes when making a new poll */
+"POLL_OPTIONS_LABEL" = "Alternativ";
+
 /* Prefix for a poll preview */
 "POLL_PREFIX" = "Omröstning:";
+
+/* Header for the poll question text box when making a new poll */
+"POLL_QUESTION_LABEL" = "Fråga";
+
+/* Placeholder text for poll question */
+"POLL_QUESTION_PLACEHOLDER_TEXT" = "Ställ en fråga";
+
+/* Title of poll details pane when poll is ended */
+"POLL_RESULTS_TITLE" = "Resultat från omröstningen";
 
 /* Label specifying the user can select more than one option */
 "POLL_SELECT_LABEL_MULTIPLE" = "Välj en eller flera";
 
 /* Label specifying the user can select one option */
 "POLL_SELECT_LABEL_SINGULAR" = "Välj en";
+
+/* Notification that {{contact}} voted in a poll with question {{poll question}} */
+"POLL_VOTED_NOTIFICATION" = "%1$@ röstade i omröstningen “%2$@”";
 
 /* Badge indicating that the user is verified. */
 "PRIVACY_IDENTITY_IS_VERIFIED_BADGE" = "Verifierad";
@@ -6661,6 +7009,15 @@
 /* Title of alert shown when push tokens sync job succeeds. */
 "PUSH_REGISTER_SUCCESS" = "Det gick att omregistrera för pushnotiser.";
 
+/* Body for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_BODY" = "Använd den här enheten för att skanna QR-koden på den enhet du vill överföra till";
+
+/* Title for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_TITLE" = "Skanna QR-kod";
+
+/* Message for an action sheet telling users how to use quick restore, when trying to open an external quick restore URL. */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "För att överföra det här kontot till en ny enhet trycker du på Fortsätt och skannar QR-koden med B&A-kameran. Se till att du bara skannar QR-koder som kommer direkt från B&A.";
+
 /* Accessibility label stating the author of the message to which you are replying. Embeds: {{ the author of the message to which you are replying }}. */
 "QUOTED_REPLY_ACCESSIBILITY_LABEL_FORMAT" = "Svarar till %1$@.";
 
@@ -6676,11 +7033,11 @@
 /* Toast alert text shown when tapping on a quoted message which we cannot scroll to because the local copy of the message didn't exist when the quote was received. */
 "QUOTED_REPLY_ORIGINAL_MESSAGE_REMOTELY_SOURCED" = "Hittade inte originalmeddelandet.";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to your own story. */
-"QUOTED_REPLY_REACTION_TO_OWN_STORY" = "Reagerade på din story";
+/* Label explaining that the content of a quoted message includes you reacting to someone's story. Embeds {{ %1$@ the story author }}. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_SECOND_PERSON" = "Reagerade på storyn från %1$@";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to a story. Embeds {{ story author name }} */
-"QUOTED_REPLY_REACTION_TO_STORY_FORMAT" = "Reagerade på storyn från %1$@";
+/* Label explaining that the content of a quoted message includes someone reacting to your story. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_THIRD_PERSON" = "Reagerade på din story";
 
 /* Message header when you are quoting a story. Embeds {{ story author name }} */
 "QUOTED_REPLY_STORY_AUTHOR_INDICATOR_FORMAT" = "%1$@ · Story";
@@ -6702,6 +7059,9 @@
 
 /* Indicates this message is a quoted reply to a video file. */
 "QUOTED_REPLY_TYPE_VIDEO" = "Video";
+
+/* Indicates this message is a quoted reply to a voice message. */
+"QUOTED_REPLY_TYPE_VOICE_MESSAGE" = "Röstmeddelande";
 
 /* Label for a button to lower your raised hand in a call. */
 "RAISED_HANDS_LOWER_HAND_BUTTON" = "Ta ner";
@@ -6841,6 +7201,9 @@
 /* Body for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
+/* Body for a sheet warning users about an incorrect recovery key and having hit a rate limit on retries. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_RATE_LIMIT_BODY" = "Du har slut på försök med återställningsnyckel. För din säkerhet är antalet försök du kan göra begränsat. Vänta 1 timme och försök igen.";
+
 /* Title for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "Fel säkerhetskopieringsnyckel";
 
@@ -6892,12 +7255,6 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "Landskod";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "Om du fortsätter kommer det att inaktivera B&A på andra enheter som för närvarande är registrerade med samma telefonnummer.";
-
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "Överför konto och meddelanden";
-
 /* Description for the screen that allows users to enter their recovery key. */
 "REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "Din säkerhetskopieringsnyckel är en 64-siffrig kod som krävs för att återställa ditt konto och dina data.";
 
@@ -6939,6 +7296,9 @@
 
 /* During registration, users are asked to enter their phone number. This is the subtitle on that screen, which gives users some instructions. */
 "REGISTRATION_PHONE_NUMBER_SUBTITLE" = "Ange ditt telefonnummer för att komma igång.";
+
+/* During re-registration, users are asked to confirm their phone number. This is the subtitle on that screen, which gives users some instructions. */
+"REGISTRATION_PHONE_NUMBER_SUBTITLE_2" = "En verifieringskod skickas till detta nummer:";
 
 /* During registration, users are asked to enter their phone number. This is the title on that screen. */
 "REGISTRATION_PHONE_NUMBER_TITLE" = "Ditt telefonnummer";
@@ -6993,6 +7353,15 @@
 
 /* Error shown if an SMS/call service provider is temporarily unable to send a verification code to the provided number. */
 "REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "B&A kunde inte skicka en SMS-kod på grund av problem med SMS-leverantören. Försök igen om flera timmar.";
+
+/* Third step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_ENABLE_BACKUPS" = "Aktivera säkerhetskopieringar och vänta tills säkerhetskopieringen är klar";
+
+/* First step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_OPEN_SIGNAL" = "Öppna B&A på din gamla enhet";
+
+/* Second step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_TAP_SETTINGS" = "Tryck på Inställningar > Säkerhetskopieringar";
 
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "Du behöver registrera dig innan du kan skicka ett meddelande.";
@@ -7066,6 +7435,18 @@
 /* Label warning the user that something is wrong with their username link. */
 "REMINDER_VIEW_USERNAME_LINK_CORRUPTED_WARNING" = "Något gick fel med QR-koden och länken för ditt användarnamn, det är inte längre giltigt. Skapa en ny länk för att dela med andra.";
 
+/* A message that displays when one person in a call remotely muted another participant. Embeds {{name}} {{name}} */
+"REMOTE_MUTE_TOAST_A_MUTED_B" = "%1$@ har tystat %2$@.";
+
+/* A message that displays when your microphone is remotely muted by another call participant. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_SOMEONE_MUTED_YOU" = "%1$@ har tystat dig.";
+
+/* A message that displays when you remotely muted another call participant's microphone. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_YOU_MUTED_SOMEONE" = "Du har tystat %1$@.";
+
+/* A message that displays when you joined a call on two devices and mute one from the other. */
+"REMOTE_MUTE_TOAST_YOU_MUTED_YOURSELF" = "Du har tystat dig själv från en annan enhet.";
+
 /* Accessibility label for a button that removes the preview from a drafted message. */
 "REMOVE_PREVIEW" = "Ta bort förhandsgranskning";
 
@@ -7083,6 +7464,30 @@
 
 /* Configure reactions reset button text */
 "RESET" = "Återställ";
+
+/* Body for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_BODY" = "Återställningen av dina media har inte slutförts. Om du väljer att avbryta kan du återställa igen genom att länka om enheten.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_PRIMARY_BUTTON" = "Fortsätt återställa";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_SECONDARY_BUTTON" = "Avbryt återställning";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_TITLE" = "Dina media återställs";
+
+/* Message for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_MESSAGE" = "Återställningen av dina media har inte slutförts. Om du väljer att avbryta kan du återställa igen genom att länka om enheten.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_PRIMARY_BUTTON" = "Fortsätt återställa";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_SECONDARY_BUTTON" = "Avbryt återställning";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_TITLE" = "Avbryta medieåterställning?";
 
 /* Button title shown on chat list banner for restoring media from a backup when paused because the device has insufficient disk space, to see a bottom sheet with more details about next steps. */
 "RESTORING_MEDIA_BANNER_DISK_SPACE_BUTTON" = "Detaljer";
@@ -7262,7 +7667,7 @@
 "SCREEN_LOCK_UNLOCK_SIGNAL" = "Lås upp B&A";
 
 /* Placeholder text indicating the user can search for contacts by name, username, or phone number. */
-"SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "Namn, användarnamn eller nummer";
+"SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "Namn, anv.namn eller nummer";
 
 /* Placeholder text indicating the user can search for contacts by name or phone number. */
 "SEARCH_BYNAMEORNUMBER_PLACEHOLDER_TEXT" = "Sök via namn eller nummer";
@@ -7605,9 +8010,6 @@
 
 /* No comment provided by engineer. */
 "SETTINGS_CLEAR_HISTORY" = "Rensa chatthistorik";
-
-/* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicenserad under AGPLv3";
 
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "Dataanvändning";
@@ -8500,6 +8902,12 @@
 /* The name for the sticker category 'Featured' */
 "STICKER_CATEGORY_FEATURED_NAME" = "Utvalda";
 
+/* Subtitle of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_SUBTITLE" = "Skicka ett klistermärke så visas det här";
+
+/* Title of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_TITLE" = "Inga senaste klistermärken";
+
 /* The name for the sticker category 'Recents' */
 "STICKER_CATEGORY_RECENTS_NAME" = "Senaste";
 
@@ -8508,9 +8916,6 @@
 
 /* Message when trying to show a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_MESSAGE_LABEL" = "Klistermärket är inte tillgängligt";
-
-/* Message for sheet shown when tapping a sticker that has expired and is unavailable for download */
-"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Det här klistermärket överfördes inte från din telefon när den här enheten länkades. Media och filer som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
 
 /* Title for sheet shown when tapping a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_SHEET_TITLE" = "Klistermärket är inte tillgängligt";
@@ -8659,21 +9064,6 @@
 /* Context menu action to share the selected story */
 "STORIES_SHARE_STORY_ACTION" = "Dela";
 
-/* Section title shown when sending to non-story conversations but failing to send the file to stories. */
-"STORIES_SHARESHEET_PARTIAL_SEND_REMAINING_SECTION_TITLE" = "Skickat till";
-
-/* Section title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_STORIES_SECTION_TITLE" = "Inte skickad till";
-
-/* Title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_TITLE" = "Delvis skickad";
-
-/* Subtitle shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_SUBTITLE" = "Den valda filtypen stöds inte.";
-
-/* Title shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_TITLE" = "Det går inte att skicka";
-
 /* Title for the stories view. */
 "STORIES_TITLE" = "Stories";
 
@@ -8722,8 +9112,11 @@
 /* Title for the story privacy settings view */
 "STORY_PRIVACY_TITLE" = "Storyintegritet";
 
-/* inbox and notification text for a reaction to a story authored by the local user. Embeds {{reaction emoji}} */
-"STORY_REACTION_LOCAL_AUTHOR_PREVIEW_FORMAT" = "Reagerade %1$@ på din story";
+/* Text explaining that you reacted to someone else's story. Embeds {{ %1$@ reaction emoji, %2$@ story author name }}. */
+"STORY_REACTION_PREVIEW_FORMAT_SECOND_PERSON" = "Du reagerade %1$@ på en story från %2$@";
+
+/* Text explaining that someone reacted to your story. Embeds {{ %1$@ reaction emoji }}. */
+"STORY_REACTION_PREVIEW_FORMAT_THIRD_PERSON" = "Reagerade %1$@ på din story";
 
 /* quote text for a reaction to a story by the user (the header on the bubble says \"You\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_SECOND_PERSON" = "Reagerade %1$@ på en story";
@@ -8731,17 +9124,8 @@
 /* quote text for a reaction to a story by some other user (the header on the bubble says their name, e.g. \"Bob\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_THIRD_PERSON" = "Reagerade %1$@ på en story";
 
-/* inbox and notification text for a reaction to a story authored by another user. Embeds {{ %1$@ reaction emoji, %2$@ story author name }} */
-"STORY_REACTION_REMOTE_AUTHOR_PREVIEW_FORMAT" = "Reagerade %1$@ på en story från %2$@";
-
 /* Button for replying to a story with no existing replies. */
 "STORY_REPLY_BUTTON" = "Svara";
-
-/* Text indicating you reacted to a story (the header on the bubble says \"You\") */
-"STORY_REPLY_REACTION_SECOND_PERSON" = "Reagerade på storyn";
-
-/* Text indicating someone else reacted to a story (the header on the bubble says their name, e.g. \"Bob\") */
-"STORY_REPLY_REACTION_THIRD_PERSON" = "Reagerade på storyn";
 
 /* placeholder text for replying to a story */
 "STORY_REPLY_TEXT_FIELD_PLACEHOLDER" = "Svara";
@@ -8965,35 +9349,23 @@
 /* Option in selected text edit menu to make text bold */
 "TEXT_MENU_BOLD" = "Bold";
 
-/* Option in selected text edit menu to clear all text formatting in the selected text range */
-"TEXT_MENU_CLEAR_FORMATTING" = "Rensa formatering";
-
 /* Option in selected text edit menu to view text formatting options */
 "TEXT_MENU_FORMAT" = "Formatera";
 
 /* Option in selected text edit menu to make text italic */
 "TEXT_MENU_ITALIC" = "Kursiv";
 
-/* Option in selected text edit menu to look up word definitions */
-"TEXT_MENU_LOOK_UP" = "Slå upp";
-
 /* Option in selected text edit menu to make text monospace */
 "TEXT_MENU_MONOSPACE" = "Monospace";
 
-/* Option in selected text edit menu to replace text with suggestions */
-"TEXT_MENU_REPLACE" = "Ersätt";
-
-/* Option in selected text edit menu to share selected text */
-"TEXT_MENU_SHARE" = "Dela";
+/* Option in selected text edit menu to remove all text formatting in the selected text range */
+"TEXT_MENU_REMOVE_FORMATTING" = "Ta bort formatering";
 
 /* Option in selected text edit menu to make text spoiler */
 "TEXT_MENU_SPOILER" = "Spoiler";
 
 /* Option in selected text edit menu to make text strikethrough */
 "TEXT_MENU_STRIKETHROUGH" = "Genomstruken";
-
-/* Option in selected text edit menu to translate the word */
-"TEXT_MENU_TRANSLATE" = "Översätt";
 
 /* text indicating the message was remotely deleted */
 "THIS_MESSAGE_WAS_DELETED" = "Detta meddelande togs bort.";
@@ -9526,45 +9898,81 @@
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Du satte tid innan meddelanden försvinner till %1$@.";
 
-/* BA custom strings */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "Skapar säkerhetskopia: %1$@";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "Exporterar säkerhetskopia ...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "Laddar upp säkerhetskopia ...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "Laddar upp säkerhetskopieringsmedia ...";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "Säkerhetskopiera nu";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "Säkerhetskopiera senare";
-"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "För många misslyckanden med denna kontakt. Försök igen senare.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "Slå av";
-"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "För att inaktivera din PIN-kod måste du först stänga av registreringslåset.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "Slå av registreringslås?";
-"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "PIN-koden kunde skapas, men registreringslåset kunde inte aktiveras. Kontrollera din anslutning och försök igen.";
-"PIN_CREATION_REGLOCK_ERROR_TITLE" = "Aktivera registreringslås misslyckades";
-"PIN_DISABLE_ERROR_MESSAGE" = "Din pinkod kunde inte inaktiveras.";
-"PIN_DISABLE_ERROR_TITLE" = "PIN-kod inaktivering misslyckades";
-"REGISTER_RATE_LIMITING_BODY" = "Du har provat för ofta. Vänta en minut innan du provar igen.";
-"VOICE_MESSAGE_FILE_NAME" = "B&A";
+/* ===== B&A Custom Strings ===== */
 
-/* BA custom strings */
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Det här röstmeddelandet överfördes inte från din telefon när den här enheten länkades. Filer och media som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Den här filen överfördes inte från din telefon när den här enheten länkades. Filer och media som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Hela texten i det här meddelandet överfördes inte från din telefon när den här enheten länkades. Långa textmeddelanden som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Det här klistermärket överfördes inte från din telefon när den här enheten länkades. Media och filer som är äldre än 45 dagar vid tidpunkten för enhetslänkning kan inte synkroniseras.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Säkerhetskopiering av textmeddelanden + senaste 45 dagars media";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Senaste 45 dagarnas media";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Textmeddelanden + senaste 45 dagarnas media";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Mer";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Andra sätt att donera";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicenserad under AGPLv3";
+
+/* Link BAXS platform account */
+
 "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Det verkar som om du försöker länka ett BAXS-konto. Tryck på fortsätt och tryck sedan på Skanna QR-kod. Skanna sedan QR-koden igen.";
+
 "LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Länka BA-plattformskonto";
+
 "LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Länkat BAXS-konto";
+
 "LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA-plattformskonto";
+
 "LINK_BA_PLATFORM_SCAN_FOOTER" = "Skanna QR-koden som visas på BA-betalningsplattformen för att länka ditt konto.";
+
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "Skanna QR-kod";
-"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
-"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "E-post";
-"LINK_BA_PLATFORM_USER_ID" = "User ID";
-"LINK_BA_PLATFORM_USER_NAME" = "User Name";
-"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Länka BA-plattformskonto";
-"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Länka ditt konto till \"%@\"?";
-"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA-plattformskonto länkat.";
-"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Ogiltig QR-kod";
-"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Den här QR-koden är inte en giltig BA-plattformslänkningskod.";
+
 "LINK_BA_PLATFORM_SCAN_AGAIN" = "Skanna igen";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Mobil";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "E-post";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Länka BA-plattformskonto";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Länka ditt konto till \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA-plattformskonto länkat.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Ogiltig QR-kod";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Den här QR-koden är inte en giltig BA-plattformslänkningskod.";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Kan inte länka";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Den här QR-koden kan inte användas för länkning.";
+
 "LINK_BA_PLATFORM_FAILED_TITLE" = "Länkning misslyckades";
+
 "LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA-plattformen avvisade länkningsförfrågan.";
+
 "LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Länkning tog för lång tid";
+
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA-plattformen svarade inte i tid. Försök igen.";
+
 "LINK_BA_PLATFORM_ERROR_TITLE" = "Fel";
+

@@ -17,13 +17,11 @@ extension Stripe {
         let response = try await SSKEnvironment.shared.networkManagerRef
             .asyncRequest(request, retryPolicy: .hopefullyRecoverable)
 
-        let statusCode = response.responseStatusCode
-
-        guard statusCode == 200 else {
-            throw OWSAssertionError("Got bad response code \(statusCode).")
+        guard response.responseStatusCode == 200 else {
+            throw response.asError()
         }
 
-        guard let parser = ParamParser(responseObject: response.responseBodyJson) else {
+        guard let parser = response.responseBodyParamParser else {
             throw OWSAssertionError("Missing or invalid response.")
         }
 
@@ -45,7 +43,7 @@ extension Stripe {
     /// The new payment ID.
     public static func setupNewSubscription(
         clientSecret: String,
-        paymentMethod: PaymentMethod
+        paymentMethod: PaymentMethod,
     ) async throws -> ConfirmedSetupIntent {
         let paymentMethodId = try await createPaymentMethod(with: paymentMethod)
         // Pass in the correct callback URL
@@ -53,7 +51,7 @@ extension Stripe {
             mandate: paymentMethod.mandate,
             paymentMethodId: paymentMethodId,
             clientSecret: clientSecret,
-            callbackURL: paymentMethod.callbackURL
+            callbackURL: paymentMethod.callbackURL,
         )
     }
 }

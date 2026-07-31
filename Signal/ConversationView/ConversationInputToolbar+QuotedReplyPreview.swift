@@ -12,13 +12,14 @@ protocol QuotedReplyPreviewDelegate: AnyObject {
 
 class QuotedReplyPreview: UIView, QuotedMessageSnippetViewDelegate {
 
-    public weak var delegate: QuotedReplyPreviewDelegate?
+    weak var delegate: QuotedReplyPreviewDelegate?
 
     private let quotedReplyDraft: DraftQuotedReplyModel
-    private let conversationStyle: ConversationStyle
     private let spoilerState: SpoilerRenderState
     private var quotedMessageView: QuotedMessageSnippetView?
     private var heightConstraint: NSLayoutConstraint!
+
+    private weak var contentView: UIView?
 
     @available(*, unavailable, message: "use other constructor instead.")
     required init(coder aDecoder: NSCoder) {
@@ -32,68 +33,100 @@ class QuotedReplyPreview: UIView, QuotedMessageSnippetViewDelegate {
 
     init(
         quotedReplyDraft: DraftQuotedReplyModel,
-        conversationStyle: ConversationStyle,
-        spoilerState: SpoilerRenderState
+        spoilerState: SpoilerRenderState,
     ) {
         self.quotedReplyDraft = quotedReplyDraft
-        self.conversationStyle = conversationStyle
         self.spoilerState = spoilerState
 
         super.init(frame: .zero)
 
-        self.heightConstraint = self.autoSetDimension(.height, toSize: 0)
+        directionalLayoutMargins = .init(hMargin: 8, vMargin: 0)
 
-        updateContents()
+        contentView = self
 
-        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
+        // Background with rounded corners.
+        let backgroundView: UIView
+        if #available(iOS 26, *) {
+            clipsToBounds = true
+            cornerConfiguration = .uniformCorners(radius: .containerConcentric(minimum: 12))
+
+            let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
+
+            // Colored overlay on top of blur.
+            let dimmingView = UIView()
+            dimmingView.backgroundColor = .Signal.secondaryFill
+            dimmingView.translatesAutoresizingMaskIntoConstraints = false
+            blurEffectView.contentView.addSubview(dimmingView)
+            NSLayoutConstraint.activate([
+                dimmingView.topAnchor.constraint(equalTo: blurEffectView.topAnchor),
+                dimmingView.leadingAnchor.constraint(equalTo: blurEffectView.leadingAnchor),
+                dimmingView.trailingAnchor.constraint(equalTo: blurEffectView.trailingAnchor),
+                dimmingView.bottomAnchor.constraint(equalTo: blurEffectView.bottomAnchor),
+            ])
+
+            contentView = blurEffectView.contentView
+            backgroundView = blurEffectView
+        } else {
+            let maskLayer = CAShapeLayer()
+            backgroundView = OWSLayerView(
+                frame: .zero,
+                layoutCallback: { layerView in
+                    maskLayer.path = UIBezierPath(roundedRect: layerView.bounds, cornerRadius: 12).cgPath
+                },
+            )
+            backgroundView.layer.mask = maskLayer
+            backgroundView.backgroundColor = .Signal.secondaryFill
+        }
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(backgroundView)
+        addConstraints([
+            backgroundView.topAnchor.constraint(equalTo: topAnchor),
+            backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
+
+        reloadMessageSnippet()
+
+        // Quoted message text is complicated and is constructed via AttributedString.
+        // Simply reload message preview view when font size changes.
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(contentSizeCategoryDidChange),
+            name: UIContentSizeCategory.didChangeNotification,
+            object: nil,
+        )
     }
 
-    private let draftMarginTop: CGFloat = 6
-
-    func updateContents() {
-        subviews.forEach { $0.removeFromSuperview() }
-
-        let hMargin: CGFloat = 6
-        self.layoutMargins = UIEdgeInsets(top: draftMarginTop,
-                                          left: hMargin,
-                                          bottom: 0,
-                                          right: hMargin)
+    private func reloadMessageSnippet() {
+        if let quotedMessageView {
+            quotedMessageView.removeFromSuperview()
+        }
 
         // We instantiate quotedMessageView late to ensure that it is updated
         // every time contentSizeCategoryDidChange (i.e. when dynamic type
         // sizes changes).
         let quotedMessageView = QuotedMessageSnippetView(
             quotedMessage: quotedReplyDraft,
-            conversationStyle: conversationStyle,
-            spoilerState: spoilerState
+            spoilerState: spoilerState,
         )
         quotedMessageView.delegate = self
+        quotedMessageView.translatesAutoresizingMaskIntoConstraints = false
+        let contentView = contentView ?? self
+        contentView.addSubview(quotedMessageView)
+        addConstraints([
+            quotedMessageView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+            quotedMessageView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            quotedMessageView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+            quotedMessageView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+        ])
+
         self.quotedMessageView = quotedMessageView
-        quotedMessageView.setContentHuggingHorizontalLow()
-        quotedMessageView.setCompressionResistanceHorizontalLow()
-        quotedMessageView.backgroundColor = .clear
-        self.addSubview(quotedMessageView)
-        quotedMessageView.autoPinEdgesToSuperviewMargins()
-
-        updateHeight()
-    }
-
-    // MARK: Sizing
-
-    func updateHeight() {
-        guard let quotedMessageView else {
-            owsFailDebug("missing quotedMessageView")
-            return
-        }
-        let size = quotedMessageView.systemLayoutSizeFitting(.square(CGFloat.greatestFiniteMagnitude))
-        heightConstraint.constant = size.height + draftMarginTop
     }
 
     @objc
     private func contentSizeCategoryDidChange(_ notification: Notification) {
-        Logger.debug("")
-
-        updateContents()
+        reloadMessageSnippet()
     }
 
     // MARK: QuotedMessageSnippetViewDelegate
@@ -112,28 +145,24 @@ private class QuotedMessageSnippetView: UIView {
     weak var delegate: QuotedMessageSnippetViewDelegate?
 
     private let quotedMessage: DraftQuotedReplyModel
-    private let conversationStyle: ConversationStyle
     private let spoilerState: SpoilerRenderState
     private lazy var displayableQuotedText: DisplayableText? = {
         QuotedMessageSnippetView.displayableTextWithSneakyTransaction(
             forPreview: quotedMessage,
-            spoilerState: spoilerState
+            spoilerState: spoilerState,
         )
     }()
 
     init(
         quotedMessage: DraftQuotedReplyModel,
-        conversationStyle: ConversationStyle,
-        spoilerState: SpoilerRenderState
+        spoilerState: SpoilerRenderState,
     ) {
         self.quotedMessage = quotedMessage
-        self.conversationStyle = conversationStyle
         self.spoilerState = spoilerState
 
         super.init(frame: .zero)
 
         isUserInteractionEnabled = true
-        layoutMargins = .zero
         clipsToBounds = true
 
         createViewContents()
@@ -159,26 +188,27 @@ private class QuotedMessageSnippetView: UIView {
             let authorName = SSKEnvironment.shared.databaseStorageRef.read { tx in
                 return SSKEnvironment.shared.contactManagerRef.displayName(
                     for: quotedMessage.originalMessageAuthorAddress,
-                    tx: tx
+                    tx: tx,
                 ).resolvedValue()
             }
             quotedAuthor = String(
                 format: NSLocalizedString(
                     "QUOTED_REPLY_AUTHOR_INDICATOR_FORMAT",
-                    comment: "Indicates the author of a quoted message. Embeds {{the author's name or phone number}}."
+                    comment: "Indicates the author of a quoted message. Embeds {{the author's name or phone number}}.",
                 ),
-                authorName
+                authorName,
             )
         }
 
         let label = UILabel()
         label.text = quotedAuthor
         label.font = Layout.quotedAuthorFont
-        label.textColor = conversationStyle.quotedReplyAuthorColor()
+        label.textColor = ConversationInputToolbar.Style.primaryTextColor
         label.lineBreakMode = .byTruncatingTail
         label.numberOfLines = 1
         label.setContentHuggingVerticalHigh()
         label.setContentHuggingHorizontalLow()
+        label.setCompressionResistanceVerticalHigh()
         label.setCompressionResistanceHorizontalLow()
         return label
     }()
@@ -189,16 +219,20 @@ private class QuotedMessageSnippetView: UIView {
         let label = UILabel()
 
         let attributedText: NSAttributedString
-        if let displayableQuotedText, !displayableQuotedText.displayTextValue.isEmpty {
+        if
+            let displayableQuotedText,
+            !displayableQuotedText.displayTextValue.isEmpty,
+            !quotedMessage.content.isPoll
+        {
             let config = HydratedMessageBody.DisplayConfiguration.quotedReply(
                 font: Layout.quotedTextFont,
-                textColor: .fixed(conversationStyle.quotedReplyTextColor())
+                textColor: .fixed(ConversationInputToolbar.Style.primaryTextColor),
             )
             attributedText = styleDisplayableQuotedText(
                 displayableQuotedText,
                 config: config,
                 quotedReplyModel: quotedMessage,
-                spoilerState: spoilerState
+                spoilerState: spoilerState,
             )
             let animator = SpoilerableLabelAnimator(label: label)
             self.quotedTextLabelSpoilerAnimator = animator
@@ -211,52 +245,91 @@ private class QuotedMessageSnippetView: UIView {
             } else {
                 owsFailDebug("Unable to build spoiler animator")
             }
+        } else if
+            case .attachmentStub(_, let stub) = quotedMessage.content,
+            stub.renderingFlag == .voiceMessage
+        {
+            let iconPrefix = SignalSymbol.audioSquare.attributedString(dynamicTypeBaseSize: Layout.fileTypeFont.pointSize)
+            attributedText = iconPrefix + " " + OWSLocalizedString(
+                "QUOTED_REPLY_TYPE_VOICE_MESSAGE",
+                comment: "Indicates this message is a quoted reply to a voice message.",
+            )
         } else if let fileTypeForSnippet {
             attributedText = NSAttributedString(
                 string: fileTypeForSnippet,
                 attributes: [
                     .font: Layout.fileTypeFont,
-                    .foregroundColor: conversationStyle.quotedReplyAttachmentColor()
-                ]
+                    .foregroundColor: ConversationInputToolbar.Style.secondaryTextColor,
+                ],
             )
         } else if let sourceFilename = sourceFilenameForSnippet(quotedMessage.content)?.filterForDisplay {
             attributedText = NSAttributedString(
                 string: sourceFilename,
                 attributes: [
                     .font: Layout.filenameFont,
-                    .foregroundColor: conversationStyle.quotedReplyAttachmentColor()
-                ]
+                    .foregroundColor: ConversationInputToolbar.Style.secondaryTextColor,
+                ],
             )
         } else if quotedMessage.content.isGiftBadge {
             attributedText = NSAttributedString(
                 string: NSLocalizedString(
                     "DONATION_ON_BEHALF_OF_A_FRIEND_REPLY",
-                    comment: "Shown when you're replying to a donation message."
+                    comment: "Shown when you're replying to a donation message.",
                 ),
                 attributes: [
                     .font: Layout.fileTypeFont,
-                    .foregroundColor: conversationStyle.quotedReplyAttachmentColor()
-                ]
+                    .foregroundColor: ConversationInputToolbar.Style.secondaryTextColor,
+                ],
             )
+        } else if quotedMessage.content.isPoll {
+            switch quotedMessage.content {
+            case .poll(let pollQuestion):
+                let pollIcon = SignalSymbol.poll.attributedString(dynamicTypeBaseSize: Layout.fileTypeFont.pointSize) + " "
+                let pollPrefix = OWSLocalizedString(
+                    "POLL_LABEL",
+                    comment: "Label specifying the message type as a poll",
+                ) + ": "
+
+                attributedText = pollIcon + NSAttributedString(
+                    string: pollPrefix + pollQuestion,
+                    attributes: [
+                        .font: Layout.fileTypeFont,
+                        .foregroundColor: ConversationInputToolbar.Style.secondaryTextColor,
+                    ],
+                )
+            default:
+                owsFailDebug("Quoted message is poll but there's no poll")
+                attributedText = NSAttributedString(
+                    string: NSLocalizedString(
+                        "QUOTED_REPLY_TYPE_ATTACHMENT",
+                        comment: "Indicates this message is a quoted reply to an attachment of unknown type.",
+                    ),
+                    attributes: [
+                        .font: Layout.fileTypeFont,
+                        .foregroundColor: ConversationInputToolbar.Style.secondaryTextColor,
+                    ],
+                )
+            }
         } else {
             attributedText = NSAttributedString(
                 string: NSLocalizedString(
                     "QUOTED_REPLY_TYPE_ATTACHMENT",
-                    comment: "Indicates this message is a quoted reply to an attachment of unknown type."
+                    comment: "Indicates this message is a quoted reply to an attachment of unknown type.",
                 ),
                 attributes: [
                     .font: Layout.fileTypeFont,
-                    .foregroundColor: conversationStyle.quotedReplyAttachmentColor()
-                ]
+                    .foregroundColor: ConversationInputToolbar.Style.secondaryTextColor,
+                ],
             )
         }
-        label.numberOfLines = 1
+        label.numberOfLines = 2
         label.lineBreakMode = .byTruncatingTail
         label.textAlignment = displayableQuotedText?.displayTextNaturalAlignment ?? .natural
         label.attributedText = attributedText
+        label.setContentHuggingVerticalHigh()
         label.setContentHuggingHorizontalLow()
-        label.setCompressionResistanceHorizontalLow()
         label.setCompressionResistanceVerticalHigh()
+        label.setCompressionResistanceHorizontalLow()
         return label
     }()
 
@@ -273,7 +346,7 @@ private class QuotedMessageSnippetView: UIView {
         glyphImageView.tintColor = Theme.lightThemePrimaryColor
         glyphImageView.autoSetDimensions(to: .square(Layout.remotelySourcedContentGlyphLength))
 
-        let sourceRow = UIStackView(arrangedSubviews: [ glyphImageView, quoteContentSourceLabel ])
+        let sourceRow = UIStackView(arrangedSubviews: [glyphImageView, quoteContentSourceLabel])
         sourceRow.axis = .horizontal
         sourceRow.alignment = .center
         // TODO verify spacing w/ design
@@ -302,17 +375,12 @@ private class QuotedMessageSnippetView: UIView {
     }
 
     private enum Layout {
-        static let hSpacing: CGFloat = 8
-
         static var quotedAuthorFont: UIFont {
-            UIFont.dynamicTypeSubheadline.semibold()
-        }
-        static var quotedAuthorHeight: CGFloat {
-            ceil(quotedAuthorFont.lineHeight)
+            UIFont.dynamicTypeFootnoteClamped.semibold()
         }
 
         static var quotedTextFont: UIFont {
-            .dynamicTypeBody
+            .dynamicTypeSubheadlineClamped
         }
 
         static var filenameFont: UIFont {
@@ -329,121 +397,158 @@ private class QuotedMessageSnippetView: UIView {
     }
 
     private func createViewContents() {
-        let maskLayer = CAShapeLayer()
-        let innerBubbleView = OWSLayerView(
-            frame: .zero,
-            layoutCallback: { layerView in
-                let bezierPath = UIBezierPath.roundedRect(
-                    layerView.bounds,
-                    sharpCorners: [ .bottomLeft, .bottomRight ],
-                    sharpCornerRadius: 4,
-                    wideCornerRadius: 12
-                )
-                maskLayer.path = bezierPath.cgPath
-            }
-        )
-        innerBubbleView.layer.mask = maskLayer
-
-        // Background
-        let chatColorView = CVColorOrGradientView.build(conversationStyle: conversationStyle, referenceView: self)
-        chatColorView.shouldDeactivateConstraints = false
-        innerBubbleView.addSubview(chatColorView)
-        chatColorView.autoPinEdgesToSuperviewEdges()
-        let tintView = UIView()
-        tintView.backgroundColor = conversationStyle.isDarkThemeEnabled ? .ows_blackAlpha40 : .ows_whiteAlpha60
-        innerBubbleView.addSubview(tintView)
-        tintView.autoPinEdgesToSuperviewEdges()
-
-        addSubview(innerBubbleView)
-        innerBubbleView.autoPinEdgesToSuperviewMargins()
-
-        let hStackView = UIStackView()
-        hStackView.axis = .horizontal
-        hStackView.spacing = Layout.hSpacing
+        // Quoted text and message author, media thumbnail if any.
+        let horizonalStack = UIStackView(arrangedSubviews: [])
+        horizonalStack.axis = .horizontal
+        horizonalStack.spacing = 8
 
         let stripeView = UIView()
-        stripeView.backgroundColor = .white
-        stripeView.autoSetDimension(.width, toSize: 4)
-        hStackView.addArrangedSubview(stripeView)
+        stripeView.backgroundColor = .Signal.quaternaryLabel
+        horizonalStack.addArrangedSubview(stripeView)
+        if #available(iOS 26, *) {
+            stripeView.cornerConfiguration = .capsule()
+        }
 
-        let vStackView = UIStackView()
-        vStackView.axis = .vertical
-        vStackView.layoutMargins = UIEdgeInsets(hMargin: 0, vMargin: 7)
-        vStackView.isLayoutMarginsRelativeArrangement = true
-        vStackView.spacing = 2
-        hStackView.addArrangedSubview(vStackView)
+        let textStack = UIStackView(arrangedSubviews: [quotedAuthorLabel, quotedTextLabel])
+        textStack.axis = .vertical
+        textStack.spacing = 2
+        // Putting vertical stack in a container allows to center that text stack vertically
+        // when the image is taller than text, as well as add top and bottom margins.
+        let textStackContainer = UIView.container()
+        textStackContainer.addSubview(textStack)
+        textStack.translatesAutoresizingMaskIntoConstraints = false
+        textStackContainer.addSubview(stripeView)
+        stripeView.translatesAutoresizingMaskIntoConstraints = false
+        textStackContainer.addConstraints([
+            stripeView.leadingAnchor.constraint(equalTo: textStackContainer.leadingAnchor),
+            stripeView.widthAnchor.constraint(equalToConstant: 4),
+            stripeView.topAnchor.constraint(equalTo: textStack.topAnchor),
+            stripeView.bottomAnchor.constraint(equalTo: textStack.bottomAnchor),
 
-        vStackView.addArrangedSubview(quotedAuthorLabel)
-        quotedAuthorLabel.autoSetDimension(.height, toSize: Layout.quotedAuthorHeight)
+            textStack.leadingAnchor.constraint(equalTo: stripeView.trailingAnchor, constant: 8),
+            textStack.topAnchor.constraint(greaterThanOrEqualTo: textStackContainer.topAnchor, constant: 8),
+            {
+                let c = textStack.topAnchor.constraint(equalTo: textStackContainer.topAnchor, constant: 8)
+                c.priority = .defaultLow
+                return c
+            }(),
+            textStack.centerYAnchor.constraint(equalTo: textStackContainer.centerYAnchor),
+            textStack.trailingAnchor.constraint(equalTo: textStackContainer.trailingAnchor),
+        ])
+        horizonalStack.addArrangedSubview(textStackContainer)
 
-        vStackView.addArrangedSubview(quotedTextLabel)
+        createContentView(for: quotedMessage.content, in: horizonalStack)
 
-        self.createContentView(for: quotedMessage.content, in: hStackView)
-
+        // If there's no local copy of the quoted message we display some extra text below
+        // by wrapping what we have so far in a vertical stack view.
         let contentView: UIView
         if quotedMessage.content.isRemotelySourced {
-            let quoteSourceWrapper = UIStackView(arrangedSubviews: [ hStackView, buildRemoteContentSourceView() ])
+            let quoteSourceWrapper = UIStackView(arrangedSubviews: [horizonalStack, buildRemoteContentSourceView()])
             quoteSourceWrapper.axis = .vertical
             contentView = quoteSourceWrapper
         } else {
-            contentView = hStackView
+            contentView = horizonalStack
         }
 
-        let cancelButton = UIButton(type: .custom)
-        cancelButton.setImage(UIImage(imageLiteralResourceName: "x-20"), for: .normal)
-        cancelButton.tintColor = Theme.secondaryTextAndIconColor
-        cancelButton.addTarget(self, action: #selector(didTapCancel), for: .touchUpInside)
+        // (X) button.
+        let cancelButton = UIButton(
+            configuration: .bordered(),
+            primaryAction: UIAction { [weak self] _ in
+                self?.didTapCancel()
+            },
+        )
+        cancelButton.configuration?.image = UIImage(imageLiteralResourceName: "x-compact-bold")
+        cancelButton.configuration?.baseBackgroundColor = .init(dynamicProvider: { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+                ? UIColor(rgbHex: 0x787880, alpha: 0.4)
+                : UIColor(rgbHex: 0xF5F5F5, alpha: 0.9)
+        })
+        cancelButton.configuration?.background.visualEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        cancelButton.tintColor = ConversationInputToolbar.Style.primaryTextColor
+        cancelButton.configuration?.cornerStyle = .capsule
         cancelButton.setContentHuggingHorizontalHigh()
         cancelButton.setCompressionResistanceHorizontalHigh()
 
-        let cancelStack = UIStackView(arrangedSubviews: [cancelButton])
-        cancelStack.axis = .horizontal
-        cancelStack.alignment = .top
-        cancelStack.isLayoutMarginsRelativeArrangement = true
-        cancelStack.layoutMargins = UIEdgeInsets(top: 6, leading: 2, bottom: 0, trailing: 6)
+        // Put the button in a container and align it to the top.
+        let cancelButtonContainer = UIView.container()
+        cancelButtonContainer.addSubview(cancelButton)
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelButtonContainer.addConstraints([
+            cancelButton.widthAnchor.constraint(equalToConstant: 24),
+            cancelButton.heightAnchor.constraint(equalToConstant: 24),
 
-        let cancelWrapper = UIStackView(arrangedSubviews: [ contentView, cancelStack ])
-        cancelWrapper.axis = .horizontal
+            cancelButton.topAnchor.constraint(equalTo: cancelButtonContainer.topAnchor, constant: 8),
+            cancelButton.leadingAnchor.constraint(equalTo: cancelButtonContainer.leadingAnchor),
+            cancelButton.trailingAnchor.constraint(equalTo: cancelButtonContainer.trailingAnchor),
+            cancelButton.bottomAnchor.constraint(lessThanOrEqualTo: cancelButtonContainer.bottomAnchor),
+        ])
 
-        innerBubbleView.addSubview(cancelWrapper)
-        cancelWrapper.autoPinEdgesToSuperviewEdges()
+        // One more horizontal stack to hold everything.
+        let outermostHStack = UIStackView(arrangedSubviews: [contentView, cancelButtonContainer])
+        outermostHStack.axis = .horizontal
+        outermostHStack.spacing = 8
+        outermostHStack.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(outermostHStack)
+        addConstraints([
+            outermostHStack.topAnchor.constraint(equalTo: topAnchor),
+            outermostHStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            outermostHStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            outermostHStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
     }
 
-    private func createContentView(for content: DraftQuotedReplyModel.Content, in hStackView: UIStackView) {
+    private func createContentView(for content: DraftQuotedReplyModel.Content, in stackView: UIStackView) {
+        var thumbnailView: UIView?
+
         switch content {
         case let .attachment(_, _, attachment, thumbnailImage):
-            let quotedAttachmentView = self.createAttachmentView(attachment, thumbnailImage: thumbnailImage)
-            quotedAttachmentView.autoSetDimensions(to: .square(Layout.quotedAttachmentSize))
-            hStackView.addArrangedSubview(quotedAttachmentView)
+            thumbnailView = createAttachmentView(attachment, thumbnailImage: thumbnailImage)
 
-        case .attachmentStub:
-            let view = createStubAttachmentView()
-            view.autoSetDimensions(to: .square(Layout.quotedAttachmentSize))
-            hStackView.addArrangedSubview(view)
+        case .attachmentStub(_, let stub):
+            switch stub.renderingFlag {
+            case .voiceMessage:
+                break
+            case .default, .borderless, .shouldLoop:
+                thumbnailView = createStubAttachmentView()
+            }
 
         case let .edit(_, _, content):
-            return createContentView(for: content, in: hStackView)
+            createContentView(for: content, in: stackView)
+            return
 
         case .giftBadge:
-            let contentImageView = buildImageView(image: UIImage(imageLiteralResourceName: "gift-thumbnail"))
-            contentImageView.contentMode = .scaleAspectFit
+            let imageView = buildImageView(image: UIImage(imageLiteralResourceName: "gift-thumbnail"))
+            imageView.contentMode = .scaleAspectFit
+            thumbnailView = imageView
 
-            let wrapper = UIView.transparentContainer()
-            wrapper.addSubview(contentImageView)
-            contentImageView.autoCenterInSuperview()
-            contentImageView.autoSetDimension(.width, toSize: Layout.quotedAttachmentSize)
-
-            wrapper.autoSetDimensions(to: .square(Layout.quotedAttachmentSize))
-            hStackView.addArrangedSubview(wrapper)
-
-        case .payment, .text, .viewOnce, .contactShare, .storyReactionEmoji:
-            // If there's no attachment, add an empty view so that
-            // the stack view's spacing serves as a margin between
-            // the text views and the trailing edge.
-            let emptyView = UIView.transparentContainer()
-            emptyView.autoSetDimension(.width, toSize: 0)
-            hStackView.addArrangedSubview(emptyView)
+        case .payment, .text, .viewOnce, .contactShare, .storyReactionEmoji, .poll:
+            break
         }
+
+        guard let thumbnailView else { return }
+
+        let containerView = UIView.container()
+        containerView.addSubview(thumbnailView)
+        thumbnailView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addConstraints([
+            thumbnailView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            thumbnailView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            thumbnailView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            thumbnailView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+
+            // Always fixed width.
+            thumbnailView.widthAnchor.constraint(equalToConstant: Layout.quotedAttachmentSize),
+
+            // Stretch thumbnail to fill height if text requires more vertical space than
+            // default height of the thumbnail provides.
+            {
+                let c = thumbnailView.heightAnchor.constraint(equalToConstant: Layout.quotedAttachmentSize)
+                // Lower than vertical compression resistance on the text labels.
+                c.priority = .defaultHigh
+                return c
+            }(),
+        ])
+        stackView.addArrangedSubview(containerView)
     }
 
     private func createAttachmentView(_ attachment: Attachment, thumbnailImage: UIImage?) -> UIView {
@@ -457,20 +562,27 @@ private class QuotedMessageSnippetView: UIView {
                 let playIconImageView = buildImageView(image: UIImage(imageLiteralResourceName: "play-fill"))
                 playIconImageView.tintColor = .white
                 contentImageView.addSubview(playIconImageView)
-                playIconImageView.autoCenterInSuperview()
+                playIconImageView.translatesAutoresizingMaskIntoConstraints = false
+                contentImageView.addConstraints([
+                    playIconImageView.centerYAnchor.constraint(equalTo: contentImageView.centerYAnchor),
+                    playIconImageView.centerXAnchor.constraint(equalTo: contentImageView.centerXAnchor),
+                ])
             }
 
             quotedAttachmentView = contentImageView
         } else if attachment.asAnyPointer() != nil {
-            let contentImageView = buildImageView(image: UIImage(imageLiteralResourceName: "refresh"))
-            contentImageView.contentMode = .scaleAspectFit
-            contentImageView.tintColor = .white
-            contentImageView.autoSetDimensions(to: .square(Layout.quotedAttachmentSize * 0.5))
+            let refreshIcon = buildImageView(image: UIImage(imageLiteralResourceName: "refresh"))
+            refreshIcon.contentMode = .scaleAspectFit
+            refreshIcon.tintColor = .Signal.tertiaryLabel
 
             let containerView = UIView.container()
-            containerView.backgroundColor = conversationStyle.quotedReplyHighlightColor()
-            containerView.addSubview(contentImageView)
-            contentImageView.autoCenterInSuperview()
+            containerView.backgroundColor = .Signal.tertiaryBackground
+            containerView.addSubview(refreshIcon)
+            refreshIcon.translatesAutoresizingMaskIntoConstraints = false
+            containerView.addConstraints([
+                refreshIcon.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+                refreshIcon.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            ])
 
             quotedAttachmentView = containerView
         } else {
@@ -479,74 +591,86 @@ private class QuotedMessageSnippetView: UIView {
         return quotedAttachmentView
     }
 
+    // Return generic attachment image centered in a container view.
     private func createStubAttachmentView() -> UIView {
-        // TODO: Should we overlay the file extension like we do with CVComponentGenericAttachment?
-        let contentImageView = buildImageView(image: UIImage(imageLiteralResourceName: "generic-attachment"))
-        contentImageView.autoSetDimension(.width, toSize: Layout.quotedAttachmentSize * 0.5)
-        contentImageView.contentMode = .scaleAspectFit
+        let imageView = buildImageView(image: .genericAttachment)
+        imageView.contentMode = .scaleAspectFit
 
-        let wrapper = UIView.transparentContainer()
-        wrapper.addSubview(contentImageView)
-        contentImageView.autoCenterInSuperview()
-        return wrapper
+        let containerView = UIView.container()
+        containerView.addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addConstraints([
+            imageView.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor),
+            imageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            imageView.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor),
+            imageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+        ])
+        return containerView
     }
 
-    @objc
     private func didTapCancel() {
         delegate?.didTapCancelInQuotedMessageSnippet(view: self)
     }
 
     // MARK: -
 
-    private func mimeTypeAndIsLooping(_ content: DraftQuotedReplyModel.Content) -> (String, Bool)? {
+    private func mimeTypeAndRenderingFlag(
+        _ content: DraftQuotedReplyModel.Content,
+    ) -> (String, AttachmentReference.RenderingFlag)? {
         switch content {
-        case .attachmentStub(_, let stub) where stub.mimeType != nil:
-            return (stub.mimeType!, false)
+        case .attachmentStub(_, let stub):
+            if let mimeType = stub.mimeType {
+                return (mimeType, stub.renderingFlag)
+            } else {
+                return nil
+            }
         case .attachment(_, let reference, let attachment, _):
-            return (attachment.mimeType, reference.renderingFlag == .shouldLoop)
+            return (attachment.mimeType, reference.renderingFlag)
         case .edit(_, _, let innerContent):
-            return mimeTypeAndIsLooping(innerContent)
-        case .giftBadge, .text, .payment, .attachmentStub, .viewOnce, .contactShare, .storyReactionEmoji:
+            return mimeTypeAndRenderingFlag(innerContent)
+        case .giftBadge, .text, .payment, .viewOnce, .contactShare, .storyReactionEmoji, .poll:
             return nil
         }
     }
 
     private var fileTypeForSnippet: String? {
-        guard let (mimeType, isLoopingVideo) = mimeTypeAndIsLooping(quotedMessage.content) else {
+        guard let (mimeType, renderingFlag) = mimeTypeAndRenderingFlag(quotedMessage.content) else {
             return nil
         }
 
         if MimeTypeUtil.isSupportedAudioMimeType(mimeType) {
             return NSLocalizedString(
                 "QUOTED_REPLY_TYPE_AUDIO",
-                comment: "Indicates this message is a quoted reply to an audio file."
+                comment: "Indicates this message is a quoted reply to an audio file.",
             )
         } else if MimeTypeUtil.isSupportedDefinitelyAnimatedMimeType(mimeType) {
             if mimeType.caseInsensitiveCompare(MimeType.imageGif.rawValue) == .orderedSame {
                 return NSLocalizedString(
                     "QUOTED_REPLY_TYPE_GIF",
-                    comment: "Indicates this message is a quoted reply to animated GIF file."
+                    comment: "Indicates this message is a quoted reply to animated GIF file.",
                 )
             } else {
                 return NSLocalizedString(
                     "QUOTED_REPLY_TYPE_IMAGE",
-                    comment: "Indicates this message is a quoted reply to an image file."
+                    comment: "Indicates this message is a quoted reply to an image file.",
                 )
             }
-        } else if isLoopingVideo && MimeTypeUtil.isSupportedVideoMimeType(mimeType) {
-            return NSLocalizedString(
-                "QUOTED_REPLY_TYPE_GIF",
-                comment: "Indicates this message is a quoted reply to animated GIF file."
-            )
         } else if MimeTypeUtil.isSupportedVideoMimeType(mimeType) {
-            return NSLocalizedString(
-                "QUOTED_REPLY_TYPE_VIDEO",
-                comment: "Indicates this message is a quoted reply to a video file."
-            )
+            if renderingFlag == .shouldLoop {
+                return NSLocalizedString(
+                    "QUOTED_REPLY_TYPE_GIF",
+                    comment: "Indicates this message is a quoted reply to animated GIF file.",
+                )
+            } else {
+                return NSLocalizedString(
+                    "QUOTED_REPLY_TYPE_VIDEO",
+                    comment: "Indicates this message is a quoted reply to a video file.",
+                )
+            }
         } else if MimeTypeUtil.isSupportedImageMimeType(mimeType) {
             return NSLocalizedString(
                 "QUOTED_REPLY_TYPE_PHOTO",
-                comment: "Indicates this message is a quoted reply to a photo file."
+                comment: "Indicates this message is a quoted reply to a photo file.",
             )
         }
         return nil
@@ -560,14 +684,14 @@ private class QuotedMessageSnippetView: UIView {
             return reference.sourceFilename
         case .edit(_, _, let innerContent):
             return sourceFilenameForSnippet(innerContent)
-        case .giftBadge, .text, .payment, .contactShare, .viewOnce, .storyReactionEmoji:
+        case .giftBadge, .text, .payment, .contactShare, .viewOnce, .storyReactionEmoji, .poll:
             return nil
         }
     }
 
     private static func displayableTextWithSneakyTransaction(
         forPreview quotedMessage: DraftQuotedReplyModel,
-        spoilerState: SpoilerRenderState
+        spoilerState: SpoilerRenderState,
     ) -> DisplayableText? {
         guard
             let body = quotedMessage.bodyForSending,
@@ -578,7 +702,7 @@ private class QuotedMessageSnippetView: UIView {
         return SSKEnvironment.shared.databaseStorageRef.read { tx in
             return DisplayableText.displayableText(
                 withMessageBody: body,
-                transaction: tx
+                transaction: tx,
             )
         }
     }
@@ -587,11 +711,11 @@ private class QuotedMessageSnippetView: UIView {
         _ displayableQuotedText: DisplayableText,
         config: HydratedMessageBody.DisplayConfiguration,
         quotedReplyModel: DraftQuotedReplyModel,
-        spoilerState: SpoilerRenderState
+        spoilerState: SpoilerRenderState,
     ) -> NSAttributedString {
         let baseAttributes: [NSAttributedString.Key: Any] = [
             .font: config.baseFont,
-            .foregroundColor: config.baseTextColor.forCurrentTheme
+            .foregroundColor: config.baseTextColor.forCurrentTheme,
         ]
         switch displayableQuotedText.displayTextValue {
         case .text(let text):
@@ -603,7 +727,7 @@ private class QuotedMessageSnippetView: UIView {
         case .messageBody(let messageBody):
             return messageBody.asAttributedStringForDisplay(
                 config: config,
-                isDarkThemeEnabled: Theme.isDarkThemeEnabled
+                isDarkThemeEnabled: Theme.isDarkThemeEnabled,
             )
         }
     }

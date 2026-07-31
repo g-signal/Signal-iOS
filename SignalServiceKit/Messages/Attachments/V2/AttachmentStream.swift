@@ -32,7 +32,7 @@ public class AttachmentStream {
 
     private init(
         attachment: Attachment,
-        info: Attachment.StreamInfo
+        info: Attachment.StreamInfo,
     ) {
         self.attachment = attachment
         self.info = info
@@ -47,7 +47,7 @@ public class AttachmentStream {
         }
         self.init(
             attachment: attachment,
-            info: info
+            info: info,
         )
     }
 
@@ -124,7 +124,7 @@ public class AttachmentStream {
 
             tmpURL = OWSFileSystem.temporaryFileUrl(
                 fileName: normalizedFilename,
-                fileExtension: pathExtension
+                fileExtension: pathExtension,
             )
             try OWSFileSystem.deleteFileIfExists(url: tmpURL)
         } else {
@@ -134,10 +134,10 @@ public class AttachmentStream {
         try Cryptography.decryptFileWithoutValidating(
             at: fileURL,
             metadata: DecryptionMetadata(
-                key: attachment.encryptionKey,
-                plaintextLength: Int(info.unencryptedByteCount)
+                key: AttachmentKey(combinedKey: attachment.encryptionKey),
+                plaintextLength: UInt64(safeCast: info.unencryptedByteCount),
             ),
-            output: tmpURL
+            output: tmpURL,
         )
         return tmpURL
     }
@@ -148,11 +148,10 @@ public class AttachmentStream {
         // hmac and digest are validated at download time; no need to revalidate every read.
         return try Cryptography.decryptFileWithoutValidating(
             at: fileURL,
-            metadata: .init(
-                key: attachment.encryptionKey,
-                length: Int(info.encryptedByteCount),
-                plaintextLength: Int(info.unencryptedByteCount)
-            )
+            metadata: DecryptionMetadata(
+                key: AttachmentKey(combinedKey: attachment.encryptionKey),
+                plaintextLength: UInt64(safeCast: info.unencryptedByteCount),
+            ),
         )
     }
 
@@ -190,9 +189,9 @@ public class AttachmentStream {
             }
             return try UIImage.fromEncryptedFile(
                 at: Self.absoluteAttachmentFileURL(relativeFilePath: stillImageRelativeFilePath),
-                encryptionKey: attachment.encryptionKey,
+                attachmentKey: AttachmentKey(combinedKey: attachment.encryptionKey),
                 plaintextLength: nil,
-                mimeType: OWSMediaUtils.videoStillFrameMimeType.rawValue
+                mimeType: OWSMediaUtils.videoStillFrameMimeType.rawValue,
             )
         }
     }

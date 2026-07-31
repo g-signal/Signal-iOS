@@ -20,7 +20,7 @@ public class CallLinkProfileKeySharingManager {
     @MainActor
     func sendProfileKeyToCallMembers(
         acis: [Aci],
-        blockingManager: BlockingManager
+        blockingManager: BlockingManager,
     ) {
         var unconsideredAcis = [Aci]()
 
@@ -37,7 +37,7 @@ public class CallLinkProfileKeySharingManager {
                 let address = SignalServiceAddress(aci)
                 let isBlocked = blockingManager.isAddressBlocked(
                     address,
-                    transaction: SDSDB.shimOnlyBridge(tx)
+                    transaction: tx,
                 )
 
                 let isEligible = !isLocal && !isBlocked
@@ -55,7 +55,7 @@ public class CallLinkProfileKeySharingManager {
         self.consideredAcis.formUnion(eligibleAcisNotSentProfileKeyYet)
         db.asyncWrite { tx in
             let profileManager = SSKEnvironment.shared.profileManagerRef
-            let profileKey = profileManager.localProfileKey(tx: SDSDB.shimOnlyBridge(tx))!
+            let profileKey = profileManager.localProfileKey(tx: tx)!
             for aci in eligibleAcisNotSentProfileKeyYet {
                 self.sendProfileKey(profileKey, toAci: aci, tx: tx)
             }
@@ -64,18 +64,18 @@ public class CallLinkProfileKeySharingManager {
 
     private func sendProfileKey(_ profileKey: ProfileKey, toAci aci: Aci, tx: DBWriteTransaction) {
         let thread = TSContactThread.getOrCreateThread(withContactAddress: SignalServiceAddress(aci), transaction: tx)
-        let profileKeyMessage = OWSProfileKeyMessage(
+        let profileKeyMessage = ProfileKeyMessage(
             thread: thread,
-            profileKey: profileKey.serialize(),
-            transaction: SDSDB.shimOnlyBridge(tx)
+            profileKey: profileKey,
+            tx: tx,
         )
         let preparedMessage = PreparedOutgoingMessage.preprepared(
-            transientMessageWithoutAttachments: profileKeyMessage
+            transientMessageWithoutAttachments: profileKeyMessage,
         )
         let sendPromise = SSKEnvironment.shared.messageSenderJobQueueRef.add(
             .promise,
             message: preparedMessage,
-            transaction: SDSDB.shimOnlyBridge(tx)
+            transaction: tx,
         )
         Task { @MainActor in
             do {
@@ -105,7 +105,7 @@ extension CallLinkProfileKeySharingManager: GroupCallObserver {
             {
                 sendProfileKeyToCallMembers(
                     acis: acis,
-                    blockingManager: SSKEnvironment.shared.blockingManagerRef
+                    blockingManager: SSKEnvironment.shared.blockingManagerRef,
                 )
             }
         }

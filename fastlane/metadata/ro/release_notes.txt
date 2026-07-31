@@ -1,1 +1,1 @@
-• Am remediat o eroare care făcea ca imaginea camerei să apară goală la încercarea de a conecta un dispozitiv nou. Acum, vizorul va arăta așa doar dacă încerci să conectezi un dispozitiv nou într-o cameră foarte întunecată.
+• Menține informațiile importante ușor accesibile, cu ajutorul mesajelor fixate. Cele mai frecvente întrebări, rezervările pentru cină și itinerariile de vacanță sunt deja în topul gândurilor tale. Acum, ele pot fi și în topul chat-ului.

@@ -7,10 +7,12 @@ import Foundation
 public import LibSignalClient
 
 private class LocalUserLeaveGroupJobRunnerFactory: JobRunnerFactory {
-    func buildRunner() -> LocalUserLeaveGroupJobRunner { buildRunner(future: nil) }
+    func buildRunner() -> LocalUserLeaveGroupJobRunner {
+        return buildRunner(isDeletingAccount: false, future: nil)
+    }
 
-    func buildRunner(future: Future<Void>?) -> LocalUserLeaveGroupJobRunner {
-        return LocalUserLeaveGroupJobRunner(future: future)
+    func buildRunner(isDeletingAccount: Bool, future: Future<[Promise<Void>]>?) -> LocalUserLeaveGroupJobRunner {
+        return LocalUserLeaveGroupJobRunner(isDeletingAccount: isDeletingAccount, future: future)
     }
 }
 
@@ -19,31 +21,33 @@ private class LocalUserLeaveGroupJobRunner: JobRunner {
         static let maxRetries: UInt = 110
     }
 
-    private let future: Future<Void>?
+    private let isDeletingAccount: Bool
+    private let future: Future<[Promise<Void>]>?
 
-    init(future: Future<Void>?) {
+    init(isDeletingAccount: Bool, future: Future<[Promise<Void>]>?) {
+        self.isDeletingAccount = isDeletingAccount
         self.future = future
     }
 
-    func runJobAttempt(_ jobRecord: LocalUserLeaveGroupJobRecord) async -> JobAttemptResult {
+    func runJobAttempt(_ jobRecord: LocalUserLeaveGroupJobRecord) async -> JobAttemptResult<[Promise<Void>]> {
         return await JobAttemptResult.executeBlockWithDefaultErrorHandler(
             jobRecord: jobRecord,
             retryLimit: Constants.maxRetries,
             db: DependenciesBridge.shared.db,
-            block: { try await _runJobAttempt(jobRecord) }
+            block: { try await _runJobAttempt(jobRecord) },
         )
     }
 
-    func didFinishJob(_ jobRecordId: JobRecord.RowId, result: JobResult) async {
+    func didFinishJob(_ jobRecordId: JobRecord.RowId, result: JobResult<[Promise<Void>]>) async {
         switch result.ranSuccessfullyOrError {
-        case .success:
-            future?.resolve()
+        case .success(let result):
+            future?.resolve(result)
         case .failure(let error):
             future?.reject(error)
         }
     }
 
-    private func _runJobAttempt(_ jobRecord: LocalUserLeaveGroupJobRecord) async throws {
+    private func _runJobAttempt(_ jobRecord: LocalUserLeaveGroupJobRecord) async throws -> [Promise<Void>] {
         if jobRecord.waitForMessageProcessing {
             try await GroupManager.waitForMessageFetchingAndProcessingWithTimeout()
         }
@@ -69,9 +73,10 @@ private class LocalUserLeaveGroupJobRunner: JobRunner {
             Logger.warn("Tried and failed to refresh credentials; continuing anyways because credentials aren't required; error: \(error)")
         }
 
-        try await GroupManager.updateGroupV2(
+        let sendPromises = try await GroupManager.updateGroupV2(
             groupModel: groupModel,
-            description: #fileID
+            description: #fileID,
+            isDeletingAccount: isDeletingAccount,
         ) { groupChangeSet in
             groupChangeSet.setShouldLeaveGroupDeclineInvite()
 
@@ -84,6 +89,8 @@ private class LocalUserLeaveGroupJobRunner: JobRunner {
         await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
             jobRecord.anyRemove(transaction: tx)
         }
+
+        return sendPromises
     }
 
     private func refreshGroupSendEndorsementsIfNeeded(
@@ -113,7 +120,7 @@ private class LocalUserLeaveGroupJobRunner: JobRunner {
 public class LocalUserLeaveGroupJobQueue {
     private let jobQueueRunner: JobQueueRunner<
         JobRecordFinderImpl<LocalUserLeaveGroupJobRecord>,
-        LocalUserLeaveGroupJobRunnerFactory
+        LocalUserLeaveGroupJobRunnerFactory,
     >
     private var jobSerializer = CompletionSerializer()
     private let jobRunnerFactory: LocalUserLeaveGroupJobRunnerFactory
@@ -124,7 +131,7 @@ public class LocalUserLeaveGroupJobQueue {
             canExecuteJobsConcurrently: false,
             db: db,
             jobFinder: JobRecordFinderImpl(db: db),
-            jobRunnerFactory: self.jobRunnerFactory
+            jobRunnerFactory: self.jobRunnerFactory,
         )
         self.jobQueueRunner.listenForReachabilityChanges(reachabilityManager: reachabilityManager)
     }
@@ -135,12 +142,16 @@ public class LocalUserLeaveGroupJobQueue {
 
     // MARK: - Promises
 
+    /// - Returns: A Promise for leaving the group whose value is a list of
+    /// Promises for sending the group update message(s) about leaving the
+    /// group. (See `updateGroupV2` for details.)
     public func addJob(
         groupThread: TSGroupThread,
         replacementAdminAci: Aci?,
         waitForMessageProcessing: Bool,
-        tx: DBWriteTransaction
-    ) -> Promise<Void> {
+        isDeletingAccount: Bool,
+        tx: DBWriteTransaction,
+    ) -> Promise<[Promise<Void>]> {
         guard groupThread.isGroupV2Thread else {
             owsFail("[GV1] Mutations on V1 groups should be impossible!")
         }
@@ -149,8 +160,9 @@ public class LocalUserLeaveGroupJobQueue {
                 threadId: groupThread.uniqueId,
                 replacementAdminAci: replacementAdminAci,
                 waitForMessageProcessing: waitForMessageProcessing,
+                isDeletingAccount: isDeletingAccount,
                 future: future,
-                tx: tx
+                tx: tx,
             )
         }
     }
@@ -159,17 +171,21 @@ public class LocalUserLeaveGroupJobQueue {
         threadId: String,
         replacementAdminAci: Aci?,
         waitForMessageProcessing: Bool,
-        future: Future<Void>,
-        tx: DBWriteTransaction
+        isDeletingAccount: Bool,
+        future: Future<[Promise<Void>]>,
+        tx: DBWriteTransaction,
     ) {
         let jobRecord = LocalUserLeaveGroupJobRecord(
             threadId: threadId,
             replacementAdminAci: replacementAdminAci,
-            waitForMessageProcessing: waitForMessageProcessing
+            waitForMessageProcessing: waitForMessageProcessing,
         )
         jobRecord.anyInsert(transaction: tx)
         jobSerializer.addOrderedSyncCompletion(tx: tx) {
-            self.jobQueueRunner.addPersistedJob(jobRecord, runner: self.jobRunnerFactory.buildRunner(future: future))
+            self.jobQueueRunner.addPersistedJob(
+                jobRecord,
+                runner: self.jobRunnerFactory.buildRunner(isDeletingAccount: isDeletingAccount, future: future),
+            )
         }
     }
 }

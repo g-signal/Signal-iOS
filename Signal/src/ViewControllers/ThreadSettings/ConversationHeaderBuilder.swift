@@ -772,7 +772,7 @@ extension ConversationSettingsViewController: ConversationHeaderDelegate {
         guard let groupThread = thread as? TSGroupThread else { return }
         let vc = GroupDescriptionViewController(
             groupModel: groupThread.groupModel,
-            options: [.editable, .updateImmediately]
+            options: [.canEdit, .updateImmediately]
         )
         vc.descriptionDelegate = self
         presentFormSheet(OWSNavigationController(rootViewController: vc), animated: true)

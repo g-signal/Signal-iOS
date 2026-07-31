@@ -11,7 +11,9 @@ public class CVAccessibilityCustomAction: UIAccessibilityCustomAction {
 }
 
 extension ConversationViewController: UIGestureRecognizerDelegate {
-    func createGestureRecognizers() {
+    func configureGestureRecognizersIfNeeded() {
+        guard !collectionViewGestureRecongnizersConfigured else { return }
+
         collectionViewTapGestureRecognizer.setTapDelegate(self)
         collectionViewTapGestureRecognizer.delegate = self
         collectionView.addGestureRecognizer(collectionViewTapGestureRecognizer)
@@ -25,12 +27,10 @@ extension ConversationViewController: UIGestureRecognizerDelegate {
         collectionViewContextMenuGestureRecognizer.delegate = self
         collectionView.addGestureRecognizer(collectionViewContextMenuGestureRecognizer)
 
-        let collectionViewContextMenuSecondaryClickRecognizer = UITapGestureRecognizer()
         collectionViewContextMenuSecondaryClickRecognizer.addTarget(self, action: #selector(handleSecondaryClickGesture))
         collectionViewContextMenuSecondaryClickRecognizer.buttonMaskRequired = [.secondary]
         collectionViewContextMenuSecondaryClickRecognizer.delegate = self
         collectionView.addGestureRecognizer(collectionViewContextMenuSecondaryClickRecognizer)
-        self.collectionViewContextMenuSecondaryClickRecognizer = collectionViewContextMenuSecondaryClickRecognizer
 
         collectionViewPanGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
         collectionViewPanGestureRecognizer.delegate = self
@@ -48,19 +48,23 @@ extension ConversationViewController: UIGestureRecognizerDelegate {
         if let interactivePopGestureRecognizer = navigationController?.interactivePopGestureRecognizer {
             collectionViewPanGestureRecognizer.require(toFail: interactivePopGestureRecognizer)
         }
+
+        collectionViewGestureRecongnizersConfigured = true
     }
 
     // TODO: Revisit
     private func cellAtPoint(_ point: CGPoint) -> CVCell? {
-        guard let indexPath = collectionView.indexPathForItem(at: point),
-              let cell = collectionView.cellForItem(at: indexPath) else { return nil }
+        guard
+            let indexPath = collectionView.indexPathForItem(at: point),
+            let cell = collectionView.cellForItem(at: indexPath) else { return nil }
         return cell as? CVCell
     }
 
     private func cellForInteractionId(_ interactionId: String) -> CVCell? {
         // TODO: Won't this build a new cell in some cases?
-        guard let indexPath = indexPath(forInteractionUniqueId: interactionId),
-              let cell = collectionView.cellForItem(at: indexPath) else { return nil }
+        guard
+            let indexPath = indexPath(forInteractionUniqueId: interactionId),
+            let cell = collectionView.cellForItem(at: indexPath) else { return nil }
         return cell as? CVCell
     }
 
@@ -82,7 +86,6 @@ extension ConversationViewController: UIGestureRecognizerDelegate {
     }
 
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-#if compiler(>=6.2)
         if
             #available(iOS 26, *),
             otherGestureRecognizer == navigationController?.interactiveContentPopGestureRecognizer,
@@ -92,7 +95,6 @@ extension ConversationViewController: UIGestureRecognizerDelegate {
             // Allow content pop gesture if there is no pan handler
             return true
         }
-#endif
 
         // Support standard long press recognizing for body text cases, and context menu long press recognizing for everything else
         let currentIsLongPressOrTap = (gestureRecognizer == collectionViewLongPressGestureRecognizer || gestureRecognizer == collectionViewContextMenuGestureRecognizer || gestureRecognizer == collectionViewTapGestureRecognizer)
@@ -204,8 +206,12 @@ extension ConversationViewController {
         guard let cell = findCell(forGesture: sender) else {
             return
         }
-        guard let longPressHandler = cell.findLongPressHandler(sender: sender,
-                                                               componentDelegate: self) else {
+        guard
+            let longPressHandler = cell.findLongPressHandler(
+                sender: sender,
+                componentDelegate: self,
+            )
+        else {
             return
         }
 
@@ -216,8 +222,12 @@ extension ConversationViewController {
         guard let cell = findCell(forGesture: sender) else {
             return nil
         }
-        guard let longPressHandler = cell.findLongPressHandler(sender: sender,
-                                                               componentDelegate: self) else {
+        guard
+            let longPressHandler = cell.findLongPressHandler(
+                sender: sender,
+                componentDelegate: self,
+            )
+        else {
             return nil
         }
         if sender == collectionViewContextMenuGestureRecognizer {
@@ -249,9 +259,11 @@ extension ConversationViewController {
                 return
             }
             let messageSwipeActionState = self.viewState.messageSwipeActionState
-            panHandler.handlePan(sender: sender,
-                                 cell: cell,
-                                 messageSwipeActionState: messageSwipeActionState)
+            panHandler.handlePan(
+                sender: sender,
+                cell: cell,
+                messageSwipeActionState: messageSwipeActionState,
+            )
         }
 
         switch sender.state {
@@ -277,16 +289,20 @@ extension ConversationViewController {
             return nil
         }
         let messageSwipeActionState = viewState.messageSwipeActionState
-        guard let panHandler = cell.findPanHandler(sender: sender,
-                                                   componentDelegate: self,
-                                                   messageSwipeActionState: messageSwipeActionState) else {
+        guard
+            let panHandler = cell.findPanHandler(
+                sender: sender,
+                componentDelegate: self,
+                messageSwipeActionState: messageSwipeActionState,
+            )
+        else {
             return nil
         }
         return panHandler
     }
 
     private func startPanHandler(sender: UIPanGestureRecognizer) {
-        guard let panHandler = panHandler else { return }
+        guard let panHandler else { return }
         guard let cell = findCell(forGesture: sender) else { return }
         panHandler.startGesture(sender: sender, cell: cell, messageSwipeActionState: viewState.messageSwipeActionState)
     }
@@ -306,13 +322,18 @@ public struct CVLongPressHandler {
         case quotedReply
         case systemMessage
         case paymentMessage
+        case poll
         case bodyText(item: CVTextLabel.Item)
+        case associatedSubcomponent
     }
+
     let gestureLocation: GestureLocation
 
-    init(delegate: CVComponentDelegate,
-         renderItem: CVRenderItem,
-         gestureLocation: GestureLocation) {
+    init(
+        delegate: CVComponentDelegate,
+        renderItem: CVRenderItem,
+        gestureLocation: GestureLocation,
+    ) {
         self.delegate = delegate
         self.renderItem = renderItem
         self.gestureLocation = gestureLocation
@@ -331,27 +352,50 @@ public struct CVLongPressHandler {
 
         switch gestureLocation {
         case .`default`:
-            delegate.didLongPressTextViewItem(cell,
-                                              itemViewModel: itemViewModel,
-                                              shouldAllowReply: shouldAllowReply)
+            delegate.didLongPressTextViewItem(
+                cell,
+                itemViewModel: itemViewModel,
+                shouldAllowReply: shouldAllowReply,
+            )
         case .media:
-            delegate.didLongPressMediaViewItem(cell,
-                                               itemViewModel: itemViewModel,
-                                               shouldAllowReply: shouldAllowReply)
+            delegate.didLongPressMediaViewItem(
+                cell,
+                itemViewModel: itemViewModel,
+                shouldAllowReply: shouldAllowReply,
+            )
         case .sticker:
-            delegate.didLongPressSticker(cell,
-                                         itemViewModel: itemViewModel,
-                                         shouldAllowReply: shouldAllowReply)
+            delegate.didLongPressSticker(
+                cell,
+                itemViewModel: itemViewModel,
+                shouldAllowReply: shouldAllowReply,
+            )
         case .quotedReply:
-            delegate.didLongPressQuote(cell,
-                                       itemViewModel: itemViewModel,
-                                       shouldAllowReply: shouldAllowReply)
+            delegate.didLongPressQuote(
+                cell,
+                itemViewModel: itemViewModel,
+                shouldAllowReply: shouldAllowReply,
+            )
         case .systemMessage:
             delegate.didLongPressSystemMessage(cell, itemViewModel: itemViewModel)
         case .paymentMessage:
             delegate.didLongPressPaymentMessage(cell, itemViewModel: itemViewModel, shouldAllowReply: shouldAllowReply)
+        case .poll:
+            delegate.didLongPressPoll(cell, itemViewModel: itemViewModel, shouldAllowReply: shouldAllowReply)
         case .bodyText:
             break
+        case .associatedSubcomponent:
+            // Bottom buttons, labels, and footers are considered separate subcomponents,
+            // but may be associated with another subcomponent type.
+            if let message = itemViewModel.interaction as? TSMessage, message.isPoll {
+                delegate.didLongPressPoll(cell, itemViewModel: itemViewModel, shouldAllowReply: shouldAllowReply)
+                return
+            }
+            // Default
+            delegate.didLongPressTextViewItem(
+                cell,
+                itemViewModel: itemViewModel,
+                shouldAllowReply: shouldAllowReply,
+            )
         }
     }
 
@@ -401,6 +445,7 @@ public class CVPanHandler {
         case messageSwipeAction
         case scrubAudio
     }
+
     public let panType: PanType
 
     private weak var delegate: CVComponentDelegate?
@@ -414,6 +459,7 @@ public class CVPanHandler {
         case right
         case none
     }
+
     public var activeDirection: ActiveDirection = .none
     var messageDetailViewController: MessageDetailViewController?
 
@@ -425,9 +471,11 @@ public class CVPanHandler {
         self.renderItem = renderItem
     }
 
-    func startGesture(sender: UIPanGestureRecognizer,
-                      cell: CVCell,
-                      messageSwipeActionState: CVMessageSwipeActionState) {
+    func startGesture(
+        sender: UIPanGestureRecognizer,
+        cell: CVCell,
+        messageSwipeActionState: CVMessageSwipeActionState,
+    ) {
         guard let delegate = self.delegate else {
             owsFailDebug("Missing delegate.")
             return
@@ -438,19 +486,23 @@ public class CVPanHandler {
         // should not yet be set.
         owsAssertDebug(messageSwipeActionState.getProgress(interactionId: interactionId) == nil)
 
-        cell.startPanGesture(sender: sender,
-                             panHandler: self,
-                             componentDelegate: delegate,
-                             messageSwipeActionState: messageSwipeActionState)
+        cell.startPanGesture(
+            sender: sender,
+            panHandler: self,
+            componentDelegate: delegate,
+            messageSwipeActionState: messageSwipeActionState,
+        )
 
         if panType == .messageSwipeAction {
             owsAssertDebug(messageSwipeActionState.getProgress(interactionId: interactionId) != nil)
         }
     }
 
-    func handlePan(sender: UIPanGestureRecognizer,
-                   cell: CVCell,
-                   messageSwipeActionState: CVMessageSwipeActionState) {
+    func handlePan(
+        sender: UIPanGestureRecognizer,
+        cell: CVCell,
+        messageSwipeActionState: CVMessageSwipeActionState,
+    ) {
         guard let delegate = self.delegate else {
             owsFailDebug("Missing delegate.")
             return
@@ -459,9 +511,11 @@ public class CVPanHandler {
         if panType == .messageSwipeAction {
             owsAssertDebug(messageSwipeActionState.getProgress(interactionId: interactionId) != nil)
         }
-        cell.handlePanGesture(sender: sender,
-                              panHandler: self,
-                              componentDelegate: delegate,
-                              messageSwipeActionState: messageSwipeActionState)
+        cell.handlePanGesture(
+            sender: sender,
+            panHandler: self,
+            componentDelegate: delegate,
+            messageSwipeActionState: messageSwipeActionState,
+        )
     }
 }

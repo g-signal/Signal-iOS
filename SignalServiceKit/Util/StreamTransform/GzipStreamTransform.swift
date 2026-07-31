@@ -58,14 +58,14 @@ public class GzipStreamTransform: StreamTransform, FinalizableStreamTransform {
                 MAX_MEM_LEVEL,
                 Z_DEFAULT_STRATEGY,
                 ZLIB_VERSION,
-                Int32(MemoryLayout<z_stream>.size)
+                Int32(MemoryLayout<z_stream>.size),
             )
         case .decompress:
             status = inflateInit2_(
                 &stream,
                 Constants.MaxWindowBits + Constants.GzipInflateHeaderWindowBits,
                 ZLIB_VERSION,
-                Int32(MemoryLayout<z_stream>.size)
+                Int32(MemoryLayout<z_stream>.size),
             )
         }
 
@@ -215,8 +215,8 @@ public class GzipStreamTransform: StreamTransform, FinalizableStreamTransform {
         case .compress:
             // Pad the gzip similar to how attachments are padded.
             // gzip will ignore this trailing data during decompression.
-            let unpaddedSize = UInt(bitPattern: outputCount)
-            let paddedSize = Cryptography.paddedSize(unpaddedSize: unpaddedSize)
+            let unpaddedSize = UInt64(safeCast: UInt(bitPattern: outputCount))
+            let paddedSize = Cryptography.paddedSize(unpaddedSize: unpaddedSize)!
             if paddedSize > unpaddedSize {
                 finalData.append(Data(repeating: 0, count: Int(paddedSize - unpaddedSize)))
             }

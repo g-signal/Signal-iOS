@@ -21,7 +21,7 @@ public enum GiphyAPI {
         return OWSURLSession(
             baseUrl: kGiphyBaseURL,
             securityPolicy: OWSURLSession.defaultSecurityPolicy,
-            configuration: configuration
+            configuration: configuration,
         )
     }
 
@@ -38,7 +38,7 @@ public enum GiphyAPI {
     public static func search(query: String) async throws -> [GiphyImageInfo] {
         try await fetch(urlPath: "/v1/gifs/search", queryItems: [
             URLQueryItem(name: "q", value: query),
-            URLQueryItem(name: "offset", value: "0")
+            URLQueryItem(name: "offset", value: "0"),
         ])
     }
 
@@ -47,7 +47,7 @@ public enum GiphyAPI {
         urlComponents.path = urlPath
         let baseQueryItems: [URLQueryItem] = [
             URLQueryItem(name: "api_key", value: kGiphyApiKey),
-            URLQueryItem(name: "limit", value: "\(kGiphyPageSize)")
+            URLQueryItem(name: "limit", value: "\(kGiphyPageSize)"),
         ]
         urlComponents.queryItems = baseQueryItems + queryItems
         guard let urlString = urlComponents.string else {
@@ -61,11 +61,11 @@ public enum GiphyAPI {
                 throw OWSAssertionError("Invalid URL")
             }
             let response = try await urlSession.performRequest(request: request, ignoreAppExpiry: false)
-            guard let json = response.responseBodyJson else {
+            guard let responseDict = response.responseBodyDict else {
                 throw OWSAssertionError("Missing or invalid JSON")
             }
             Logger.info("Request succeeded.")
-            guard let imageInfos = self.parseGiphyImages(responseJson: json) else {
+            guard let imageInfos = self.parseGiphyImages(responseDict: responseDict) else {
                 throw OWSAssertionError("unable to parse trending images")
             }
             return imageInfos
@@ -77,15 +77,7 @@ public enum GiphyAPI {
 
     // MARK: Parse API Responses
 
-    private static func parseGiphyImages(responseJson: Any?) -> [GiphyImageInfo]? {
-        guard let responseJson = responseJson else {
-            Logger.error("Missing response.")
-            return nil
-        }
-        guard let responseDict = responseJson as? [String: Any] else {
-            Logger.error("Invalid response.")
-            return nil
-        }
+    private static func parseGiphyImages(responseDict: [String: Any]) -> [GiphyImageInfo]? {
         guard let imageDicts = responseDict["data"] as? [[String: Any]] else {
             Logger.error("Invalid response data.")
             return nil

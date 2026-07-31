@@ -25,25 +25,25 @@ public class AudioWaveformManagerMock: AudioWaveformManager {
 
     public func audioWaveform(
         forEncryptedAudioFileAtPath filePath: String,
-        encryptionKey: Data,
+        attachmentKey: AttachmentKey,
         plaintextDataLength: UInt32,
         mimeType: String,
-        outputWaveformPath: String
+        outputWaveformPath: String,
     ) async throws {
         // Do nothing
     }
 
     public func audioWaveformSync(
-        forAudioPath audioPath: String
+        forAudioPath audioPath: String,
     ) throws -> AudioWaveform {
         return AudioWaveform(decibelSamples: [])
     }
 
     public func audioWaveformSync(
         forEncryptedAudioFileAtPath filePath: String,
-        encryptionKey: Data,
+        attachmentKey: AttachmentKey,
         plaintextDataLength: UInt32,
-        mimeType: String
+        mimeType: String,
     ) throws -> AudioWaveform {
         return AudioWaveform(decibelSamples: [])
     }

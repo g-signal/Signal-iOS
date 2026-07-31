@@ -6,83 +6,34 @@
 import Foundation
 import LibSignalClient
 
-internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamWriter {
+class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamWriter {
     private typealias ArchiveFrameError = BackupArchive.ArchiveFrameError<BackupArchive.InteractionUniqueId>
 
     private let attachmentManager: AttachmentManager
     private let attachmentStore: AttachmentStore
-    private let backupAttachmentDownloadManager: BackupAttachmentDownloadManager
+    private let backupAttachmentDownloadScheduler: BackupAttachmentDownloadScheduler
 
     init(
         attachmentManager: AttachmentManager,
         attachmentStore: AttachmentStore,
-        backupAttachmentDownloadManager: BackupAttachmentDownloadManager,
+        backupAttachmentDownloadScheduler: BackupAttachmentDownloadScheduler,
     ) {
         self.attachmentManager = attachmentManager
         self.attachmentStore = attachmentStore
-        self.backupAttachmentDownloadManager = backupAttachmentDownloadManager
-    }
-
-    /// We tend to deal with all attachments for a given message back-to-back, but in separate steps.
-    /// To avoid multiple database round trips, we fetch all attachments for a message at once and cache
-    /// the results until we get a different message row id requested.
-    private var cachedAttachmentsMessageRowId: Int64?
-    private var attachmentsCache = [ReferencedAttachment]()
-
-    private func fetchReferencedAttachments(messageRowId: Int64, tx: DBReadTransaction) -> [ReferencedAttachment] {
-        if let cachedAttachmentsMessageRowId, cachedAttachmentsMessageRowId == messageRowId {
-            return attachmentsCache
-        }
-        let attachments = attachmentStore.fetchAllReferencedAttachments(
-            owningMessageRowId: messageRowId,
-            tx: tx
-        )
-        cachedAttachmentsMessageRowId = messageRowId
-        attachmentsCache = attachments
-        return attachments
-    }
-
-    private func fetchReferencedAttachments(for ownerId: AttachmentReference.OwnerId, tx: DBReadTransaction) -> [ReferencedAttachment] {
-        let messageRowId: Int64
-        switch ownerId {
-        case
-                .messageBodyAttachment(let rowId),
-                .messageOversizeText(let rowId),
-                .messageLinkPreview(let rowId),
-                .quotedReplyAttachment(let rowId),
-                .messageSticker(let rowId),
-                .messageContactAvatar(let rowId):
-            messageRowId = rowId
-        case .storyMessageMedia, .storyMessageLinkPreview, .threadWallpaperImage, .globalThreadWallpaperImage:
-            owsFailDebug("Invalid type in private method")
-            return []
-        }
-        return fetchReferencedAttachments(messageRowId: messageRowId, tx: tx)
-            .filter { referencedAttachment in
-                referencedAttachment.reference.owner.id == ownerId
-            }
+        self.backupAttachmentDownloadScheduler = backupAttachmentDownloadScheduler
     }
 
     // MARK: - Archiving
 
     func archiveBodyAttachments(
-        messageId: BackupArchive.InteractionUniqueId,
-        messageRowId: Int64,
-        context: BackupArchive.ArchivingContext
-    ) -> BackupArchive.ArchiveInteractionResult<[BackupProto_MessageAttachment]> {
-        let referencedAttachments = self.fetchReferencedAttachments(
-            for: .messageBodyAttachment(messageRowId: messageRowId),
-            tx: context.tx
-        )
-        if referencedAttachments.isEmpty {
-            return .success([])
-        }
-
+        referencedAttachments: [ReferencedAttachment],
+        context: BackupArchive.ArchivingContext,
+    ) -> [BackupProto_MessageAttachment] {
         var pointers = [BackupProto_MessageAttachment]()
+
         for referencedAttachment in referencedAttachments {
             let pointerProto = referencedAttachment.asBackupFilePointer(
-                currentBackupAttachmentUploadEra: context.currentBackupAttachmentUploadEra,
-                attachmentByteCounter: context.attachmentByteCounter,
+                context: context,
             )
 
             var attachmentProto = BackupProto_MessageAttachment()
@@ -101,50 +52,28 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
             pointers.append(attachmentProto)
         }
 
-        return .success(pointers)
+        return pointers
     }
 
-    public func archiveOversizeTextAttachment(
-        _ referencedAttachment: ReferencedAttachment,
-        context: BackupArchive.ArchivingContext
-    ) -> BackupArchive.ArchiveInteractionResult<BackupProto_FilePointer?> {
-        return .success(referencedAttachment.asBackupFilePointer(
-            currentBackupAttachmentUploadEra: context.currentBackupAttachmentUploadEra,
-            attachmentByteCounter: context.attachmentByteCounter,
-        ))
+    func archiveOversizeTextAttachment(
+        referencedAttachment: ReferencedAttachment,
+        context: BackupArchive.ArchivingContext,
+    ) -> BackupProto_FilePointer {
+        return referencedAttachment.asBackupFilePointer(context: context)
     }
 
-    public func archiveLinkPreviewAttachment(
-        messageRowId: Int64,
-        messageId: BackupArchive.InteractionUniqueId,
-        context: BackupArchive.ArchivingContext
-    ) -> BackupArchive.ArchiveInteractionResult<BackupProto_FilePointer?> {
-        return self.archiveSingleAttachment(
-            ownerType: .linkPreview,
-            messageId: messageId,
-            messageRowId: messageRowId,
-            context: context
-        )
+    func archiveLinkPreviewAttachment(
+        referencedAttachment: ReferencedAttachment,
+        context: BackupArchive.ArchivingContext,
+    ) -> BackupProto_FilePointer {
+        return referencedAttachment.asBackupFilePointer(context: context)
     }
 
-    public func archiveQuotedReplyThumbnailAttachment(
-        messageId: BackupArchive.InteractionUniqueId,
-        messageRowId: Int64,
-        context: BackupArchive.ArchivingContext
-    ) -> BackupArchive.ArchiveInteractionResult<BackupProto_MessageAttachment?> {
-        guard
-            let referencedAttachment = self.fetchReferencedAttachments(
-                for: .quotedReplyAttachment(messageRowId: messageRowId),
-                tx: context.tx
-            ).first
-        else {
-            return .success(nil)
-        }
-
-        let pointerProto = referencedAttachment.asBackupFilePointer(
-            currentBackupAttachmentUploadEra: context.currentBackupAttachmentUploadEra,
-            attachmentByteCounter: context.attachmentByteCounter
-        )
+    func archiveQuotedReplyThumbnailAttachment(
+        referencedAttachment: ReferencedAttachment,
+        context: BackupArchive.ArchivingContext,
+    ) -> BackupProto_MessageAttachment {
+        let pointerProto = referencedAttachment.asBackupFilePointer(context: context)
 
         var attachmentProto = BackupProto_MessageAttachment()
         attachmentProto.pointer = pointerProto
@@ -152,44 +81,32 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
         attachmentProto.wasDownloaded = referencedAttachment.attachment.asStream() != nil
         // NOTE: clientUuid is unecessary for quoted reply attachments.
 
-        return .success(attachmentProto)
+        return attachmentProto
     }
 
-    public func archiveContactShareAvatarAttachment(
-        messageId: BackupArchive.InteractionUniqueId,
-        messageRowId: Int64,
-        context: BackupArchive.ArchivingContext
-    ) -> BackupArchive.ArchiveInteractionResult<BackupProto_FilePointer?> {
-        return self.archiveSingleAttachment(
-            ownerType: .contactAvatar,
-            messageId: messageId,
-            messageRowId: messageRowId,
-            context: context
-        )
+    func archiveContactAvatar(
+        referencedAttachment: ReferencedAttachment,
+        context: BackupArchive.ArchivingContext,
+    ) -> BackupProto_FilePointer {
+        return referencedAttachment.asBackupFilePointer(context: context)
     }
 
-    public func archiveStickerAttachment(
-        messageId: BackupArchive.InteractionUniqueId,
-        messageRowId: Int64,
-        context: BackupArchive.ArchivingContext
-    ) -> BackupArchive.ArchiveInteractionResult<BackupProto_FilePointer?> {
-        return self.archiveSingleAttachment(
-            ownerType: .sticker,
-            messageId: messageId,
-            messageRowId: messageRowId,
-            context: context
-        )
+    func archiveStickerAttachment(
+        referencedAttachment: ReferencedAttachment,
+        context: BackupArchive.ArchivingContext,
+    ) -> BackupProto_FilePointer {
+        return referencedAttachment.asBackupFilePointer(context: context)
     }
 
-    // MARK: Restoring
+    // MARK: Restoring -
 
-    public func restoreBodyAttachments(
+    func restoreBodyAttachments(
         _ attachments: [BackupProto_MessageAttachment],
         chatItemId: BackupArchive.ChatItemId,
         messageRowId: Int64,
         message: TSMessage,
         thread: BackupArchive.ChatThread,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) -> BackupArchive.RestoreInteractionResult<Void> {
         var uuidErrors = [BackupArchive.RestoreFrameError<BackupArchive.ChatItemId>.ErrorType.InvalidProtoDataError]()
         let withUnwrappedUUIDs: [(BackupProto_MessageAttachment, UUID?)]
@@ -210,7 +127,8 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
             })
         }
 
-        let ownedAttachments = withUnwrappedUUIDs.map { attachment, clientUUID in
+        let ownedAttachments = withUnwrappedUUIDs.enumerated().map { idx, withUnwrappedUUID in
+            let (attachment, clientUUID) = withUnwrappedUUID
             return OwnedAttachmentBackupPointerProto(
                 proto: attachment.pointer,
                 renderingFlag: attachment.flag.asAttachmentFlag,
@@ -220,25 +138,26 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
                     receivedAtTimestamp: message.receivedAtTimestamp,
                     threadRowId: thread.threadRowId,
                     isViewOnce: message.isViewOnceMessage,
-                    isPastEditRevision: message.isPastEditRevision()
-                ))
+                    isPastEditRevision: message.isPastEditRevision(),
+                    orderInMessage: UInt32(idx),
+                )),
             )
         }
 
         return restoreAttachments(
             ownedAttachments,
             chatItemId: chatItemId,
-            context: context
+            context: context,
         )
     }
 
-    public func restoreOversizeTextAttachment(
+    func restoreOversizeTextAttachment(
         _ attachment: BackupProto_FilePointer,
         chatItemId: BackupArchive.ChatItemId,
         messageRowId: Int64,
         message: TSMessage,
         thread: BackupArchive.ChatThread,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) -> BackupArchive.RestoreInteractionResult<Void> {
         let ownedAttachment = OwnedAttachmentBackupPointerProto(
             proto: attachment,
@@ -250,31 +169,31 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
                 messageRowId: messageRowId,
                 receivedAtTimestamp: message.receivedAtTimestamp,
                 threadRowId: thread.threadRowId,
-                isPastEditRevision: message.isPastEditRevision()
-            ))
+                isPastEditRevision: message.isPastEditRevision(),
+            )),
         )
 
         return restoreAttachments(
             [ownedAttachment],
             chatItemId: chatItemId,
-            context: context
+            context: context,
         )
     }
 
-    public func restoreQuotedReplyThumbnailAttachment(
+    func restoreQuotedReplyThumbnailAttachment(
         _ attachment: BackupProto_MessageAttachment,
         chatItemId: BackupArchive.ChatItemId,
         messageRowId: Int64,
         message: TSMessage,
         thread: BackupArchive.ChatThread,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) -> BackupArchive.RestoreInteractionResult<Void> {
         let clientUUID: UUID?
         if attachment.hasClientUuid {
             guard let uuid = UUID(data: attachment.clientUuid) else {
                 return .messageFailure([.restoreFrameError(
                     .invalidProtoData(.invalidAttachmentClientUUID),
-                    chatItemId
+                    chatItemId,
                 )])
             }
             clientUUID = uuid
@@ -290,24 +209,24 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
                 messageRowId: messageRowId,
                 receivedAtTimestamp: message.receivedAtTimestamp,
                 threadRowId: thread.threadRowId,
-                isPastEditRevision: message.isPastEditRevision()
-            ))
+                isPastEditRevision: message.isPastEditRevision(),
+            )),
         )
 
         return restoreAttachments(
             [ownedAttachment],
             chatItemId: chatItemId,
-            context: context
+            context: context,
         )
     }
 
-    public func restoreLinkPreviewAttachment(
+    func restoreLinkPreviewAttachment(
         _ attachment: BackupProto_FilePointer,
         chatItemId: BackupArchive.ChatItemId,
         messageRowId: Int64,
         message: TSMessage,
         thread: BackupArchive.ChatThread,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) -> BackupArchive.RestoreInteractionResult<Void> {
         let ownedAttachment = OwnedAttachmentBackupPointerProto(
             proto: attachment,
@@ -319,24 +238,24 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
                 messageRowId: messageRowId,
                 receivedAtTimestamp: message.receivedAtTimestamp,
                 threadRowId: thread.threadRowId,
-                isPastEditRevision: message.isPastEditRevision()
-            ))
+                isPastEditRevision: message.isPastEditRevision(),
+            )),
         )
 
         return restoreAttachments(
             [ownedAttachment],
             chatItemId: chatItemId,
-            context: context
+            context: context,
         )
     }
 
-    public func restoreContactAvatarAttachment(
+    func restoreContactAvatarAttachment(
         _ attachment: BackupProto_FilePointer,
         chatItemId: BackupArchive.ChatItemId,
         messageRowId: Int64,
         message: TSMessage,
         thread: BackupArchive.ChatThread,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) -> BackupArchive.RestoreInteractionResult<Void> {
         let ownedAttachment = OwnedAttachmentBackupPointerProto(
             proto: attachment,
@@ -348,18 +267,18 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
                 messageRowId: messageRowId,
                 receivedAtTimestamp: message.receivedAtTimestamp,
                 threadRowId: thread.threadRowId,
-                isPastEditRevision: message.isPastEditRevision()
-            ))
+                isPastEditRevision: message.isPastEditRevision(),
+            )),
         )
 
         return restoreAttachments(
             [ownedAttachment],
             chatItemId: chatItemId,
-            context: context
+            context: context,
         )
     }
 
-    public func restoreStickerAttachment(
+    func restoreStickerAttachment(
         _ attachment: BackupProto_FilePointer,
         stickerPackId: Data,
         stickerId: UInt32,
@@ -367,7 +286,7 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
         messageRowId: Int64,
         message: TSMessage,
         thread: BackupArchive.ChatThread,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) -> BackupArchive.RestoreInteractionResult<Void> {
         let ownedAttachment = OwnedAttachmentBackupPointerProto(
             proto: attachment,
@@ -381,62 +300,35 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
                 threadRowId: thread.threadRowId,
                 isPastEditRevision: message.isPastEditRevision(),
                 stickerPackId: stickerPackId,
-                stickerId: stickerId
-            ))
+                stickerId: stickerId,
+            )),
         )
 
         return restoreAttachments(
             [ownedAttachment],
             chatItemId: chatItemId,
-            context: context
+            context: context,
         )
     }
-
-    // MARK: - Private
-
-    // MARK: Archiving
-
-    private func archiveSingleAttachment(
-        ownerType: AttachmentReference.MessageOwnerTypeRaw,
-        messageId: BackupArchive.InteractionUniqueId,
-        messageRowId: Int64,
-        context: BackupArchive.ArchivingContext
-    ) -> BackupArchive.ArchiveInteractionResult<BackupProto_FilePointer?> {
-        guard
-            let referencedAttachment = self.fetchReferencedAttachments(
-                for: ownerType.with(messageRowId: messageRowId),
-                tx: context.tx
-            ).first
-        else {
-            return .success(nil)
-        }
-
-        let result = referencedAttachment.asBackupFilePointer(
-            currentBackupAttachmentUploadEra: context.currentBackupAttachmentUploadEra,
-            attachmentByteCounter: context.attachmentByteCounter,
-        )
-
-        return .success(result)
-    }
-
-    // MARK: Restoring
 
     private func restoreAttachments(
         _ attachments: [OwnedAttachmentBackupPointerProto],
         chatItemId: BackupArchive.ChatItemId,
-        context: BackupArchive.ChatItemRestoringContext
+        context: BackupArchive.ChatItemRestoringContext,
     ) -> BackupArchive.RestoreInteractionResult<Void> {
         // Whether we're free or paid this should be set when we restored the account data frame.
         guard let uploadEra = context.chatContext.customChatColorContext.accountDataContext.uploadEra else {
             return .messageFailure([.restoreFrameError(.invalidProtoData(.accountDataNotFound), chatItemId)])
         }
 
-        let errors = attachmentManager.createAttachmentPointers(
-            from: attachments,
-            uploadEra: uploadEra,
-            attachmentByteCounter: context.attachmentByteCounter,
-            tx: context.tx
-        )
+        let errors = attachments.compactMap { attachment in
+            return attachmentManager.createAttachmentPointer(
+                from: attachment,
+                uploadEra: uploadEra,
+                attachmentByteCounter: context.attachmentByteCounter,
+                tx: context.tx,
+            )
+        }
 
         guard errors.isEmpty else {
             // Treat attachment failures as message failures; a message
@@ -444,7 +336,7 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
             return .messageFailure(errors.map {
                 return .restoreFrameError(
                     .fromAttachmentCreationError($0),
-                    chatItemId
+                    chatItemId,
                 )
             })
         }
@@ -460,49 +352,41 @@ internal class BackupArchiveMessageAttachmentArchiver: BackupArchiveProtoStreamW
             // text attachment.
             results = attachmentStore.fetchReferencedAttachments(
                 for: .messageOversizeText(messageRowId: messageRowId),
-                tx: context.tx
+                tx: context.tx,
             )
         } else {
             results = attachmentStore.fetchReferencedAttachments(owners: attachments.map(\.owner.id), tx: context.tx)
         }
-        if results.isEmpty && !attachments.isEmpty {
+        if results.isEmpty, !attachments.isEmpty {
             return .messageFailure([.restoreFrameError(
                 .failedToCreateAttachment,
-                chatItemId
+                chatItemId,
             )])
         }
 
-        let accountDataContext = context.chatContext.customChatColorContext.accountDataContext
-        guard let backupPlan = accountDataContext.backupPlan else {
+        guard let backupPlan = context.accountDataContext.backupPlan else {
             return .messageFailure([.restoreFrameError(
-                .invalidProtoData(
-                    .accountDataNotFound
-                ),
-                chatItemId
+                .invalidProtoData(.accountDataNotFound),
+                chatItemId,
             )])
         }
 
-        do {
-            try results.forEach {
-                try backupAttachmentDownloadManager.enqueueFromBackupIfNeeded(
-                    $0,
-                    restoreStartTimestampMs: context.startTimestampMs,
-                    backupPlan: backupPlan,
-                    remoteConfig: accountDataContext.currentRemoteConfig,
-                    isPrimaryDevice: context.isPrimaryDevice,
-                    tx: context.tx
-                )
-            }
-        } catch {
-            return .partialRestore((), [.restoreFrameError(
-                .failedToEnqueueAttachmentDownload(error),
-                chatItemId
-            )])
+        for referencedAttachment in results {
+            backupAttachmentDownloadScheduler.enqueueFromBackupIfNeeded(
+                referencedAttachment,
+                restoreStartTimestampMs: context.startDate.ows_millisecondsSince1970,
+                backupPlan: backupPlan,
+                remoteConfig: context.remoteConfig,
+                isPrimaryDevice: context.isPrimaryDevice,
+                tx: context.tx,
+            )
         }
 
         return .success(())
     }
 }
+
+// MARK: -
 
 extension BackupProto_MessageAttachment.Flag {
 
@@ -538,8 +422,8 @@ extension AttachmentReference.RenderingFlag {
 
 extension BackupArchive.RestoreFrameError.ErrorType {
 
-    internal static func fromAttachmentCreationError(
-        _ error: OwnedAttachmentBackupPointerProto.CreationError
+    static func fromAttachmentCreationError(
+        _ error: OwnedAttachmentBackupPointerProto.CreationError,
     ) -> Self {
         switch error {
         case .dbInsertionError(let error):
@@ -550,9 +434,8 @@ extension BackupArchive.RestoreFrameError.ErrorType {
 
 extension ReferencedAttachment {
 
-    internal func asBackupFilePointer(
-        currentBackupAttachmentUploadEra: String,
-        attachmentByteCounter: BackupArchiveAttachmentByteCounter
+    func asBackupFilePointer(
+        context: BackupArchive.ArchivingContext,
     ) -> BackupProto_FilePointer {
         var proto = BackupProto_FilePointer()
         proto.contentType = attachment.mimeType
@@ -568,9 +451,9 @@ extension ReferencedAttachment {
 
         switch attachment.streamInfo?.contentType {
         case
-                .animatedImage(let pixelSize),
-                .image(let pixelSize),
-                .video(_, let pixelSize, _):
+            .animatedImage(let pixelSize),
+            .image(let pixelSize),
+            .video(_, let pixelSize, _):
             proto.width = UInt32(pixelSize.width)
             proto.height = UInt32(pixelSize.height)
         case .audio, .file, .invalid:
@@ -582,17 +465,17 @@ extension ReferencedAttachment {
             }
         }
 
-        proto.locatorInfo = self.asBackupFilePointerLocatorInfo(currentBackupAttachmentUploadEra: currentBackupAttachmentUploadEra)
+        proto.locatorInfo = self.asBackupFilePointerLocatorInfo(context: context)
 
         if
             attachment.mediaName != nil,
             let unencryptedByteCount =
-                attachment.streamInfo?.unencryptedByteCount
+            attachment.streamInfo?.unencryptedByteCount
                 ?? attachment.mediaTierInfo?.unencryptedByteCount
         {
-            attachmentByteCounter.addToByteCount(
+            context.attachmentByteCounter.addToByteCount(
                 attachmentID: attachment.id,
-                byteCount: Cryptography.estimatedMediaTierCDNSize(unencryptedSize: unencryptedByteCount)
+                byteCount: Cryptography.estimatedMediaTierCDNSize(unencryptedSize: UInt64(safeCast: unencryptedByteCount)) ?? UInt64(UInt32.max),
             )
         }
 
@@ -602,7 +485,7 @@ extension ReferencedAttachment {
     }
 
     private func asBackupFilePointerLocatorInfo(
-        currentBackupAttachmentUploadEra: String
+        context: BackupArchive.ArchivingContext,
     ) -> BackupProto_FilePointer.LocatorInfo {
         var locatorInfo = BackupProto_FilePointer.LocatorInfo()
 
@@ -615,7 +498,7 @@ extension ReferencedAttachment {
         // When encryption keys don't match: if we reupload (e.g. forward) an
         // attachment after 3+ days, we rotate to a new encryption key; transit
         // tier info uses this new random key and can't be the fallback here.
-        let transitTierInfoToExport: Attachment.TransitTierInfo?
+        var transitTierInfoToExport: Attachment.TransitTierInfo?
         if
             let latestTransitTierInfo = attachment.latestTransitTierInfo,
             latestTransitTierInfo.encryptionKey == attachment.encryptionKey
@@ -627,42 +510,56 @@ extension ReferencedAttachment {
             transitTierInfoToExport = nil
         }
 
+        if
+            let transitTierUploadDate = transitTierInfoToExport.map({ Date(millisecondsSince1970: $0.uploadTimestamp) }),
+            transitTierUploadDate.addingTimeInterval(context.remoteConfig.messageQueueTime) < context.startDate
+        {
+            // This transit tier info is expired, so there's no point in
+            // exporting it.
+            transitTierInfoToExport = nil
+        }
+
         if let transitTierInfoToExport {
             locatorInfo.transitCdnKey = transitTierInfoToExport.cdnKey
             locatorInfo.transitCdnNumber = transitTierInfoToExport.cdnNumber
             locatorInfo.transitTierUploadTimestamp = transitTierInfoToExport.uploadTimestamp
-            // We may overwrite this below with plaintext hash integrity check,
-            // which is desired. We only use encrypted digest integrity check
-            // if we don't have a plaintext hash and DO have a transit tier upload.
-            switch transitTierInfoToExport.integrityCheck {
-            case .digestSHA256Ciphertext(let data):
-                locatorInfo.integrityCheck = .encryptedDigest(data)
-            case .sha256ContentHash(let data):
-                locatorInfo.integrityCheck = .plaintextHash(data)
-            }
         }
 
-        if let plaintextHash = attachment.sha256ContentHash {
-            locatorInfo.integrityCheck = .plaintextHash(plaintextHash)
-            if let mediaTierCdnNumber = attachment.mediaTierInfo?.cdnNumber {
-                locatorInfo.mediaTierCdnNumber = mediaTierCdnNumber
-            }
-        }
-
-        // Set fields only if some cdn info is available.
-        switch locatorInfo.integrityCheck {
-        case .plaintextHash, .encryptedDigest:
+        if let mediaTierInfo = attachment.mediaTierInfo {
             locatorInfo.key = attachment.encryptionKey
+            locatorInfo.size = mediaTierInfo.unencryptedByteCount
+            locatorInfo.integrityCheck = .plaintextHash(mediaTierInfo.sha256ContentHash)
 
-            if
-                let unencryptedByteCount = attachment.streamInfo?.unencryptedByteCount
-                    ?? attachment.mediaTierInfo?.unencryptedByteCount
-                    ?? attachment.latestTransitTierInfo?.unencryptedByteCount
-            {
-                locatorInfo.size = unencryptedByteCount
+            if let cdnNumber = mediaTierInfo.cdnNumber {
+                locatorInfo.mediaTierCdnNumber = cdnNumber
             }
-        case .none:
-            break
+        } else if let streamInfo = attachment.streamInfo {
+            locatorInfo.key = attachment.encryptionKey
+            locatorInfo.size = streamInfo.unencryptedByteCount
+            locatorInfo.integrityCheck = .plaintextHash(streamInfo.sha256ContentHash)
+        } else if let transitTierInfoToExport {
+            locatorInfo.key = attachment.encryptionKey
+            locatorInfo.size = transitTierInfoToExport.unencryptedByteCount ?? 0
+
+            // At the time of writing, TransitTierInfo.integrityCheck prefers
+            // the encrypted digest even if both are present. (See comment in
+            // that type's init.) So, manually check for the plaintext hash
+            // here, falling back to the encrypted digest otherwise.
+            if let plaintextHash = attachment.sha256ContentHash {
+                locatorInfo.integrityCheck = .plaintextHash(plaintextHash)
+            } else {
+                switch transitTierInfoToExport.integrityCheck {
+                case .sha256ContentHash(let plaintextHash):
+                    owsFailDebug("Missing Attachment plaintext hash, but had one on TransitTierInfo!")
+                    locatorInfo.integrityCheck = .plaintextHash(plaintextHash)
+                case .digestSHA256Ciphertext(let encryptedDigest):
+                    locatorInfo.integrityCheck = .encryptedDigest(encryptedDigest)
+                }
+            }
+        } else {
+            // This attachment isn't uploaded anywhere and this device won't be
+            // able to upload it in the future. So, we leave a bunch of fields
+            // unset so any restoring device knows it's unavailable.
         }
 
         return locatorInfo

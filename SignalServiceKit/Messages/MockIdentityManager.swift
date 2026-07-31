@@ -10,6 +10,7 @@ public import LibSignalClient
 
 open class MockIdentityManager: OWSIdentityManager {
     private let recipientIdFinder: RecipientIdFinder
+    public var generatedKeyPairs = [ECKeyPair]()
 
     init(recipientIdFinder: RecipientIdFinder) {
         self.recipientIdFinder = recipientIdFinder
@@ -51,10 +52,16 @@ open class MockIdentityManager: OWSIdentityManager {
                 identityKey: fromValue.identityKey,
                 isFirstKnownKey: fromValue.isFirstKnownKey,
                 createdAt: fromValue.createdAt,
-                verificationState: fromValue.verificationState
+                verificationState: fromValue.verificationState,
             )
         }
         recipientIdentities[recipient.uniqueId] = nil
+    }
+
+    open func generateNewIdentityKeyPair() -> ECKeyPair {
+        let keyPair = ECKeyPair.generateKeyPair()
+        generatedKeyPairs.append(keyPair)
+        return keyPair
     }
 
     open func libSignalStore(for identity: OWSIdentity, tx: DBReadTransaction) throws -> IdentityStore { fatalError() }
@@ -65,12 +72,15 @@ open class MockIdentityManager: OWSIdentityManager {
     open func identityKeyPair(for identity: OWSIdentity, tx: DBReadTransaction) -> ECKeyPair? {
         return identityKeyPairs[identity]
     }
+
     open func setIdentityKeyPair(_ keyPair: ECKeyPair?, for identity: OWSIdentity, tx: DBWriteTransaction) {
         identityKeyPairs[identity] = keyPair
     }
+
     open func wipeIdentityKeysFromFailedProvisioning(tx: DBWriteTransaction) {
         identityKeyPairs = [:]
     }
+
     open func identityKey(for address: SignalServiceAddress, tx: DBReadTransaction) -> Data? { fatalError() }
     open func saveIdentityKey(_ identityKey: Data, for serviceId: ServiceId, tx: DBWriteTransaction) -> Result<IdentityChange, RecipientIdError> { fatalError() }
     open func untrustedIdentityForSending(to address: SignalServiceAddress, untrustedThreshold: Date?, tx: DBReadTransaction) -> OWSRecipientIdentity? { fatalError() }
@@ -78,7 +88,6 @@ open class MockIdentityManager: OWSIdentityManager {
     open func verificationState(for address: SignalServiceAddress, tx: DBReadTransaction) -> VerificationState { fatalError() }
     open func setVerificationState(_ verificationState: VerificationState, of identityKey: Data, for address: SignalServiceAddress, isUserInitiatedChange: Bool, tx: DBWriteTransaction) -> ChangeVerificationStateResult { fatalError() }
     open func processIncomingVerifiedProto(_ verified: SSKProtoVerified, tx: DBWriteTransaction) throws { fatalError() }
-    open func processIncomingPniChangePhoneNumber(proto: SSKProtoSyncMessagePniChangeNumber, updatedPni updatedPniString: String?, preKeyManager: PreKeyManager, tx: DBWriteTransaction) { fatalError() }
     open func shouldSharePhoneNumber(with serviceId: ServiceId, tx: DBReadTransaction) -> Bool { fatalError() }
     open func setShouldSharePhoneNumber(with recipient: Aci, tx: DBWriteTransaction) { fatalError() }
     open func clearShouldSharePhoneNumber(with recipient: Aci, tx: DBWriteTransaction) { fatalError() }

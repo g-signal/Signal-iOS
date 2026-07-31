@@ -23,6 +23,7 @@ public struct NewKeyValueStore {
             static let key = "key"
             static let value = "value"
         }
+
         static let tableName = "keyvalue"
     }
 
@@ -100,16 +101,8 @@ public struct NewKeyValueStore {
     private func withDatabaseError<T>(_ block: () throws -> T) throws(GRDB.DatabaseError) -> T {
         do {
             return try block()
-        } catch let error as GRDB.DatabaseError {
-            throw error.forLogging
         } catch {
-            owsFailDebug("The database threw a non-DatabaseError: \(error)")
-            throw DatabaseError(
-                resultCode: .SQLITE_ERROR,
-                message: "\(error)",
-                sql: nil,
-                arguments: nil,
-            )
+            throw error.forceCastToDatabaseError()
         }
     }
 
@@ -117,12 +110,12 @@ public struct NewKeyValueStore {
         Logger.info("KeyValueStore statistics:")
         do {
             let sql = """
-                SELECT \(TableMetadata.Columns.collection), COUNT(*)
-                FROM \(TableMetadata.tableName)
-                GROUP BY \(TableMetadata.Columns.collection)
-                ORDER BY COUNT(*) DESC
-                LIMIT 10
-                """
+            SELECT \(TableMetadata.Columns.collection), COUNT(*)
+            FROM \(TableMetadata.tableName)
+            GROUP BY \(TableMetadata.Columns.collection)
+            ORDER BY COUNT(*) DESC
+            LIMIT 10
+            """
             let cursor = try Row.fetchCursor(tx.database, sql: sql)
             while let row = try cursor.next() {
                 let collection: String = row[0]
@@ -140,12 +133,12 @@ public struct NewKeyValueStore {
         return try T.fetchOne(
             tx.database,
             sql: """
-                SELECT \(TableMetadata.Columns.value)
-                FROM \(TableMetadata.tableName)
-                WHERE
-                    \(TableMetadata.Columns.key) = ?
-                    AND \(TableMetadata.Columns.collection) == ?
-                """,
+            SELECT \(TableMetadata.Columns.value)
+            FROM \(TableMetadata.tableName)
+            WHERE
+                \(TableMetadata.Columns.key) = ?
+                AND \(TableMetadata.Columns.collection) == ?
+            """,
             arguments: [key, collection],
         )
     }
@@ -154,10 +147,10 @@ public struct NewKeyValueStore {
         return try String.fetchAll(
             tx.database,
             sql: """
-                SELECT \(TableMetadata.Columns.key)
-                FROM \(TableMetadata.tableName)
-                WHERE \(TableMetadata.Columns.collection) == ?
-                """,
+            SELECT \(TableMetadata.Columns.key)
+            FROM \(TableMetadata.tableName)
+            WHERE \(TableMetadata.Columns.collection) == ?
+            """,
             arguments: [collection],
         )
     }
@@ -168,26 +161,26 @@ public struct NewKeyValueStore {
         if let value {
             // See: https://www.sqlite.org/lang_UPSERT.html
             sql = """
-                INSERT INTO \(TableMetadata.tableName) (
-                    \(TableMetadata.Columns.key),
-                    \(TableMetadata.Columns.collection),
-                    \(TableMetadata.Columns.value)
-                ) VALUES (?, ?, ?)
-                ON CONFLICT (
-                    \(TableMetadata.Columns.key),
-                    \(TableMetadata.Columns.collection)
-                ) DO UPDATE
-                SET \(TableMetadata.Columns.value) = ?
-                """
+            INSERT INTO \(TableMetadata.tableName) (
+                \(TableMetadata.Columns.key),
+                \(TableMetadata.Columns.collection),
+                \(TableMetadata.Columns.value)
+            ) VALUES (?, ?, ?)
+            ON CONFLICT (
+                \(TableMetadata.Columns.key),
+                \(TableMetadata.Columns.collection)
+            ) DO UPDATE
+            SET \(TableMetadata.Columns.value) = ?
+            """
             arguments = [key, collection, value, value]
         } else {
             // Setting to nil is a delete.
             sql = """
-                DELETE FROM \(TableMetadata.tableName)
-                WHERE
-                    \(TableMetadata.Columns.key) == ?
-                    AND \(TableMetadata.Columns.collection) == ?
-                """
+            DELETE FROM \(TableMetadata.tableName)
+            WHERE
+                \(TableMetadata.Columns.key) == ?
+                AND \(TableMetadata.Columns.collection) == ?
+            """
             arguments = [key, collection]
         }
 
@@ -199,11 +192,11 @@ public struct NewKeyValueStore {
     private func _removeAllOrThrow(tx: DBWriteTransaction) throws {
         try tx.database.execute(
             sql: """
-                DELETE
-                FROM \(TableMetadata.tableName)
-                WHERE \(TableMetadata.Columns.collection) == ?
-                """,
-            arguments: [collection]
+            DELETE
+            FROM \(TableMetadata.tableName)
+            WHERE \(TableMetadata.Columns.collection) == ?
+            """,
+            arguments: [collection],
         )
     }
 }

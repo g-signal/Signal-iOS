@@ -60,7 +60,7 @@ class ChooseBackupPlanViewController: HostingController<ChooseBackupPlanView> {
         onConfirmPlanSelectionBlock: @escaping OnConfirmPlanSelectionBlock,
     ) async throws(OWSAssertionError) -> ChooseBackupPlanViewController {
         let storeKitAvailability: StoreKitAvailability
-        if FeatureFlags.Backups.avoidStoreKitForTesters {
+        if BuildFlags.Backups.avoidStoreKitForTesters {
             storeKitAvailability = .unavailableForTesters
         } else {
             let backupSubscriptionManager = DependenciesBridge.shared.backupSubscriptionManager

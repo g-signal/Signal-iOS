@@ -82,7 +82,7 @@ class InternalSettingsViewController: OWSTableViewController2 {
                 guard let self = self else {
                     return
                 }
-                SignalApp.showExportDatabaseUI(from: self)
+                SignalApp.shared.showExportDatabaseUI(from: self)
             }
         ))
         debugSection.add(.actionItem(
@@ -98,7 +98,22 @@ class InternalSettingsViewController: OWSTableViewController2 {
                 guard let self = self else {
                     return
                 }
-                SignalApp.showDatabaseIntegrityCheckUI(from: self, databaseStorage: SSKEnvironment.shared.databaseStorageRef)
+                ModalActivityIndicatorViewController.present(
+                    fromViewController: self
+                ) { modal in
+                    let databaseStorage = SSKEnvironment.shared.databaseStorageRef
+                    let integrityCheckResult = GRDBDatabaseStorageAdapter.checkIntegrity(
+                        databaseStorage: databaseStorage
+                    )
+                    modal.dismiss {
+                        switch integrityCheckResult {
+                        case .ok:
+                            self.presentToast(text: "Integrity check: ok! More detail in logs.")
+                        case .notOk:
+                            self.presentToast(text: "Integrity check: not ok! More detail in logs.")
+                        }
+                    }
+                }
             }
         ))
         debugSection.add(.actionItem(
@@ -109,11 +124,8 @@ class InternalSettingsViewController: OWSTableViewController2 {
                     fromViewController: self,
                     canCancel: false
                 ) { modalActivityIndicator in
-                    DispatchQueue.main.async {
-                        OWSOrphanDataCleaner.auditAndCleanup(true) {
-                            DispatchQueue.main.async { modalActivityIndicator.dismiss() }
-                        }
-                    }
+                    try? await OWSOrphanDataCleaner.cleanUp(shouldRemoveOrphanedData: true)
+                    modalActivityIndicator.dismiss()
                 }
             }
         ))
@@ -241,7 +253,7 @@ class InternalSettingsViewController: OWSTableViewController2 {
 
         let buildSection = OWSTableSection(title: "Build")
         buildSection.add(.copyableItem(label: "Environment", value: TSConstants.isUsingProductionService ? "Production" : "Staging"))
-        buildSection.add(.copyableItem(label: "Variant", value: FeatureFlags.buildVariantString))
+        buildSection.add(.copyableItem(label: "Variant", value: BuildFlags.buildVariantString))
         buildSection.add(.copyableItem(label: "Current Version", value: AppVersionImpl.shared.currentAppVersion))
         buildSection.add(.copyableItem(label: "First Version", value: AppVersionImpl.shared.firstAppVersion))
         if let buildDetails = Bundle.main.object(forInfoDictionaryKey: "BuildDetails") as? [String: AnyObject] {
@@ -479,7 +491,7 @@ private extension InternalSettingsViewController {
             progress: nil
         )
 
-        let registeredBackupKeyToken = try await backupKeyService.registerBackupKey(
+        try await backupKeyService.registerBackupKey(
             localIdentifiers: localIdentifiers,
             auth: .implicit()
         )
@@ -487,7 +499,6 @@ private extension InternalSettingsViewController {
         _ = try await backupArchiveManager.uploadEncryptedBackup(
             backupKey: messageBackupKey,
             metadata: metadata,
-            registeredBackupKeyToken: registeredBackupKeyToken,
             auth: .implicit(),
             progress: nil,
         )

@@ -13,14 +13,18 @@ public extension TSInfoMessage {
         thread: TSThread,
         messageType: TSInfoMessageType,
         timestamp: UInt64 = MessageTimestampGenerator.sharedInstance.generateTimestamp(),
-        infoMessageUserInfo: [InfoMessageUserInfoKey: Any]? = nil
+        expireTimerVersion: UInt32? = nil,
+        expiresInSeconds: UInt32? = nil,
+        infoMessageUserInfo: [InfoMessageUserInfoKey: Any]? = nil,
     ) {
         self.init(
             thread: thread,
             timestamp: timestamp,
             serverGuid: nil,
             messageType: messageType,
-            infoMessageUserInfo: infoMessageUserInfo
+            expireTimerVersion: expireTimerVersion as NSNumber?,
+            expiresInSeconds: expiresInSeconds ?? 0,
+            infoMessageUserInfo: infoMessageUserInfo,
         )
     }
 }

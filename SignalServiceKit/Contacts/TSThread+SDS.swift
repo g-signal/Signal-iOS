@@ -180,7 +180,7 @@ extension TSThread {
             let mentionNotificationMode: TSThreadMentionNotificationMode = TSThreadMentionNotificationMode(rawValue: record.mentionNotificationMode) ?? .default
             let messageDraft: String? = record.messageDraft
             let messageDraftBodyRangesSerialized: Data? = record.messageDraftBodyRanges
-            let messageDraftBodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(messageDraftBodyRangesSerialized, name: "messageDraftBodyRanges")
+            let messageDraftBodyRanges: MessageBodyRanges? = try messageDraftBodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let mutedUntilDateObsoleteInterval: Double? = record.mutedUntilDate
             let mutedUntilDateObsolete: Date? = SDSDeserialization.optionalDoubleAsDate(mutedUntilDateObsoleteInterval, name: "mutedUntilDateObsolete")
             let mutedUntilTimestampObsolete: UInt64 = record.mutedUntilTimestamp
@@ -232,14 +232,14 @@ extension TSThread {
             let mentionNotificationMode: TSThreadMentionNotificationMode = TSThreadMentionNotificationMode(rawValue: record.mentionNotificationMode) ?? .default
             let messageDraft: String? = record.messageDraft
             let messageDraftBodyRangesSerialized: Data? = record.messageDraftBodyRanges
-            let messageDraftBodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(messageDraftBodyRangesSerialized, name: "messageDraftBodyRanges")
+            let messageDraftBodyRanges: MessageBodyRanges? = try messageDraftBodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let mutedUntilDateObsoleteInterval: Double? = record.mutedUntilDate
             let mutedUntilDateObsolete: Date? = SDSDeserialization.optionalDoubleAsDate(mutedUntilDateObsoleteInterval, name: "mutedUntilDateObsolete")
             let mutedUntilTimestampObsolete: UInt64 = record.mutedUntilTimestamp
             let shouldThreadBeVisible: Bool = record.shouldThreadBeVisible
             let storyViewMode: TSThreadStoryViewMode = TSThreadStoryViewMode(rawValue: record.storyViewMode) ?? .default
-            let groupModelSerialized: Data? = record.groupModel
-            let groupModel: TSGroupModel = try SDSDeserialization.unarchive(groupModelSerialized, name: "groupModel")
+            let groupModelSerialized: Data = try record.groupModel ?? { () -> Data in throw SDSError.missingRequiredField(fieldName: "groupModel") }()
+            let groupModel: TSGroupModel = try SDSDeserialization.unarchivedObject(ofClass: TSGroupModel.self, from: groupModelSerialized)
 
             return TSGroupThread(grdbId: recordId,
                                  uniqueId: uniqueId,
@@ -281,7 +281,7 @@ extension TSThread {
             let mentionNotificationMode: TSThreadMentionNotificationMode = TSThreadMentionNotificationMode(rawValue: record.mentionNotificationMode) ?? .default
             let messageDraft: String? = record.messageDraft
             let messageDraftBodyRangesSerialized: Data? = record.messageDraftBodyRanges
-            let messageDraftBodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(messageDraftBodyRangesSerialized, name: "messageDraftBodyRanges")
+            let messageDraftBodyRanges: MessageBodyRanges? = try messageDraftBodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let mutedUntilDateObsoleteInterval: Double? = record.mutedUntilDate
             let mutedUntilDateObsolete: Date? = SDSDeserialization.optionalDoubleAsDate(mutedUntilDateObsoleteInterval, name: "mutedUntilDateObsolete")
             let mutedUntilTimestampObsolete: UInt64 = record.mutedUntilTimestamp
@@ -333,7 +333,7 @@ extension TSThread {
             let mentionNotificationMode: TSThreadMentionNotificationMode = TSThreadMentionNotificationMode(rawValue: record.mentionNotificationMode) ?? .default
             let messageDraft: String? = record.messageDraft
             let messageDraftBodyRangesSerialized: Data? = record.messageDraftBodyRanges
-            let messageDraftBodyRanges: MessageBodyRanges? = try SDSDeserialization.optionalUnarchive(messageDraftBodyRangesSerialized, name: "messageDraftBodyRanges")
+            let messageDraftBodyRanges: MessageBodyRanges? = try messageDraftBodyRangesSerialized.map({ try SDSDeserialization.unarchivedObject(ofClass: MessageBodyRanges.self, from: $0) })
             let mutedUntilDateObsoleteInterval: Double? = record.mutedUntilDate
             let mutedUntilDateObsolete: Date? = SDSDeserialization.optionalDoubleAsDate(mutedUntilDateObsoleteInterval, name: "mutedUntilDateObsolete")
             let mutedUntilTimestampObsolete: UInt64 = record.mutedUntilTimestamp
@@ -795,17 +795,14 @@ public extension TSThread {
 @objc
 public class TSThreadCursor: NSObject, SDSCursor {
     private let transaction: DBReadTransaction
-    private let cursor: RecordCursor<ThreadRecord>?
+    private let cursor: RecordCursor<ThreadRecord>
 
-    init(transaction: DBReadTransaction, cursor: RecordCursor<ThreadRecord>?) {
+    init(transaction: DBReadTransaction, cursor: RecordCursor<ThreadRecord>) {
         self.transaction = transaction
         self.cursor = cursor
     }
 
     public func next() throws -> TSThread? {
-        guard let cursor = cursor else {
-            return nil
-        }
         guard let record = try cursor.next() else {
             return nil
         }
@@ -833,16 +830,9 @@ public extension TSThread {
     @nonobjc
     class func grdbFetchCursor(transaction: DBReadTransaction) -> TSThreadCursor {
         let database = transaction.database
-        do {
+        return failIfThrows {
             let cursor = try ThreadRecord.fetchCursor(database)
             return TSThreadCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \(error)")
-            return TSThreadCursor(transaction: transaction, cursor: nil)
         }
     }
 
@@ -913,44 +903,6 @@ public extension TSThread {
                             })
     }
 
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        anyEnumerateUniqueIds(transaction: transaction, batched: false, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batched: Bool = false,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        let batchSize = batched ? Batching.kDefaultBatchSize : 0
-        anyEnumerateUniqueIds(transaction: transaction, batchSize: batchSize, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    //
-    // If batchSize > 0, the enumeration is performed in autoreleased batches.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batchSize: UInt,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        grdbEnumerateUniqueIds(transaction: transaction,
-                                sql: """
-                SELECT \(threadColumn: .uniqueId)
-                FROM \(ThreadRecord.databaseTableName)
-            """,
-            batchSize: batchSize,
-            block: block)
-    }
-
     // Does not order the results.
     class func anyFetchAll(transaction: DBReadTransaction) -> [TSThread] {
         var result = [TSThread]()
@@ -960,36 +912,8 @@ public extension TSThread {
         return result
     }
 
-    // Does not order the results.
-    class func anyAllUniqueIds(transaction: DBReadTransaction) -> [String] {
-        var result = [String]()
-        anyEnumerateUniqueIds(transaction: transaction) { (uniqueId, _) in
-            result.append(uniqueId)
-        }
-        return result
-    }
-
     class func anyCount(transaction: DBReadTransaction) -> UInt {
         return ThreadRecord.ows_fetchCount(transaction.database)
-    }
-
-    class func anyExists(
-        uniqueId: String,
-        transaction: DBReadTransaction
-    ) -> Bool {
-        assert(!uniqueId.isEmpty)
-
-        let sql = "SELECT EXISTS ( SELECT 1 FROM \(ThreadRecord.databaseTableName) WHERE \(threadColumn: .uniqueId) = ? )"
-        let arguments: StatementArguments = [uniqueId]
-        do {
-            return try Bool.fetchOne(transaction.database, sql: sql, arguments: arguments) ?? false
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFail("Missing instance.")
-        }
     }
 }
 
@@ -999,17 +923,10 @@ public extension TSThread {
     class func grdbFetchCursor(sql: String,
                                arguments: StatementArguments = StatementArguments(),
                                transaction: DBReadTransaction) -> TSThreadCursor {
-        do {
+        return failIfThrows {
             let sqlRequest = SQLRequest<Void>(sql: sql, arguments: arguments, cached: true)
             let cursor = try ThreadRecord.fetchCursor(transaction.database, sqlRequest)
             return TSThreadCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \(error)")
-            return TSThreadCursor(transaction: transaction, cursor: nil)
         }
     }
 

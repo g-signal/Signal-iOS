@@ -8,22 +8,22 @@ import Foundation
 public protocol SignalRecipientManager {
     func fetchRecipientIfPhoneNumberVisible(
         _ phoneNumber: String,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> SignalRecipient?
 
     func modifyAndSave(
-        _ recipient: SignalRecipient,
+        _ recipient: inout SignalRecipient,
         deviceIdsToAdd: [DeviceId],
         deviceIdsToRemove: [DeviceId],
         shouldUpdateStorageService: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 
     func markAsUnregisteredAndSave(
-        _ recipient: SignalRecipient,
+        _ recipient: inout SignalRecipient,
         unregisteredAt: UnregisteredAt,
         shouldUpdateStorageService: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 }
 
@@ -34,17 +34,17 @@ public enum UnregisteredAt {
 
 extension SignalRecipientManager {
     public func markAsRegisteredAndSave(
-        _ recipient: SignalRecipient,
+        _ recipient: inout SignalRecipient,
         deviceId: DeviceId = .primary,
         shouldUpdateStorageService: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         modifyAndSave(
-            recipient,
+            &recipient,
             deviceIdsToAdd: [deviceId],
             deviceIdsToRemove: [],
             shouldUpdateStorageService: shouldUpdateStorageService,
-            tx: tx
+            tx: tx,
         )
     }
 
@@ -58,7 +58,7 @@ public class SignalRecipientManagerImpl: SignalRecipientManager {
     public init(
         phoneNumberVisibilityFetcher: any PhoneNumberVisibilityFetcher,
         recipientDatabaseTable: RecipientDatabaseTable,
-        storageServiceManager: any StorageServiceManager
+        storageServiceManager: any StorageServiceManager,
     ) {
         self.phoneNumberVisibilityFetcher = phoneNumberVisibilityFetcher
         self.recipientDatabaseTable = recipientDatabaseTable
@@ -77,29 +77,29 @@ public class SignalRecipientManagerImpl: SignalRecipientManager {
     }
 
     public func markAsUnregisteredAndSave(
-        _ recipient: SignalRecipient,
+        _ recipient: inout SignalRecipient,
         unregisteredAt: UnregisteredAt,
         shouldUpdateStorageService: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         if case .specificTimeFromOtherDevice(let timestamp) = unregisteredAt {
-            setUnregisteredAtTimestamp(timestamp, for: recipient, shouldUpdateStorageService: shouldUpdateStorageService)
+            setUnregisteredAtTimestamp(timestamp, for: &recipient, shouldUpdateStorageService: shouldUpdateStorageService)
         }
         modifyAndSave(
-            recipient,
+            &recipient,
             deviceIdsToAdd: [],
             deviceIdsToRemove: recipient.deviceIds,
             shouldUpdateStorageService: shouldUpdateStorageService,
-            tx: tx
+            tx: tx,
         )
     }
 
     public func modifyAndSave(
-        _ recipient: SignalRecipient,
+        _ recipient: inout SignalRecipient,
         deviceIdsToAdd: [DeviceId],
         deviceIdsToRemove: [DeviceId],
         shouldUpdateStorageService: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         var deviceIdsToAdd = deviceIdsToAdd
         // Always add the primary if any other device is registered.
@@ -116,7 +116,7 @@ public class SignalRecipientManagerImpl: SignalRecipientManager {
 
         Logger.info("Updating \(recipient.aci?.logString ?? recipient.pni?.logString ?? "<>")'s devices. Added \(newDeviceIds.subtracting(oldDeviceIds).sorted()). Removed \(oldDeviceIds.subtracting(newDeviceIds).sorted()).")
 
-        setDeviceIds(newDeviceIds, for: recipient, shouldUpdateStorageService: shouldUpdateStorageService)
+        setDeviceIds(newDeviceIds, for: &recipient, shouldUpdateStorageService: shouldUpdateStorageService)
         recipientDatabaseTable.updateRecipient(recipient, transaction: tx)
     }
 }

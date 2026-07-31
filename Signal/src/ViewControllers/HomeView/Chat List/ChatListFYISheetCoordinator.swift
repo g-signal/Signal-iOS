@@ -4,10 +4,11 @@
 //
 
 import SignalServiceKit
+import SignalUI
 
 @MainActor
 class ChatListFYISheetCoordinator {
-    private enum FYISheet {
+    fileprivate enum FYISheet {
         struct BadgeThanks {
             let redemptionSuccess: DonationReceiptCredentialRedemptionSuccess
             let successMode: DonationReceiptCredentialResultStore.Mode
@@ -26,29 +27,46 @@ class ChatListFYISheetCoordinator {
             let probablyHasCurrentSubscription: Bool
         }
 
+        struct BackupSubscriptionExpired {
+            enum SubscriptionType {
+                case iap
+                case testFlight
+            }
+
+            let subscriptionType: SubscriptionType
+        }
+
+        struct BackupSubscriptionFailedToRenew {}
+
         case badgeThanks(BadgeThanks)
         case badgeIssue(BadgeIssue)
         case badgeExpiration(BadgeExpiration)
+        case backupSubscriptionExpired(BackupSubscriptionExpired)
+        case backupSubscriptionFailedToRenew(BackupSubscriptionFailedToRenew)
     }
 
+    private let backupExportJobRunner: BackupExportJobRunner
+    private let backupSubscriptionIssueStore: BackupSubscriptionIssueStore
     private let donationReceiptCredentialResultStore: DonationReceiptCredentialResultStore
     private let donationSubscriptionManager: DonationSubscriptionManager.Type
     private let db: DB
-    private let logger: PrefixedLogger
     private let networkManager: NetworkManager
     private let profileManager: ProfileManager
 
     init(
+        backupExportJobRunner: BackupExportJobRunner,
+        backupSubscriptionIssueStore: BackupSubscriptionIssueStore,
         donationReceiptCredentialResultStore: DonationReceiptCredentialResultStore,
         donationSubscriptionManager: DonationSubscriptionManager.Type,
         db: DB,
         networkManager: NetworkManager,
         profileManager: ProfileManager,
     ) {
+        self.backupExportJobRunner = backupExportJobRunner
+        self.backupSubscriptionIssueStore = backupSubscriptionIssueStore
         self.donationReceiptCredentialResultStore = donationReceiptCredentialResultStore
         self.donationSubscriptionManager = donationSubscriptionManager
         self.db = db
-        self.logger = PrefixedLogger(prefix: "[Donations]")
         self.networkManager = networkManager
         self.profileManager = profileManager
     }
@@ -89,6 +107,12 @@ class ChatListFYISheetCoordinator {
                 mostRecentSubscriptionPaymentMethod: donationSubscriptionManager.getMostRecentSubscriptionPaymentMethod(transaction: tx),
                 probablyHasCurrentSubscription: donationSubscriptionManager.probablyHasCurrentSubscription(tx: tx),
             ))
+        } else if backupSubscriptionIssueStore.shouldWarnIAPSubscriptionExpired(tx: tx) {
+            return .backupSubscriptionExpired(FYISheet.BackupSubscriptionExpired(subscriptionType: .iap))
+        } else if backupSubscriptionIssueStore.shouldWarnTestFlightSubscriptionExpired(tx: tx) {
+            return .backupSubscriptionExpired(FYISheet.BackupSubscriptionExpired(subscriptionType: .testFlight))
+        } else if backupSubscriptionIssueStore.shouldWarnIAPSubscriptionFailedToRenew(tx: tx) {
+            return .backupSubscriptionFailedToRenew(FYISheet.BackupSubscriptionFailedToRenew())
         } else {
             return nil
         }
@@ -106,7 +130,7 @@ class ChatListFYISheetCoordinator {
     /// silently.
     private func shouldShowBadgeThanksSheet(
         successMode: DonationReceiptCredentialResultStore.Mode,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> FYISheet? {
         guard
             let redemptionSuccess = donationReceiptCredentialResultStore
@@ -130,7 +154,7 @@ class ChatListFYISheetCoordinator {
     /// redundant errors here.
     private func shouldShowBadgeIssueSheet(
         errorMode: DonationReceiptCredentialResultStore.Mode,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> FYISheet? {
         guard
             let redemptionError = donationReceiptCredentialResultStore
@@ -141,22 +165,16 @@ class ChatListFYISheetCoordinator {
             return nil
         }
 
-        guard let badge = redemptionError.badge else {
-            // Might be missing for old errors, but we need this to present the
-            // sheet, so ignore if missing.
-            return nil
-        }
-
         switch redemptionError.errorCode {
         case .paymentStillProcessing:
             // Not a terminal error – no reason to show a sheet.
             return nil
         case
-                .paymentFailed,
-                .localValidationFailed,
-                .serverValidationFailed,
-                .paymentNotFound,
-                .paymentIntentRedeemed:
+            .paymentFailed,
+            .localValidationFailed,
+            .serverValidationFailed,
+            .paymentNotFound,
+            .paymentIntentRedeemed:
             break
         }
 
@@ -181,7 +199,7 @@ class ChatListFYISheetCoordinator {
 
         return .badgeIssue(FYISheet.BadgeIssue(
             redemptionError: redemptionError,
-            badge: badge,
+            badge: redemptionError.badge,
             errorMode: errorMode,
         ))
     }
@@ -199,6 +217,10 @@ class ChatListFYISheetCoordinator {
             await _present(badgeIssue: badgeIssue, from: chatListViewController)
         case .badgeExpiration(let badgeExpiration):
             await _present(badgeExpiration: badgeExpiration, from: chatListViewController)
+        case .backupSubscriptionExpired(let backupSubscriptionExpired):
+            await _present(backupSubscriptionExpired: backupSubscriptionExpired, from: chatListViewController)
+        case .backupSubscriptionFailedToRenew(let backupSubscriptionFailedToRenew):
+            await _present(backupSubscriptionFailedToRenew: backupSubscriptionFailedToRenew, from: chatListViewController)
         }
     }
 
@@ -208,7 +230,7 @@ class ChatListFYISheetCoordinator {
     ) async {
         let badgeThanksSheetPresenter: BadgeThanksSheetPresenter = .fromGlobals(
             redemptionSuccess: badgeThanks.redemptionSuccess,
-            successMode: badgeThanks.successMode
+            successMode: badgeThanks.successMode,
         )
 
         await badgeThanksSheetPresenter.presentAndRecordBadgeThanks(fromViewController: chatListViewController)
@@ -218,6 +240,8 @@ class ChatListFYISheetCoordinator {
         badgeIssue: FYISheet.BadgeIssue,
         from chatListViewController: ChatListViewController,
     ) async {
+        let logger = PrefixedLogger(prefix: "[Donations]")
+
         let redemptionError = badgeIssue.redemptionError
         let chargeFailureCodeIfPaymentFailed = redemptionError.chargeFailureCodeIfPaymentFailed
         let paymentMethod = redemptionError.paymentMethod
@@ -240,19 +264,19 @@ class ChatListFYISheetCoordinator {
             switch errorMode {
             case .oneTimeBoost, .recurringSubscriptionInitiation:
                 return .bankPaymentFailed(
-                    chargeFailureCode: chargeFailureCodeIfPaymentFailed
+                    chargeFailureCode: chargeFailureCodeIfPaymentFailed,
                 )
             case .recurringSubscriptionRenewal:
                 return .subscriptionExpiredBecauseOfChargeFailure(
                     chargeFailureCode: chargeFailureCodeIfPaymentFailed,
-                    paymentMethod: paymentMethod
+                    paymentMethod: paymentMethod,
                 )
             }
         }()
 
         let badgeIssueSheet = BadgeIssueSheet(
             badge: badge,
-            mode: badgeIssueSheetMode
+            mode: badgeIssueSheetMode,
         )
         badgeIssueSheet.delegate = chatListViewController
 
@@ -261,7 +285,7 @@ class ChatListFYISheetCoordinator {
         await db.awaitableWrite { tx in
             donationReceiptCredentialResultStore.setHasPresentedError(
                 errorMode: errorMode,
-                tx: tx
+                tx: tx,
             )
         }
     }
@@ -270,6 +294,8 @@ class ChatListFYISheetCoordinator {
         badgeExpiration: FYISheet.BadgeExpiration,
         from chatListViewController: ChatListViewController,
     ) async {
+        let logger = PrefixedLogger(prefix: "[Donations]")
+
         let expiredBadgeID = badgeExpiration.expiredBadgeID
         let donationSubscriberID = badgeExpiration.donationSubscriberID
         let probablyHasCurrentSubscription = badgeExpiration.probablyHasCurrentSubscription
@@ -292,7 +318,7 @@ class ChatListFYISheetCoordinator {
 
             let badgeIssueSheet = BadgeIssueSheet(
                 badge: boostBadge,
-                mode: .boostExpired(hasCurrentSubscription: probablyHasCurrentSubscription)
+                mode: .boostExpired(hasCurrentSubscription: probablyHasCurrentSubscription),
             )
             badgeIssueSheet.delegate = chatListViewController
 
@@ -358,6 +384,54 @@ class ChatListFYISheetCoordinator {
             }
         }
     }
+
+    private func _present(
+        backupSubscriptionExpired: FYISheet.BackupSubscriptionExpired,
+        from chatListViewController: ChatListViewController,
+    ) async {
+        let logger = PrefixedLogger(prefix: "[Backups]")
+        logger.info("Showing BackupSubscriptionExpired FYI sheet.")
+
+        let sheet = BackupSubscriptionExpiredHeroSheet(
+            subscriptionType: backupSubscriptionExpired.subscriptionType,
+            onManageBackups: {
+                SignalApp.shared.showAppSettings(mode: .backups)
+            },
+        )
+        chatListViewController.present(sheet, animated: true) { [self] in
+            db.write { tx in
+                let snoozeMethod: (Bool, DBWriteTransaction) -> Void
+                switch backupSubscriptionExpired.subscriptionType {
+                case .iap:
+                    snoozeMethod = backupSubscriptionIssueStore.setShouldWarnIAPSubscriptionExpired
+                case .testFlight:
+                    snoozeMethod = backupSubscriptionIssueStore.setShouldWarnTestFlightSubscriptionExpired
+                }
+
+                // We showed the sheet, no need to show it again.
+                snoozeMethod(false, tx)
+            }
+        }
+    }
+
+    private func _present(
+        backupSubscriptionFailedToRenew: FYISheet.BackupSubscriptionFailedToRenew,
+        from chatListViewController: ChatListViewController,
+    ) async {
+        let logger = PrefixedLogger(prefix: "[Backups]")
+        logger.info("Showing BackupSubscriptionFailedToRenew FYI sheet.")
+
+        let sheet = BackupSubscriptionFailedToRenewHeroSheet(
+            onManageSubscription: {
+                SignalApp.shared.showAppSettings(mode: .backups)
+            },
+        )
+        chatListViewController.present(sheet, animated: true) { [self] in
+            db.write { tx in
+                backupSubscriptionIssueStore.setDidWarnIAPSubscriptionFailedToRenew(tx: tx)
+            }
+        }
+    }
 }
 
 // MARK: - ChatListViewController: BadgeIssueSheetDelegate
@@ -370,5 +444,86 @@ extension ChatListViewController: BadgeIssueSheetDelegate {
         case .openDonationView:
             showAppSettings(mode: .donate(donateMode: .oneTime))
         }
+    }
+}
+
+// MARK: -
+
+private class BackupSubscriptionExpiredHeroSheet: HeroSheetViewController {
+    init(
+        subscriptionType: ChatListFYISheetCoordinator.FYISheet.BackupSubscriptionExpired.SubscriptionType,
+        onManageBackups: @escaping () -> Void,
+    ) {
+        let bodyString: String = switch subscriptionType {
+        case .iap:
+            OWSLocalizedString(
+                "BACKUP_PLAN_DOWNGRADED_SHEET_BODY",
+                comment: "Body for a sheet shown when your Backup plan is downgraded.",
+            )
+        case .testFlight:
+            OWSLocalizedString(
+                "BACKUP_PLAN_DOWNGRADED_SHEET_BODY_TESTFLIGHT",
+                comment: "Body for a sheet shown when your Backup plan is downgraded because you stopped using TestFlight.",
+            )
+        }
+
+        super.init(
+            hero: .image(.backupsError),
+            title: OWSLocalizedString(
+                "BACKUP_PLAN_DOWNGRADED_SHEET_TITLE",
+                comment: "Title for a sheet shown when your Backup plan is downgraded.",
+            ),
+            body: bodyString,
+            primaryButton: HeroSheetViewController.Button(
+                title: OWSLocalizedString(
+                    "BACKUP_PLAN_DOWNGRADED_SHEET_PRIMARY_BUTTON",
+                    comment: "Primary button for a sheet shown when your Backup plan is downgraded.",
+                ),
+                action: { sheet in
+                    sheet.dismiss(animated: true) {
+                        onManageBackups()
+                    }
+                },
+            ),
+            secondaryButton: .dismissing(
+                title: CommonStrings.notNowButton,
+                style: .secondary,
+            ),
+        )
+    }
+}
+
+// MARK: -
+
+private class BackupSubscriptionFailedToRenewHeroSheet: HeroSheetViewController {
+    init(
+        onManageSubscription: @escaping () -> Void,
+    ) {
+        super.init(
+            hero: .image(.backupsError),
+            title: OWSLocalizedString(
+                "BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE",
+                comment: "Title for a sheet shown when your Backup subscription fails to renew.",
+            ),
+            body: OWSLocalizedString(
+                "BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_MESSAGE",
+                comment: "Message for a sheet shown when your Backup subscription fails to renew.",
+            ),
+            primaryButton: HeroSheetViewController.Button(
+                title: OWSLocalizedString(
+                    "BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_PRIMARY_BUTTON",
+                    comment: "Primary button for a sheet shown when your Backup subscription fails to renew.",
+                ),
+                action: { sheet in
+                    sheet.dismiss(animated: true) {
+                        onManageSubscription()
+                    }
+                },
+            ),
+            secondaryButton: .dismissing(
+                title: CommonStrings.notNowButton,
+                style: .secondary,
+            ),
+        )
     }
 }

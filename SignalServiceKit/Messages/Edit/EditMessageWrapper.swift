@@ -27,21 +27,21 @@ public protocol EditMessageWrapper {
         applying: MessageEdits,
         isLatestRevision: Bool,
         attachmentContentValidator: AttachmentContentValidator,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> MessageBuilderType
 
     static func build(
         _ builder: MessageBuilderType,
-        dataStore: EditManagerImpl.Shims.DataStore,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> MessageType
 
     func updateMessageCopy(
-        dataStore: EditManagerImpl.Shims.DataStore,
         newMessageCopy: MessageType,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     )
 }
+
+// MARK: -
 
 public struct IncomingEditMessageWrapper: EditMessageWrapper {
 
@@ -51,53 +51,57 @@ public struct IncomingEditMessageWrapper: EditMessageWrapper {
 
     /// Read state is .. complicated when it comes to edit revisions.
     ///
-    /// First, some context: For an incoming edit message, the `read` value of the interaction may
-    /// not tell the whole story about the read  state of the edit.   This is mainly because of two things:
+    /// For the latest revision of a message, the `TSInteraction/read` property
+    /// is accurate.
     ///
-    /// 1) The queries that look up read count are affected by the number of unread items in a
-    ///   thread, and leaving a bunch of old  edit revision as 'unread' could
+    /// However, the `TSInteraction` for all past revisions has `read` set to
+    /// `true`, and "whether the user has read that edit" is tracked separately
+    /// on `EditRecord`.
     ///
-    /// 2) Read state is tracked by watching for an interaction to become visible and marking all items
-    ///   before it in a conversation as read.   Old edit revisions are neither (a) visible on the UI to trigger
-    ///   the standard read tracking logic or (b) guaranteed to be located _before_ the last message in a
-    ///   thread (due to other architectural limitations)
+    /// This is for two reasons:
     ///
-    /// Because of the above to points, when processing an edit, old revisions are marked as `read`
-    /// regardless  of the `read` state of the original target mesasge.
+    /// 1. There are many queries that filter on `TSInteraction/read`, and by
+    /// automatically excluding prior revisions from those queries we make them
+    /// simpler; for example, queries pertaining to unread count, or whether a
+    /// thread contains an unread mention of the local user.
     ///
-    /// All of this is to say that this method as solely determining if the message in question was
-    /// viewed through the UI and marked read through the standard read tracking mechanisms.
+    /// 2. Interactions are marked "read" by tracking the latest interaction to
+    /// become visible, and marking all interactions before it (by SQL insertion
+    /// order) as read. Old edit revisions are not visible in the UI, and are
+    /// inserted as *newer* interactions than the latest revision; this makes it
+    /// complicated to correctly mark those interactions as read.
     ///
-    /// If the `editState` of the message is marked as `.lastRevision'
-    /// it couldn't (or shouldn't as of this writing) have been visible in the UI to mark as read in normal
-    /// conversation view, and if the state is `.latestRevisionUnread`, it is, as per t's name, still unread.
+    /// ---
     ///
-    /// If the message is neither of these states, (meaning it's either `.latestRevisionRead`
-    /// or `.none` (unedited)), the messages `wasRead` can be consulted for the read
-    /// state of the message.
-    ///
-    /// The primary (or at least original) use for this boolean was to determine
-    /// the read state of the current message when processing an incoming edit.
-    /// This allows capturing all the unread edits to allow view receipts to
-    /// be sent later on if the edit history is viewed.
+    /// Note that we should only ever be targeting a latest revision for edits.
     public var wasRead: Bool {
-        if message.editState == .latestRevisionRead || message.editState == .none {
+        switch message.editState {
+        case .none, .latestRevisionRead, .latestRevisionUnread:
             return message.wasRead
+        case .pastRevision:
+            // We shouldn't ever be targeting a past revision for an edit. If we
+            // were, though, assume it was unread since it can't be seen in the
+            // conversation view.
+            owsFailDebug("Edit target was unexpectedly past revision!")
+            return false
         }
-        return false
     }
 
     public func cloneAsBuilderWithoutAttachments(
         applying edits: MessageEdits,
         isLatestRevision: Bool,
         attachmentContentValidator: AttachmentContentValidator,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> TSIncomingMessageBuilder {
         let editState: TSEditState = {
             if isLatestRevision {
-                if message.editState == .none {
+                switch message.editState {
+                case .none:
                     return message.wasRead ? .latestRevisionRead : .latestRevisionUnread
-                } else {
+                case .latestRevisionRead, .latestRevisionUnread:
+                    return message.editState
+                case .pastRevision:
+                    owsFailDebug("Latest revision message unexpectedly had .pastRevision edit state!")
                     return message.editState
                 }
             } else {
@@ -111,7 +115,7 @@ public struct IncomingEditMessageWrapper: EditMessageWrapper {
             messageBody = message.body.map {
                 attachmentContentValidator.truncatedMessageBodyForInlining(
                     MessageBody(text: $0, ranges: message.bodyRanges ?? .empty),
-                    tx: tx
+                    tx: tx,
                 )
             }
         case .change(let body):
@@ -161,24 +165,24 @@ public struct IncomingEditMessageWrapper: EditMessageWrapper {
             messageSticker: nil,
             giftBadge: message.giftBadge,
             paymentNotification: nil,
-            isPoll: false
+            isPoll: false,
         )
     }
 
     public static func build(
         _ builder: TSIncomingMessageBuilder,
-        dataStore: EditManagerImpl.Shims.DataStore,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> TSIncomingMessage {
         return builder.build()
     }
 
     public func updateMessageCopy(
-        dataStore: EditManagerImpl.Shims.DataStore,
         newMessageCopy: TSIncomingMessage,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {}
 }
+
+// MARK: -
 
 public struct OutgoingEditMessageWrapper: EditMessageWrapper {
 
@@ -187,20 +191,20 @@ public struct OutgoingEditMessageWrapper: EditMessageWrapper {
 
     public init(
         message: TSOutgoingMessage,
-        thread: TSThread
+        thread: TSThread,
     ) {
         self.message = message
         self.thread = thread
     }
 
-    // Always return true for the sake of outgoing message read status
+    /// Outgoing messages are always read.
     public var wasRead: Bool { true }
 
     public func cloneAsBuilderWithoutAttachments(
         applying edits: MessageEdits,
         isLatestRevision: Bool,
         attachmentContentValidator: AttachmentContentValidator,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> TSOutgoingMessageBuilder {
         let messageBody: ValidatedInlineMessageBody?
         switch edits.body {
@@ -208,7 +212,7 @@ public struct OutgoingEditMessageWrapper: EditMessageWrapper {
             messageBody = message.body.map {
                 attachmentContentValidator.truncatedMessageBodyForInlining(
                     MessageBody(text: $0, ranges: message.bodyRanges ?? .empty),
-                    tx: tx
+                    tx: tx,
                 )
             }
         case .change(let body):
@@ -237,7 +241,6 @@ public struct OutgoingEditMessageWrapper: EditMessageWrapper {
             expireTimerVersion: isLatestRevision ? message.expireTimerVersion?.uint32Value : 0,
             expireStartedAt: message.expireStartedAt,
             isVoiceMessage: message.isVoiceMessage,
-            groupMetaMessage: message.groupMetaMessage,
             isSmsMessageRestoredFromBackup: message.isSmsMessageRestoredFromBackup,
             isViewOnceMessage: message.isViewOnceMessage,
             isViewOnceComplete: message.isViewOnceComplete,
@@ -252,29 +255,26 @@ public struct OutgoingEditMessageWrapper: EditMessageWrapper {
             linkPreview: nil,
             messageSticker: nil,
             giftBadge: message.giftBadge,
-            isPoll: false
+            isPoll: false,
         )
     }
 
     public static func build(
         _ builder: TSOutgoingMessageBuilder,
-        dataStore: EditManagerImpl.Shims.DataStore,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> TSOutgoingMessage {
-        return dataStore.build(builder, tx: tx)
+        return builder.build(transaction: tx)
     }
 
     public func updateMessageCopy(
-        dataStore: EditManagerImpl.Shims.DataStore,
         newMessageCopy: TSOutgoingMessage,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         // Need to copy over the recipient address from the old message
         // This is needed when procesing sync messages.
-        dataStore.update(
-            newMessageCopy,
-            withRecipientAddressStates: message.recipientAddressStates,
-            tx: tx
+        newMessageCopy.updateWithRecipientAddressStates(
+            message.recipientAddressStates,
+            tx: tx,
         )
     }
 }

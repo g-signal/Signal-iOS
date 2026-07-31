@@ -10,7 +10,7 @@ import SignalUI
 
 class DonateViewController: OWSViewController, OWSNavigationChildController {
     private static func canMakeNewDonations(
-        forDonateMode donateMode: DonateMode
+        forDonateMode donateMode: DonateMode,
     ) -> Bool {
         DonationUtilities.canDonate(
             inMode: donateMode.asDonationMode,
@@ -18,15 +18,12 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         )
     }
 
-    private var backgroundColor: UIColor {
-        OWSTableViewController2.tableBackgroundColor(isUsingPresentedStyle: true)
-    }
     static let cornerRadius: CGFloat = 18
     static var bubbleBackgroundColor: CGColor { DonationViewsUtil.bubbleBackgroundColor.cgColor }
-    static var selectedColor: CGColor { Theme.accentBlueColor.cgColor }
+    static var selectedColor: CGColor { UIColor.Signal.accent.cgColor }
 
-    public var preferredNavigationBarStyle: OWSNavigationBarStyle { .solid }
-    public var navbarBackgroundColorOverride: UIColor? { .clear }
+    var preferredNavigationBarStyle: OWSNavigationBarStyle { .solid }
+    var navbarBackgroundColorOverride: UIColor? { .clear }
 
     private static func commonStack() -> UIStackView {
         let result = UIStackView()
@@ -38,7 +35,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
 
     // MARK: - Initialization
 
-    internal var state: State {
+    var state: State {
         didSet {
             Logger.info("[Donations] DonateViewController state changed to \(state.debugDescription)")
             render(oldState: oldValue)
@@ -48,21 +45,22 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
     enum FinishResult {
         case completedDonation(
             donateSheet: DonateViewController,
-            receiptCredentialSuccessMode: DonationReceiptCredentialResultStore.Mode
+            receiptCredentialSuccessMode: DonationReceiptCredentialResultStore.Mode,
         )
 
         case monthlySubscriptionCancelled(
             donateSheet: DonateViewController,
-            toastText: String
+            toastText: String,
         )
     }
-    internal let onFinished: (FinishResult) -> Void
+
+    let onFinished: (FinishResult) -> Void
 
     private var scrollToOneTimeContinueButtonWhenKeyboardAppears = false
 
-    public init(
+    init(
         preferredDonateMode: DonateMode,
-        onFinished: @escaping (FinishResult) -> Void
+        onFinished: @escaping (FinishResult) -> Void,
     ) {
         if Self.canMakeNewDonations(forDonateMode: preferredDonateMode) {
             self.state = .init(donateMode: preferredDonateMode)
@@ -76,8 +74,10 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
 
     // MARK: - View callbacks
 
-    public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
+
+        view.backgroundColor = .Signal.groupedBackground
 
         let isPresentedStandalone = navigationController?.viewControllers.first == self
         if isPresentedStandalone {
@@ -112,13 +112,8 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             self,
             selector: #selector(didKeyboardShow),
             name: UIResponder.keyboardDidShowNotification,
-            object: nil
+            object: nil,
         )
-    }
-
-    public override func themeDidChange() {
-        super.themeDidChange()
-        render(oldState: nil)
     }
 
     // MARK: - Events
@@ -152,7 +147,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
     private func didSelectOneTimeAmount(
         amount: FiatMoney,
         animationAnchor: UIView,
-        animationName: String
+        animationName: String,
     ) {
         state = state.selectOneTimeAmount(.selectedPreset(amount: amount))
         addAnimationView(anchor: animationAnchor, name: animationName)
@@ -175,7 +170,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         switch oneTime.selectedAmount {
         case .nothingSelected, .selectedPreset:
             state = state.selectOneTimeAmount(.choseCustomAmount(
-                amount: FiatMoney(currencyCode: oneTime.selectedCurrencyCode, value: 0)
+                amount: FiatMoney(currencyCode: oneTime.selectedCurrencyCode, value: 0),
             ))
         case .choseCustomAmount:
             break
@@ -196,7 +191,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
 
     private func startApplePay(
         with amount: FiatMoney,
-        donateMode: DonateMode
+        donateMode: DonateMode,
     ) {
         let paymentRequest = DonationUtilities.newPaymentRequest(
             for: amount,
@@ -205,7 +200,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 case .oneTime: return false
                 case .monthly: return true
                 }
-            }()
+            }(),
         )
         let paymentController = PKPaymentAuthorizationController(paymentRequest: paymentRequest)
         paymentController.delegate = self
@@ -223,7 +218,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         badge: ProfileBadge?,
         donateMode: DonateMode,
         donationPaymentMethod: DonationPaymentMethod,
-        viewControllerPaymentMethod: DonationPaymentDetailsViewController.PaymentMethod
+        viewControllerPaymentMethod: DonationPaymentDetailsViewController.PaymentMethod,
     ) {
         guard let navigationController else {
             owsFail("[Donations] Cannot open credit/debit card screen if we're not in a navigation controller")
@@ -250,7 +245,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 subscriptionLevel: subscriptionLevel,
                 subscriberID: monthly.subscriberID,
                 currentSubscription: monthly.currentSubscription,
-                currentSubscriptionLevel: monthly.currentSubscriptionLevel
+                currentSubscriptionLevel: monthly.currentSubscriptionLevel,
             )
             receiptCredentialSuccessMode = .recurringSubscriptionInitiation
         }
@@ -258,7 +253,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         let vc = DonationPaymentDetailsViewController(
             donationAmount: amount,
             donationMode: cardDonationMode,
-            paymentMethod: viewControllerPaymentMethod
+            paymentMethod: viewControllerPaymentMethod,
         ) { [weak self] error in
             guard let self else { return }
             if let error {
@@ -266,11 +261,11 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                     error: error,
                     mode: donateMode,
                     badge: badge,
-                    paymentMethod: donationPaymentMethod
+                    paymentMethod: donationPaymentMethod,
                 )
             } else {
                 self.didCompleteDonation(
-                    receiptCredentialSuccessMode: receiptCredentialSuccessMode
+                    receiptCredentialSuccessMode: receiptCredentialSuccessMode,
                 )
             }
         }
@@ -281,7 +276,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
     private func startPaypal(
         with amount: FiatMoney,
         badge: ProfileBadge?,
-        donateMode: DonateMode
+        donateMode: DonateMode,
     ) {
         guard let badge else {
             owsFail("[Donations] Missing badge!")
@@ -298,7 +293,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
     private func startSEPA(
         with amount: FiatMoney,
         badge: ProfileBadge?,
-        donateMode: DonateMode
+        donateMode: DonateMode,
     ) {
         if
             case .oneTime = donateMode,
@@ -320,7 +315,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                     badge: badge,
                     donateMode: donateMode,
                     donationPaymentMethod: .sepa,
-                    viewControllerPaymentMethod: .sepa(mandate: mandate)
+                    viewControllerPaymentMethod: .sepa(mandate: mandate),
                 )
             }
         }
@@ -331,18 +326,18 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
     private func presentAmountTooLargeForSepaSheet(maximumAmount: FiatMoney) {
         let messageFormat = OWSLocalizedString(
             "DONATE_SCREEN_ERROR_MESSAGE_FORMAT_BANK_TRANSFER_AMOUNT_TOO_LARGE",
-            comment: "Message for an alert shown when the user tries to donate via bank transfer, but the amount they want to donate is too large. Embeds {{ the maximum allowed donation amount }}."
+            comment: "Message for an alert shown when the user tries to donate via bank transfer, but the amount they want to donate is too large. Embeds {{ the maximum allowed donation amount }}.",
         )
 
         let actionSheetController = ActionSheetController(
             title: OWSLocalizedString(
                 "DONATE_SCREEN_ERROR_TITLE_BANK_TRANSFER_AMOUNT_TOO_LARGE",
-                comment: "Title for an alert shown when the user tries to donate via bank transfer, but the amount they want to donate is too large."
+                comment: "Title for an alert shown when the user tries to donate via bank transfer, but the amount they want to donate is too large.",
             ),
             message: String(
                 format: messageFormat,
-                CurrencyFormatter.format(money: maximumAmount)
-            )
+                CurrencyFormatter.format(money: maximumAmount),
+            ),
         )
         actionSheetController.addAction(OWSActionSheets.okayAction)
 
@@ -352,7 +347,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
     private func startIDEAL(
         with amount: FiatMoney,
         badge: ProfileBadge?,
-        donateMode: DonateMode
+        donateMode: DonateMode,
     ) {
         // For iDEAL, monthly donations are backed by SEPA transaction, so only
         // show the mandate UI for this case.
@@ -366,7 +361,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                         badge: badge,
                         donateMode: donateMode,
                         donationPaymentMethod: .ideal,
-                        viewControllerPaymentMethod: .ideal(paymentType: .recurring(mandate: mandate))
+                        viewControllerPaymentMethod: .ideal(paymentType: .recurring(mandate: mandate)),
                     )
                 }
             }
@@ -378,7 +373,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 badge: badge,
                 donateMode: donateMode,
                 donationPaymentMethod: .ideal,
-                viewControllerPaymentMethod: .ideal(paymentType: .oneTime)
+                viewControllerPaymentMethod: .ideal(paymentType: .oneTime),
             )
         }
     }
@@ -387,7 +382,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         amount: FiatMoney,
         badge: ProfileBadge,
         donateMode: DonateMode,
-        supportedPaymentMethods: Set<DonationPaymentMethod>
+        supportedPaymentMethods: Set<DonationPaymentMethod>,
     ) {
         oneTimeCustomAmountTextField.resignFirstResponder()
 
@@ -395,8 +390,8 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             amount: amount,
             badge: badge,
             donationMode: donateMode.forChoosePaymentMethodSheet,
-            supportedPaymentMethods: supportedPaymentMethods
-        ) { [weak self] (sheet, paymentMethod) in
+            supportedPaymentMethods: supportedPaymentMethods,
+        ) { [weak self] sheet, paymentMethod in
             sheet.dismiss(animated: true) { [weak self] in
                 guard let self else { return }
 
@@ -409,25 +404,25 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                         badge: badge,
                         donateMode: donateMode,
                         donationPaymentMethod: paymentMethod,
-                        viewControllerPaymentMethod: .card
+                        viewControllerPaymentMethod: .card,
                     )
                 case .paypal:
                     self.startPaypal(
                         with: amount,
                         badge: badge,
-                        donateMode: donateMode
+                        donateMode: donateMode,
                     )
                 case .sepa:
                     self.startSEPA(
                         with: amount,
                         badge: badge,
-                        donateMode: donateMode
+                        donateMode: donateMode,
                     )
                 case .ideal:
                     self.startIDEAL(
                         with: amount,
                         badge: badge,
-                        donateMode: donateMode
+                        donateMode: donateMode,
                     )
                 }
             }
@@ -450,20 +445,20 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             case .applePay, .creditOrDebitCard, .paypal:
                 title = OWSLocalizedString(
                     "DONATE_SCREEN_ERROR_TITLE_YOU_HAVE_A_PAYMENT_PROCESSING",
-                    comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently processing via non-bank payment."
+                    comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently processing via non-bank payment.",
                 )
                 message = OWSLocalizedString(
                     "DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_MAKING_ANOTHER_DONATION",
-                    comment: "Message in an alert presented when the user tries to make a donation, but already has a donation that is currently processing via non-bank payment."
+                    comment: "Message in an alert presented when the user tries to make a donation, but already has a donation that is currently processing via non-bank payment.",
                 )
             case .sepa, .ideal:
                 title = OWSLocalizedString(
                     "DONATE_SCREEN_ERROR_TITLE_BANK_PAYMENT_YOU_HAVE_A_DONATION_PENDING",
-                    comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently processing via bank payment."
+                    comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently processing via bank payment.",
                 )
                 message = OWSLocalizedString(
                     "DONATE_SCREEN_ERROR_MESSAGE_BANK_PAYMENT_PLEASE_WAIT_BEFORE_MAKING_ANOTHER_DONATION",
-                    comment: "Message in an alert presented when the user tries to make a donation, but already has a donation that is currently processing via bank payment."
+                    comment: "Message in an alert presented when the user tries to make a donation, but already has a donation that is currently processing via bank payment.",
                 )
             }
 
@@ -471,12 +466,12 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         case .noAmountSelected:
             showError(OWSLocalizedString(
                 "DONATE_SCREEN_ERROR_NO_AMOUNT_SELECTED",
-                comment: "If the user tries to donate to Signal but no amount is selected, this error message is shown."
+                comment: "If the user tries to donate to Signal but no amount is selected, this error message is shown.",
             ))
         case let .amountIsTooSmall(minimumAmount):
             let format = OWSLocalizedString(
                 "DONATE_SCREEN_ERROR_SELECT_A_LARGER_AMOUNT_FORMAT",
-                comment: "If the user tries to donate to Signal but they've entered an amount that's too small, this error message is shown. Embeds {{currency string}}, such as \"$5\"."
+                comment: "If the user tries to donate to Signal but they've entered an amount that's too small, this error message is shown. Embeds {{currency string}}, such as \"$5\".",
             )
             let currencyString = CurrencyFormatter.format(money: minimumAmount)
             showError(String(format: format, currencyString))
@@ -484,11 +479,11 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             // Not pending, but awaiting approval
             let title = OWSLocalizedString(
                 "DONATE_SCREEN_ERROR_TITLE_YOU_HAVE_A_PAYMENT_PROCESSING",
-                comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently processing via non-bank payment."
+                comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently processing via non-bank payment.",
             )
             let message = OWSLocalizedString(
                 "DONATE_SCREEN_ERROR_MESSAGE_APPROVE_IDEAL_DONATION_BEFORE_MAKING_ANOTHER_DONATION",
-                comment: "Message in an alert presented when the user tries to make a donation, but already has an iDEAL donation that is currently awaiting approval."
+                comment: "Message in an alert presented when the user tries to make a donation, but already has an iDEAL donation that is currently awaiting approval.",
             )
             showError(title: title, message)
         case let .canContinue(amount, supportedPaymentMethods):
@@ -496,7 +491,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 amount: amount,
                 badge: oneTime.profileBadge,
                 donateMode: .oneTime,
-                supportedPaymentMethods: supportedPaymentMethods
+                supportedPaymentMethods: supportedPaymentMethods,
             )
         }
     }
@@ -510,7 +505,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             amount: monthlyPaymentRequest.amount,
             badge: monthlyPaymentRequest.profileBadge,
             donateMode: .monthly,
-            supportedPaymentMethods: monthlyPaymentRequest.supportedPaymentMethods
+            supportedPaymentMethods: monthlyPaymentRequest.supportedPaymentMethods,
         )
     }
 
@@ -536,7 +531,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                             let subscription = try await DonationSubscriptionManager.updateSubscriptionLevel(
                                 for: subscriberID,
                                 to: selectedSubscriptionLevel,
-                                currencyCode: monthly.selectedCurrencyCode
+                                currencyCode: monthly.selectedCurrencyCode,
                             )
 
                             guard let donationPaymentProcessor = subscription.donationPaymentProcessor else {
@@ -551,20 +546,20 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                                     priorSubscriptionLevel: subscription.level,
                                     paymentProcessor: donationPaymentProcessor,
                                     paymentMethod: subscription.donationPaymentMethod,
-                                    isNewSubscription: true
+                                    isNewSubscription: true,
                                 )
                             }
-                        }
+                        },
                     )
                     self.didCompleteDonation(
-                        receiptCredentialSuccessMode: .recurringSubscriptionInitiation
+                        receiptCredentialSuccessMode: .recurringSubscriptionInitiation,
                     )
                 } catch {
                     self.didFailDonation(
                         error: error,
                         mode: .monthly,
                         badge: selectedSubscriptionLevel.badge,
-                        paymentMethod: monthly.previousMonthlySubscriptionPaymentMethod
+                        paymentMethod: monthly.previousMonthlySubscriptionPaymentMethod,
                     )
                 }
             }
@@ -574,7 +569,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 amount: monthlyPaymentRequest.amount,
                 badge: monthlyPaymentRequest.profileBadge,
                 donateMode: .monthly,
-                supportedPaymentMethods: monthlyPaymentRequest.supportedPaymentMethods
+                supportedPaymentMethods: monthlyPaymentRequest.supportedPaymentMethods,
             )
         }
     }
@@ -587,18 +582,18 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         let currencyString = CurrencyFormatter.format(money: monthlyPaymentRequest.amount)
         let title = OWSLocalizedString(
             "SUSTAINER_VIEW_UPDATE_SUBSCRIPTION_CONFIRMATION_TITLE",
-            comment: "Update Subscription? Action sheet title"
+            comment: "Update Subscription? Action sheet title",
         )
         let message = String(
             format: OWSLocalizedString(
                 "SUSTAINER_VIEW_UPDATE_SUBSCRIPTION_CONFIRMATION_MESSAGE",
-                comment: "Update Subscription? Action sheet message, embeds {{Price}}"
+                comment: "Update Subscription? Action sheet message, embeds {{Price}}",
             ),
-            currencyString
+            currencyString,
         )
         let notNow = OWSLocalizedString(
             "SUSTAINER_VIEW_SUBSCRIPTION_CONFIRMATION_NOT_NOW",
-            comment: "Sustainer view Not Now Action sheet button"
+            comment: "Sustainer view Not Now Action sheet button",
         )
 
         let actionSheet = ActionSheetController(title: title, message: message)
@@ -607,12 +602,12 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             style: .default,
             handler: { [weak self] _ in
                 self?.didConfirmMonthlyDonationUpdate()
-            }
+            },
         ))
         actionSheet.addAction(.init(
             title: notNow,
             style: .cancel,
-            handler: nil
+            handler: nil,
         ))
 
         self.presentActionSheet(actionSheet)
@@ -621,19 +616,19 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
     private func didTapToCancelSubscription() {
         let title = OWSLocalizedString(
             "SUSTAINER_VIEW_CANCEL_SUBSCRIPTION_CONFIRMATION_TITLE",
-            comment: "Confirm Cancellation? Action sheet title"
+            comment: "Confirm Cancellation? Action sheet title",
         )
         let message = OWSLocalizedString(
             "SUSTAINER_VIEW_CANCEL_SUBSCRIPTION_CONFIRMATION_MESSAGE",
-            comment: "Confirm Cancellation? Action sheet message"
+            comment: "Confirm Cancellation? Action sheet message",
         )
         let confirm = OWSLocalizedString(
             "SUSTAINER_VIEW_CANCEL_SUBSCRIPTION_CONFIRMATION_CONFIRM",
-            comment: "Confirm Cancellation? Action sheet confirm button"
+            comment: "Confirm Cancellation? Action sheet confirm button",
         )
         let notNow = OWSLocalizedString(
             "SUSTAINER_VIEW_SUBSCRIPTION_CONFIRMATION_NOT_NOW",
-            comment: "Sustainer view Not Now Action sheet button"
+            comment: "Sustainer view Not Now Action sheet button",
         )
         let actionSheet = ActionSheetController(title: title, message: message)
         actionSheet.addAction(ActionSheetAction(
@@ -641,12 +636,12 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             style: .default,
             handler: { [weak self] _ in
                 self?.didConfirmSubscriptionCancelation()
-            }
+            },
         ))
         actionSheet.addAction(ActionSheetAction(
             title: notNow,
             style: .cancel,
-            handler: nil
+            handler: nil,
         ))
         presentActionSheet(actionSheet)
     }
@@ -663,58 +658,58 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 do {
                     try await DonationSubscriptionManager.cancelSubscription(for: subscriberID)
                     modal.dismiss { [weak self] in
-                        guard let self = self else { return }
+                        guard let self else { return }
                         self.onFinished(.monthlySubscriptionCancelled(
                             donateSheet: self,
                             toastText: OWSLocalizedString(
                                 "SUSTAINER_VIEW_SUBSCRIPTION_CANCELLED",
-                                comment: "Toast indicating that the subscription has been cancelled"
-                            )
+                                comment: "Toast indicating that the subscription has been cancelled",
+                            ),
                         ))
                     }
                 } catch {
                     modal.dismiss()
                     owsFailDebug("[Donations] Failed to cancel subscription \(error)")
                 }
-            }
+            },
         )
     }
 
     private func showError(title: String? = nil, _ message: String) {
         let actionSheet = ActionSheetController(
             title: title,
-            message: message
+            message: message,
         )
 
         actionSheet.addAction(.init(
             title: CommonStrings.okayButton,
             style: .cancel,
-            handler: nil
+            handler: nil,
         ))
 
         presentActionSheet(actionSheet)
     }
 
-    internal func didCompleteDonation(
-        receiptCredentialSuccessMode: DonationReceiptCredentialResultStore.Mode
+    func didCompleteDonation(
+        receiptCredentialSuccessMode: DonationReceiptCredentialResultStore.Mode,
     ) {
         onFinished(.completedDonation(
             donateSheet: self,
-            receiptCredentialSuccessMode: receiptCredentialSuccessMode
+            receiptCredentialSuccessMode: receiptCredentialSuccessMode,
         ))
     }
 
-    internal func didCancelDonation() {
+    func didCancelDonation() {
         // A cancel should not be considered "finishing" donation, since the
         // user may want to try again.
         Logger.info("User canceled donation!")
     }
 
-    internal func didFailDonation(
+    func didFailDonation(
         error: Error,
         mode: DonateMode,
         badge: ProfileBadge,
-        paymentMethod: DonationPaymentMethod?
+        paymentMethod: DonationPaymentMethod?,
     ) {
         if
             let donationJobError = error as? DonationJobError,
@@ -736,7 +731,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                         error: error,
                         mode: mode,
                         badge: badge,
-                        paymentMethod: paymentMethod
+                        paymentMethod: paymentMethod,
                     )
                 }
             }
@@ -746,7 +741,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 error: error,
                 mode: mode,
                 badge: badge,
-                paymentMethod: paymentMethod
+                paymentMethod: paymentMethod,
             )
         }
     }
@@ -766,7 +761,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
     /// Requests one-time and monthly badges and preset amounts from the
     /// service, prepares badge assets, and loads local state as appropriate.
     private func loadState(currentState: State) async -> State {
-        typealias DonationConfiguration = DonationSubscriptionManager.DonationConfiguration
+        typealias DonationConfiguration = DonationSubscriptionConfiguration
 
         let (
             subscriberID,
@@ -775,7 +770,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             oneTimeBoostReceiptCredentialRequestError,
             recurringSubscriptionReceiptCredentialRequestError,
             pendingIDEALOneTimeDonation,
-            pendingIDEALSubscription
+            pendingIDEALSubscription,
         ) = SSKEnvironment.shared.databaseStorageRef.read {
             (
                 DonationSubscriptionManager.getSubscriberID(transaction: $0),
@@ -786,7 +781,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 DependenciesBridge.shared.donationReceiptCredentialResultStore
                     .getRequestErrorForAnyRecurringSubscription(tx: $0),
                 DependenciesBridge.shared.externalPendingIDEALDonationStore.getPendingOneTimeDonation(tx: $0),
-                DependenciesBridge.shared.externalPendingIDEALDonationStore.getPendingSubscription(tx: $0)
+                DependenciesBridge.shared.externalPendingIDEALDonationStore.getPendingSubscription(tx: $0),
             )
         }
 
@@ -826,7 +821,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 pendingIDEALOneTimeDonation: pendingIDEALOneTimeDonation,
                 pendingIDEALSubscription: pendingIDEALSubscription,
                 locale: Locale.current,
-                localNumber: DependenciesBridge.shared.tsAccountManager.localIdentifiersWithMaybeSneakyTransaction?.phoneNumber
+                localNumber: DependenciesBridge.shared.tsAccountManager.localIdentifiersWithMaybeSneakyTransaction?.phoneNumber,
             )
         } catch {
             Logger.warn("[Donations] \(error)")
@@ -855,8 +850,6 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             stackView.removeAllSubviews()
             stackView.addArrangedSubviews([heroView, bodyView])
         }
-
-        view.backgroundColor = backgroundColor
     }
 
     // MARK: - Hero
@@ -873,7 +866,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         let selectedProfileBadge = state.selectedProfileBadge
         let shouldUpdateAvatar: Bool = (
             oldState == nil ||
-            oldState?.selectedProfileBadge != selectedProfileBadge
+                oldState?.selectedProfileBadge != selectedProfileBadge,
         )
         guard shouldUpdateAvatar else { return }
 
@@ -903,14 +896,14 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 oldState: oldState,
                 donateMode: state.donateMode,
                 oneTime: oneTime,
-                monthly: monthly
+                monthly: monthly,
             )
         }
     }
 
     private func renderLoadingBody(oldState: State?) {
         let wasPreviouslyLoading: Bool = {
-            guard let oldState = oldState else { return false }
+            guard let oldState else { return false }
             switch oldState.loadState {
             case .initializing, .loading, .loadFailed:
                 return true
@@ -930,19 +923,19 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         oldState: State?,
         donateMode: DonateMode,
         oneTime: State.OneTimeState,
-        monthly: State.MonthlyState
+        monthly: State.MonthlyState,
     ) {
         switch donateMode {
         case .oneTime:
             renderCurrencyPickerView(
                 oldState: oldState,
-                selectedCurrencyCode: oneTime.selectedCurrencyCode
+                selectedCurrencyCode: oneTime.selectedCurrencyCode,
             )
             renderOneTime(oldState: oldState, oneTime: oneTime)
         case .monthly:
             renderCurrencyPickerView(
                 oldState: oldState,
-                selectedCurrencyCode: monthly.selectedCurrencyCode
+                selectedCurrencyCode: monthly.selectedCurrencyCode,
             )
             renderMonthly(oldState: oldState, monthly: monthly)
         }
@@ -997,33 +990,36 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
     private var currencyPickerContainerView: UIStackView = {
         let result = UIStackView()
         result.axis = .vertical
-        result.alignment = .fill
+        result.alignment = .center
+        result.isLayoutMarginsRelativeArrangement = true
+        result.directionalLayoutMargins.bottom = 16
         return result
     }()
 
     private func renderCurrencyPickerView(
         oldState: State?,
-        selectedCurrencyCode: Currency.Code
+        selectedCurrencyCode: Currency.Code,
     ) {
         if
             oldState?.donateMode == state.donateMode,
-            oldState?.selectedCurrencyCode == selectedCurrencyCode {
+            oldState?.selectedCurrencyCode == selectedCurrencyCode
+        {
             return
         }
 
         let button = DonationCurrencyPickerButton(
             currentCurrencyCode: selectedCurrencyCode,
-            hasLabel: false
+            hasLabel: false,
         ) { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
 
             let vc = CurrencyPickerViewController(
                 dataSource: StripeCurrencyPickerDataSource(
                     currentCurrencyCode: selectedCurrencyCode,
-                    supportedCurrencyCodes: self.state.supportedCurrencyCodes
-                )
+                    supportedCurrencyCodes: self.state.supportedCurrencyCodes,
+                ),
             ) { [weak self] currencyCode in
-                guard let self = self else { return }
+                guard let self else { return }
                 self.state = self.state.selectCurrencyCode(currencyCode)
             }
 
@@ -1043,18 +1039,18 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         picker.insertSegment(
             withTitle: OWSLocalizedString(
                 "DONATE_SCREEN_ONE_TIME_CHOICE",
-                comment: "On the donation screen, you can choose between one-time and monthly donations. This is the text on the picker for one-time donations."
+                comment: "On the donation screen, you can choose between one-time and monthly donations. This is the text on the picker for one-time donations.",
             ),
             at: DonateMode.oneTime.rawValue,
-            animated: false
+            animated: false,
         )
         picker.insertSegment(
             withTitle: OWSLocalizedString(
                 "DONATE_SCREEN_MONTHLY_CHOICE",
-                comment: "On the donation screen, you can choose between one-time and monthly donations. This is the text on the picker for one-time donations."
+                comment: "On the donation screen, you can choose between one-time and monthly donations. This is the text on the picker for one-time donations.",
             ),
             at: DonateMode.monthly.rawValue,
-            animated: false
+            animated: false,
         )
         picker.addTarget(self, action: #selector(didDonateModeChange), for: .valueChanged)
         return picker
@@ -1068,7 +1064,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
 
     private struct OneTimePresetButton {
         let amount: FiatMoney
-        let view: OWSFlatButton
+        let view: UIButton
     }
 
     private var oneTimePresetButtons = [OneTimePresetButton]()
@@ -1087,42 +1083,40 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         }
 
         let field = OneTimeDonationCustomAmountTextField(currencyCode: currencyCode)
-
+        field.font = .dynamicTypeBodyClamped
         field.placeholder = OWSLocalizedString(
             "BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER",
-            comment: "Default text for the custom amount field of the boost view."
+            comment: "Default text for the custom amount field of the boost view.",
         )
+        field.textColor = .Signal.label
         field.delegate = self
         field.accessibilityIdentifier = UIView.accessibilityIdentifier(
             in: self,
-            name: "custom_amount_text_field"
+            name: "custom_amount_text_field",
         )
 
-        field.layer.cornerRadius = Self.cornerRadius
         field.layer.borderWidth = DonationViewsUtil.bubbleBorderWidth
-        field.font = .dynamicTypeBodyClamped
+        if #available(iOS 26, *) {
+            field.cornerConfiguration = .capsule()
+        } else {
+            field.layer.cornerRadius = Self.cornerRadius
+        }
 
         let tap = UITapGestureRecognizer(
             target: self,
-            action: #selector(didTapOneTimeCustomAmountTextField)
+            action: #selector(didTapOneTimeCustomAmountTextField),
         )
         field.addGestureRecognizer(tap)
 
         return field
     }()
 
-    private lazy var oneTimeContinueButton: OWSButton = {
-        let button = OWSButton(title: CommonStrings.continueButton) { [weak self] in
+    private lazy var oneTimeContinueButton = UIButton(
+        configuration: .largePrimary(title: CommonStrings.continueButton),
+        primaryAction: UIAction { [weak self] _ in
             self?.didTapToContinueOneTimeDonation()
-        }
-        button.dimsWhenHighlighted = true
-        button.dimsWhenDisabled = true
-        button.layer.cornerRadius = 12
-        button.backgroundColor = .ows_accentBlue
-        button.titleLabel?.font = .dynamicTypeHeadline
-        button.autoSetDimension(.height, toSize: 48, relation: .greaterThanOrEqual)
-        return button
-    }()
+        },
+    )
 
     private lazy var oneTimeView: UIStackView = Self.commonStack()
 
@@ -1139,7 +1133,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             oneTimeView.addArrangedSubviews([
                 oneTimePresetsView,
                 oneTimeCustomAmountTextField,
-                oneTimeContinueButton
+                oneTimeContinueButton.enclosedInVerticalStackView(isFullWidthButton: true),
             ])
         }
     }
@@ -1155,38 +1149,41 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             row.distribution = .fillEqually
             row.spacing = UIDevice.current.isIPhone5OrShorter ? 8 : 14
 
+            let font = UIFont.regularFont(ofSize: UIDevice.current.isIPhone5OrShorter ? 18 : 20)
             for (colIndex, amount) in amounts.enumerated() {
-                let button = OWSFlatButton()
-                button.setPressedBlock { [weak self] in
-                    let animationNames = [
-                        "boost_smile",
-                        "boost_clap",
-                        "boost_heart_eyes",
-                        "boost_fire",
-                        "boost_shock",
-                        "boost_rockets"
-                    ]
-                    let animationIndex = (rowIndex * 3) + colIndex
-                    self?.didSelectOneTimeAmount(
-                        amount: amount,
-                        animationAnchor: button,
-                        animationName: animationNames[safe: animationIndex] ?? "boost_fire"
-                    )
-                }
-                button.setBackgroundColors(
-                    upColor: DonationViewsUtil.bubbleBackgroundColor,
-                    downColor: DonationViewsUtil.bubbleBackgroundColor.withAlphaComponent(0.8)
+                let button = UIButton(configuration: .bordered())
+                button.addAction(
+                    UIAction { [weak self] _ in
+                        let animationNames = [
+                            "boost_smile",
+                            "boost_clap",
+                            "boost_heart_eyes",
+                            "boost_fire",
+                            "boost_shock",
+                            "boost_rockets",
+                        ]
+                        let animationIndex = (rowIndex * 3) + colIndex
+                        self?.didSelectOneTimeAmount(
+                            amount: amount,
+                            animationAnchor: button,
+                            animationName: animationNames[safe: animationIndex] ?? "boost_fire",
+                        )
+                    },
+                    for: .primaryActionTriggered,
                 )
-                button.setTitle(
-                    title: CurrencyFormatter.format(money: amount),
-                    font: .regularFont(ofSize: UIDevice.current.isIPhone5OrShorter ? 18 : 20),
-                    titleColor: Theme.primaryTextColor
-                )
-                button.autoSetDimension(.height, toSize: 52, relation: .greaterThanOrEqual)
+                button.configuration?.title = CurrencyFormatter.format(money: amount)
+                button.configuration?.titleTextAttributesTransformer = .defaultFont(font)
+                button.configuration?.baseForegroundColor = .Signal.label
+                button.configuration?.baseBackgroundColor = .Signal.secondaryGroupedBackground
+                button.autoSetDimension(.height, toSize: DonationViewsUtil.amountFieldMinHeight, relation: .greaterThanOrEqual)
                 button.enableMultilineLabel()
-                button.layer.cornerRadius = Self.cornerRadius
                 button.clipsToBounds = true
                 button.layer.borderWidth = DonationViewsUtil.bubbleBorderWidth
+                if #available(iOS 26, *) {
+                    button.cornerConfiguration = .capsule()
+                } else {
+                    button.layer.cornerRadius = Self.cornerRadius
+                }
 
                 row.addArrangedSubview(button)
 
@@ -1232,9 +1229,6 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             oneTimeCustomAmountTextField.layer.borderColor = Self.selectedColor
             scrollView.scrollIntoView(subview: oneTimeCustomAmountTextField)
         }
-
-        oneTimeCustomAmountTextField.textColor = Theme.primaryTextColor
-        oneTimeCustomAmountTextField.backgroundColor = DonationViewsUtil.bubbleBackgroundColor
     }
 
     private func renderOneTimeContinueButton(oneTime: State.OneTimeState) {
@@ -1260,11 +1254,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         return result
     }()
 
-    private lazy var monthlyButtonsView: UIStackView = {
-        let result = Self.commonStack()
-        result.spacing = 10
-        return result
-    }()
+    private lazy var monthlyButtonsView = UIStackView.verticalButtonStack(buttons: [])
 
     private lazy var monthlyView: UIStackView = Self.commonStack()
 
@@ -1279,7 +1269,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             monthlyView.removeAllSubviews()
             monthlyView.addArrangedSubviews([
                 monthlySubscriptionLevelsView,
-                monthlyButtonsView
+                monthlyButtonsView,
             ])
         }
     }
@@ -1290,17 +1280,17 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
         let animationNames = ["boost_fire", "boost_shock", "boost_rockets"]
         monthlySubscriptionLevelViews = monthly.subscriptionLevels
             .enumerated()
-            .map { (index, subscriptionLevel) in
+            .map { index, subscriptionLevel in
                 MonthlySubscriptionLevelView(
                     subscriptionLevel: subscriptionLevel,
-                    animationName: animationNames[safe: index] ?? "boost_fire"
+                    animationName: animationNames[safe: index] ?? "boost_fire",
                 )
             }
 
         for view in monthlySubscriptionLevelViews {
             let tap = UITapGestureRecognizer(
                 target: self,
-                action: #selector(didTapMonthlySubscriptionLevelView)
+                action: #selector(didTapMonthlySubscriptionLevelView),
             )
             view.addGestureRecognizer(tap)
             monthlySubscriptionLevelsView.addArrangedSubview(view)
@@ -1317,29 +1307,17 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             subscriptionLevelView.render(
                 currencyCode: monthly.selectedCurrencyCode,
                 currentSubscription: monthly.currentSubscription,
-                selectedSubscriptionLevel: monthly.selectedSubscriptionLevel
+                selectedSubscriptionLevel: monthly.selectedSubscriptionLevel,
             )
         }
     }
 
     private func renderMonthlyButtonsView(monthly: State.MonthlyState) {
-        let buttons = buttonsForMonthlyView(monthly: monthly)
-
-        for button in buttons {
-            button.dimsWhenHighlighted = true
-            button.dimsWhenDisabled = true
-            button.layer.cornerRadius = 8
-            button.titleLabel?.numberOfLines = 0
-            button.titleLabel?.lineBreakMode = .byWordWrapping
-            button.titleLabel?.textAlignment = .center
-            button.autoSetDimension(.height, toSize: 48, relation: .greaterThanOrEqual)
-        }
-
         monthlyButtonsView.removeAllSubviews()
-        monthlyButtonsView.addArrangedSubviews(buttons)
+        monthlyButtonsView.addArrangedSubviews(buttonsForMonthlyView(monthly: monthly))
     }
 
-    private func buttonsForMonthlyView(monthly: State.MonthlyState) -> [OWSButton] {
+    private func buttonsForMonthlyView(monthly: State.MonthlyState) -> [UIButton] {
         func isDifferentSubscriptionLevelSelected(_ currentSubscription: Subscription?) -> Bool {
             guard let currentSubscription else { return false }
 
@@ -1349,54 +1327,55 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
 
             if
                 let selectedSubscriptionLevel = monthly.selectedSubscriptionLevel,
-                currentSubscription.level != selectedSubscriptionLevel.level {
+                currentSubscription.level != selectedSubscriptionLevel.level
+            {
                 return true
             }
 
             return false
         }
 
-        func doomedContinueButton(errorAlertTitle: String, errorAlertMessage: String, isEnabled: Bool) -> OWSButton {
-            let doomedContinueButton = OWSButton(title: CommonStrings.continueButton) { [weak self] in
-                self?.showError(title: errorAlertTitle, errorAlertMessage)
-            }
-
-            doomedContinueButton.backgroundColor = .ows_accentBlue
-            doomedContinueButton.titleLabel?.font = UIFont.dynamicTypeBody.semibold()
+        func doomedContinueButton(errorAlertTitle: String, errorAlertMessage: String, isEnabled: Bool) -> UIButton {
+            let doomedContinueButton = UIButton(
+                configuration: .largePrimary(title: CommonStrings.continueButton),
+                primaryAction: UIAction { [weak self] _ in
+                    self?.showError(title: errorAlertTitle, errorAlertMessage)
+                },
+            )
             doomedContinueButton.isEnabled = isEnabled
 
             return doomedContinueButton
         }
 
-        func cancelSubscriptionButton(block: @escaping () -> Void) -> OWSButton {
-            let cancelButton = OWSButton(
-                title: OWSLocalizedString(
+        func cancelSubscriptionButton(block: @escaping () -> Void) -> UIButton {
+            return UIButton(
+                configuration: .largeSecondary(title: OWSLocalizedString(
                     "SUSTAINER_VIEW_CANCEL_SUBSCRIPTION",
-                    comment: "Sustainer view Cancel Subscription button title"
-                ),
-                block: block
+                    comment: "Sustainer view Cancel Subscription button title",
+                )),
+                primaryAction: UIAction { _ in
+                    block()
+                },
             )
-            cancelButton.setTitleColor(Theme.accentBlueColor, for: .normal)
-            return cancelButton
         }
 
         if monthly.pendingIDEALSubscription != nil {
             let title = OWSLocalizedString(
                 "DONATE_SCREEN_ERROR_TITLE_BANK_PAYMENT_AWAITING_AUTHORIZATION",
-                comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently awaiting authorization."
+                comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently awaiting authorization.",
             )
 
             let message = OWSLocalizedString(
                 "DONATE_SCREEN_ERROR_MESSAGE_BANK_PAYMENT_AWAITING_AUTHORIZATION",
-                comment: "Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently awaiting authorization."
+                comment: "Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently awaiting authorization.",
             )
 
             return [
                 doomedContinueButton(
                     errorAlertTitle: title,
                     errorAlertMessage: message,
-                    isEnabled: true
-                )
+                    isEnabled: true,
+                ),
             ]
         } else if
             let currentSubscription = monthly.currentSubscription,
@@ -1409,27 +1388,27 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             case .applePay, .creditOrDebitCard, .paypal:
                 title = OWSLocalizedString(
                     "DONATE_SCREEN_ERROR_TITLE_YOU_HAVE_A_PAYMENT_PROCESSING",
-                    comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently processing via non-bank payment."
+                    comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently processing via non-bank payment.",
                 )
                 message = OWSLocalizedString(
                     "DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_UPDATING_YOUR_SUBSCRIPTION",
-                    comment: "Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently processing via non-bank payment."
+                    comment: "Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently processing via non-bank payment.",
                 )
             case .sepa, .ideal:
                 title = OWSLocalizedString(
                     "DONATE_SCREEN_ERROR_TITLE_BANK_PAYMENT_YOU_HAVE_A_DONATION_PENDING",
-                    comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently processing via bank payment."
+                    comment: "Title for an alert presented when the user tries to make a donation, but already has a donation that is currently processing via bank payment.",
                 )
                 message = OWSLocalizedString(
                     "DONATE_SCREEN_ERROR_MESSAGE_BANK_PAYMENT_PLEASE_WAIT_BEFORE_UPDATING_YOUR_SUBSCRIPTION",
-                    comment: "Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently processing via bank payment."
+                    comment: "Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently processing via bank payment.",
                 )
             }
 
             let continueButton = doomedContinueButton(
                 errorAlertTitle: title,
                 errorAlertMessage: message,
-                isEnabled: isDifferentSubscriptionLevelSelected(monthly.currentSubscription)
+                isEnabled: isDifferentSubscriptionLevelSelected(monthly.currentSubscription),
             )
             let cancelButton = cancelSubscriptionButton { [weak self] in
                 guard let self else { return }
@@ -1439,17 +1418,17 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                     OWSActionSheets.showConfirmationAlert(
                         title: OWSLocalizedString(
                             "DONATE_SCREEN_CANCEL_SUBSCRIPTION_PENDING_DONATION_WARNING_TITLE",
-                            comment: "Title for an action sheet shown when the user tries to cancel their donation subscription, but they have a pending donation."
+                            comment: "Title for an action sheet shown when the user tries to cancel their donation subscription, but they have a pending donation.",
                         ),
                         message: OWSLocalizedString(
                             "DONATE_SCREEN_CANCEL_SUBSCRIPTION_PENDING_DONATION_WARNING_MESSAGE",
-                            comment: "Message for an action sheet shown when the user tries to cancel their donation subscription, but they have a pending donation."
+                            comment: "Message for an action sheet shown when the user tries to cancel their donation subscription, but they have a pending donation.",
                         ),
                         proceedTitle: CommonStrings.continueButton,
                         proceedAction: { [weak self] _ in
                             guard let self else { return }
                             didTapToCancelSubscription()
-                        }
+                        },
                     )
                 case .pastDue:
                     /// If the user's subscription is `.pastDue`, it means a renewal
@@ -1457,7 +1436,7 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                     /// the renewal payment. Give the user a chance to bail out by
                     /// canceling their subscription, which will stop the retries.
                     didTapToCancelSubscription()
-                case .unknown, .canceled, .incomplete, .unpaid:
+                case .canceled, .unrecognized:
                     /// It's not clear how this happened, but something is wrong
                     /// and we should let users clear their local state.
                     owsFailDebug("Have a payment processing, but have unexpected subscription status \(currentSubscription.status)")
@@ -1477,13 +1456,14 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
             {
                 let updateTitle = OWSLocalizedString(
                     "DONATE_SCREEN_UPDATE_MONTHLY_SUBSCRIPTION_BUTTON",
-                    comment: "On the donation screen, if you already have a subscription, you'll see a button to update your subscription. This is the text on that button."
+                    comment: "On the donation screen, if you already have a subscription, you'll see a button to update your subscription. This is the text on that button.",
                 )
-                let updateButton = OWSButton(title: updateTitle) { [weak self] in
-                    self?.didTapToUpdateMonthlyDonation()
-                }
-                updateButton.backgroundColor = .ows_accentBlue
-                updateButton.titleLabel?.font = UIFont.dynamicTypeBody.semibold()
+                let updateButton = UIButton(
+                    configuration: .largePrimary(title: updateTitle),
+                    primaryAction: UIAction { [weak self] _ in
+                        self?.didTapToUpdateMonthlyDonation()
+                    },
+                )
                 updateButton.isEnabled = isDifferentSubscriptionLevelSelected(currentSubscription)
 
                 return [updateButton, cancelButton]
@@ -1491,12 +1471,12 @@ class DonateViewController: OWSViewController, OWSNavigationChildController {
                 return [cancelButton]
             }
         } else {
-            let continueButton = OWSButton(title: CommonStrings.continueButton) { [weak self] in
-                self?.didTapToStartNewMonthlyDonation()
-            }
-            continueButton.backgroundColor = .ows_accentBlue
-            continueButton.titleLabel?.font = UIFont.dynamicTypeBody.semibold()
-
+            let continueButton = UIButton(
+                configuration: .largePrimary(title: CommonStrings.continueButton),
+                primaryAction: UIAction { [weak self] _ in
+                    self?.didTapToStartNewMonthlyDonation()
+                },
+            )
             return [continueButton]
         }
     }
@@ -1520,7 +1500,7 @@ extension DonateViewController: OneTimeDonationCustomAmountTextFieldDelegate {
 
 // MARK: - UIScrollView
 
-fileprivate extension UIScrollView {
+private extension UIScrollView {
     /// Scroll a subview into view.
     ///
     /// Only meant for use on this screen. Your mileage may vary if used elsewhere.

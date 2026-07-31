@@ -7,11 +7,17 @@ import SignalServiceKit
 import SignalUI
 
 extension DonateViewController {
-    internal class MonthlySubscriptionLevelView: UIStackView {
+    class MonthlySubscriptionLevelView: UIStackView {
         private let background: UIView = {
             let result = UIView()
+            result.backgroundColor = DonationViewsUtil.bubbleBackgroundColor
             result.layer.borderWidth = DonationViewsUtil.bubbleBorderWidth
-            result.layer.cornerRadius = DonateViewController.cornerRadius
+            result.layer.borderColor = result.backgroundColor?.cgColor
+            if #available(iOS 26, *) {
+                result.cornerConfiguration = .uniformCorners(radius: 26)
+            } else {
+                result.layer.cornerRadius = DonateViewController.cornerRadius
+            }
             return result
         }()
 
@@ -39,10 +45,10 @@ extension DonateViewController {
             return result
         }()
 
-        public let subscriptionLevel: DonationSubscriptionLevel
-        public let animationName: String
+        let subscriptionLevel: DonationSubscriptionLevel
+        let animationName: String
 
-        public init(subscriptionLevel: DonationSubscriptionLevel, animationName: String) {
+        init(subscriptionLevel: DonationSubscriptionLevel, animationName: String) {
             self.subscriptionLevel = subscriptionLevel
             self.animationName = animationName
 
@@ -79,30 +85,29 @@ extension DonateViewController {
             fatalError("init(coder:) has not been implemented")
         }
 
-        public func render(
+        func render(
             currencyCode: Currency.Code,
             currentSubscription: Subscription?,
-            selectedSubscriptionLevel: DonationSubscriptionLevel?
+            selectedSubscriptionLevel: DonationSubscriptionLevel?,
         ) {
             let isCurrentSubscription: Bool = {
-                guard let currentSubscription = currentSubscription else { return false }
-                return (
+                guard let currentSubscription else { return false }
+                return
                     currentSubscription.active &&
                     currentSubscription.level == subscriptionLevel.level &&
                     currentSubscription.amount.currencyCode == currencyCode
-                )
+
             }()
             let isSelectedInUi = selectedSubscriptionLevel?.level == subscriptionLevel.level
 
-            background.layer.backgroundColor = DonateViewController.bubbleBackgroundColor
             background.layer.borderColor = isSelectedInUi
-            ? DonateViewController.selectedColor
-            : DonateViewController.bubbleBackgroundColor
+                ? DonateViewController.selectedColor
+                : background.backgroundColor?.cgColor
 
             headingLabel.text = {
                 let format = OWSLocalizedString(
                     "DONATE_SCREEN_MONTHLY_SUBSCRIPTION_TITLE",
-                    comment: "On the donation screen, you can see a list of monthly subscription levels. This text will be shown as the title for each level, telling you the price per month. Embeds {{currency string}}, such as \"$5\"."
+                    comment: "On the donation screen, you can see a list of monthly subscription levels. This text will be shown as the title for each level, telling you the price per month. Embeds {{currency string}}, such as \"$5\".",
                 )
                 guard let price = subscriptionLevel.amounts[currencyCode] else {
                     owsFail("[Donations] No price for this currency code. This should be impossible in the UI")
@@ -114,37 +119,36 @@ extension DonateViewController {
             headingStackView.addArrangedSubview(headingLabel)
             if isCurrentSubscription {
                 let checkmark = UIImageView(image: UIImage(named: "check-20"))
-                checkmark.tintColor = Theme.primaryTextColor
+                checkmark.tintColor = .Signal.label
                 headingStackView.addArrangedSubview(checkmark)
                 checkmark.setCompressionResistanceHorizontalHigh()
                 checkmark.autoSetDimensions(to: CGSize(square: 15))
             }
 
             subheadingLabel.text = {
-                if isCurrentSubscription, let currentSubscription = currentSubscription {
+                if isCurrentSubscription, let currentSubscription {
                     let format: String
                     if currentSubscription.cancelAtEndOfPeriod {
                         format = OWSLocalizedString(
                             "DONATE_SCREEN_MONTHLY_SUBSCRIPTION_EXPIRES_ON_DATE",
-                            comment: "On the donation screen, you can see a list of monthly subscription levels. If you already have one of these and it expires soon, this text is shown below it indicating when it will expire. Embeds {{formatted renewal date}}, such as \"June 9, 2010\"."
+                            comment: "On the donation screen, you can see a list of monthly subscription levels. If you already have one of these and it expires soon, this text is shown below it indicating when it will expire. Embeds {{formatted renewal date}}, such as \"June 9, 2010\".",
                         )
                     } else {
                         format = OWSLocalizedString(
                             "DONATE_SCREEN_MONTHLY_SUBSCRIPTION_RENEWS_ON_DATE",
-                            comment: "On the donation screen, you can see a list of monthly subscription levels. If you already have one of these, this text is shown below it indicating when it will renew. Embeds {{formatted renewal date}}, such as \"June 9, 2010\"."
+                            comment: "On the donation screen, you can see a list of monthly subscription levels. If you already have one of these, this text is shown below it indicating when it will renew. Embeds {{formatted renewal date}}, such as \"June 9, 2010\".",
                         )
                     }
 
-                    let date = Date(timeIntervalSince1970: currentSubscription.endOfCurrentPeriod)
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateStyle = .medium
-                    let dateString = dateFormatter.string(from: date)
+                    let dateString = dateFormatter.string(from: currentSubscription.endOfCurrentPeriod)
 
                     return String(format: format, dateString)
                 } else {
                     let format = OWSLocalizedString(
                         "DONATE_SCREEN_MONTHLY_SUBSCRIPTION_SUBTITLE",
-                        comment: "On the donation screen, you can see a list of monthly subscription levels. This text will be shown in the subtitle of each level, telling you which badge you'll get. Embeds {{localized badge name}}, such as \"Planet\"."
+                        comment: "On the donation screen, you can see a list of monthly subscription levels. This text will be shown in the subtitle of each level, telling you which badge you'll get. Embeds {{localized badge name}}, such as \"Planet\".",
                     )
                     return String(format: format, subscriptionLevel.badge.localizedName)
                 }

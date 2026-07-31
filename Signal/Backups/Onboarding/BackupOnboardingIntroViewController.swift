@@ -14,7 +14,7 @@ class BackupOnboardingIntroViewController: HostingController<BackupOnboardingInt
     ) {
         super.init(wrappedView: BackupOnboardingIntroView(
             onContinue: onContinue,
-            onNotNow: onNotNow
+            onNotNow: onNotNow,
         ))
 
         OWSTableViewController2.removeBackButtonText(viewController: self)
@@ -39,46 +39,54 @@ struct BackupOnboardingIntroView: View {
             image: .lock,
             text: OWSLocalizedString(
                 "BACKUP_ONBOARDING_INTRO_BULLET_1",
-                comment: "Bullet point on a view introducing Backups during an onboarding flow."
-            )
+                comment: "Bullet point on a view introducing Backups during an onboarding flow.",
+            ),
         ),
         BulletPoint(
             image: .checkSquare,
             text: OWSLocalizedString(
                 "BACKUP_ONBOARDING_INTRO_BULLET_2",
-                comment: "Bullet point on a view introducing Backups during an onboarding flow."
-            )
+                comment: "Bullet point on a view introducing Backups during an onboarding flow.",
+            ),
         ),
         BulletPoint(
             image: .trash,
             text: OWSLocalizedString(
                 "BACKUP_ONBOARDING_INTRO_BULLET_3",
-                comment: "Bullet point on a view introducing Backups during an onboarding flow."
-            )
+                comment: "Bullet point on a view introducing Backups during an onboarding flow.",
+            ),
         ),
     ]
 
+    private var titleString: AttributedString {
+        var attributedString = AttributedString("BETA")
+        attributedString.backgroundColor = Color.Signal.secondaryFill
+        return attributedString
+    }
+
     var body: some View {
         ScrollableContentPinnedFooterView {
-            VStack {
-                HStack {
-                    Image(uiImage: Theme.iconImage(.info))
-                        .frame(width: 25, height: 40)
+            HStack(spacing: 12) {
+                Image(Theme.iconName(.info))
 
-                    Text(OWSLocalizedString(
+                Text(
+                    OWSLocalizedString(
                         "BACKUP_SETTINGS_BETA_NOTICE_HEADER",
-                        comment: "Notice that backups is a beta feature")
-                    )
-                    .font(.footnote)
-                    .multilineTextAlignment(.leading)
-                }
-                .foregroundColor(Color.Signal.label)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 10)
-                .background(Color.Signal.quaternaryFill)
-                .cornerRadius(12)
+                        comment: "Notice that backups is a beta feature",
+                    ),
+                )
+                .font(.footnote)
+                .multilineTextAlignment(.leading)
+
+                Spacer(minLength: 0)
             }
-            .padding(.horizontal, 10)
+            .foregroundColor(Color.Signal.label)
+            .padding(.vertical, 16)
+            .padding(.leading, 16)
+            .padding(.trailing, 11)
+            .background(Color.Signal.quaternaryFill)
+            .cornerRadius(12)
+            .padding(.horizontal, 20)
 
             VStack {
                 Spacer().frame(height: 20)
@@ -90,9 +98,9 @@ struct BackupOnboardingIntroView: View {
                 HStack {
                     Text(OWSLocalizedString(
                         "BACKUP_ONBOARDING_INTRO_TITLE",
-                        comment: "Title for a view introducing Backups during an onboarding flow."
+                        comment: "Title for a view introducing Backups during an onboarding flow.",
                     ))
-                    .font(.title)
+                    .font(Font(UIFont.dynamicTypeFont(ofStandardSize: 26)))
                     .fontWeight(.semibold)
                     .foregroundStyle(Color.Signal.label)
 
@@ -101,50 +109,54 @@ struct BackupOnboardingIntroView: View {
                         .bold()
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
-                        .background(Capsule().fill(
-                            Color.Signal.secondaryFill)
+                        .background(
+                            Capsule().fill(
+                                Color.Signal.secondaryFill,
+                            ),
                         )
                         .foregroundStyle(Color.Signal.label)
                 }
+                .padding(.horizontal, 32)
+                .multilineTextAlignment(.center)
 
                 Spacer().frame(height: 12)
 
                 Text(OWSLocalizedString(
                     "BACKUP_ONBOARDING_INTRO_SUBTITLE",
-                    comment: "Subtitle for a view introducing Backups during an onboarding flow."
+                    comment: "Subtitle for a view introducing Backups during an onboarding flow.",
                 ))
                 .font(.body)
                 .foregroundStyle(Color.Signal.secondaryLabel)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
 
                 Spacer().frame(height: 32)
 
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 26) {
                     ForEach(bulletPoints) { bulletPoint in
-                        Label {
-                            Text(bulletPoint.text)
-                        } icon: {
-                            Image(uiImage: bulletPoint.image)
+                        HStack {
+                            Label {
+                                Text(bulletPoint.text)
+                            } icon: {
+                                Image(uiImage: bulletPoint.image)
+                            }
+
+                            Spacer()
                         }
-                        .multilineTextAlignment(.leading)
-                        .foregroundStyle(Color.Signal.label)
-                        .padding(.horizontal, 20) // Extra inset in case of wrap
                     }
                 }
+                .padding(.horizontal, 56)
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(Color.Signal.label)
+                .padding(.horizontal)
             }
-            .padding(.horizontal, 48)
         } pinnedFooter: {
             Button {
                 onContinue()
             } label: {
                 Text(CommonStrings.continueButton)
-                    .foregroundStyle(.white)
-                    .font(.headline)
-                    .padding(.vertical, 14)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.Signal.ultramarine)
             }
-            .buttonStyle(.plain)
-            .cornerRadius(12)
+            .buttonStyle(Registration.UI.LargePrimaryButtonStyle())
             .padding(.horizontal, 40)
 
             Spacer().frame(height: 16)
@@ -153,15 +165,10 @@ struct BackupOnboardingIntroView: View {
                 onNotNow()
             } label: {
                 Text(CommonStrings.notNowButton)
-                    .foregroundStyle(Color.Signal.ultramarine)
-                    .font(.headline)
-                    .padding(.vertical, 14)
             }
-            .buttonStyle(.plain)
-            .frame(maxWidth: .infinity)
+            .buttonStyle(Registration.UI.LargeSecondaryButtonStyle())
             .padding(.horizontal, 40)
         }
-        .multilineTextAlignment(.center)
         .background(Color.Signal.groupedBackground)
     }
 }
@@ -170,11 +177,12 @@ struct BackupOnboardingIntroView: View {
 
 #if DEBUG
 
+@available(iOS 17, *)
 #Preview {
-    BackupOnboardingIntroView(
+    SheetPreviewViewController(sheet: OWSNavigationController(rootViewController: BackupOnboardingIntroViewController(
         onContinue: { print("Continuing...!") },
-        onNotNow: { print("Not now...!") }
-    )
+        onNotNow: { print("Not now...!") },
+    )))
 }
 
 #endif

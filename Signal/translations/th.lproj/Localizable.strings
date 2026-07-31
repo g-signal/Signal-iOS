@@ -1,6 +1,9 @@
 /* Button text to dismiss missing contacts permission alert */
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "ไม่ใช่ตอนนี้";
 
+/* Footer for the 'about' help section. For non-English languages, exclude the word '501c3'. */
+"ABOUT_SECTION_FOOTER" = "ลิขสิทธิ์ B&A Messenger\nเผยแพร่ภายใต้สัญญาอนุญาต AGPLv3\nB&A เป็นแอปไม่แสวงหาผลกำไร";
+
 /* Title for the 'about' help section */
 "ABOUT_SECTION_TITLE" = "เกี่ยวกับ B&A";
 
@@ -69,6 +72,12 @@
 
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "ส่งข้อความ";
+
+/* Message shown in an action sheet when a generic error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_GENERIC_ERROR" = "เกิดข้อผิดพลาดบางอย่าง โปรดติดต่อฝ่ายสนับสนุน";
+
+/* Message shown in an action sheet when a network error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_NETWORK_ERROR" = "เกิดข้อผิดพลาดบางอย่าง ตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง";
 
 /* A label for 'tap to download' buttons. */
 "ACTION_TAP_TO_DOWNLOAD" = "แตะเพื่อดาวน์โหลด";
@@ -196,6 +205,12 @@
 /* notification body */
 "APN_Message" = "คุณอาจมีข้อความใหม่";
 
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. The embedded value is 'Update now' (translated via APP_EXPIRED_BOTTOM_UPDATE), and it will be formatted as a tappable link. */
+"APP_EXPIRED_BOTTOM" = "B&A เวอร์ชันนี้หมดอายุแล้ว โปรด%1$@เพื่อใช้งานการส่งและรับข้อความต่อไป";
+
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. This value is a tappable link embedded in a larger sentence. */
+"APP_EXPIRED_BOTTOM_UPDATE" = "อัปเดตตอนนี้";
+
 /* Default message for the 'app launch failed' alert. */
 "APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "ไม่สามารถเปิด B&A ได้ กรุณาส่งปูมดีบักไปที่ support@baxs.com เพื่อที่เราจะสามารถแก้ปัญหานี้ได้";
 
@@ -210,6 +225,15 @@
 
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "ไม่สามารถเรียกฐานข้อมูลได้";
+
+/* Message for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_MESSAGE" = "ไม่สามารถเปิด B&A ได้เนื่องจากฐานข้อมูลได้รับความเสียหาย กรณีเช่นนี้ไม่มีผลกระทบต่อความปลอดภัยในบัญชีหรือข้อความของคุณ";
+
+/* Title for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_TITLE" = "ฐานข้อมูลได้รับความเสียหาย";
+
+/* Action in an action sheet offering to attempt recovery of a corrupted database. */
+"APP_LAUNCH_FAILURE_DATABASE_RECOVERY_ACTION_TITLE" = "ซ่อมแซม";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "กรุณาปรับรุ่นไปใช้ B&A รุ่นล่าสุด";
@@ -246,15 +270,6 @@
 
 /* Text prompting user to edit their profile name. */
 "APP_SETTINGS_EDIT_PROFILE_NAME_PROMPT" = "ป้อนชื่อของคุณ";
-
-/* Label for the 'dismiss' button in the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_DISMISS_BUTTON" = "ไม่ใช่ตอนนี้";
-
-/* Message format for the 'new app version available' alert. Embeds: {{The latest app version number}} */
-"APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "รุ่น %1$@ ออกแล้วใน App Store";
-
-/* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "B&A รุ่นใหม่ออกแล้ว";
 
 /* Label for the 'update' button in the 'new app version available' alert. */
 "APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "ปรับปรุง";
@@ -427,6 +442,9 @@
 /* A button to open the photo picker from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_PHOTOS" = "รูปภาพ";
 
+/* A button to select a poll from the Attachment Keyboard */
+"ATTACHMENT_KEYBOARD_POLL" = "โพล";
+
 /* Accessibility label for attaching photos */
 "ATTACHMENT_LABEL" = "แฟ้มแนบ";
 
@@ -487,14 +505,8 @@
 /* Message when trying to show a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_MESSAGE_LABEL" = "ไม่พบข้อความเสียง";
 
-/* Message for sheet shown when tapping a voice message that has expired and is unavailable for download */
-"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "ข้อความเสียงนี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ไฟล์และสื่อที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
-
 /* Title for sheet shown when tapping a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "ไม่พบข้อความเสียง";
-
-/* Username for recovery key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "การสำรองข้อมูลของ B&A";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "เลือกสี";
@@ -556,6 +568,15 @@
 /* Toast indicating that the Recovery Key was correct. */
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "กุญแจสำรองถูกต้อง โปรดเก็บกุญแจของคุณให้ปลอดภัย";
 
+/* Button label for action sheet to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_ACTION" = "ออกจากการตั้งค่าการสำรองข้อมูล";
+
+/* Message for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_MESSAGE" = "คุณยังดำเนินการตั้งค่าการสำรองข้อมูลไม่เสร็จสิ้น และระบบยังไม่ได้สร้างข้อมูลสำรอง คุณสามารถเปิดใช้งานการสำรองข้อมูลได้ในการตั้งค่า";
+
+/* Title for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_TITLE" = "ออกจากการตั้งค่าการสำรองข้อมูลใช่หรือไม่";
+
 /* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "หากทำกุญแจหาย B&A จะไม่สามารถช่วยกู้คืนข้อมูลสำรองของคุณได้ โปรดเก็บรักษากุญแจนี้ไว้ในที่ปลอดภัยและไม่บอกรหัสของคุณกับใคร";
 
@@ -580,17 +601,41 @@
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "เลือกลบข้อมูลสำรองได้ทุกเมื่อ";
 
+/* A toast shown when 'Not Now' is tapped from the Backups onboarding intro. */
+"BACKUP_ONBOARDING_INTRO_NOT_NOW_TOAST" = "คุณสามารถเปิดใช้งานการสำรองข้อมูลได้ในการตั้งค่า";
+
 /* Subtitle for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "สำรองข้อความและไฟล์สื่อของคุณด้วยบริการจัดเก็บที่ปลอดภัยและถูกเข้ารหัสตั้งแต่ต้นทางถึงปลายทางของ B&A ช่วยเก็บรักษาทุกข้อความแม้ในกรณีที่คุณเปลี่ยนโทรศัพท์เครื่องใหม่หรือติดตั้ง B&A อีกครั้ง";
 
 /* Title for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_TITLE" = "การสำรองข้อมูลของ B&A";
 
-/* Subtitle for a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "กุญแจสำรองคือรหัส 64 ตัวที่จะทำให้คุณสามารถกู้คืนข้อมูลสำรองในกรณีที่ติดตั้ง B&A ใหม่อีกครั้ง\n\nหากลืมกุญแจของตัวเอง คุณจะไม่สามารถกู้คืนข้อมูลสำรอง และ B&A จะไม่สามารถช่วยกู้ข้อมูลสำรองให้คุณได้";
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "กุญแจกู้คืนคือรหัส 64 ตัวที่คุณต้องมีเพื่อใช้กู้คืนข้อมูลสำรอง";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_2" = "โปรดเก็บกุญแจกู้คืนของคุณไว้ในที่ปลอดภัย เช่น เก็บไว้กับตัวจัดการรหัสผ่าน รวมถึงไม่บอกรหัสนี้กับใคร";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_3" = "คุณจะไม่สามารถกู้คืนข้อความได้หากทำกุญแจหาย";
+
+/* Title for a continue button for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_CONTINUE_BUTTON_TITLE" = "ดูกุญแจกู้คืน";
 
 /* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "กุญแจสำรองของคุณ";
+
+/* Body for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY" = "แพ็กเกจสำรองข้อมูลของคุณหมดอายุเนื่องจากไม่สามารถต่ออายุการสมัครด้วยวิธีการชำระเงินของคุณได้\n\nคุณสามารถสมัครแพ็กเกจอีกครั้งหากต้องการสำรองไฟล์สื่อทั้งหมด อย่างไรก็ดี คุณยังคงสามารถใช้งานแพ็กเกจสำรองข้อมูลของ B&A แบบฟรีได้อยู่";
+
+/* Body for a sheet shown when your Backup plan is downgraded because you stopped using TestFlight. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY_TESTFLIGHT" = "แพ็กเกจสำรองข้อมูลของคุณหมดอายุเนื่องจากคุณไม่ได้ใช้งาน TestFlight แล้ว\n\nคุณสามารถสมัครแพ็กเกจอีกครั้งหากต้องการสำรองไฟล์สื่อทั้งหมด อย่างไรก็ดี คุณยังคงสามารถใช้งานแพ็กเกจสำรองข้อมูลของ B&A แบบฟรีได้อยู่";
+
+/* Primary button for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_PRIMARY_BUTTON" = "จัดการการสำรองข้อมูล";
+
+/* Title for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_TITLE" = "แพ็กเกจสำรองข้อมูลของคุณหมดอายุแล้ว";
 
 /* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "คัดลอกไปคลิปบอร์ด";
@@ -613,6 +658,21 @@
 /* Title for a progress spinner on a modal when restoring messages */
 "BACKUP_RESTORE_MODAL_TITLE" = "กำลังกู้คืนข้อความ…";
 
+/* Message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "การสำรองข้อมูลอัตโนมัติถูกปิดใช้งานอยู่ โปรดเปิดใช้งานการสำรองข้อมูลอัตโนมัติโดยอัปเดตการอนุญาตสิทธิ์ของ B&A";
+
+/* Add-on to a message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE_UPDATE_NOW" = "อัปเดตตอนนี้";
+
+/* Title for a button that takes the users to Signal's iOS Settings page. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_GO_TO_SETTINGS_BUTTON" = "ไปที่การตั้งค่า";
+
+/* Message for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_MESSAGE" = "อนุญาตให้ B&A สำรองข้อความของคุณโดยอัตโนมัติ โดยแตะ \"ไปที่การตั้งค่า\" ด้านล่างนี้ แล้วเปิดใช้งาน \"รีเฟรชแอปพื้นหลัง\"";
+
+/* Title for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_TITLE" = "การสำรองข้อมูลอัตโนมัติถูกปิดใช้งาน";
+
 /* Message for an action sheet explaining that performing a backup failed with a generic error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR" = "เกิดข้อผิดพลาดในระหว่างการสร้างข้อมูลสำรองของคุณ โปรดลองอีกครั้งหรือติดต่อฝ่ายสนับสนุน";
 
@@ -628,6 +688,9 @@
 /* Message for an action sheet explaining that performing a backup failed with a network error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR" = "เกิดข้อผิดพลาดในระหว่างการสร้างข้อมูลสำรองของคุณ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง";
 
+/* Message for an action sheet explaining that you must be registered to make a Backup. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "คุณจะต้องลงทะเบียนเพื่อสร้างข้อมูลสำรอง";
+
 /* Description for a progress bar tracking the optimizing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "กำลังจัดระเบียบไฟล์สื่อ...";
 
@@ -637,14 +700,26 @@
 /* Description for a progress bar tracking the processing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PROCESSING_MEDIA" = "กำลังประมวลผลไฟล์สื่อ...";
 
+/* Title for an action sheet action explaining the user can now scan a QR code to continue the restore. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_ACTION_TITLE" = "สแกนคิวอาร์โค้ด";
+
+/* Body for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_BODY" = "ใช้อุปกรณ์เครื่องนี้สแกนคิวอาร์โค้ดซึ่งแสดงอยู่บนอุปกรณ์ที่คุณต้องการถ่ายโอน";
+
+/* Title for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_TITLE" = "พร้อมสำหรับการถ่ายโอน";
+
+/* Message describing to the user that the last backup failed. */
+"BACKUP_SETTINGS_BACKUP_FAILED_MESSAGE" = "การสำรองข้อมูลครั้งล่าสุดของคุณไม่เสร็จสมบูรณ์ โปรดแตะ \"สำรองข้อมูลเดี๋ยวนี้\" เพื่อลองอีกครั้ง";
+
 /* Title for a button allowing users to upgrade from a free to paid backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "อัปเกรด";
 
+/* Text describing the user's free backup plan when they have Backups disabled. */
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_AND_DISABLED_DESCRIPTION" = "คุณปิดใช้งานการสำรองข้อมูลแล้ว";
+
 /* Text describing the user's free backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_DESCRIPTION" = "แพ็กเกจสำรองข้อมูลที่คุณเลือกไม่มีค่าใช้จ่าย";
-
-/* Header describing what the free backup plan includes. */
-"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "สำรองข้อความ + สื่อจาก 45 วัน";
 
 /* Message for a view indicating we failed to fetch someone's Backup plan due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_MESSAGE" = "เกิดข้อผิดพลาดบางประการ โปรดติดต่อฝ่ายสนับสนุน";
@@ -673,11 +748,26 @@
 /* Text explaining that a user's paid plan, which has been canceled, expired on a past date. Embeds {{ the formatted expiration date }}. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_PAST_EXPIRATION_FORMAT" = "หมดอายุแล้วเมื่อ %1$@";
 
+/* Title for a button allowing users to manage a paid backup plan that failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_ACTION_BUTTON_TITLE" = "จัดการการเป็นสมาชิก";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_1" = "วิธีการชำระเงินถูกปฏิเสธ";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_2" = "โปรดตรวจสอบให้แน่ใจว่าคุณอัปเดตวิธีการชำระเงินแล้ว";
+
 /* Title for a button allowing users to manage their backup plan as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "จัดการแพ็กเกจ";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "มีค่าบริการ แต่ฟรีหากยังอยู่ในสถานะผู้ร่วมทดสอบ";
+
+/* Title for a button allowing users to renew their backup subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_ACTION_BUTTON_TITLE" = "ต่ออายุ";
+
+/* Text describing that the user's paid backup plan did not correspond to a App Store subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_DESCRIPTION" = "ไม่พบการสมัครแพ็กเกจของคุณบนอุปกรณ์เครื่องนี้ โปรดต่ออายุเพื่อการใช้งานแพ็กเกจสำรองข้อมูลของ B&A อย่างต่อเนื่อง";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "สำรองข้อความ + สื่อทั้งหมด";
@@ -717,6 +807,15 @@
 
 /* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "คุณจำเป็นต้องลงทะเบียนเพื่อสร้างกุญแจกู้คืนใหม่";
+
+/* Explanation text for a sheet warning users they've reached a rate limit for creating Recovery Key. {{ Embeds 1: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_BODY" = "หากคุณสร้างกุญแจกู้คืนใหม่ คุณจะไม่สามารถเปิดใช้งานการสำรองข้อมูลได้จนกว่าจะครบ %1$@ การจำกัดจำนวนครั้งของการสร้างกุญแจเป็นไปเพื่อป้องกันการใช้งานในทางที่ไม่ถูกต้อง";
+
+/* Action in an action sheet allowing to continue to rotate their key */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_CONTINUE_ACTION" = "สร้างกุญแจใหม่";
+
+/* Title for a sheet warning users they've reached a rate limit for creating Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_TITLE" = "สร้างกุญแจกู้คืนถึงจำนวนที่กำหนดแล้ว";
 
 /* Toast shown when a new Recovery Key has been created successfully. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "สร้างกุญแจใหม่แล้ว!";
@@ -759,6 +858,15 @@
 
 /* Message shown in an action sheet when the user tries to disable Backups, but is not registered. */
 "BACKUP_SETTINGS_DISABLING_ERROR_NOT_REGISTERED" = "คุณจะต้องลงทะเบียนเพื่อปิดใช้งานการสำรองข้อมูล";
+
+/* Button for an action sheet shown when the user disables Backups, letting them manage their subscription. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MANAGE_SUBSCRIPTION_BUTTON" = "จัดการการเป็นสมาชิก";
+
+/* Message for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MESSAGE" = "หากต้องการยกเลิกแพ็กเกจ ให้แตะที่จัดการการเป็นสมาชิก > B&A > ยกเลิกการเป็นสมาชิก";
+
+/* Title for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_TITLE" = "คุณยังคงใช้งานแพ็กเกจสำรองข้อมูลแบบชำระค่าบริการอยู่";
 
 /* Title for a button shown in Backup Settings that lets a user cancel an in-progress download. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_CANCEL_DOWNLOAD" = "ยกเลิกการดาวน์โหลด";
@@ -814,6 +922,15 @@
 /* Label for a menu item offering to show the user their recovery key. */
 "BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "ดูกุญแจสำรอง";
 
+/* Body for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_BODY" = "ไม่สามารถกู้คืนการสมัครแพ็กเกจของคุณบนอุปกรณ์เครื่องนี้ เหตุการณ์นี้อาจเกิดขึ้นได้ในกรณีที่คุณลงชื่อเข้าใช้ App Store ด้วยบัญชี Apple คนละบัญชีกับที่เคยใช้ หรือหากคุณถ่ายโอนการใช้งานมาจากโทรศัพท์ Android\n\nหากโทรศัพท์เครื่องเดิมของคุณยังมีการใช้งานแพ็กเกจอยู่ เราขอแนะนำให้ยกเลิกแพ็กเกจนั้นก่อนที่จะมีการต่ออายุ";
+
+/* Button for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_GOT_IT_BUTTON" = "เข้าใจแล้ว";
+
+/* Title for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_TITLE" = "ไม่พบการสมัครแพ็กเกจ";
+
 /* Title for a button allowing users to trigger a manual backup. */
 "BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "สำรองข้อมูลเดี๋ยวนี้";
 
@@ -850,6 +967,12 @@
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "เพิ่มประสิทธิภาพพื้นที่จัดเก็บบนอุปกรณ์";
 
+/* Subtitle for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_SUBTITLE" = "พื้นที่จัดเก็บข้อมูลสำรองของคุณเต็มแล้ว โปรดเพิ่มพื้นที่จัดเก็บใน B&A เพื่อสำรองข้อมูลแชทและไฟล์สื่อต่อไป";
+
+/* Title for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_TITLE" = "พื้นที่จัดเก็บข้อมูลสำรองเต็มแล้ว";
+
 /* Title for a button allowing users to re-enable Backups, after it had been previously disabled. */
 "BACKUP_SETTINGS_REENABLE_BACKUPS_BUTTON_TITLE" = "เปิดใช้งานการสำรองข้อมูลอีกครั้ง";
 
@@ -861,6 +984,21 @@
 
 /* Title for a sheet warning the user about skipping downloads. */
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "ข้ามการดาวน์โหลดใช่หรือไม่";
+
+/* Title for detail button in notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_DETAIL_BUTTON" = "รายละเอียด";
+
+/* Title for notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_TITLE" = "ไม่สามารถใช้งานแพ็กเกจสำรองข้อมูลของคุณได้";
+
+/* Body for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_BODY" = "พบว่ามีอุปกรณ์หลายเครื่องพยายามใช้งานแพ็กเกจของคุณในเดือนนี้\n\nนี่อาจเป็นเพราะคุณลงทะเบียนบัญชี B&A ใหม่หลายครั้งเกินไป หรือมีอุปกรณ์ที่ใช้แพ็กเกจเดียวกันหลายเครื่องเกินไป";
+
+/* Button for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_GOT_IT_BUTTON" = "เข้าใจแล้ว";
+
+/* Title for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_TITLE" = "ไม่สามารถใช้งานแพ็กเกจสำรองข้อมูลของคุณได้";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "การอัปโหลดหยุดชั่วคราว: อุปกรณ์มีแบตเตอรี่ต่ำ";
@@ -874,6 +1012,9 @@
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "การอัปโหลดหยุดชั่วคราว: กำลังรอสัญญาณ Wi-Fi";
 
+/* Subtitle for a progress bar tracking uploads that are paused because the user is out of remote storage space. Embeds 1:{{ total storage space provided, e.g. 100 GB }}; 2:{{ space the user needs to free up by deleting media, e.g. 1 GB }}. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_OUT_OF_STORAGE_SPACE_FORMAT" = "พื้นที่จัดเก็บ %1$@ ในแพ็กเกจสำรองข้อมูลของคุณเต็มแล้ว โปรดเพิ่มพื้นที่จัดเก็บ %2$@ ใน B&A เพื่อสำรองข้อมูลแชทและไฟล์สื่อล่าสุด จากนั้นให้แตะ “สำรองข้อมูลเดี๋ยวนี้”";
+
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "กำลังอัปโหลด %1$@ จาก %2$@ (%3$@)";
 
@@ -882,6 +1023,21 @@
 
 /* Title for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "ยินดีต้อนรับสู่การสำรองข้อมูลของ B&A เริ่มสำรองข้อมูลของคุณได้เลย";
+
+/* Message for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_MESSAGE" = "โปรดตรวจสอบให้แน่ใจว่าคุณอัปเดตวิธีการชำระเงินแล้ว โดยแตะที่จัดการการเป็นสมาชิก > B&A > อัปเดตวิธีการชำระเงิน";
+
+/* Primary button for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_PRIMARY_BUTTON" = "จัดการการเป็นสมาชิก";
+
+/* Title for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "ไม่สามารถต่ออายุแพ็กเกจสำรองข้อมูลของคุณ";
+
+/* Body for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "โปรดส่งบันทึกดีบักเพื่อให้เราช่วยแก้ไขปัญหา";
+
+/* Title for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "พบข้อผิดพลาดในการสำรองข้อมูลสื่อของคุณ";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "การสำรองข้อมูลของ B&A";
@@ -1041,9 +1197,6 @@
 
 /* An explanation of the consequences of blocking another user. */
 "BLOCK_USER_BEHAVIOR_EXPLANATION" = "ผู้ใช้ที่ถูกบล็อกจะไม่สามารถโทรหรือส่งข้อความหาคุณได้";
-
-/* Tooltip highlighting the blur image editing tool. */
-"BLUR_TOOLTIP" = "ใหม่: มัวหน้าหรือวาดที่ใดก็ได้เพื่อทำให้มัว";
 
 /* Default text for the custom amount field of the boost view. */
 "BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "กรอกจำนวนเอง";
@@ -1227,6 +1380,87 @@
 
 /* notification body */
 "CALL_MISSED_BECAUSE_OF_IDENTITY_CHANGE_NOTIFICATION_BODY" = "☎️ ไม่ได้รับสาย เพราะหมายเลขความปลอดภัยของผู้โทรได้เปลี่ยนไป";
+
+/* Title for toast which appears after submitting a call quality survey */
+"CALL_QUALITY_SURVEY_COMPLETION_TOAST" = "ขอบคุณสำหรับความคิดเห็น";
+
+/* Footer text explaining custom issue descriptions in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_FOOTER" = "โปรดแจ้งรายละเอียดต่างๆ ที่เกี่ยวข้องกับปัญหาที่คุณพบ ข้อมูลทั้งหมดของคุณจะถูกรวบรวมอย่างเป็นส่วนตัว รวมถึงจะถูกนำไปใช้เพื่อจุดประสงค์ในการปรับปรุงและพัฒนาการโทรของ B&A เท่านั้น";
+
+/* Placeholder text for the custom issue entry in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_PLACEHOLDER" = "อธิบายถึงปัญหาที่คุณพบ";
+
+/* Footer text explaining what debug logs contain in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER" = "ข้อมูลที่คุณจะแชร์ให้เราเป็นข้อมูลแอประดับพื้นฐานซึ่งไม่รวมถึงเนื้อหาใดๆ ในการโทรของคุณ";
+
+/* Header text explaining the purpose of sharing debug logs in the call quality survey. The text inside the <link> tags is tappable for viewing the diagnostic information. */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_HEADER" = "การส่งรายงานจะเป็นการแชร์ความคิดเห็นของคุณรวมถึง<link>ข้อมูลผลการวิเคราะห์ปัญหาเกี่ยวกับการโทรของคุณ</link> คุณยังสามารถเลือกที่จะแชร์บันทึกดีบักเพื่อช่วยให้เราพัฒนาคุณภาพการโทรให้ดียิ่งขึ้น";
+
+/* Link text to open a preview of debug logs in the call quality survey. Appended to CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_PREVIEW_LINK" = "ดูบันทึกดีบัก";
+
+/* Title for the debug log sharing screen in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TITLE" = "ช่วยเราปรับปรุงการใช้งาน";
+
+/* Label for the toggle to share debug log in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TOGGLE" = "แชร์บันทึกดีบัก";
+
+/* Title for preview of the call diagnostic info that will be sent with the survey */
+"CALL_QUALITY_SURVEY_DIAGNOSTICS_TITLE" = "ข้อมูลผลการวิเคราะห์ปัญหา";
+
+/* Button label for indicating the call did not have issues in the call quality survey */
+"CALL_QUALITY_SURVEY_GREAT_BUTTON" = "ดีมาก";
+
+/* Button label for indicating the call had issues in the call quality survey */
+"CALL_QUALITY_SURVEY_HAD_ISSUES_BUTTON" = "มีปัญหาขัดข้อง";
+
+/* Label for audio issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO" = "ปัญหาด้านเสียง";
+
+/* Label for audio dropout issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_DROP" = "ไม่มีเสียง";
+
+/* Label for local echo issue option in call quality survey, indicating the user heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_LOCAL_ECHO" = "ฉันได้ยินเสียงสะท้อน";
+
+/* Label for remote echo issue option in call quality survey, indicating other participants heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_REMOTE_ECHO" = "คนอื่นได้ยินเสียงสะท้อน";
+
+/* Label for audio stuttering issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_STUTTERING" = "เสียงขาดหาย";
+
+/* Label for call dropped issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_CALL_DROPPED" = "สายหลุด";
+
+/* Label for custom issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_OTHER" = "อย่างอื่น";
+
+/* Label for video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO" = "ปัญหาด้านวิดีโอ";
+
+/* Label for poor video quality issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_QUALITY" = "วิดีโอคุณภาพไม่ดี";
+
+/* Label for low resolution video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_RESOLUTION" = "ความละเอียดต่ำ";
+
+/* Label for camera not working issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_NO_CAMERA" = "กล้องใช้งานไม่ได้";
+
+/* Header text on the call quality survey issues screen */
+"CALL_QUALITY_SURVEY_ISSUES_HEADER" = "เลือกทั้งหมดที่เกี่ยวข้อง";
+
+/* Title for the sheet in the call quality survey where issues with the call can be selected */
+"CALL_QUALITY_SURVEY_ISSUES_SHEET_TITLE" = "โปรดระบุปัญหาที่คุณพบ";
+
+/* Header text explaining the purpose of the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_HEADER" = "นี่จะช่วยให้เราสามารถปรับปรุงพัฒนาการโทรบน B&A โดยเราจะไม่จัดเก็บข้อมูลส่วนบุคคลที่ใช้ระบุตัวตนได้";
+
+/* Title for the initial rating screen in the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_TITLE" = "การโทรของคุณเป็นอย่างไรบ้าง";
+
+/* Button text to submit the call quality survey */
+"CALL_QUALITY_SURVEY_SUBMIT_BUTTON" = "ส่ง";
 
 /* Label on button for raising hand in call. */
 "CALL_RAISE_HAND_BUTTON_LABEL" = "ยกมือ";
@@ -1579,17 +1813,8 @@
 /* Text for a bullet point in a list of Backup features, describing that all text messages are included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_TEXT_BACKUP" = "สำรองข้อมูลข้อความทั้งหมด";
 
-/* Text for a bullet point in a list of Backup features, describing that recent media is included. */
-"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "ไฟล์สื่อจาก 45 วันที่ผ่านมา";
-
-/* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
+/* Text for a bullet point in a list of Backup features, describing the amount of included storage. Embeds {{ the amount of storage preformatted as a localized byte count, e.g. '100 GB' }}. */
 "CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "พื้นที่จัดเก็บ 1TB (รูปภาพ ~250k)";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "เกิดข้อผิดพลาดบางอย่าง โปรดติดต่อฝ่ายสนับสนุน";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a network error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NETWORK_ERROR" = "เกิดข้อผิดพลาดบางอย่าง ตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง";
 
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but is not registered. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED" = "คุณจะต้องลงทะเบียนเพื่อเปิดใช้งานการสำรองข้อมูล";
@@ -1600,11 +1825,23 @@
 /* Message shown in an action sheet when the user tries to confirm selecting the paid plan, but encountered an error while redeeming their completed purchase. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_PURCHASE_REDEMPTION" = "เกิดข้อผิดพลาดบางอย่าง โปรดติดต่อฝ่ายสนับสนุน";
 
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED" = "เนื่องจากคุณสร้างกุญแจกู้คืนใหม่ถึงจำนวนที่กำหนดแล้ว เพื่อป้องกันการใช้งานในทางที่ไม่ถูกต้อง คุณจะไม่สามารถเปิดใช้งานการสำรองข้อมูลได้จนกว่าจะครบ %1$@ โปรดลองอีกครั้งในอีก %1$@";
+
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. {{ Embeds 1 & 2: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED_TITLE" = "ไม่สามารถเปิดใช้งานการสำรองข้อมูลได้";
+
 /* A label indicating that a given Backup plan option is what the user has already enabled. */
 "CHOOSE_BACKUP_PLAN_CURRENT_PLAN_LABEL" = "แพ็กเกจที่ใช้อยู่";
 
-/* Subtitle for the free plan option, when choosing a Backup plan. */
-"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "ข้อความ + สื่อจาก 45 วัน";
+/* Text for a button that will downgrade the user from the paid Backup plan to the free one. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_BUTTON_TEXT" = "เปลี่ยนแพ็กเกจ";
+
+/* Button for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_PROCEED_BUTTON" = "เปลี่ยนแพ็กเกจ";
+
+/* Title for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_TITLE" = "ลดระดับแพ็กเกจเป็นแบบฟรีใช่หรือไม่";
 
 /* Title for the free plan option, when choosing a Backup plan. */
 "CHOOSE_BACKUP_PLAN_FREE_PLAN_TITLE" = "ฟรี";
@@ -1623,6 +1860,9 @@
 
 /* Subtitle for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_SUBTITLE" = "การสำรองข้อมูลทั้งหมดจะถูกเข้ารหัสตั้งแต่ต้นทางถึงปลายทาง B&A เป็นแอปที่ไม่แสวงผลกำไร ร่วมสนับสนุนภารกิจนี้ของเราได้ด้วยการสมัครบริการสำรองข้อมูล";
+
+/* Title for a label allowing users to view Signal's Terms & Conditions. */
+"CHOOSE_BACKUP_PLAN_TERM_AND_PRIVACY_POLICY_TEXT" = "เงื่อนไขและนโยบายความเป็นส่วนตัว";
 
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "เลือกแพ็กเกจสำรองข้อมูลของคุณ";
@@ -1996,6 +2236,9 @@
 /* Footer for the 'attributes access' section in conversation settings view. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "เลือกว่าใครสามารถแก้ไขชื่อกลุ่ม รูปภาพ คำอธิบาย และตั้งเวลาให้ข้อความหายไป";
 
+/* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "เลือกว่าใครสามารถแก้ไขชื่อกลุ่ม รูปภาพ คำอธิบาย รวมถึงตั้งเวลาให้ข้อความหายไปและข้อความที่ปักหมุดไว้";
+
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "รับโล่สำหรับโปรไฟล์คุณด้วยการสนับสนุน B&A แตะที่โล่เพื่อดูข้อมูลเพิ่มเติม";
 
@@ -2052,6 +2295,9 @@
 
 /* Label for 'member requests & invites' action in conversation settings view. */
 "CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES" = "คำขอและคำเชิญ";
+
+/* Label for 'member label' action in conversation settings view. */
+"CONVERSATION_SETTINGS_MEMBER_TAG" = "ป้ายกำกับสมาชิก";
 
 /* label for 'always' option for mention notifications in conversation settings */
 "CONVERSATION_SETTINGS_MENTION_MODE_AlWAYS" = "แจ้งเตือนตลอด";
@@ -2251,22 +2497,10 @@
 /* Tooltip highlighting the custom chat color controls. */
 "CUSTOM_CHAT_COLOR_SETTINGS_TOOLTIP" = "ลากเพื่อเปลี่ยนทิศทางของการไล่สี";
 
-/* Button to run the database integrity check */
-"DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "เปิดใช้งาน";
-
-/* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "ขั้นตอนนี้จะช่วยให้เราแก้ปัญหาของคุณได้ และอาจใช้เวลาสักครู่ คุณสามารถปิดแอป B&A ระหว่างทำการตรวจสอบนี้ แต่กรุณากลับมาส่งบันทึกข้อมูลการใช้งานของคุณ";
-
-/* Button to skip database integrity check step */
-"DATABASE_INTEGRITY_CHECK_SKIP" = "ข้าม";
-
-/* Title for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_TITLE" = "ดำเนินการตรวจสอบฐานข้อมูลหรือไม่";
-
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so keep that in mind. This is the description on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_DESCRIPTION" = "ประวัติการส่งข้อความบางส่วนของคุณอาจได้รับความเสียหาย ไม่พบผลกระทบต่อความปลอดภัยในบัญชีหรือข้อความของคุณ แตะ “ดำเนินการต่อ” เพื่อกู้คืนข้อมูล";
 
-/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
+/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "พบปัญหาในการดึงข้อมูล";
 
 /* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
@@ -2356,6 +2590,12 @@
 /* Accessibility label for the ? vector asset used to get info about debug logs */
 "DEBUG_LOG_INFO_BUTTON" = "ข้อมูลเกี่ยวกับปูมดีบัก";
 
+/* Header text displayed above the debug log preview */
+"DEBUG_LOG_PREVIEW_HEADER" = "บันทึกที่คุณส่งจะถูกโพสต์ทางออนไลน์เป็นเวลา 30 วันผ่าน URL เฉพาะที่ไม่มีการเผยแพร่";
+
+/* Title for the debug log preview screen */
+"DEBUG_LOG_PREVIEW_TITLE" = "บันทึกดีบัก";
+
 /* info message text in conversation view */
 "DECLINED_VIDEO_CALL" = "คุณปฏิเสธวิดีโอคอล";
 
@@ -2428,23 +2668,17 @@
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "ข้อความนี้จะถูกลบออกจากอุปกรณ์ทุกเครื่องของคุณ";
 
-/* Label for a button in an info sheet confirming that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_BUTTON" = "เข้าใจแล้ว";
-
-/* Subtitle for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_SUBTITLE" = "เมื่อคุณลบข้อความหรือแชท ข้อมูลนั้นจะถูกลบออกจากโทรศัพท์ของคุณและอุปกรณ์ที่เชื่อมโยงอยู่ทุกเครื่อง";
-
-/* Title for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_TITLE" = "การลบซิงค์เข้ากับอุปกรณ์ทุกเครื่องของคุณแล้ว";
-
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "บัญชีที่ถูกลบ";
 
 /* Notification warning the user that they have been de-registered. */
 "DEREGISTRATION_NOTIFICATION" = "คุณออกจากระบบ B&A บนอุปกรณ์เครื่องนี้แล้ว";
 
-/* Label for button that lets users re-register using the same phone number. */
-"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "ลงทะเบียนหมายเลขโทรศัพท์นี้ใหม่";
+/* Button that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_BUTTON" = "ลงทะเบียนอีกรอบ";
+
+/* Title for prompt that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_PROMPT_TITLE" = "ลงทะเบียนหมายเลขโทรศัพท์นี้อีกครั้งใช่หรือไม่";
 
 /* Label warning the user that they have been de-registered. */
 "DEREGISTRATION_WARNING" = "อุปกรณ์เครื่องนี้ไม่ได้ลงทะเบียนอีกต่อไป นี่น่าจะเป็นเพราะคุณลงทะเบียนหมายเลขโทรศัพท์นี้กับ B&A ไว้บนอุปกรณ์เครื่องอื่น";
@@ -2485,23 +2719,14 @@
 /* The explanation for the device transfer 'choice' view when linking a device */
 "DEVICE_TRANSFER_CHOICE_LINKED_EXPLANATION" = "เลือกวิธีถ่ายโอนประวัติการส่งข้อความและข้อมูลบัญชีของคุณ";
 
-/* The body for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_BODY" = "ทำต่อโดยไม่ถ่ายโอนบัญชีและข้อความของคุณ";
-
 /* The body for the device transfer 'choice' view 'register' option when linking a device when message syncing is available */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_BODY_LINK_AND_SYNC" = "คุณจะสามารถเลือกถ่ายโอนข้อความและไฟล์สื่อล่าสุดจากโทรศัพท์";
 
 /* The title for the device transfer 'choice' view 'register' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_TITLE" = "เพิ่มเป็นอุปกรณ์ใหม่";
 
-/* The title for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_TITLE" = "ลงทะเบียนโดยไม่ถ่ายโอน";
-
 /* The title for the device transfer 'choice' view */
 "DEVICE_TRANSFER_CHOICE_TITLE" = "ถ่ายโอนบัญชีและข้อความ";
-
-/* The body for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_BODY" = "ถ่ายโอนบัญชีและประวัติการส่งข้อความจากอุปกรณ์ iOS เครื่องเก่าของคุณ";
 
 /* The body for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_BODY" = "ถ่ายโอนบัญชีและประวัติการส่งข้อความจากอุปกรณ์ iOS เครื่องเก่าของคุณ";
@@ -2509,26 +2734,11 @@
 /* The title for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_TITLE" = "ถ่ายโอนจาก iPad อีกเครื่อง";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_TITLE" = "ถ่ายโอนจากอุปกรณ์ iOS";
-
-/* Button shown to contract a QR code and exit the fullscreen view. */
-"DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "ดูขนาดเล็กลง";
-
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "การถ่ายโอนไม่เสร็จสมบูรณ์ โปรดตรวจสอบให้แน่ใจว่าอุปกรณ์ทั้งสองเครื่องเปิดแอป B&A ไว้ แล้วลองใหม่อีกครั้ง";
 
-/* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
-"DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "ไม่สามารถยืนยันอุปกรณ์ใหม่ของคุณได้ กรุณาลองอีกครั้ง";
-
 /* An error indicating that something went wrong with the transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_GENERIC" = "การถ่ายโอนไม่เสร็จสมบูรณ์ โปรดตรวจสอบให้แน่ใจว่าอุปกรณ์ทั้งสองเครื่องวางอยู่ใกล้กัน แล้วลองใหม่อีกครั้ง";
-
-/* An error indicating the user must scan this code with a linked device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_LINKED" = "เพื่อตั้งค่า iPad เครื่องนี้ให้เป็นอุปกรณ์ที่เชื่อมโยง คุณต้องสแกนด้วย iPad เครื่องเก่า";
-
-/* An error indicating the user must scan this code with a primary device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_PRIMARY" = "เพื่อถ่ายโอนบัญชีของคุณ คุณต้องสแกนด้วย iPhone ของคุณ";
 
 /* An error indicating that the user does not have enough free space on their device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "ไม่มีพื้นที่ว่างมากพอที่จะถ่ายโอนให้เสร็จสมบูรณ์";
@@ -2536,41 +2746,11 @@
 /* An error indicating the user must update their device before trying to transfer. */
 "DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "ปรับปรุง B&A ให้เป็นรุ่นล่าสุดและลองอีกครั้ง";
 
-/* Button shown to expand a QR code and view it fullscreen. */
-"DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "ดูขนาดใหญ่ขึ้น";
-
-/* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "ถ่ายโอนบัญชี B&A ของคุณไปยังอุปกรณ์ iOS เครื่องใหม่ ทำให้แน่ใจว่าอุปกรณ์เครื่องใหม่ของคุณอยู่ใกล้ ๆ และเปิดอยู่";
-
-/* The title on the acttion sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_TITLE" = "ถ่ายโอนบัญชี";
-
-/* The explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION" = "นำอุปกรณ์เครื่องเก่าของคุณมาวางไว้ใกล้ๆ พร้อมตรวจสอบว่ามีการเปิดใช้งาน Wi-Fi และบลูทูธ จากนั้นให้ใช้อุปกรณ์สแกนคิวอาร์โค้ดนี้";
-
-/* The second explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION2" = "เลื่อนคิวอาร์โค้ดนี้ให้อยู่ในกรอบบนอุปกรณ์ iOS อีกเครื่องของคุณ";
-
-/* A prompt to provide further explanation if the user is not seeing the transfer on both devices. */
-"DEVICE_TRANSFER_QRCODE_NOT_SEEING" = "ไม่พบการแจ้งเตือนบนอุปกรณ์เครื่องเก่าของคุณหรือ?";
-
-/* The title for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_TITLE" = "สแกนรหัส QR";
-
 /* The explanation on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "ทำให้แน่ใจว่าอุปกรณ์ทั้งคู่อยู่ใกล้กัน อย่าปิดเครื่องใด และให้เปิด B&A อยู่ตลอดเวลา การถ่ายโอนนั้นจะถูกเข้ารหัสลับตั้งแต่ต้นทางถึงปลายทาง";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "รับข้อมูล";
-
-/* Text indicating that we are connecting to the scanned device */
-"DEVICE_TRANSFER_SCANNING_CONNECTING" = "กำลังเชื่อมต่อ…";
-
-/* The explanation for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_EXPLANATION" = "เลื่อนรหัส QR ให้อยู่ในวงกลม";
-
-/* The title for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_TITLE" = "จับอุปกรณ์ใหม่ของคุณให้อยู่ในกล้อง";
 
 /* Status message on new device when cancelling transfer. */
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_CANCELLING" = "กำลังยกเลิกการเชื่อมต่อกับ iPhone เครื่องเก่า…";
@@ -2608,11 +2788,8 @@
 /* Status message on old device when transfer is starting. */
 "DEVICE_TRANSFER_STATUS_OLD_DEVICE_STARTING" = "กำลังรอเชื่อมต่อกับ iPhone เครื่องใหม่…";
 
-/* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "ทำให้แน่ใจว่าอุปกรณ์ทั้งคู่อยู่ใกล้กัน อย่าปิดเครื่องใด และให้เปิด B&A อยู่ตลอดเวลา";
-
-/* The title on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_TITLE" = "ถ่ายโอนข้อมูล";
+/* Action asking user to try again after transfer failure. */
+"DEVICE_TRANSFER_TRY_AGAIN_ACTION" = "ลองอีกครั้ง";
 
 /* table cell label in conversation settings */
 "DISAPPEARING_MESSAGES" = "ข้อความที่ลบตัวเองได้";
@@ -2893,17 +3070,17 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ บริจาคให้ B&A ในนามของคุณ! ร่วมแสดงการสนับสนุน B&A บนโปรไฟล์ของคุณ";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "ส่งข้อความอย่างเป็นส่วนตัว ไม่มีโฆษณา ไม่มีการติดตาม ไม่มีการเก็บข้อมูล";
+/* Body text for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BODY" = "B&A เป็นแอปอิสระที่ไม่แสวงหาผลกำไร เรามุ่งมั่นให้บริการการส่งข้อความและการโทรที่เป็นส่วนตัว ไม่มีโฆษณา ไม่มีการติดตาม และไม่มีการเก็บข้อมูล บริจาควันนี้เพื่อร่วมสนับสนุน B&A";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "B&A ได้รับการสนับสนุนจากการบริจาค ความเป็นส่วนตัวของคุณจึงสำคัญที่สุดสำหรับเรา B&A ถูกสร้างมาเพื่อคุณ ไม่ใช่เพื่อข้อมูลของคุณหรือผลกำไรใดๆ";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_1" = "บริจาคแล้วรับโล่เพื่อเลือกแสดงบนโปรไฟล์ของคุณ";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "ร่วมบริจาคเพื่อสนับสนุนให้ B&A เป็นแอปที่ใช้งานสะดวก สนุก เชื่อถือได้ และเข้าถึงทุกคน";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_2" = "ความเป็นส่วนตัวของคุณคือภารกิจของเรา";
 
-/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "B&A นั้นแตกต่าง";
+/* Bullet point for a sheet discussing donating to Signal. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
+"DONATION_READ_MORE_SHEET_BULLET_3" = "B&A เป็นแอปไม่แสวงหาผลกำไร";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "ยอดเงิน";
@@ -3046,20 +3223,17 @@
 /* Text describing to the user that they're going to pay a monthly donation to Signal */
 "DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "บริจาครายเดือนให้ B&A";
 
-/* Title for the 'more' section on the donation screen */
-"DONATION_VIEW_MORE_SECTION_TITLE" = "ดูเพิ่ม";
-
 /* Title for the 'my support' section in the donation view */
 "DONATION_VIEW_MY_SUPPORT_TITLE" = "การสนับสนุนของฉัน";
-
-/* Title for the \"other ways to donate\" section on the donation view. */
-"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "วิธีอื่นในการบริจาค";
 
 /* Title on the 'Donate to Signal' screen */
 "DONATION_VIEW_TITLE" = "บริจาคให้ B&A";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "สกุลเงิน";
+
+/* Label for a button that says 'Don't show again'. */
+"DONT_SHOW_AGAIN_BUTTON_TITLE" = "ไม่ต้องแสดงอีก";
 
 /* Message for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_MESSAGE" = "แตะเร็วๆ สองครั้งที่ข้อความของคุณเพื่อแก้ไข คุณสามารถแก้ไขข้อความได้ภายใน 24 ชั่วโมงหลังการส่ง";
@@ -3316,9 +3490,6 @@
 /* Footer for message cell for documents/files when they are expired and unavailable for download */
 "FILE_UNAVAILABLE_FOOTER" = "ไม่พบไฟล์";
 
-/* Message for sheet shown when tapping a document/file that has expired and is unavailable for download */
-"FILE_UNAVAILABLE_SHEET_MESSAGE" = "ไฟล์นี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ไฟล์และสื่อที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
-
 /* Title for sheet shown when tapping a document/file that has expired and is unavailable for download */
 "FILE_UNAVAILABLE_SHEET_TITLE" = "ไม่พบไฟล์";
 
@@ -3352,12 +3523,6 @@
 /* Tooltip notifying users that the flip camera button moved to the picture-in-picture view of themselves in a call */
 "FLIP_CAMERA_BUTTON_MOVED_TO_PIP_TOOLTIP" = "ปุ่มพลิกหน้ากล้องย้ายมาอยู่ที่นี่ แตะที่วิดีโอของคุณเพื่อลองใช้งาน";
 
-/* Message for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_MESSAGE" = "ข้อความที่ถูกส่งต่อจะถูกส่งทันที";
-
-/* Title for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_TITLE" = "ส่งต่อเร็วขึ้น";
-
 /* Indicates that a single message was forwarded. */
 "FORWARD_MESSAGE_MESSAGES_SENT_1" = "ข้อความถูกส่งแล้ว";
 
@@ -3385,11 +3550,11 @@
 /* Title for the 'Get Started' banner */
 "GET_STARTED_BANNER_TITLE" = "เริ่มต้นใช้งาน";
 
-/* 'Get Started' button directing users to appearance */
-"GET_STARTED_CARD_APPEARANCE" = "ลักษณะ";
-
 /* 'Get Started' button direction users to avatar builder */
 "GET_STARTED_CARD_AVATAR_BUILDER" = "เพิ่มรูปภาพ";
+
+/* 'Get Started' button directing users to Chat Color settings */
+"GET_STARTED_CARD_CHAT_COLOR" = "สีแชท";
 
 /* 'Get Started' button directing users to invite friends */
 "GET_STARTED_CARD_INVITE_FRIENDS" = "เชิญเพื่อน";
@@ -3595,9 +3760,6 @@
 /* Toast view text informing user about swiping to speaker view */
 "GROUP_CALL_SPEAKER_VIEW_TOAST" = "ปัดขึ้นเพื่อเปลี่ยนมุมมอง";
 
-/* Tooltip highlighting group calls. */
-"GROUP_CALL_START_TOOLTIP" = "แตะที่นี่เพื่อเริ่มโทรแบบกลุ่ม";
-
 /* Text explaining that you started a group call. */
 "GROUP_CALL_STARTED_BY_YOU" = "คุณได้เริ่มการโทรแบบกลุ่ม";
 
@@ -3736,6 +3898,12 @@
 /* Message indicating that 'announcement-only' mode was enabled by a remote user. Embeds {{ user who enabled 'announcement-only' mode }}. */
 "GROUP_IS_ANNOUNCEMENT_ONLY_ENABLED_BY_REMOTE_USER_FORMAT" = "%1$@ เปลี่ยนการตั้งค่ากลุ่มเพื่ออนุญาตให้ผู้ดูแลเท่านั้นที่ส่งข้อความได้";
 
+/* Message text for the 'group invite link' action sheet. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE" = "เข้าร่วมกลุ่มนี้ รวมถึงเปิดเผยชื่อและรูปของคุณให้สมาชิกในกลุ่มเห็นหรือไม่";
+
+/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE_W_REQUEST" = "เมื่อส่งคำขอเข้าร่วมกลุ่ม สมาชิกในกลุ่มนี้จะสามารถเห็นชื่อและรูปของคุณได้ และผู้ดูแลกลุ่มจะต้องเป็นคนอนุมัติคำขอของคุณ";
+
 /* Subtitle indicating that the local user has been blocked from joining the group */
 "GROUP_LINK_ACTION_SHEET_VIEW_BLOCKED_FROM_JOINING_SUBTITLE" = "คุณเข้าร่วมกลุ่มนี้ด้วยลิงก์กลุ่มไม่ได้เพราะผู้ดูแลลบคุณออกไปแล้ว โปรดติดต่อผู้ดูแลให้เพิ่มคุณกลับเข้ากลุ่มอีกครั้ง";
 
@@ -3754,14 +3922,8 @@
 /* Label indicating that the group info is being loaded in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_LOADING_TITLE" = "กำลังโหลด…";
 
-/* Message text for the 'group invite link' action sheet. */
-"GROUP_LINK_ACTION_SHEET_VIEW_MESSAGE" = "คุณต้องการเข้าร่วมกลุ่มและเปิดเผยชื่อกับรูปภาพให้สมาชิกในกลุ่มเห็นหรือไม่?";
-
 /* Label for the 'request to join' button in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_BUTTON" = "ขอเข้ากลุ่ม";
-
-/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
-"GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_MESSAGE" = "ผู้ดูแลของกลุ่มนี้จะต้องอนุมัติคำขอเข้าร่วมของคุณก่อนที่คุณจะสามารถเข้าร่วมกลุ่มนี้ได้ เมื่อคุณส่งคำร้องขอเข้าร่วม สมาชิกคนอื่นๆ จะเห็นชื่อและรูปของคุณ";
 
 /* Error message the attempt to request to join the group failed due to network connectivity. */
 "GROUP_LINK_COULD_NOT_REQUEST_TO_JOIN_GROUP_DUE_TO_NETWORK_ERROR_MESSAGE" = "กรุณาตรวจสอบว่าคุณออนไลน์อยู่หรือไม่ และลองอีกครั้ง";
@@ -4045,6 +4207,12 @@
 /* Name for a group story on the stories list. Embeds {author's name}, {group name} */
 "GROUP_STORY_NAME_FORMAT" = "%1$@ ถึง %2$@";
 
+/* Text indicating you reacted to a group story (the header on the bubble says \"You\") */
+"GROUP_STORY_REPLY_REACTION_SECOND_PERSON" = "แสดงความรู้สึกต่อสตอรี่";
+
+/* Text indicating someone else reacted to a group story (the header on the bubble says their name, e.g. \"Bob\") */
+"GROUP_STORY_REPLY_REACTION_THIRD_PERSON" = "แสดงความรู้สึกต่อสตอรี่";
+
 /* Button to delete the story on the 'group story settings' view */
 "GROUP_STORY_SETTINGS_DELETE_BUTTON" = "ลบสตอรี่กลุ่ม";
 
@@ -4263,6 +4431,18 @@
 
 /* Title for the conversation list's 'archive' mode. */
 "HOME_VIEW_TITLE_ARCHIVE" = "ที่เก็บถาวร";
+
+/* Title for the conversation list's backup storage full context menu action. */
+"HOME_VIEW_TITLE_BACKUP_OUT_OF_STORAGE_QUOTA" = "พื้นที่จัดเก็บข้อมูลสำรองเต็มแล้ว";
+
+/* Title for the conversation list's failed to redeem backup subscription context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_FAILED_TO_REDEEM" = "แพ็กเกจสำรองข้อมูลมีข้อผิดพลาด";
+
+/* Title for the conversation list's backup subscription not found locally context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_NOT_FOUND_LOCALLY" = "ไม่พบการสมัครแพ็กเกจสำรองข้อมูล";
+
+/* Title for the conversation list's failed to backup context menu action. */
+"HOME_VIEW_TITLE_FAILED_TO_BACKUP" = "สำรองข้อมูลไม่สำเร็จ";
 
 /* Title for the 'Select Chats' option in the ChatList. */
 "HOME_VIEW_TITLE_SELECT_CHATS" = "เลือกแชท";
@@ -4546,8 +4726,8 @@
 /* confirm the users intent to link a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TITLE" = "เชื่อมโยงเสร็จสิ้น";
 
-/* subtitle for choosing to send message history when linking a new device */
-"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE" = "ถ่ายโอนข้อความของคุณทั้งหมดและไฟล์สื่อจาก 45 วันที่ผ่านมา";
+/* Subtitle for choosing to send message history when linking a new device, if you have the paid tier enabled. */
+"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_PAID_PLAN_SUBTITLE" = "ถ่ายโอนข้อความและไฟล์สื่อทั้งหมดของคุณ";
 
 /* title for choosing to send message history when linking a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_TITLE" = "ถ่ายโอนประวัติการส่งข้อความ";
@@ -4708,24 +4888,6 @@
 /* Shown to users while the app is loading, asking them not to close the app. */
 "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "อย่าปิดแอป";
 
-/* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "ในการถ่ายโอนบัญชี B&A ของคุณนั้น คุณจำเป็นต้องเปิดใช้งานการเข้าถึงเครือข่ายภายในบนอุปกรณ์ทั้งสองเครื่อง";
-
-/* A button asking the user if they need further help getting their transfer working. */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "มีอะไรให้ช่วยไหม?";
-
-/* First step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_ONE" = "เปิดเมนูการตั้งค่าบนอุปกรณ์แต่ละเครื่อง";
-
-/* Third step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "เปิดใช้งาน \"Local Network\"";
-
-/* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "ไปที่ B&A";
-
-/* Title for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "เปิดใช้งาน Local Network Access";
-
 /* A string indicating that the user can search for a location */
 "LOCATION_PICKER_SEARCH_PLACEHOLDER" = "ค้นด้วยชื่อหรือที่อยู่";
 
@@ -4830,6 +4992,24 @@
 
 /* toast indicating that we will remind the user later */
 "MEGAPHONE_WILL_REMIND_LATER" = "เราจะเตือนคุณในภายหลัง";
+
+/* Label for an action to add a member label */
+"MEMBER_LABEL_ADD" = "เพิ่มป้ายกำกับสมาชิก";
+
+/* Heading shown above the preview of a message bubble with the edited member label. */
+"MEMBER_LABEL_PREVIEW_HEADING" = "ดูตัวอย่าง";
+
+/* Text shown in the preview message bubble when a user is editing their member label. */
+"MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "สวัสดี!";
+
+/* Placeholder text in text field where user can edit their member label. */
+"MEMBER_LABEL_VIEW_PLACEHOLDER_TEXT" = "เพิ่มป้ายกำกับของคุณ";
+
+/* Subtitle for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_SUBTITLE" = "กำหนดป้ายกำกับสมาชิกเพื่อบรรยายตัวเองหรือระบุบทบาทของคุณในกลุ่มนี้ โดยระบบจะแสดงป้ายกำกับสมาชิกให้เห็นเฉพาะภายในกลุ่มนี้เท่านั้น";
+
+/* Title for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_TITLE" = "ป้ายกำกับสมาชิก";
 
 /* Action sheet button title */
 "MESSAGE_ACTION_COPY_TEXT" = "คัดลอกตัวอักษรของข้อความ";
@@ -5428,6 +5608,18 @@
 /* A string describing that the user has no groups in common other than the group implied by the current UI context */
 "NO_OTHER_GROUPS_IN_COMMON" = "ไม่มีกลุ่มอื่นร่วมกัน";
 
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-link' (translated via NOT_LINKED_BOTTOM_RELINK), and it will be formatted as a tappable link. */
+"NOT_LINKED_BOTTOM" = "อุปกรณ์เครื่องนี้ไม่ได้เชื่อมโยงอีกต่อไป โปรด%1$@เพื่อใช้งาน B&A บนอุปกรณ์เครื่องนี้";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_LINKED_BOTTOM_RELINK" = "เชื่อมโยงอีกครั้ง";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-register' (translated via NOT_REGISTERED_BOTTOM_REREGISTER), and it will be formatted as a tappable link. */
+"NOT_REGISTERED_BOTTOM" = "อุปกรณ์เครื่องนี้ไม่ได้ลงทะเบียนอีกต่อไป โปรด%1$@เพื่อใช้งาน B&A ต่อ";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_REGISTERED_BOTTOM_REREGISTER" = "ลงทะเบียนอีกครั้ง";
+
 /* Label for 1:1 conversation with yourself. */
 "NOTE_TO_SELF" = "บันทึกส่วนตัว";
 
@@ -5515,20 +5707,35 @@
 /* Label for the 'skip and create new pin' button when reglock is disabled during onboarding. */
 "ONBOARDING_2FA_SKIP_AND_CREATE_NEW_PIN" = "ข้ามและสร้างรหัส PIN ใหม่";
 
+/* Label for action to use Recovery Key instead of PIN for registration. */
+"ONBOARDING_2FA_SKIP_AND_USE_RECOVERY_KEY" = "ใช้กุญแจกู้คืน";
+
 /* Explanation for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE" = "ถ้าคุณจำรหัส PIN ไม่ได้ คุณสามารถสร้างมันใหม่ คุณสามารถลงทะเบียนและใช้บัญชีของคุณได้ แต่คุณจะสูญเสียการตั้งค่าเดิมอย่างข้อมูลโปรไฟล์ของคุณ";
 
 /* Title for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "ข้ามการใส่รหัส PIN หรือไม่?";
 
-/* The body for the device transfer 'choice' view 'transfer' option */
+/* The body for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "กู้คืนข้อความและไฟล์สื่อของคุณจากแพ็กเกจสำรองข้อมูลแบบชำระค่าบริการของ B&A";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
+/* The title for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "กู้คืนข้อมูลสำรองจาก B&A";
+
+/* Body for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_BODY" = "หากข้ามการกู้คืนตอนนี้ คุณจะไม่สามารถกู้คืนได้อีกในภายหลัง โดยเมื่อคุณเปิดใช้งานการสำรองข้อมูลบนอุปกรณ์เครื่องนี้อีกครั้ง ข้อมูลสำรองที่มีอยู่จะถูกแทนที่ด้วยประวัติการส่งข้อความใหม่";
+
+/* Title for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_TITLE" = "ข้ามการกู้คืนใช่หรือไม่";
 
 /* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "เลือกวิธีกู้คืนประวัติการส่งข้อความและข้อมูลบัญชีของคุณ";
+
+/* Message body displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_BODY" = "ในกรณีที่ย้ายการใช้งานจากอุปกรณ์ Android มาเป็น iOS วิธีเดียวในการถ่ายโอนข้อความและไฟล์สื่อคือการเปิดใช้งานการสำรองข้อมูลของ B&A บนอุปกรณ์เครื่องเก่าของคุณ";
+
+/* Title displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_TITLE" = "ไม่พบข้อมูลสำรองเพื่อใช้ในการกู้คืน";
 
 /* The body for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_BODY" = "ดำเนินการต่อโดยไม่ถ่ายโอนข้อความและไฟล์สื่อของคุณ";
@@ -5659,6 +5866,9 @@
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "ฉันมีโทรศัพท์เครื่องเก่า";
 
+/* Text indicating Signal is a nonprofit on the 'onboarding splash' view. For non-English languages, exclude the word '501c3'. */
+"ONBOARDING_SPLASH_NONPROFIT" = "B&A เป็นแอปไม่แสวงหาผลกำไร";
+
 /* Button for restoring or transferring account in the 'onboarding splash' view. */
 "ONBOARDING_SPLASH_RESTORE_OR_TRANSFER_BUTTON_TITLE" = "กู้คืนหรือถ่ายโอนบัญชี";
 
@@ -5764,6 +5974,21 @@
 /* Title of prompt notifying restore failed for unknown reasons. */
 "OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_TITLE" = "พบข้อผิดพลาดที่ไม่ทราบสาเหตุ";
 
+/* Action button to backup before continuing. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_BACKUP_ACTION" = "สำรองข้อมูลเดี๋ยวนี้";
+
+/* Body text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_BODY" = "โปรดสำรองข้อมูลก่อนถ่ายโอน เนื่องจากคุณอาจได้รับข้อความใหม่ที่ยังไม่ได้รับการสำรองข้อมูล";
+
+/* Title text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_TITLE" = "เตรียมอุปกรณ์ของคุณให้พร้อม";
+
+/* Action button to skip backup and continue. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_SKIP_ACTION" = "ข้ามและดำเนินการต่อ";
+
+/* Description for form confirming restore from backup without size detail. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_RESTORE_DESCRIPTION" = "คุณสำรองข้อมูลครั้งล่าสุดเมื่อวันที่ %1$@ เวลา %2$@";
+
 /* Body of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "เริ่มการถ่ายโอนบัญชี B&A และข้อความของคุณไปยังอุปกรณ์อีกเครื่องแล้ว ขณะนี้ B&A บนอุปกรณ์เครื่องนี้จะหยุดทำงาน";
 
@@ -5817,9 +6042,6 @@
 
 /* Footer for message cell for long text when it is expired and unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_FOOTER" = "ข้อความนี้ไม่ครบถ้วนสมบูรณ์";
-
-/* Message for sheet shown when tapping oversized text that has expired and is unavailable for download */
-"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "เนื้อหาที่ครบถ้วนทั้งหมดในข้อความนี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ข้อความขนาดยาวที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
 
 /* Title for sheet shown when tapping oversized text that has expired and is unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_SHEET_TITLE" = "ไม่พบข้อความที่ครบถ้วน";
@@ -6145,9 +6367,6 @@
 /* Message indicating that a request to join the group was successfully approved. Embeds {{ the name of the approved user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_APPROVED_FORMAT" = "เพิ่ม “%1$@” แล้ว";
 
-/* Label for the 'view requests' button in the pending member requests banner. */
-"PENDING_GROUP_MEMBERS_REQUEST_BANNER_VIEW_REQUESTS" = "ดูคำขอ";
-
 /* Message indicating that a request to join the group was successfully denied. Embeds {{ the name of the denied user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_DENIED_FORMAT" = "ปฏิเสธ “%1$@” แล้ว";
 
@@ -6263,9 +6482,6 @@
 "PHOTO_CAPTURE_GENERIC_ERROR" = "ไม่สามารถจับภาพได้";
 
 /* alert title */
-"PHOTO_CAPTURE_UNABLE_TO_CAPTURE_IMAGE" = "ไม่สามารถจับภาพได้";
-
-/* alert title */
 "PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA" = "การตั้งค่ากล้องล้มเหลว";
 
 /* Button label for opening the chat on a sheet presented from photo capture view indicating that a username QR code was found. */
@@ -6276,9 +6492,6 @@
 
 /* Title for sheet presented from photo capture view indicating that a username QR code was found. Embeds {{username}}. */
 "PHOTO_CAPTURE_USERNAME_QR_CODE_FOUND_TITLE_FORMAT" = "พบ %1$@";
-
-/* alert title, generic error preventing user from capturing a video that is too long */
-"PHOTO_CAPTURE_VIDEO_SIZE_ERROR" = "วิดีโอยาวเกินไป";
 
 /* Pressing this button pins a thread */
 "PIN_ACTION" = "ปักหมุด";
@@ -6364,6 +6577,9 @@
 /* If the user is re-registering, they need to enter their PIN to restore all their data. In some cases, they can skip this entry and lose some data. This text is shown on a button that lets them begin to do this. */
 "PIN_ENTER_EXISTING_SKIP" = "ข้ามการใส่ PIN";
 
+/* If the user is re-registering, they need to enter their PIN to restore all their data. If they don't remember their PIN, they may remember their Recovery Key which can be used instead of a PIN. */
+"PIN_ENTER_EXISTING_USE_RECOVERY_KEY" = "ใช้กุญแจกู้คืน";
+
 /* Error title indicating that the attempt to recreate a PIN failed. */
 "PIN_RECREATION_ERROR_TITLE" = "การสร้างรหัส PIN ล้มเหลว";
 
@@ -6421,8 +6637,80 @@
 /* An explanation that you have already pinned the maximum number of conversations. */
 "PINNED_CONVERSATION_LIMIT" = "คุณปักหมุดแชทได้ 4 รายการเท่านั้น";
 
+/* Accessibility label prefix for banner showing a pinned message */
+"PINNED_MESSAGE_BANNER_AX_LABEL" = "ข้อความที่ปักหมุด:";
+
+/* Shown when another user pins a message. Embeds {{ another user }}. */
+"PINNED_MESSAGE_CHAT_EVENT_OTHER" = "%1$@ ปักหมุดข้อความ";
+
+/* Shown when the local user pins a message. */
+"PINNED_MESSAGE_CHAT_EVENT_SELF" = "คุณปักหมุดข้อความ";
+
+/* Accessibility label for pin message button */
+"PINNED_MESSAGE_MENU_ACCESSIBILITY_LABEL" = "เมนูข้อความที่ปักหมุด";
+
+/* Label for button to pin a message */
+"PINNED_MESSAGE_PIN_ACTION_TITLE" = "ปักหมุด";
+
+/* Message for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BODY" = "ข้อความที่ปักหมุดนี้จะไปแทนที่ข้อความปักหมุดที่เก่าที่สุด";
+
+/* Option in pinned message action sheet to replace oldest pin. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BUTTON" = "แทนที่";
+
+/* Title for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_TITLE" = "แทนที่ข้อความที่เก่าที่สุดใช่หรือไม่";
+
+/* Body for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_BODY" = "กรุณาตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง";
+
+/* Title for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_TITLE" = "ไม่สามารถปักหมุดข้อความ";
+
+/* Text to show on a toast when someone unpins a message */
+"PINNED_MESSAGE_TOAST" = "เลิกปักหมุดข้อความแล้ว";
+
+/* Label for button to unpin a message */
+"PINNED_MESSAGE_UNPIN_ACTION_TITLE" = "เลิกปักหมุด";
+
+/* Option in pinned message action sheet to pin for 24 hours. */
+"PINNED_MESSAGES_24_HOURS" = "24 ชั่วโมง";
+
+/* Option in pinned message action sheet to pin for 30 days. */
+"PINNED_MESSAGES_30_DAYS" = "30 วัน";
+
+/* Option in pinned message action sheet to pin for 7 days. */
+"PINNED_MESSAGES_7_DAYS" = "7 วัน";
+
+/* Title for Pinned Messages detail view */
+"PINNED_MESSAGES_DETAILS_TITLE" = "ข้อความที่ปักหมุด";
+
+/* Title for an action sheet to indicate how long to keep the pin active */
+"PINNED_MESSAGES_EXPIRY_SHEET_TITLE" = "ปักหมุดไว้เป็นเวลา...";
+
+/* Option in pinned message action sheet to pin with no expiry. */
+"PINNED_MESSAGES_FOREVER" = "ตลอดไป";
+
+/* Action menu item to go to a message in the conversation view */
+"PINNED_MESSAGES_GO_TO_MESSAGE" = "ไปที่ข้อความ";
+
+/* Action menu item to see all pinned messages */
+"PINNED_MESSAGES_SEE_ALL_MESSAGES" = "ดูข้อความทั้งหมด";
+
+/* Action menu item to unpin a message */
+"PINNED_MESSAGES_UNPIN" = "เลิกปักหมุด";
+
+/* Title for a button to unpin all pinned messages. */
+"PINNED_MESSAGES_UNPIN_ALL" = "เลิกปักหมุดทั้งหมด";
+
 /* The title for pinned conversation section on the conversation list */
 "PINNED_SECTION_TITLE" = "ปักหมุด";
+
+/* Body for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_BODY" = "เมื่อครบเวลาที่กำหนด ข้อความที่จะหายไปจะถูกปลดหมุดและจะถูกลบออกจากแชท";
+
+/* Title for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_TITLE" = "การปักหมุดข้อความที่จะหายไป";
 
 /* Action text for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_ACTION" = "สร้างรหัส PIN";
@@ -6439,11 +6727,35 @@
 /* Accessibility label for button to start media playback */
 "PLAY_BUTTON_ACCESSABILITY_LABEL" = "เล่นสื่อ";
 
+/* Accessibility label for poll message. Embeds {{ poll question }}. */
+"POLL_ACCESSIBILITY_LABEL" = "โพล: %1$@";
+
+/* Accessibility label for a vote option that is not selected by the user. */
+"POLL_ACCESSIBILITY_LABEL_OPTION_PENDING" = "รอดำเนินการ";
+
+/* Title for a toggle allowing multiple votes for a poll. */
+"POLL_ALLOW_MULTIPLE_LABEL" = "อนุญาตให้ตอบได้มากกว่าหนึ่งข้อ";
+
+/* Button to view a poll after its ended */
+"POLL_BUTTON_VIEW_POLL" = "ดูโพล";
+
 /* Button to view poll results */
 "POLL_BUTTON_VIEW_RESULTS" = "ดูผลโพล";
 
 /* Button to view poll votes */
 "POLL_BUTTON_VIEW_VOTES" = "ดูผลโหวต";
+
+/* Toast telling user to add a question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION" = "ตั้งคำถาม";
+
+/* Toast telling user to add options and question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION_OR_ENOUGH_OPTIONS" = "ตั้งคำถามและใส่ตัวเลือกอย่างน้อย 2 รายการ";
+
+/* Toast telling user to add more options to poll. */
+"POLL_CREATE_ERROR_TOAST_NOT_ENOUGH_OPTIONS" = "ใส่ตัวเลือกอย่างน้อย 2 รายการ";
+
+/* Title of create poll pane */
+"POLL_CREATE_TITLE" = "โพลใหม่";
 
 /* Label for button to end a poll */
 "POLL_DETAILS_END_POLL" = "ปิดโพล";
@@ -6451,20 +6763,56 @@
 /* Title of poll details pane */
 "POLL_DETAILS_TITLE" = "รายละเอียดโพล";
 
+/* Title for an action sheet confirming the user wants end a poll. */
+"POLL_END_CONFIRMATION" = "ปิดโพลใช่หรือไม่";
+
+/* Message for an action sheet confirming the user wants to end a poll. */
+"POLL_END_CONFIRMATION_MESSAGE" = "สมาชิกในกลุ่มจะไม่สามารถโหวตในโพลนี้ได้อีกต่อไป";
+
+/* Shown when another user ends a poll. Embeds {{ another user }} and {{ poll question }}. */
+"POLL_ENDED_BY_OTHER_CHAT_LIST_UPDATE" = "%1$@ ปิดโพล: %2$@";
+
+/* Shown when the local user ends a poll. Embeds {{ poll question }}. */
+"POLL_ENDED_BY_YOU_CHAT_LIST_UPDATE" = "คุณปิดโพล: %1$@";
+
 /* Notification that {{contact}} ended a poll with question {{poll question}} */
 "POLL_ENDED_NOTIFICATION" = "%1$@ ปิดโพล “%2$@”";
+
+/* Label specifying the poll is finished and these are the final results */
+"POLL_FINAL_RESULTS_LABEL" = "ผลโพลสรุป";
 
 /* Label specifying the message type as a poll */
 "POLL_LABEL" = "โพล";
 
+/* String to display when a poll has no votes */
+"POLL_NO_VOTES" = "ยังไม่มีคะแนนโหวต";
+
+/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
+"POLL_OPTION_PLACEHOLDER_PREFIX" = "Option";
+
+/* Header for the poll options text boxes when making a new poll */
+"POLL_OPTIONS_LABEL" = "ตัวเลือก";
+
 /* Prefix for a poll preview */
 "POLL_PREFIX" = "โพล:";
+
+/* Header for the poll question text box when making a new poll */
+"POLL_QUESTION_LABEL" = "คำถาม";
+
+/* Placeholder text for poll question */
+"POLL_QUESTION_PLACEHOLDER_TEXT" = "ตั้งคำถาม";
+
+/* Title of poll details pane when poll is ended */
+"POLL_RESULTS_TITLE" = "ผลโพล";
 
 /* Label specifying the user can select more than one option */
 "POLL_SELECT_LABEL_MULTIPLE" = "เลือกคำตอบ (ตอบได้มากกว่าหนึ่งข้อ)";
 
 /* Label specifying the user can select one option */
 "POLL_SELECT_LABEL_SINGULAR" = "เลือกหนึ่งข้อ";
+
+/* Notification that {{contact}} voted in a poll with question {{poll question}} */
+"POLL_VOTED_NOTIFICATION" = "%1$@ โหวตในโพล “%2$@”";
 
 /* Badge indicating that the user is verified. */
 "PRIVACY_IDENTITY_IS_VERIFIED_BADGE" = "ตรวจยืนยันแล้ว";
@@ -6661,6 +7009,15 @@
 /* Title of alert shown when push tokens sync job succeeds. */
 "PUSH_REGISTER_SUCCESS" = "ลงทะเบียนใหม่สำหรับการแจ้งเตือนแบบพุชได้สำเร็จ";
 
+/* Body for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_BODY" = "ใช้อุปกรณ์เครื่องนี้สแกนคิวอาร์โค้ดซึ่งแสดงอยู่บนอุปกรณ์ที่คุณต้องการถ่ายโอน";
+
+/* Title for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_TITLE" = "สแกนคิวอาร์โค้ด";
+
+/* Message for an action sheet telling users how to use quick restore, when trying to open an external quick restore URL. */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "ถ่ายโอนบัญชีนี้ไปยังอุปกรณ์เครื่องใหม่ โดยแตะ “ดำเนินการต่อ” แล้วใช้กล้องใน B&A สแกนคิวอาร์โค้ด โปรดตรวจสอบให้แน่ใจว่าคุณสแกนคิวอาร์โค้ดที่มาจาก B&A โดยตรงเท่านั้น";
+
 /* Accessibility label stating the author of the message to which you are replying. Embeds: {{ the author of the message to which you are replying }}. */
 "QUOTED_REPLY_ACCESSIBILITY_LABEL_FORMAT" = "ตอบกลับหา %1$@";
 
@@ -6676,11 +7033,11 @@
 /* Toast alert text shown when tapping on a quoted message which we cannot scroll to because the local copy of the message didn't exist when the quote was received. */
 "QUOTED_REPLY_ORIGINAL_MESSAGE_REMOTELY_SOURCED" = "ไม่พบข้อความต้นฉบับ";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to your own story. */
-"QUOTED_REPLY_REACTION_TO_OWN_STORY" = "แสดงความรู้สึกต่อสตอรี่ของคุณ";
+/* Label explaining that the content of a quoted message includes you reacting to someone's story. Embeds {{ %1$@ the story author }}. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_SECOND_PERSON" = "แสดงความรู้สึกต่อสตอรี่ของ %1$@";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to a story. Embeds {{ story author name }} */
-"QUOTED_REPLY_REACTION_TO_STORY_FORMAT" = "แสดงความรู้สึกต่อสตอรี่ของ %1$@";
+/* Label explaining that the content of a quoted message includes someone reacting to your story. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_THIRD_PERSON" = "แสดงความรู้สึกต่อสตอรี่ของคุณ";
 
 /* Message header when you are quoting a story. Embeds {{ story author name }} */
 "QUOTED_REPLY_STORY_AUTHOR_INDICATOR_FORMAT" = "%1$@ · สตอรี่";
@@ -6702,6 +7059,9 @@
 
 /* Indicates this message is a quoted reply to a video file. */
 "QUOTED_REPLY_TYPE_VIDEO" = "วิดีโอ";
+
+/* Indicates this message is a quoted reply to a voice message. */
+"QUOTED_REPLY_TYPE_VOICE_MESSAGE" = "ข้อความเสียง";
 
 /* Label for a button to lower your raised hand in a call. */
 "RAISED_HANDS_LOWER_HAND_BUTTON" = "เอามือลง";
@@ -6841,6 +7201,9 @@
 /* Body for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
+/* Body for a sheet warning users about an incorrect recovery key and having hit a rate limit on retries. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_RATE_LIMIT_BODY" = "คุณป้อนกุญแจกู้คืนเกินจำนวนครั้งที่กำหนดแล้ว การจำกัดจำนวนครั้งเป็นไปเพื่อความปลอดภัยของคุณ โปรดลองอีกครั้งในอีก 1 ชั่วโมง";
+
 /* Title for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "กุญแจสำรองไม่ถูกต้อง";
 
@@ -6892,12 +7255,6 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "รหัสประเทศ";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "เมื่อดำเนินการต่อ ระบบจะปิดการใช้งาน B&A บนอุปกรณ์เครื่องอื่นที่ลงทะเบียนไว้ด้วยหมายเลขโทรศัพท์เดียวกัน";
-
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "ถ่ายโอนบัญชีและข้อความ";
-
 /* Description for the screen that allows users to enter their recovery key. */
 "REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "กุญแจสำรองคือรหัส 64 หลักที่คุณต้องใช้ในการกู้คืนบัญชีและข้อมูล";
 
@@ -6939,6 +7296,9 @@
 
 /* During registration, users are asked to enter their phone number. This is the subtitle on that screen, which gives users some instructions. */
 "REGISTRATION_PHONE_NUMBER_SUBTITLE" = "ใส่หมายเลขโทรศัพท์ของคุณเพื่อเริ่มต้นใช้งาน";
+
+/* During re-registration, users are asked to confirm their phone number. This is the subtitle on that screen, which gives users some instructions. */
+"REGISTRATION_PHONE_NUMBER_SUBTITLE_2" = "รหัสยืนยันจะถูกส่งไปยังหมายเลขโทรศัพท์นี้:";
 
 /* During registration, users are asked to enter their phone number. This is the title on that screen. */
 "REGISTRATION_PHONE_NUMBER_TITLE" = "หมายเลขโทรศัพท์ของคุณ";
@@ -6993,6 +7353,15 @@
 
 /* Error shown if an SMS/call service provider is temporarily unable to send a verification code to the provided number. */
 "REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "B&A ไม่สามารถส่งรหัส SMS เนื่องด้วยปัญหาเกี่ยวกับผู้ให้บริการ SMS โปรดรอประมาณ 2-3 ชั่วโมงแล้วลองใหม่อีกครั้ง";
+
+/* Third step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_ENABLE_BACKUPS" = "เปิดใช้งานการสำรองข้อมูล แล้วรอจนการสำรองข้อมูลของคุณเสร็จสมบูรณ์";
+
+/* First step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_OPEN_SIGNAL" = "เปิดแอป B&A บนอุปกรณ์เครื่องเก่า";
+
+/* Second step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_TAP_SETTINGS" = "แตะที่การตั้งค่า > ข้อมูลสำรอง";
 
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "คุณจำเป็นต้องลงทะเบียนก่อน จึงจะสามารถส่งข้อความได้";
@@ -7066,6 +7435,18 @@
 /* Label warning the user that something is wrong with their username link. */
 "REMINDER_VIEW_USERNAME_LINK_CORRUPTED_WARNING" = "เกิดข้อผิดพลาดเกี่ยวกับคิวอาร์โค้ดและลิงก์ชื่อผู้ใช้ของคุณ จึงไม่สามารถใช้ลิงก์นี้ได้อีกต่อไป โปรดสร้างลิงก์ใหม่เพื่อใช้สำหรับแชร์กับผู้ติดต่อ";
 
+/* A message that displays when one person in a call remotely muted another participant. Embeds {{name}} {{name}} */
+"REMOTE_MUTE_TOAST_A_MUTED_B" = "%1$@ ปิดเสียงของ %2$@";
+
+/* A message that displays when your microphone is remotely muted by another call participant. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_SOMEONE_MUTED_YOU" = "%1$@ ปิดเสียงของคุณ";
+
+/* A message that displays when you remotely muted another call participant's microphone. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_YOU_MUTED_SOMEONE" = "คุณปิดเสียงของ %1$@";
+
+/* A message that displays when you joined a call on two devices and mute one from the other. */
+"REMOTE_MUTE_TOAST_YOU_MUTED_YOURSELF" = "คุณปิดเสียงของตัวเองจากอุปกรณ์อีกเครื่อง";
+
 /* Accessibility label for a button that removes the preview from a drafted message. */
 "REMOVE_PREVIEW" = "ลบตัวอย่าง";
 
@@ -7083,6 +7464,30 @@
 
 /* Configure reactions reset button text */
 "RESET" = "รีเซ็ต";
+
+/* Body for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_BODY" = "ระบบยังกู้คืนไฟล์สื่อของคุณไม่เสร็จสมบูรณ์ โดยหากยกเลิก คุณจะยังสามารถกู้คืนไฟล์ได้อีกด้วยการเชื่อมโยงอุปกรณ์นี้อีกครั้ง";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_PRIMARY_BUTTON" = "ดำเนินการกู้คืนต่อ";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_SECONDARY_BUTTON" = "ยกเลิกการกู้คืน";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_TITLE" = "กำลังกู้คืนไฟล์สื่อของคุณ";
+
+/* Message for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_MESSAGE" = "ระบบยังกู้คืนไฟล์สื่อของคุณไม่เสร็จสมบูรณ์ โดยหากยกเลิก คุณจะยังสามารถกู้คืนไฟล์ได้อีกด้วยการเชื่อมโยงอุปกรณ์นี้อีกครั้ง";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_PRIMARY_BUTTON" = "ดำเนินการกู้คืนต่อ";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_SECONDARY_BUTTON" = "ยกเลิกการกู้คืน";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_TITLE" = "ยกเลิกการกู้คืนไฟล์สื่อใช่หรือไม่";
 
 /* Button title shown on chat list banner for restoring media from a backup when paused because the device has insufficient disk space, to see a bottom sheet with more details about next steps. */
 "RESTORING_MEDIA_BANNER_DISK_SPACE_BUTTON" = "รายละเอียด";
@@ -7262,7 +7667,7 @@
 "SCREEN_LOCK_UNLOCK_SIGNAL" = "ปลดล็อก B&A";
 
 /* Placeholder text indicating the user can search for contacts by name, username, or phone number. */
-"SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "ชื่อ ชื่อผู้ใช้ หรือหมายเลขโทรศัพท์";
+"SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "ชื่อ ชื่อผู้ใช้ หรือเบอร์โทร";
 
 /* Placeholder text indicating the user can search for contacts by name or phone number. */
 "SEARCH_BYNAMEORNUMBER_PLACEHOLDER_TEXT" = "ค้นหาโดยชื่อหรือหมายเลข";
@@ -7605,9 +8010,6 @@
 
 /* No comment provided by engineer. */
 "SETTINGS_CLEAR_HISTORY" = "ล้างประวัติแชท";
-
-/* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "ลิขสิทธิ์ B&A Messenger\nเผยแพร่ภายใต้สัญญาอนุญาต AGPLv3";
 
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "การใช้ข้อมูล";
@@ -8500,6 +8902,12 @@
 /* The name for the sticker category 'Featured' */
 "STICKER_CATEGORY_FEATURED_NAME" = "แนะนำ";
 
+/* Subtitle of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_SUBTITLE" = "สติกเกอร์ที่คุณส่งจะปรากฏในหน้านี้";
+
+/* Title of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_TITLE" = "ไม่มีสติกเกอร์ล่าสุด";
+
 /* The name for the sticker category 'Recents' */
 "STICKER_CATEGORY_RECENTS_NAME" = "ล่าสุด";
 
@@ -8508,9 +8916,6 @@
 
 /* Message when trying to show a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_MESSAGE_LABEL" = "ไม่พบสติกเกอร์";
-
-/* Message for sheet shown when tapping a sticker that has expired and is unavailable for download */
-"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "สติกเกอร์นี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ไฟล์และสื่อที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
 
 /* Title for sheet shown when tapping a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_SHEET_TITLE" = "ไม่พบสติกเกอร์";
@@ -8659,21 +9064,6 @@
 /* Context menu action to share the selected story */
 "STORIES_SHARE_STORY_ACTION" = "แบ่งปัน";
 
-/* Section title shown when sending to non-story conversations but failing to send the file to stories. */
-"STORIES_SHARESHEET_PARTIAL_SEND_REMAINING_SECTION_TITLE" = "ส่งถึง";
-
-/* Section title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_STORIES_SECTION_TITLE" = "ไม่สามารถส่งไปยัง";
-
-/* Title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_TITLE" = "ส่งแล้วบางส่วน";
-
-/* Subtitle shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_SUBTITLE" = "ไม่รองรับประเภทของไฟล์ที่เลือก";
-
-/* Title shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_TITLE" = "ไม่สามารถส่งได้";
-
 /* Title for the stories view. */
 "STORIES_TITLE" = "สตอรี่";
 
@@ -8722,8 +9112,11 @@
 /* Title for the story privacy settings view */
 "STORY_PRIVACY_TITLE" = "ความเป็นส่วนตัวของสตอรี่";
 
-/* inbox and notification text for a reaction to a story authored by the local user. Embeds {{reaction emoji}} */
-"STORY_REACTION_LOCAL_AUTHOR_PREVIEW_FORMAT" = "แสดงความรู้สึก %1$@ ต่อสตอรี่ของคุณ";
+/* Text explaining that you reacted to someone else's story. Embeds {{ %1$@ reaction emoji, %2$@ story author name }}. */
+"STORY_REACTION_PREVIEW_FORMAT_SECOND_PERSON" = "คุณแสดงความรู้สึก %1$@ ต่อสตอรี่ของ %2$@";
+
+/* Text explaining that someone reacted to your story. Embeds {{ %1$@ reaction emoji }}. */
+"STORY_REACTION_PREVIEW_FORMAT_THIRD_PERSON" = "แสดงความรู้สึก %1$@ ต่อสตอรี่ของคุณ";
 
 /* quote text for a reaction to a story by the user (the header on the bubble says \"You\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_SECOND_PERSON" = "แสดงความรู้สึก %1$@ ต่อสตอรี่";
@@ -8731,17 +9124,8 @@
 /* quote text for a reaction to a story by some other user (the header on the bubble says their name, e.g. \"Bob\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_THIRD_PERSON" = "แสดงความรู้สึก %1$@ ต่อสตอรี่";
 
-/* inbox and notification text for a reaction to a story authored by another user. Embeds {{ %1$@ reaction emoji, %2$@ story author name }} */
-"STORY_REACTION_REMOTE_AUTHOR_PREVIEW_FORMAT" = "แสดงความรู้สึก %1$@ ต่อสตอรี่ของ %2$@";
-
 /* Button for replying to a story with no existing replies. */
 "STORY_REPLY_BUTTON" = "ตอบกลับ";
-
-/* Text indicating you reacted to a story (the header on the bubble says \"You\") */
-"STORY_REPLY_REACTION_SECOND_PERSON" = "แสดงความรู้สึกต่อสตอรี่";
-
-/* Text indicating someone else reacted to a story (the header on the bubble says their name, e.g. \"Bob\") */
-"STORY_REPLY_REACTION_THIRD_PERSON" = "แสดงความรู้สึกต่อสตอรี่";
 
 /* placeholder text for replying to a story */
 "STORY_REPLY_TEXT_FIELD_PLACEHOLDER" = "ตอบกลับ";
@@ -8965,35 +9349,23 @@
 /* Option in selected text edit menu to make text bold */
 "TEXT_MENU_BOLD" = "ตัวหนา";
 
-/* Option in selected text edit menu to clear all text formatting in the selected text range */
-"TEXT_MENU_CLEAR_FORMATTING" = "ล้างการปรับแต่ง";
-
 /* Option in selected text edit menu to view text formatting options */
 "TEXT_MENU_FORMAT" = "ปรับแต่ง";
 
 /* Option in selected text edit menu to make text italic */
 "TEXT_MENU_ITALIC" = "ตัวเอียง";
 
-/* Option in selected text edit menu to look up word definitions */
-"TEXT_MENU_LOOK_UP" = "ค้นหา";
-
 /* Option in selected text edit menu to make text monospace */
 "TEXT_MENU_MONOSPACE" = "โมโนสเปซ";
 
-/* Option in selected text edit menu to replace text with suggestions */
-"TEXT_MENU_REPLACE" = "แทนที่";
-
-/* Option in selected text edit menu to share selected text */
-"TEXT_MENU_SHARE" = "แบ่งปัน";
+/* Option in selected text edit menu to remove all text formatting in the selected text range */
+"TEXT_MENU_REMOVE_FORMATTING" = "ล้างการปรับแต่งตัวอักษร";
 
 /* Option in selected text edit menu to make text spoiler */
 "TEXT_MENU_SPOILER" = "โหมดสปอยเลอร์";
 
 /* Option in selected text edit menu to make text strikethrough */
 "TEXT_MENU_STRIKETHROUGH" = "ขีดทับ";
-
-/* Option in selected text edit menu to translate the word */
-"TEXT_MENU_TRANSLATE" = "แปลภาษา";
 
 /* text indicating the message was remotely deleted */
 "THIS_MESSAGE_WAS_DELETED" = "ข้อความนี้ถูกลบแล้ว";
@@ -9526,45 +9898,81 @@
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "คุณได้ตั้งเวลาข้อความที่ลบตัวเองได้ไว้ที่ %1$@";
 
-/* BA custom strings */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "กำลังสร้างข้อมูลสำรอง: %1$@";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "กำลังส่งออกข้อมูลสำรอง...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "กำลังอัปโหลดข้อมูลสำรอง...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "กำลังอัปโหลดไฟล์สื่อในข้อมูลสำรอง...";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "สำรองข้อมูลเดี๋ยวนี้";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "สำรองข้อมูลภายหลัง";
-"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "ติดต่อผู้ใช้นี้ไม่สำเร็จหลายครั้งเกินไป โปรดลองใหม่ในภายหลัง";
-"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "ปิดกุญแจลงทะเบียน";
-"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "ในการปิดการใช้งานรหัส PIN คุณจะต้องปิดการใช้งานกุญแจลงทะเบียนก่อนเป็นอย่างแรก";
-"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "ปิดกุญแจลงทะเบียนหรือไม่?";
-"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "การสร้างรหัส PIN เสร็จเรียบร้อย แต่กุญแจลงทะเบียนไม่สามรถเปิดใช้งานได้ ตรวจสอบการเชื่อมต่อแล้วแล้วอีกครั้ง";
-"PIN_CREATION_REGLOCK_ERROR_TITLE" = "การเปิดใช้งานกุญแจลงทะเบียนล้มเหลว";
-"PIN_DISABLE_ERROR_MESSAGE" = "ไม่สามารถปิดใช้งาน PIN ของคุณได้";
-"PIN_DISABLE_ERROR_TITLE" = "การปิดใช้งาน PIN ล้มเหลว";
-"REGISTER_RATE_LIMITING_BODY" = "คุณลองบ่อยครั้งเกินไป กรุณารอสักนาทีก่อนจะลองใหม่";
-"VOICE_MESSAGE_FILE_NAME" = "B&A";
+/* ===== B&A Custom Strings ===== */
 
-/* BA custom strings */
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "ข้อความเสียงนี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ไฟล์และสื่อที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "ไฟล์นี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ไฟล์และสื่อที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "เนื้อหาที่ครบถ้วนทั้งหมดในข้อความนี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ข้อความขนาดยาวที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "สติกเกอร์นี้ไม่ได้ถูกถ่ายโอนจากโทรศัพท์ของคุณในขั้นตอนการเชื่อมโยงอุปกรณ์ ระบบไม่สามารถซิงค์ไฟล์และสื่อที่เก่ากว่า 45 วันนับจากวันที่เชื่อมโยงอุปกรณ์ได้";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "สำรองข้อความ + สื่อจาก 45 วัน";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "ไฟล์สื่อจาก 45 วันที่ผ่านมา";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "ข้อความ + สื่อจาก 45 วัน";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "ดูเพิ่ม";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "วิธีอื่นในการบริจาค";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "ลิขสิทธิ์ B&A Messenger\nเผยแพร่ภายใต้สัญญาอนุญาต AGPLv3";
+
+/* Link BAXS platform account */
+
 "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "ดูเหมือนว่าคุณพยายามจะเชื่อมโยงบัญชี BAXS แตะดำเนินการต่อ จากนั้นให้แตะ \"สแกนคิวอาร์โค้ด\" แล้วสแกนคิวอาร์โค้ดอีกครั้ง";
+
 "LINK_BA_PLATFORM_ACCOUNT_TITLE" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA";
+
 "LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "บัญชี BAXS ที่เชื่อมต่อแล้ว";
+
 "LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "บัญชีแพลตฟอร์ม BA";
+
 "LINK_BA_PLATFORM_SCAN_FOOTER" = "สแกน QR โค้ดที่แสดงบนแพลตฟอร์มการชำระเงิน BA เพื่อเชื่อมต่อบัญชีของคุณ";
+
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "สแกน QR โค้ด";
-"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "มือถือ";
-"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "อีเมล";
-"LINK_BA_PLATFORM_USER_ID" = "User ID";
-"LINK_BA_PLATFORM_USER_NAME" = "User Name";
-"LINK_BA_PLATFORM_CONFIRM_TITLE" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA";
-"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "เชื่อมต่อบัญชีของคุณกับ \"%@\"?";
-"LINK_BA_PLATFORM_SUCCESS_TOAST" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA สำเร็จแล้ว";
-"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "QR โค้ดไม่ถูกต้อง";
-"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "QR โค้ดนี้ไม่ใช่รหัสเชื่อมต่อแพลตฟอร์ม BA ที่ถูกต้อง";
+
 "LINK_BA_PLATFORM_SCAN_AGAIN" = "สแกนอีกครั้ง";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "มือถือ";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "อีเมล";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "เชื่อมต่อบัญชีของคุณกับ \"%@\"?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "เชื่อมต่อบัญชีแพลตฟอร์ม BA สำเร็จแล้ว";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "QR โค้ดไม่ถูกต้อง";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "QR โค้ดนี้ไม่ใช่รหัสเชื่อมต่อแพลตฟอร์ม BA ที่ถูกต้อง";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "ไม่สามารถเชื่อมต่อได้";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "ไม่สามารถใช้ QR โค้ดนี้สำหรับการเชื่อมต่อได้";
+
 "LINK_BA_PLATFORM_FAILED_TITLE" = "การเชื่อมต่อล้มเหลว";
+
 "LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "แพลตฟอร์ม BA ปฏิเสธคำขอเชื่อมต่อ";
+
 "LINK_BA_PLATFORM_TIMEOUT_TITLE" = "การเชื่อมต่อหมดเวลา";
+
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "แพลตฟอร์ม BA ไม่ตอบสนองทันเวลา กรุณาลองอีกครั้ง";
+
 "LINK_BA_PLATFORM_ERROR_TITLE" = "ข้อผิดพลาด";
+

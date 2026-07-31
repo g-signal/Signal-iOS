@@ -3,18 +3,52 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-import SignalServiceKit
 import LibSignalClient
+import SignalServiceKit
 import SignalUI
 import SwiftUI
 
-class PollDetailsViewController: HostingController<PollDetailsView>, ObservableObject {
-    private let viewModel: PollDetailsViewModel
+protocol PollDetailsViewControllerDelegate: AnyObject {
+    func terminatePoll(poll: OWSPoll)
+}
 
-    init(poll: OWSPoll) {
-        self.viewModel = PollDetailsViewModel()
-        super.init(wrappedView: PollDetailsView(poll: poll, viewModel: viewModel))
+class PollDetailsViewController: HostingController<PollDetailsView> {
+    private let viewModel: PollDetailsViewModel
+    private let message: TSMessage
+    private let db: DB
+    private let pollManager: PollMessageManager
+
+    weak var delegate: PollDetailsViewControllerDelegate?
+
+    init(
+        poll: OWSPoll,
+        message: TSMessage,
+        pollManager: PollMessageManager,
+        db: DB,
+        databaseChangeObserver: DatabaseChangeObserver,
+    ) {
+        self.viewModel = PollDetailsViewModel(poll: poll)
+        self.message = message
+        self.pollManager = pollManager
+        self.db = db
+
+        super.init(wrappedView: PollDetailsView(viewModel: viewModel))
+
         viewModel.actionsDelegate = self
+        databaseChangeObserver.appendDatabaseChangeDelegate(self)
+    }
+
+    private func updatePollStateIfNeeded() {
+        do {
+            let poll = try db.read { tx in
+                try self.pollManager.buildPoll(message: message, transaction: tx)
+            }
+            if let poll {
+                self.viewModel.poll = poll
+            }
+        } catch {
+            Logger.error("Unable to read poll from database: \(error)")
+        }
     }
 }
 
@@ -24,14 +58,35 @@ extension PollDetailsViewController: PollDetailsViewModel.ActionsDelegate {
     }
 
     func pollTerminate() {
-        // TODO: implement
+        delegate?.terminatePoll(poll: self.viewModel.poll)
+        dismiss(animated: true)
+    }
+
+    func presentContactSheet(address: SignalServiceAddress) {
+        guard address.isValid else {
+            owsFailDebug("Invalid address.")
+            return
+        }
+        ProfileSheetSheetCoordinator(
+            address: address,
+            groupViewHelper: nil,
+            spoilerState: SpoilerRenderState(),
+        )
+        .presentAppropriateSheet(from: self)
     }
 }
 
-private class PollDetailsViewModel {
+private class PollDetailsViewModel: ObservableObject {
+    @Published var poll: OWSPoll
+
+    init(poll: OWSPoll) {
+        self.poll = poll
+    }
+
     protocol ActionsDelegate: AnyObject {
         func onDismiss()
         func pollTerminate()
+        func presentContactSheet(address: SignalServiceAddress)
     }
 
     weak var actionsDelegate: ActionsDelegate?
@@ -41,87 +96,149 @@ private class PollDetailsViewModel {
     }
 
     func pollTerminate() {
-        actionsDelegate?.pollTerminate()
+        OWSActionSheets.showConfirmationAlert(
+            title: OWSLocalizedString(
+                "POLL_END_CONFIRMATION",
+                comment: "Title for an action sheet confirming the user wants end a poll.",
+            ),
+            message: OWSLocalizedString(
+                "POLL_END_CONFIRMATION_MESSAGE",
+                comment: "Message for an action sheet confirming the user wants to end a poll.",
+            ),
+            proceedTitle: CommonStrings.okButton,
+            proceedAction: { [weak self] _ in
+                self?.actionsDelegate?.pollTerminate()
+            },
+        )
+    }
+
+    func presentContactSheet(address: SignalServiceAddress) {
+        actionsDelegate?.presentContactSheet(address: address)
     }
 }
 
 struct PollDetailsView: View {
-    fileprivate let viewModel: PollDetailsViewModel
-    private var poll: OWSPoll
+    @ObservedObject fileprivate var viewModel: PollDetailsViewModel
 
-    fileprivate init(poll: OWSPoll, viewModel: PollDetailsViewModel) {
-        self.poll = poll
-        self.viewModel = viewModel
+    var titleString: String {
+        if viewModel.poll.isEnded {
+            return OWSLocalizedString("POLL_RESULTS_TITLE", comment: "Title of poll details pane when poll is ended")
+        }
+        return OWSLocalizedString("POLL_DETAILS_TITLE", comment: "Title of poll details pane")
     }
 
     var body: some View {
+        let poll = viewModel.poll
         VStack(spacing: 0) {
-            ZStack {
-                Text(OWSLocalizedString("POLL_DETAILS_TITLE", comment: "Title of poll details pane"))
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                HStack {
-                    Button(CommonStrings.doneButton, action: {
-                        viewModel.onDismiss()
-                    })
-                    .foregroundColor(Color.Signal.label)
-                    .padding()
-                    Spacer()
-                }
-            }
-            .background(Color.Signal.secondaryBackground)
             SignalList {
                 SignalSection {
                     Text(poll.question)
                         .font(.body)
                         .foregroundColor(Color.Signal.label)
+                } header: {
+                    Text(
+                        OWSLocalizedString(
+                            "POLL_QUESTION_LABEL",
+                            comment: "Header for the poll question text box when making a new poll",
+                        ),
+                    )
                 }
-
-                // TODO: only show for poll creator
-                if !poll.isEnded {
-                    SignalSection {
-                        Button {
-                            viewModel.pollTerminate()
-                        } label: {
-                            Label {
-                                Text(OWSLocalizedString("POLL_DETAILS_END_POLL", comment: "Label for button to end a poll"))
-                                    .font(.body)
-                                    .foregroundColor(Color.Signal.label)
-                            } icon: {
-                                Image(Theme.iconName(.pollStop))
+                if #unavailable(iOS 26) {
+                    if !poll.isEnded, poll.ownerIsLocalUser {
+                        SignalSection {
+                            Button {
+                                viewModel.pollTerminate()
+                            } label: {
+                                Label {
+                                    Text(OWSLocalizedString("POLL_DETAILS_END_POLL", comment: "Label for button to end a poll"))
+                                        .font(.body)
+                                        .foregroundColor(Color.Signal.label)
+                                } icon: {
+                                    Image(uiImage: Theme.iconImage(.pollStop))
+                                }
+                                .foregroundColor(Color.Signal.label)
                             }
                         }
                     }
                 }
 
+                let maxVotes = poll.maxVoteCount()
                 ForEach(poll.sortedOptions()) { option in
                     SignalSection {
                         ForEach(option.acis, id: \.self) { aci in
-                            ContactRow(address: SignalServiceAddress(aci))
-                                .padding(.vertical, 1)
-                                .padding(.horizontal, 4)
+                            ContactRow(
+                                address: SignalServiceAddress(aci),
+                                onTap: { address in
+                                    viewModel.presentContactSheet(address: address)
+                                },
+                            )
+                            .padding(.vertical, 1)
+                            .padding(.horizontal, 4)
+                        }
+                        if option.acis.count == 0 {
+                            Text(OWSLocalizedString(
+                                "POLL_NO_VOTES",
+                                comment: "String to display when a poll has no votes",
+                            ))
+                            .font(.body)
+                            .foregroundColor(Color.Signal.secondaryLabel)
                         }
                     } header: {
-                        // TODO: add star icon to winning option if poll is ended
                         HStack {
                             Text(option.text)
                                 .font(.body)
                                 .fontWeight(.medium)
                             Spacer()
-                            Text(
-                                String(
-                                    format: OWSLocalizedString(
-                                        "POLL_VOTE_COUNT",
-                                        tableName: "PluralAware",
-                                        comment: "Count indicating number of votes for this option. Embeds {{number of votes}}"
+                            if option.acis.count > 0 {
+                                if option.acis.count == maxVotes {
+                                    Image("poll-win")
+                                }
+                                Text(
+                                    String.localizedStringWithFormat(
+                                        OWSLocalizedString(
+                                            "POLL_VOTE_COUNT",
+                                            tableName: "PluralAware",
+                                            comment: "Count indicating number of votes for this option. Embeds {{number of votes}}",
+                                        ),
+                                        option.acis.count,
                                     ),
-                                    option.acis.count
                                 )
-                            )
-                            .font(.body)
+                                .font(.body)
+                            }
                         }
                     }
+                }
+            }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if #available(iOS 26.0, *) {
+                if !poll.isEnded, poll.ownerIsLocalUser {
+                    Button {
+                        viewModel.pollTerminate()
+                    } label: {
+                        Text(OWSLocalizedString("POLL_DETAILS_END_POLL", comment: "Label for button to end a poll"))
+                    }
+                    .buttonStyle(Registration.UI.LargePrimaryButtonStyle())
+                    .padding()
+                }
+            }
+        }
+        .navigationTitle(titleString)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if #available(iOS 26.0, *) {
+                    Button(action: {
+                        viewModel.onDismiss()
+                    }) {
+                        Image(Theme.iconName(.x26))
+                    }
+                    .accessibilityLabel(CommonStrings.doneButton)
+                    .foregroundColor(Color.Signal.label)
+                } else {
+                    Button(CommonStrings.doneButton, action: {
+                        viewModel.onDismiss()
+                    })
+                    .foregroundColor(Color.Signal.label)
                 }
             }
         }
@@ -129,17 +246,22 @@ struct PollDetailsView: View {
 
     struct ContactRow: UIViewRepresentable {
         let address: SignalServiceAddress
+        var onTap: (SignalServiceAddress) -> Void
 
         func updateUIView(_ uiView: ManualStackView, context: Context) {
         }
 
         func makeUIView(context: Context) -> ManualStackView {
-            return addressCell(address: address) ?? ManualStackView(name: "??")
+            let contactView = addressCell(address: address) ?? ManualStackView(name: "??")
+            contactView.addTapGesture {
+                onTap(address)
+            }
+            return contactView
         }
 
         private func addressCell(address: SignalServiceAddress) -> ManualStackView? {
             let cell = ContactCellView()
-            let config = ContactCellConfiguration(address: address, localUserDisplayMode: .noteToSelf)
+            let config = ContactCellConfiguration(address: address, localUserDisplayMode: .asLocalUser)
             config.avatarSizeClass = .twentyEight
 
             SSKEnvironment.shared.databaseStorageRef.read { transaction in
@@ -155,13 +277,33 @@ struct PollDetailsView: View {
 
 #Preview {
     let poll = OWSPoll(
-        pollId: 1,
+        interactionId: 1,
         question: "What is your favorite color?",
         options: ["Red", "Blue", "Yellow"],
+        localUserPendingState: [:],
         allowsMultiSelect: false,
         votes: [:],
-        isEnded: false
+        isEnded: false,
+        ownerIsLocalUser: false,
     )
 
-    PollDetailsView(poll: poll, viewModel: PollDetailsViewModel())
+    PollDetailsView(viewModel: PollDetailsViewModel(poll: poll))
+}
+
+extension PollDetailsViewController: DatabaseChangeDelegate {
+    func databaseChangesDidUpdate(databaseChanges: any SignalServiceKit.DatabaseChanges) {
+        guard databaseChanges.interactionUniqueIds.contains(message.uniqueId) else {
+            return
+        }
+
+        updatePollStateIfNeeded()
+    }
+
+    func databaseChangesDidUpdateExternally() {
+        updatePollStateIfNeeded()
+    }
+
+    func databaseChangesDidReset() {
+        updatePollStateIfNeeded()
+    }
 }

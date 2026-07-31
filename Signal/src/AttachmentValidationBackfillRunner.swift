@@ -17,7 +17,7 @@ class AttachmentValidationBackfillRunner: BGProcessingTaskRunner {
     init(
         db: SDSDatabaseStorage,
         store: AttachmentValidationBackfillStore,
-        migrator: @escaping () -> any AttachmentValidationBackfillMigrator
+        migrator: @escaping () -> any AttachmentValidationBackfillMigrator,
     ) {
         self.db = db
         self.store = store
@@ -26,28 +26,23 @@ class AttachmentValidationBackfillRunner: BGProcessingTaskRunner {
 
     // MARK: - BGProcessingTaskRunner
 
-    public static let taskIdentifier = "AttachmentValidationBackfillMigrator"
-
-    public static let requiresNetworkConnectivity = false
-    public static let requiresExternalPower = false
+    static let taskIdentifier = "AttachmentValidationBackfillMigrator"
+    static let logPrefix: String? = nil
+    static let requiresNetworkConnectivity = false
+    static let requiresExternalPower = false
 
     func run() async throws {
         try await self.runInBatches(
             willBegin: {},
-            runNextBatch: { try await migrator().runNextBatch() }
+            runNextBatch: { try await migrator().runNextBatch() },
         )
     }
 
-    public func startCondition() -> BGProcessingTaskStartCondition {
+    func startCondition() -> BGProcessingTaskStartCondition {
         return db.read { tx in
-            do {
-                if try store.needsToRun(tx: tx) {
-                    return .asSoonAsPossible
-                } else {
-                    return .never
-                }
-            } catch let error {
-                Logger.error("Failed to check status \(error)")
+            if store.needsToRun(tx: tx) {
+                return .asSoonAsPossible
+            } else {
                 return .never
             }
         }

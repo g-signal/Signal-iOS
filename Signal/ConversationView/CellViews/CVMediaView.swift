@@ -32,7 +32,7 @@ public class CVMediaView: ManualLayoutViewWithLayer {
         isLoopingVideo: Bool,
         isBroken: Bool,
         thumbnailQuality: AttachmentThumbnailQuality,
-        conversationStyle: ConversationStyle
+        conversationStyle: ConversationStyle,
     ) {
         self.mediaCache = mediaCache
         self.attachment = attachment
@@ -103,7 +103,7 @@ public class CVMediaView: ManualLayoutViewWithLayer {
         let direction: CVAttachmentProgressView.Direction
         switch CVAttachmentProgressView.progressType(
             forAttachment: attachment,
-            interaction: interaction
+            interaction: interaction,
         ) {
         case .none:
             return false
@@ -119,16 +119,18 @@ public class CVMediaView: ManualLayoutViewWithLayer {
 
             direction = .download(
                 attachmentPointer: attachmentPointer,
-                downloadState: downloadState
+                downloadState: downloadState,
             )
         case .unknown:
             owsFailDebug("Unknown progress type.")
             return false
         }
 
-        let progressView = CVAttachmentProgressView(direction: direction,
-                                                    isDarkThemeEnabled: conversationStyle.isDarkThemeEnabled,
-                                                    mediaCache: mediaCache)
+        let progressView = CVAttachmentProgressView(
+            direction: direction,
+            isDarkThemeEnabled: conversationStyle.isDarkThemeEnabled,
+            mediaCache: mediaCache,
+        )
         addSubviewToCenterOnSuperview(progressView, size: progressView.layoutSize)
 
         return true
@@ -187,16 +189,20 @@ public class CVMediaView: ManualLayoutViewWithLayer {
     }
 
     private func configureForLoopingVideo(attachmentStream: AttachmentStream) {
-        if let reusableMediaView = mediaCache.getMediaView(
-            .attachment(attachmentStream.id),
-            isAnimated: true
-        ) {
+        if
+            let reusableMediaView = mediaCache.getMediaView(
+                .attachment(attachmentStream.id),
+                isAnimated: true,
+            )
+        {
             applyReusableMediaView(reusableMediaView)
         } else {
             createNewReusableMediaView(
                 mediaViewAdapter: MediaViewAdapterLoopingVideo(
-                    attachmentStream: attachmentStream),
-                isAnimated: true)
+                    attachmentStream: attachmentStream,
+                ),
+                isAnimated: true,
+            )
         }
     }
 
@@ -220,8 +226,10 @@ public class CVMediaView: ManualLayoutViewWithLayer {
             return
         }
 
-        let mediaViewAdapter = MediaViewAdapterStill(attachmentStream: attachmentStream,
-                                                     thumbnailQuality: thumbnailQuality)
+        let mediaViewAdapter = MediaViewAdapterStill(
+            attachmentStream: attachmentStream,
+            thumbnailQuality: thumbnailQuality,
+        )
         createNewReusableMediaView(mediaViewAdapter: mediaViewAdapter, isAnimated: isAnimated)
     }
 
@@ -233,8 +241,10 @@ public class CVMediaView: ManualLayoutViewWithLayer {
             return
         }
 
-        let mediaViewAdapter = MediaViewAdapterVideo(attachmentStream: attachmentStream,
-                                                     thumbnailQuality: thumbnailQuality)
+        let mediaViewAdapter = MediaViewAdapterVideo(
+            attachmentStream: attachmentStream,
+            thumbnailQuality: thumbnailQuality,
+        )
         createNewReusableMediaView(mediaViewAdapter: mediaViewAdapter, isAnimated: isAnimated)
     }
 
@@ -270,8 +280,10 @@ public class CVMediaView: ManualLayoutViewWithLayer {
             playVideoIconView.setTemplateImageName("play-fill-32", tintColor: UIColor.ows_white)
         }
         playVideoIconView.isUserInteractionEnabled = false
-        addSubviewToCenterOnSuperview(playVideoIconView,
-                                      size: CGSize(square: playVideoIconWidth))
+        addSubviewToCenterOnSuperview(
+            playVideoIconView,
+            size: CGSize(square: playVideoIconWidth),
+        )
     }
 
     private var hasBlurHash: Bool {
@@ -301,7 +313,7 @@ public class CVMediaView: ManualLayoutViewWithLayer {
     public func loadMedia() {
         AssertIsOnMainThread()
 
-        guard let reusableMediaView = reusableMediaView else {
+        guard let reusableMediaView else {
             return
         }
         guard reusableMediaView.owner != nil else {
@@ -319,7 +331,7 @@ public class CVMediaView: ManualLayoutViewWithLayer {
     public func unloadMedia() {
         AssertIsOnMainThread()
 
-        guard let reusableMediaView = reusableMediaView else {
+        guard let reusableMediaView else {
             return
         }
         guard reusableMediaView.owner == self else {

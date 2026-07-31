@@ -1,6 +1,9 @@
 /* Button text to dismiss missing contacts permission alert */
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "나중에";
 
+/* Footer for the 'about' help section. For non-English languages, exclude the word '501c3'. */
+"ABOUT_SECTION_FOOTER" = "B&A Messenger 저작권\nAGPLv3 라이선스로 공개\nB&A는 비영리 단체입니다";
+
 /* Title for the 'about' help section */
 "ABOUT_SECTION_TITLE" = "B&A에 대하여";
 
@@ -8,7 +11,7 @@
 "ACCESSIBILITY_LABEL_ATTACHMENT" = "첨부 파일";
 
 /* Accessibility label for audio. */
-"ACCESSIBILITY_LABEL_AUDIO" = "음성";
+"ACCESSIBILITY_LABEL_AUDIO" = "오디오";
 
 /* Accessibility label for contact. */
 "ACCESSIBILITY_LABEL_CONTACT" = "연락처";
@@ -70,6 +73,12 @@
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "메시지 보내기";
 
+/* Message shown in an action sheet when a generic error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_GENERIC_ERROR" = "오류가 발생했습니다. 고객 지원팀에 문의하세요.";
+
+/* Message shown in an action sheet when a network error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_NETWORK_ERROR" = "오류가 발생했습니다. 연결을 확인하고 다시 시도하세요.";
+
 /* A label for 'tap to download' buttons. */
 "ACTION_TAP_TO_DOWNLOAD" = "탭하여 다운로드";
 
@@ -83,10 +92,10 @@
 "ADD_GROUP_MEMBERS_VIEW_TITLE" = "멤버 추가";
 
 /* Message shown in conversation view that offers to share your profile with a group. */
-"ADD_GROUP_TO_PROFILE_WHITELIST_OFFER" = "이 그룹에게 내 프로필을 공유하시겠습니까?";
+"ADD_GROUP_TO_PROFILE_WHITELIST_OFFER" = "이 그룹에 내 프로필을 공유하시겠어요?";
 
 /* Message shown in conversation view that offers to add an unknown user to your phone's contacts. */
-"ADD_TO_CONTACTS_OFFER" = "이 사용자를 내 연락처에 추가하겠습니까?";
+"ADD_TO_CONTACTS_OFFER" = "이 사용자를 내 연락처에 추가하시겠어요?";
 
 /* Label for button or row which allows users to add to another group. */
 "ADD_TO_GROUP" = "다른 그룹에 추가";
@@ -95,7 +104,7 @@
 "ADD_TO_GROUP_ACTION_PROCEED_BUTTON" = "그룹에 추가";
 
 /* The title on the 'add to group' confirmation action sheet. Embeds {contact name, group name} */
-"ADD_TO_GROUP_ACTION_SHEET_MESSAGE_FORMAT" = "%1$@를 %2$@에 추가하시겠습니까?";
+"ADD_TO_GROUP_ACTION_SHEET_MESSAGE_FORMAT" = "%1$@ 님을 '%2$@'에 추가할까요?";
 
 /* The title on the 'add to group' confirmation action sheet. */
 "ADD_TO_GROUP_ACTION_SHEET_TITLE" = "새 멤버 추가";
@@ -110,22 +119,22 @@
 "ADD_TO_GROUP_TITLE" = "그룹에 추가하기";
 
 /* Message shown in conversation view that offers to share your profile with a user. */
-"ADD_USER_TO_PROFILE_WHITELIST_OFFER" = "이 사용자에게 내 프로필을 공유하시겠습니까?";
+"ADD_USER_TO_PROFILE_WHITELIST_OFFER" = "이 사용자에게 내 프로필을 공유하시겠어요?";
 
 /* generic button text to acknowledge that the corresponding text was read. */
 "ALERT_ACTION_ACKNOWLEDGE" = "확인";
 
 /* Format string for delivery issue sheet message. Embeds {{ sender name }}. */
-"ALERT_DELIVERY_ISSUE_MESSAGE_FORMAT" = "이 대화에서 %1$@ 님이 보낸 메시지, 스티커, 반응, 수신 확인 또는 미디어를 받지 못했습니다.";
+"ALERT_DELIVERY_ISSUE_MESSAGE_FORMAT" = "이 대화에서 %1$@ 님이 보낸 메시지, 스티커, 반응, 열람 확인 또는 미디어가 전달되지 못했습니다.";
 
 /* Title for delivery issue sheet */
-"ALERT_DELIVERY_ISSUE_TITLE" = "배송 문제";
+"ALERT_DELIVERY_ISSUE_TITLE" = "전송 문제";
 
 /* Format string for delivery issue sheet message where the original thread is unknown. Embeds {{ sender name }}. */
-"ALERT_DELIVERY_ISSUE_UNKNOWN_THREAD_MESSAGE_FORMAT" = "%1$@ 님이 보낸 메시지, 스티커, 반응, 수신 확인 또는 미디어를 받지 못했습니다. 사용자에게 직접 보내거나 그룹에서 보내려고 했을 수 있습니다.";
+"ALERT_DELIVERY_ISSUE_UNKNOWN_THREAD_MESSAGE_FORMAT" = "%1$@ 님이 보낸 메시지, 스티커, 반응, 열람 확인 또는 미디어가 전달되지 못했습니다. 나에게 직접 보내거나 그룹 대화에서 보내려 했던 것으로 보여요.";
 
 /* The label for the 'discard' button in alerts and action sheets. */
-"ALERT_DISCARD_BUTTON" = "파기";
+"ALERT_DISCARD_BUTTON" = "버리기";
 
 /* The label for the 'don't save' button in action sheets. */
 "ALERT_DONT_SAVE" = "저장하지 않음";
@@ -137,10 +146,10 @@
 "ALERT_SAVE" = "저장";
 
 /* Message for UI warning about an unknown contact thread. */
-"ALERT_UNKNOWN_THREAD_WARNING_CONTACT_MESSAGE" = "해당 사용자와 공유하는 그룹이 없습니다. 원치 않는 메시지를 피하기 위해 수락하기 전에 요청을 주의 깊게 검토하세요.";
+"ALERT_UNKNOWN_THREAD_WARNING_CONTACT_MESSAGE" = "이 사용자와 함께 소속된 그룹이 없습니다. 원치 않는 메시지를 받지 않도록, 수락하기 전에 요청 내용을 꼼꼼히 확인하세요.";
 
 /* Message for UI warning about an unknown group thread. */
-"ALERT_UNKNOWN_THREAD_WARNING_GROUP_MESSAGE" = "이 그룹과 공통된 멤버가 없습니다. 원치 않는 메시지를 피하기 위해 수락하기 전에 요청을 주의 깊게 검토하세요.";
+"ALERT_UNKNOWN_THREAD_WARNING_GROUP_MESSAGE" = "이 그룹에는 공통으로 알고 있는 멤버가 없습니다. 원치 않는 메시지를 받지 않도록, 수락하기 전에 요청 내용을 꼼꼼히 확인하세요.";
 
 /* Label for button to learn more about message requests. */
 "ALERT_UNKNOWN_THREAD_WARNING_LEARN_MORE" = "메시지 요청 정보";
@@ -196,6 +205,12 @@
 /* notification body */
 "APN_Message" = "새 메시지가 있을 수 있음";
 
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. The embedded value is 'Update now' (translated via APP_EXPIRED_BOTTOM_UPDATE), and it will be formatted as a tappable link. */
+"APP_EXPIRED_BOTTOM" = "이 B&A 버전은 만료되었습니다. 메시지를 주고받으려면 %1$@하세요.";
+
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. This value is a tappable link embedded in a larger sentence. */
+"APP_EXPIRED_BOTTOM_UPDATE" = "지금 업데이트";
+
 /* Default message for the 'app launch failed' alert. */
 "APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&A 시작에 실패했습니다. 문제 해결을 위해 디버그 로그를 support@baxs.com로 보내주세요.";
 
@@ -211,11 +226,20 @@
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "데이터베이스를 불러올 수 없음";
 
+/* Message for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_MESSAGE" = "데이터베이스가 손상되어 B&A을 시작할 수 없습니다. 계정이나 메시지 보안에는 영향이 없습니다.";
+
+/* Title for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_TITLE" = "데이터베이스 손상";
+
+/* Action in an action sheet offering to attempt recovery of a corrupted database. */
+"APP_LAUNCH_FAILURE_DATABASE_RECOVERY_ACTION_TITLE" = "복구";
+
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "최신 버전의 B&A로 업그레이드해 주세요.";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
-"APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "데이터베이스 버전을 알 수 없습니다.";
+"APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_TITLE" = "알 수 없는 데이터베이스 버전입니다.";
 
 /* Error indicating that the app crashed during the previous launch. */
 "APP_LAUNCH_FAILURE_LAST_LAUNCH_CRASHED_MESSAGE" = "B&A을 여는 도중 오류가 발생했습니다. 문제 해결을 위해 support@baxs.com에 디버그 로그를 보내주세요.";
@@ -246,15 +270,6 @@
 
 /* Text prompting user to edit their profile name. */
 "APP_SETTINGS_EDIT_PROFILE_NAME_PROMPT" = "이름을 입력해주세요";
-
-/* Label for the 'dismiss' button in the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_DISMISS_BUTTON" = "나중에";
-
-/* Message format for the 'new app version available' alert. Embeds: {{The latest app version number}} */
-"APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "%1$@ 버전을 지금 App Store에서 다운로드할 수 있습니다.";
-
-/* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "B&A 새 버전 이용 가능";
 
 /* Label for the 'update' button in the 'new app version available' alert. */
 "APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "업데이트";
@@ -362,7 +377,7 @@
 "ATTACHMENT_ERROR_COULD_NOT_CONVERT_TO_MP4" = "동영상을 처리할 수 없습니다.";
 
 /* Attachment error message for image attachments which cannot be parsed */
-"ATTACHMENT_ERROR_COULD_NOT_PARSE_IMAGE" = "사진을 분석할 수 없습니다.";
+"ATTACHMENT_ERROR_COULD_NOT_PARSE_IMAGE" = "이미지를 처리할 수 없습니다.";
 
 /* Attachment error message for image attachments in which metadata could not be removed */
 "ATTACHMENT_ERROR_COULD_NOT_REMOVE_METADATA" = "사진의 메타데이터를 제거할 수 없습니다.";
@@ -427,11 +442,14 @@
 /* A button to open the photo picker from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_PHOTOS" = "사진";
 
+/* A button to select a poll from the Attachment Keyboard */
+"ATTACHMENT_KEYBOARD_POLL" = "투표";
+
 /* Accessibility label for attaching photos */
 "ATTACHMENT_LABEL" = "첨부 파일";
 
 /* Alert title when picking a document fails for an unknown reason */
-"ATTACHMENT_PICKER_DOCUMENTS_FAILED_ALERT_TITLE" = "문서 선택에 실패했습니다.";
+"ATTACHMENT_PICKER_DOCUMENTS_FAILED_ALERT_TITLE" = "문서를 선택하지 못했습니다.";
 
 /* Alert body when picking a document fails because user picked a directory/bundle */
 "ATTACHMENT_PICKER_DOCUMENTS_PICKED_DIRECTORY_FAILED_ALERT_BODY" = "이 파일 또는 디렉터리를 압축한 후, 압축된 파일을 전송하세요.";
@@ -461,7 +479,7 @@
 "ATTACHMENT_TYPE_ANIMATED" = "애니메이션";
 
 /* Short text label for a audio attachment, used for thread preview and on the lock screen */
-"ATTACHMENT_TYPE_AUDIO" = "음성";
+"ATTACHMENT_TYPE_AUDIO" = "오디오";
 
 /* Short text label for a file attachment, used for thread preview and on the lock screen */
 "ATTACHMENT_TYPE_FILE" = "파일";
@@ -487,14 +505,8 @@
 /* Message when trying to show a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_MESSAGE_LABEL" = "음성 메시지를 사용할 수 없음";
 
-/* Message for sheet shown when tapping a voice message that has expired and is unavailable for download */
-"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "이 기기 연결 시 이 음성 메시지를 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 파일과 미디어는 동기화할 수 없습니다.";
-
 /* Title for sheet shown when tapping a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "음성 메시지를 사용할 수 없음";
-
-/* Username for recovery key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "B&A 백업";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "색상 선택";
@@ -556,6 +568,15 @@
 /* Toast indicating that the Recovery Key was correct. */
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "올바른 백업 키입니다. 키를 안전하게 보관하세요.";
 
+/* Button label for action sheet to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_ACTION" = "백업 설정 종료";
+
+/* Message for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_MESSAGE" = "백업 설정을 완료하지 않았으며 백업이 생성되지 않았습니다. 설정에서 백업을 활성화할 수 있습니다.";
+
+/* Title for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_TITLE" = "백업 설정을 종료하시겠습니까?";
+
 /* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "키를 분실할 경우 B&A은 백업을 복원하도록 도와드릴 수 없습니다. 안전한 곳에 키를 보관해 두고, 다른 사람과 공유하지 마세요.";
 
@@ -575,10 +596,13 @@
 "BACKUP_ONBOARDING_INTRO_BULLET_1" = "엔드투엔드 암호화";
 
 /* Bullet point on a view introducing Backups during an onboarding flow. */
-"BACKUP_ONBOARDING_INTRO_BULLET_2" = "항상 선택 가능";
+"BACKUP_ONBOARDING_INTRO_BULLET_2" = "필수가 아닌 선택 사항";
 
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "언제나 백업 삭제 가능";
+
+/* A toast shown when 'Not Now' is tapped from the Backups onboarding intro. */
+"BACKUP_ONBOARDING_INTRO_NOT_NOW_TOAST" = "설정에서 백업을 활성화할 수 있습니다.";
 
 /* Subtitle for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "B&A의 안전한 엔드투엔드 암호화 저장소 서비스를 사용하여 메시지와 미디어를 백업하세요. 새 휴대폰을 구매하거나 B&A을 다시 설치하는 경우에도 메시지를 손실할 염려가 없습니다.";
@@ -586,11 +610,32 @@
 /* Title for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_TITLE" = "B&A 백업";
 
-/* Subtitle for a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "백업 키는 B&A을 다시 설치할 경우 백업을 복원하는 데 사용할 수 있는 64자리 코드입니다.\n\n키를 잊어버리면 백업을 복원할 수 없습니다. B&A은 백업을 복원하도록 도와드릴 수 없습니다.";
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "복구 키는 백업을 복구하는 데 필요한 64자 코드입니다.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_2" = "암호 관리자와 같은 안전한 곳에 복구 키를 보관하고 다른 사람과 공유하지 마세요.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_3" = "키를 분실하면 메시지를 복구할 수 없습니다.";
+
+/* Title for a continue button for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_CONTINUE_BUTTON_TITLE" = "복구 키 보기";
 
 /* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "내 백업 키";
+
+/* Body for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY" = "현재 등록된 결제 수단으로 갱신할 수 없어 백업 구독이 만료되었습니다.\n\n미디어 백업을 계속하려면 다시 구독하세요. 무료 B&A 백업 플랜을 계속 이용할 수 있습니다.";
+
+/* Body for a sheet shown when your Backup plan is downgraded because you stopped using TestFlight. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY_TESTFLIGHT" = "TestFlight를 더 이상 사용하지 않아 백업 구독이 만료되었습니다.\n\n미디어 백업을 계속하려면 다시 구독하세요. 무료 B&A 백업 플랜을 계속 이용할 수 있습니다.";
+
+/* Primary button for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_PRIMARY_BUTTON" = "백업 관리";
+
+/* Title for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_TITLE" = "백업 구독 만료";
 
 /* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "클립보드에 복사";
@@ -613,6 +658,21 @@
 /* Title for a progress spinner on a modal when restoring messages */
 "BACKUP_RESTORE_MODAL_TITLE" = "메시지를 복원하는 중...";
 
+/* Message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "자동 백업을 비활성화했습니다. B&A의 사용 권한을 업데이트하여 자동 백업을 활성화하세요.";
+
+/* Add-on to a message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE_UPDATE_NOW" = "지금 업데이트";
+
+/* Title for a button that takes the users to Signal's iOS Settings page. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_GO_TO_SETTINGS_BUTTON" = "설정으로 이동";
+
+/* Message for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_MESSAGE" = "B&A이 자동으로 메시지를 백업하도록 하려면 아래의 '설정으로 이동'을 탭하여 '백그라운드 앱 새로 고침'을 활성화하세요.";
+
+/* Title for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_TITLE" = "자동 백업 비활성화됨";
+
 /* Message for an action sheet explaining that performing a backup failed with a generic error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR" = "백업을 만드는 중 오류가 발생했습니다. 다시 시도하거나 지원팀에 문의하세요.";
 
@@ -628,6 +688,9 @@
 /* Message for an action sheet explaining that performing a backup failed with a network error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR" = "백업을 만드는 중 오류가 발생했습니다. 인터넷 연결을 확인하고 다시 시도하세요.";
 
+/* Message for an action sheet explaining that you must be registered to make a Backup. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "백업을 만들려면 먼저 등록을 완료해야 합니다.";
+
 /* Description for a progress bar tracking the optimizing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "미디어 최적화 중...";
 
@@ -637,14 +700,26 @@
 /* Description for a progress bar tracking the processing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PROCESSING_MEDIA" = "미디어 처리 중...";
 
+/* Title for an action sheet action explaining the user can now scan a QR code to continue the restore. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_ACTION_TITLE" = "QR 코드 스캔";
+
+/* Body for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_BODY" = "이 기기를 사용하여 이전하려는 기기의 QR 코드를 스캔하세요";
+
+/* Title for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_TITLE" = "이전 준비 완료";
+
+/* Message describing to the user that the last backup failed. */
+"BACKUP_SETTINGS_BACKUP_FAILED_MESSAGE" = "마지막 백업을 완료하지 못했습니다. '지금 백업'을 탭하여 다시 시도하세요.";
+
 /* Title for a button allowing users to upgrade from a free to paid backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "업그레이드";
 
+/* Text describing the user's free backup plan when they have Backups disabled. */
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_AND_DISABLED_DESCRIPTION" = "백업을 껐습니다.";
+
 /* Text describing the user's free backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_DESCRIPTION" = "백업 플랜이 무료입니다.";
-
-/* Header describing what the free backup plan includes. */
-"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "텍스트 + 45일간의 미디어 백업";
 
 /* Message for a view indicating we failed to fetch someone's Backup plan due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_MESSAGE" = "오류가 발생했습니다. 고객 지원팀에 문의하세요.";
@@ -673,11 +748,26 @@
 /* Text explaining that a user's paid plan, which has been canceled, expired on a past date. Embeds {{ the formatted expiration date }}. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_PAST_EXPIRATION_FORMAT" = "%1$@ 만료";
 
+/* Title for a button allowing users to manage a paid backup plan that failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_ACTION_BUTTON_TITLE" = "구독 관리";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_1" = "결제 수단 거부됨";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_2" = "결제 수단이 최신 상태인지 확인하세요.";
+
 /* Title for a button allowing users to manage their backup plan as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "플랜 관리";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "유료이지만 테스트 사용자 자격을 유지하는 동안은 무료로 사용 가능";
+
+/* Title for a button allowing users to renew their backup subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_ACTION_BUTTON_TITLE" = "갱신";
+
+/* Text describing that the user's paid backup plan did not correspond to a App Store subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_DESCRIPTION" = "이 기기에서 구독 정보를 찾지 못했습니다. B&A 백업을 계속 사용하려면 갱신하세요.";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "텍스트 + 모든 미디어 백업";
@@ -713,10 +803,19 @@
 "BACKUP_SETTINGS_BACKUPS_ENABLED_SECTION_HEADER" = "백업 세부 정보";
 
 /* Notice that backups is a beta feature */
-"BACKUP_SETTINGS_BETA_NOTICE_HEADER" = "이 기능은 베타 기능이며 시간이 지남에 따라 개선될 예정입니다.";
+"BACKUP_SETTINGS_BETA_NOTICE_HEADER" = "이 기능은 베타 단계이며, 앞으로 지속적으로 개선될 예정입니다.";
 
 /* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "새 복구 키를 만들려면 사용자 등록이 되어 있어야 합니다.";
+
+/* Explanation text for a sheet warning users they've reached a rate limit for creating Recovery Key. {{ Embeds 1: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_BODY" = "새 복구 키를 만들면 %1$@ 동안 백업을 활성화할 수 없습니다. 남용을 방지하기 위해 생성할 수 있는 키 개수가 제한됩니다.";
+
+/* Action in an action sheet allowing to continue to rotate their key */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_CONTINUE_ACTION" = "새로운 키 생성";
+
+/* Title for a sheet warning users they've reached a rate limit for creating Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_TITLE" = "복구 키 한도 도달";
 
 /* Toast shown when a new Recovery Key has been created successfully. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "새 키를 생성했습니다!";
@@ -759,6 +858,15 @@
 
 /* Message shown in an action sheet when the user tries to disable Backups, but is not registered. */
 "BACKUP_SETTINGS_DISABLING_ERROR_NOT_REGISTERED" = "백업을 비활성화하려면 먼저 등록해야 합니다.";
+
+/* Button for an action sheet shown when the user disables Backups, letting them manage their subscription. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MANAGE_SUBSCRIPTION_BUTTON" = "구독 관리";
+
+/* Message for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MESSAGE" = "구독을 취소하려면 구독 > B&A > 구독 취소를 탭하세요";
+
+/* Title for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_TITLE" = "유료 백업 플랜을 계속 구독 중입니다";
 
 /* Title for a button shown in Backup Settings that lets a user cancel an in-progress download. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_CANCEL_DOWNLOAD" = "다운로드 취소";
@@ -814,6 +922,15 @@
 /* Label for a menu item offering to show the user their recovery key. */
 "BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "백업 키 보기";
 
+/* Body for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_BODY" = "이 기기에서 구독을 복구할 수 없습니다. 다른 Apple 계정으로 App Store에 로그인했거나, Android 휴대폰에서 이전한 경우 이러한 문제가 발생할 수 있습니다.\n\n이전 휴대폰에 활성 구독이 있다면 갱신하기 전에 해당 구독을 취소하는 것이 좋습니다.";
+
+/* Button for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_GOT_IT_BUTTON" = "확인";
+
+/* Title for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_TITLE" = "구독을 찾을 수 없음";
+
 /* Title for a button allowing users to trigger a manual backup. */
 "BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "지금 백업";
 
@@ -850,6 +967,12 @@
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "기기 저장 공간 최적화";
 
+/* Subtitle for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_SUBTITLE" = "백업 저장 용량이 한도에 도달했습니다. 채팅과 미디어를 계속 백업하려면 B&A에 사용 가능한 공간을 확보하세요.";
+
+/* Title for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_TITLE" = "백업 저장 용량 부족";
+
 /* Title for a button allowing users to re-enable Backups, after it had been previously disabled. */
 "BACKUP_SETTINGS_REENABLE_BACKUPS_BUTTON_TITLE" = "백업 재활성화";
 
@@ -861,6 +984,21 @@
 
 /* Title for a sheet warning the user about skipping downloads. */
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "다운로드를 건너뛰시겠습니까?";
+
+/* Title for detail button in notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_DETAIL_BUTTON" = "세부 정보";
+
+/* Title for notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_TITLE" = "백업 구독을 사용하지 못했습니다";
+
+/* Body for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_BODY" = "이달에 너무 많은 기기에서 구독을 사용하려고 시도했습니다.\n\nB&A 계정을 너무 많이 재등록했거나, 동일한 구독을 사용하는 기기가 너무 많을 수 있습니다.";
+
+/* Button for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_GOT_IT_BUTTON" = "확인";
+
+/* Title for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_TITLE" = "백업 구독을 사용하지 못했습니다";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "업로드 일시 중지: 기기 배터리 부족";
@@ -874,6 +1012,9 @@
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "업로드 일시 중지: Wi-Fi를 연결하는 중";
 
+/* Subtitle for a progress bar tracking uploads that are paused because the user is out of remote storage space. Embeds 1:{{ total storage space provided, e.g. 100 GB }}; 2:{{ space the user needs to free up by deleting media, e.g. 1 GB }}. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_OUT_OF_STORAGE_SPACE_FORMAT" = "백업 플랜에 포함된 %1$@ 저장 용량이 한도에 도달했습니다. 새 채팅과 미디어를 백업하려면 B&A에서 %2$@의 공간을 확보한 다음 '지금 백업'을 탭하세요.";
+
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "업로드 중: %1$@/%2$@(%3$@)";
 
@@ -882,6 +1023,21 @@
 
 /* Title for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "B&A 백업에 오신 것을 환영합니다. 지금 백업을 시작하세요.";
+
+/* Message for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_MESSAGE" = "결제 수단이 최신 상태인지 확인하세요. 구독 관리 > B&A > 결제 수단 업데이트를 탭하세요.";
+
+/* Primary button for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_PRIMARY_BUTTON" = "구독 관리";
+
+/* Title for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "백업 구독 갱신 실패";
+
+/* Body for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "문제를 해결할 수 있도록 디버그 로그를 보내주세요!";
+
+/* Title for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "미디어 백업 중 오류 발생";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "B&A 백업";
@@ -902,7 +1058,7 @@
 "BADGE_CONFIGURATION_TITLE" = "배지";
 
 /* When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to Signal\" button will be shown. This is the text in that button. */
-"BADGE_DETAILS_DONATE_TO_SIGNAL" = "지금 기부하기";
+"BADGE_DETAILS_DONATE_TO_SIGNAL" = "지금 후원하기";
 
 /* When viewing someone else's donor badge, you'll see a sheet. This is the title on that sheet. Embeds {badge owner's short name} */
 "BADGE_DETAILS_TITLE_FOR_SUPPORTER" = "%1$@ 님은 B&A의 기부자입니다.";
@@ -911,28 +1067,28 @@
 "BADGE_EXPIRED_BOOST_BODY" = "부스트 배지가 만료되어 더 이상 프로필에 표시되지 않습니다.\n\nB&A을 계속 사용할 수는 있지만, 월간 기부자가 되어 사용자를 위해 설계된 B&A의 기술을 지원해 주세요.";
 
 /* String explaining to the user that their boost badge has expired while they are a current subscription sustainer on the badge expiry sheet. */
-"BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "부스트 배지가 만료되어 더 이상 프로필에 표시되지 않습니다.\n\n일회성 기부를 통해 부스트 배지를 다음 30일 동안 재활성화하세요.";
+"BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "부스트 배지가 만료되어 더 이상 프로필에 표시되지 않습니다.\n\n일회성 기부를 통해 부스트 배지를 30일 더 활성화해 보세요.";
 
 /* Title for boost on the badge expiration sheet. */
 "BADGE_EXPIRED_BOOST_TITLE" = "배지 만료됨";
 
 /* Button text when a badge expires, asking users to donate */
-"BADGE_EXPIRED_DONATE_BUTTON" = "기부";
+"BADGE_EXPIRED_DONATE_BUTTON" = "후원하기";
 
 /* Text for the 'learn more' link in a sheet explaining there's been an issue with your badge. */
 "BADGE_EXPIRED_LEARN_MORE_LINK" = "더 알아보세요.";
 
 /* Title for subscription on the badge expiration sheet. */
-"BADGE_EXPIRED_SUBSCRIPTION_TITLE" = "월간 기부를 취소함";
+"BADGE_EXPIRED_SUBSCRIPTION_TITLE" = "월 정기후원이 취소되었어요";
 
 /* String explaining to the user on a badge expiry sheet that their subscription badge has expired because the renewal payment failed. Embeds {{ a specific, already-localized string describing the payment failure }}. Will have a 'learn more' link appended, when it is rendered. */
-"BADGE_SUBSCRIPTION_EXPIRED_BECAUSE_OF_CHARGE_FAILURE_BODY_FORMAT" = "월간 기부를 취소했습니다. %1$@\n\n배지가 더는 프로필에 표시되지 않습니다.";
+"BADGE_SUBSCRIPTION_EXPIRED_BECAUSE_OF_CHARGE_FAILURE_BODY_FORMAT" = "월 정기후원이 취소되었습니다. %1$@\n\n배지가 더는 프로필에 표시되지 않습니다.";
 
 /* Body for a sheet explaining that a bank transfer donation is complete, and that you have received a badge. */
 "BADGE_THANKS_BANK_DONATION_COMPLETE_BODY" = "은행 송금이 완료되었습니다. 프로필에 이 배지를 표시하여 B&A에 대한 지지를 보여줄 수 있습니다.";
 
 /* Title for a sheet explaining that a bank transfer donation is complete, and that you have received a badge. */
-"BADGE_THANKS_BANK_DONATION_COMPLETE_TITLE" = "기부 완료";
+"BADGE_THANKS_BANK_DONATION_COMPLETE_TITLE" = "후원 완료";
 
 /* When you make a donation to Signal, you will receive a badge. A thank-you sheet appears when this happens. This is the body text on that sheet. */
 "BADGE_THANKS_BODY" = "프로필에 이 배지를 표시하여 B&A에 대한 지지를 보여줄 수 있습니다.";
@@ -944,7 +1100,7 @@
 "BADGE_THANKS_MAKE_FEATURED" = "프로필 배지 등록";
 
 /* When you make a donation to Signal, you will receive a badge. A thank-you sheet appears when this happens. This is the title of that sheet. */
-"BADGE_THANKS_TITLE" = "기부에 감사드립니다!";
+"BADGE_THANKS_TITLE" = "후원에 감사드립니다!";
 
 /* Footer explaining that only one badge can be featured at a time on the thank you sheet. */
 "BADGE_THANKS_TOGGLE_FOOTER" = "배지가 여러 개 있는 경우 프로필에 표시하고 싶은 배지를 선택하여 등록할 수 있습니다.";
@@ -1042,11 +1198,8 @@
 /* An explanation of the consequences of blocking another user. */
 "BLOCK_USER_BEHAVIOR_EXPLANATION" = "차단한 사용자는 나에게 전화를 걸거나 메시지를 보낼 수 없습니다.";
 
-/* Tooltip highlighting the blur image editing tool. */
-"BLUR_TOOLTIP" = "새 기능: 얼굴 또는 그린 곳을 가릴 수 있습니다.";
-
 /* Default text for the custom amount field of the boost view. */
-"BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "사용자 정의 금액 입력";
+"BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "직접 금액 입력하기";
 
 /* Label for the 'add' button. */
 "BUTTON_ADD" = "추가";
@@ -1228,6 +1381,87 @@
 /* notification body */
 "CALL_MISSED_BECAUSE_OF_IDENTITY_CHANGE_NOTIFICATION_BODY" = "☎️ 발신자의 안전 번호가 변경되어 부재중 전화로 처리됨";
 
+/* Title for toast which appears after submitting a call quality survey */
+"CALL_QUALITY_SURVEY_COMPLETION_TOAST" = "피드백을 보내주셔서 감사합니다!";
+
+/* Footer text explaining custom issue descriptions in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_FOOTER" = "문제와 관련된 모든 세부 정보를 포함해 주세요. 여기에서 공유하는 모든 내용은 비공개로 유지되며 B&A의 통화를 개선하는 데에만 사용됩니다.";
+
+/* Placeholder text for the custom issue entry in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_PLACEHOLDER" = "어떤 문제가 있었는지 알려주세요";
+
+/* Footer text explaining what debug logs contain in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER" = "B&A에 공유되는 정보는 앱의 기본적인 사용 정보에 한하며, 통화 내용은 수집되지 않습니다.";
+
+/* Header text explaining the purpose of sharing debug logs in the call quality survey. The text inside the <link> tags is tappable for viewing the diagnostic information. */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_HEADER" = "피드백을 제출하면 <link>통화에 대한 진단 정보</link>가 함께 공유됩니다. 원하는 경우 통화 품질 개선을 위해 디버그 로그를 함께 공유할 수도 있습니다.";
+
+/* Link text to open a preview of debug logs in the call quality survey. Appended to CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_PREVIEW_LINK" = "디버그 로그 보기";
+
+/* Title for the debug log sharing screen in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TITLE" = "더 나은 서비스를 제공할 수 있도록 도와주세요";
+
+/* Label for the toggle to share debug log in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TOGGLE" = "디버그 로그 공유";
+
+/* Title for preview of the call diagnostic info that will be sent with the survey */
+"CALL_QUALITY_SURVEY_DIAGNOSTICS_TITLE" = "진단 정보";
+
+/* Button label for indicating the call did not have issues in the call quality survey */
+"CALL_QUALITY_SURVEY_GREAT_BUTTON" = "좋았음";
+
+/* Button label for indicating the call had issues in the call quality survey */
+"CALL_QUALITY_SURVEY_HAD_ISSUES_BUTTON" = "문제가 있었음";
+
+/* Label for audio issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO" = "오디오 문제";
+
+/* Label for audio dropout issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_DROP" = "오디오 잘림";
+
+/* Label for local echo issue option in call quality survey, indicating the user heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_LOCAL_ECHO" = "소리가 울림";
+
+/* Label for remote echo issue option in call quality survey, indicating other participants heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_REMOTE_ECHO" = "다른 사람들이 소리가 울린다고 함";
+
+/* Label for audio stuttering issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_STUTTERING" = "오디오 끊김 현상";
+
+/* Label for call dropped issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_CALL_DROPPED" = "통화 끊김";
+
+/* Label for custom issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_OTHER" = "다른 문제";
+
+/* Label for video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO" = "화상 문제";
+
+/* Label for poor video quality issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_QUALITY" = "화상 품질이 낮음";
+
+/* Label for low resolution video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_RESOLUTION" = "낮은 해상도";
+
+/* Label for camera not working issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_NO_CAMERA" = "카메라 작동 오류";
+
+/* Header text on the call quality survey issues screen */
+"CALL_QUALITY_SURVEY_ISSUES_HEADER" = "해당되는 항목 모두 선택";
+
+/* Title for the sheet in the call quality survey where issues with the call can be selected */
+"CALL_QUALITY_SURVEY_ISSUES_SHEET_TITLE" = "어떤 문제가 있었나요?";
+
+/* Header text explaining the purpose of the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_HEADER" = "피드백을 주시면 B&A의 통화를 개선하는 데 도움이 됩니다. 개인 식별 정보는 저장되지 않습니다.";
+
+/* Title for the initial rating screen in the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_TITLE" = "통화는 어땠나요?";
+
+/* Button text to submit the call quality survey */
+"CALL_QUALITY_SURVEY_SUBMIT_BUTTON" = "제출";
+
 /* Label on button for raising hand in call. */
 "CALL_RAISE_HAND_BUTTON_LABEL" = "손 들기";
 
@@ -1244,31 +1478,31 @@
 "CALL_USER_ALERT_CALL_BUTTON" = "전화";
 
 /* Message format for alert offering to call a user. Embeds {{the user's display name or phone number}}. */
-"CALL_USER_ALERT_MESSAGE_FORMAT" = "%1$@ 님에게 전화하시겠습니까?";
+"CALL_USER_ALERT_MESSAGE_FORMAT" = "%1$@ 님에게 전화할까요?";
 
 /* Title for alert offering to call a user. */
-"CALL_USER_ALERT_TITLE" = "전화하시겠습니까?";
+"CALL_USER_ALERT_TITLE" = "전화할까요?";
 
 /* notification body for a missed call in the last 24 hours. Embeds {{time}}, e.g. '3:30 PM'. */
-"CALL_VIDEO_MISSED_24_HOURS_NOTIFICATION_BODY_FORMAT" = "📹 %1$@ 부재중 영상 통화";
+"CALL_VIDEO_MISSED_24_HOURS_NOTIFICATION_BODY_FORMAT" = "📹 부재중 영상 통화, %1$@";
 
 /* notification body for a call that was just missed */
-"CALL_VIDEO_MISSED_NOTIFICATION_BODY" = "부재중 영상 통화";
+"CALL_VIDEO_MISSED_NOTIFICATION_BODY" = "📹 부재중 영상 통화";
 
 /* notification body for a missed call from more than a week ago. Embeds {{short date}}, e.g. '6/28'. */
-"CALL_VIDEO_MISSED_PAST_NOTIFICATION_BODY_FORMAT" = "📹 %1$@ 부재중 영상 통화";
+"CALL_VIDEO_MISSED_PAST_NOTIFICATION_BODY_FORMAT" = "📹 부재중 영상 통화, %1$@";
 
 /* notification body for a missed call from the last week. Embeds {{weekday}}, e.g. 'Monday'. */
-"CALL_VIDEO_MISSED_WEEK_NOTIFICATION_BODY_FORMAT" = "📹 %1$@ 부재중 영상 통화";
+"CALL_VIDEO_MISSED_WEEK_NOTIFICATION_BODY_FORMAT" = "📹 부재중 영상 통화, %1$@";
 
 /* label for accepting incoming video calls as audio only */
-"CALL_VIEW_ACCEPT_INCOMING_CALL_AUDIO_ONLY_LABEL" = "카메라 끄고 응답";
+"CALL_VIEW_ACCEPT_INCOMING_CALL_AUDIO_ONLY_LABEL" = "음성 통화로 받기";
 
 /* label for accepting incoming calls */
 "CALL_VIEW_ACCEPT_INCOMING_CALL_LABEL" = "응답";
 
 /* Accessibility label for selection the audio source */
-"CALL_VIEW_AUDIO_SOURCE_LABEL" = "음성";
+"CALL_VIEW_AUDIO_SOURCE_LABEL" = "오디오";
 
 /* label for declining incoming calls */
 "CALL_VIEW_DECLINE_INCOMING_CALL_LABEL" = "거절";
@@ -1511,7 +1745,7 @@
 "CHANGE_AVATAR_BUTTON_LABEL" = "사진 편집";
 
 /* Error indicating that the user's old and new phone numbers are identical. */
-"CHANGE_PHONE_NUMBER_IDENTICAL_PHONE_NUMBERS_ALERT_MESSAGE" = "새 번호는 이전 번호와 같을 수 없습니다. 새 전화번호를 입력하여 번호를 변경하세요.";
+"CHANGE_PHONE_NUMBER_IDENTICAL_PHONE_NUMBERS_ALERT_MESSAGE" = "새 번호는 이전 번호와 같을 수 없습니다. 번호를 변경하려면 새 전화번호를 입력해 주세요.";
 
 /* Error indicating that the user's old phone number was not entered correctly. */
 "CHANGE_PHONE_NUMBER_INCORRECT_OLD_PHONE_NUMBER_ALERT_MESSAGE" = "입력한 전화번호가 계정의 전화번호와 일치하지 않습니다.";
@@ -1523,22 +1757,22 @@
 "CHANGE_PHONE_NUMBER_INVALID_PHONE_NUMBER_ALERT_MESSAGE_OLD" = "이전 전화번호가 잘못됐습니다. 올바른 전화번호를 입력하여 번호를 변경하세요.";
 
 /* The incoming bubble text when setting a chat color. */
-"CHAT_COLOR_INCOMING_MESSAGE" = "다음은 대화창 색의 미리 보기입니다.";
+"CHAT_COLOR_INCOMING_MESSAGE" = "다음은 대화창 색의 미리보기입니다.";
 
 /* The first incoming bubble text when setting a chat color. */
-"CHAT_COLOR_INCOMING_MESSAGE_1" = "다음은 대화창 색의 미리 보기입니다.";
+"CHAT_COLOR_INCOMING_MESSAGE_1" = "다음은 대화창 색의 미리보기입니다.";
 
 /* The second incoming bubble text when setting a chat color. */
 "CHAT_COLOR_INCOMING_MESSAGE_2" = "또 다른 거품";
 
 /* The outgoing bubble text when setting a chat color. */
-"CHAT_COLOR_OUTGOING_MESSAGE" = "색상은 사용자에게만 보입니다.";
+"CHAT_COLOR_OUTGOING_MESSAGE" = "색상은 나에게만 표시됩니다.";
 
 /* The first outgoing bubble text when setting a chat color. */
-"CHAT_COLOR_OUTGOING_MESSAGE_1" = "색상은 사용자에게만 보입니다.";
+"CHAT_COLOR_OUTGOING_MESSAGE_1" = "색상은 나에게만 표시됩니다.";
 
 /* The second outgoing bubble text when setting a chat color. */
-"CHAT_COLOR_OUTGOING_MESSAGE_2" = "색상은 사용자에게만 보입니다.";
+"CHAT_COLOR_OUTGOING_MESSAGE_2" = "색상은 나에게만 표시됩니다.";
 
 /* Label for the 'automatic chat color' option in the chat color settings view. */
 "CHAT_COLOR_SETTINGS_AUTO" = "자동";
@@ -1553,7 +1787,7 @@
 "CHAT_COLOR_SETTINGS_UPDATE_ALERT_ALERT_TITLE" = "색상 편집";
 
 /* Tooltip highlighting the auto chat color option. */
-"CHAT_COLORS_AUTO_TOOLTIP" = "배경 화면에 색상을 자동 일치시킵니다.";
+"CHAT_COLORS_AUTO_TOOLTIP" = "배경 화면에 맞게 색상이 자동으로 적용됩니다.";
 
 /* Title for context menu action to disable chat list filter (e.g., Filter by Unread) */
 "CHAT_LIST_CLEAR_FILTER_MENU_ACTION" = "읽지 않음 필터 지우기";
@@ -1579,17 +1813,8 @@
 /* Text for a bullet point in a list of Backup features, describing that all text messages are included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_TEXT_BACKUP" = "전체 문자 메시지 백업";
 
-/* Text for a bullet point in a list of Backup features, describing that recent media is included. */
-"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "지난 45일간의 미디어";
-
-/* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
+/* Text for a bullet point in a list of Backup features, describing the amount of included storage. Embeds {{ the amount of storage preformatted as a localized byte count, e.g. '100 GB' }}. */
 "CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "저장 용량 1TB(최대 25만 장의 사진)";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "오류가 발생했습니다. 고객 지원팀에 문의하세요.";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a network error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NETWORK_ERROR" = "오류가 발생했습니다. 연결을 확인하고 다시 시도하세요.";
 
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but is not registered. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED" = "백업을 활성화하려면 먼저 등록해야 합니다.";
@@ -1600,11 +1825,23 @@
 /* Message shown in an action sheet when the user tries to confirm selecting the paid plan, but encountered an error while redeeming their completed purchase. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_PURCHASE_REDEMPTION" = "오류가 발생했습니다. 고객 지원팀에 문의하세요.";
 
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED" = "새 복구 키 한도에 도달했기 때문에 남용을 방지하기 위해 %1$@ 동안 백업을 활성화할 수 없습니다. %1$@ 동안 기다렸다가 다시 시도하세요.";
+
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. {{ Embeds 1 & 2: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED_TITLE" = "백업을 활성화할 수 없음";
+
 /* A label indicating that a given Backup plan option is what the user has already enabled. */
 "CHOOSE_BACKUP_PLAN_CURRENT_PLAN_LABEL" = "현재 플랜";
 
-/* Subtitle for the free plan option, when choosing a Backup plan. */
-"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "텍스트 + 45일 분량의 미디어";
+/* Text for a button that will downgrade the user from the paid Backup plan to the free one. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_BUTTON_TEXT" = "플랜 변경";
+
+/* Button for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_PROCEED_BUTTON" = "플랜 변경";
+
+/* Title for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_TITLE" = "무료로 다운그레이드하시겠습니까?";
 
 /* Title for the free plan option, when choosing a Backup plan. */
 "CHOOSE_BACKUP_PLAN_FREE_PLAN_TITLE" = "무료";
@@ -1623,6 +1860,9 @@
 
 /* Subtitle for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_SUBTITLE" = "모든 백업 내용은 엔드투엔드로 암호화됩니다. B&A은 비영리 단체입니다. 백업 요금은 B&A의 사명을 지원하는 데 사용됩니다.";
+
+/* Title for a label allowing users to view Signal's Terms & Conditions. */
+"CHOOSE_BACKUP_PLAN_TERM_AND_PRIVACY_POLICY_TEXT" = "이용약관 및 개인정보 처리방침";
 
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "백업 플랜 선택";
@@ -1670,10 +1910,10 @@
 "COMPOSE_SCREEN_MISSING_CONTACTS_PERMISSION" = "iOS 설정 앱에서 연락처 권한을 허용하면 내 연락처에서 누가 B&A을 사용하고 있는지 알 수 있습니다.";
 
 /* Configure reactions title text */
-"CONFIGURE_REACTIONS" = "반응 구성";
+"CONFIGURE_REACTIONS" = "반응 설정";
 
 /* No comment provided by engineer. */
-"CONFIRM_DELETE_DATA_TEXT" = "메시지를 삭제하고 애플리케이션이 재설정됩니다. 이 과정이 완료되면 애플리케이션이 종료됩니다.";
+"CONFIRM_DELETE_DATA_TEXT" = "이 작업을 수행하면 메시지가 삭제되며 앱이 초기화됩니다. 완료되면 앱이 종료됩니다.";
 
 /* No comment provided by engineer. */
 "CONFIRM_DELETE_DATA_TITLE" = "모든 데이터를 삭제하시겠습니까?";
@@ -1688,7 +1928,7 @@
 "CONFIRM_LEAVE_GROUP_DESCRIPTION" = "이 그룹에서 메시지를 보내거나 받을 수 없게 됩니다.";
 
 /* Alert title */
-"CONFIRM_LEAVE_GROUP_TITLE" = "이 그룹에서 나가시겠습니까?";
+"CONFIRM_LEAVE_GROUP_TITLE" = "이 그룹에서 나가시겠어요?";
 
 /* Button text */
 "CONFIRM_LINK_NEW_DEVICE_ACTION" = "새 기기 연결";
@@ -1778,7 +2018,7 @@
 "CONTACT_PERMISSION_ACTION_SHEET_STEP_TWO" = "\"연락처\"를 켜세요";
 
 /* Title for contact permission action sheet */
-"CONTACT_PERMISSION_ACTION_SHEET_TITLE" = "연락처를 켜기";
+"CONTACT_PERMISSION_ACTION_SHEET_TITLE" = "연락처 켜기";
 
 /* Snooze action text for contact permission reminder megaphone */
 "CONTACT_PERMISSION_NOT_NOW_ACTION" = "나중에";
@@ -1820,13 +2060,13 @@
 "CONTACT_SHARING_NO_ACCESS_TITLE" = "연락처 접근 허용";
 
 /* Button text to initiate an email to signal support staff */
-"CONTACT_SUPPORT" = "지원에 문의";
+"CONTACT_SUPPORT" = "고객 지원 문의";
 
 /* The localized representation of the 'Donations & Badges' support filter. */
-"CONTACT_SUPPORT_FILTER_DONATIONS_AND_BADGES" = "기부 및 배지";
+"CONTACT_SUPPORT_FILTER_DONATIONS_AND_BADGES" = "후원 및 배지";
 
 /* A brief localized representation of the 'Donations & Badges' support filter. */
-"CONTACT_SUPPORT_FILTER_DONATIONS_AND_BADGES_SHORT" = "기부 및 배지";
+"CONTACT_SUPPORT_FILTER_DONATIONS_AND_BADGES_SHORT" = "후원 및 배지";
 
 /* The localized representation of the 'feature request' support filter. */
 "CONTACT_SUPPORT_FILTER_FEATURE_REQUEST" = "새 기능을 요청하고 싶어요.";
@@ -1877,10 +2117,10 @@
 "CONTACT_SUPPORT_PROMPT_TO_INCLUDE_DEBUG_LOG_MESSAGE" = "디버그 로그를 보내 문제 해결에 도움을 주실 수 있습니다. 로그 보내기는 선택 사항입니다.";
 
 /* Alert title */
-"CONTACT_SUPPORT_PROMPT_TO_INCLUDE_DEBUG_LOG_TITLE" = "디버그 로그를 보내시겠습니까?";
+"CONTACT_SUPPORT_PROMPT_TO_INCLUDE_DEBUG_LOG_TITLE" = "디버그 로그를 보낼까요?";
 
 /* Placeholder telling user they must select a filter. */
-"CONTACT_SUPPORT_SELECT_A_FILTER" = "이유 선택하";
+"CONTACT_SUPPORT_SELECT_A_FILTER" = "이유 선택";
 
 /* Button text */
 "CONTACT_SUPPORT_SUBMIT_WITH_LOG" = "디버그 로그와 함께 보내기";
@@ -1994,7 +2234,10 @@
 "CONVERSATION_SETTINGS_ALL_MEDIA_HEADER" = "모든 미디어";
 
 /* Footer for the 'attributes access' section in conversation settings view. */
-"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "그룹 이름, 사진, 설명 및 사라지는 메시지 타이머를 편집할 수 있는 사용자를 선택하세요.";
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "그룹 이름, 사진, 설명 및 자동 삭제 메시지 타이머를 편집할 수 있는 사용자를 선택하세요.";
+
+/* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "그룹 이름, 사진, 설명, 자동 삭제 메시지 시간, 고정 메시지를 수정할 수 있는 사람을 선택하세요.";
 
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "B&A을 지원하고 배지를 받으세요. 배지를 탭하여 자세히 알아보세요.";
@@ -2030,7 +2273,7 @@
 "CONVERSATION_SETTINGS_EDIT_ATTRIBUTES_ACCESS" = "그룹 정보 수정";
 
 /* Label for button that sets 'group attributes access' to 'administrators-only'. */
-"CONVERSATION_SETTINGS_EDIT_ATTRIBUTES_ACCESS_ALERT_ADMINISTRATORS_BUTTON" = "관리자만";
+"CONVERSATION_SETTINGS_EDIT_ATTRIBUTES_ACCESS_ALERT_ADMINISTRATORS_BUTTON" = "관리자";
 
 /* Label for button that sets 'group attributes access' to 'members-only'. */
 "CONVERSATION_SETTINGS_EDIT_ATTRIBUTES_ACCESS_ALERT_MEMBERS_BUTTON" = "모든 멤버";
@@ -2053,6 +2296,9 @@
 /* Label for 'member requests & invites' action in conversation settings view. */
 "CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES" = "요청 & 초대";
 
+/* Label for 'member label' action in conversation settings view. */
+"CONVERSATION_SETTINGS_MEMBER_TAG" = "멤버 라벨";
+
 /* label for 'always' option for mention notifications in conversation settings */
 "CONVERSATION_SETTINGS_MENTION_MODE_AlWAYS" = "항상 알림";
 
@@ -2063,7 +2309,7 @@
 "CONVERSATION_SETTINGS_MENTION_NOTIFICATION_MODE_ACTION_SHEET_TITLE" = "알림을 끈 대화에서 멘션될 경우 알림을 받아보시겠어요?";
 
 /* label for 'mentions' cell in conversation settings */
-"CONVERSATION_SETTINGS_MENTIONS_LABEL" = "언급";
+"CONVERSATION_SETTINGS_MENTIONS_LABEL" = "멘션";
 
 /* Button to message the chat */
 "CONVERSATION_SETTINGS_MESSAGE_BUTTON" = "메세지";
@@ -2084,7 +2330,7 @@
 "CONVERSATION_SETTINGS_MUTE_LABEL" = "알림 끄기";
 
 /* Indicates that the current thread is not muted. */
-"CONVERSATION_SETTINGS_MUTE_NOT_MUTED" = "알림 꺼지지 않음";
+"CONVERSATION_SETTINGS_MUTE_NOT_MUTED" = "알림 켜짐";
 
 /* Label for button to mute a thread for a day. */
 "CONVERSATION_SETTINGS_MUTE_ONE_DAY_ACTION" = "1일";
@@ -2147,7 +2393,7 @@
 "CONVERSATION_SETTINGS_SEND_MESSAGES_SECTION_HEADER" = "메시지 전송";
 
 /* Label for button that sets 'send messages permission' for a group to 'administrators only'. */
-"CONVERSATION_SETTINGS_SEND_MESSAGES_SECTION_ONLY_ADMINS" = "관리자만";
+"CONVERSATION_SETTINGS_SEND_MESSAGES_SECTION_ONLY_ADMINS" = "관리자";
 
 /* Label for 'unblock group' action in conversation settings view. */
 "CONVERSATION_SETTINGS_UNBLOCK_GROUP" = "그룹 차단 해제";
@@ -2159,7 +2405,7 @@
 "CONVERSATION_SETTINGS_UNMUTE_ACTION" = "알림 켜기";
 
 /* Button to start a video call */
-"CONVERSATION_SETTINGS_VIDEO_CALL_BUTTON" = "비디오";
+"CONVERSATION_SETTINGS_VIDEO_CALL_BUTTON" = "영상";
 
 /* Indicates that user is in the system contacts list. */
 "CONVERSATION_SETTINGS_VIEW_IS_SYSTEM_CONTACT" = "연락처 세부 정보";
@@ -2192,7 +2438,7 @@
 "COPIED_TO_CLIPBOARD" = "클립보드에 복사됨";
 
 /* ActionSheet title */
-"CORRUPTED_SESSION_DESCRIPTION" = "세션을 초기화하면 %1$@ 님의 메시지를 다시 받을 수 있게 되나, 이미 손상된 메시지는 복구할 수 없습니다.";
+"CORRUPTED_SESSION_DESCRIPTION" = "세션을 초기화하면 %1$@ 님의 새 메시지는 받을 수 있으나, 이미 손상된 메시지는 복구할 수 없습니다.";
 
 /* No comment provided by engineer. */
 "COUNTRYCODE_SELECT_TITLE" = "국가 코드 선택";
@@ -2201,7 +2447,7 @@
 "CREATE_CALL_LINK_LABEL" = "통화 링크 만들기";
 
 /* Body text for an interactive in-app prompt to set up a Signal username. */
-"CREATE_USERNAME_MEGAPHONE_BODY" = "전화번호 개인 정보 보호와 선택적 사용자 이름 및 링크를 소개합니다.";
+"CREATE_USERNAME_MEGAPHONE_BODY" = "전화번호 보호와 사용자 이름, 그리고 링크 기능이 추가됐어요.";
 
 /* Title for an interactive in-app prompt to set up a Signal username. */
 "CREATE_USERNAME_MEGAPHONE_TITLE" = "새로운 연락 방법";
@@ -2234,7 +2480,7 @@
 "CURRENCY_PICKER_VIEW_TITLE" = "통화 설정";
 
 /* Label for the 'gradient' mode in the custom chat color settings view. */
-"CUSTOM_CHAT_COLOR_SETTINGS_GRADIENT" = "그라디언트";
+"CUSTOM_CHAT_COLOR_SETTINGS_GRADIENT" = "그라데이션";
 
 /* Title for the 'hue' section in the chat color settings view. */
 "CUSTOM_CHAT_COLOR_SETTINGS_HUE" = "색상";
@@ -2243,30 +2489,18 @@
 "CUSTOM_CHAT_COLOR_SETTINGS_SATURATION" = "채도";
 
 /* Label for the 'solid color' mode in the custom chat color settings view. */
-"CUSTOM_CHAT_COLOR_SETTINGS_SOLID_COLOR" = "견고함";
+"CUSTOM_CHAT_COLOR_SETTINGS_SOLID_COLOR" = "단색";
 
 /* Title for the custom chat color settings view. */
-"CUSTOM_CHAT_COLOR_SETTINGS_TITLE" = "사용자 지정 색상";
+"CUSTOM_CHAT_COLOR_SETTINGS_TITLE" = "맞춤 색상";
 
 /* Tooltip highlighting the custom chat color controls. */
-"CUSTOM_CHAT_COLOR_SETTINGS_TOOLTIP" = "드래그하여 그라디언트 방향 변경";
-
-/* Button to run the database integrity check */
-"DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "실행";
-
-/* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "이 검사는 문제 해결에 도움이 되며, 완료 시까지 몇 분 정도가 소요될 수 있습니다. 검사가 진행되는 동안에는 B&A을 닫아도 괜찮지만, 나중에 로그를 제출하러 다시 돌아와 주세요.";
-
-/* Button to skip database integrity check step */
-"DATABASE_INTEGRITY_CHECK_SKIP" = "건너뛰기";
-
-/* Title for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_TITLE" = "데이터베이스 진단 검사를 실행할까요?";
+"CUSTOM_CHAT_COLOR_SETTINGS_TOOLTIP" = "드래그하여 그라데이션 방향 변경";
 
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so keep that in mind. This is the description on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_DESCRIPTION" = "내 메시지 기록 중 일부가 손상됐을 수 있습니다. 계정이나 메시지 보안에는 영향이 없습니다. '계속'을 탭하여 데이터를 복구하세요.";
 
-/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
+/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "데이터를 가져오는 데 문제가 발생함";
 
 /* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
@@ -2333,7 +2567,7 @@
 "DEBUG_LOG_ALERT_ERROR_UPLOADING_LOG" = "로그를 업로드할 수 없습니다.";
 
 /* Message of the debug log alert. */
-"DEBUG_LOG_ALERT_MESSAGE" = "디버그 로그 링크로 무엇을 하시겠습니까?";
+"DEBUG_LOG_ALERT_MESSAGE" = "디버그 로그 링크로 무엇을 하시겠어요?";
 
 /* Error indicating that no debug logs could be found. */
 "DEBUG_LOG_ALERT_NO_LOGS" = "로그를 찾을 수 없습니다.";
@@ -2355,6 +2589,12 @@
 
 /* Accessibility label for the ? vector asset used to get info about debug logs */
 "DEBUG_LOG_INFO_BUTTON" = "디버그 로그에 대한 정보";
+
+/* Header text displayed above the debug log preview */
+"DEBUG_LOG_PREVIEW_HEADER" = "제출한 로그는 개별적으로 생성된 비공개 URL에 30일 동안 게시됩니다.";
+
+/* Title for the debug log preview screen */
+"DEBUG_LOG_PREVIEW_TITLE" = "디버그 로그";
 
 /* info message text in conversation view */
 "DECLINED_VIDEO_CALL" = "영상 통화를 거부했습니다.";
@@ -2428,23 +2668,17 @@
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "모든 기기에서 이 메시지를 삭제합니다.";
 
-/* Label for a button in an info sheet confirming that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_BUTTON" = "확인";
-
-/* Subtitle for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_SUBTITLE" = "메시지 또는 대화를 삭제할 때 휴대폰 및 모든 연결된 기기에서 해당 내용을 삭제합니다.";
-
-/* Title for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_TITLE" = "이제 모든 기기에서 삭제를 동기화합니다";
-
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "삭제된 계정";
 
 /* Notification warning the user that they have been de-registered. */
 "DEREGISTRATION_NOTIFICATION" = "이 기기의 B&A에서 로그아웃했습니다.";
 
-/* Label for button that lets users re-register using the same phone number. */
-"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "이 전화번호 재등록";
+/* Button that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_BUTTON" = "재등록";
+
+/* Title for prompt that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_PROMPT_TITLE" = "이 전화번호를 다시 등록하시겠습니까?";
 
 /* Label warning the user that they have been de-registered. */
 "DEREGISTRATION_WARNING" = "이 기기의 등록이 해제됐습니다. 다른 기기에서 B&A에 전화번호를 등록했기 때문일 가능성이 높습니다.";
@@ -2459,7 +2693,7 @@
 "DEVICE_LINKED_AT_LABEL" = "연결 %1$@";
 
 /* Alert title that can occur when viewing device manager. */
-"DEVICE_LIST_UPDATE_FAILED_TITLE" = "기기 목록 업데이트에 실패했습니다.";
+"DEVICE_LIST_UPDATE_FAILED_TITLE" = "기기 목록을 업데이트하지 못했습니다.";
 
 /* Message appearing on a toast indicating a new device was successfully linked and synced. */
 "DEVICE_LIST_UPDATE_NEW_DEVICE_SYNCED_TOAST" = "메시지 동기화 완료";
@@ -2477,16 +2711,13 @@
 "DEVICE_TRANSFER_CANCEL_CONFIRMATION_ACTION" = "이동 중단";
 
 /* The message of the dialog asking the user if they want to cancel a device transfer */
-"DEVICE_TRANSFER_CANCEL_CONFIRMATION_MESSAGE" = "창을 닫으면 전송이 중단됩니다. 계속하시겠습니까?";
+"DEVICE_TRANSFER_CANCEL_CONFIRMATION_MESSAGE" = "창을 닫으면 기기 이전이 중단됩니다. 정말 중단하시겠어요?";
 
 /* The title of the dialog asking the user if they want to cancel a device transfer */
-"DEVICE_TRANSFER_CANCEL_CONFIRMATION_TITLE" = "이동을 중단하시겠습니까?";
+"DEVICE_TRANSFER_CANCEL_CONFIRMATION_TITLE" = "이전을 중단할까요?";
 
 /* The explanation for the device transfer 'choice' view when linking a device */
 "DEVICE_TRANSFER_CHOICE_LINKED_EXPLANATION" = "메시지 기록과 계정 데이터 전송 방법을 선택하세요";
-
-/* The body for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_BODY" = "계정과 메시지를 이동하지 않고 계속합니다";
 
 /* The body for the device transfer 'choice' view 'register' option when linking a device when message syncing is available */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_BODY_LINK_AND_SYNC" = "휴대폰의 메시지와 최근 미디어를 전송하는 옵션이 제공됩니다";
@@ -2494,14 +2725,8 @@
 /* The title for the device transfer 'choice' view 'register' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_TITLE" = "새 기기로 추가";
 
-/* The title for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_TITLE" = "이동하지 않고 등록";
-
 /* The title for the device transfer 'choice' view */
 "DEVICE_TRANSFER_CHOICE_TITLE" = "계정 및 메시지 이동";
-
-/* The body for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_BODY" = "이전 iOS 기기에서 계정과 메시지 기록 이동하기";
 
 /* The body for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_BODY" = "이전 iOS 기기에서 계정과 메시지 기록 이동하기";
@@ -2509,26 +2734,11 @@
 /* The title for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_TITLE" = "다른 iPad에서 이동하기";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_TITLE" = "iOS 기기에서 이동하기";
-
-/* Button shown to contract a QR code and exit the fullscreen view. */
-"DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "더 작게 보기";
-
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "송금을 완료할 수 없습니다. 두 기기 모두에 B&A이 열려 있는지 확인하고 다시 시도하세요.";
 
-/* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
-"DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "새 기기를 검증할 수 없습니다. 다시 시도해 주세요.";
-
 /* An error indicating that something went wrong with the transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_GENERIC" = "송금을 완료할 수 없습니다. 두 기기를 가까이 두고 다시 시도하세요.";
-
-/* An error indicating the user must scan this code with a linked device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_LINKED" = "이 iPad를 연결하려면 이전 iPad를 스캔해야 합니다";
-
-/* An error indicating the user must scan this code with a primary device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_PRIMARY" = "계정을 이동하려면 iPhone으로 스캔해야 합니다";
 
 /* An error indicating that the user does not have enough free space on their device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "이동에 필요한 저장 공간이 부족합니다";
@@ -2536,41 +2746,11 @@
 /* An error indicating the user must update their device before trying to transfer. */
 "DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "최신 B&A 버전으로 업데이트한 후 다시 시도해 주세요.";
 
-/* Button shown to expand a QR code and view it fullscreen. */
-"DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "더 크게 보기";
-
-/* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "새 iOS 기기로 B&A 계정을 이동하세요. 새 기기가 가까이 있고 켜져 있는지 확인하세요.";
-
-/* The title on the acttion sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_TITLE" = "계정 이동";
-
-/* The explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION" = "이전 기기를 가까이 가져와서 Wi-Fi와 Bluetooth가 활성화되어 있는지 확인한 다음 해당 기기로 이 QR 코드를 스캔하세요.";
-
-/* The second explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION2" = "다른 iOS 기기의 프레임에 이 QR 코드를 맞추세요.";
-
-/* A prompt to provide further explanation if the user is not seeing the transfer on both devices. */
-"DEVICE_TRANSFER_QRCODE_NOT_SEEING" = "이전 기기에 메시지가 표시되지 않습니까?";
-
-/* The title for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_TITLE" = "QR 코드 스캔";
-
 /* The explanation on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "두 기기를 가까이 두세요. 기기를 끄지 말고 B&A을 계속 켜두시기 바랍니다. 이동은 단대단 암호화됩니다.";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "데이터 수신 중";
-
-/* Text indicating that we are connecting to the scanned device */
-"DEVICE_TRANSFER_SCANNING_CONNECTING" = "연결 중…";
-
-/* The explanation for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_EXPLANATION" = "원 안에 QR 코드를 맞추세요";
-
-/* The title for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_TITLE" = "새 기기를 카메라로 가져오세요";
 
 /* Status message on new device when cancelling transfer. */
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_CANCELLING" = "이전 iPhone에 대한 연결을 취소하는 중…";
@@ -2608,11 +2788,8 @@
 /* Status message on old device when transfer is starting. */
 "DEVICE_TRANSFER_STATUS_OLD_DEVICE_STARTING" = "새 iPhone에 연결 대기 중…";
 
-/* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "두 기기에서 B&A을 실행한 후 서로 가까이 두세요. 기기를 끄지 마세요.";
-
-/* The title on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_TITLE" = "데이터 이동 중";
+/* Action asking user to try again after transfer failure. */
+"DEVICE_TRANSFER_TRY_AGAIN_ACTION" = "다시 시도";
 
 /* table cell label in conversation settings */
 "DISAPPEARING_MESSAGES" = "사라지는 메시지";
@@ -2621,7 +2798,7 @@
 "DISAPPEARING_MESSAGES_CONFIGURATION_GROUP_EXISTING_FORMAT" = "%1$@ 뒤 이 대화의 메시지가 사라집니다.";
 
 /* Disappearing message option to define a custom time */
-"DISAPPEARING_MESSAGES_CUSTOM_TIME" = "지역 시간";
+"DISAPPEARING_MESSAGES_CUSTOM_TIME" = "맞춤 시간";
 
 /* Title for a picker for the unit of time to use for disappearing messages. */
 "DISAPPEARING_MESSAGES_CUSTOM_TIME_UNIT_PICKER" = "단위";
@@ -2633,7 +2810,7 @@
 "DISAPPEARING_MESSAGES_DAYS" = "일";
 
 /* subheading in conversation settings */
-"DISAPPEARING_MESSAGES_DESCRIPTION" = "이 기능을 사용하면 이 대화에서 보내거나 받는 새 메시지가 확인 후 자동 삭제됩니다.";
+"DISAPPEARING_MESSAGES_DESCRIPTION" = "이 기능을 켤 경우, 대화에서 주고받는 새 메시지는 확인 후 자동 삭제됩니다.";
 
 /* Accessibility hint that contains current timeout information */
 "DISAPPEARING_MESSAGES_HINT" = "현재 메시지가 %1$@ 후 사라지도록 설정됨";
@@ -2678,10 +2855,10 @@
 "DOMAIN_FRONTING_COUNTRY_VIEW_SECTION_HEADER" = "검열 우회 위치";
 
 /* Users can donate to Signal with a credit or debit card. This is the heading on that screen, telling them how much they'll donate. Embeds {{formatted amount of money}}, such as \"$20\". */
-"DONATE_BUTTON" = "%1$@ 기부";
+"DONATE_BUTTON" = "%1$@ 후원";
 
 /* Users can donate to Signal with a credit or debit card. This is the heading on that screen, telling them how much they'll donate every month. Embeds {{formatted amount of money}}, such as \"$20\". */
-"DONATE_BUTTON_MONTHLY" = "월 %1$@ 기부";
+"DONATE_BUTTON_MONTHLY" = "월 %1$@ 후원";
 
 /* When users make donations, they can choose which payment method they want to use. This is the text on the button that lets them choose to pay with bank transfer. */
 "DONATE_CHOOSE_BANK_TRANSFER_AS_PAYMENT_METHOD" = "송금";
@@ -2708,7 +2885,7 @@
 "DONATE_CHOOSE_PAYMENT_METHOD_SHEET_TITLE_FOR_ONE_TIME_DONATION" = "B&A에 %1$@ 기부";
 
 /* Users can donate on a friend's behalf and can optionally add a message. This is tells users about that optional message. */
-"DONATE_ON_BEHALF_OF_A_FRIEND_ADDITIONAL_MESSAGE_INFO" = "받는 사람에게 1대1 메시지로 기부 알림이 발송됩니다. 아래에 나만의 메시지를 추가하세요.";
+"DONATE_ON_BEHALF_OF_A_FRIEND_ADDITIONAL_MESSAGE_INFO" = "받는 사람에게 1대1 메시지로 후원 알림이 발송됩니다. 아래에 나만의 메시지를 추가하세요.";
 
 /* Users can donate on a friend's behalf and can optionally add a message. This is the placeholder in the text field for that additional message. */
 "DONATE_ON_BEHALF_OF_A_FRIEND_ADDITIONAL_MESSAGE_PLACEHOLDER" = "메시지 추가";
@@ -2729,7 +2906,7 @@
 "DONATE_SCREEN_ERROR_MESSAGE_BANK_PAYMENT_AWAITING_AUTHORIZATION" = "iDEAL 기부를 아직 처리 중입니다. 다른 기부를 하기 전에 은행 앱을 확인하여 결제를 승인하세요.";
 
 /* Message in an alert presented when the user tries to make a donation, but already has a donation that is currently processing via bank payment. */
-"DONATE_SCREEN_ERROR_MESSAGE_BANK_PAYMENT_PLEASE_WAIT_BEFORE_MAKING_ANOTHER_DONATION" = "은행 송금을 처리하는 데 영업일 기준 1~14일이 걸릴 수 있습니다. 이 기부가 완료될 때까지 기다렸다가 더 기부해 주세요.";
+"DONATE_SCREEN_ERROR_MESSAGE_BANK_PAYMENT_PLEASE_WAIT_BEFORE_MAKING_ANOTHER_DONATION" = "은행 송금을 처리하는 데 영업일 기준 1~14일이 걸릴 수 있습니다. 완료될 때까지 기다리신 후, 추가 후원을 진행해 주세요.";
 
 /* Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently processing via bank payment. */
 "DONATE_SCREEN_ERROR_MESSAGE_BANK_PAYMENT_PLEASE_WAIT_BEFORE_UPDATING_YOUR_SUBSCRIPTION" = "은행 송금을 처리하는 데 영업일 기준 1~14일이 걸릴 수 있습니다. 이 기부가 완료될 때까지 기다렸다가 구독을 업데이트해 주세요.";
@@ -2738,16 +2915,16 @@
 "DONATE_SCREEN_ERROR_MESSAGE_FORMAT_BANK_TRANSFER_AMOUNT_TOO_LARGE" = "은행 송금을 통해 보낼 수 있는 최대 금액은 %1$@입니다. 다른 금액이나 다른 결제 방법으로 시도해 주세요.";
 
 /* Message in an alert presented when the user tries to make a donation, but already has a donation that is currently processing via non-bank payment. */
-"DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_MAKING_ANOTHER_DONATION" = "기부를 아직 처리하는 중입니다. 연결에 따라 몇 분이 소요될 수 있습니다. 이 기부가 완료될 때까지 기다렸다가 더 기부해 주세요.";
+"DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_MAKING_ANOTHER_DONATION" = "현재 기부가 처리되고 있습니다. 연결 상태에 따라 몇 분이 소요될 수 있습니다. 완료될 때까지 잠시 기다리신 후, 추가 후원을 진행해 주세요.";
 
 /* Message in an alert presented when the user tries to update their recurring donation, but already has a recurring donation that is currently processing via non-bank payment. */
 "DONATE_SCREEN_ERROR_MESSAGE_PLEASE_WAIT_BEFORE_UPDATING_YOUR_SUBSCRIPTION" = "기부를 아직 처리하는 중입니다. 연결에 따라 몇 분이 소요될 수 있습니다. 이 기부가 완료될 때까지 기다렸다가 구독을 업데이트해 주세요.";
 
 /* If the user tries to donate to Signal but no amount is selected, this error message is shown. */
-"DONATE_SCREEN_ERROR_NO_AMOUNT_SELECTED" = "기부할 금액을 선택하세요.";
+"DONATE_SCREEN_ERROR_NO_AMOUNT_SELECTED" = "후원할 금액을 선택하세요.";
 
 /* If the user tries to donate to Signal but they've entered an amount that's too small, this error message is shown. Embeds {{currency string}}, such as \"$5\". */
-"DONATE_SCREEN_ERROR_SELECT_A_LARGER_AMOUNT_FORMAT" = "기부할 수 있는 최소 금액은 %1$@입니다.";
+"DONATE_SCREEN_ERROR_SELECT_A_LARGER_AMOUNT_FORMAT" = "후원할 수 있는 최소 금액은 %1$@입니다.";
 
 /* Title for an alert presented when the user tries to make a donation, but already has a donation that is currently awaiting authorization. */
 "DONATE_SCREEN_ERROR_TITLE_BANK_PAYMENT_AWAITING_AUTHORIZATION" = "기부 승인 대기 중";
@@ -2762,7 +2939,7 @@
 "DONATE_SCREEN_ERROR_TITLE_YOU_HAVE_A_PAYMENT_PROCESSING" = "처리 중인 기부가 있습니다";
 
 /* On the donation screen, you can choose between one-time and monthly donations. This is the text on the picker for one-time donations. */
-"DONATE_SCREEN_MONTHLY_CHOICE" = "월간";
+"DONATE_SCREEN_MONTHLY_CHOICE" = "월 정기후원";
 
 /* On the donation screen, you can see a list of monthly subscription levels. If you already have one of these and it expires soon, this text is shown below it indicating when it will expire. Embeds {{formatted renewal date}}, such as \"June 9, 2010\". */
 "DONATE_SCREEN_MONTHLY_SUBSCRIPTION_EXPIRES_ON_DATE" = "%1$@ 만료";
@@ -2795,7 +2972,7 @@
 "DONATION_BADGE_ISSUE_SHEET_ONE_TIME_BANK_PAYMENT_PROCESSING_MESSAGE" = "1회성 기부가 대기 중입니다. 기부가 완료되면 프로필에 %1$@ 배지를 표시할 수 있습니다.\n\n은행 송금을 처리하는 데 영업일 기준 1~14일이 걸릴 수 있습니다.";
 
 /* Message for a sheet explaining that a recurring donation via bank payment is pending, and how that will affect the user's badge. Embeds {{ the name of the badge }}. Will have a 'learn more' link appended, when it is rendered. */
-"DONATION_BADGE_ISSUE_SHEET_RECURRING_BANK_PAYMENT_PROCESSING_MESSAGE" = "월간 기부가 대기 중입니다. 기부가 완료되면 프로필에 %1$@ 배지를 표시할 수 있습니다.\n\n은행 송금을 처리하는 데 영업일 기준 1~14일이 걸릴 수 있습니다.";
+"DONATION_BADGE_ISSUE_SHEET_RECURRING_BANK_PAYMENT_PROCESSING_MESSAGE" = "월 정기후원이 대기 중입니다. 후원이 완료되면 프로필에 %1$@ 배지를 표시할 수 있습니다.\n\n은행 송금을 처리하는 데 영업일 기준 1~14일이 걸릴 수 있습니다.";
 
 /* Title for a button asking the user to renew their subscription, because it has expired. */
 "DONATION_BADGE_ISSUE_SHEET_RENEW_SUBSCRIPTION_BUTTON_TITLE" = "구독 갱신";
@@ -2807,13 +2984,13 @@
 "DONATION_FOR_A_FRIEND_ROW_DURATION" = "지속 기간: %1$@";
 
 /* Someone donated on your behalf and you got a badge, which expired. A sheet appears to tell you about this. This is the text on that sheet. */
-"DONATION_FROM_A_FRIEND_BADGE_EXPIRED_BODY" = "기부가 만료되어 더 이상 프로필에 표시되지 않습니다.";
+"DONATION_FROM_A_FRIEND_BADGE_EXPIRED_BODY" = "후원이 만료되어 더 이상 프로필에 표시되지 않습니다.";
 
 /* Someone donated on your behalf and you got a badge, which expired. A sheet appears to tell you about this. This is the title on that sheet. */
-"DONATION_FROM_A_FRIEND_BADGE_EXPIRED_TITLE" = "기부가 만료되었습니다.";
+"DONATION_FROM_A_FRIEND_BADGE_EXPIRED_TITLE" = "후원이 만료되었어요";
 
 /* Someone donated on your behalf and you got a badge, which expired before you could redeem it. A sheet appears to tell you about this. This is the text on that sheet. Embeds {{contact name}}. */
-"DONATION_FROM_A_FRIEND_BADGE_NOT_REDEEMED_BODY_FORMAT" = "%1$@ 님의 기부가 만료되어 더 이상 사용할 수 없습니다.";
+"DONATION_FROM_A_FRIEND_BADGE_NOT_REDEEMED_BODY_FORMAT" = "%1$@ 님의 후원이 만료되어 더 이상 사용할 수 없습니다.";
 
 /* Someone donated on your behalf and you got a badge, which expired before you could redeem it. A sheet appears to tell you about this. This is the title on that sheet. */
 "DONATION_FROM_A_FRIEND_BADGE_NOT_REDEEMED_TITLE" = "기부가 만료되었습니다.";
@@ -2825,7 +3002,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_CHOOSE_BADGE_DESCRIPTION" = "B&A을 사용하는 친구나 가족을 대신하여 기부하여 B&A을 지지해 주세요. 프로필을 통해 지지를 표현할 수 있는 옵션이 제공됩니다.";
 
 /* Users can donate on behalf of a friend, and the friend will receive a badge. This is the title on the screen where users choose the badge their friend will receive. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_CHOOSE_BADGE_TITLE" = "친구를 대신해 기부하세요.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_CHOOSE_BADGE_TITLE" = "친구를 대신해 후원하세요.";
 
 /* Title on the screen where you choose who you're going to donate on behalf of. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_CHOOSE_RECIPIENT_TITLE" = "수신자 선택";
@@ -2834,7 +3011,7 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_CONFIRMATION_SCREEN_TITLE" = "기부를 확인해 주세요.";
 
 /* When users make donations on a friend's behalf, a message is sent. This text tells senders that their message will disappear, if the conversation has disappearing messages enabled. Embeds {{duration}}, such as \"1 week\". */
-"DONATION_ON_BEHALF_OF_A_FRIEND_DISAPPEARING_MESSAGES_NOTICE_FORMAT" = "이 대화에서 메시지 자동 삭제를 사용합니다. %1$@ 후 기부 메시지가 사라집니다.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_DISAPPEARING_MESSAGES_NOTICE_FORMAT" = "이 대화에 메시지 자동 삭제 기능이 켜져 있습니다. %1$@ 후 후원 알림 메시지가 사라집니다.";
 
 /* Users can donate on a friend's behalf. This tells users that this will be a one-time donation. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_DESCRIPTION" = "일회성 기부";
@@ -2849,22 +3026,22 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_SUCCEEDED_BUT_MESSAGE_FAILED_ERROR_BODY" = "결제를 처리했으나 B&A에서 귀하의 기부 메시지를 보내지 못했습니다. 고객 지원팀으로 문의하세요.";
 
 /* Users can donate on a friend's behalf. If the payment was processed but the donation failed to send, an error dialog will be shown. This is the title of that dialog. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_SUCCEEDED_BUT_MESSAGE_FAILED_ERROR_TITLE" = "기부에 실패했습니다.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_PAYMENT_SUCCEEDED_BUT_MESSAGE_FAILED_ERROR_TITLE" = "후원 처리 오류";
 
 /* A friend has donated on your behalf. This text is shown in the list of chats, when the most recent message is one of these donations. Embeds {friend's short display name}. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_PREVIEW_INCOMING" = "✨ %1$@ 님이 귀하를 대신해 기부했습니다.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_PREVIEW_INCOMING" = "✨ %1$@ 님이 나를 대신해 후원했어요";
 
 /* You have a made a donation on a friend's behalf. This text is shown in the list of chats, when the most recent message is one of these donations. Embeds {friend's short display name}. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_PREVIEW_OUTGOING" = "✨ %1$@ 님을 대신해 기부했습니다.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_PREVIEW_OUTGOING" = "✨ %1$@ 님을 대신해 후원했어요";
 
 /* You received a donation from a friend. This is the title of that message in the chat. Embeds {{short contact name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_RECEIVED_TITLE_FORMAT" = "%1$@ 님이 귀하를 대신해 B&A에 기부했습니다.";
 
 /* Users can donate on a friend's behalf. This is the error message that appears if the try to do this, but the recipient is blocked. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_RECIPIENT_IS_BLOCKED_ERROR_BODY" = "이 사용자를 대신해 기부하려면 이 사용자를 차단 해제해야 합니다.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_RECIPIENT_IS_BLOCKED_ERROR_BODY" = "이 사용자를 대신해 후원하려면 차단을 해제해 주세요.";
 
 /* Users can donate on a friend's behalf. This is the title for an error message that appears if the try to do this, but the recipient is blocked. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_RECIPIENT_IS_BLOCKED_ERROR_TITLE" = "기부를 완료할 수 없습니다.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_RECIPIENT_IS_BLOCKED_ERROR_TITLE" = "후원을 완료할 수 없습니다.";
 
 /* Label for a button used to redeem a badge that was received as a donation on your behalf. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_REDEEM_BADGE" = "사용";
@@ -2873,19 +3050,19 @@
 "DONATION_ON_BEHALF_OF_A_FRIEND_REDEEM_BADGE_LATER" = "나중에 기부를 사용할 수 있습니다.";
 
 /* A friend has donated on your behalf and you received a badge. A sheet opens for you to redeem this badge. Embeds {{contact's short name, such as a first name}}. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_REDEEM_BADGE_TITLE_FORMAT" = "%1$@ 님이 귀하를 대신해 기부했습니다.";
+"DONATION_ON_BEHALF_OF_A_FRIEND_REDEEM_BADGE_TITLE_FORMAT" = "%1$@ 님이 나를 대신해 후원했어요";
 
 /* Shown when you're replying to a donation message. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_REPLY" = "기부";
+"DONATION_ON_BEHALF_OF_A_FRIEND_REPLY" = "후원";
 
 /* You sent a donation to a friend. This is the title of that message in the chat. Embeds {{short contact name}}. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_SENT_TITLE_FORMAT" = "%1$@ 님 대신 기부";
+"DONATION_ON_BEHALF_OF_A_FRIEND_SENT_TITLE_FORMAT" = "%1$@ 님을 대신해 후원했어요";
 
 /* When you donate on behalf of a friend, a thank-you sheet will appear. This is the text on that sheet. Embeds {{recipient name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_THANKS_BODY_FORMAT" = "%1$@ 님을 대신하여 B&A에 기부했습니다. 프로필을 통해 지지를 표현할 옵션이 제공됩니다.";
 
 /* When you donate on behalf of a friend, a thank-you sheet will appear. This is the title on that sheet. */
-"DONATION_ON_BEHALF_OF_A_FRIEND_THANKS_TITLE" = "지지와 성원에 감사드립니다!";
+"DONATION_ON_BEHALF_OF_A_FRIEND_THANKS_TITLE" = "후원에 감사드립니다!";
 
 /* A button shown on a donation message you send, to view additional details about the badge that was sent. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_VIEW" = "보기";
@@ -2893,17 +3070,17 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ 님이 귀하를 대신하여 B&A에 기부했습니다! 프로필에서 B&A에 대한 지지를 표현해 주세요.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "개인정보를 보호하는 메시지. 광고와 트래커, 사찰에서 자유로운 앱.";
+/* Body text for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BODY" = "B&A는 독립적인 비영리단체로, 메시지와 통화의 프라이버시 보호를 핵심 가치로 삼고 있습니다. 광고도, 추적도, 감시도 없습니다. B&A의 사명을 지지하신다면 지금 후원해 보세요.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "B&A은 사용자의 기부로 운영되기에 모든 면에서 사용자의 개인정보보호를 최우선으로 생각합니다. B&A은 데이터와 수익이 아닌 사용자를 위한 앱입니다.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_1" = "후원하면 프로필에 표시되는 배지를 받을 수 있어요";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "가능하다면 지금 B&A에 기부하여 B&A이 누구나 안심하고 사용할 수 있는 즐거운 앱으로 남을 수 있도록 도와주세요.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_2" = "개인정보 보호는 B&A의 사명입니다";
 
-/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "B&A은 다릅니다.";
+/* Bullet point for a sheet discussing donating to Signal. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
+"DONATION_READ_MORE_SHEET_BULLET_3" = "B&A는 비영리단체입니다";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "금액";
@@ -2921,13 +3098,13 @@
 "DONATION_RECEIPT_FOOTER" = "B&A을 지지해 주셔서 감사합니다. 귀하의 기여는 표현의 자유를 보호하고 전 세계 수백만 사용자에게 안전한 글로벌 커뮤니케이션을 제공하는 오픈 소스 프라이버시 기술을 개발하겠다는 B&A의 사명을 지키는 데 도움이 됩니다. 미국 거주자라면 세금 보고 시 사용할 수 있도록 이 영수증을 보관하세요. B&A Technology Foundation은 내국세법조항 501c3조에 의거하여 세금 공제를 받을 수 있는 비영리 기관입니다. B&A 연방세 ID는 82-4506840입니다.";
 
 /* Title for receipts for donations given on a friend's behalf */
-"DONATION_RECEIPT_FOR_DONATION_ON_BEHALF_OF_A_FRIEND" = "친구 대신 기부";
+"DONATION_RECEIPT_FOR_DONATION_ON_BEHALF_OF_A_FRIEND" = "친구를 대신해 후원했어요";
 
 /* Title for one-time donation receipts */
-"DONATION_RECEIPT_ONE_TIME" = "1회성 기부";
+"DONATION_RECEIPT_ONE_TIME" = "일회성 기부";
 
 /* Title for recurring donation receipts */
-"DONATION_RECEIPT_RECURRING" = "정기 기부";
+"DONATION_RECEIPT_RECURRING" = "정기후원";
 
 /* Title on donation receipts */
 "DONATION_RECEIPT_TITLE" = "기부 영수증";
@@ -2951,7 +3128,7 @@
 "DONATION_REDIRECT_ERROR_PAYMENT_DENIED_MESSAGE" = "결제가 거부되었습니다. 다시 시도해 주세요.";
 
 /* On the donation settings screen, tapping this button will take the user to a screen where they can donate. */
-"DONATION_SCREEN_DONATE_BUTTON" = "기부";
+"DONATION_SCREEN_DONATE_BUTTON" = "후원하기";
 
 /* On donation screens, a small amount of information text is shown. This is the subtitle for that text. */
 "DONATION_SCREENS_HEADER_DESCRIPTION" = "사용자의 기부로 운영되는 개인정보를 보호하는 메시지. 광고와 트래커, 타협에서 자유로운 앱. 지금 기부를 통해 B&A을 지지해 주세요.";
@@ -2999,16 +3176,16 @@
 "DONATION_SETTINGS_MY_SUPPORT_IDEAL_ONE_TIME_DONATION_NOT_CONFIRMED_MESSAGE_FORMAT" = "%1$@ iDEAL 1회성 기부를 확인할 수 없습니다. 은행 앱을 확인하여 iDEAL 기부를 승인해 주세요.";
 
 /* Message shown in a sheet explaining that the user's iDEAL recurring monthly donation coultn't be processed. */
-"DONATION_SETTINGS_MY_SUPPORT_IDEAL_RECURRING_SUBSCRIPTION_FAILED_MESSAGE" = "iDEAL 반복 월간 기부를 처리할 수 없습니다. 다른 결제 수단을 시도하거나 은행에 자세한 정보를 문의하세요.";
+"DONATION_SETTINGS_MY_SUPPORT_IDEAL_RECURRING_SUBSCRIPTION_FAILED_MESSAGE" = "iDEAL 월 정기후원을 처리하지 못했습니다. 다른 결제 수단을 시도하거나 은행에 자세한 정보를 문의하세요.";
 
 /* Message shown in a sheet explaining that the user's iDEAL recurring monthly donation hasn't been confirmed. Embeds {{ formatted current amount }}. */
-"DONATION_SETTINGS_MY_SUPPORT_IDEAL_RECURRING_SUBSCRIPTION_NOT_CONFIRMED_MESSAGE_FORMAT" = "%1$@ iDEAL 반복 월간 기부를 확인할 수 없습니다. 은행 앱을 확인하여 iDEAL 기부를 승인해 주세요.";
+"DONATION_SETTINGS_MY_SUPPORT_IDEAL_RECURRING_SUBSCRIPTION_NOT_CONFIRMED_MESSAGE_FORMAT" = "%1$@ iDEAL 월 정기후원을 확인하지 못했습니다. 은행 앱을 확인하여 iDEAL 후원을 승인해 주세요.";
 
 /* Message shown in a sheet explaining that the user's recurring subscription has ended because payment failed. Embeds {{ a specific, already-localized string describing the failure reason }}. */
-"DONATION_SETTINGS_MY_SUPPORT_RECURRING_SUBSCRIPTION_LAPSED_CHARGE_FAILURE_ALERT_MESSAGE_FORMAT" = "현 월간 기부가 종료되었습니다. %1$@";
+"DONATION_SETTINGS_MY_SUPPORT_RECURRING_SUBSCRIPTION_LAPSED_CHARGE_FAILURE_ALERT_MESSAGE_FORMAT" = "월 정기후원이 종료되었습니다. %1$@";
 
 /* Title for a sheet explaining that the user's recurring subscription has ended because payment failed. */
-"DONATION_SETTINGS_MY_SUPPORT_RECURRING_SUBSCRIPTION_LAPSED_TITLE" = "월간 기부를 취소함";
+"DONATION_SETTINGS_MY_SUPPORT_RECURRING_SUBSCRIPTION_LAPSED_TITLE" = "월 정기후원이 취소되었어요";
 
 /* A label describing a donation payment that was made via bank transfer, which is still processing and has not completed. */
 "DONATION_SETTINGS_MY_SUPPORT_TABLE_CELL_SUBTITLE_BANK_PAYMENT_PROCESSING" = "기부 대기 중";
@@ -3020,7 +3197,7 @@
 "DONATION_SETTINGS_MY_SUPPORT_TABLE_CELL_SUBTITLE_PAYMENT_FAILED" = "기부 처리 오류";
 
 /* A label describing a recurring monthly donation that used to be active, but has now been canceled because it failed to renew. */
-"DONATION_SETTINGS_MY_SUPPORT_TABLE_CELL_SUBTITLE_SUBSCRIPTION_LAPSED" = "월간 기부를 취소함";
+"DONATION_SETTINGS_MY_SUPPORT_TABLE_CELL_SUBTITLE_SUBSCRIPTION_LAPSED" = "월 정기후원이 취소되었어요";
 
 /* A label describing a donation payment that has requires authorization. */
 "DONATION_SETTINGS_MY_SUPPORT_TABLE_CELL_SUBTITLE_WAITING_FOR_AUTHORIZATION" = "승인 대기 중";
@@ -3029,13 +3206,13 @@
 "DONATION_SETTINGS_ONE_TIME_AMOUNT_FORMAT" = "%1$@ 일회성 기부";
 
 /* Title for the \"donate for a friend\" button on the donation view. */
-"DONATION_VIEW_DONATE_ON_BEHALF_OF_A_FRIEND" = "친구를 대신해 기부하세요.";
+"DONATION_VIEW_DONATE_ON_BEHALF_OF_A_FRIEND" = "친구를 대신해 후원하세요.";
 
 /* Text describing to the user that they're going to pay a donation to Signal */
 "DONATION_VIEW_DONATION_TO_SIGNAL" = "B&A 기부";
 
 /* Title for the 'Donor FAQ' button on the donation screen */
-"DONATION_VIEW_DONOR_FAQ" = "기부자 FAQ";
+"DONATION_VIEW_DONOR_FAQ" = "후원자 FAQ";
 
 /* Text that's shown when the donation view fails to load data, probably due to network failure */
 "DONATION_VIEW_LOAD_FAILED" = "네트워크 오류. 연결을 확인하고 다시 시도하세요.";
@@ -3046,20 +3223,17 @@
 /* Text describing to the user that they're going to pay a monthly donation to Signal */
 "DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "B&A 월간 기부";
 
-/* Title for the 'more' section on the donation screen */
-"DONATION_VIEW_MORE_SECTION_TITLE" = "더 보기";
-
 /* Title for the 'my support' section in the donation view */
 "DONATION_VIEW_MY_SUPPORT_TITLE" = "내 지원";
-
-/* Title for the \"other ways to donate\" section on the donation view. */
-"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "다른 기부 방법";
 
 /* Title on the 'Donate to Signal' screen */
 "DONATION_VIEW_TITLE" = "B&A에 기부";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "통화";
+
+/* Label for a button that says 'Don't show again'. */
+"DONT_SHOW_AGAIN_BUTTON_TITLE" = "다시 표시 안 함";
 
 /* Message for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_MESSAGE" = "메시지를 수정하려면 메지시를 빠르게 두 번 탭하세요. 메시지는 전송 후 24시간 내에 수정할 수 있습니다.";
@@ -3080,13 +3254,13 @@
 "EDIT_GROUP_ERROR_CANNOT_ADD_MEMBER" = "이 사용자가 B&A을 업그레이드하기 전에는 그룹에 추가할 수 없습니다.";
 
 /* Error message indicating that an avatar image is invalid and cannot be used. */
-"EDIT_GROUP_ERROR_INVALID_AVATAR" = "잘못된 사진입니다.";
+"EDIT_GROUP_ERROR_INVALID_AVATAR" = "유효하지 않은 사진입니다.";
 
 /* The title for the 'update group' button. */
 "EDIT_GROUP_UPDATE_BUTTON" = "업데이트";
 
 /* The alert message if user tries to exit update group view without saving changes. */
-"EDIT_GROUP_VIEW_UNSAVED_CHANGES_MESSAGE" = "이 그룹의 변경사항을 저장하시겠습니까?";
+"EDIT_GROUP_VIEW_UNSAVED_CHANGES_MESSAGE" = "이 그룹의 변경 사항을 저장하시겠어요?";
 
 /* The alert title if user tries to exit update group view without saving changes. */
 "EDIT_GROUP_VIEW_UNSAVED_CHANGES_TITLE" = "저장하지 않은 변경사항";
@@ -3167,34 +3341,34 @@
 "ERROR_COULD_NOT_FORWARD_MESSAGES_1" = "메시지를 전달하지 못했습니다.";
 
 /* Error indicating that a message could not be forwarded. */
-"ERROR_COULD_NOT_FORWARD_MESSAGES_MISSING_1" = "메시지를 더는 사용할 수 없어 전달하지 못했습니다.";
+"ERROR_COULD_NOT_FORWARD_MESSAGES_MISSING_1" = "메시지가 더는 존재하지 않아 전달할 수 없습니다.";
 
 /* Error indicating that messages could not be forwarded. */
-"ERROR_COULD_NOT_FORWARD_MESSAGES_MISSING_N" = "메시지를 더는 사용할 수 없어 전달하지 못했습니다.";
+"ERROR_COULD_NOT_FORWARD_MESSAGES_MISSING_N" = "메시지가 더는 존재하지 않아 전달할 수 없습니다.";
 
 /* Error indicating that messages could not be forwarded. */
-"ERROR_COULD_NOT_FORWARD_MESSAGES_N" = "메시지를 전달하지 못했습니다.";
+"ERROR_COULD_NOT_FORWARD_MESSAGES_N" = "메시지를 전달하지 못했습니다";
 
 /* Generic notice when message failed to send. */
-"ERROR_DESCRIPTION_CLIENT_SENDING_FAILURE" = "메시지를 보낼 수 없습니다.";
+"ERROR_DESCRIPTION_CLIENT_SENDING_FAILURE" = "메시지를 보내지 못했습니다.";
 
 /* Error indicating that openURL for a mailto: URL failed. */
-"ERROR_DESCRIPTION_COULD_NOT_LAUNCH_EMAIL" = "이메일 앱 열 수 없음";
+"ERROR_DESCRIPTION_COULD_NOT_LAUNCH_EMAIL" = "이메일 앱을 열지 못했습니다";
 
 /* Error indicating that a support mailto link could not be created. */
 "ERROR_DESCRIPTION_INVALID_SUPPORT_EMAIL" = "지원 요청 만들 수 없음";
 
 /* Generic error indicating that log upload failed */
-"ERROR_DESCRIPTION_LOG_UPLOAD_FAILED" = "로그 업로드에 실패했습니다.";
+"ERROR_DESCRIPTION_LOG_UPLOAD_FAILED" = "로그를 업로드하지 못했습니다.";
 
 /* Error message indicating that message send failed due to block list */
 "ERROR_DESCRIPTION_MESSAGE_SEND_FAILED_DUE_TO_BLOCK_LIST" = "내가 차단한 사용자에게는 메시지를 보낼 수 없습니다.";
 
 /* Error indicating that an outgoing message had no valid recipients. */
-"ERROR_DESCRIPTION_NO_VALID_RECIPIENTS" = "올바른 수신자가 없어 메시지를 보낼 수 없습니다.";
+"ERROR_DESCRIPTION_NO_VALID_RECIPIENTS" = "올바른 수신자가 없어 메시지를 보내지 못했습니다.";
 
 /* Error indicating that a socket request failed. */
-"ERROR_DESCRIPTION_REQUEST_FAILED" = "네트워크 요청에 실패했습니다.";
+"ERROR_DESCRIPTION_REQUEST_FAILED" = "네트워크를 요청하지 못했습니다.";
 
 /* Error indicating that a socket request timed out. */
 "ERROR_DESCRIPTION_REQUEST_TIMED_OUT" = "네트워크 요청 시간이 초과되었습니다.";
@@ -3305,7 +3479,7 @@
 "FAILED_TO_REDEEM_BADGE_RECEIVED_AFTER_DONATION_FROM_A_FRIEND_TITLE" = "기부를 사용할 수 없습니다.";
 
 /* alert title */
-"FAILED_VERIFICATION_TITLE" = "안전 번호 검증 실패!";
+"FAILED_VERIFICATION_TITLE" = "안전 번호 인증 실패";
 
 /* Section header directing user to select a badge */
 "FEATURED_BADGE_SECTION_HEADER" = "배지 선택";
@@ -3315,9 +3489,6 @@
 
 /* Footer for message cell for documents/files when they are expired and unavailable for download */
 "FILE_UNAVAILABLE_FOOTER" = "파일을 사용할 수 없음";
-
-/* Message for sheet shown when tapping a document/file that has expired and is unavailable for download */
-"FILE_UNAVAILABLE_SHEET_MESSAGE" = "이 기기를 연결한 상태로 이 파일을 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 파일과 미디어는 동기화할 수 없습니다.";
 
 /* Title for sheet shown when tapping a document/file that has expired and is unavailable for download */
 "FILE_UNAVAILABLE_SHEET_TITLE" = "파일을 사용할 수 없음";
@@ -3341,7 +3512,7 @@
 "FIND_BY_USERNAME_TITLE" = "사용자 이름으로 검색";
 
 /* Button that marks user as verified after a successful fingerprint scan. */
-"FINGERPRINT_SCAN_VERIFY_BUTTON" = "검증으로 표시";
+"FINGERPRINT_SCAN_VERIFY_BUTTON" = "인증 완료로 표시";
 
 /* Label for button to reset a session. */
 "FINGERPRINT_SHRED_KEYMATERIAL_BUTTON" = "세션 초기화";
@@ -3351,12 +3522,6 @@
 
 /* Tooltip notifying users that the flip camera button moved to the picture-in-picture view of themselves in a call */
 "FLIP_CAMERA_BUTTON_MOVED_TO_PIP_TOOLTIP" = "카메라 전환이 여기로 이동했습니다. 영상을 탭하여 사용해 보세요.";
-
-/* Message for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_MESSAGE" = "이제 전달하는 메시지를 바로 보냅니다.";
-
-/* Title for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_TITLE" = "더 빠른 전달";
 
 /* Indicates that a single message was forwarded. */
 "FORWARD_MESSAGE_MESSAGES_SENT_1" = "메시지 보냄";
@@ -3385,11 +3550,11 @@
 /* Title for the 'Get Started' banner */
 "GET_STARTED_BANNER_TITLE" = "시작";
 
-/* 'Get Started' button directing users to appearance */
-"GET_STARTED_CARD_APPEARANCE" = "디자인";
-
 /* 'Get Started' button direction users to avatar builder */
 "GET_STARTED_CARD_AVATAR_BUILDER" = "사진 추가";
+
+/* 'Get Started' button directing users to Chat Color settings */
+"GET_STARTED_CARD_CHAT_COLOR" = "대화창 색";
 
 /* 'Get Started' button directing users to invite friends */
 "GET_STARTED_CARD_INVITE_FRIENDS" = "친구 초대";
@@ -3398,7 +3563,7 @@
 "GET_STARTED_CARD_NEW_GROUP" = "새 그룹";
 
 /* Error displayed when there is a failure fetching a GIF from the remote service. */
-"GIF_PICKER_ERROR_FETCH_FAILURE" = "요청한 GIF를 받아올 수 없습니다. 인터넷에 연결되어 있는지 확인하세요.";
+"GIF_PICKER_ERROR_FETCH_FAILURE" = "요청한 GIF를 불러오지 못했습니다. 인터넷에 연결되어 있는지 확인해 주세요.";
 
 /* Generic error displayed when picking a GIF */
 "GIF_PICKER_ERROR_GENERIC" = "알 수 없는 오류가 발생했습니다.";
@@ -3422,10 +3587,10 @@
 "GO_TO_SETTINGS_BUTTON" = "설정으로 이동";
 
 /* Message indicating that the access to the group's attributes was changed by the local user. Embeds {{new access level}}. */
-"GROUP_ACCESS_ATTRIBUTES_UPDATED_BY_LOCAL_USER_FORMAT" = "그룹 정보를 수정할 수 있는 사람을 '%1$@'(으)로 변경했습니다.";
+"GROUP_ACCESS_ATTRIBUTES_UPDATED_BY_LOCAL_USER_FORMAT" = "그룹 정보를 수정할 수 있는 사람을 '%1$@'로 변경했습니다.";
 
 /* Message indicating that the access to the group's attributes was changed by a remote user. Embeds {{ %1$@ user who changed the access, %2$@ new access level}}. */
-"GROUP_ACCESS_ATTRIBUTES_UPDATED_BY_REMOTE_USER_FORMAT" = "%1$@ 님이 그룹 정보를 수정할 수 있는 사람을 '%2$@'(으)로 변경했습니다.";
+"GROUP_ACCESS_ATTRIBUTES_UPDATED_BY_REMOTE_USER_FORMAT" = "%1$@ 님이 그룹 정보를 수정할 수 있는 사람을 '%2$@'로 변경했습니다.";
 
 /* Message indicating that the access to the group's attributes was changed. Embeds {{new access level}}. */
 "GROUP_ACCESS_ATTRIBUTES_UPDATED_FORMAT" = "이제 '%1$@'이(가) 그룹 정보를 변경할 수 있습니다.";
@@ -3446,10 +3611,10 @@
 "GROUP_ACCESS_LEVEL_UNSATISFIABLE" = "꺼짐";
 
 /* Message indicating that the access to the group's members was changed by the local user. Embeds {{new access level}}. */
-"GROUP_ACCESS_MEMBERS_UPDATED_BY_LOCAL_USER_FORMAT" = "그룹 멤버십을 수정할 수 있는 사람을 '%1$@'(으)로 변경했습니다.";
+"GROUP_ACCESS_MEMBERS_UPDATED_BY_LOCAL_USER_FORMAT" = "그룹 멤버십을 수정할 수 있는 사람을 '%1$@'로 변경했습니다.";
 
 /* Message indicating that the access to the group's members was changed by a remote user. Embeds {{ %1$@ user who changed the access, %2$@ new access level}}. */
-"GROUP_ACCESS_MEMBERS_UPDATED_BY_REMOTE_USER_FORMAT" = "%1$@ 님이 그룹 멤버십을 수정할 수 있는 사람을 '%2$@'(으)로 변경했습니다.";
+"GROUP_ACCESS_MEMBERS_UPDATED_BY_REMOTE_USER_FORMAT" = "%1$@ 님이 그룹 멤버십을 수정할 수 있는 사람을 '%2$@'로 변경했습니다.";
 
 /* Message indicating that the access to the group's members was changed. Embeds {{new access level}}. */
 "GROUP_ACCESS_MEMBERS_UPDATED_FORMAT" = "이제 '%1$@'이(가) 그룹 멤버십을 변경할 수 있습니다.";
@@ -3458,7 +3623,7 @@
 "GROUP_ADMIN_ONLY_WARNING" = "관리자만 이 설정을 변경할 수 있습니다.";
 
 /* Message body for alert explaining that a group call participant is blocked */
-"GROUP_CALL_BLOCKED_ALERT_MESSAGE" = "음성 또는 영상 통화를 더 이상 수신하지 않으며 차단된 사람도 나의 통화를 수신할 수 없습니다.";
+"GROUP_CALL_BLOCKED_ALERT_MESSAGE" = "음성 또는 영상 통화를 더 이상 수신하지 않으며 해당 사용자도 나의 통화를 수신할 수 없습니다.";
 
 /* Title for alert explaining that a group call participant is blocked. Embeds {{ user's name }} */
 "GROUP_CALL_BLOCKED_ALERT_TITLE_FORMAT" = "%1$@ 님을 차단함";
@@ -3595,9 +3760,6 @@
 /* Toast view text informing user about swiping to speaker view */
 "GROUP_CALL_SPEAKER_VIEW_TOAST" = "위로 스와이프하여 보기를 변경하세요.";
 
-/* Tooltip highlighting group calls. */
-"GROUP_CALL_START_TOOLTIP" = "여기를 탭하여 그룹 통화를 시작하세요.";
-
 /* Text explaining that you started a group call. */
 "GROUP_CALL_STARTED_BY_YOU" = "그룹 통화를 시작함";
 
@@ -3641,13 +3803,13 @@
 "GROUP_CREATED_BY_UNKNOWN_USER" = "그룹이 생성되었습니다.";
 
 /* Message shown in conversation view that indicates there were issues with group creation. */
-"GROUP_CREATION_FAILED" = "모든 멤버를 그룹에 추가할 수 없습니다. 탭하면 다시 시도합니다.";
+"GROUP_CREATION_FAILED" = "일부 멤버를 그룹에 추가하지 못했습니다. 다시 시도하려면 탭하세요.";
 
 /* Text indication the user can tap to view the full group description */
 "GROUP_DESCRIPTION_MORE" = "더";
 
 /* Placeholder text for 'group description' field. */
-"GROUP_DESCRIPTION_PLACEHOLDER" = "그룹 설명 추가…";
+"GROUP_DESCRIPTION_PLACEHOLDER" = "그룹 설명 추가하기";
 
 /* Footer text when editing the group description */
 "GROUP_DESCRIPTION_VIEW_EDIT_FOOTER" = "그룹 설명은 그룹의 멤버와 초대받은 사용자들에게 표시됩니다.";
@@ -3713,7 +3875,7 @@
 "GROUP_INVITE_LINK_SET_TO_REQUIRE_APPROVAL_BY_REMOTE_USER_FORMAT" = "%1$@ 님이 그룹 링크 관리자 참가 승인 기능을 켰습니다.";
 
 /* Format for the message for an alert indicating that a member was invited to a group. Embeds: {{ the name of the member. }} */
-"GROUP_INVITES_SENT_ALERT_MESSAGE_1_FORMAT" = "%1$@ 님을 그룹에 자동으로 추가할 수 없습니다. 참가 초대는 보내졌으나 상대는 이를 수락할 때까지 그룹 메시지를 볼 수 없습니다.";
+"GROUP_INVITES_SENT_ALERT_MESSAGE_1_FORMAT" = "%1$@ 님을 자동으로 그룹에 추가할 수 없습니다. 해당 사용자에게는 초대가 발송되었으며, 초대 수락 후에 그룹 메시지 확인이 가능합니다.";
 
 /* Message for an alert indicating that some members were invited to a group. */
 "GROUP_INVITES_SENT_ALERT_TITLE_N_MESSAGE" = "사용자들을 그룹에 자동으로 추가할 수 없습니다. 참가 초대는 보내졌으나 상대는 이를 수락할 때까지 그룹 메시지를 볼 수 없습니다.";
@@ -3736,6 +3898,12 @@
 /* Message indicating that 'announcement-only' mode was enabled by a remote user. Embeds {{ user who enabled 'announcement-only' mode }}. */
 "GROUP_IS_ANNOUNCEMENT_ONLY_ENABLED_BY_REMOTE_USER_FORMAT" = "%1$@ 님은 관리자만 메시지를 전송할 수 있도록 그룹 설정을 변경했습니다.";
 
+/* Message text for the 'group invite link' action sheet. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE" = "이 그룹에 참여하여 멤버들에게 이름과 사진을 공유하시겠어요?";
+
+/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE_W_REQUEST" = "가입을 요청하면 이름과 사진이 이 그룹의 멤버들과 공유됩니다. 관리자가 요청을 승인해야 합니다.";
+
 /* Subtitle indicating that the local user has been blocked from joining the group */
 "GROUP_LINK_ACTION_SHEET_VIEW_BLOCKED_FROM_JOINING_SUBTITLE" = "관리자가 귀하를 제거했기 때문에 그룹 링크를 통해 그룹에 참가할 수 없습니다. 관리자에게 그룹에 다시 추가해 달라고 요청하세요.";
 
@@ -3754,14 +3922,8 @@
 /* Label indicating that the group info is being loaded in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_LOADING_TITLE" = "불러오는 중…";
 
-/* Message text for the 'group invite link' action sheet. */
-"GROUP_LINK_ACTION_SHEET_VIEW_MESSAGE" = "그룹에 참가하고 그룹 멤버에게 내 이름과 사진을 공유하시겠습니까?";
-
 /* Label for the 'request to join' button in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_BUTTON" = "참가 요청하기";
-
-/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
-"GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_MESSAGE" = "이 그룹에 가입하려면 그룹의 관리자가 요청을 승인해야 합니다. 가입을 요청하면 내 이름과 사진이 공유됩니다.";
 
 /* Error message the attempt to request to join the group failed due to network connectivity. */
 "GROUP_LINK_COULD_NOT_REQUEST_TO_JOIN_GROUP_DUE_TO_NETWORK_ERROR_MESSAGE" = "온라인인지 확인한 후 다시 시도해 주세요.";
@@ -3821,7 +3983,7 @@
 "GROUP_LINK_VIEW_RESET_LINK" = "링크 초기화";
 
 /* Title for the 'confirm reset link' alert in the 'group link' view. */
-"GROUP_LINK_VIEW_RESET_LINK_CONFIRM_ALERT_TITLE" = "그룹 링크를 초기화하시겠습니까? 이 링크로 사람들이 그룹에 참가할 수 없게 됩니다.";
+"GROUP_LINK_VIEW_RESET_LINK_CONFIRM_ALERT_TITLE" = "그룹 링크를 초기화하시겠어요? 이 링크로 사람들이 그룹에 참가할 수 없게 됩니다.";
 
 /* Label for the 'share link' button in the 'group link' view. */
 "GROUP_LINK_VIEW_SHARE_LINK" = "공유";
@@ -3908,7 +4070,7 @@
 "GROUP_LOCAL_USER_REVOKED_ADMINISTRATOR_BY_REMOTE_USER_FORMAT" = "%1$@ 님이 내 관리자 권한을 취소했습니다.";
 
 /* Message indicating that the local user was added to the group. */
-"GROUP_LOCAL_USER_WAS_ADDED_TO_THE_GROUP" = "멤버가 당신을 그룹에 추가하였습니다.";
+"GROUP_LOCAL_USER_WAS_ADDED_TO_THE_GROUP" = "멤버가 나를 그룹에 추가했습니다.";
 
 /* Label indicating that a group member is an admin. */
 "GROUP_MEMBER_ADMIN_INDICATOR" = "관리자";
@@ -4013,7 +4175,7 @@
 "GROUP_REMOTE_USER_REQUEST_CANCELLED_BY_REMOTE_USER_FORMAT" = "%1$@ 님이 그룹 참가 요청을 취소했습니다.";
 
 /* Message indicating that a remote user's request to join the group was rejected by the local user. Embeds {{requesting user name}}. */
-"GROUP_REMOTE_USER_REQUEST_REJECTED_BY_LOCAL_USER_FORMAT" = "내가 %1$@ 님의 그룹 참가 요청을 거절했습니다.";
+"GROUP_REMOTE_USER_REQUEST_REJECTED_BY_LOCAL_USER_FORMAT" = "%1$@ 님의 그룹 참가 요청을 거절했습니다.";
 
 /* Message indicating that a remote user's request to join the group was rejected by another user. Embeds {{ %1$@ requesting user name, %2$@ rejecting user name }}. */
 "GROUP_REMOTE_USER_REQUEST_REJECTED_BY_REMOTE_USER_FORMAT" = "%2$@ 님이 %1$@ 님의 그룹 참가 요청을 거절했습니다.";
@@ -4044,6 +4206,12 @@
 
 /* Name for a group story on the stories list. Embeds {author's name}, {group name} */
 "GROUP_STORY_NAME_FORMAT" = "보낸 사람: %1$@, 받는 그룹: %2$@";
+
+/* Text indicating you reacted to a group story (the header on the bubble says \"You\") */
+"GROUP_STORY_REPLY_REACTION_SECOND_PERSON" = "스토리에 반응했어요";
+
+/* Text indicating someone else reacted to a group story (the header on the bubble says their name, e.g. \"Bob\") */
+"GROUP_STORY_REPLY_REACTION_THIRD_PERSON" = "스토리에 반응했어요";
 
 /* Button to delete the story on the 'group story settings' view */
 "GROUP_STORY_SETTINGS_DELETE_BUTTON" = "그룹 스토리 삭제";
@@ -4145,7 +4313,7 @@
 "GROUPS_BLOCK_REQUEST_SHEET_BLOCK_BUTTON" = "요청 차단";
 
 /* Message for sheet offering to let the user block a request to join the group. Embeds {{ the requester's name }}. */
-"GROUPS_BLOCK_REQUEST_SHEET_MESSAGE" = "%1$@ 님이 그룹 링크를 통해 이 그룹에 참가하거나 참가를 요청할 수 없게 됩니다. 하지만 관리자는 계속 추가할 수 있습니다.";
+"GROUPS_BLOCK_REQUEST_SHEET_MESSAGE" = "%1$@ 님은 그룹 링크를 통해 이 그룹에 참가하거나 참가 요청을 할 수 없지만, 관리자가 직접 추가하는 것은 가능합니다.";
 
 /* Title for sheet asking if the user wants to block a request to join the group. */
 "GROUPS_BLOCK_REQUEST_SHEET_TITLE" = "요청을 차단하시겠어요?";
@@ -4187,7 +4355,7 @@
 "GROUPS_TOO_MANY_MEMBERS_ALERT_TITLE" = "권장 멤버 수 한도에 도달했습니다.";
 
 /* Message asking the user to confirm that they want to add a member to the group. */
-"GROUPS_TOO_MANY_MEMBERS_CONFIRM" = "그래도 멤버를 추가하시겠습니까?";
+"GROUPS_TOO_MANY_MEMBERS_CONFIRM" = "그래도 멤버를 추가하시겠어요?";
 
 /* Label for button that lets the user view the request to join the group. */
 "GROUPS_VIEW_REQUEST_BUTTON" = "요청 보기";
@@ -4264,6 +4432,18 @@
 /* Title for the conversation list's 'archive' mode. */
 "HOME_VIEW_TITLE_ARCHIVE" = "보관";
 
+/* Title for the conversation list's backup storage full context menu action. */
+"HOME_VIEW_TITLE_BACKUP_OUT_OF_STORAGE_QUOTA" = "백업 저장 용량 부족";
+
+/* Title for the conversation list's failed to redeem backup subscription context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_FAILED_TO_REDEEM" = "백업 구독 오류";
+
+/* Title for the conversation list's backup subscription not found locally context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_NOT_FOUND_LOCALLY" = "백업 구독을 찾을 수 없음";
+
+/* Title for the conversation list's failed to backup context menu action. */
+"HOME_VIEW_TITLE_FAILED_TO_BACKUP" = "백업 실패";
+
 /* Title for the 'Select Chats' option in the ChatList. */
 "HOME_VIEW_TITLE_SELECT_CHATS" = "대화 선택";
 
@@ -4274,7 +4454,7 @@
 "IDEAL_DONATION_CONFIRM_DONATION_TITLE" = "기부 확인";
 
 /* Message confirming recurring donation with bank. This message confirms with the user that they will see a small confirmation charge with their bank before the donation. Embeds 1:{{ 0.01 euro, as a localized string }}, 2:{{ the amount of their donation, as a localized string }}. */
-"IDEAL_DONATION_CONFIRM_DONATION_WITH_BANK_MESSAGE" = "정기 기부를 설정하려면 계속을 탭하여 은행을 통한 %1$@ 청구를 확인해 주세요. 이렇게 하면 청구 금액은 자동으로 환불되고 계정에서 월 %2$@ 기부가 승인됩니다.";
+"IDEAL_DONATION_CONFIRM_DONATION_WITH_BANK_MESSAGE" = "정기후원을 설정하려면 '계속'을 탭하여 은행을 통해 %1$@ 청구를 확인해 주세요. 확인이 완료되면 청구 금액은 자동으로 환불되며, 내 계좌에서 월 %2$@ 정기후원이 승인됩니다.";
 
 /* The image editor hint that you can draw blur */
 "IMAGE_EDITOR_BLUR_HINT" = "아무 곳이나 그려서 가릴 수 있습니다";
@@ -4439,7 +4619,7 @@
 "INPUT_TOOLBAR_VOICE_MEMO_BUTTON_ACCESSIBILITY_LABEL" = "음성 메시지";
 
 /* Message for the alert indicating that an audio file is invalid. */
-"INVALID_AUDIO_FILE_ALERT_ERROR_MESSAGE" = "잘못된 음성 파일입니다.";
+"INVALID_AUDIO_FILE_ALERT_ERROR_MESSAGE" = "잘못된 오디오 파일입니다.";
 
 /* The provided proxy host address is not valid */
 "INVALID_PROXY_HOST_ERROR" = "입력한 프록시 주소가 잘못됐습니다. 주소를 확인하고 다시 시도하세요.";
@@ -4523,7 +4703,7 @@
 "LEAVE_GROUP_FAILED" = "그룹 나가기 도중 오류가 발생했습니다.";
 
 /* Text in a sheet explaining details about 'Legacy Groups'. */
-"LEGACY_GROUP_UNSUPPORTED_LEARN_MORE_BODY" = "'레거시 그룹'은 @멘션, 관리자와 같은 기능을 지원하지 않는 그룹입니다. 대부분 레거시 그룹은 자동 또는 수동으로 '새 그룹'으로 업그레이드 되었습니다. 이 그룹은 장기간 비활성 상태였으므로 더 이상 업그레이드할 수 없습니다.\n\n이 대화를 계속하려면 새 그룹을 만들어야 합니다.";
+"LEGACY_GROUP_UNSUPPORTED_LEARN_MORE_BODY" = "'레거시 그룹'은 @멘션, 관리자 등 일부 기능을 지원하지 않는 그룹입니다. 대부분의 레거시 그룹은 자동 또는 수동으로 '새 그룹'으로 업그레이드되었지만, 이 그룹은 오랫동안 사용되지 않아 더 이상 업그레이드할 수 없습니다.\n\n이 대화를 계속하려면 새 그룹을 만들어야 합니다.";
 
 /* Title for a sheet explaining details about 'Legacy Groups'. */
 "LEGACY_GROUP_UNSUPPORTED_LEARN_MORE_TITLE" = "레거시 그룹";
@@ -4532,7 +4712,7 @@
 "LEGACY_GROUP_UNSUPPORTED_MESSAGE" = "이 그룹은 레거시 그룹이며, 더 이상 지원되지 않습니다. 이 대화를 계속하려면 새로운 그룹을 만드세요. %1$@";
 
 /* Text in a sheet explaining details about 'New Groups'. */
-"LEGACY_GROUP_WHAT_ARE_NEW_GROUPS_BODY" = "새 그룹에는 @멘션 및 그룹 관리자와 같은 기능이 있으며 향후 더 많은 기능을 지원할 예정입니다.\n\n모든 업그레이드 전의 메시지 기록과 미디어를 보관했습니다.";
+"LEGACY_GROUP_WHAT_ARE_NEW_GROUPS_BODY" = "새 그룹에는 @멘션 및 그룹 관리자와 같은 기능이 있으며 향후 더 많은 기능을 지원할 예정입니다.\n\n업그레이드 전의 모든 메시지 기록과 미디어는 보관 처리되었습니다.";
 
 /* Title for a sheet explaining details about 'New Groups'. */
 "LEGACY_GROUP_WHAT_ARE_NEW_GROUPS_TITLE" = "새 그룹이 무엇인가요?";
@@ -4546,8 +4726,8 @@
 /* confirm the users intent to link a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TITLE" = "연결 완료";
 
-/* subtitle for choosing to send message history when linking a new device */
-"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE" = "텍스트 메시지와 지난 45일간의 미디어를 전송합니다";
+/* Subtitle for choosing to send message history when linking a new device, if you have the paid tier enabled. */
+"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_PAID_PLAN_SUBTITLE" = "텍스트 메시지 및 모든 미디어 전송";
 
 /* title for choosing to send message history when linking a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_TITLE" = "메시지 기록 전송";
@@ -4562,7 +4742,7 @@
 "LINK_DEVICE_PERMISSION_ALERT_BODY" = "이 기기에서 내 그룹과 연락처를 보고, 대화에 접근하고, 내 이름으로 메시지를 보낼 수 있습니다.";
 
 /* confirm the users intent to link a new device */
-"LINK_DEVICE_PERMISSION_ALERT_TITLE" = "이 기기를 연결하시겠습니까?";
+"LINK_DEVICE_PERMISSION_ALERT_TITLE" = "이 기기를 연결하시겠어요?";
 
 /* attempt another linking */
 "LINK_DEVICE_RESTART" = "재시도";
@@ -4708,26 +4888,8 @@
 /* Shown to users while the app is loading, asking them not to close the app. */
 "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "B&A을 닫지 마세요.";
 
-/* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "B&A 계정을 이전하려면 두 기기 모두에서 로컬 네트워크 액세스를 활성화해야 합니다.";
-
-/* A button asking the user if they need further help getting their transfer working. */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "도움이 필요하신가요?";
-
-/* First step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_ONE" = "각 기기에서 설정을 엽니다.";
-
-/* Third step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "로컬 네트워크를 켭니다.";
-
-/* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "B&A 탐색하기";
-
-/* Title for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "로컬 네트워크 액세스 켜기";
-
 /* A string indicating that the user can search for a location */
-"LOCATION_PICKER_SEARCH_PLACEHOLDER" = "이름, 주소로 검색";
+"LOCATION_PICKER_SEARCH_PLACEHOLDER" = "이름 또는 주소로 검색";
 
 /* The title for the location picker view */
 "LOCATION_PICKER_TITLE" = "위치 선택";
@@ -4796,7 +4958,7 @@
 "MEDIA_GALLERY_NO_AUDIO_TITLE" = "오디오 파일 없음";
 
 /* Displayed in All Media (Audio) screen when there's no non-audiovisual files - second line. */
-"MEDIA_GALLERY_NO_FILES_SUBTITLE" = "내가 전송 및 수신하는 파일이 여기에 표시됩니다";
+"MEDIA_GALLERY_NO_FILES_SUBTITLE" = "내가 주고받는 파일이 여기에 표시됩니다";
 
 /* Displayed in All Media (Audio) screen when there's no non-audiovisual files - first line. */
 "MEDIA_GALLERY_NO_FILES_TITLE" = "파일 없음";
@@ -4830,6 +4992,24 @@
 
 /* toast indicating that we will remind the user later */
 "MEGAPHONE_WILL_REMIND_LATER" = "나중에 다시 알려드리겠습니다.";
+
+/* Label for an action to add a member label */
+"MEMBER_LABEL_ADD" = "멤버 라벨 추가";
+
+/* Heading shown above the preview of a message bubble with the edited member label. */
+"MEMBER_LABEL_PREVIEW_HEADING" = "미리보기";
+
+/* Text shown in the preview message bubble when a user is editing their member label. */
+"MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "안녕하세요!";
+
+/* Placeholder text in text field where user can edit their member label. */
+"MEMBER_LABEL_VIEW_PLACEHOLDER_TEXT" = "라벨 추가";
+
+/* Subtitle for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_SUBTITLE" = "이 그룹에서 나의 역할이나 나를 소개하는 멤버 라벨을 설정하세요. 멤버 라벨은 이 그룹에서만 표시됩니다.";
+
+/* Title for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_TITLE" = "멤버 라벨";
 
 /* Action sheet button title */
 "MESSAGE_ACTION_COPY_TEXT" = "메시지 내용 복사";
@@ -4895,10 +5075,10 @@
 "MESSAGE_ACTION_PHONE_NUMBER_CALL" = "전화";
 
 /* Label for button to make a FaceTime audio call to a phone number. */
-"MESSAGE_ACTION_PHONE_NUMBER_FACETIME_AUDIO" = "FaceTime 오디오";
+"MESSAGE_ACTION_PHONE_NUMBER_FACETIME_AUDIO" = "FaceTime 음성 통화";
 
 /* Label for button to make a FaceTime video call to a phone number. */
-"MESSAGE_ACTION_PHONE_NUMBER_FACETIME_VIDEO" = "FaceTime 비디오";
+"MESSAGE_ACTION_PHONE_NUMBER_FACETIME_VIDEO" = "FaceTime 영상 통화";
 
 /* Label for button to send a text message a phone number. */
 "MESSAGE_ACTION_PHONE_NUMBER_SMS" = "문자 메시지 보내기";
@@ -4994,7 +5174,7 @@
 "MESSAGE_METADATA_VIEW_TITLE" = "메시지 세부 정보";
 
 /* Context menu message preview accessibility label */
-"MESSAGE_PREVIEW" = "메시지 미리 보기";
+"MESSAGE_PREVIEW" = "메시지 미리보기";
 
 /* Sheet option for blocking a chat. In this case, the sheet appears when the user taps a button attached to a 'message request accepted' info message in-chat. */
 "MESSAGE_REQUEST_ACCEPTED_INFO_MESSAGE_SHEET_OPTION_BLOCK" = "차단";
@@ -5048,7 +5228,7 @@
 "MESSAGE_REQUEST_NAME_COLLISION_BANNER_LABEL" = "이 사람의 이름이 연락처의 다른 사람과 이름이 같습니다.";
 
 /* A header string informing the user about name collisions in a message request */
-"MESSAGE_REQUEST_NAME_COLLISON_HEADER" = "요청을 보낸 사람이 누군지 모르겠다면 아래 연락처를 검토하고 작업을 수행하세요.";
+"MESSAGE_REQUEST_NAME_COLLISON_HEADER" = "요청을 보낸 사람이 누군지 모르겠다면 아래 연락처 목록을 살펴본 후 진행해 주세요.";
 
 /* A title string for a view that allows a user to review name collisions for an incoming message request */
 "MESSAGE_REQUEST_NAME_COLLISON_TITLE" = "요청 검토";
@@ -5078,7 +5258,7 @@
 "MESSAGE_REQUEST_VIEW_BLOCK_BUTTON" = "차단";
 
 /* A prompt notifying that the user must unblock this conversation to continue. Embeds {{contact name}}. */
-"MESSAGE_REQUEST_VIEW_BLOCKED_CONTACT_PROMPT_FORMAT" = "%1$@ 님이 내게 메시지를 보내고 내 이름과 사진을 공유할 수 있도록 허용할까요? 차단을 해제할 때까지 모든 메시지를 차단합니다.";
+"MESSAGE_REQUEST_VIEW_BLOCKED_CONTACT_PROMPT_FORMAT" = "%1$@ 님이 나에게 메시지를 보내고, 내 이름과 사진을 공유할 수 있도록 허용할까요? 차단을 해제하기 전까지는 메시지가 전달되지 않습니다.";
 
 /* A prompt notifying that the user must unblock this group to continue. */
 "MESSAGE_REQUEST_VIEW_BLOCKED_GROUP_PROMPT" = "이 그룹을 차단 해제하고 그룹 멤버에게 내 이름과 사진을 공유할까요? 차단을 해제할 때까지 모든 메시지를 차단합니다.";
@@ -5099,16 +5279,16 @@
 "MESSAGE_REQUEST_VIEW_EXISTING_GROUP_PROMPT" = "이 그룹과 대화를 계속하고 해당 그룹의 멤버들에게 이름과 사진을 공유하시겠어요?";
 
 /* A prompt asking if the user wants to accept a conversation invite. Embeds {{contact name}}. */
-"MESSAGE_REQUEST_VIEW_NEW_CONTACT_PROMPT_FORMAT" = "%1$@ 님에게 내 이름과 사진을 공유하고 메시지를 보내도록 허용하시겠습니까? 수락하기 전까지 상대는 내가 메시지를 보았는지 알 수 없습니다.";
+"MESSAGE_REQUEST_VIEW_NEW_CONTACT_PROMPT_FORMAT" = "%1$@ 님이 나에게 메시지를 보내고, 내 이름과 사진을 공유하도록 허용할까요? 내가 수락하기 전까지는 상대방이 내가 메시지를 확인했는지 알 수 없어요.";
 
 /* A prompt asking if the user wants to accept a group invite. */
-"MESSAGE_REQUEST_VIEW_NEW_GROUP_PROMPT" = "이 그룹에 참가하고 내 이름과 사진을 멤버와 공유하시겠습니까? 수락하기 전까지 상대는 내가 메시지를 보았는지 알 수 없습니다.";
+"MESSAGE_REQUEST_VIEW_NEW_GROUP_PROMPT" = "이 그룹에 참가하고 그룹 멤버들에게 내 이름과 사진을 공유할까요? 내가 수락하기 전까지 그룹 멤버들은 내가 메시지를 확인했는지 알 수 없어요.";
 
 /* A prompt asking if the user wants to accept a group invite. */
-"MESSAGE_REQUEST_VIEW_NEW_GROUP_PROMPT_V2" = "이 그룹에 참가하시겠습니까? 수락하기 전까지 상대는 내가 메시지를 보았는지 알 수 없습니다.";
+"MESSAGE_REQUEST_VIEW_NEW_GROUP_PROMPT_V2" = "이 그룹에 참가할까요? 내가 수락하기 전까지 그룹 멤버들은 내가 메시지를 확인했는지 알 수 없어요.";
 
 /* A prompt asking if the user wants to accept a conversation invite from a person whom they previously removed. Embeds {{contact name}}. */
-"MESSAGE_REQUEST_VIEW_REMOVED_CONTACT_PROMPT_FORMAT" = "%1$@ 님이 내게 메시지를 보내도록 허용하고, 내 이름과 사진을 공유할까요? 이 사용자는 귀하가 이전에 제거한 사용자입니다.";
+"MESSAGE_REQUEST_VIEW_REMOVED_CONTACT_PROMPT_FORMAT" = "%1$@ 님이 나에게 메시지를 보내고, 내 이름과 사진을 공유하도록 허용할까요? 이 사용자는 내가 이전에 삭제했던 사용자입니다.";
 
 /* incoming message request button text which reports a conversation as spam */
 "MESSAGE_REQUEST_VIEW_REPORT_BUTTON" = "신고…";
@@ -5120,7 +5300,7 @@
 "MESSAGE_REQUESTS_CANCEL_REQUEST_BUTTON" = "요청 취소하기";
 
 /* Title for the confirmation alert when cancelling your request to join the group. */
-"MESSAGE_REQUESTS_CANCEL_REQUEST_CONFIRM_TITLE" = "그룹 참가 신청을 취소하시겠습니까?";
+"MESSAGE_REQUESTS_CANCEL_REQUEST_CONFIRM_TITLE" = "그룹 참가 신청을 취소할까요?";
 
 /* Indicator that you have requested to join this group. */
 "MESSAGE_REQUESTS_CONVERSATION_REQUEST_INDICATOR" = "내 참가 요청을 그룹 관리자에게 보냈습니다. 관리자가 조치를 취할 때 알림을 받게 됩니다.";
@@ -5135,7 +5315,7 @@
 "MESSAGE_STATUS_EDITED" = "수정함";
 
 /* status message for failed messages */
-"MESSAGE_STATUS_FAILED" = "보내기에 실패했습니다.";
+"MESSAGE_STATUS_FAILED" = "전송하지 못했습니다.";
 
 /* status message for failed messages */
 "MESSAGE_STATUS_FAILED_SHORT" = "실패";
@@ -5156,7 +5336,7 @@
 "MESSAGE_STATUS_RECIPIENT_SKIPPED" = "건너뜀";
 
 /* Label indicating that a message failed to send. */
-"MESSAGE_STATUS_SEND_FAILED" = "보내기 실패";
+"MESSAGE_STATUS_SEND_FAILED" = "전송 실패";
 
 /* message status while message is sending. */
 "MESSAGE_STATUS_SENDING" = "보내는 중…";
@@ -5237,13 +5417,13 @@
 "MY_STORIES_NO_STORIES" = "내 스토리에 대한 업데이트가 여기 표시됩니다.";
 
 /* Title for the visibility option */
-"MY_STORIES_SETTINGS_VISIBILITY_ALL_SIGNAL_CONNECTIONS_EXCEPT_TITLE" = "다음을 제외한 모든 사용자…";
+"MY_STORIES_SETTINGS_VISIBILITY_ALL_SIGNAL_CONNECTIONS_EXCEPT_TITLE" = "일부를 제외한 모든 사용자";
 
 /* Title for the visibility option */
 "MY_STORIES_SETTINGS_VISIBILITY_ALL_SIGNAL_CONNECTIONS_TITLE" = "모든 B&A 커넥션";
 
 /* Title for the visibility option */
-"MY_STORIES_SETTINGS_VISIBILITY_ONLY_SHARE_WITH_TITLE" = "다음 사용자와만 공유…";
+"MY_STORIES_SETTINGS_VISIBILITY_ONLY_SHARE_WITH_TITLE" = "일부 사용자와만 공유";
 
 /* Title for the 'My Stories' view */
 "MY_STORIES_TITLE" = "내 스토리";
@@ -5381,7 +5561,7 @@
 "NEW_STORY_SHEET_CUSTOM_STORY_SUBTITLE" = "특정 사용자만 볼 수 있음";
 
 /* Title for create custom story row on the 'new story sheet' */
-"NEW_STORY_SHEET_CUSTOM_STORY_TITLE" = "새 사용자 지정 스토리";
+"NEW_STORY_SHEET_CUSTOM_STORY_TITLE" = "새 맞춤 스토리";
 
 /* Subtitle for create group story row on the 'new story sheet' */
 "NEW_STORY_SHEET_GROUP_STORY_SUBTITLE" = "기존 그룹과 공유";
@@ -5428,6 +5608,18 @@
 /* A string describing that the user has no groups in common other than the group implied by the current UI context */
 "NO_OTHER_GROUPS_IN_COMMON" = "공통된 다른 그룹이 없습니다.";
 
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-link' (translated via NOT_LINKED_BOTTOM_RELINK), and it will be formatted as a tappable link. */
+"NOT_LINKED_BOTTOM" = "이 기기는 연결이 해제되었습니다. 이 기기에서 B&A을 계속 사용하려면 %1$@하세요.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_LINKED_BOTTOM_RELINK" = "다시 연결";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-register' (translated via NOT_REGISTERED_BOTTOM_REREGISTER), and it will be formatted as a tappable link. */
+"NOT_REGISTERED_BOTTOM" = "이 기기는 등록이 해제되었습니다. B&A을 계속 사용하려면 %1$@하세요.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_REGISTERED_BOTTOM_REREGISTER" = "다시 등록";
+
 /* Label for 1:1 conversation with yourself. */
 "NOTE_TO_SELF" = "개인 메모";
 
@@ -5462,7 +5654,7 @@
 "NOTIFICATION_PERMISSION_REMINDER_MEGAPHONE_BODY" = "내 연락처와 그룹의 메시지를 놓치지 마세요.";
 
 /* Title for notification permission reminder megaphone */
-"NOTIFICATION_PERMISSION_REMINDER_MEGAPHONE_TITLE" = "알림을 켜시겠습니까?";
+"NOTIFICATION_PERMISSION_REMINDER_MEGAPHONE_TITLE" = "알림을 켤까요?";
 
 /* Shown as the body of an alert when notifications can't be shown due to an error. */
 "NOTIFICATIONS_ERROR_MESSAGE" = "B&A 알림을 받지 못하는 경우 %1$@을(를) 다시 시작하세요.";
@@ -5480,7 +5672,7 @@
 "NOTIFICATIONS_SECTION_INAPP" = "앱이 열려 있을 때 재생";
 
 /* Label for settings UI that allows user to add a new notification sound. */
-"NOTIFICATIONS_SECTION_SOUNDS_ADD_CUSTOM_SOUND" = "사용자 설정 소리 추가…";
+"NOTIFICATIONS_SECTION_SOUNDS_ADD_CUSTOM_SOUND" = "맞춤 알림음 추가하기";
 
 /* No comment provided by engineer. */
 "NOTIFICATIONS_SENDER_AND_MESSAGE" = "이름, 내용 또는 조치";
@@ -5515,20 +5707,35 @@
 /* Label for the 'skip and create new pin' button when reglock is disabled during onboarding. */
 "ONBOARDING_2FA_SKIP_AND_CREATE_NEW_PIN" = "건너뛴 후 새 PIN 만들기";
 
+/* Label for action to use Recovery Key instead of PIN for registration. */
+"ONBOARDING_2FA_SKIP_AND_USE_RECOVERY_KEY" = "복구 키 사용";
+
 /* Explanation for the skip pin entry action sheet during onboarding. */
-"ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE" = "PIN을 잊어버렸다면 새로 만들 수 있습니다. 등록 후 계정을 사용할 수 있으나 프로필 정보 등 일부 저장되어 있던 설정은 삭제됩니다.";
+"ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE" = "PIN이 기억나지 않는다면 새로 설정할 수 있습니다. 등록 후 계정은 계속 사용할 수 있지만, 프로필 정보와 같은 일부 설정은 복구되지 않습니다.";
 
 /* Title for the skip pin entry action sheet during onboarding. */
-"ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "PIN 입력을 건너뛰시겠습니까?";
+"ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "PIN 입력을 건너뛸까요?";
 
-/* The body for the device transfer 'choice' view 'transfer' option */
+/* The body for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "유료 B&A 백업 플랜의 텍스트 메시지와 미디어를 복원합니다";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
+/* The title for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "B&A 백업 복원";
+
+/* Body for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_BODY" = "지금 복원을 건너뛰면 나중에 복원할 수 없습니다. 이 기기에서 백업을 다시 활성화하면 현재 백업이 새 메시지 기록으로 바뀝니다.";
+
+/* Title for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_TITLE" = "복원을 건너뛰시겠어요?";
 
 /* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "메시지 기록과 계정 데이터를 복원할 방법을 선택하세요.";
+
+/* Message body displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_BODY" = "Android에서 iOS로 이동하는 경우, 메시지와 미디어를 전송하는 유일한 방법은 이전 기기에서 B&A 백업을 활성화하는 것입니다.";
+
+/* Title displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_TITLE" = "복원할 백업이 없음";
 
 /* The body for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_BODY" = "메시지와 미디어를 전송하지 않고 계속";
@@ -5600,7 +5807,7 @@
 "ONBOARDING_MODE_SWITCH_WARNING_PROVISIONING" = "iPad를 등록하면 같은 전화번호로 등록한 다른 모든 기기의 B&A을 비활성화합니다.";
 
 /* warning to the user that linking a phone is not recommended */
-"ONBOARDING_MODE_SWITCH_WARNING_REGISTERING" = "iPhone을 연결하면 각종 주요 기능이 제한되기에 추천해 드리지 않습니다.";
+"ONBOARDING_MODE_SWITCH_WARNING_REGISTERING" = "iPhone을 연결하는 것은 권장되지 않으며, 핵심 기능이 제한될 수 있어요.";
 
 /* Description of the 'Contacts' permission in the 'onboarding permissions' view. */
 "ONBOARDING_PERMISSIONS_CONTACTS_DESCRIPTION" = "아는 사람을 찾으세요. 연락처는 암호화되며 B&A 서비스에 표시되지 않습니다.";
@@ -5658,6 +5865,9 @@
 
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "이전 휴대폰을 가지고 있음";
+
+/* Text indicating Signal is a nonprofit on the 'onboarding splash' view. For non-English languages, exclude the word '501c3'. */
+"ONBOARDING_SPLASH_NONPROFIT" = "B&A는 비영리단체입니다";
 
 /* Button for restoring or transferring account in the 'onboarding splash' view. */
 "ONBOARDING_SPLASH_RESTORE_OR_TRANSFER_BUTTON_TITLE" = "계정 복원 또는 전송";
@@ -5764,6 +5974,21 @@
 /* Title of prompt notifying restore failed for unknown reasons. */
 "OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_TITLE" = "알 수 없는 오류";
 
+/* Action button to backup before continuing. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_BACKUP_ACTION" = "지금 백업";
+
+/* Body text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_BODY" = "이전하기 전 백업을 진행하세요. 아직 백업되지 않은 메시지가 있을 수 있습니다.";
+
+/* Title text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_TITLE" = "기기 준비하기";
+
+/* Action button to skip backup and continue. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_SKIP_ACTION" = "건너뛰고 계속하기";
+
+/* Description for form confirming restore from backup without size detail. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_RESTORE_DESCRIPTION" = "마지막 백업이 완료된 시간은 %1$@ %2$@입니다.";
+
 /* Body of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "B&A 계정과 메시지를 다른 기기로 전송하기 시작했습니다. 이제 이 기기의 B&A이 비활성화됩니다.";
 
@@ -5817,9 +6042,6 @@
 
 /* Footer for message cell for long text when it is expired and unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_FOOTER" = "메시지가 불완전함";
-
-/* Message for sheet shown when tapping oversized text that has expired and is unavailable for download */
-"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "이 기기를 연결한 상태로 이 메시지의 전체 텍스트를 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 긴 텍스트 메시지는 동기화할 수 없습니다.";
 
 /* Title for sheet shown when tapping oversized text that has expired and is unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_SHEET_TITLE" = "전체 메시지를 사용할 수 없음";
@@ -5948,10 +6170,10 @@
 "PAYMENTS_NEW_PAYMENT_ERROR_CONNECTIVITY_FAILURE" = "서비스에 연결할 수 없습니다.";
 
 /* Indicates that a payment failed due to insufficient funds. */
-"PAYMENTS_NEW_PAYMENT_ERROR_INSUFFICIENT_FUNDS" = "지불을 완료하기에 충분한 MOB가 없습니다.";
+"PAYMENTS_NEW_PAYMENT_ERROR_INSUFFICIENT_FUNDS" = "MOB 잔액이 부족해 결제를 완료할 수 없습니다.";
 
 /* Indicates that a payment failed due to insufficient funds. Embeds {{ current balance }}. */
-"PAYMENTS_NEW_PAYMENT_ERROR_INSUFFICIENT_FUNDS_FORMAT" = "지불을 완료하기에 충분한 MOB가 없습니다. 현재 잔액은 %1$@입니다.";
+"PAYMENTS_NEW_PAYMENT_ERROR_INSUFFICIENT_FUNDS_FORMAT" = "MOB 잔액이 부족해 결제를 완료할 수 없습니다. 현재 잔액은 %1$@입니다.";
 
 /* Indicates that a payment failed due to being invalid. */
 "PAYMENTS_NEW_PAYMENT_ERROR_INVALID_TRANSACTION" = "잘못된 거래";
@@ -5960,7 +6182,7 @@
 "PAYMENTS_NEW_PAYMENT_ERROR_OUTDATED_CLIENT" = "결제를 사용하려면 B&A을 업데이트하세요.";
 
 /* Indicates that an outgoing payment could not be verified in a timely way. */
-"PAYMENTS_NEW_PAYMENT_ERROR_OUTGOING_VERIFICATION_TAKING_TOO_LONG" = "결제가 아직 확인되지 않음";
+"PAYMENTS_NEW_PAYMENT_ERROR_OUTGOING_VERIFICATION_TAKING_TOO_LONG" = "결제가 아직 인증되지 않았습니다";
 
 /* Indicates that a payment failed because the payments lock attempt was cancelled. */
 "PAYMENTS_NEW_PAYMENT_ERROR_PAYMENTS_LOCK_AUTH_CANCELLED" = "결제 잠금 인증을 취소했습니다.";
@@ -5969,7 +6191,7 @@
 "PAYMENTS_NEW_PAYMENT_ERROR_PAYMENTS_LOCK_AUTH_FAILURE" = "결제 잠금 인증에 실패했습니다.";
 
 /* Indicates that an unknown error occurred while sending a payment or payment request. */
-"PAYMENTS_NEW_PAYMENT_ERROR_UNKNOWN" = "결제를 완료할 수 없습니다. 연결을 확인하고 다시 시도하세요.";
+"PAYMENTS_NEW_PAYMENT_ERROR_UNKNOWN" = "결제를 완료할 수 없습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.";
 
 /* Label for the 'payment estimated fee' indicator. */
 "PAYMENTS_NEW_PAYMENT_ESTIMATED_FEE" = "네트워크 사용료";
@@ -6005,7 +6227,7 @@
 "PAYMENTS_NOTIFICATION_BANNER_1_WITH_DETAILS_FORMAT" = "%1$@ 님이 %2$@을(를) 보냈습니다.";
 
 /* Format for the payments notification banner for multiple payment notifications. Embeds: {{ the number of unread payment notifications }}. */
-"PAYMENTS_NOTIFICATION_BANNER_N_FORMAT" = "%1$@ 새로운 결제 알림";
+"PAYMENTS_NOTIFICATION_BANNER_N_FORMAT" = "새로운 결제 알림 %1$@개";
 
 /* Payment status context with contact name, failed. Embeds {{ Name of receiving contact }} */
 "PAYMENTS_PAYMENT_STATUS_IN_CHAT_PAYMENT_TO" = "결제를 받을 사람: %1$@";
@@ -6086,10 +6308,10 @@
 "PAYMENTS_PREVIEW_TEXT_UNKNOWN" = "알 수 없는 결제";
 
 /* Message for error alert indicating that a given user cannot receive payments because of a pending message request for a recipient that they have sent messages to. */
-"PAYMENTS_RECIPIENT_MISSING_PROFILE_KEY_MESSAGE_W_MESSAGES" = "사용자에게 지불을 보내려면 사용자의 메시지 요청을 수락해야 합니다.";
+"PAYMENTS_RECIPIENT_MISSING_PROFILE_KEY_MESSAGE_W_MESSAGES" = "결제를 보내려면 이 사용자가 내 메시지 요청을 수락해야 합니다.";
 
 /* Message for error alert indicating that a given user cannot receive payments because of a pending message request for a recipient that they have not sent message to. */
-"PAYMENTS_RECIPIENT_MISSING_PROFILE_KEY_MESSAGE_WO_MESSAGES" = "사용자에게 지불을 보내려면 사용자의 메시지 요청을 수락해야 합니다. 메시지를 전송하여 메시지 요청을 생성하세요.";
+"PAYMENTS_RECIPIENT_MISSING_PROFILE_KEY_MESSAGE_WO_MESSAGES" = "결제를 보내려면 이 사용자가 내 메시지 요청을 수락해야 합니다. 메시지를 전송하여 메시지 요청을 생성하세요.";
 
 /* Title for error alert indicating that a given user cannot receive payments because of a pending message request. */
 "PAYMENTS_RECIPIENT_MISSING_PROFILE_KEY_TITLE" = "결제를 전송할 수 없음";
@@ -6110,16 +6332,16 @@
 "PAYMENTS_TRANSFER_OUT_PAYMENT" = "출금";
 
 /* Indicator for unidentified incoming payments. */
-"PAYMENTS_UNIDENTIFIED_PAYMENT_INCOMING" = "지불 수신됨";
+"PAYMENTS_UNIDENTIFIED_PAYMENT_INCOMING" = "받은 결제";
 
 /* Indicator for unidentified outgoing payments. */
-"PAYMENTS_UNIDENTIFIED_PAYMENT_OUTGOING" = "지불 발신됨";
+"PAYMENTS_UNIDENTIFIED_PAYMENT_OUTGOING" = "보낸 결제";
 
 /* Label for unknown payments. */
 "PAYMENTS_UNKNOWN_PAYMENT" = "잘못된 결제";
 
 /* The alert message if user tries to exit a task without saving changes. */
-"PENDING_CHANGES_ACTION_SHEET_MESSAGE" = "변경사항을 파기하시겠습니까?";
+"PENDING_CHANGES_ACTION_SHEET_MESSAGE" = "변경 사항을 저장하지 말고 삭제할까요?";
 
 /* The alert title if user tries to exit a task without saving changes. */
 "PENDING_CHANGES_ACTION_SHEET_TITLE" = "저장하지 않은 변경사항";
@@ -6128,13 +6350,13 @@
 "PENDING_GROUP_MEMBERS_ACCEPT_REQUEST_BUTTON" = "그룹에 추가";
 
 /* Title of 'accept member request to join group' confirmation alert. Embeds {{ the name of the requesting group member. }}. */
-"PENDING_GROUP_MEMBERS_ACCEPT_REQUEST_CONFIRMATION_TITLE_FORMAT" = "\"%1$@\" 님을 그룹에 추가하시겠습니까?";
+"PENDING_GROUP_MEMBERS_ACCEPT_REQUEST_CONFIRMATION_TITLE_FORMAT" = "'%1$@' 님을 그룹에 추가할까요?";
 
 /* Title of 'deny member request to join group' button. */
 "PENDING_GROUP_MEMBERS_DENY_REQUEST_BUTTON" = "요청 거절";
 
 /* Title of 'deny member request to join group' confirmation alert. Embeds {{ the name of the requesting group member. }}. */
-"PENDING_GROUP_MEMBERS_DENY_REQUEST_CONFIRMATION_TITLE_FORMAT" = "“%1$@” 님의 요청을 거부할까요? 더 이상 그룹 링크를 통한 참가를 요청할 수 없게 됩니다.";
+"PENDING_GROUP_MEMBERS_DENY_REQUEST_CONFIRMATION_TITLE_FORMAT" = "'%1$@' 님의 요청을 거부할까요? 이 사용자는 그룹 링크를 통해 다시 참가 요청을 보낼 수 없습니다.";
 
 /* Label indicating that a group has no pending member requests. */
 "PENDING_GROUP_MEMBERS_NO_PENDING_MEMBER_REQUESTS" = "대기 중인 멤버 요청이 없습니다.";
@@ -6144,9 +6366,6 @@
 
 /* Message indicating that a request to join the group was successfully approved. Embeds {{ the name of the approved user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_APPROVED_FORMAT" = "'%1$@' 님을 추가했습니다.";
-
-/* Label for the 'view requests' button in the pending member requests banner. */
-"PENDING_GROUP_MEMBERS_REQUEST_BANNER_VIEW_REQUESTS" = "요청 보기";
 
 /* Message indicating that a request to join the group was successfully denied. Embeds {{ the name of the denied user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_DENIED_FORMAT" = "'%1$@' 님을 거절했습니다.";
@@ -6263,10 +6482,7 @@
 "PHOTO_CAPTURE_GENERIC_ERROR" = "사진을 캡처할 수 없습니다.";
 
 /* alert title */
-"PHOTO_CAPTURE_UNABLE_TO_CAPTURE_IMAGE" = "사진을 캡처할 수 없습니다.";
-
-/* alert title */
-"PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA" = "카메라를 구성할 수 없습니다.";
+"PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA" = "카메라를 구성하지 못했습니다.";
 
 /* Button label for opening the chat on a sheet presented from photo capture view indicating that a username QR code was found. */
 "PHOTO_CAPTURE_USERNAME_QR_CODE_FOUND_CTA" = "대화로 이동";
@@ -6277,14 +6493,11 @@
 /* Title for sheet presented from photo capture view indicating that a username QR code was found. Embeds {{username}}. */
 "PHOTO_CAPTURE_USERNAME_QR_CODE_FOUND_TITLE_FORMAT" = "%1$@ 님을 찾았습니다.";
 
-/* alert title, generic error preventing user from capturing a video that is too long */
-"PHOTO_CAPTURE_VIDEO_SIZE_ERROR" = "동영상이 너무 깁니다.";
-
 /* Pressing this button pins a thread */
 "PIN_ACTION" = "고정";
 
 /* Error body indicating that the attempt to change a PIN failed. */
-"PIN_CHANGE_ERROR_MESSAGE" = "새로운 PIN을 만들 수 없습니다. 기존 PIN을 비활성화했습니다. 연결을 확인하고 다시 시도하세요.";
+"PIN_CHANGE_ERROR_MESSAGE" = "새 PIN을 생성하지 못했습니다. 기존 PIN은 비활성화되었습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.";
 
 /* Error title indicating that the attempt to change a PIN failed. */
 "PIN_CHANGE_ERROR_TITLE" = "PIN 변경 실패";
@@ -6364,6 +6577,9 @@
 /* If the user is re-registering, they need to enter their PIN to restore all their data. In some cases, they can skip this entry and lose some data. This text is shown on a button that lets them begin to do this. */
 "PIN_ENTER_EXISTING_SKIP" = "PIN 건너뛰기";
 
+/* If the user is re-registering, they need to enter their PIN to restore all their data. If they don't remember their PIN, they may remember their Recovery Key which can be used instead of a PIN. */
+"PIN_ENTER_EXISTING_USE_RECOVERY_KEY" = "복구 키 사용";
+
 /* Error title indicating that the attempt to recreate a PIN failed. */
 "PIN_RECREATION_ERROR_TITLE" = "PIN 생성 실패";
 
@@ -6421,8 +6637,80 @@
 /* An explanation that you have already pinned the maximum number of conversations. */
 "PINNED_CONVERSATION_LIMIT" = "대화는 4개까지만 고정할 수 있습니다.";
 
+/* Accessibility label prefix for banner showing a pinned message */
+"PINNED_MESSAGE_BANNER_AX_LABEL" = "고정 메시지:";
+
+/* Shown when another user pins a message. Embeds {{ another user }}. */
+"PINNED_MESSAGE_CHAT_EVENT_OTHER" = "%1$@ 님이 메시지를 고정했습니다";
+
+/* Shown when the local user pins a message. */
+"PINNED_MESSAGE_CHAT_EVENT_SELF" = "메시지를 고정했습니다";
+
+/* Accessibility label for pin message button */
+"PINNED_MESSAGE_MENU_ACCESSIBILITY_LABEL" = "고정 메시지 메뉴";
+
+/* Label for button to pin a message */
+"PINNED_MESSAGE_PIN_ACTION_TITLE" = "고정";
+
+/* Message for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BODY" = "고정 메시지가 가장 오래된 메시지를 대체합니다.";
+
+/* Option in pinned message action sheet to replace oldest pin. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BUTTON" = "바꾸기";
+
+/* Title for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_TITLE" = "가장 오래된 고정 항목을 교체하시겠습니까?";
+
+/* Body for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_BODY" = "연결을 확인하고 다시 시도하세요.";
+
+/* Title for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_TITLE" = "메시지를 고정할 수 없음";
+
+/* Text to show on a toast when someone unpins a message */
+"PINNED_MESSAGE_TOAST" = "메시지 고정 해제됨";
+
+/* Label for button to unpin a message */
+"PINNED_MESSAGE_UNPIN_ACTION_TITLE" = "고정 해제";
+
+/* Option in pinned message action sheet to pin for 24 hours. */
+"PINNED_MESSAGES_24_HOURS" = "24시간";
+
+/* Option in pinned message action sheet to pin for 30 days. */
+"PINNED_MESSAGES_30_DAYS" = "30일";
+
+/* Option in pinned message action sheet to pin for 7 days. */
+"PINNED_MESSAGES_7_DAYS" = "7일";
+
+/* Title for Pinned Messages detail view */
+"PINNED_MESSAGES_DETAILS_TITLE" = "고정 메시지";
+
+/* Title for an action sheet to indicate how long to keep the pin active */
+"PINNED_MESSAGES_EXPIRY_SHEET_TITLE" = "메시지 고정 기간";
+
+/* Option in pinned message action sheet to pin with no expiry. */
+"PINNED_MESSAGES_FOREVER" = "계속";
+
+/* Action menu item to go to a message in the conversation view */
+"PINNED_MESSAGES_GO_TO_MESSAGE" = "메시지로 이동";
+
+/* Action menu item to see all pinned messages */
+"PINNED_MESSAGES_SEE_ALL_MESSAGES" = "모든 메시지 보기";
+
+/* Action menu item to unpin a message */
+"PINNED_MESSAGES_UNPIN" = "고정 해제";
+
+/* Title for a button to unpin all pinned messages. */
+"PINNED_MESSAGES_UNPIN_ALL" = "모두 고정 해제";
+
 /* The title for pinned conversation section on the conversation list */
 "PINNED_SECTION_TITLE" = "고정됨";
+
+/* Body for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_BODY" = "자동 삭제 메시지는 타이머가 만료되고 채팅에서 메시지가 제거되면 고정이 해제됩니다.";
+
+/* Title for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_TITLE" = "자동 삭제 메시지 고정";
 
 /* Action text for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_ACTION" = "PIN 만들기";
@@ -6439,11 +6727,35 @@
 /* Accessibility label for button to start media playback */
 "PLAY_BUTTON_ACCESSABILITY_LABEL" = "미디어 재생";
 
+/* Accessibility label for poll message. Embeds {{ poll question }}. */
+"POLL_ACCESSIBILITY_LABEL" = "설문조사: %1$@";
+
+/* Accessibility label for a vote option that is not selected by the user. */
+"POLL_ACCESSIBILITY_LABEL_OPTION_PENDING" = "대기 중";
+
+/* Title for a toggle allowing multiple votes for a poll. */
+"POLL_ALLOW_MULTIPLE_LABEL" = "복수 투표 허용";
+
+/* Button to view a poll after its ended */
+"POLL_BUTTON_VIEW_POLL" = "설문조사 보기";
+
 /* Button to view poll results */
 "POLL_BUTTON_VIEW_RESULTS" = "결과 보기";
 
 /* Button to view poll votes */
 "POLL_BUTTON_VIEW_VOTES" = "투표 결과 보기";
+
+/* Toast telling user to add a question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION" = "질문을 추가하세요.";
+
+/* Toast telling user to add options and question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION_OR_ENOUGH_OPTIONS" = "질문과 옵션을 2개 이상 추가하세요.";
+
+/* Toast telling user to add more options to poll. */
+"POLL_CREATE_ERROR_TOAST_NOT_ENOUGH_OPTIONS" = "옵션을 2개 이상 추가하세요.";
+
+/* Title of create poll pane */
+"POLL_CREATE_TITLE" = "새 투표";
 
 /* Label for button to end a poll */
 "POLL_DETAILS_END_POLL" = "투표 종료";
@@ -6451,20 +6763,56 @@
 /* Title of poll details pane */
 "POLL_DETAILS_TITLE" = "투표 세부 정보";
 
+/* Title for an action sheet confirming the user wants end a poll. */
+"POLL_END_CONFIRMATION" = "설문조사를 종료하시겠어요?";
+
+/* Message for an action sheet confirming the user wants to end a poll. */
+"POLL_END_CONFIRMATION_MESSAGE" = "그룹 구성원이 더 이상 이 설문조사에서 투표할 수 없습니다.";
+
+/* Shown when another user ends a poll. Embeds {{ another user }} and {{ poll question }}. */
+"POLL_ENDED_BY_OTHER_CHAT_LIST_UPDATE" = "%1$@ 님이 \"%2$@\" 설문조사를 종료했습니다.";
+
+/* Shown when the local user ends a poll. Embeds {{ poll question }}. */
+"POLL_ENDED_BY_YOU_CHAT_LIST_UPDATE" = "투표를 종료했습니다: %1$@";
+
 /* Notification that {{contact}} ended a poll with question {{poll question}} */
 "POLL_ENDED_NOTIFICATION" = "%1$@ 님이 \"%2$@\" 투표를 종료하였습니다.";
+
+/* Label specifying the poll is finished and these are the final results */
+"POLL_FINAL_RESULTS_LABEL" = "최종 결과";
 
 /* Label specifying the message type as a poll */
 "POLL_LABEL" = "투표";
 
+/* String to display when a poll has no votes */
+"POLL_NO_VOTES" = "투표 없음";
+
+/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
+"POLL_OPTION_PLACEHOLDER_PREFIX" = "Option";
+
+/* Header for the poll options text boxes when making a new poll */
+"POLL_OPTIONS_LABEL" = "옵션";
+
 /* Prefix for a poll preview */
 "POLL_PREFIX" = "투표:";
+
+/* Header for the poll question text box when making a new poll */
+"POLL_QUESTION_LABEL" = "질문";
+
+/* Placeholder text for poll question */
+"POLL_QUESTION_PLACEHOLDER_TEXT" = "질문하기";
+
+/* Title of poll details pane when poll is ended */
+"POLL_RESULTS_TITLE" = "설문조사 결과";
 
 /* Label specifying the user can select more than one option */
 "POLL_SELECT_LABEL_MULTIPLE" = "하나 이상 선택";
 
 /* Label specifying the user can select one option */
 "POLL_SELECT_LABEL_SINGULAR" = "하나 선택";
+
+/* Notification that {{contact}} voted in a poll with question {{poll question}} */
+"POLL_VOTED_NOTIFICATION" = "%1$@ 님이 \"%2$@\" 설문조사에 투표했습니다.";
 
 /* Badge indicating that the user is verified. */
 "PRIVACY_IDENTITY_IS_VERIFIED_BADGE" = "검증함";
@@ -6500,13 +6848,13 @@
 "PRIVACY_VERIFICATION_TITLE" = "안전 번호 검증";
 
 /* Button that lets user mark another user's identity as verified. */
-"PRIVACY_VERIFY_BUTTON" = "검증으로 표시";
+"PRIVACY_VERIFY_BUTTON" = "인증 완료로 표시";
 
 /* Button to add a new viewer on the 'private story settings' view */
 "PRIVATE_STORY_SETTINGS_ADD_VIEWER_BUTTON" = "볼 수 있는 사람 추가";
 
 /* Button to delete the story on the 'private story settings' view */
-"PRIVATE_STORY_SETTINGS_DELETE_BUTTON" = "사용자 지정 스토리 삭제";
+"PRIVATE_STORY_SETTINGS_DELETE_BUTTON" = "맞춤 스토리 삭제";
 
 /* Action sheet title confirming deletion of a private story on the 'private story settings' view. Embeds {{ $1%@ private story name }} */
 "PRIVATE_STORY_SETTINGS_DELETE_CONFIRMATION_FORMAT" = "'%1$@'을(를) 삭제할까요? 이 스토리에 공유한 업데이트도 삭제합니다.";
@@ -6527,25 +6875,25 @@
 "PROFILE_BIO_VIEW_BIO_PLACEHOLDER" = "간략한 자기소개를 적어주세요…";
 
 /* The 'Be kind' default bio in the profile bio view. */
-"PROFILE_BIO_VIEW_DEFAULT_BIO_BE_KIND" = "친절함";
+"PROFILE_BIO_VIEW_DEFAULT_BIO_BE_KIND" = "배려 있게 대화해요";
 
 /* The 'Coffee lover' default bio in the profile bio view. */
-"PROFILE_BIO_VIEW_DEFAULT_BIO_COFFEE_LOVER" = "커피 애호가";
+"PROFILE_BIO_VIEW_DEFAULT_BIO_COFFEE_LOVER" = "커피 없인 못 살아요";
 
 /* The 'Encrypted' default bio in the profile bio view. */
-"PROFILE_BIO_VIEW_DEFAULT_BIO_ENCRYPTED" = "암호화됨";
+"PROFILE_BIO_VIEW_DEFAULT_BIO_ENCRYPTED" = "프라이버시가 중요해요";
 
 /* The 'free to chat' default bio in the profile bio view. */
-"PROFILE_BIO_VIEW_DEFAULT_BIO_FREE_TO_CHAT" = "대화 가능";
+"PROFILE_BIO_VIEW_DEFAULT_BIO_FREE_TO_CHAT" = "대화 가능해요";
 
 /* The 'Speak Freely' default bio in the profile bio view. */
-"PROFILE_BIO_VIEW_DEFAULT_BIO_SPEAK_FREELY" = "자유롭게 말하다";
+"PROFILE_BIO_VIEW_DEFAULT_BIO_SPEAK_FREELY" = "자유롭게 이야기해요";
 
 /* The 'Taking a break' default bio in the profile bio view. */
-"PROFILE_BIO_VIEW_DEFAULT_BIO_TAKING_A_BREAK" = "쉬는 중";
+"PROFILE_BIO_VIEW_DEFAULT_BIO_TAKING_A_BREAK" = "휴식 모드";
 
 /* The 'Working on something new' default bio in the profile bio view. */
-"PROFILE_BIO_VIEW_DEFAULT_BIO_WORKING_ON_SOMETHING_NEW" = "새로운 것에 도전하는 중";
+"PROFILE_BIO_VIEW_DEFAULT_BIO_WORKING_ON_SOMETHING_NEW" = "새로운 것에 도전하고 있어요";
 
 /* Title for the profile bio view. */
 "PROFILE_BIO_VIEW_TITLE" = "정보";
@@ -6623,7 +6971,7 @@
 "PROFILE_VIEW_NO_CONNECTION" = "프로필은 인터넷에 연결됐을 때만 업데이트할 수 있습니다.";
 
 /* Description of the user profile. */
-"PROFILE_VIEW_PROFILE_DESCRIPTION" = "프로필과 프로필 변경 사항이 사용자가 메시지를 보내는 사람과 연락처, 그룹에 표시됩니다.";
+"PROFILE_VIEW_PROFILE_DESCRIPTION" = "프로필과 프로필 변경 사항은 메시지를 주고받는 상대와 연락처, 그룹에 표시됩니다.";
 
 /* Title for the profile view. */
 "PROFILE_VIEW_TITLE" = "프로필";
@@ -6661,6 +7009,15 @@
 /* Title of alert shown when push tokens sync job succeeds. */
 "PUSH_REGISTER_SUCCESS" = "푸시 알림을 재등록했습니다.";
 
+/* Body for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_BODY" = "이 기기를 사용하여 이전하려는 기기의 QR 코드를 스캔하세요";
+
+/* Title for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_TITLE" = "QR 코드 스캔";
+
+/* Message for an action sheet telling users how to use quick restore, when trying to open an external quick restore URL. */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "이 계정을 새 기기로 이전하려면 '계속'을 탭하고 B&A 카메라로 QR 코드를 스캔하세요. B&A에서 직접 제공한 QR 코드만 스캔하세요.";
+
 /* Accessibility label stating the author of the message to which you are replying. Embeds: {{ the author of the message to which you are replying }}. */
 "QUOTED_REPLY_ACCESSIBILITY_LABEL_FORMAT" = "%1$@ 님에게 답장하는 중입니다.";
 
@@ -6676,11 +7033,11 @@
 /* Toast alert text shown when tapping on a quoted message which we cannot scroll to because the local copy of the message didn't exist when the quote was received. */
 "QUOTED_REPLY_ORIGINAL_MESSAGE_REMOTELY_SOURCED" = "메시지 원본을 찾을 수 없습니다.";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to your own story. */
-"QUOTED_REPLY_REACTION_TO_OWN_STORY" = "내 스토리에 반응함";
+/* Label explaining that the content of a quoted message includes you reacting to someone's story. Embeds {{ %1$@ the story author }}. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_SECOND_PERSON" = "%1$@ 님의 스토리에 반응했어요";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to a story. Embeds {{ story author name }} */
-"QUOTED_REPLY_REACTION_TO_STORY_FORMAT" = "%1$@ 님의 스토리에 반응했습니다.";
+/* Label explaining that the content of a quoted message includes someone reacting to your story. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_THIRD_PERSON" = "내 스토리에 반응했어요";
 
 /* Message header when you are quoting a story. Embeds {{ story author name }} */
 "QUOTED_REPLY_STORY_AUTHOR_INDICATOR_FORMAT" = "%1$@ · 스토리";
@@ -6689,7 +7046,7 @@
 "QUOTED_REPLY_TYPE_ATTACHMENT" = "첨부 파일";
 
 /* Indicates this message is a quoted reply to an audio file. */
-"QUOTED_REPLY_TYPE_AUDIO" = "음성";
+"QUOTED_REPLY_TYPE_AUDIO" = "오디오";
 
 /* Indicates this message is a quoted reply to animated GIF file. */
 "QUOTED_REPLY_TYPE_GIF" = "GIF";
@@ -6702,6 +7059,9 @@
 
 /* Indicates this message is a quoted reply to a video file. */
 "QUOTED_REPLY_TYPE_VIDEO" = "동영상";
+
+/* Indicates this message is a quoted reply to a voice message. */
+"QUOTED_REPLY_TYPE_VOICE_MESSAGE" = "음성 메시지";
 
 /* Label for a button to lower your raised hand in a call. */
 "RAISED_HANDS_LOWER_HAND_BUTTON" = "손 내리기";
@@ -6719,40 +7079,40 @@
 "REACTION_DETAIL_ALL_FORMAT" = "모두 · %1$@";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_BODY_FORMAT" = "내 메시지에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_BODY_FORMAT" = "내 메시지에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_TO_ALBUM_BODY_FORMAT" = "내 앨범에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_TO_ALBUM_BODY_FORMAT" = "내 앨범에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_TO_AUDIO_BODY_FORMAT" = "내 음성에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_TO_AUDIO_BODY_FORMAT" = "내 오디오에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_TO_CONTACT_SHARE_BODY_FORMAT" = "내 연락처 공유에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_TO_CONTACT_SHARE_BODY_FORMAT" = "내 연락처 공유에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_TO_FILE_BODY_FORMAT" = "내 파일에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_TO_FILE_BODY_FORMAT" = "내 파일에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_TO_GIF_BODY_FORMAT" = "내 GIF에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_TO_GIF_BODY_FORMAT" = "내 GIF에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_TO_PHOTO_BODY_FORMAT" = "내 사진에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_TO_PHOTO_BODY_FORMAT" = "내 사진에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_TO_STICKER_MESSAGE_BODY_FORMAT" = "내 스티커에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_TO_STICKER_MESSAGE_BODY_FORMAT" = "내 스티커에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} and {{body text}} */
-"REACTION_INCOMING_NOTIFICATION_TO_TEXT_MESSAGE_BODY_FORMAT" = "다음에 %1$@ 이모지로 반응함: \"%2$@\"";
+"REACTION_INCOMING_NOTIFICATION_TO_TEXT_MESSAGE_BODY_FORMAT" = "\"%2$@\" 메시지에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_TO_VIDEO_BODY_FORMAT" = "내 동영상에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_TO_VIDEO_BODY_FORMAT" = "내 동영상에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_TO_VIEW_ONCE_MESSAGE_BODY_FORMAT" = "한 번만 볼 수 있는 내 미디어에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_TO_VIEW_ONCE_MESSAGE_BODY_FORMAT" = "한 번만 볼 수 있는 내 미디어에 %1$@ 이모지로 반응했어요";
 
 /* notification body. Embeds {{reaction emoji}} */
-"REACTION_INCOMING_NOTIFICATION_TO_VOICE_MESSAGE_BODY_FORMAT" = "내 음성 메시지에 %1$@ 이모지로 반응했습니다.";
+"REACTION_INCOMING_NOTIFICATION_TO_VOICE_MESSAGE_BODY_FORMAT" = "내 음성 메시지에 %1$@ 이모지로 반응했어요";
 
 /* Pressing this button marks a thread as read */
 "READ_ACTION" = "읽음";
@@ -6841,6 +7201,9 @@
 /* Body for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
+/* Body for a sheet warning users about an incorrect recovery key and having hit a rate limit on retries. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_RATE_LIMIT_BODY" = "복구 키 시도 횟수를 초과했습니다. 보안을 위해 시도할 수 있는 횟수는 제한되어 있습니다. 1시간 동안 기다렸다가 다시 시도하세요.";
+
 /* Title for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "잘못된 백업 키";
 
@@ -6892,12 +7255,6 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "국가 코드";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "계속하면 같은 전화번호로 등록한 다른 모든 기기의 B&A을 비활성화합니다.";
-
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "계정 및 메시지 이동";
-
 /* Description for the screen that allows users to enter their recovery key. */
 "REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "백업 키는 계정과 데이터를 복원하는 데 필요한 64자 코드입니다.";
 
@@ -6939,6 +7296,9 @@
 
 /* During registration, users are asked to enter their phone number. This is the subtitle on that screen, which gives users some instructions. */
 "REGISTRATION_PHONE_NUMBER_SUBTITLE" = "전화번호를 입력하여 시작하세요.";
+
+/* During re-registration, users are asked to confirm their phone number. This is the subtitle on that screen, which gives users some instructions. */
+"REGISTRATION_PHONE_NUMBER_SUBTITLE_2" = "다음 번호로 확인 코드가 전송됩니다.";
 
 /* During registration, users are asked to enter their phone number. This is the title on that screen. */
 "REGISTRATION_PHONE_NUMBER_TITLE" = "내 전화번호";
@@ -6993,6 +7353,15 @@
 
 /* Error shown if an SMS/call service provider is temporarily unable to send a verification code to the provided number. */
 "REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "SMS 통신사 문제로 인해 B&A에서 SMS 코드를 전송하지 못했습니다. 몇 시간 정도 기다렸다가 다시 시도해 주세요.";
+
+/* Third step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_ENABLE_BACKUPS" = "백업을 활성화하고 백업이 완료될까지 기다립니다";
+
+/* First step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_OPEN_SIGNAL" = "이전 장치에서 B&A을 엽니다";
+
+/* Second step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_TAP_SETTINGS" = "설정 > 백업을 탭합니다";
 
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "메시지를 보내기 전에 등록해야 합니다.";
@@ -7066,6 +7435,18 @@
 /* Label warning the user that something is wrong with their username link. */
 "REMINDER_VIEW_USERNAME_LINK_CORRUPTED_WARNING" = "사용자 이름 QR 코드와 링크에 문제가 생겨 더는 이 QR 코드와 링크를 사용할 수 없습니다. 다른 사용자와 공유하려면 새로운 링크를 만드세요.";
 
+/* A message that displays when one person in a call remotely muted another participant. Embeds {{name}} {{name}} */
+"REMOTE_MUTE_TOAST_A_MUTED_B" = "%1$@ 님이 %2$@ 님의 알림을 껐습니다.";
+
+/* A message that displays when your microphone is remotely muted by another call participant. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_SOMEONE_MUTED_YOU" = "%1$@ 님이 내 알림을 껐습니다.";
+
+/* A message that displays when you remotely muted another call participant's microphone. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_YOU_MUTED_SOMEONE" = "%1$@의 알림을 껐습니다.";
+
+/* A message that displays when you joined a call on two devices and mute one from the other. */
+"REMOTE_MUTE_TOAST_YOU_MUTED_YOURSELF" = "다른 기기에서 내 알림을 껐습니다.";
+
 /* Accessibility label for a button that removes the preview from a drafted message. */
 "REMOVE_PREVIEW" = "미리 보기 제거";
 
@@ -7083,6 +7464,30 @@
 
 /* Configure reactions reset button text */
 "RESET" = "초기화";
+
+/* Body for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_BODY" = "미디어 복구를 완료하지 못했습니다. 취소할 경우 기기를 다시 연결하여 복구할 수 있습니다.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_PRIMARY_BUTTON" = "복구 계속하기";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_SECONDARY_BUTTON" = "복구 취소";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_TITLE" = "미디어를 복구하는 중";
+
+/* Message for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_MESSAGE" = "미디어 복구를 완료하지 못했습니다. 취소할 경우 기기를 다시 연결하여 복구할 수 있습니다.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_PRIMARY_BUTTON" = "복구 계속하기";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_SECONDARY_BUTTON" = "복구 취소";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_TITLE" = "미디어 복구를 취소하시겠습니까?";
 
 /* Button title shown on chat list banner for restoring media from a backup when paused because the device has insufficient disk space, to see a bottom sheet with more details about next steps. */
 "RESTORING_MEDIA_BANNER_DISK_SPACE_BUTTON" = "세부 정보";
@@ -7370,13 +7775,13 @@
 "SEND_BUTTON_TITLE" = "보내기";
 
 /* notification body */
-"SEND_FAILED_NOTIFICATION_BODY" = "메세지 보내기에 실패하였습니다.";
+"SEND_FAILED_NOTIFICATION_BODY" = "메시지를 보내지 못했습니다.";
 
 /* Alert body after invite failed */
-"SEND_INVITE_FAILURE" = "초대 보내기에 실패했습니다. 나중에 다시 시도해 주세요.";
+"SEND_INVITE_FAILURE" = "초대를 전송하지 못했습니다. 나중에 다시 시도해 주세요.";
 
 /* alert action, confirming the user wants to exit the media flow and abandon any photos they've taken */
-"SEND_MEDIA_CONFIRM_ABANDON_ALBUM" = "미디어 파기";
+"SEND_MEDIA_CONFIRM_ABANDON_ALBUM" = "미디어 삭제하기";
 
 /* alert action when the user decides not to cancel the media flow after all. */
 "SEND_MEDIA_RETURN_TO_CAMERA" = "카메라로 돌아가기";
@@ -7457,7 +7862,7 @@
 "SET_WALLPAPER_PRESETS" = "프리셋";
 
 /* Title for the set wallpaper settings view. */
-"SET_WALLPAPER_TITLE" = "배경 설정";
+"SET_WALLPAPER_TITLE" = "배경 화면 설정";
 
 /* Title for the 'account' link in settings. */
 "SETTINGS_ACCOUNT" = "계정";
@@ -7606,9 +8011,6 @@
 /* No comment provided by engineer. */
 "SETTINGS_CLEAR_HISTORY" = "대화 기록 삭제";
 
-/* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "B&A Messenger 저작권\nAGPLv3에 따라 라이선스 부여됨";
-
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "데이터 사용량";
 
@@ -7634,7 +8036,7 @@
 "SETTINGS_DATA_SENT_MEDIA_QUALITY_ITEM_TITLE" = "보낸 미디어 품질";
 
 /* Section footer for the sent media section in data settings */
-"SETTINGS_DATA_SENT_MEDIA_SECTION_FOOTER" = "보낼 사진과 동영상의 품질을 선택합니다.";
+"SETTINGS_DATA_SENT_MEDIA_SECTION_FOOTER" = "전송할 사진과 동영상의 품질을 선택합니다.";
 
 /* Section header for the sent media section in data settings */
 "SETTINGS_DATA_SENT_MEDIA_SECTION_HEADER" = "보낸 미디어";
@@ -7652,7 +8054,7 @@
 "SETTINGS_DELETE_ACCOUNT_PAYMENTS_BALANCE_ALERT_MESSAGE_FORMAT" = "잔액이 %1$@입니다. 계정을 삭제하기 전에 다른 지갑 주소로 자금을 이체하지 않으면 영원히 잃게 됩니다.";
 
 /* Title for the alert confirming whether the user wants transfer their payments balance before deleting their account. */
-"SETTINGS_DELETE_ACCOUNT_PAYMENTS_BALANCE_ALERT_TITLE" = "결제 잔액을 이체하시겠습니까?";
+"SETTINGS_DELETE_ACCOUNT_PAYMENTS_BALANCE_ALERT_TITLE" = "결제 잔액을 이체할까요?";
 
 /* Button for transferring the user's payments balance before deleting their account. */
 "SETTINGS_DELETE_ACCOUNT_PAYMENTS_BALANCE_ALERT_TRANSFER" = "잔액 이체";
@@ -7706,7 +8108,7 @@
 "SETTINGS_LINK_PREVIEWS" = "링크 미리보기 생성";
 
 /* Footer for setting for enabling & disabling link previews. */
-"SETTINGS_LINK_PREVIEWS_FOOTER" = "보내는 메시지에 포함된 웹사이트의 링크 미리보기를 함께 첨부합니다.";
+"SETTINGS_LINK_PREVIEWS_FOOTER" = "보내는 메시지에 포함된 링크의 미리보기를 해당 웹사이트에서 직접 가져옵니다.";
 
 /* Label for the 'never' media attachment download behavior in the media download settings. */
 "SETTINGS_MEDIA_DOWNLOAD_CONDITION_NEVER" = "없음";
@@ -7718,7 +8120,7 @@
 "SETTINGS_MEDIA_DOWNLOAD_CONDITION_WIFI_ONLY" = "Wi-Fi";
 
 /* Label for the 'audio' attachment type in the media download settings. */
-"SETTINGS_MEDIA_DOWNLOAD_TYPE_AUDIO" = "음성";
+"SETTINGS_MEDIA_DOWNLOAD_TYPE_AUDIO" = "오디오";
 
 /* Label for the 'document' attachment type in the media download settings. */
 "SETTINGS_MEDIA_DOWNLOAD_TYPE_DOCUMENT" = "문서";
@@ -7751,7 +8153,7 @@
 "SETTINGS_NOTIFICATION_EVENTS_CONTACT_JOINED_SIGNAL" = "아는 사람이 B&A에 가입했습니다";
 
 /* table section header */
-"SETTINGS_NOTIFICATION_NOTIFY_WHEN_TITLE" = "다음의 경우 알림…";
+"SETTINGS_NOTIFICATION_NOTIFY_WHEN_TITLE" = "다음 경우에 알림";
 
 /* The title for the notification settings. */
 "SETTINGS_NOTIFICATIONS" = "알림";
@@ -7778,7 +8180,7 @@
 "SETTINGS_PAYMENTS_ADD_MONEY_WALLET_ADDRESS_COPIED" = "지갑 주소 복사됨";
 
 /* Label for the 'all payment records' section of the app settings. */
-"SETTINGS_PAYMENTS_ALL_RECORDS" = "모든 지불";
+"SETTINGS_PAYMENTS_ALL_RECORDS" = "모든 결제";
 
 /* Format string for the 'local balance converted into local currency' indicator. Embeds: {{ %1$@ the local balance in the local currency, %2$@ the local currency code, %3$@ the date the currency conversion rate was obtained. }}.. */
 "SETTINGS_PAYMENTS_BALANCE_CONVERSION_FORMAT" = "%1$@ %2$@ %3$@";
@@ -7790,7 +8192,7 @@
 "SETTINGS_PAYMENTS_CANNOT_DEACTIVATE_PAYMENTS_NO_BALANCE" = "잔액을 사용할 수 없기 때문에 결제를 비활성화할 수 없습니다. 연결을 확인하고 다시 시도하세요.";
 
 /* Error message indicating that a payment could not be sent because the current balance is unavailable. */
-"SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENT_NO_BALANCE" = "잔액을 사용할 수 없기 때문에 결제를 완료할 수 없습니다. 연결을 확인하고 다시 시도하세요.";
+"SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENT_NO_BALANCE" = "잔액을 사용할 수 없어 결제를 완료할 수 없습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.";
 
 /* Error message indicating that payments cannot be sent because the feature is not currently available. */
 "SETTINGS_PAYMENTS_CANNOT_SEND_PAYMENTS_KILL_SWITCH" = "B&A 결제는 더 이상 사용할 수 없습니다. 여전히 거래소로 자금을 이체할 수 있지만 더 이상 지불을 주고받거나 자금을 추가할 수 없습니다.";
@@ -7817,7 +8219,7 @@
 "SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS_CONFIRM_DESCRIPTION" = "결제를 비활성화하면 B&A에서 Mobilecoin을 보내거나 받을 수 없습니다.";
 
 /* Title for the 'deactivate payments confirmation' UI in the payment settings. */
-"SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS_CONFIRM_TITLE" = "결제를 비활성화하시겠습니까?";
+"SETTINGS_PAYMENTS_DEACTIVATE_PAYMENTS_CONFIRM_TITLE" = "결제를 비활성화할까요?";
 
 /* Label for the 'de-activate payments' view of the app settings. */
 "SETTINGS_PAYMENTS_DEACTIVATE_TITLE" = "결제 비활성화";
@@ -7829,7 +8231,7 @@
 "SETTINGS_PAYMENTS_DEACTIVATE_WITHOUT_TRANSFER_CONFIRM_DESCRIPTION" = "결제를 다시 활성화하기로 선택할 경우 잔액이 B&A에 연결된 지갑에 남아 있게 됩니다.";
 
 /* Title for the 'deactivate payments confirmation' UI in the payment settings. */
-"SETTINGS_PAYMENTS_DEACTIVATE_WITHOUT_TRANSFER_CONFIRM_TITLE" = "전송하지 않고 비활성화하시겠습니까?";
+"SETTINGS_PAYMENTS_DEACTIVATE_WITHOUT_TRANSFER_CONFIRM_TITLE" = "이체하지 않고 비활성화하시겠어요?";
 
 /* Label for 'deactivate payments without transferring balance' button in the 'deactivate payments' settings. */
 "SETTINGS_PAYMENTS_DEACTIVATE_WITHOUT_TRANSFERRING_BALANCE" = "전송하지 않고 비활성화";
@@ -7892,13 +8294,13 @@
 "SETTINGS_PAYMENTS_NO_ACTIVITY_INDICATOR" = "아직 최근 활동이 없습니다.";
 
 /* Message for the 'payments not enabled' alert. */
-"SETTINGS_PAYMENTS_NOT_ENABLED_ALERT_MESSAGE" = "결제를 활성화하시겠습니까?";
+"SETTINGS_PAYMENTS_NOT_ENABLED_ALERT_MESSAGE" = "결제를 활성화하시겠어요?";
 
 /* Title for the 'payments not enabled' alert. */
 "SETTINGS_PAYMENTS_NOT_ENABLED_ALERT_TITLE" = "결제가 활성화되지 않음";
 
 /* Message for the 'payments not registered' alert. */
-"SETTINGS_PAYMENTS_NOT_REGISTERED_ALERT_MESSAGE" = "지불을 보내려면 다시 등록하세요.";
+"SETTINGS_PAYMENTS_NOT_REGISTERED_ALERT_MESSAGE" = "결제 대금을 보내려면 다시 등록하세요.";
 
 /* Title for the 'payments not registered' alert. */
 "SETTINGS_PAYMENTS_NOT_REGISTERED_ALERT_TITLE" = "등록되지 않음";
@@ -7973,13 +8375,13 @@
 "SETTINGS_PAYMENTS_PAYMENT_DETAILS_STATUS" = "상태";
 
 /* Footer string for the status section of the payment details view in the app settings. */
-"SETTINGS_PAYMENTS_PAYMENT_DETAILS_STATUS_FOOTER" = "지불 금액 및 거래 시간을 포함한 거래 세부 정보는 MobileCoin Ledger의 일부입니다.";
+"SETTINGS_PAYMENTS_PAYMENT_DETAILS_STATUS_FOOTER" = "결제 금액과 거래가 이루어진 시각 등의 거래 내역은 MobileCoin Ledger의 일부입니다.";
 
 /* Footer string for the status section of the payment details view in the app settings for defragmentation transactions. */
-"SETTINGS_PAYMENTS_PAYMENT_DETAILS_STATUS_FOOTER_DEFRAGMENTATION" = "보유하고 있는 코인을 합산하여 거래를 완료할 수 없는 경우 '코인 정리 수수료'가 부과됩니다. 정리를 통해 계속 지불할 수 있습니다.";
+"SETTINGS_PAYMENTS_PAYMENT_DETAILS_STATUS_FOOTER_DEFRAGMENTATION" = "보유한 코인을 합쳐 거래를 완료할 수 없는 경우 '코인 정리 수수료'가 부과됩니다. 코인 정리를 하면 결제를 계속 보낼 수 있습니다.";
 
 /* Message for the 'insufficient balance for payment' alert. Embeds: {{ The current payments balance }}. */
-"SETTINGS_PAYMENTS_PAYMENT_INSUFFICIENT_BALANCE_ALERT_MESSAGE_FORMAT" = "지불을 완료하기에 충분한 MOB가 없습니다. 현재 잔액은 %1$@입니다.";
+"SETTINGS_PAYMENTS_PAYMENT_INSUFFICIENT_BALANCE_ALERT_MESSAGE_FORMAT" = "MOB 잔액이 부족해 결제를 완료할 수 없습니다. 현재 잔액은 %1$@입니다.";
 
 /* Title for the 'insufficient balance for payment' alert. */
 "SETTINGS_PAYMENTS_PAYMENT_INSUFFICIENT_BALANCE_ALERT_TITLE" = "잔액 불충분";
@@ -8054,16 +8456,16 @@
 "SETTINGS_PAYMENTS_PAYMENTS_TYPE_OUTGOING" = "보낸 시간";
 
 /* Label for the 'recent payments' section in the payment settings. */
-"SETTINGS_PAYMENTS_RECENT_PAYMENTS" = "최근 지불";
+"SETTINGS_PAYMENTS_RECENT_PAYMENTS" = "최근 결제";
 
 /* Description for the 'record payments passphrase to disable pin' UI in the app settings. */
-"SETTINGS_PAYMENTS_RECORD_PASSPHRASE_DISABLE_PIN_DESCRIPTION" = "PIN을 사용 중지하기 전에 결제 계정을 복구할 수 있도록 결제 복구 문구를 기록해야 합니다.";
+"SETTINGS_PAYMENTS_RECORD_PASSPHRASE_DISABLE_PIN_DESCRIPTION" = "결제 계정을 복구할 수 있도록, PIN을 비활성화하기 전에 결제 복구 문구를 기록해 주세요.";
 
 /* Label for the 'record recovery passphrase' button in the 'record payments passphrase to disable pin' UI in the app settings. */
 "SETTINGS_PAYMENTS_RECORD_PASSPHRASE_DISABLE_PIN_RECORD_PASSPHRASE" = "기록 복구 문구";
 
 /* Title for the 'record payments passphrase to disable pin' UI in the app settings. */
-"SETTINGS_PAYMENTS_RECORD_PASSPHRASE_DISABLE_PIN_TITLE" = "지불 복구 문구 기록";
+"SETTINGS_PAYMENTS_RECORD_PASSPHRASE_DISABLE_PIN_TITLE" = "결제 복구 문구 기록";
 
 /* Label for the current balance in the 'deactivate payments' settings. */
 "SETTINGS_PAYMENTS_REMAINING_BALANCE" = "잔액";
@@ -8102,7 +8504,7 @@
 "SETTINGS_PAYMENTS_RESTORE_WALLET_PASTE_TITLE" = "복구 문구 붙여넣기";
 
 /* Explanation of the 'restore payments wallet' process payments settings. */
-"SETTINGS_PAYMENTS_RESTORE_WALLET_SPLASH_EXPLANATION" = "복원 문구는 24개 단어로 구성된 사용자별 고유 문구입니다. 이 문구를 사용하여 결제 계정을 복원하세요.";
+"SETTINGS_PAYMENTS_RESTORE_WALLET_SPLASH_EXPLANATION" = "복구 문구는 사용자별로 제공되는 계정 복원용 문구로, 24개 단어로 구성됩니다.";
 
 /* Title for the first step of the 'restore payments wallet' views. */
 "SETTINGS_PAYMENTS_RESTORE_WALLET_SPLASH_TITLE" = "복구 문구 입력";
@@ -8153,7 +8555,7 @@
 "SETTINGS_PAYMENTS_SECURITY_TITLE" = "결제";
 
 /* Label for 'send payment' button in the payment settings. */
-"SETTINGS_PAYMENTS_SEND_PAYMENT" = "송금";
+"SETTINGS_PAYMENTS_SEND_PAYMENT" = "결제 대금 보내기";
 
 /* Label for the 'send payment to recipient' view in the payment settings. */
 "SETTINGS_PAYMENTS_SEND_TO_RECIPIENT_TITLE" = "수신자 선택";
@@ -8315,7 +8717,7 @@
 "SETTINGS_REGISTRATION_LOCK_TURN_OFF_ERROR_NETWORK" = "등록 잠금을 비활성화하지 못했습니다. 인터넷 연결을 확인하고 다시 시도하세요.";
 
 /* Title for the alert confirming that the user wants to turn off registration lock. */
-"SETTINGS_REGISTRATION_LOCK_TURN_OFF_TITLE" = "등록 잠금을 끄시겠습니까?";
+"SETTINGS_REGISTRATION_LOCK_TURN_OFF_TITLE" = "등록 잠금을 끄시겠어요?";
 
 /* Action to turn on registration lock */
 "SETTINGS_REGISTRATION_LOCK_TURN_ON" = "켜기";
@@ -8333,7 +8735,7 @@
 "SETTINGS_REGISTRATION_LOCK_TURN_ON_MESSAGE" = "B&A에 등록할 때 B&A PIN을 또 잊어버린다면 7일간 계정이 잠깁니다.";
 
 /* Title for the alert confirming that the user wants to turn on registration lock. */
-"SETTINGS_REGISTRATION_LOCK_TURN_ON_TITLE" = "등록 잠금을 켜시겠습니까?";
+"SETTINGS_REGISTRATION_LOCK_TURN_ON_TITLE" = "등록 잠금을 켜시겠어요?";
 
 /* Label for re-link button. */
 "SETTINGS_RELINK_BUTTON" = "재연결";
@@ -8447,7 +8849,7 @@
 "SHARE_EXTENSION_VIEW_TITLE" = "B&A에 공유";
 
 /* Title of alert indicating sharing suggestions failed to deactivate */
-"SHARING_SUGGESTIONS_DISABLE_ERROR" = "제안 공유를 비활성화하지 못했습니다.";
+"SHARING_SUGGESTIONS_DISABLE_ERROR" = "공유 제안을 비활성화하지 못했습니다.";
 
 /* notification action */
 "SHOW_THREAD_BUTTON_TITLE" = "대화 표시";
@@ -8474,10 +8876,10 @@
 "SPAM_CAPTCHA_COMPLETED_TOAST" = "확인이 완료되었습니다.";
 
 /* Message for confirmation dialog confirming to ignore verification. */
-"SPAM_CAPTCHA_DISMISS_CONFIRMATION_MESSAGE" = "확인을 건너뛰도록 선택하면 다른 사용자이 보낸 메시지를 놓칠 수 있고 메시지가 전송되지 않을 수 있습니다.";
+"SPAM_CAPTCHA_DISMISS_CONFIRMATION_MESSAGE" = "인증을 건너뛰면 다른 사람이 보낸 메시지를 받지 못할 수 있으며, 내 메시지가 전송되지 않을 수 있습니다.";
 
 /* Title for confirmation dialog confirming to ignore verification. */
-"SPAM_CAPTCHA_DISMISS_CONFIRMATION_TITLE" = "확인하지 않고 계속하시겠습니까?";
+"SPAM_CAPTCHA_DISMISS_CONFIRMATION_TITLE" = "인증하지 않고 계속할까요?";
 
 /* Body for action sheet explaining captcha requirement. */
 "SPAM_CAPTCHA_SHEET_BODY" = "B&A에서 스팸을 방지하려면 확인을 완료하세요.\n\n확인 후 메시지를 계속 전송할 수 있습니다. 일시 중지된 메시지는 자동으로 전송됩니다.";
@@ -8500,6 +8902,12 @@
 /* The name for the sticker category 'Featured' */
 "STICKER_CATEGORY_FEATURED_NAME" = "추천";
 
+/* Subtitle of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_SUBTITLE" = "스티커를 보내면 여기에 표시됩니다";
+
+/* Title of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_TITLE" = "최근 스티커 없음";
+
 /* The name for the sticker category 'Recents' */
 "STICKER_CATEGORY_RECENTS_NAME" = "최근";
 
@@ -8508,9 +8916,6 @@
 
 /* Message when trying to show a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_MESSAGE_LABEL" = "스티커를 사용할 수 없음";
-
-/* Message for sheet shown when tapping a sticker that has expired and is unavailable for download */
-"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "이 기기 연결 시 이 스티커를 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 미디어와 파일은 동기화할 수 없습니다.";
 
 /* Title for sheet shown when tapping a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_SHEET_TITLE" = "스티커를 사용할 수 없음";
@@ -8651,28 +9056,13 @@
 "STORIES_SETTINGS_TURN_ON_STORIES_BUTTON" = "스토리 켜기";
 
 /* Title for the 'view receipts' setting in stories settings */
-"STORIES_SETTINGS_VIEW_RECEIPTS" = "수신 확인";
+"STORIES_SETTINGS_VIEW_RECEIPTS" = "열람 확인";
 
 /* Footer for the 'view receipts' section of the stories settings */
 "STORIES_SETTINGS_VIEW_RECEIPTS_FOOTER" = "언제 스토리를 조회했는지를 보고 공유합니다. 비활성화할 경우 다른 사람이 내 스토리를 언제 조회했는지를 알 수 없습니다.";
 
 /* Context menu action to share the selected story */
 "STORIES_SHARE_STORY_ACTION" = "공유";
-
-/* Section title shown when sending to non-story conversations but failing to send the file to stories. */
-"STORIES_SHARESHEET_PARTIAL_SEND_REMAINING_SECTION_TITLE" = "보냄";
-
-/* Section title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_STORIES_SECTION_TITLE" = "전송 실패";
-
-/* Title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_TITLE" = "일부만 전송됐습니다.";
-
-/* Subtitle shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_SUBTITLE" = "선택한 파일 형식을 지원하지 않습니다.";
-
-/* Title shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_TITLE" = "전송 실패";
 
 /* Title for the stories view. */
 "STORIES_TITLE" = "스토리";
@@ -8687,7 +9077,7 @@
 "STORIES_UNHIDE_STORY_CONFIRMATION_TOAST" = "스토리를 숨김 해제했습니다.";
 
 /* Text explaining that you will not see any views for your story because you have view receipts turned off */
-"STORIES_VIEWS_OFF_DESCRIPTION" = "내 스토리를 본 사람을 확인하려면 수신 확인을 활성화하세요.";
+"STORIES_VIEWS_OFF_DESCRIPTION" = "내 스토리를 본 사람을 확인하려면 열람 확인을 활성화하세요.";
 
 /* Title text for the 'views' tab on the stories views & replies sheet */
 "STORIES_VIEWS_TAB" = "조회";
@@ -8722,26 +9112,20 @@
 /* Title for the story privacy settings view */
 "STORY_PRIVACY_TITLE" = "스토리 개인정보보호";
 
-/* inbox and notification text for a reaction to a story authored by the local user. Embeds {{reaction emoji}} */
-"STORY_REACTION_LOCAL_AUTHOR_PREVIEW_FORMAT" = "내 스토리에 %1$@ 이모지로 반응했습니다.";
+/* Text explaining that you reacted to someone else's story. Embeds {{ %1$@ reaction emoji, %2$@ story author name }}. */
+"STORY_REACTION_PREVIEW_FORMAT_SECOND_PERSON" = "%2$@ 님의 스토리에 %1$@ 이모지로 반응했어요";
+
+/* Text explaining that someone reacted to your story. Embeds {{ %1$@ reaction emoji }}. */
+"STORY_REACTION_PREVIEW_FORMAT_THIRD_PERSON" = "내 스토리에 %1$@ 이모지로 반응했어요";
 
 /* quote text for a reaction to a story by the user (the header on the bubble says \"You\"). Embeds {{reaction emoji}} */
-"STORY_REACTION_QUOTE_FORMAT_SECOND_PERSON" = "스토리에 %1$@ 이모지로 반응했습니다.";
+"STORY_REACTION_QUOTE_FORMAT_SECOND_PERSON" = "스토리에 %1$@ 이모지로 반응했어요";
 
 /* quote text for a reaction to a story by some other user (the header on the bubble says their name, e.g. \"Bob\"). Embeds {{reaction emoji}} */
-"STORY_REACTION_QUOTE_FORMAT_THIRD_PERSON" = "스토리에 %1$@ 이모지로 반응했습니다.";
-
-/* inbox and notification text for a reaction to a story authored by another user. Embeds {{ %1$@ reaction emoji, %2$@ story author name }} */
-"STORY_REACTION_REMOTE_AUTHOR_PREVIEW_FORMAT" = "%2$@ 님의 스토리에 %1$@ 이모지로 반응했습니다.";
+"STORY_REACTION_QUOTE_FORMAT_THIRD_PERSON" = "스토리에 %1$@ 이모지로 반응했어요";
 
 /* Button for replying to a story with no existing replies. */
 "STORY_REPLY_BUTTON" = "답장";
-
-/* Text indicating you reacted to a story (the header on the bubble says \"You\") */
-"STORY_REPLY_REACTION_SECOND_PERSON" = "스토리에 반응했습니다.";
-
-/* Text indicating someone else reacted to a story (the header on the bubble says their name, e.g. \"Bob\") */
-"STORY_REPLY_REACTION_THIRD_PERSON" = "스토리에 반응했습니다.";
 
 /* placeholder text for replying to a story */
 "STORY_REPLY_TEXT_FIELD_PLACEHOLDER" = "답장";
@@ -8762,10 +9146,10 @@
 "STORY_RESEND_PARTIALLY_FAILED_MESSAGE_ACTION_SHEET" = "이 스토리를 일부 사용자에게 보낼 수 없습니다. 연결을 확인하고 다시 시도하세요.";
 
 /* The title for the 'select connections for story' view. */
-"STORY_SELECT_ALLOWED_CONNECTIONS_VIEW_TITLE" = "다음 사용자와만 공유…";
+"STORY_SELECT_ALLOWED_CONNECTIONS_VIEW_TITLE" = "일부 사용자와만 공유";
 
 /* The title for the 'select excluded connections for story' view. */
-"STORY_SELECT_EXCLUDED_CONNECTIONS_VIEW_TITLE" = "다음을 제외한 모든 사용자…";
+"STORY_SELECT_EXCLUDED_CONNECTIONS_VIEW_TITLE" = "일부를 제외한 모든 사용자";
 
 /* Text indicating that the story send has failed */
 "STORY_SEND_FAILED" = "전송에 실패했습니다.";
@@ -8834,7 +9218,7 @@
 "STORY_VIEWS_OFF" = "보기 사용 안 함";
 
 /* Toast indicating that the user has copied their subscriber ID. (Externally referred to as donor ID) */
-"SUBSCRIPTION_SUBSCRIBER_ID_COPIED_TO_CLIPBOARD" = "기부자 ID를 클립보드에 복사함";
+"SUBSCRIPTION_SUBSCRIBER_ID_COPIED_TO_CLIPBOARD" = "후원자 ID를 클립보드에 복사함";
 
 /* Alert body after verifying privacy with {{other user's name}} */
 "SUCCESSFUL_VERIFICATION_DESCRIPTION" = "%1$@ 님과의 안전 번호가 일치합니다. 이 연락처를 검증했다고 표시할 수 있습니다.";
@@ -8909,7 +9293,7 @@
 "SUSTAINER_VIEW_CANT_ADD_BADGE_MESSAGE" = "배지를 계정에 추가할 수 없습니다. 고객 지원팀에 문의하세요.";
 
 /* Action sheet title for Couldn't Add Badge sheet */
-"SUSTAINER_VIEW_CANT_ADD_BADGE_TITLE" = "배지를 추가하지 못했습니다.";
+"SUSTAINER_VIEW_CANT_ADD_BADGE_TITLE" = "배지를 추가하지 못했습니다";
 
 /* Action sheet title for Error Authorizing Payment sheet */
 "SUSTAINER_VIEW_ERROR_AUTHORIZING_PAYMENT_TITLE" = "결제 승인 오류";
@@ -8965,35 +9349,23 @@
 /* Option in selected text edit menu to make text bold */
 "TEXT_MENU_BOLD" = "두껍게";
 
-/* Option in selected text edit menu to clear all text formatting in the selected text range */
-"TEXT_MENU_CLEAR_FORMATTING" = "텍스트 서식 지우기";
-
 /* Option in selected text edit menu to view text formatting options */
 "TEXT_MENU_FORMAT" = "서식 지정";
 
 /* Option in selected text edit menu to make text italic */
 "TEXT_MENU_ITALIC" = "기울임꼴";
 
-/* Option in selected text edit menu to look up word definitions */
-"TEXT_MENU_LOOK_UP" = "조회";
-
 /* Option in selected text edit menu to make text monospace */
 "TEXT_MENU_MONOSPACE" = "고정 폭";
 
-/* Option in selected text edit menu to replace text with suggestions */
-"TEXT_MENU_REPLACE" = "바꾸기";
-
-/* Option in selected text edit menu to share selected text */
-"TEXT_MENU_SHARE" = "공유";
+/* Option in selected text edit menu to remove all text formatting in the selected text range */
+"TEXT_MENU_REMOVE_FORMATTING" = "서식 제거";
 
 /* Option in selected text edit menu to make text spoiler */
 "TEXT_MENU_SPOILER" = "스포일러";
 
 /* Option in selected text edit menu to make text strikethrough */
 "TEXT_MENU_STRIKETHROUGH" = "취소선";
-
-/* Option in selected text edit menu to translate the word */
-"TEXT_MENU_TRANSLATE" = "번역";
 
 /* text indicating the message was remotely deleted */
 "THIS_MESSAGE_WAS_DELETED" = "이 메세지는 삭제되었습니다.";
@@ -9173,7 +9545,7 @@
 "UNLINK_CONFIRMATION_ALERT_BODY" = "기기가 연결 해제되면 더 이상 메시지를 보내거나 받을 수 없게 됩니다.";
 
 /* Alert title for confirming device deletion */
-"UNLINK_CONFIRMATION_ALERT_TITLE" = "\"%1$@\" 기기의 연결을 해제하시겠습니까?";
+"UNLINK_CONFIRMATION_ALERT_TITLE" = "'%1$@' 기기의 연결을 해제할까요?";
 
 /* Label warning the user that they have been unlinked from their primary device. */
 "UNLINKED_WARNING" = "이 기기는 연결이 해제되었습니다. 메시지를 계속 이용하려면 B&A에 휴대폰을 다시 연결하세요.";
@@ -9224,7 +9596,7 @@
 "USE_PROXY_EXPLANATION" = "모바일 데이터 또는 Wi-Fi에서 B&A에 연결할 수 없는 경우에만 프록시를 사용하세요.";
 
 /* Description of username links and QR codes on the username education sheet */
-"USERNAME_EDUCATION_LINK_DESCRIPTION" = "사용자 이름에는 나와 빠르게 대화를 시작하도록 친구와 공유할 수 있는 고유한 QR 코드와 링크가 있습니다.";
+"USERNAME_EDUCATION_LINK_DESCRIPTION" = "사용자 이름에는 고유한 QR 코드와 링크가 함께 제공됩니다. 해당 코드나 링크를 친구와 공유하여 바로 대화를 시작해 보세요.";
 
 /* Title for the username links and QR codes section on the username education sheet */
 "USERNAME_EDUCATION_LINK_TITLE" = "QR 코드와 링크";
@@ -9233,7 +9605,7 @@
 "USERNAME_EDUCATION_PRIVACY_DESCRIPTION" = "이 대화에 내 전화번호가 더 이상 표시되지 않습니다. 내 전화번호를 연락처에 저장한 친구는 계속 내 전화번호를 볼 수 있습니다.";
 
 /* Title for phone number privacy section of the username education sheet */
-"USERNAME_EDUCATION_PRIVACY_TITLE" = "전화번호 개인 정보 보호";
+"USERNAME_EDUCATION_PRIVACY_TITLE" = "전화번호 보호";
 
 /* Label for the 'set up' button on the username education sheet */
 "USERNAME_EDUCATION_SET_UP_BUTTON" = "사용자 이름 설정";
@@ -9242,7 +9614,7 @@
 "USERNAME_EDUCATION_TITLE" = "새로운 연락 방법";
 
 /* Description of usernames on the username education sheet */
-"USERNAME_EDUCATION_USERNAME_DESCRIPTION" = "이제 나에게 메시지를 보낼 때 선택적 사용자 이름을 사용할 수 있으므로 다른 사람과 전화번호를 공유할 필요가 없습니다. 사용자 이름은 프로필에 표시되지 않습니다.";
+"USERNAME_EDUCATION_USERNAME_DESCRIPTION" = "이제 별도의 사용자 이름으로 메시지를 받을 수 있어 다른 사람과 전화번호를 공유하지 않아도 됩니다. 사용자 이름은 프로필에 표시되지 않습니다.";
 
 /* Title for usernames section on the username education sheet */
 "USERNAME_EDUCATION_USERNAME_TITLE" = "사용자 이름";
@@ -9332,7 +9704,7 @@
 "USERNAME_SELECTION_CHANGE_USERNAME_CONFIRMATION_MESSAGE" = "사용자 이름을 변경하면 기존 QR 코드와 링크가 초기화됩니다. 계속할까요?";
 
 /* Footer text below a text field in which users type their desired username, which explains how usernames work. Embeds a {{ \"learn more\" link. }}. */
-"USERNAME_SELECTION_EXPLANATION_FOOTER_FORMAT" = "사용자 이름은 항상 숫자와 짝지어 쓰입니다. %1$@";
+"USERNAME_SELECTION_EXPLANATION_FOOTER_FORMAT" = "모든 사용자 이름에는 고유 번호가 부여됩니다. %1$@";
 
 /* When the user has entered text into a text field for setting their username, a header displays the username text. This string is shown in the header when the text field is empty. */
 "USERNAME_SELECTION_HEADER_TEXT_FOR_PLACEHOLDER" = "사용자 이름을 선택하세요.";
@@ -9344,7 +9716,7 @@
 "USERNAME_SELECTION_INVALID_DISCRIMINATOR_ERROR_MESSAGE" = "사용자 이름이 잘못되었습니다. 2자 이상으로 입력해 주세요.";
 
 /* The message of a sheet that pops up when the user taps \"Learn More\" in text that explains how usernames work. This message help explain that the automatically-generated numeric suffix of their username helps keep their username private, to avoid them being contacted by people by whom they don't want to be contacted. */
-"USERNAME_SELECTION_LEARN_MORE_ACTION_SHEET_MESSAGE" = "이 일련번호는 사용자 이름을 비공개로 유지하여 원치 않는 메시지를 피할 수 있도록 도와줍니다. 대화를 원하는 사용자 및 그룹과만 사용자 이름을 공유하세요. 사용자 이름을 변경하면 새로운 일련번호가 부여됩니다.";
+"USERNAME_SELECTION_LEARN_MORE_ACTION_SHEET_MESSAGE" = "이 일련번호는 사용자 이름을 비공개로 보호해 원치 않는 메시지를 차단하는 데 도움이 됩니다. 사용자 이름은 신뢰하는 사용자나 그룹과만 공유해 주세요. 사용자 이름을 변경하면 새로운 일련번호가 생성됩니다.";
 
 /* The title of a sheet that pops up when the user taps \"Learn More\" in text that explains how usernames work. The sheet will present a more detailed explanation of the username's numeric suffix. */
 "USERNAME_SELECTION_LEARN_MORE_ACTION_SHEET_TITLE" = "이 번호는 무엇인가요?";
@@ -9392,7 +9764,7 @@
 "VERIFY_SAFETY_NUMBER_INSTRUCTIONS" = "%1$@ 님과의 엔드투엔드 암호화를 검증하려면 상기 번호를 상대방 기기의 번호와 비교하세요. 상대방의 기기로 코드를 스캔할 수도 있습니다.";
 
 /* Toast alert text shown when tapping on a video that cannot be played. */
-"VIDEO_BROKEN" = "이 동영상을 표시할 수 없습니다.";
+"VIDEO_BROKEN" = "이 동영상을 재생할 수 없습니다.";
 
 /* Accessibility label for placing a video call */
 "VIDEO_CALL_LABEL" = "영상 통화";
@@ -9425,25 +9797,25 @@
 "VOICE_MESSAGE_TOO_SHORT_TOOLTIP" = "길게 누르면 녹음됩니다.";
 
 /* Accessibility label for gradient wallpaper swatch, naming the two colors in the gradient. {{ Embeds the names of the two colors in the gradient }} */
-"WALLPAPER_GRADIENT_COLORS_ACCESSIBILITY_LABEL" = "%1$@ 및 %2$@을(를) 사용한 그라데이션";
+"WALLPAPER_GRADIENT_COLORS_ACCESSIBILITY_LABEL" = "%1$@ 및 %2$@ 색상을 사용한 그라데이션";
 
 /* Placeholder text for header of the wallpaper mini preview */
 "WALLPAPER_MINI_PREVIEW_CONTACT_NAME" = "연락처 이름";
 
 /* Blur button on wallpaper preview. */
-"WALLPAPER_PREVIEW_BLUR_BUTTON" = "블러 처리된 사진";
+"WALLPAPER_PREVIEW_BLUR_BUTTON" = "사진에 흐림 효과 주기";
 
 /* The incoming bubble text when setting a photo */
 "WALLPAPER_PREVIEW_INCOMING_MESSAGE_PHOTO" = "확대하기 위해서는 화면 위에 두 손가락을 모으거나 멀어지게 조작하시고, 조정하기 위해서는 손가락으로 끌어보세요.";
 
 /* The incoming bubble text when setting a preset */
-"WALLPAPER_PREVIEW_INCOMING_MESSAGE_PRESET" = "스와이프하여 더 많은 배경을 미리 보세요.";
+"WALLPAPER_PREVIEW_INCOMING_MESSAGE_PRESET" = "화면을 밀어 더 많은 배경 화면을 미리 확인하세요.";
 
 /* The outgoing bubble text when setting a wallpaper for all chats. */
 "WALLPAPER_PREVIEW_OUTGOING_MESSAGE_ALL_CHATS" = "모든 대화에 배경 화면을 설정합니다.";
 
 /* The outgoing bubble text when setting a wallpaper for specific chat. Embeds {{chat name}} */
-"WALLPAPER_PREVIEW_OUTGOING_MESSAGE_FORMAT" = "%1$@ 배경으로 설정했습니다.";
+"WALLPAPER_PREVIEW_OUTGOING_MESSAGE_FORMAT" = "%1$@ 채팅창 배경 화면 설정";
 
 /* Title for the wallpaper preview view. */
 "WALLPAPER_PREVIEW_TITLE" = "미리보기";
@@ -9455,13 +9827,13 @@
 "WALLPAPER_SETTINGS_CLEAR_CHAT_COLOR_CHAT_CONFIRMATION" = "이 대화의 대화창 색을 제거할까요?";
 
 /* Clear wallpaper action in wallpaper settings view. */
-"WALLPAPER_SETTINGS_CLEAR_WALLPAPER" = "배경 삭제";
+"WALLPAPER_SETTINGS_CLEAR_WALLPAPER" = "배경 화면 삭제";
 
 /* Confirmation dialog when clearing the wallpaper for a specific chat. */
 "WALLPAPER_SETTINGS_CLEAR_WALLPAPER_CHAT_CONFIRMATION" = "이 대화의 배경 화면을 제거할까요?";
 
 /* Dim wallpaper action in wallpaper settings view. */
-"WALLPAPER_SETTINGS_DIM_WALLPAPER" = "어두운 테마는 배경을 흐립니다.";
+"WALLPAPER_SETTINGS_DIM_WALLPAPER" = "다크 모드 설정 시 배경 화면이 어두워집니다";
 
 /* An error indicating to the user that we failed to clear the wallpaper. */
 "WALLPAPER_SETTINGS_FAILED_TO_CLEAR" = "배경을 삭제할 수 없습니다. 오류가 계속되면 다시 시도하거나 지원팀에 문의하세요.";
@@ -9470,10 +9842,10 @@
 "WALLPAPER_SETTINGS_FAILED_TO_RESET" = "모든 배경을 재설정할 수 없습니다. 오류가 계속되면 다시 시도하거나 지원팀에 문의하세요";
 
 /* Label for 'reset all chat colors' action in the global wallpaper settings. */
-"WALLPAPER_SETTINGS_RESET_ALL_CHAT_COLORS" = "모든 색상 재설정";
+"WALLPAPER_SETTINGS_RESET_ALL_CHAT_COLORS" = "모든 색상 초기화";
 
 /* Label for 'reset all wallpapers' action in the global wallpaper settings. */
-"WALLPAPER_SETTINGS_RESET_ALL_WALLPAPERS" = "모든 배경 재설정";
+"WALLPAPER_SETTINGS_RESET_ALL_WALLPAPERS" = "모든 배경 화면 초기화";
 
 /* Message of confirmation dialog when resetting the global wallpaper settings. */
 "WALLPAPER_SETTINGS_RESET_CHAT_COLORS_CONFIRMATION_MESSAGE" = "모든 대화창 색을 다시 정의할까요?";
@@ -9485,31 +9857,31 @@
 "WALLPAPER_SETTINGS_RESET_CONVERSATION_CHAT_COLOR" = "대화창 색 재설정";
 
 /* Reset conversation wallpaper action in wallpaper settings view. */
-"WALLPAPER_SETTINGS_RESET_CONVERSATION_WALLPAPER" = "배경 화면 재설정";
+"WALLPAPER_SETTINGS_RESET_CONVERSATION_WALLPAPER" = "배경 화면 초기화";
 
 /* Label for 'reset default chat color' action in the global wallpaper settings. */
-"WALLPAPER_SETTINGS_RESET_DEFAULT_CHAT_COLOR" = "기본 색상 재설정";
+"WALLPAPER_SETTINGS_RESET_DEFAULT_CHAT_COLOR" = "기본 색상 초기화";
 
 /* Reset global chat colors action in wallpaper settings view. */
 "WALLPAPER_SETTINGS_RESET_DEFAULT_CHAT_COLORS" = "대화창 색 재설정";
 
 /* Label for 'reset default wallpaper' action in the global wallpaper settings. */
-"WALLPAPER_SETTINGS_RESET_DEFAULT_WALLPAPER" = "기본 배경 화면 재설정";
+"WALLPAPER_SETTINGS_RESET_DEFAULT_WALLPAPER" = "기본 배경 화면 초기화";
 
 /* Reset wallpapers action in wallpaper settings view. */
-"WALLPAPER_SETTINGS_RESET_GLOBAL_WALLPAPER" = "배경 화면 재설정";
+"WALLPAPER_SETTINGS_RESET_GLOBAL_WALLPAPER" = "배경 화면 초기화";
 
 /* Message of confirmation dialog when resetting the global wallpaper settings. */
-"WALLPAPER_SETTINGS_RESET_WALLPAPERS_CONFIRMATION_MESSAGE" = "모든 배경 화면을 덮어쓰시겠습니까?";
+"WALLPAPER_SETTINGS_RESET_WALLPAPERS_CONFIRMATION_MESSAGE" = "모든 배경 화면을 덮어쓸까요?";
 
 /* Title of confirmation dialog when resetting the global wallpaper settings. */
-"WALLPAPER_SETTINGS_RESET_WALLPAPERS_CONFIRMATION_TITLE" = "배경 화면 재설정";
+"WALLPAPER_SETTINGS_RESET_WALLPAPERS_CONFIRMATION_TITLE" = "배경 화면 초기화";
 
 /* Set chat color action in color and wallpaper settings view. */
 "WALLPAPER_SETTINGS_SET_CHAT_COLOR" = "대화창 색";
 
 /* Set wallpaper action in wallpaper settings view. */
-"WALLPAPER_SETTINGS_SET_WALLPAPER" = "배경 설정";
+"WALLPAPER_SETTINGS_SET_WALLPAPER" = "배경 화면 설정";
 
 /* Second person pronoun to represent the local user. */
 "YOU" = "나";
@@ -9526,45 +9898,81 @@
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "사라지는 메시지 시간을 %1$@(으)로 설정했습니다.";
 
-/* BA custom strings */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "백업 생성 중: %1$@";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "백업을 내보내는 중...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "백업을 업로드하는 중...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "백업 미디어를 업로드하는 중...";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "지금 백업";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "나중에 백업";
-"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "이 연락처에서 너무 많은 오류가 발생했습니다. 나중에 다시 시도해 주세요.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "끄기";
-"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "PIN을 끄기 전 먼저 등록 잠금부터 꺼야 합니다.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "등록 잠금을 끄시겠습니까?";
-"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "PIN을 만들었으나 등록 잠금을 활성화하지 못했습니다. 연결을 확인하고 다시 시도하세요.";
-"PIN_CREATION_REGLOCK_ERROR_TITLE" = "등록 잠금 활성화 실패";
-"PIN_DISABLE_ERROR_MESSAGE" = "PIN을 비활성화할 수 없습니다.";
-"PIN_DISABLE_ERROR_TITLE" = "PIN 끄기 실패";
-"REGISTER_RATE_LIMITING_BODY" = "너무 많이 시도하셨습니다. 몇 분 후 다시 시도해 주세요.";
-"VOICE_MESSAGE_FILE_NAME" = "B&A";
+/* ===== B&A Custom Strings ===== */
 
-/* BA custom strings */
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "이 기기 연결 시 이 음성 메시지를 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 파일과 미디어는 동기화할 수 없습니다.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "이 기기를 연결한 상태로 이 파일을 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 파일과 미디어는 동기화할 수 없습니다.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "이 기기를 연결한 상태로 이 메시지의 전체 텍스트를 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 긴 텍스트 메시지는 동기화할 수 없습니다.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "이 기기 연결 시 이 스티커를 휴대폰에서 전송할 수 없습니다. 기기 연결 시점에 45일보다 오래된 미디어와 파일은 동기화할 수 없습니다.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "텍스트 + 45일간의 미디어 백업";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "지난 45일간의 미디어";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "텍스트 + 45일 분량의 미디어";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "더 보기";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "다른 기부 방법";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "B&A Messenger 저작권\nAGPLv3에 따라 라이선스 부여됨";
+
+/* Link BAXS platform account */
+
 "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "BAXS 계정을 연결하려는 것 같네요. 계속을 탭한 다음 'QR 코드 스캔'을 탭하고 QR 코드를 다시 스캔하세요.";
+
 "LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BA 플랫폼 계정 연결";
+
 "LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "연결된 BAXS 계정";
+
 "LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BA 플랫폼 계정";
+
 "LINK_BA_PLATFORM_SCAN_FOOTER" = "BA 결제 플랫폼에 표시된 QR 코드를 스캔하여 계정을 연결하세요.";
+
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "QR 코드 스캔";
-"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "휴대폰";
-"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "이메일";
-"LINK_BA_PLATFORM_USER_ID" = "User ID";
-"LINK_BA_PLATFORM_USER_NAME" = "User Name";
-"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA 플랫폼 계정 연결";
-"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "\"%@\"에 계정을 연결하시겠습니까?";
-"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA 플랫폼 계정이 성공적으로 연결되었습니다.";
-"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "유효하지 않은 QR 코드";
-"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "이 QR 코드는 유효한 BA 플랫폼 연결 코드가 아닙니다.";
+
 "LINK_BA_PLATFORM_SCAN_AGAIN" = "다시 스캔";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "휴대폰";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "이메일";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BA 플랫폼 계정 연결";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "\"%@\"에 계정을 연결하시겠습니까?";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BA 플랫폼 계정이 성공적으로 연결되었습니다.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "유효하지 않은 QR 코드";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "이 QR 코드는 유효한 BA 플랫폼 연결 코드가 아닙니다.";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "연결할 수 없음";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "이 QR 코드는 연결에 사용할 수 없습니다.";
+
 "LINK_BA_PLATFORM_FAILED_TITLE" = "연결 실패";
+
 "LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BA 플랫폼이 연결 요청을 거부했습니다.";
+
 "LINK_BA_PLATFORM_TIMEOUT_TITLE" = "연결 시간 초과";
+
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BA 플랫폼이 제때 응답하지 않았습니다. 다시 시도해 주세요.";
+
 "LINK_BA_PLATFORM_ERROR_TITLE" = "오류";
+

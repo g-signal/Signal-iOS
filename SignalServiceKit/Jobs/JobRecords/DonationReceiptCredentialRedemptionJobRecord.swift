@@ -23,8 +23,8 @@ public final class DonationReceiptCredentialRedemptionJobRecord: JobRecord, Fact
     /// interesting to callers!
     func getReceiptCredentialPresentation() throws -> ReceiptCredentialPresentation? {
         if let _receiptCredential {
-            return try DonationSubscriptionManager.generateReceiptCredentialPresentation(
-                receiptCredential: try ReceiptCredential(contents: _receiptCredential)
+            return try ReceiptCredentialManager.generateReceiptCredentialPresentation(
+                receiptCredential: try ReceiptCredential(contents: _receiptCredential),
             )
         } else if let _receiptCredentialPresentation {
             return try ReceiptCredentialPresentation(contents: _receiptCredentialPresentation)
@@ -57,7 +57,7 @@ public final class DonationReceiptCredentialRedemptionJobRecord: JobRecord, Fact
         isBoost: Bool,
         amount: Decimal?,
         currencyCode: String?,
-        boostPaymentIntentID: String
+        boostPaymentIntentID: String,
     ) {
         self.paymentProcessor = paymentProcessor
         self.paymentMethod = paymentMethod
@@ -76,7 +76,7 @@ public final class DonationReceiptCredentialRedemptionJobRecord: JobRecord, Fact
 
         super.init(
             failureCount: 0,
-            status: .ready
+            status: .ready,
         )
     }
 
@@ -97,7 +97,7 @@ public final class DonationReceiptCredentialRedemptionJobRecord: JobRecord, Fact
         currencyCode: String?,
         boostPaymentIntentID: String,
         failureCount: UInt,
-        status: Status
+        status: Status,
     ) {
         self.paymentProcessor = paymentProcessor
         self.paymentMethod = paymentMethod
@@ -116,7 +116,7 @@ public final class DonationReceiptCredentialRedemptionJobRecord: JobRecord, Fact
 
         super.init(
             failureCount: failureCount,
-            status: status
+            status: status,
         )
     }
 #endif
@@ -143,19 +143,19 @@ public final class DonationReceiptCredentialRedemptionJobRecord: JobRecord, Fact
 
         amount = try container.decodeIfPresent(
             Data.self,
-            forKey: .amount
+            forKey: .amount,
         ).map { amountData in
             return try LegacySDSSerializer().deserializeLegacySDSData(
                 amountData,
-                propertyName: "amount"
-            )
+                ofClass: NSDecimalNumber.self,
+            ) as Decimal
         }
         currencyCode = try container.decodeIfPresent(String.self, forKey: .currencyCode)
 
         try super.init(baseClassDuringFactoryInitializationFrom: container.superDecoder())
     }
 
-    public override func encode(to encoder: Encoder) throws {
+    override public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         try super.encode(to: container.superEncoder())
@@ -172,8 +172,8 @@ public final class DonationReceiptCredentialRedemptionJobRecord: JobRecord, Fact
         try container.encode(isNewSubscription, forKey: .isNewSubscription)
         try container.encode(isBoost, forKey: .isBoost)
         try container.encodeIfPresent(
-            LegacySDSSerializer().serializeAsLegacySDSData(property: amount),
-            forKey: .amount
+            (amount as NSDecimalNumber?).map(LegacySDSSerializer().serializeAsLegacySDSData(_:)),
+            forKey: .amount,
         )
         try container.encodeIfPresent(currencyCode, forKey: .currencyCode)
         try container.encode(boostPaymentIntentID, forKey: .boostPaymentIntentID)

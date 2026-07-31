@@ -113,14 +113,14 @@ extension StickerPack {
             let uniqueId: String = record.uniqueId
             let author: String? = record.author
             let coverSerialized: Data = record.cover
-            let cover: StickerPackItem = try SDSDeserialization.unarchive(coverSerialized, name: "cover")
+            let cover: StickerPackItem = try SDSDeserialization.unarchivedObject(ofClass: StickerPackItem.self, from: coverSerialized)
             let dateCreatedInterval: Double = record.dateCreated
             let dateCreated: Date = SDSDeserialization.requiredDoubleAsDate(dateCreatedInterval, name: "dateCreated")
             let infoSerialized: Data = record.info
-            let info: StickerPackInfo = try SDSDeserialization.unarchive(infoSerialized, name: "info")
+            let info: StickerPackInfo = try SDSDeserialization.unarchivedObject(ofClass: StickerPackInfo.self, from: infoSerialized)
             let isInstalled: Bool = record.isInstalled
             let itemsSerialized: Data = record.items
-            let items: [StickerPackItem] = try SDSDeserialization.unarchive(itemsSerialized, name: "items")
+            let items: [StickerPackItem] = try SDSDeserialization.unarchivedArrayOfObjects(ofClass: StickerPackItem.self, from: itemsSerialized)
             let title: String? = record.title
 
             return StickerPack(grdbId: recordId,
@@ -338,17 +338,14 @@ public extension StickerPack {
 @objc
 public class StickerPackCursor: NSObject, SDSCursor {
     private let transaction: DBReadTransaction
-    private let cursor: RecordCursor<StickerPackRecord>?
+    private let cursor: RecordCursor<StickerPackRecord>
 
-    init(transaction: DBReadTransaction, cursor: RecordCursor<StickerPackRecord>?) {
+    init(transaction: DBReadTransaction, cursor: RecordCursor<StickerPackRecord>) {
         self.transaction = transaction
         self.cursor = cursor
     }
 
     public func next() throws -> StickerPack? {
-        guard let cursor = cursor else {
-            return nil
-        }
         guard let record = try cursor.next() else {
             return nil
         }
@@ -374,16 +371,9 @@ public extension StickerPack {
     @nonobjc
     class func grdbFetchCursor(transaction: DBReadTransaction) -> StickerPackCursor {
         let database = transaction.database
-        do {
+        return failIfThrows {
             let cursor = try StickerPackRecord.fetchCursor(database)
             return StickerPackCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \(error)")
-            return StickerPackCursor(transaction: transaction, cursor: nil)
         }
     }
 
@@ -440,44 +430,6 @@ public extension StickerPack {
                             })
     }
 
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        anyEnumerateUniqueIds(transaction: transaction, batched: false, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batched: Bool = false,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        let batchSize = batched ? Batching.kDefaultBatchSize : 0
-        anyEnumerateUniqueIds(transaction: transaction, batchSize: batchSize, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    //
-    // If batchSize > 0, the enumeration is performed in autoreleased batches.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batchSize: UInt,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        grdbEnumerateUniqueIds(transaction: transaction,
-                                sql: """
-                SELECT \(stickerPackColumn: .uniqueId)
-                FROM \(StickerPackRecord.databaseTableName)
-            """,
-            batchSize: batchSize,
-            block: block)
-    }
-
     // Does not order the results.
     class func anyFetchAll(transaction: DBReadTransaction) -> [StickerPack] {
         var result = [StickerPack]()
@@ -487,36 +439,8 @@ public extension StickerPack {
         return result
     }
 
-    // Does not order the results.
-    class func anyAllUniqueIds(transaction: DBReadTransaction) -> [String] {
-        var result = [String]()
-        anyEnumerateUniqueIds(transaction: transaction) { (uniqueId, _) in
-            result.append(uniqueId)
-        }
-        return result
-    }
-
     class func anyCount(transaction: DBReadTransaction) -> UInt {
         return StickerPackRecord.ows_fetchCount(transaction.database)
-    }
-
-    class func anyExists(
-        uniqueId: String,
-        transaction: DBReadTransaction
-    ) -> Bool {
-        assert(!uniqueId.isEmpty)
-
-        let sql = "SELECT EXISTS ( SELECT 1 FROM \(StickerPackRecord.databaseTableName) WHERE \(stickerPackColumn: .uniqueId) = ? )"
-        let arguments: StatementArguments = [uniqueId]
-        do {
-            return try Bool.fetchOne(transaction.database, sql: sql, arguments: arguments) ?? false
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFail("Missing instance.")
-        }
     }
 }
 
@@ -526,17 +450,10 @@ public extension StickerPack {
     class func grdbFetchCursor(sql: String,
                                arguments: StatementArguments = StatementArguments(),
                                transaction: DBReadTransaction) -> StickerPackCursor {
-        do {
+        return failIfThrows {
             let sqlRequest = SQLRequest<Void>(sql: sql, arguments: arguments, cached: true)
             let cursor = try StickerPackRecord.fetchCursor(transaction.database, sqlRequest)
             return StickerPackCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \(error)")
-            return StickerPackCursor(transaction: transaction, cursor: nil)
         }
     }
 

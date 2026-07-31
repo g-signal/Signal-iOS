@@ -12,18 +12,15 @@ public final class TransformingInputStream: InputStreamable {
 
     private let transforms: [any StreamTransform]
     private let inputStream: InputStreamable
-    private let runLoop: RunLoop?
 
     private var hasInitialized: Bool = false
 
     public init(
         transforms: [any StreamTransform],
         inputStream: InputStreamable,
-        runLoop: RunLoop? = nil
     ) {
         self.transforms = transforms
         self.inputStream = inputStream
-        self.runLoop = runLoop
     }
 
     /// `hasBytesAvailable` should return true if any of the following is true:
@@ -37,8 +34,8 @@ public final class TransformingInputStream: InputStreamable {
     public var hasBytesAvailable: Bool {
         return
             inputStream.hasBytesAvailable
-            || transforms.contains { $0.hasPendingBytes }
-            || transforms.compactMap { $0 as? FinalizableStreamTransform }.contains { !$0.hasFinalized }
+                || transforms.contains { $0.hasPendingBytes }
+                || transforms.compactMap { $0 as? FinalizableStreamTransform }.contains { !$0.hasFinalized }
     }
 
     /// Read up to `maxLength` bytes of transformed input stream data.
@@ -54,7 +51,7 @@ public final class TransformingInputStream: InputStreamable {
         // otherwise, read data until the buffer is filled.
         // read some bytes, transform them, read some more, until the buffer is full
         var returnData: Data = Data()
-        while returnData.count == 0 && inputStream.hasBytesAvailable {
+        while returnData.count == 0, inputStream.hasBytesAvailable {
             func getData() throws -> Data {
                 // Only read if there isn't pending data in the transforms
                 if transforms.contains(where: { $0.hasPendingBytes }) == false {
@@ -86,7 +83,7 @@ public final class TransformingInputStream: InputStreamable {
         // remaining data in the transfom buffers, finalize the transforms
         // and read any data resulting from that.
         var remainingData = try transforms.readNextRemainingBytes()
-        while remainingData.count == 0 && hasBytesAvailable {
+        while remainingData.count == 0, hasBytesAvailable {
             remainingData = try transforms.readNextRemainingBytes()
         }
         return remainingData

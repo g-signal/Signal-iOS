@@ -1,1 +1,3 @@
-• Vi har åtgärdat ett fel som gjorde att kameran visades tom vid försök att länka en ny enhet. Nu kommer sökaren bara att se ut så om du försöker länka en ny enhet i ett riktigt mörkt rum.
+• Hjälp till att hålla viktig information lättillgänglig med nålade meddelanden. Dina vanligaste frågor, middagsbokningar och semesterplaner är redan högst upp i tankarna. Nu kan de också vara högst upp i chatten.
+
+

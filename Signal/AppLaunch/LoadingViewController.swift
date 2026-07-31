@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import Foundation
 import SignalServiceKit
 import SignalUI
 
@@ -33,33 +34,33 @@ class LoadingViewController: UIViewController {
         logoView.autoSetDimensions(to: CGSize(square: 128))
 
         self.topLabel = buildLabel()
-        topLabel.alpha = 0
+        topLabel.isHiddenInStackView = true
         topLabel.font = UIFont.dynamicTypeTitle2
         topLabel.text = OWSLocalizedString("DATABASE_VIEW_OVERLAY_TITLE", comment: "Title shown while the app is updating its database.")
         labelStack.addArrangedSubview(topLabel)
 
         self.bottomLabel = buildLabel()
-        bottomLabel.alpha = 0
+        bottomLabel.isHiddenInStackView = true
         bottomLabel.font = UIFont.dynamicTypeBody
         bottomLabel.text = OWSLocalizedString(
             "DATABASE_VIEW_OVERLAY_SUBTITLE",
-            comment: "Subtitle shown while the app is updating its database."
+            comment: "Subtitle shown while the app is updating its database.",
         ) + "\n" + OWSLocalizedString(
             "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP",
-            comment: "Shown to users while the app is loading, asking them not to close the app."
+            comment: "Shown to users while the app is loading, asking them not to close the app.",
         )
         bottomLabel.textAlignment = .center
         labelStack.addArrangedSubview(bottomLabel)
         labelStack.setCustomSpacing(20, after: bottomLabel)
 
         progressView.setProgress(0.1, animated: false)
-        progressView.alpha = 0
+        progressView.isHiddenInStackView = true
         labelStack.addArrangedSubview(progressView)
         labelStack.setCustomSpacing(16, after: progressView)
         progressView.autoPinWidthToSuperview(withMargin: 20, relation: .lessThanOrEqual)
         progressView.autoSetDimension(.width, toSize: 330).priority = .defaultLow
 
-        percentCompleteLabel.alpha = 0
+        percentCompleteLabel.isHiddenInStackView = true
         percentCompleteLabel.font = {
             let metrics = UIFontMetrics(forTextStyle: .body)
             let desc = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body)
@@ -70,7 +71,7 @@ class LoadingViewController: UIViewController {
         labelStack.addArrangedSubview(percentCompleteLabel)
         labelStack.setCustomSpacing(6, after: percentCompleteLabel)
 
-        unitCountLabel.alpha = 0
+        unitCountLabel.isHiddenInStackView = true
         unitCountLabel.font = .dynamicTypeBody.monospaced()
         unitCountLabel.textColor = .Signal.secondaryLabel
         labelStack.addArrangedSubview(unitCountLabel)
@@ -102,19 +103,19 @@ class LoadingViewController: UIViewController {
             self,
             selector: #selector(didBecomeActive),
             name: .OWSApplicationDidBecomeActive,
-            object: nil
+            object: nil,
         )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(didEnterBackground),
             name: .OWSApplicationDidEnterBackground,
-            object: nil
+            object: nil,
         )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(themeDidChange),
             name: .themeDidChange,
-            object: nil
+            object: nil,
         )
     }
 
@@ -153,6 +154,7 @@ class LoadingViewController: UIViewController {
 
     private func showBottomLabelAnimated() {
         bottomLabel.layer.removeAllAnimations()
+        bottomLabel.isHiddenInStackView = false
         bottomLabel.alpha = kMinAlpha
         UIView.animate(withDuration: 0.3) {
             self.bottomLabel.alpha = 1
@@ -162,6 +164,7 @@ class LoadingViewController: UIViewController {
 
     private func showTopLabel() {
         topLabel.layer.removeAllAnimations()
+        topLabel.isHiddenInStackView = false
         topLabel.alpha = 0.2
         UIView.animate(withDuration: 0.9, delay: 0, options: [.autoreverse, .repeat, .curveEaseInOut], animations: {
             self.topLabel.alpha = 1.0
@@ -170,7 +173,7 @@ class LoadingViewController: UIViewController {
 
     private func showBottomLabel() {
         bottomLabel.layer.removeAllAnimations()
-        self.bottomLabel.alpha = 1
+        bottomLabel.isHiddenInStackView = false
     }
 
     // MARK: -
@@ -213,7 +216,7 @@ class LoadingViewController: UIViewController {
 
     private var progress: OWSProgress?
 
-    public func updateProgress(_ progress: OWSProgress) {
+    func updateProgress(_ progress: OWSProgress) {
         self.progress = progress
         let percentComplete = progress.percentComplete
         let unitCountToComplete = progress.totalUnitCount
@@ -223,9 +226,9 @@ class LoadingViewController: UIViewController {
         percentCompleteLabel.text = String(
             format: OWSLocalizedString(
                 "LINK_NEW_DEVICE_SYNC_PROGRESS_PERCENT",
-                comment: "On a progress modal indicating the percent complete the sync process is. Embeds {{ formatted percentage }}"
+                comment: "On a progress modal indicating the percent complete the sync process is. Embeds {{ formatted percentage }}",
             ),
-            percentComplete.formatted(.percent.precision(.fractionLength(0)))
+            percentComplete.formatted(.percent.precision(.fractionLength(0))),
         )
         unitCountLabel.text = "\(unitCountCompleted.formatted(.number)) / \(unitCountToComplete.formatted(.number))"
 
@@ -252,7 +255,7 @@ class LoadingViewController: UIViewController {
     // Typically this task's work is represented in `updateProgress`
     // if that has been called; its ok to set this without
     // setting progress, however.
-    public func setCancellableTask(_ task: Task<Void, Never>?) {
+    func setCancellableTask(_ task: Task<Void, Never>?) {
         self.cancellableTask = task
         updateCancelButton()
     }

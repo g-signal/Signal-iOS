@@ -4,7 +4,6 @@
 //
 
 #import "TSThread.h"
-#import "OWSDisappearingMessagesConfiguration.h"
 #import "OWSReadTracking.h"
 #import "TSIncomingMessage.h"
 #import "TSInfoMessage.h"
@@ -109,37 +108,102 @@ lastVisibleSortIdOnScreenPercentageObsolete:(double)lastVisibleSortIdOnScreenPer
 
 // --- CODE GENERATION MARKER
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    self = [super initWithCoder:coder];
-    if (!self) {
-        return self;
+    NSUInteger result = [super hash];
+    result ^= self.conversationColorNameObsolete.hash;
+    result ^= self.creationDate.hash;
+    result ^= self.editTargetTimestamp.hash;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    result ^= self.isArchivedByLegacyTimestampForSorting;
+#pragma clang diagnostic pop
+    result ^= self.isArchivedObsolete;
+    result ^= self.isMarkedUnreadObsolete;
+    result ^= self.lastDraftInteractionRowId;
+    result ^= self.lastDraftUpdateTimestamp;
+    result ^= self.lastInteractionRowId;
+    result ^= self.lastSentStoryTimestamp.hash;
+    result ^= self.lastVisibleSortIdObsolete;
+    result ^= @(self.lastVisibleSortIdOnScreenPercentageObsolete).stringValue.hash;
+    result ^= self.mentionNotificationMode;
+    result ^= self.messageDraft.hash;
+    result ^= self.messageDraftBodyRanges.hash;
+    result ^= self.mutedUntilDateObsolete.hash;
+    result ^= self.mutedUntilTimestampObsolete;
+    result ^= self.shouldThreadBeVisible;
+    result ^= self.storyViewMode;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
     }
-
-    // renamed `hasEverHadMessage` -> `shouldThreadBeVisible`
-    if (!_shouldThreadBeVisible) {
-        NSNumber *_Nullable legacy_hasEverHadMessage = [coder decodeObjectForKey:@"hasEverHadMessage"];
-
-        if (legacy_hasEverHadMessage != nil) {
-            _shouldThreadBeVisible = legacy_hasEverHadMessage.boolValue;
-        }
+    TSThread *typedOther = (TSThread *)other;
+    if (![NSObject isObject:self.conversationColorNameObsolete
+              equalToObject:typedOther.conversationColorNameObsolete]) {
+        return NO;
     }
-
-    if (_conversationColorNameObsolete.length == 0) {
-        _conversationColorNameObsolete = @"Obsolete";
+    if (![NSObject isObject:self.creationDate equalToObject:typedOther.creationDate]) {
+        return NO;
     }
-
-    NSDate *_Nullable lastMessageDate = [coder decodeObjectOfClass:NSDate.class forKey:@"lastMessageDate"];
-    NSDate *_Nullable archivalDate = [coder decodeObjectOfClass:NSDate.class forKey:@"archivalDate"];
-    _isArchivedByLegacyTimestampForSorting = [self.class legacyIsArchivedWithLastMessageDate:lastMessageDate
-                                                                                archivalDate:archivalDate];
-
-    if ([coder decodeObjectForKey:@"archivedAsOfMessageSortId"] != nil) {
-        OWSAssertDebug(!_isArchivedObsolete);
-        _isArchivedObsolete = YES;
+    if (![NSObject isObject:self.editTargetTimestamp equalToObject:typedOther.editTargetTimestamp]) {
+        return NO;
     }
-
-    return self;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    if (self.isArchivedByLegacyTimestampForSorting != typedOther.isArchivedByLegacyTimestampForSorting) {
+        return NO;
+    }
+#pragma clang diagnostic pop
+    if (self.isArchivedObsolete != typedOther.isArchivedObsolete) {
+        return NO;
+    }
+    if (self.isMarkedUnreadObsolete != typedOther.isMarkedUnreadObsolete) {
+        return NO;
+    }
+    if (self.lastDraftInteractionRowId != typedOther.lastDraftInteractionRowId) {
+        return NO;
+    }
+    if (self.lastDraftUpdateTimestamp != typedOther.lastDraftUpdateTimestamp) {
+        return NO;
+    }
+    if (self.lastInteractionRowId != typedOther.lastInteractionRowId) {
+        return NO;
+    }
+    if (![NSObject isObject:self.lastSentStoryTimestamp equalToObject:typedOther.lastSentStoryTimestamp]) {
+        return NO;
+    }
+    if (self.lastVisibleSortIdObsolete != typedOther.lastVisibleSortIdObsolete) {
+        return NO;
+    }
+    if (self.lastVisibleSortIdOnScreenPercentageObsolete != typedOther.lastVisibleSortIdOnScreenPercentageObsolete) {
+        return NO;
+    }
+    if (self.mentionNotificationMode != typedOther.mentionNotificationMode) {
+        return NO;
+    }
+    if (![NSObject isObject:self.messageDraft equalToObject:typedOther.messageDraft]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.messageDraftBodyRanges equalToObject:typedOther.messageDraftBodyRanges]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.mutedUntilDateObsolete equalToObject:typedOther.mutedUntilDateObsolete]) {
+        return NO;
+    }
+    if (self.mutedUntilTimestampObsolete != typedOther.mutedUntilTimestampObsolete) {
+        return NO;
+    }
+    if (self.shouldThreadBeVisible != typedOther.shouldThreadBeVisible) {
+        return NO;
+    }
+    if (self.storyViewMode != typedOther.storyViewMode) {
+        return NO;
+    }
+    return YES;
 }
 
 - (void)anyDidInsertWithTransaction:(DBWriteTransaction *)transaction
@@ -175,11 +239,6 @@ lastVisibleSortIdOnScreenPercentageObsolete:(double)lastVisibleSortIdOnScreenPer
     return NO;
 }
 
-- (NSString *)colorSeed
-{
-    return self.uniqueId;
-}
-
 #pragma mark - To be subclassed.
 
 - (NSArray<SignalServiceAddress *> *)recipientAddressesWithSneakyTransaction
@@ -205,11 +264,13 @@ lastVisibleSortIdOnScreenPercentageObsolete:(double)lastVisibleSortIdOnScreenPer
 
 #pragma mark - Interactions
 
-- (nullable TSInteraction *)lastInteractionForInboxWithTransaction:(DBReadTransaction *)transaction
+- (nullable TSInteraction *)lastInteractionForInboxForChatListSorting:(BOOL)isForSorting
+                                                          transaction:(DBReadTransaction *)transaction
 {
     OWSAssertDebug(transaction);
     return [[[InteractionFinder alloc] initWithThreadUniqueId:self.uniqueId]
-        mostRecentInteractionForInboxWithTransaction:transaction];
+        mostRecentInteractionForInboxForChatListSorting:isForSorting
+                                            transaction:transaction];
 }
 
 - (nullable TSInteraction *)firstInteractionAtOrAroundSortId:(uint64_t)sortId
@@ -219,22 +280,6 @@ lastVisibleSortIdOnScreenPercentageObsolete:(double)lastVisibleSortIdOnScreenPer
     return
         [[[InteractionFinder alloc] initWithThreadUniqueId:self.uniqueId] firstInteractionAtOrAroundSortId:sortId
                                                                                                transaction:transaction];
-}
-
-#pragma mark - Archival
-
-+ (BOOL)legacyIsArchivedWithLastMessageDate:(nullable NSDate *)lastMessageDate
-                               archivalDate:(nullable NSDate *)archivalDate
-{
-    if (!archivalDate) {
-        return NO;
-    }
-
-    if (!lastMessageDate) {
-        return YES;
-    }
-
-    return [archivalDate compare:lastMessageDate] != NSOrderedAscending;
 }
 
 #pragma mark - Merging

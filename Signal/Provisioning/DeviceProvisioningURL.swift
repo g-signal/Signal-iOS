@@ -13,7 +13,6 @@ public class DeviceProvisioningURL {
     /// scoped specifically to provisioning to communicate between the primary
     /// and secondary device.
     public enum Capability: String {
-        case linknsync_backCompat = "backup4"
         case linknsync = "backup5"
     }
 
@@ -41,7 +40,7 @@ public class DeviceProvisioningURL {
         type: LinkType,
         ephemeralDeviceId: String,
         publicKey: PublicKey,
-        capabilities: [Capability] = []
+        capabilities: [Capability] = [],
     ) {
         self.linkType = type
         self.ephemeralDeviceId = ephemeralDeviceId
@@ -94,7 +93,7 @@ public class DeviceProvisioningURL {
                         }
                         return capability
                     })
-                ?? []
+                    ?? []
             default:
                 Logger.warn("unknown query item in provisioning string: \(queryItem.name)")
             }

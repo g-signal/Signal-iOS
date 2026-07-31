@@ -11,7 +11,7 @@ public class SessionResetJobQueue {
             canExecuteJobsConcurrently: true,
             db: db,
             jobFinder: JobRecordFinderImpl(db: db),
-            jobRunnerFactory: SessionResetJobRunnerFactory()
+            jobRunnerFactory: SessionResetJobRunnerFactory(),
         )
         self.jobQueueRunner.listenForReachabilityChanges(reachabilityManager: reachabilityManager)
     }
@@ -39,14 +39,17 @@ private class SessionResetJobRunner: JobRunner {
 
     private var hasArchivedAllSessions = false
 
-    func runJobAttempt(_ jobRecord: SessionResetJobRecord) async -> JobAttemptResult {
+    func runJobAttempt(_ jobRecord: SessionResetJobRecord) async -> JobAttemptResult<Void> {
         do {
             try await _runJobAttempt(jobRecord)
             return .finished(.success(()))
         } catch {
             return await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
-                let result = JobAttemptResult.performDefaultErrorHandler(
-                    error: error, jobRecord: jobRecord, retryLimit: Constants.maxRetries, tx: tx
+                let result = JobAttemptResult<Void>.performDefaultErrorHandler(
+                    error: error,
+                    jobRecord: jobRecord,
+                    retryLimit: Constants.maxRetries,
+                    tx: tx,
                 )
                 if case .finished(.failure) = result {
                     // Even though this is the failure handler - which means probably the
@@ -64,7 +67,7 @@ private class SessionResetJobRunner: JobRunner {
         }
     }
 
-    func didFinishJob(_ jobRecordId: JobRecord.RowId, result: JobResult) async {}
+    func didFinishJob(_ jobRecordId: JobRecord.RowId, result: JobResult<Void>) async {}
 
     private func _runJobAttempt(_ jobRecord: SessionResetJobRecord) async throws {
         let endSessionMessagePromise = try await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
@@ -72,9 +75,9 @@ private class SessionResetJobRunner: JobRunner {
             if !self.hasArchivedAllSessions {
                 self.archiveAllSessions(for: contactThread, tx: tx)
             }
-            let endSessionMessage = EndSessionMessage(thread: contactThread, transaction: tx)
+            let endSessionMessage = OutgoingEndSessionMessage(thread: contactThread, tx: tx)
             let preparedMessage = PreparedOutgoingMessage.preprepared(
-                transientMessageWithoutAttachments: endSessionMessage
+                transientMessageWithoutAttachments: endSessionMessage,
             )
             return ThreadUtil.enqueueMessagePromise(message: preparedMessage, isHighPriority: true, transaction: tx)
         }
@@ -82,7 +85,6 @@ private class SessionResetJobRunner: JobRunner {
 
         try await endSessionMessagePromise.awaitable()
 
-        Logger.info("successfully sent EndSessionMessage.")
         try await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
             let contactThread = try self.fetchThread(jobRecord: jobRecord, tx: tx)
             // Archive the just-created session since the recipient should delete their
@@ -106,6 +108,6 @@ private class SessionResetJobRunner: JobRunner {
 
     private func archiveAllSessions(for contactThread: TSContactThread, tx: DBWriteTransaction) {
         let sessionStore = DependenciesBridge.shared.signalProtocolStoreManager.signalProtocolStore(for: .aci).sessionStore
-        sessionStore.archiveAllSessions(for: contactThread.contactAddress, tx: tx)
+        sessionStore.archiveSessions(forAddress: contactThread.contactAddress, tx: tx)
     }
 }

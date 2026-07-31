@@ -19,7 +19,7 @@ public class MessagePipelineSupervisor: NSObject {
     /// Initializes a MessagePipelineSupervisor
     ///   Only to be used by tests.
     @objc
-    public override init() {
+    override public init() {
         super.init()
 
         SwiftSingletons.register(self)
@@ -41,9 +41,7 @@ public class MessagePipelineSupervisor: NSObject {
         case nseWakingUpApp(suspensionId: UUID, payloadString: String)
         case registrationProvisioning
         case pendingChangeNumber
-        case backup
         case linkNsync
-        case backupBGProcessingTask
 
         fileprivate var reasonString: String {
             switch self {
@@ -53,12 +51,8 @@ public class MessagePipelineSupervisor: NSObject {
                 return "registration or provisioning"
             case .pendingChangeNumber:
                 return "Pending change number"
-            case .backup:
-                return "Backup"
             case .linkNsync:
                 return "Link'N'Sync"
-            case .backupBGProcessingTask:
-                return "Backup BGProcessingTask"
             }
         }
     }
@@ -142,7 +136,7 @@ public class MessagePipelineSupervisor: NSObject {
         // Make a copy so we don't need to hold the lock while we call out
         let toNotify = lock.withLock { return Array(pipelineStages.allObjects) }
 
-        toNotify.forEach { (stage) in
+        toNotify.forEach { stage in
             if isSuspended {
                 stage.supervisorDidSuspendMessageProcessing?(self)
             } else {

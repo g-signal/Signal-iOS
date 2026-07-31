@@ -40,7 +40,7 @@ class SyncPushTokensJob: NSObject {
         }
     }
 
-    public typealias ApnRegistrationId = RegistrationRequestFactory.ApnRegistrationId
+    typealias ApnRegistrationId = RegistrationRequestFactory.ApnRegistrationId
 
     private func run(shouldRotateAPNSToken: Bool) async throws {
         let regResult = try await AppEnvironment.shared.pushRegistrationManagerRef.requestPushTokens(forceRotation: shouldRotateAPNSToken)
@@ -71,9 +71,9 @@ class SyncPushTokensJob: NSObject {
         } else if currentVoipToken != voipToken {
             reason = "voip_changed"
             Logger.info("VoIP token changed: \(redact(currentVoipToken)) -> \(redact(voipToken))")
-        } else if AppVersionImpl.shared.lastAppVersion != AppVersionImpl.shared.currentAppVersion {
+        } else if AppVersionImpl.shared.lastCompletedLaunchAppVersion != AppVersionImpl.shared.currentAppVersion {
             reason = "upgraded"
-            Logger.info("App version changed: \(AppVersionImpl.shared.lastAppVersion ?? "nil") -> \(AppVersionImpl.shared.currentAppVersion)")
+            Logger.info("App version changed: \(AppVersionImpl.shared.lastCompletedLaunchAppVersion ?? "nil") -> \(AppVersionImpl.shared.currentAppVersion)")
         } else if !Self.hasUploadedTokensOnce.get() {
             reason = "launched"
             Logger.info("First time uploading tokens since app launch")
@@ -169,7 +169,7 @@ class SyncPushTokensJob: NSObject {
 }
 
 private func redact(_ string: String?) -> String {
-    guard let string = string else { return "nil" }
+    guard let string else { return "nil" }
 #if DEBUG
     return string
 #else

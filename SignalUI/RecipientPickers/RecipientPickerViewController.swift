@@ -61,7 +61,7 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
 
     // MARK: UIViewController
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         title = OWSLocalizedString("MESSAGE_COMPOSEVIEW_TITLE", comment: "")
@@ -69,22 +69,16 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
         updateSignalConnections()
         SUIEnvironment.shared.contactsViewHelperRef.addObserver(self)
 
-        // Stack View
-        signalContactsStackView.isHidden = isNoContactsModeActive
-        view.addSubview(signalContactsStackView)
-        signalContactsStackView.autoPinEdgesToSuperviewEdges()
-
-        // Search Bar
-        signalContactsStackView.addArrangedSubview(searchBar)
-
-        // Custom Header Views
-        if let customHeaderViews = delegate?.recipientPickerCustomHeaderViews() {
-            customHeaderViews.forEach { signalContactsStackView.addArrangedSubview($0) }
-        }
+        let navigationItem = (parent ?? self).navigationItem
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
 
         // Table View
         addChild(tableViewController)
-        signalContactsStackView.addArrangedSubview(tableViewController.view)
+        view.addSubview(tableViewController.view)
+        tableViewController.view.isHidden = isNoContactsModeActive
+        tableViewController.view.autoPinEdgesToSuperviewEdges()
+        tableViewController.didMove(toParent: self)
 
         // "No Signal Contacts"
         noSignalContactsView.isHidden = !isNoContactsModeActive
@@ -96,7 +90,6 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
         // Pull to Refresh
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = .gray
-        refreshControl.accessibilityIdentifier = "RecipientPickerViewController.pullToRefreshView"
         refreshControl.addTarget(self, action: #selector(pullToRefreshPerformed), for: .valueChanged)
         tableView.refreshControl = refreshControl
 
@@ -105,7 +98,7 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
         applyTheme()
     }
 
-    public override func viewWillAppear(_ animated: Bool) {
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         // Make sure we have requested contact access at this point if, e.g.
@@ -116,17 +109,7 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
         showContactAppropriateViews()
     }
 
-    public override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        updateSearchBarMargins()
-    }
-
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updateSearchBarMargins()
-    }
-
-    public override func themeDidChange() {
+    override public func themeDidChange() {
         super.themeDidChange()
         applyTheme()
     }
@@ -139,7 +122,21 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
 
     private static let minimumSearchLength = 1
 
-    private var searchText: String { searchBar.text?.stripped ?? "" }
+    private lazy var searchController: UISearchController = {
+        let controller = UISearchController(searchResultsController: nil)
+        controller.obscuresBackgroundDuringPresentation = false
+        controller.hidesNavigationBarDuringPresentation = false
+        controller.searchResultsUpdater = self
+        controller.searchBar.placeholder = OWSLocalizedString(
+            "SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT",
+            comment: "Placeholder text indicating the user can search for contacts by name, username, or phone number.",
+        )
+        return controller
+    }()
+
+    private var searchText: String {
+        searchController.searchBar.text?.stripped ?? ""
+    }
 
     private var lastSearchText: String?
     private var lastSearchTask: Task<Void, Never>?
@@ -194,22 +191,13 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
                 searchText: searchText,
                 includeLocalUser: !shouldHideLocalRecipient,
                 includeStories: false,
-                tx: tx
+                tx: tx,
             )
         }
     }
 
-    private func updateSearchBarMargins() {
-        // This should ideally compute the insets for self.tableView, but that
-        // view's size hasn't been updated when the viewDidLayoutSubviews method is
-        // called. As a quick fix, use self.view's size, which matches the eventual
-        // width of self.tableView. (A more complete fix would likely add a
-        // callback when self.tableView’s size is available.)
-        searchBar.layoutMargins = OWSTableViewController2.cellOuterInsets(in: view)
-    }
-
-    internal func clearSearchText() {
-        searchBar.text = ""
+    func clearSearchText() {
+        searchController.searchBar.text = ""
         searchTextDidChange()
     }
 
@@ -219,7 +207,7 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
         didSet {
             guard oldValue != isNoContactsModeActive else { return }
 
-            signalContactsStackView.isHidden = isNoContactsModeActive
+            tableViewController.view.isHidden = isNoContactsModeActive
             noSignalContactsView.isHidden = !isNoContactsModeActive
 
             updateTableContents()
@@ -227,28 +215,6 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
     }
 
     private let collation = UILocalizedIndexedCollation.current()
-
-    private lazy var signalContactsStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        return stackView
-    }()
-
-    private lazy var searchBar: OWSSearchBar = {
-        let searchBar = OWSSearchBar()
-        searchBar.delegate = self
-        searchBar.placeholder = OWSLocalizedString(
-            "SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT",
-            comment: "Placeholder text indicating the user can search for contacts by name, username, or phone number."
-        )
-        searchBar.accessibilityIdentifier = "RecipientPickerViewController.searchBar"
-        searchBar.textField?.accessibilityIdentifier = "RecipientPickerViewController.contact_search"
-        searchBar.sizeToFit()
-        searchBar.setCompressionResistanceVerticalHigh()
-        searchBar.setContentHuggingVerticalHigh()
-        return searchBar
-    }()
 
     private lazy var tableViewController: OWSTableViewController2 = {
         let viewController = OWSTableViewController2()
@@ -264,19 +230,10 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
 
     private lazy var noSignalContactsView = createNoSignalContactsView()
 
-    private var tableView: UITableView { tableViewController.tableView }
+    var tableView: UITableView { tableViewController.tableView }
 
     private func applyTheme() {
-        tableViewController.applyTheme(to: self)
-        searchBar.searchFieldBackgroundColorOverride = Theme.searchFieldElevatedBackgroundColor
         tableViewController.tableView.sectionIndexColor = Theme.primaryTextColor
-        if let owsNavigationController = navigationController as? OWSNavigationController {
-            owsNavigationController.updateNavbarAppearance()
-        }
-    }
-
-    public func applyTheme(to viewController: UIViewController) {
-        tableViewController.applyTheme(to: viewController)
     }
 
     // MARK: Context Menu
@@ -291,7 +248,7 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
             accountManager: DependenciesBridge.shared.tsAccountManager,
             contactsManager: SSKEnvironment.shared.contactManagerRef,
             fromViewController: self,
-            delegate: self.delegate
+            delegate: self.delegate,
         )
     }()
 
@@ -352,33 +309,33 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
 
         let isSearching = searchResults != nil
 
-        if shouldShowNewGroup && !isSearching {
+        if shouldShowNewGroup, !isSearching {
             staticSection.add(OWSTableItem.disclosureItem(
                 icon: .genericGroup,
                 withText: OWSLocalizedString(
                     "NEW_GROUP_BUTTON",
-                    comment: "Label for the 'create new group' button."
+                    comment: "Label for the 'create new group' button.",
                 ),
                 actionBlock: { [weak self] in
                     self?.newGroupButtonPressed()
-                }
+                },
             ))
         }
 
-        if allowsAddByAddress && !isSearching {
+        if allowsAddByAddress, !isSearching {
             // Find by username
             staticSection.add(OWSTableItem.disclosureItem(
                 icon: .profileUsername,
                 withText: OWSLocalizedString(
                     "NEW_CONVERSATION_FIND_BY_USERNAME",
-                    comment: "A label for the cell that lets you add a new member by their username"
+                    comment: "A label for the cell that lets you add a new member by their username",
                 ),
                 actionBlock: { [weak self] in
                     guard let self else { return }
                     let viewController = FindByUsernameViewController()
                     viewController.findByUsernameDelegate = self
                     self.navigationController?.pushViewController(viewController, animated: true)
-                }
+                },
             ))
 
             // Find by phone number
@@ -386,17 +343,17 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
                 icon: .phoneNumber,
                 withText: OWSLocalizedString(
                     "NEW_CONVERSATION_FIND_BY_PHONE_NUMBER",
-                    comment: "A label the cell that lets you add a new member to a group."
+                    comment: "A label the cell that lets you add a new member to a group.",
                 ),
                 actionBlock: { [weak self] in
                     guard let self else { return }
                     let viewController = FindByPhoneNumberViewController(
                         delegate: self,
                         buttonText: self.findByPhoneNumberButtonTitle,
-                        requiresRegisteredNumber: self.selectionMode != .blocklist
+                        requiresRegisteredNumber: self.selectionMode != .blocklist,
                     )
                     self.navigationController?.pushViewController(viewController, animated: true)
-                }
+                },
             ))
         }
 
@@ -405,7 +362,7 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
         }
 
         // Render any non-contact picked recipients
-        if !pickedRecipients.isEmpty && !isSearching {
+        if !pickedRecipients.isEmpty, !isSearching {
             let sectionRecipients = pickedRecipients.filter { recipient in
                 guard let recipientAddress = recipient.address else { return false }
                 if signalConnectionAddresses.contains(recipientAddress) {
@@ -417,9 +374,9 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
                 tableContents.add(OWSTableSection(
                     title: OWSLocalizedString(
                         "NEW_GROUP_NON_CONTACTS_SECTION_TITLE",
-                        comment: "a title for the selected section of the 'recipient picker' view."
+                        comment: "a title for the selected section of the 'recipient picker' view.",
                     ),
-                    items: sectionRecipients.map { item(forRecipient: $0) }
+                    items: sectionRecipients.map { item(forRecipient: $0) },
                 ))
             }
         }
@@ -501,32 +458,14 @@ public class RecipientPickerViewController: OWSViewController, OWSNavigationChil
 }
 
 extension RecipientPickerViewController: OWSTableViewControllerDelegate {
-
     public func tableViewWillBeginDragging(_ tableView: UITableView) {
-        searchBar.resignFirstResponder()
+        searchController.searchBar.resignFirstResponder()
         delegate?.recipientPickerTableViewWillBeginDragging(self)
     }
 }
 
-extension RecipientPickerViewController: UISearchBarDelegate {
-
-    public func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchTextDidChange()
-    }
-
-    public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchTextDidChange()
-    }
-
-    public func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchTextDidChange()
-    }
-
-    public func searchBarResultsListButtonClicked(_ searchBar: UISearchBar) {
-        searchTextDidChange()
-    }
-
-    public func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+extension RecipientPickerViewController: UISearchResultsUpdating {
+    public func updateSearchResults(for searchController: UISearchController) {
         searchTextDidChange()
     }
 }
@@ -549,7 +488,7 @@ extension RecipientPickerViewController {
             return nil
         case .groupsThatUserIsMemberOfWhenSearching:
             groupThreads = searchResults.groupThreads.filter { thread in
-                thread.isLocalUserFullMember
+                thread.groupModel.groupMembership.isLocalUserFullMember
             }
         case .allGroupsWhenSearching:
             groupThreads = searchResults.groupThreads
@@ -560,11 +499,11 @@ extension RecipientPickerViewController {
         return OWSTableSection(
             title: OWSLocalizedString(
                 "COMPOSE_MESSAGE_GROUP_SECTION_TITLE",
-                comment: "Table section header for group listing when composing a new message"
+                comment: "Table section header for group listing when composing a new message",
             ),
             items: groupThreads.map {
                 self.item(forRecipient: PickedRecipient.for(groupThread: $0))
-            }
+            },
         )
     }
 }
@@ -584,7 +523,7 @@ private extension RecipientPickerViewController {
     private func didPrepareToSelectRecipient(_ recipient: PickedRecipient) {
         AssertIsOnMainThread()
 
-        guard let delegate = delegate else { return }
+        guard let delegate else { return }
 
         delegate.recipientPicker(self, didSelectRecipient: recipient)
     }
@@ -604,7 +543,7 @@ extension RecipientPickerViewController {
         let titleLabel = UILabel()
         titleLabel.text = OWSLocalizedString(
             "EMPTY_CONTACTS_LABEL_LINE1",
-            comment: "Full width label displayed when attempting to compose message"
+            comment: "Full width label displayed when attempting to compose message",
         )
         titleLabel.textColor = Theme.primaryTextColor
         titleLabel.font = .semiboldFont(ofSize: .scaleFromIPhone5To7Plus(17, 20))
@@ -615,7 +554,7 @@ extension RecipientPickerViewController {
         let subtitleLabel = UILabel()
         subtitleLabel.text = OWSLocalizedString(
             "EMPTY_CONTACTS_LABEL_LINE2",
-            comment: "Full width label displayed when attempting to compose message"
+            comment: "Full width label displayed when attempting to compose message",
         )
         subtitleLabel.textColor = Theme.secondaryTextAndIconColor
         subtitleLabel.font = .regularFont(ofSize: .scaleFromIPhone5To7Plus(12, 14))
@@ -626,7 +565,7 @@ extension RecipientPickerViewController {
         let headerStack = UIStackView(arrangedSubviews: [
             heroImageView,
             titleLabel,
-            subtitleLabel
+            subtitleLabel,
         ])
         headerStack.setCustomSpacing(30, after: heroImageView)
         headerStack.setCustomSpacing(15, after: titleLabel)
@@ -643,13 +582,13 @@ extension RecipientPickerViewController {
             selector: Selector,
             accessibilityIdentifierName: String,
             icon: ThemeIcon,
-            innerIconSize: CGFloat
+            innerIconSize: CGFloat,
         ) {
             let button = UIButton(type: .custom)
             button.addTarget(self, action: selector, for: .touchUpInside)
             button.accessibilityIdentifier = UIView.accessibilityIdentifier(
                 in: self,
-                name: accessibilityIdentifierName
+                name: accessibilityIdentifierName,
             )
             buttonStack.addArrangedSubview(button)
 
@@ -657,7 +596,7 @@ extension RecipientPickerViewController {
                 icon: icon,
                 iconSize: AvatarBuilder.standardAvatarSizePoints,
                 innerIconSize: innerIconSize,
-                iconTintColor: Theme.accentBlueColor
+                iconTintColor: Theme.accentBlueColor,
             )
             iconView.backgroundColor = tableViewController.cellBackgroundColor
 
@@ -680,12 +619,12 @@ extension RecipientPickerViewController {
             addButton(
                 title: OWSLocalizedString(
                     "NEW_GROUP_BUTTON",
-                    comment: "Label for the 'create new group' button."
+                    comment: "Label for the 'create new group' button.",
                 ),
                 selector: #selector(newGroupButtonPressed),
                 accessibilityIdentifierName: "newGroupButton",
                 icon: .composeNewGroupLarge,
-                innerIconSize: 35
+                innerIconSize: 35,
             )
         }
 
@@ -693,23 +632,23 @@ extension RecipientPickerViewController {
             addButton(
                 title: OWSLocalizedString(
                     "NO_CONTACTS_SEARCH_BY_USERNAME",
-                    comment: "Label for a button that lets users search for contacts by username"
+                    comment: "Label for a button that lets users search for contacts by username",
                 ),
                 selector: #selector(hideBackgroundView),
                 accessibilityIdentifierName: "searchByPhoneNumberButton",
                 icon: .composeFindByUsernameLarge,
-                innerIconSize: 40
+                innerIconSize: 40,
             )
 
             addButton(
                 title: OWSLocalizedString(
                     "NO_CONTACTS_SEARCH_BY_PHONE_NUMBER",
-                    comment: "Label for a button that lets users search for contacts by phone number"
+                    comment: "Label for a button that lets users search for contacts by phone number",
                 ),
                 selector: #selector(hideBackgroundView),
                 accessibilityIdentifierName: "searchByPhoneNumberButton",
                 icon: .composeFindByPhoneNumberLarge,
-                innerIconSize: 42
+                innerIconSize: 42,
             )
         }
 
@@ -717,12 +656,12 @@ extension RecipientPickerViewController {
             addButton(
                 title: OWSLocalizedString(
                     "INVITE_FRIENDS_CONTACT_TABLE_BUTTON",
-                    comment: "Label for the cell that presents the 'invite contacts' workflow."
+                    comment: "Label for the cell that presents the 'invite contacts' workflow.",
                 ),
                 selector: #selector(presentInviteFlow),
                 accessibilityIdentifierName: "inviteContactsButton",
                 icon: .composeInviteLarge,
-                innerIconSize: 38
+                innerIconSize: 38,
             )
         }
 
@@ -841,8 +780,8 @@ extension RecipientPickerViewController {
         return OWSTableItem.softCenterLabel(
             withText: OWSLocalizedString(
                 "SETTINGS_BLOCK_LIST_NO_CONTACTS",
-                comment: "A label that indicates the user has no Signal contacts that they haven't blocked."
-            )
+                comment: "A label that indicates the user has no Signal contacts that they haven't blocked.",
+            ),
         )
     }
 
@@ -912,7 +851,7 @@ extension RecipientPickerViewController {
                 },
                 dismissAction: { [weak self] in
                     self?.hideShowContactAccessNotAllowedReminderItem()
-                }
+                },
             )
         })
     }
@@ -940,7 +879,7 @@ extension RecipientPickerViewController {
 extension RecipientPickerViewController {
     private func contactsSection() -> [OWSTableSection] {
         guard !signalConnections.isEmpty else {
-            return [ noContactsTableSection() ]
+            return [noContactsTableSection()]
         }
 
         // All contacts in one section
@@ -948,9 +887,9 @@ extension RecipientPickerViewController {
             return [OWSTableSection(
                 title: OWSLocalizedString(
                     "COMPOSE_MESSAGE_CONTACT_SECTION_TITLE",
-                    comment: "Table section header for contact listing when composing a new message"
+                    comment: "Table section header for contact listing when composing a new message",
                 ),
-                items: signalConnections.map { item(forRecipient: PickedRecipient.for(address: $0.address)) }
+                items: signalConnections.map { item(forRecipient: PickedRecipient.for(address: $0.address)) },
             )]
         }
 
@@ -958,7 +897,7 @@ extension RecipientPickerViewController {
         for signalConnection in signalConnections {
             let section = collation.section(
                 for: CollatableComparableDisplayName(signalConnection),
-                collationStringSelector: #selector(CollatableComparableDisplayName.collationString)
+                collationStringSelector: #selector(CollatableComparableDisplayName.collationString),
             )
             guard section >= 0 else {
                 continue
@@ -976,7 +915,7 @@ extension RecipientPickerViewController {
 
             return OWSTableSection(
                 title: collation.sectionTitles[index].uppercased(),
-                items: signalConnections.map { item(forRecipient: PickedRecipient.for(address: $0.address)) }
+                items: signalConnections.map { item(forRecipient: PickedRecipient.for(address: $0.address)) },
             )
         }
 
@@ -1005,9 +944,9 @@ extension RecipientPickerViewController {
             sections.append(OWSTableSection(
                 title: OWSLocalizedString(
                     "COMPOSE_MESSAGE_CONTACT_SECTION_TITLE",
-                    comment: "Table section header for contact listing when composing a new message"
+                    comment: "Table section header for contact listing when composing a new message",
                 ),
-                items: contactsSectionItems
+                items: contactsSectionItems,
             ))
         }
 
@@ -1025,13 +964,13 @@ extension RecipientPickerViewController {
 
         guard !sections.isEmpty else {
             // No Search Results
-             return [
+            return [
                 OWSTableSection(items: [
                     OWSTableItem.softCenterLabel(withText: OWSLocalizedString(
                         "SETTINGS_BLOCK_LIST_NO_SEARCH_RESULTS",
-                        comment: "A label that indicates the user's search has no matching results."
-                    ))
-                ])
+                        comment: "A label that indicates the user's search has no matching results.",
+                    )),
+                ]),
             ]
         }
 
@@ -1048,7 +987,7 @@ extension RecipientPickerViewController {
                 actionBlock: { [weak self] in
                     self?.tryToSelectRecipient(recipient)
                 },
-                contextMenuActionProvider: recipientContextMenuHelper.actionProvider(address: address)
+                contextMenuActionProvider: recipientContextMenuHelper.actionProvider(address: address),
             )
         case .group(let groupThread):
             return OWSTableItem(
@@ -1058,7 +997,7 @@ extension RecipientPickerViewController {
                 actionBlock: { [weak self] in
                     self?.tryToSelectRecipient(recipient)
                 },
-                contextMenuActionProvider: recipientContextMenuHelper.actionProvider(groupThread: groupThread)
+                contextMenuActionProvider: recipientContextMenuHelper.actionProvider(groupThread: groupThread),
             )
         }
     }
@@ -1163,8 +1102,8 @@ struct PhoneNumberFinder {
         let uniqueResults = OrderedSet(
             phoneNumberUtil.parsePhoneNumbers(
                 userSpecifiedText: searchText,
-                localPhoneNumber: localNumber ?? ""
-            ).lazy.compactMap { self.validE164(from: $0) }
+                localPhoneNumber: localNumber ?? "",
+            ).lazy.compactMap { self.validE164(from: $0) },
         )
         if !uniqueResults.isEmpty {
             return uniqueResults.orderedMembers.map { .valid(validE164: $0) }
@@ -1210,7 +1149,7 @@ struct PhoneNumberFinder {
 
         var allowedCharacters = CharacterSet(charactersIn: "+0123456789")
         allowedCharacters.formUnion(.whitespaces)
-        allowedCharacters.formUnion(.punctuationCharacters)  // allow "(", ")", "-", etc.
+        allowedCharacters.formUnion(.punctuationCharacters) // allow "(", ")", "-", etc.
         guard searchText.rangeOfCharacter(from: allowedCharacters.inverted) == nil else {
             return nil
         }
@@ -1267,12 +1206,12 @@ extension RecipientPickerViewController {
 
     public func findByNumberSection(
         for searchResults: RecipientSearchResultSet,
-        skipping alreadyMatchedPhoneNumbers: Set<String>
+        skipping alreadyMatchedPhoneNumbers: Set<String>,
     ) -> OWSTableSection? {
         let phoneNumberFinder = PhoneNumberFinder(
             localNumber: DependenciesBridge.shared.tsAccountManager.localIdentifiersWithMaybeSneakyTransaction?.phoneNumber,
             contactDiscoveryManager: SSKEnvironment.shared.contactDiscoveryManagerRef,
-            phoneNumberUtil: SSKEnvironment.shared.phoneNumberUtilRef
+            phoneNumberUtil: SSKEnvironment.shared.phoneNumberUtilRef,
         )
         var phoneNumberResults = phoneNumberFinder.parseResults(for: searchResults.searchText)
         // Don't show phone numbers that are visible in other sections.
@@ -1288,7 +1227,7 @@ extension RecipientPickerViewController {
         return OWSTableSection(
             title: OWSLocalizedString(
                 "COMPOSE_MESSAGE_PHONE_NUMBER_SEARCH_SECTION_TITLE",
-                comment: "Table section header for phone number search when composing a new message"
+                comment: "Table section header for phone number search when composing a new message",
             ),
             items: phoneNumberResults.map { phoneNumberResult in
                 return OWSTableItem(
@@ -1298,9 +1237,9 @@ extension RecipientPickerViewController {
                     },
                     actionBlock: { [weak self] in
                         self?.findByNumber(phoneNumberResult, using: phoneNumberFinder)
-                    }
+                    },
                 )
-            }
+            },
         )
     }
 
@@ -1355,26 +1294,26 @@ extension RecipientPickerViewController {
     public static func presentSMSInvitationSheet(
         for phoneNumber: String,
         fromViewController viewController: UIViewController,
-        dismissalDelegate: (any SheetDismissalDelegate)? = nil
+        dismissalDelegate: (any SheetDismissalDelegate)? = nil,
     ) {
         let actionSheet = ActionSheetController(
             title: OWSLocalizedString(
                 "RECIPIENT_PICKER_INVITE_TITLE",
-                comment: "Alert title. Shown after selecting a phone number that isn't a Signal user."
+                comment: "Alert title. Shown after selecting a phone number that isn't a Signal user.",
             ),
             message: String(
                 format: OWSLocalizedString(
                     "RECIPIENT_PICKER_INVITE_MESSAGE",
-                    comment: "Alert text. Shown after selecting a phone number that isn't a Signal user."
+                    comment: "Alert text. Shown after selecting a phone number that isn't a Signal user.",
                 ),
-                PhoneNumber.bestEffortFormatPartialUserSpecifiedTextToLookLikeAPhoneNumber(phoneNumber)
-            )
+                PhoneNumber.bestEffortFormatPartialUserSpecifiedTextToLookLikeAPhoneNumber(phoneNumber),
+            ),
         )
         actionSheet.addAction(OWSActionSheets.cancelAction)
         actionSheet.addAction(ActionSheetAction(
             title: OWSLocalizedString(
                 "RECIPIENT_PICKER_INVITE_ACTION",
-                comment: "Button. Shown after selecting a phone number that isn't a Signal user. Tapping the button will open a view that allows the user to send an SMS message to specified phone number."
+                comment: "Button. Shown after selecting a phone number that isn't a Signal user. Tapping the button will open a view that allows the user to send an SMS message to specified phone number.",
             ),
             style: .default,
             handler: { [weak viewController] action in
@@ -1385,7 +1324,7 @@ extension RecipientPickerViewController {
                 }
                 let inviteFlow = InviteFlow(presentingViewController: viewController)
                 inviteFlow.sendSMSTo(phoneNumbers: [phoneNumber])
-            }
+            },
         ))
         actionSheet.dismissalDelegate = dismissalDelegate
         viewController.presentActionSheet(actionSheet)
@@ -1395,15 +1334,15 @@ extension RecipientPickerViewController {
         let actionSheet = ActionSheetController(
             title: OWSLocalizedString(
                 "RECIPIENT_PICKER_INVALID_NUMBER_TITLE",
-                comment: "Alert title. Shown after selecting a phone number that isn't valid."
+                comment: "Alert title. Shown after selecting a phone number that isn't valid.",
             ),
             message: String(
                 format: OWSLocalizedString(
                     "RECIPIENT_PICKER_INVALID_NUMBER_MESSAGE",
-                    comment: "Alert text. Shown after selecting a phone number that isn't valid."
+                    comment: "Alert text. Shown after selecting a phone number that isn't valid.",
                 ),
-                PhoneNumber.bestEffortFormatPartialUserSpecifiedTextToLookLikeAPhoneNumber(phoneNumber)
-            )
+                PhoneNumber.bestEffortFormatPartialUserSpecifiedTextToLookLikeAPhoneNumber(phoneNumber),
+            ),
         )
         actionSheet.addAction(OWSActionSheets.okayAction)
         presentActionSheet(actionSheet)
@@ -1411,13 +1350,14 @@ extension RecipientPickerViewController {
 }
 
 // MARK: - FindByPhoneNumberDelegate
+
 // ^^ This refers to the *separate* "Find by Phone Number" row that you can tap.
 
 extension RecipientPickerViewController: FindByPhoneNumberDelegate {
 
     public func findByPhoneNumber(
         _ findByPhoneNumber: FindByPhoneNumberViewController,
-        didSelectAddress address: SignalServiceAddress
+        didSelectAddress address: SignalServiceAddress,
     ) {
         owsAssertDebug(address.isValid)
 
@@ -1479,30 +1419,29 @@ extension RecipientPickerViewController {
             },
             actionBlock: { [weak self] in
                 self?.findByUsername(username)
-            }
+            },
         )
         return OWSTableSection(
             title: OWSLocalizedString(
                 "COMPOSE_MESSAGE_USERNAME_SEARCH_SECTION_TITLE",
-                comment: "Table section header for username search when composing a new message"
+                comment: "Table section header for username search when composing a new message",
             ),
-            items: [tableItem]
+            items: [tableItem],
         )
     }
 
     private func findByUsername(_ username: String) {
-        SSKEnvironment.shared.databaseStorageRef.read { tx in
-            UsernameQuerier().queryForUsername(
-                username: username,
-                fromViewController: self,
-                tx: tx,
-                onSuccess: { [weak self] aci in
-                    AssertIsOnMainThread()
+        Task {
+            guard
+                let aci = await UsernameQuerier().queryForUsername(
+                    username: username,
+                    fromViewController: self,
+                )
+            else {
+                return
+            }
 
-                    guard let self else { return }
-                    self.tryToSelectRecipient(.for(address: SignalServiceAddress(aci)))
-                }
-            )
+            tryToSelectRecipient(.for(address: SignalServiceAddress(aci)))
         }
     }
 }
@@ -1523,19 +1462,19 @@ private class ContactAccessDeniedReminderTableViewCell: UITableViewCell {
         label.attributedText = NSAttributedString.composed(of: [
             OWSLocalizedString(
                 "COMPOSE_SCREEN_MISSING_CONTACTS_PERMISSION",
-                comment: "Multi-line label explaining why compose-screen contact picker is empty."
+                comment: "Multi-line label explaining why compose-screen contact picker is empty.",
             ),
             "\n",
             OWSLocalizedString(
                 "COMPOSE_SCREEN_MISSING_CONTACTS_CTA",
-                comment: "Button to open settings from an empty compose-screen contact picker."
+                comment: "Button to open settings from an empty compose-screen contact picker.",
             ).styled(
                 with: .font(.dynamicTypeSubheadline.semibold()),
-                .alignment(.trailing)
-            )
+                .alignment(.trailing),
+            ),
         ]).styled(
             with: .font(.dynamicTypeSubheadline),
-            .color(Theme.primaryTextColor)
+            .color(Theme.primaryTextColor),
         )
 
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTap)))
@@ -1563,9 +1502,8 @@ extension ContactAccessDeniedReminderTableViewCell: CustomBackgroundColorCell {
 
 // MARK: - ContactAccessLimitedReminderTableViewCell
 
-class ContactAccessLimitedReminderTableViewCell: UITableViewCell {}
+class ContactAccessLimitedReminderTableViewCell: UITableViewCell, CustomBackgroundColorCell {
 
-extension ContactAccessLimitedReminderTableViewCell: CustomBackgroundColorCell {
     func customBackgroundColor(forceDarkMode: Bool) -> UIColor {
         Theme.isDarkThemeEnabled ? .ows_gray80 : .ows_gray05
     }

@@ -70,7 +70,7 @@ public extension TSThread {
             }
         }
         if let groupThread = self as? TSGroupThread {
-            guard groupThread.isLocalUserFullMember else {
+            guard groupThread.groupModel.groupMembership.isLocalUserFullMember else {
                 return false
             }
         }
@@ -85,8 +85,7 @@ public extension TSThread {
             return false
         }
         // In "announcement-only" groups, only admins can send messages and start group calls.
-        return (groupModel.isAnnouncementsOnly &&
-                    !groupModel.groupMembership.isLocalUserFullMemberAndAdministrator)
+        return groupModel.isAnnouncementsOnly && !groupModel.groupMembership.isLocalUserFullMemberAndAdministrator
     }
 
     var isAnnouncementOnlyGroupThread: Bool {
@@ -127,8 +126,10 @@ extension TSThread {
     }
 
     @objc
-    public func currentDraft(shouldFetchLatest: Bool,
-                             transaction: DBReadTransaction) -> MessageBody? {
+    public func currentDraft(
+        shouldFetchLatest: Bool,
+        transaction: DBReadTransaction,
+    ) -> MessageBody? {
         if shouldFetchLatest {
             guard let thread = TSThread.anyFetch(uniqueId: uniqueId, transaction: transaction) else {
                 return nil
@@ -159,7 +160,7 @@ extension TSThread {
             withTimestamp: editTargetTimestamp,
             threadId: uniqueId,
             author: localAddress,
-            transaction: transaction
+            transaction: transaction,
         ) as? TSOutgoingMessage
     }
 }

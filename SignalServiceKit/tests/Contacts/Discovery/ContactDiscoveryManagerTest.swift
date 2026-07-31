@@ -10,16 +10,25 @@ import XCTest
 
 final class ContactDiscoveryManagerTest: XCTestCase {
     private class MockContactDiscoveryTaskQueue: ContactDiscoveryTaskQueue {
-        var onPerform: ((Set<String>, ContactDiscoveryMode) async throws -> Set<SignalRecipient>)?
+        var onPerform: ((Set<String>, ContactDiscoveryMode) async throws -> [SignalRecipient])?
 
-        func perform(for phoneNumbers: Set<String>, mode: ContactDiscoveryMode) async throws -> Set<SignalRecipient> {
+        func perform(for phoneNumbers: Set<String>, mode: ContactDiscoveryMode) async throws -> [SignalRecipient] {
             return try await onPerform!(phoneNumbers, mode)
         }
 
-        static func foundResponse(for phoneNumbers: Set<String>) -> Set<SignalRecipient> {
-            Set(phoneNumbers.lazy.map {
-                SignalRecipient(aci: Aci.randomForTesting(), pni: Pni.randomForTesting(), phoneNumber: E164($0)!, deviceIds: [DeviceId(validating: 1)!])
-            })
+        static func foundResponse(for phoneNumbers: Set<String>) -> [SignalRecipient] {
+            let db = InMemoryDB()
+            return db.write { tx in
+                return phoneNumbers.map {
+                    return try! SignalRecipient.insertRecord(
+                        aci: Aci.randomForTesting(),
+                        phoneNumber: E164($0)!,
+                        pni: Pni.randomForTesting(),
+                        deviceIds: [DeviceId(validating: 1)!],
+                        tx: tx,
+                    )
+                }
+            }
         }
     }
 
@@ -28,7 +37,7 @@ final class ContactDiscoveryManagerTest: XCTestCase {
 
     func testQueueing() async throws {
         // Start the first stateful request, but don't resolve it yet.
-        let initialRequest = CancellableContinuation<CheckedContinuation<Set<SignalRecipient>, any Error>>()
+        let initialRequest = CancellableContinuation<CheckedContinuation<[SignalRecipient], any Error>>()
         taskQueue.onPerform = { phoneNumbers, mode in
             return try await withCheckedThrowingContinuation { continuation in
                 initialRequest.resume(with: .success(continuation))
@@ -136,7 +145,7 @@ final class ContactDiscoveryManagerTest: XCTestCase {
     func testModeRateLimitPriority() {
         let allCases = ContactDiscoveryMode.allCasesOrderedByRateLimitPriority
         let uniqueCases = Set(allCases)
-        XCTAssertEqual(allCases.count, uniqueCases.count)  // no duplicates
+        XCTAssertEqual(allCases.count, uniqueCases.count) // no duplicates
         var caseCount = 0
         for mode in Set(ContactDiscoveryMode.allCasesOrderedByRateLimitPriority) {
             switch mode {
@@ -144,6 +153,6 @@ final class ContactDiscoveryManagerTest: XCTestCase {
                 caseCount += 1
             }
         }
-        XCTAssertEqual(caseCount, 3)  // every case appears
+        XCTAssertEqual(caseCount, 3) // every case appears
     }
 }

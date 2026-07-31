@@ -22,6 +22,33 @@
     return self;
 }
 
+- (NSUInteger)hash
+{
+    NSUInteger result = [super hash];
+    result ^= self.addresses.hash;
+    result ^= self.allowsReplies;
+    result ^= self.name.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
+    }
+    TSPrivateStoryThread *typedOther = (TSPrivateStoryThread *)other;
+    if (![NSObject isObject:self.addresses equalToObject:typedOther.addresses]) {
+        return NO;
+    }
+    if (self.allowsReplies != typedOther.allowsReplies) {
+        return NO;
+    }
+    if (![NSObject isObject:self.name equalToObject:typedOther.name]) {
+        return NO;
+    }
+    return YES;
+}
+
 - (instancetype)initWithName:(NSString *)name allowsReplies:(BOOL)allowsReplies viewMode:(TSThreadStoryViewMode)viewMode
 {
     NSString *uniqueId = [[self class] generateUniqueId];

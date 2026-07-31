@@ -17,7 +17,7 @@ class RecoveryKeyReminderMegaphoneTests: XCTestCase {
         return ExperienceUpgradeManifest.checkPreconditionsForRecoveryKeyReminder(
             backupSettingsStore: backupSettingsStore,
             tsAccountManager: tsAccountManager,
-            transaction: tx
+            transaction: tx,
         )
     }
 
@@ -113,5 +113,17 @@ class RecoveryKeyReminderMegaphoneTests: XCTestCase {
             checkPreconditions(tx: tx)
         }
         XCTAssertTrue(shouldShowRecoveryKeyReminder, "Should show reminder if user registered long enough ago and hasn't seen a reminder in awhile")
+    }
+}
+
+// MARK: -
+
+private extension BackupSettingsStore {
+    func lastBackupDate(tx: DBReadTransaction) -> Date? {
+        return lastBackupDetails(tx: tx)?.date
+    }
+
+    func setLastBackupDate(_ date: Date, tx: DBWriteTransaction) {
+        setLastBackupDetails(date: date, backupFileSizeBytes: 1, backupMediaSizeBytes: 1, tx: tx)
     }
 }

@@ -8,41 +8,122 @@ import Foundation
 public import LibSignalClient
 
 @objc
-public class TSGroupModelV2: TSGroupModel {
-    @objc
+public final class TSGroupModelV2: TSGroupModel {
+    override public class var supportsSecureCoding: Bool { true }
+
+    public required init?(coder: NSCoder) {
+        self.access = coder.decodeObject(of: GroupAccess.self, forKey: "access") ?? .defaultForV2
+        self.avatarDataFailedToFetchFromCDN = coder.decodeObject(of: NSNumber.self, forKey: "avatarDataFailedToFetchFromCDN")?.boolValue ?? false
+        self.avatarUrlPath = coder.decodeObject(of: NSString.self, forKey: "avatarUrlPath") as String?
+        self.descriptionText = coder.decodeObject(of: NSString.self, forKey: "descriptionText") as String?
+        self.didJustAddSelfViaGroupLink = coder.decodeObject(of: NSNumber.self, forKey: "didJustAddSelfViaGroupLink")?.boolValue ?? false
+        self.inviteLinkPassword = coder.decodeObject(of: NSData.self, forKey: "inviteLinkPassword") as Data?
+        self.isAnnouncementsOnly = coder.decodeObject(of: NSNumber.self, forKey: "isAnnouncementsOnly")?.boolValue ?? false
+        self.isJoinRequestPlaceholder = coder.decodeObject(of: NSNumber.self, forKey: "isPlaceholderModel")?.boolValue ?? false
+        self.lowTrustAvatarDownloadWasBlocked = coder.decodeObject(of: NSNumber.self, forKey: "lowTrustAvatarDownloadWasBlocked")?.boolValue ?? false
+        self.membership = coder.decodeObject(of: GroupMembership.self, forKey: "membership") ?? .empty
+        self.revision = coder.decodeObject(of: NSNumber.self, forKey: "revision")?.uint32Value ?? 0
+        self.secretParamsData = coder.decodeObject(of: NSData.self, forKey: "secretParamsData") as Data? ?? Data()
+        self.wasJustMigrated = coder.decodeObject(of: NSNumber.self, forKey: "wasJustMigrated")?.boolValue ?? false
+        super.init(coder: coder)
+    }
+
+    override public func encode(with coder: NSCoder) {
+        super.encode(with: coder)
+        coder.encode(self.access, forKey: "access")
+        coder.encode(NSNumber(value: self.avatarDataFailedToFetchFromCDN), forKey: "avatarDataFailedToFetchFromCDN")
+        if let avatarUrlPath {
+            coder.encode(avatarUrlPath, forKey: "avatarUrlPath")
+        }
+        if let descriptionText {
+            coder.encode(descriptionText, forKey: "descriptionText")
+        }
+        coder.encode(NSNumber(value: self.didJustAddSelfViaGroupLink), forKey: "didJustAddSelfViaGroupLink")
+        if let inviteLinkPassword {
+            coder.encode(inviteLinkPassword, forKey: "inviteLinkPassword")
+        }
+        coder.encode(NSNumber(value: self.isAnnouncementsOnly), forKey: "isAnnouncementsOnly")
+        coder.encode(NSNumber(value: self.isJoinRequestPlaceholder), forKey: "isPlaceholderModel")
+        coder.encode(NSNumber(value: self.lowTrustAvatarDownloadWasBlocked), forKey: "lowTrustAvatarDownloadWasBlocked")
+        coder.encode(self.membership, forKey: "membership")
+        coder.encode(NSNumber(value: self.revision), forKey: "revision")
+        coder.encode(self.secretParamsData, forKey: "secretParamsData")
+        coder.encode(NSNumber(value: self.wasJustMigrated), forKey: "wasJustMigrated")
+    }
+
+    override public var hash: Int {
+        var hasher = Hasher()
+        hasher.combine(super.hash)
+        hasher.combine(access)
+        hasher.combine(avatarDataFailedToFetchFromCDN)
+        hasher.combine(avatarUrlPath)
+        hasher.combine(descriptionText)
+        hasher.combine(didJustAddSelfViaGroupLink)
+        hasher.combine(inviteLinkPassword)
+        hasher.combine(isAnnouncementsOnly)
+        hasher.combine(isJoinRequestPlaceholder)
+        hasher.combine(lowTrustAvatarDownloadWasBlocked)
+        hasher.combine(membership)
+        hasher.combine(revision)
+        hasher.combine(secretParamsData)
+        hasher.combine(wasJustMigrated)
+        return hasher.finalize()
+    }
+
+    override public func isEqual(_ object: Any?) -> Bool {
+        guard let object = object as? Self else { return false }
+        guard super.isEqual(object) else { return false }
+        guard self.access == object.access else { return false }
+        guard self.avatarDataFailedToFetchFromCDN == object.avatarDataFailedToFetchFromCDN else { return false }
+        guard self.avatarUrlPath == object.avatarUrlPath else { return false }
+        guard self.descriptionText == object.descriptionText else { return false }
+        guard self.didJustAddSelfViaGroupLink == object.didJustAddSelfViaGroupLink else { return false }
+        guard self.inviteLinkPassword == object.inviteLinkPassword else { return false }
+        guard self.isAnnouncementsOnly == object.isAnnouncementsOnly else { return false }
+        guard self.isJoinRequestPlaceholder == object.isJoinRequestPlaceholder else { return false }
+        guard self.lowTrustAvatarDownloadWasBlocked == object.lowTrustAvatarDownloadWasBlocked else { return false }
+        guard self.membership == object.membership else { return false }
+        guard self.revision == object.revision else { return false }
+        guard self.secretParamsData == object.secretParamsData else { return false }
+        guard self.wasJustMigrated == object.wasJustMigrated else { return false }
+        return true
+    }
+
+    override public func copy(with zone: NSZone? = nil) -> Any {
+        let result = super.copy(with: zone) as! Self
+        result.access = self.access
+        result.avatarDataFailedToFetchFromCDN = self.avatarDataFailedToFetchFromCDN
+        result.avatarUrlPath = self.avatarUrlPath
+        result.descriptionText = self.descriptionText
+        result.didJustAddSelfViaGroupLink = self.didJustAddSelfViaGroupLink
+        result.inviteLinkPassword = self.inviteLinkPassword
+        result.isAnnouncementsOnly = self.isAnnouncementsOnly
+        result.isJoinRequestPlaceholder = self.isJoinRequestPlaceholder
+        result.lowTrustAvatarDownloadWasBlocked = self.lowTrustAvatarDownloadWasBlocked
+        result.membership = self.membership
+        result.revision = self.revision
+        result.secretParamsData = self.secretParamsData
+        result.wasJustMigrated = self.wasJustMigrated
+        return result
+    }
+
     var membership: GroupMembership
-    @objc
-    public var access: GroupAccess = .defaultForV2
-    @objc
-    public var secretParamsData: Data = Data()
-    @objc
-    public var revision: UInt32 = 0
-    @objc
+    public var access: GroupAccess
+    public var secretParamsData: Data
+    public var revision: UInt32
     public var avatarUrlPath: String?
-    @objc
     public var inviteLinkPassword: Data?
-    @objc
-    public var isAnnouncementsOnly: Bool = false
-    @objc
+    public var isAnnouncementsOnly: Bool
     public var descriptionText: String?
 
     /// Whether this group model is a placeholder for a group we've requested to
     /// join, but don't yet have access to on the service. Other fields on this
     /// group model may not be populated.
-    ///
-    /// - Important
-    /// The @objc name must remain as-is, so as to correctly deserialize
-    /// existing models that were ``NSKeyedArchiver``-ed in the past.
-    @objc(isPlaceholderModel)
-    public var isJoinRequestPlaceholder: Bool = false
-    @objc
-    public var wasJustMigrated: Bool = false
-    @objc
-    public var didJustAddSelfViaGroupLink: Bool = false
+    public var isJoinRequestPlaceholder: Bool
+    public var wasJustMigrated: Bool
+    public var didJustAddSelfViaGroupLink: Bool
 
-    @objc
     public var avatarDataFailedToFetchFromCDN: Bool = false
-    @objc
     public var lowTrustAvatarDownloadWasBlocked: Bool = false
 
     public init(
@@ -60,7 +141,7 @@ public class TSGroupModelV2: TSGroupModel {
         isJoinRequestPlaceholder: Bool,
         wasJustMigrated: Bool,
         didJustAddSelfViaGroupLink: Bool,
-        addedByAddress: SignalServiceAddress?
+        addedByAddress: SignalServiceAddress?,
     ) {
         self.descriptionText = descriptionText
         self.membership = groupMembership
@@ -93,7 +174,7 @@ public class TSGroupModelV2: TSGroupModel {
             name: name,
             avatarData: avatarData,
             members: [],
-            addedBy: addedByAddress
+            addedBy: addedByAddress,
         )
     }
 
@@ -128,55 +209,46 @@ public class TSGroupModelV2: TSGroupModel {
         return url
     }
 
-    // MARK: - MTLModel
-
-    @objc
-    required public init?(coder aDecoder: NSCoder) {
-        self.membership = .empty
-        super.init(coder: aDecoder)
-    }
-
-    @objc
-    public required init(dictionary dictionaryValue: [String: Any]!) throws {
-        self.membership = .empty
-        try super.init(dictionary: dictionaryValue)
-    }
-
-    public override class func storageBehaviorForProperty(withKey propertyKey: String) -> MTLPropertyStorage {
-        if propertyKey == #keyPath(groupMembers) {
-            // This is included in groupMembership.
-            return MTLPropertyStorageNone
-        }
-        return super.storageBehaviorForProperty(withKey: propertyKey)
-    }
-
     // MARK: -
 
     @objc
-    public override var groupsVersion: GroupsVersion {
+    override public var groupsVersion: GroupsVersion {
         return .V2
     }
 
     @objc
-    public override var groupMembership: GroupMembership {
+    override public var groupMembership: GroupMembership {
         return membership
     }
 
     @objc
-    public override var groupMembers: [SignalServiceAddress] {
+    override public var groupMembers: [SignalServiceAddress] {
         return Array(groupMembership.fullMembers)
     }
 
     public func hasUserFacingChangeCompared(
-        to otherGroupModel: TSGroupModelV2
+        to otherGroupModel: TSGroupModelV2,
     ) -> Bool {
         if self === otherGroupModel {
             return false
         }
 
+        let avatarHasUserFacingChange: Bool
+        if avatarHash == otherGroupModel.avatarHash {
+            avatarHasUserFacingChange = false
+        } else if
+            otherGroupModel.lowTrustAvatarDownloadWasBlocked,
+            !self.lowTrustAvatarDownloadWasBlocked
+        {
+            // Avatar unblurred. No info message needed
+            avatarHasUserFacingChange = false
+        } else {
+            avatarHasUserFacingChange = true
+        }
+
         guard
             groupName == otherGroupModel.groupName,
-            avatarHash == otherGroupModel.avatarHash,
+            !avatarHasUserFacingChange,
             addedByAddress == otherGroupModel.addedByAddress,
             descriptionText == otherGroupModel.descriptionText,
             membership == otherGroupModel.membership,
@@ -191,7 +263,7 @@ public class TSGroupModelV2: TSGroupModel {
     }
 
     @objc
-    public override var debugDescription: String {
+    override public var debugDescription: String {
         var result = "["
         result += "groupId: \(groupId.hexadecimalString),\n"
         result += "groupsVersion: \(groupsVersion),\n"
@@ -212,15 +284,15 @@ public class TSGroupModelV2: TSGroupModel {
         result += "]"
         return result
     }
-}
 
-// MARK: -
+    // MARK: -
 
-@objc
-public extension TSGroupModelV2 {
-    var groupInviteLinkMode: GroupsV2LinkMode {
-        guard let inviteLinkPassword = inviteLinkPassword,
-              !inviteLinkPassword.isEmpty else {
+    @objc
+    public var groupInviteLinkMode: GroupsV2LinkMode {
+        guard
+            let inviteLinkPassword,
+            !inviteLinkPassword.isEmpty
+        else {
             return .disabled
         }
 
@@ -234,10 +306,13 @@ public extension TSGroupModelV2 {
         }
     }
 
-    var isGroupInviteLinkEnabled: Bool {
-        if let inviteLinkPassword = inviteLinkPassword,
-           !inviteLinkPassword.isEmpty,
-           access.canJoinFromInviteLink {
+    @objc
+    public var isGroupInviteLinkEnabled: Bool {
+        if
+            let inviteLinkPassword,
+            !inviteLinkPassword.isEmpty,
+            access.canJoinFromInviteLink
+        {
             return true
         }
         return false
@@ -246,37 +321,37 @@ public extension TSGroupModelV2 {
 
 // MARK: -
 
-@objc
-public extension TSGroupModel {
-    var isPlaceholder: Bool {
+extension TSGroupModel {
+    @objc
+    public var isPlaceholder: Bool {
         guard let groupModelV2 = self as? TSGroupModelV2 else {
             return false
         }
         return groupModelV2.isJoinRequestPlaceholder
     }
 
-    var wasJustMigratedToV2: Bool {
+    @objc
+    public var wasJustMigratedToV2: Bool {
         guard let groupModelV2 = self as? TSGroupModelV2 else {
             return false
         }
         return groupModelV2.wasJustMigrated
     }
 
-    var didJustAddSelfViaGroupLinkV2: Bool {
+    @objc
+    public var didJustAddSelfViaGroupLinkV2: Bool {
         guard let groupModelV2 = self as? TSGroupModelV2 else {
             return false
         }
         return groupModelV2.didJustAddSelfViaGroupLink
     }
-}
 
-// MARK: -
+    // MARK: -
 
-public extension TSGroupModel {
     private static let avatarsCache = LRUCache<String, Data>(maxSize: 16, nseMaxSize: 0)
 
     @objc
-    func persistAvatarData(_ data: Data) throws {
+    public func persistAvatarData(_ data: Data) throws {
         guard !data.isEmpty else {
             self.avatarHash = nil
             return
@@ -309,9 +384,60 @@ public extension TSGroupModel {
         self.avatarHash = hash
     }
 
+    private static let kMaxAvatarDimension = 1024
+
+    public static func isValidGroupAvatarData(_ imageData: Data) -> Bool {
+        guard imageData.count <= kMaxAvatarSize else {
+            return false
+        }
+        guard let metadata = DataImageSource(imageData).imageMetadata() else {
+            return false
+        }
+        return
+            metadata.pixelSize.height <= CGFloat(kMaxAvatarDimension)
+                && metadata.pixelSize.width <= CGFloat(kMaxAvatarDimension)
+
+    }
+
+    public static func dataForGroupAvatar(_ image: UIImage) -> Data? {
+        var image = image
+
+        // First, resize the image if necessary
+        if image.pixelWidth > kMaxAvatarDimension || image.pixelHeight > kMaxAvatarDimension {
+            let thumbnailSizePixels = min(kMaxAvatarDimension, min(image.pixelWidth, image.pixelHeight))
+            image = image.resizedImage(toFillPixelSize: CGSize(width: thumbnailSizePixels, height: thumbnailSizePixels))
+        }
+        if image.pixelWidth > kMaxAvatarDimension || image.pixelHeight > kMaxAvatarDimension {
+            owsFailDebug("Could not resize group avatar.")
+            return nil
+        }
+
+        // Then, convert the image to jpeg. Try to use 0.6 compression quality, but we'll ratchet down if the
+        // image is still too large.
+        let kMaxQuality = 0.6 as CGFloat
+        for targetQuality in stride(from: kMaxQuality, through: 0, by: -0.1) {
+            let avatarData = image.jpegData(compressionQuality: targetQuality)
+
+            guard let avatarData else {
+                owsFailDebug("Failed to generate jpeg representation with quality \(targetQuality)")
+                return nil
+            }
+
+            if avatarData.count <= kMaxAvatarSize {
+                guard isValidGroupAvatarData(avatarData) else {
+                    owsFailDebug("Invalid image")
+                    return nil
+                }
+                return avatarData
+            }
+        }
+        owsFailDebug("All quality levels produced an avatar that was too large")
+        return nil
+    }
+
     // MARK: -
 
-    enum AvatarDataState {
+    public enum AvatarDataState {
         case available(Data)
         case missing
         case failedToFetchFromCDN
@@ -333,7 +459,7 @@ public extension TSGroupModel {
         }
     }
 
-    var avatarDataState: AvatarDataState {
+    public var avatarDataState: AvatarDataState {
         if let selfAsV2 = self as? TSGroupModelV2 {
             if selfAsV2.avatarDataFailedToFetchFromCDN {
                 return .failedToFetchFromCDN
@@ -373,7 +499,7 @@ public extension TSGroupModel {
             return nil
         }
 
-        guard avatarData.ows_isValidImage else {
+        guard DataImageSource(avatarData).ows_isValidImage else {
             owsFailDebug("Invalid group avatar data.")
             return nil
         }
@@ -387,36 +513,38 @@ public extension TSGroupModel {
         return URL(fileURLWithPath: "\(hash).png", relativeTo: avatarsDirectory)
     }
 
-    static let avatarsDirectory = URL(
+    public static let avatarsDirectory = URL(
         fileURLWithPath: "GroupAvatars",
         isDirectory: true,
-        relativeTo: URL(fileURLWithPath: OWSFileSystem.appSharedDataDirectoryPath())
+        relativeTo: URL(fileURLWithPath: OWSFileSystem.appSharedDataDirectoryPath()),
     )
 
-    static func hash(forAvatarData avatarData: Data) throws -> String {
+    public static func hash(forAvatarData avatarData: Data) throws -> String {
         return Data(SHA256.hash(data: avatarData)).hexadecimalString
     }
 
-    static func allGroupAvatarFilePaths(transaction: DBReadTransaction) throws -> Set<String> {
+    public static func allGroupAvatarFilePaths(transaction: DBReadTransaction) throws -> Set<String> {
         let cursor = TSThread.grdbFetchCursor(
             sql: "SELECT * FROM \(ThreadRecord.databaseTableName) WHERE \(threadColumn: .recordType) = \(SDSRecordType.groupThread.rawValue)",
-            transaction: transaction
+            transaction: transaction,
         )
 
         var filePaths = Set<String>()
 
-        while let thread = try cursor.next() as? TSGroupThread {
-            guard let avatarHash = thread.groupModel.avatarHash else { continue }
-            filePaths.insert(avatarFilePath(forHash: avatarHash).path)
+        do {
+            while let thread = try cursor.next() as? TSGroupThread {
+                guard let avatarHash = thread.groupModel.avatarHash else { continue }
+                filePaths.insert(avatarFilePath(forHash: avatarHash).path)
+            }
+        } catch {
+            throw error.grdbErrorForLogging
         }
 
         return filePaths
     }
-}
 
-// MARK: -
+    // MARK: -
 
-extension TSGroupModel {
     static func generateRandomGroupId(_ version: GroupsVersion) -> Data {
         let length = switch version {
         case .V1: kGroupIdLengthV1

@@ -9,33 +9,33 @@ import SDWebImage
 extension UIImage {
 
     public static func from(
-        _ attachment: AttachmentStream
+        _ attachment: AttachmentStream,
     ) throws -> UIImage {
         return try .fromEncryptedFile(
             at: attachment.fileURL,
-            encryptionKey: attachment.attachment.encryptionKey,
+            attachmentKey: AttachmentKey(combinedKey: attachment.attachment.encryptionKey),
             plaintextLength: attachment.info.unencryptedByteCount,
-            mimeType: attachment.mimeType
+            mimeType: attachment.mimeType,
         )
     }
 
     public static func from(
-        _ attachmentThumbnail: AttachmentBackupThumbnail
+        _ attachmentThumbnail: AttachmentBackupThumbnail,
     ) throws -> UIImage {
         return try .fromEncryptedFile(
             at: attachmentThumbnail.fileURL,
-            encryptionKey: attachmentThumbnail.attachment.encryptionKey,
+            attachmentKey: AttachmentKey(combinedKey: attachmentThumbnail.attachment.encryptionKey),
             plaintextLength: nil,
-            mimeType: MimeType.imageWebp.rawValue
+            mimeType: MimeType.imageWebp.rawValue,
         )
     }
 
     /// If no plaintext length is provided, the file is assumed to only use pkcs7 padding.
-    public static func fromEncryptedFile(
+    static func fromEncryptedFile(
         at fileURL: URL,
-        encryptionKey: Data,
+        attachmentKey: AttachmentKey,
         plaintextLength: UInt32?,
-        mimeType: String
+        mimeType: String,
     ) throws -> UIImage {
         if
             mimeType.caseInsensitiveCompare(MimeType.imageJpeg.rawValue) == .orderedSame,
@@ -43,12 +43,12 @@ extension UIImage {
             /// but this at least makes it possible for it to choose not to.
             let jpegImage = try? CGDataProvider.loadFromEncryptedFile(
                 at: fileURL,
-                encryptionKey: encryptionKey,
+                attachmentKey: attachmentKey,
                 plaintextLength: plaintextLength,
                 block: { dataProvider in
                     let (cgImage, orientation) = try dataProvider.toJpegCGImage()
                     return UIImage(cgImage: cgImage, scale: 1, orientation: orientation)
-                }
+                },
             )
         {
             return jpegImage
@@ -59,24 +59,23 @@ extension UIImage {
             /// but this at least makes it possible for it to choose not to.
             let pngImage = try? CGDataProvider.loadFromEncryptedFile(
                 at: fileURL,
-                encryptionKey: encryptionKey,
+                attachmentKey: attachmentKey,
                 plaintextLength: plaintextLength,
                 block: { dataProvider in
                     return UIImage(cgImage: try dataProvider.toPngCGImage())
-                }
+                },
             )
         {
             return pngImage
         }
 
-        Logger.warn("Loading non-jpeg, non-png image into memory")
         // hmac and digest are validated at download time; no need to revalidate every read.
         let data = try Cryptography.decryptFileWithoutValidating(
             at: fileURL,
-            metadata: .init(
-                key: encryptionKey,
-                plaintextLength: plaintextLength.map(Int.init(_:))
-            )
+            metadata: DecryptionMetadata(
+                key: attachmentKey,
+                plaintextLength: plaintextLength.map(UInt64.init(safeCast:)),
+            ),
         )
         let image: UIImage?
         if mimeType.caseInsensitiveCompare(MimeType.imageWebp.rawValue) == .orderedSame {
@@ -107,21 +106,21 @@ extension CGDataProvider {
     /// If no plaintext length is provided, the file is assumed to only use pkcs7 padding.
     fileprivate static func loadFromEncryptedFile<T>(
         at fileURL: URL,
-        encryptionKey: Data,
+        attachmentKey: AttachmentKey,
         plaintextLength: UInt32?,
-        block: (CGDataProvider) throws -> T
+        block: (CGDataProvider) throws -> T,
     ) throws -> T {
         let fileHandle: EncryptedFileHandle
         if let plaintextLength {
             fileHandle = try Cryptography.encryptedAttachmentFileHandle(
                 at: fileURL,
-                plaintextLength: plaintextLength,
-                encryptionKey: encryptionKey
+                plaintextLength: UInt64(safeCast: plaintextLength),
+                attachmentKey: attachmentKey,
             )
         } else {
             fileHandle = try Cryptography.encryptedFileHandle(
                 at: fileURL,
-                encryptionKey: encryptionKey
+                attachmentKey: attachmentKey,
             )
         }
         let dataProvider = try CGDataProvider.from(fileHandle: fileHandle)
@@ -143,9 +142,9 @@ extension CGDataProvider {
                 let fileHandle = unmanagedFileHandle.takeUnretainedValue().fileHandle
                 do {
                     if offset != fileHandle.offset() {
-                        try fileHandle.seek(toOffset: UInt32(offset))
+                        try fileHandle.seek(toOffset: UInt64(offset))
                     }
-                    let data = try fileHandle.read(upToCount: UInt32(byteCount))
+                    let data = try fileHandle.read(upToCount: byteCount)
                     data.withUnsafeBytes { bytes in
                         buffer.copyMemory(from: bytes.baseAddress!, byteCount: bytes.count)
                     }
@@ -160,16 +159,18 @@ extension CGDataProvider {
                 }
                 let unmanagedFileHandle = Unmanaged<EncryptedFileHandleWrapper>.fromOpaque(info)
                 unmanagedFileHandle.release()
-            }
+            },
         )
 
         let unmanagedFileHandle = Unmanaged.passRetained(fileHandle)
 
-        guard let dataProvider = CGDataProvider(
-            directInfo: unmanagedFileHandle.toOpaque(),
-            size: Int64(fileHandle.fileHandle.plaintextLength),
-            callbacks: &callbacks
-        ) else {
+        guard
+            let dataProvider = CGDataProvider(
+                directInfo: unmanagedFileHandle.toOpaque(),
+                size: Int64(fileHandle.fileHandle.plaintextLength),
+                callbacks: &callbacks,
+            )
+        else {
             throw OWSAssertionError("Failed to create data provider")
         }
         return dataProvider
@@ -184,12 +185,14 @@ extension CGDataProvider {
     }
 
     fileprivate func toPngCGImage() throws -> CGImage {
-        guard let cgImage = CGImage(
-            pngDataProviderSource: self,
-            decode: nil,
-            shouldInterpolate: true,
-            intent: .defaultIntent
-        ) else {
+        guard
+            let cgImage = CGImage(
+                pngDataProviderSource: self,
+                decode: nil,
+                shouldInterpolate: true,
+                intent: .defaultIntent,
+            )
+        else {
             throw ParsingError.failedToParsePng
         }
         return cgImage
@@ -202,12 +205,12 @@ extension CGDataProvider {
             }
             // Get image orientation
             let options: [CFString: Any] = [
-                kCGImageSourceShouldAllowFloat: true
+                kCGImageSourceShouldAllowFloat: true,
             ]
             let properties = CGImageSourceCopyPropertiesAtIndex(
                 imageSource,
                 0,
-                options as CFDictionary
+                options as CFDictionary,
             ) as? [CFString: Any]
             guard
                 let raw = properties?[kCGImagePropertyOrientation] as? Int,
@@ -218,12 +221,14 @@ extension CGDataProvider {
             return CGImagePropertyOrientation(rawValue: raw)?.uiImageOrientation
         }() ?? .up
 
-        guard let cgImage = CGImage(
-            jpegDataProviderSource: self,
-            decode: nil,
-            shouldInterpolate: true,
-            intent: .defaultIntent
-        ) else {
+        guard
+            let cgImage = CGImage(
+                jpegDataProviderSource: self,
+                decode: nil,
+                shouldInterpolate: true,
+                intent: .defaultIntent,
+            )
+        else {
             throw ParsingError.failedToParseJpg
         }
         return (cgImage, orientation)

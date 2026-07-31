@@ -93,9 +93,75 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    return [super initWithCoder:coder];
+    NSUInteger result = [super hash];
+    result ^= self.addressUuidString.hash;
+    result ^= self.createdTimestamp;
+    result ^= self.interactionUniqueId.hash;
+    result ^= self.isUnread;
+    result ^= self.mcLedgerBlockIndex;
+    result ^= self.mcReceiptData.hash;
+    result ^= self.mcTransactionData.hash;
+    result ^= self.memoMessage.hash;
+    result ^= self.mobileCoin.hash;
+    result ^= self.paymentAmount.hash;
+    result ^= self.paymentFailure;
+    result ^= self.paymentState;
+    result ^= self.paymentType;
+    result ^= self.requestUuidString.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
+    }
+    TSPaymentModel *typedOther = (TSPaymentModel *)other;
+    if (![NSObject isObject:self.addressUuidString equalToObject:typedOther.addressUuidString]) {
+        return NO;
+    }
+    if (self.createdTimestamp != typedOther.createdTimestamp) {
+        return NO;
+    }
+    if (![NSObject isObject:self.interactionUniqueId equalToObject:typedOther.interactionUniqueId]) {
+        return NO;
+    }
+    if (self.isUnread != typedOther.isUnread) {
+        return NO;
+    }
+    if (self.mcLedgerBlockIndex != typedOther.mcLedgerBlockIndex) {
+        return NO;
+    }
+    if (![NSObject isObject:self.mcReceiptData equalToObject:typedOther.mcReceiptData]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.mcTransactionData equalToObject:typedOther.mcTransactionData]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.memoMessage equalToObject:typedOther.memoMessage]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.mobileCoin equalToObject:typedOther.mobileCoin]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.paymentAmount equalToObject:typedOther.paymentAmount]) {
+        return NO;
+    }
+    if (self.paymentFailure != typedOther.paymentFailure) {
+        return NO;
+    }
+    if (self.paymentState != typedOther.paymentState) {
+        return NO;
+    }
+    if (self.paymentType != typedOther.paymentType) {
+        return NO;
+    }
+    if (![NSObject isObject:self.requestUuidString equalToObject:typedOther.requestUuidString]) {
+        return NO;
+    }
+    return YES;
 }
 
 // --- CODE GENERATION MARKER
@@ -324,6 +390,136 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    TSPaymentAmount *feeAmount = self.feeAmount;
+    if (feeAmount != nil) {
+        [coder encodeObject:feeAmount forKey:@"feeAmount"];
+    }
+    NSArray *incomingTransactionPublicKeys = self.incomingTransactionPublicKeys;
+    if (incomingTransactionPublicKeys != nil) {
+        [coder encodeObject:incomingTransactionPublicKeys forKey:@"incomingTransactionPublicKeys"];
+    }
+    [coder encodeObject:[self valueForKey:@"ledgerBlockIndex"] forKey:@"ledgerBlockIndex"];
+    [coder encodeObject:[self valueForKey:@"ledgerBlockTimestamp"] forKey:@"ledgerBlockTimestamp"];
+    NSArray *outputPublicKeys = self.outputPublicKeys;
+    if (outputPublicKeys != nil) {
+        [coder encodeObject:outputPublicKeys forKey:@"outputPublicKeys"];
+    }
+    NSData *receiptData = self.receiptData;
+    if (receiptData != nil) {
+        [coder encodeObject:receiptData forKey:@"receiptData"];
+    }
+    NSData *recipientPublicAddressData = self.recipientPublicAddressData;
+    if (recipientPublicAddressData != nil) {
+        [coder encodeObject:recipientPublicAddressData forKey:@"recipientPublicAddressData"];
+    }
+    NSArray *spentKeyImages = self.spentKeyImages;
+    if (spentKeyImages != nil) {
+        [coder encodeObject:spentKeyImages forKey:@"spentKeyImages"];
+    }
+    NSData *transactionData = self.transactionData;
+    if (transactionData != nil) {
+        [coder encodeObject:transactionData forKey:@"transactionData"];
+    }
+}
+
+- (nullable instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
+    if (!self) {
+        return self;
+    }
+    self->_feeAmount = [coder decodeObjectOfClass:[TSPaymentAmount class] forKey:@"feeAmount"];
+    self->_incomingTransactionPublicKeys =
+        [coder decodeObjectOfClasses:[NSSet setWithArray:@[ [NSArray class], [NSData class] ]]
+                              forKey:@"incomingTransactionPublicKeys"];
+    self->_ledgerBlockIndex = [(NSNumber *)[coder decodeObjectOfClass:[NSNumber class]
+                                                               forKey:@"ledgerBlockIndex"] unsignedLongLongValue];
+    self->_ledgerBlockTimestamp =
+        [(NSNumber *)[coder decodeObjectOfClass:[NSNumber class] forKey:@"ledgerBlockTimestamp"] unsignedLongLongValue];
+    self->_outputPublicKeys = [coder decodeObjectOfClasses:[NSSet setWithArray:@[ [NSArray class], [NSData class] ]]
+                                                    forKey:@"outputPublicKeys"];
+    self->_receiptData = [coder decodeObjectOfClass:[NSData class] forKey:@"receiptData"];
+    self->_recipientPublicAddressData = [coder decodeObjectOfClass:[NSData class] forKey:@"recipientPublicAddressData"];
+    self->_spentKeyImages = [coder decodeObjectOfClasses:[NSSet setWithArray:@[ [NSArray class], [NSData class] ]]
+                                                  forKey:@"spentKeyImages"];
+    self->_transactionData = [coder decodeObjectOfClass:[NSData class] forKey:@"transactionData"];
+    return self;
+}
+
+- (NSUInteger)hash
+{
+    NSUInteger result = 0;
+    result ^= self.feeAmount.hash;
+    result ^= self.incomingTransactionPublicKeys.hash;
+    result ^= self.ledgerBlockIndex;
+    result ^= self.ledgerBlockTimestamp;
+    result ^= self.outputPublicKeys.hash;
+    result ^= self.receiptData.hash;
+    result ^= self.recipientPublicAddressData.hash;
+    result ^= self.spentKeyImages.hash;
+    result ^= self.transactionData.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![other isMemberOfClass:self.class]) {
+        return NO;
+    }
+    MobileCoinPayment *typedOther = (MobileCoinPayment *)other;
+    if (![NSObject isObject:self.feeAmount equalToObject:typedOther.feeAmount]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.incomingTransactionPublicKeys
+              equalToObject:typedOther.incomingTransactionPublicKeys]) {
+        return NO;
+    }
+    if (self.ledgerBlockIndex != typedOther.ledgerBlockIndex) {
+        return NO;
+    }
+    if (self.ledgerBlockTimestamp != typedOther.ledgerBlockTimestamp) {
+        return NO;
+    }
+    if (![NSObject isObject:self.outputPublicKeys equalToObject:typedOther.outputPublicKeys]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.receiptData equalToObject:typedOther.receiptData]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.recipientPublicAddressData equalToObject:typedOther.recipientPublicAddressData]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.spentKeyImages equalToObject:typedOther.spentKeyImages]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.transactionData equalToObject:typedOther.transactionData]) {
+        return NO;
+    }
+    return YES;
+}
+
+- (id)copyWithZone:(nullable NSZone *)zone
+{
+    MobileCoinPayment *result = [[[self class] allocWithZone:zone] init];
+    result->_feeAmount = self.feeAmount;
+    result->_incomingTransactionPublicKeys = self.incomingTransactionPublicKeys;
+    result->_ledgerBlockIndex = self.ledgerBlockIndex;
+    result->_ledgerBlockTimestamp = self.ledgerBlockTimestamp;
+    result->_outputPublicKeys = self.outputPublicKeys;
+    result->_receiptData = self.receiptData;
+    result->_recipientPublicAddressData = self.recipientPublicAddressData;
+    result->_spentKeyImages = self.spentKeyImages;
+    result->_transactionData = self.transactionData;
+    return result;
+}
+
 - (nullable NSDate *)ledgerBlockDate
 {
     if (self.ledgerBlockTimestamp > 0) {
@@ -336,7 +532,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (MobileCoinPayment *)copy:(nullable MobileCoinPayment *)oldCopy withLedgerBlockIndex:(uint64_t)ledgerBlockIndex
 {
     OWSAssertDebug(ledgerBlockIndex > 0);
-
+    // so that the compiler complains if this doesn't conform to NSCopying
+    id<NSCopying> oldCopyToCopy = oldCopy;
+    (void)oldCopyToCopy;
     MobileCoinPayment *newCopy = (oldCopy != nil ? [oldCopy copy] : [MobileCoinPayment new]);
     newCopy.ledgerBlockIndex = ledgerBlockIndex;
     return newCopy;
@@ -347,6 +545,9 @@ NS_ASSUME_NONNULL_BEGIN
 {
     OWSAssertDebug(ledgerBlockTimestamp > 0);
 
+    // so that the compiler complains if this doesn't conform to NSCopying
+    id<NSCopying> oldCopyToCopy = oldCopy;
+    (void)oldCopyToCopy;
     MobileCoinPayment *newCopy = (oldCopy != nil ? [oldCopy copy] : [MobileCoinPayment new]);
     newCopy.ledgerBlockTimestamp = ledgerBlockTimestamp;
     return newCopy;

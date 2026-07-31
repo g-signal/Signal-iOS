@@ -9,7 +9,7 @@ import SignalServiceKit
 import SignalUI
 
 protocol RecentPhotosDelegate: AnyObject {
-    func didSelectRecentPhoto(asset: PHAsset, attachment: SignalAttachment)
+    func didSelectRecentPhoto(asset: PHAsset, attachment: PreviewableAttachment, attachmentLimits: OutgoingAttachmentLimits)
 }
 
 class RecentPhotosCollectionView: UICollectionView {
@@ -32,7 +32,7 @@ class RecentPhotosCollectionView: UICollectionView {
         didSet {
             var indexPaths = [IndexPath]()
 
-            if let oldValue = oldValue {
+            if let oldValue {
                 indexPaths.append(oldValue)
             }
             if let newValue = fetchingAttachmentIndex {
@@ -48,6 +48,7 @@ class RecentPhotosCollectionView: UICollectionView {
         library.delegate = self
         return library
     }()
+
     private lazy var collection = photoLibrary.defaultPhotoAlbum()
     private lazy var collectionContents = collection.contents(limit: RecentPhotosCollectionView.maxRecentPhotos)
 
@@ -86,7 +87,7 @@ class RecentPhotosCollectionView: UICollectionView {
 
         if lastKnownHeight > 250 {
             cellSize = CGSize(square: 0.5 * (lastKnownHeight - RecentPhotosCollectionView.itemSpacing))
-        // Otherwise, assume the recent photos take up the full height of the collection view.
+            // Otherwise, assume the recent photos take up the full height of the collection view.
         } else {
             cellSize = CGSize(square: lastKnownHeight)
         }
@@ -173,15 +174,21 @@ class RecentPhotosCollectionView: UICollectionView {
     }
 
     private func noPhotosView() -> UIView {
-        let titleLabel = titleLabel(text: OWSLocalizedString(
+        let titleLabel = UILabel()
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.font = .dynamicTypeHeadlineClamped
+        titleLabel.textColor = .Signal.label
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 2
+        titleLabel.text = OWSLocalizedString(
             "ATTACHMENT_KEYBOARD_NO_MEDIA_TITLE",
-            comment: "First block of text in chat attachment panel when there's no recent photos to show."
-        ))
+            comment: "First block of text in chat attachment panel when there's no recent photos to show.",
+        )
         let bodyLabel = textLabel(text: OWSLocalizedString(
             "ATTACHMENT_KEYBOARD_NO_MEDIA_BODY",
-            comment: "Second block of text in chat attachment panel when there's no recent photos to show."
+            comment: "Second block of text in chat attachment panel when there's no recent photos to show.",
         ))
-        let stackView = UIStackView(arrangedSubviews: [ titleLabel, bodyLabel ])
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, bodyLabel])
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.spacing = 4
@@ -191,62 +198,35 @@ class RecentPhotosCollectionView: UICollectionView {
     private func noAccessToPhotosView() -> UIView {
         let textLabel = textLabel(text: OWSLocalizedString(
             "ATTACHMENT_KEYBOARD_NO_PHOTO_ACCESS",
-            comment: "Text in chat attachment panel explaining that user needs to give Signal permission to access photos."
+            comment: "Text in chat attachment panel explaining that user needs to give Signal permission to access photos.",
         ))
-        let button = button(title: OWSLocalizedString(
-            "ATTACHMENT_KEYBOARD_OPEN_SETTINGS",
-            comment: "Button in chat attachment panel to let user open Settings app and give Signal persmission to access photos."
-        ))
-        button.block = {
-            let openAppSettingsUrl = URL(string: UIApplication.openSettingsURLString)!
-            UIApplication.shared.open(openAppSettingsUrl)
-        }
-        let stackView = UIStackView(arrangedSubviews: [ textLabel, button ])
+        let button = UIButton(
+            configuration: .smallSecondary(title: OWSLocalizedString(
+                "ATTACHMENT_KEYBOARD_OPEN_SETTINGS",
+                comment: "Button in chat attachment panel to let user open Settings app and give Signal persmission to access photos.",
+            )),
+            primaryAction: UIAction { _ in
+                let openAppSettingsUrl = URL(string: UIApplication.openSettingsURLString)!
+                UIApplication.shared.open(openAppSettingsUrl)
+            },
+        )
+        let stackView = UIStackView(arrangedSubviews: [textLabel, button])
         stackView.axis = .vertical
         stackView.spacing = 16
         stackView.alignment = .center
         return stackView
     }
 
-    private func titleLabel(text: String) -> UILabel {
-        let label = UILabel()
-        label.font = .dynamicTypeHeadlineClamped
-        label.textColor = Theme.isDarkThemeEnabled ? .ows_gray20 : UIColor(rgbHex: 0x434343).withAlphaComponent(0.8)
-        label.textAlignment = .center
-        label.numberOfLines = 2
-        label.text = text
-        return label
-    }
-
     private func textLabel(text: String) -> UILabel {
         let label = UILabel()
+        label.adjustsFontForContentSizeCategory = true
         label.font = .dynamicTypeSubheadlineClamped
         label.lineBreakMode = .byWordWrapping
-        label.textColor = Theme.isDarkThemeEnabled ? .ows_gray25 : .ows_blackAlpha50
+        label.textColor = .Signal.secondaryLabel
         label.textAlignment = .center
         label.numberOfLines = 0
         label.text = text
         return label
-    }
-
-    private func button(title: String) -> OWSButton {
-        let button = OWSButton()
-
-        let backgroundColor = Theme.isDarkThemeEnabled ? UIColor(white: 1, alpha: 0.16) : UIColor(white: 0, alpha: 0.08)
-        button.setBackgroundImage(UIImage.image(color: backgroundColor), for: .normal)
-
-        let highlightedBgColor = Theme.isDarkThemeEnabled ? UIColor(white: 1, alpha: 0.26) : UIColor(white: 0, alpha: 0.18)
-        button.setBackgroundImage(UIImage.image(color: highlightedBgColor), for: .highlighted)
-
-        button.ows_contentEdgeInsets = UIEdgeInsets(top: 7, leading: 16, bottom: 7, trailing: 16)
-        button.heightAnchor.constraint(greaterThanOrEqualToConstant: 32).isActive = true
-        button.layer.masksToBounds = true
-        button.layer.cornerRadius = 16
-
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(Theme.isDarkThemeEnabled ? .ows_gray05 : .black, for: .normal)
-        button.titleLabel?.font = .dynamicTypeSubheadlineClamped.semibold()
-        return button
     }
 }
 
@@ -274,33 +254,35 @@ extension RecentPhotosCollectionView: UICollectionViewDelegate, UICollectionView
             return
         }
 
-        fetchingAttachmentIndex = indexPath
-
+        self.fetchingAttachmentIndex = indexPath
         let asset = collectionContents.asset(at: indexPath.item)
-        collectionContents.outgoingAttachment(
-            for: asset
-        ).done { [weak self] attachment in
-            switch attachment.error {
-            case nil:
-                break
-            case .fileSizeTooLarge:
-                OWSActionSheets.showActionSheet(
-                    title: OWSLocalizedString(
-                        "ATTACHMENT_ERROR_FILE_SIZE_TOO_LARGE",
-                        comment: "Attachment error message for attachments whose data exceed file size limits"
-                    )
-                )
-                return
-            default:
-                OWSActionSheets.showActionSheet(title: OWSLocalizedString("IMAGE_PICKER_FAILED_TO_PROCESS_ATTACHMENTS", comment: "alert title"))
-                return
+        let attachmentLimits = OutgoingAttachmentLimits.currentLimits()
+        Task {
+            defer {
+                self.fetchingAttachmentIndex = nil
             }
-            self?.recentPhotosDelegate?.didSelectRecentPhoto(asset: asset, attachment: attachment)
-        }.ensure { [weak self] in
-            self?.fetchingAttachmentIndex = nil
-        }.catch { error in
-            Logger.error("Error: \(error)")
-            OWSActionSheets.showActionSheet(title: OWSLocalizedString("IMAGE_PICKER_FAILED_TO_PROCESS_ATTACHMENTS", comment: "alert title"))
+            do {
+                let attachment = try await collectionContents.outgoingAttachment(for: asset, attachmentLimits: attachmentLimits)
+                self.recentPhotosDelegate?.didSelectRecentPhoto(asset: asset, attachment: attachment, attachmentLimits: attachmentLimits)
+            } catch {
+                Logger.warn("\(error)")
+                switch error {
+                case SignalAttachmentError.fileSizeTooLarge:
+                    OWSActionSheets.showActionSheet(
+                        title: OWSLocalizedString(
+                            "ATTACHMENT_ERROR_FILE_SIZE_TOO_LARGE",
+                            comment: "Attachment error message for attachments whose data exceed file size limits",
+                        ),
+                    )
+                default:
+                    OWSActionSheets.showActionSheet(
+                        title: OWSLocalizedString(
+                            "IMAGE_PICKER_FAILED_TO_PROCESS_ATTACHMENTS",
+                            comment: "alert title",
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -330,11 +312,11 @@ extension RecentPhotosCollectionView: UICollectionViewDataSource {
 
         let assetItem = collectionContents.assetItem(at: indexPath.item, thumbnailSize: thumbnailSize)
         cell.configure(item: assetItem, isLoading: fetchingAttachmentIndex == indexPath)
-        #if DEBUG
+#if DEBUG
         // These accessibilityIdentifiers won't be stable, but they
         // should work for the purposes of our automated testing.
         cell.accessibilityIdentifier = UIView.accessibilityIdentifier(in: self, name: "recent-photo-\(indexPath.row)")
-        #endif
+#endif
         return cell
     }
 }
@@ -355,7 +337,7 @@ private class RecentPhotoCell: UICollectionViewCell {
 
         super.init(frame: frame)
 
-        clipsToBounds = true
+        contentView.clipsToBounds = true
 
         imageView.contentMode = .scaleAspectFill
         contentView.addSubview(imageView)
@@ -368,6 +350,13 @@ private class RecentPhotoCell: UICollectionViewCell {
 
         contentView.addSubview(loadingIndicator)
         loadingIndicator.autoCenterInSuperview()
+
+        if #available(iOS 26, *) {
+            updateCornerRadius()
+            registerForTraitChanges([UITraitVerticalSizeClass.self]) { (self: Self, _) in
+                self.updateCornerRadius()
+            }
+        }
     }
 
     @available(*, unavailable, message: "Unimplemented")
@@ -375,29 +364,33 @@ private class RecentPhotoCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override var frame: CGRect {
-        didSet {
-            updateCornerRadius()
-        }
-    }
-
     override var bounds: CGRect {
         didSet {
-            updateCornerRadius()
+            guard #unavailable(iOS 26) else { return }
+            updateCornerRadiusLegacy()
         }
     }
 
+    @available(iOS 26, *)
     private func updateCornerRadius() {
+        let cornerRadius: CGFloat = traitCollection.verticalSizeClass == .compact ? 20 : 36
+        contentView.cornerConfiguration = .uniformCorners(radius: .fixed(cornerRadius))
+    }
+
+    @available(iOS, deprecated: 26)
+    private func updateCornerRadiusLegacy() {
         let cellSize = min(bounds.width, bounds.height)
         guard cellSize > 0 else { return }
-        layer.cornerRadius = (cellSize * 13 / 84).rounded()
+        contentView.layer.cornerRadius = (cellSize * 13 / 84).rounded()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
-        if let durationLabel,
-           previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+        if
+            let durationLabel,
+            previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory
+        {
             durationLabel.font = RecentPhotoCell.durationLabelFont()
         }
     }
@@ -456,11 +449,11 @@ private class RecentPhotoCell: UICollectionViewCell {
             let gradientView = GradientView(from: .ows_blackAlpha40, to: .clear)
             gradientView.gradientLayer.type = .radial
             gradientView.gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.5)
-            gradientView.gradientLayer.endPoint = CGPoint(x: 0, y: 90/122) // 122 x 58 oval
+            gradientView.gradientLayer.endPoint = CGPoint(x: 0, y: 90 / 122) // 122 x 58 oval
             self.durationLabelBackground = gradientView
         }
 
-        guard let durationLabel = durationLabel, let durationLabelBackground = durationLabelBackground else {
+        guard let durationLabel, let durationLabelBackground else {
             return
         }
 
@@ -488,7 +481,7 @@ private class RecentPhotoCell: UICollectionViewCell {
 
         image = nil
         item.asyncThumbnail { [weak self] image in
-            guard let self = self, let currentItem = self.item, currentItem === item else { return }
+            guard let self, let currentItem = self.item, currentItem === item else { return }
             self.image = image
         }
 

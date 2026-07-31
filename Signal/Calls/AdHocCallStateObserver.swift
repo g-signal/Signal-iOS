@@ -19,7 +19,7 @@ final class AdHocCallStateObserver {
         case attempted
         case joined
 
-        static func < (lhs: Self, rhs: Self) -> Bool {
+        static func <(lhs: Self, rhs: Self) -> Bool {
             return lhs.rawValue < rhs.rawValue
         }
     }
@@ -34,7 +34,7 @@ final class AdHocCallStateObserver {
         adHocCallRecordManager: any AdHocCallRecordManager,
         callLinkStore: any CallLinkRecordStore,
         messageSenderJobQueue: MessageSenderJobQueue,
-        db: any DB
+        db: any DB,
     ) {
         self.callLinkCall = callLinkCall
         self.adHocCallRecordManager = adHocCallRecordManager
@@ -71,7 +71,7 @@ final class AdHocCallStateObserver {
                 }
                 if callLink.adminPasskey == nil, !callLink.isDeleted {
                     let updateSender = CallLinkUpdateMessageSender(messageSenderJobQueue: messageSenderJobQueue)
-                    updateSender.sendCallLinkUpdateMessage(rootKey: rootKey, adminPasskey: nil, tx: SDSDB.shimOnlyBridge(tx))
+                    updateSender.sendCallLinkUpdateMessage(rootKey: rootKey, adminPasskey: nil, tx: tx)
                 }
                 try adHocCallRecordManager.createOrUpdateRecord(
                     callId: callIdFromEra(eraId),
@@ -84,7 +84,7 @@ final class AdHocCallStateObserver {
                     }(),
                     timestamp: Date.ows_millisecondTimestamp(),
                     shouldSendSyncMessge: true,
-                    tx: tx
+                    tx: tx,
                 )
             } catch {
                 owsFailDebug("Couldn't update CallRecord: \(error)")
@@ -109,7 +109,7 @@ final class AdHocCallStateObserver {
                 try adHocCallRecordManager.handlePeekResult(
                     eraId: peekInfo.eraId,
                     rootKey: self.callLinkCall.callLink.rootKey,
-                    tx: tx
+                    tx: tx,
                 )
             } catch {
                 owsFailDebug("\(error)")

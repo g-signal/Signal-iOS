@@ -511,34 +511,82 @@ class TypeInfo:
             )
         elif self.should_use_blob:
             blob_name = "%sSerialized" % (str(value_name),)
-            if is_optional or did_force_optional:
+            if is_optional:
                 serialized_statement = "let %s: Data? = %s" % (
                     blob_name,
                     value_expr,
                 )
+            elif did_force_optional:
+                serialized_statement = f'let {blob_name}: Data = try {value_expr} ?? {{ () -> Data in throw SDSError.missingRequiredField(fieldName: "{value_name}") }}()'
             else:
                 serialized_statement = "let %s: Data = %s" % (
                     blob_name,
                     value_expr,
                 )
+            from_name = "$0" if is_optional else blob_name
+            swift_type = self._swift_type
+            if swift_type == "[InfoMessageUserInfoKey: AnyObject]":
+                decode_statement = (
+                    'try SDSDeserialization.unarchivedInfoDictionary(from: %s)'
+                    % (
+                        from_name,
+                    )
+                )
+            elif ": " in swift_type:
+                assert swift_type.startswith("[")
+                assert swift_type.endswith("]")
+                divider_index = swift_type.index(": ")
+                key_type = swift_type[1:divider_index]
+                value_type = swift_type[divider_index + 2:-1]
+                decode_statement = (
+                    'try SDSDeserialization.unarchivedDictionary(ofKeyClass: %s.self, objectClass: %s.self, from: %s)'
+                    % (
+                        key_type,
+                        value_type,
+                        from_name,
+                    )
+                )
+            elif swift_type.startswith("["):
+                assert swift_type.endswith("]")
+                array_type = self._swift_type[1:-1]
+                objc_types = {
+                    "String": "NSString",
+                }
+                objc_type = objc_types.get(array_type, array_type)
+                decode_statement = (
+                    'try SDSDeserialization.unarchivedArrayOfObjects(ofClass: %s.self, from: %s)'
+                    % (
+                        objc_type,
+                        from_name,
+                    )
+                )
+                if array_type in objc_types:
+                    decode_statement += ' as ' + self._swift_type
+            else:
+                decode_statement = (
+                    'try SDSDeserialization.unarchivedObject(ofClass: %s.self, from: %s)'
+                    % (
+                        self._swift_type,
+                        from_name,
+                    )
+                )
             if is_optional:
                 value_statement = (
-                    'let %s: %s? = try SDSDeserialization.optionalUnarchive(%s, name: "%s")'
+                    'let %s: %s? = try %s.map({ %s })'
                     % (
                         value_name,
                         self._swift_type,
                         blob_name,
-                        value_name,
+                        decode_statement,
                     )
                 )
             else:
                 value_statement = (
-                    'let %s: %s = try SDSDeserialization.unarchive(%s, name: "%s")'
+                    'let %s: %s = %s'
                     % (
                         value_name,
                         self._swift_type,
-                        blob_name,
-                        value_name,
+                        decode_statement,
                     )
                 )
             return [
@@ -2011,17 +2059,14 @@ public extension %(class_name)s {
 @objc
 public class %sCursor: NSObject, SDSCursor {
     private let transaction: DBReadTransaction
-    private let cursor: RecordCursor<%s>?
+    private let cursor: RecordCursor<%s>
 
-    init(transaction: DBReadTransaction, cursor: RecordCursor<%s>?) {
+    init(transaction: DBReadTransaction, cursor: RecordCursor<%s>) {
         self.transaction = transaction
         self.cursor = cursor
     }
 
     public func next() throws -> %s? {
-        guard let cursor = cursor else {
-            return nil
-        }
         guard let record = try cursor.next() else {
             return nil
         }""" % (
@@ -2076,16 +2121,9 @@ public extension %(class_name)s {
     @nonobjc
     class func grdbFetchCursor(transaction: DBReadTransaction) -> %(class_name)sCursor {
         let database = transaction.database
-        do {
+        return failIfThrows {
             let cursor = try %(record_name)s.fetchCursor(database)
             return %(class_name)sCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \\(error)")
-            return %(class_name)sCursor(transaction: transaction, cursor: nil)
         }
     }
 """ % {
@@ -2182,64 +2220,12 @@ public extension %(class_name)s {
             (str(clazz.name),) * 4
         )
 
-        swift_body += '''
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        anyEnumerateUniqueIds(transaction: transaction, batched: false, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batched: Bool = false,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        let batchSize = batched ? Batching.kDefaultBatchSize : 0
-        anyEnumerateUniqueIds(transaction: transaction, batchSize: batchSize, block: block)
-    }
-
-    // Traverses all records' unique ids.
-    // Records are not visited in any particular order.
-    //
-    // If batchSize > 0, the enumeration is performed in autoreleased batches.
-    class func anyEnumerateUniqueIds(
-        transaction: DBReadTransaction,
-        batchSize: UInt,
-        block: (String, UnsafeMutablePointer<ObjCBool>) -> Void
-    ) {
-        grdbEnumerateUniqueIds(transaction: transaction,
-                                sql: """
-                SELECT \\(%sColumn: .uniqueId)
-                FROM \\(%s.databaseTableName)
-            """,
-            batchSize: batchSize,
-            block: block)
-    }
-''' % (
-            record_identifier(clazz.name),
-            record_name,
-        )
-
         swift_body += """
     // Does not order the results.
     class func anyFetchAll(transaction: DBReadTransaction) -> [%s] {
         var result = [%s]()
         anyEnumerate(transaction: transaction) { (model, _) in
             result.append(model)
-        }
-        return result
-    }
-
-    // Does not order the results.
-    class func anyAllUniqueIds(transaction: DBReadTransaction) -> [String] {
-        var result = [String]()
-        anyEnumerateUniqueIds(transaction: transaction) { (uniqueId, _) in
-            result.append(uniqueId)
         }
         return result
     }
@@ -2253,35 +2239,9 @@ public extension %(class_name)s {
     class func anyCount(transaction: DBReadTransaction) -> UInt {
         return %s.ows_fetchCount(transaction.database)
     }
-""" % (
-            record_name,
-        )
-
-        # ---- Exists ----
-
-        swift_body += """
-    class func anyExists(
-        uniqueId: String,
-        transaction: DBReadTransaction
-    ) -> Bool {
-        assert(!uniqueId.isEmpty)
-
-        let sql = "SELECT EXISTS ( SELECT 1 FROM \\(%s.databaseTableName) WHERE \\(%sColumn: .uniqueId) = ? )"
-        let arguments: StatementArguments = [uniqueId]
-        do {
-            return try Bool.fetchOne(transaction.database, sql: sql, arguments: arguments) ?? false
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFail("Missing instance.")
-        }
-    }
 }
 """ % (
             record_name,
-            record_identifier(clazz.name),
         )
 
         # ---- Fetch ----
@@ -2293,17 +2253,10 @@ public extension %(class_name)s {
     class func grdbFetchCursor(sql: String,
                                arguments: StatementArguments = StatementArguments(),
                                transaction: DBReadTransaction) -> %(class_name)sCursor {
-        do {
+        return failIfThrows {
             let sqlRequest = SQLRequest<Void>(sql: sql, arguments: arguments, cached: true)
             let cursor = try %(record_name)s.fetchCursor(transaction.database, sqlRequest)
             return %(class_name)sCursor(transaction: transaction, cursor: cursor)
-        } catch {
-            DatabaseCorruptionState.flagDatabaseReadCorruptionIfNecessary(
-                userDefaults: CurrentAppContext().appUserDefaults(),
-                error: error
-            )
-            owsFailDebug("Read failed: \\(error)")
-            return %(class_name)sCursor(transaction: transaction, cursor: nil)
         }
     }
 """ % {

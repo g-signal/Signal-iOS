@@ -25,9 +25,27 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation TSInvalidIdentityKeySendingErrorMessage
 #pragma clang diagnostic pop
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    return [super initWithCoder:coder];
+    NSUInteger result = [super hash];
+    result ^= self.messageId.hash;
+    result ^= self.preKeyBundle.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
+    }
+    TSInvalidIdentityKeySendingErrorMessage *typedOther = (TSInvalidIdentityKeySendingErrorMessage *)other;
+    if (![NSObject isObject:self.messageId equalToObject:typedOther.messageId]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.preKeyBundle equalToObject:typedOther.preKeyBundle]) {
+        return NO;
+    }
+    return YES;
 }
 
 // --- CODE GENERATION MARKER

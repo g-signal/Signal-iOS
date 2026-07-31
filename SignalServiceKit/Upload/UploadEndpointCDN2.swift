@@ -19,7 +19,7 @@ struct UploadEndpointCDN2: UploadEndpoint {
         form: Upload.Form,
         signalService: OWSSignalServiceProtocol,
         fileSystem: Upload.Shims.FileSystem,
-        logger: PrefixedLogger
+        logger: PrefixedLogger,
     ) {
         self.uploadForm = form
         self.signalService = signalService
@@ -31,7 +31,7 @@ struct UploadEndpointCDN2: UploadEndpoint {
     //
     // See: https://cloud.google.com/storage/docs/performing-resumable-uploads#xml-api
     // NOTE: follow the "XML API" instructions.
-    internal func fetchResumableUploadLocation() async throws -> URL {
+    func fetchResumableUploadLocation() async throws -> URL {
         return try await _fetchResumableUploadLocation(attemptCount: 0)
     }
 
@@ -57,11 +57,11 @@ struct UploadEndpointCDN2: UploadEndpoint {
                 urlString,
                 method: .post,
                 headers: headers,
-                body: nil
+                body: nil,
             )
 
             guard response.responseStatusCode == 201 else {
-                throw OWSAssertionError("Invalid statusCode: \(response.responseStatusCode).")
+                throw response.asError()
             }
             guard
                 let locationHeader = response.headers["location"],
@@ -84,8 +84,8 @@ struct UploadEndpointCDN2: UploadEndpoint {
     }
 
     // Determine how much has already been uploaded.
-    internal func getResumableUploadProgress<Metadata: UploadMetadata>(
-        attempt: Upload.Attempt<Metadata>
+    func getResumableUploadProgress<Metadata: UploadMetadata>(
+        attempt: Upload.Attempt<Metadata>,
     ) async throws -> Upload.ResumeProgress {
         var headers = HttpHeaders()
         headers["Content-Length"] = "0"
@@ -96,7 +96,7 @@ struct UploadEndpointCDN2: UploadEndpoint {
             attempt.uploadLocation.absoluteString,
             method: .put,
             headers: headers,
-            body: nil
+            body: nil,
         )
 
         let statusCode = response.responseStatusCode
@@ -148,52 +148,29 @@ struct UploadEndpointCDN2: UploadEndpoint {
     func performUpload<Metadata: UploadMetadata>(
         startPoint: Int,
         attempt: Upload.Attempt<Metadata>,
-        progress: OWSProgressSource?
+        progress: OWSProgressSource?,
     ) async throws(Upload.Error) {
         let totalDataLength = attempt.encryptedDataLength
         var headers = HttpHeaders()
-        let fileUrl: URL
-        var fileToCleanup: URL?
 
-        guard fileSystem.fileOrFolderExists(url: attempt.fileUrl) else {
-            throw .missingFile
+        let (uploadData, truncated) = try readUploadFileChunk(
+            fileSystem: fileSystem,
+            url: attempt.fileUrl,
+            startIndex: startPoint,
+        )
+
+        guard uploadData.count > 0 else {
+            attempt.logger.error("No data to upload")
+            return
         }
 
-        if startPoint == 0 {
-            headers["Content-Length"] = "\(totalDataLength)"
-            fileUrl = attempt.fileUrl
-        } else {
-            // Resuming, slice attachment data in memory.
-            let dataSliceFileUrl: URL
-            let dataSliceLength: Int
-            do {
-                (dataSliceFileUrl, dataSliceLength) = try fileSystem.createTempFileSlice(
-                    url: attempt.fileUrl,
-                    start: startPoint
-                )
-            } catch {
-                attempt.logger.warn("Failed to create temp file slice.")
-                throw Upload.Error.unknown
-            }
-
-            fileUrl = dataSliceFileUrl
-            fileToCleanup = dataSliceFileUrl
-
+        headers["Content-Length"] = "\(uploadData.count)"
+        if startPoint > 0 {
             // Example: Resuming after uploading 2359296 of 7351375 bytes.
             // Content-Range: bytes 2359296-7351374/7351375
             // Content-Length: 4992079
-            headers["Content-Length"] = "\(dataSliceLength)"
-            headers["Content-Range"] = "bytes \(startPoint)-\(totalDataLength - 1)/\(totalDataLength)"
-        }
-
-        defer {
-            if let fileToCleanup {
-                do {
-                    try fileSystem.deleteFile(url: fileToCleanup)
-                } catch {
-                    owsFailDebug("Error: \(error)")
-                }
-            }
+            // Since this is an index into the range, subtract one from the byte count uploaded
+            headers["Content-Range"] = "bytes \(startPoint)-\(startPoint + uploadData.count - 1)/\(totalDataLength)"
         }
 
         do {
@@ -202,11 +179,16 @@ struct UploadEndpointCDN2: UploadEndpoint {
                 attempt.uploadLocation.absoluteString,
                 method: .put,
                 headers: headers,
-                fileUrl: fileUrl,
-                progress: progress
+                requestData: uploadData,
+                progress: progress,
             )
             switch response.responseStatusCode {
             case 200, 201:
+                if truncated {
+                    // The upload succeeded in uploading a chunk of data. Throw this error
+                    // to the caller, which should trigger an immediate resume with the next chunk
+                    throw Upload.Error.partialUpload(bytesUploaded: UInt32(clamping: uploadData.count))
+                }
                 return
             default:
                 throw Upload.Error.unknown
@@ -225,9 +207,11 @@ struct UploadEndpointCDN2: UploadEndpoint {
             }()
 
             switch error {
+            case let error as Upload.Error:
+                throw error
             case let error as OWSHTTPError where (500...599).contains(error.responseStatusCode):
                 // On 5XX errors, clients should try to resume the upload
-                attempt.logger.warn("Temporary upload failure, retry.")
+                attempt.logger.warn("Temporary upload failure [\(error.responseStatusCode)], retry.")
                 // Check for any progress here
                 throw Upload.Error.uploadFailure(recovery: .resume(retryMode))
             case OWSHTTPError.networkFailure(let wrappedError):

@@ -9,20 +9,27 @@ import LibSignalClient
 public class AccountChecker {
     private let db: any DB
     private let networkManager: NetworkManager
-    private let recipientFetcher: any RecipientFetcher
+    private let recipientFetcher: RecipientFetcher
     private let recipientManager: any SignalRecipientManager
     private let recipientMerger: any RecipientMerger
     private let recipientStore: RecipientDatabaseTable
     private let tsAccountManager: any TSAccountManager
 
+    struct RateLimitError: Error, IsRetryableProvider {
+        var retryAfter: TimeInterval
+
+        /// This is a 4xx error, so it's not retryable without opting in.
+        var isRetryableProvider: Bool { false }
+    }
+
     init(
         db: any DB,
         networkManager: NetworkManager,
-        recipientFetcher: any RecipientFetcher,
+        recipientFetcher: RecipientFetcher,
         recipientManager: any SignalRecipientManager,
         recipientMerger: any RecipientMerger,
         recipientStore: RecipientDatabaseTable,
-        tsAccountManager: any TSAccountManager
+        tsAccountManager: any TSAccountManager,
     ) {
         self.db = db
         self.networkManager = networkManager
@@ -42,12 +49,14 @@ public class AccountChecker {
         do {
             let response = try await networkManager.asyncRequest(accountRequest)
             guard response.responseStatusCode == 200 else {
-                throw OWSGenericError("Unexpected server response.")
+                throw response.asError()
             }
             await db.awaitableWrite { tx in
-                let recipient = recipientFetcher.fetchOrCreate(serviceId: serviceId, tx: tx)
-                recipientManager.markAsRegisteredAndSave(recipient, shouldUpdateStorageService: true, tx: tx)
+                var recipient = recipientFetcher.fetchOrCreate(serviceId: serviceId, tx: tx)
+                recipientManager.markAsRegisteredAndSave(&recipient, shouldUpdateStorageService: true, tx: tx)
             }
+        } catch where error.httpStatusCode == 429 {
+            throw RateLimitError(retryAfter: error.httpResponseHeaders?.retryAfterTimeInterval ?? 0)
         } catch where error.httpStatusCode == 404 {
             await db.awaitableWrite { tx in
                 self.markAsUnregisteredAndSplitRecipientIfNeeded(serviceId: serviceId, shouldUpdateStorageService: true, tx: tx)
@@ -59,19 +68,19 @@ public class AccountChecker {
     func markAsUnregisteredAndSplitRecipientIfNeeded(
         serviceId: ServiceId,
         shouldUpdateStorageService: Bool,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         AssertNotOnMainThread()
 
-        guard let recipient = recipientStore.fetchRecipient(serviceId: serviceId, transaction: tx) else {
+        guard var recipient = recipientStore.fetchRecipient(serviceId: serviceId, transaction: tx) else {
             return
         }
 
         recipientManager.markAsUnregisteredAndSave(
-            recipient,
+            &recipient,
             unregisteredAt: .now,
             shouldUpdateStorageService: shouldUpdateStorageService,
-            tx: tx
+            tx: tx,
         )
 
         guard let localIdentifiers = tsAccountManager.localIdentifiers(tx: tx) else {
@@ -81,8 +90,8 @@ public class AccountChecker {
 
         recipientMerger.splitUnregisteredRecipientIfNeeded(
             localIdentifiers: localIdentifiers,
-            unregisteredRecipient: recipient,
-            tx: tx
+            unregisteredRecipient: &recipient,
+            tx: tx,
         )
     }
 }

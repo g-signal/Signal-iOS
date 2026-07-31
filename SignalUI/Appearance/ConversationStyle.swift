@@ -7,7 +7,7 @@ public import SignalServiceKit
 
 // An immutable snapshot of the core styling
 // state used by CVC for a given load/render cycle.
-public class ConversationStyle: NSObject {
+public struct ConversationStyle {
 
     public enum `Type`: UInt {
         // The style used from initialization until presentation begins.
@@ -38,11 +38,13 @@ public class ConversationStyle: NSObject {
 
     public let isWallpaperPhoto: Bool
 
+    public let isStandaloneRenderItem: Bool
+
     private let dynamicBodyTypePointSize: CGFloat
     private let primaryTextColor: UIColor
 
     public let contentMarginTop: CGFloat = 24
-    public let contentMarginBottom: CGFloat = 24
+    public let contentMarginBottom: CGFloat = if #available(iOS 26, *) { 8 } else { 24 }
 
     public let gutterLeading: CGFloat
     public let gutterTrailing: CGFloat
@@ -55,12 +57,12 @@ public class ConversationStyle: NSObject {
     public let fullWidthGutterLeading: CGFloat
     public let fullWidthGutterTrailing: CGFloat
 
-    static public let groupMessageAvatarSizeClass = ConversationAvatarView.Configuration.SizeClass.twentyEight
-    static public let selectionViewWidth: CGFloat = 24
-    static public let messageStackSpacing: CGFloat = 8
-    static public let defaultMessageSpacing: CGFloat = 12
-    static public let compactMessageSpacing: CGFloat = 2
-    static public let systemMessageSpacing: CGFloat = 20
+    public static let groupMessageAvatarSizeClass = ConversationAvatarView.Configuration.SizeClass.twentyEight
+    public static let selectionViewWidth: CGFloat = 24
+    public static let messageStackSpacing: CGFloat = 8
+    public static let defaultMessageSpacing: CGFloat = 12
+    public static let compactMessageSpacing: CGFloat = 2
+    public static let systemMessageSpacing: CGFloat = 20
 
     public let contentWidth: CGFloat
 
@@ -76,10 +78,12 @@ public class ConversationStyle: NSObject {
     public let textInsetBottom: CGFloat
     public let textInsetHorizontal: CGFloat
     public var textInsets: UIEdgeInsets {
-        UIEdgeInsets(top: textInsetTop,
-                     leading: textInsetHorizontal,
-                     bottom: textInsetBottom,
-                     trailing: textInsetHorizontal)
+        UIEdgeInsets(
+            top: textInsetTop,
+            leading: textInsetHorizontal,
+            bottom: textInsetBottom,
+            trailing: textInsetHorizontal,
+        )
     }
 
     // We want to align "group sender" avatars with the v-center of the
@@ -109,7 +113,8 @@ public class ConversationStyle: NSObject {
         viewWidth: CGFloat,
         hasWallpaper: Bool,
         isWallpaperPhoto: Bool,
-        chatColor: ColorOrGradientSetting
+        chatColor: ColorOrGradientSetting,
+        isStandaloneRenderItem: Bool = false,
     ) {
         self.type = type
         self.viewWidth = viewWidth
@@ -170,22 +175,27 @@ public class ConversationStyle: NSObject {
         let kMaxAudioMessageWidth: CGFloat = 244
         maxAudioMessageWidth = floor(min(maxMessageWidth, kMaxAudioMessageWidth))
 
-        super.init()
+        self.isStandaloneRenderItem = isStandaloneRenderItem
     }
 
     // MARK: Colors
 
-    public static func bubbleColorIncoming(hasWallpaper: Bool,
-                                           isDarkThemeEnabled: Bool) -> UIColor {
+    public static func bubbleColorIncoming(
+        hasWallpaper: Bool,
+        isDarkThemeEnabled: Bool,
+    ) -> UIColor {
         if hasWallpaper {
             return isDarkThemeEnabled ? .ows_gray95 : .white
         } else {
             return isDarkThemeEnabled ? UIColor.ows_gray80 : UIColor.ows_gray05
         }
     }
+
     public var bubbleColorIncoming: UIColor {
-        Self.bubbleColorIncoming(hasWallpaper: hasWallpaper,
-                                 isDarkThemeEnabled: isDarkThemeEnabled)
+        Self.bubbleColorIncoming(
+            hasWallpaper: hasWallpaper,
+            isDarkThemeEnabled: isDarkThemeEnabled,
+        )
     }
 
     public let dateBreakTextColor = UIColor.ows_gray60
@@ -235,7 +245,7 @@ public class ConversationStyle: NSObject {
     }
 
     public func bubbleTextColor(message: TSMessage) -> UIColor {
-        if message.wasRemotelyDeleted && !hasWallpaper {
+        if message.wasRemotelyDeleted, !hasWallpaper {
             return primaryTextColor
         } else if message is TSIncomingMessage {
             return bubbleTextColorIncoming
@@ -278,29 +288,33 @@ public class ConversationStyle: NSObject {
     public static var searchMatchHighlightColor: UIColor {
         return UIColor.yellow
     }
+}
 
-    public func isEqualForCellRendering(_ other: ConversationStyle) -> Bool {
+extension ConversationStyle: Equatable {
+    public static func ==(lhs: ConversationStyle, rhs: ConversationStyle) -> Bool {
         // We need to compare any state that could affect
         // how we render view appearance.
-        (type.isValid == other.type.isValid &&
-            viewWidth == other.viewWidth &&
-            dynamicBodyTypePointSize == other.dynamicBodyTypePointSize &&
-            isDarkThemeEnabled == other.isDarkThemeEnabled &&
-            hasWallpaper == other.hasWallpaper &&
-            isWallpaperPhoto == other.isWallpaperPhoto &&
-            maxMessageWidth == other.maxMessageWidth &&
-            maxMediaMessageWidth == other.maxMediaMessageWidth &&
-            textInsets == other.textInsets &&
-            gutterLeading == other.gutterLeading &&
-            gutterTrailing == other.gutterTrailing &&
-            fullWidthGutterLeading == other.fullWidthGutterLeading &&
-            fullWidthGutterTrailing == other.fullWidthGutterTrailing &&
-            textInsets == other.textInsets &&
-            lastTextLineAxis == other.lastTextLineAxis &&
-            chatColorSetting == other.chatColorSetting)
+        lhs.type.isValid == rhs.type.isValid &&
+            lhs.viewWidth == rhs.viewWidth &&
+            lhs.dynamicBodyTypePointSize == rhs.dynamicBodyTypePointSize &&
+            lhs.isDarkThemeEnabled == rhs.isDarkThemeEnabled &&
+            lhs.hasWallpaper == rhs.hasWallpaper &&
+            lhs.isWallpaperPhoto == rhs.isWallpaperPhoto &&
+            lhs.maxMessageWidth == rhs.maxMessageWidth &&
+            lhs.maxMediaMessageWidth == rhs.maxMediaMessageWidth &&
+            lhs.textInsets == rhs.textInsets &&
+            lhs.gutterLeading == rhs.gutterLeading &&
+            lhs.gutterTrailing == rhs.gutterTrailing &&
+            lhs.fullWidthGutterLeading == rhs.fullWidthGutterLeading &&
+            lhs.fullWidthGutterTrailing == rhs.fullWidthGutterTrailing &&
+            lhs.textInsets == rhs.textInsets &&
+            lhs.lastTextLineAxis == rhs.lastTextLineAxis &&
+            lhs.chatColorSetting == rhs.chatColorSetting
     }
+}
 
-    public override var debugDescription: String {
+extension ConversationStyle: CustomDebugStringConvertible {
+    public var debugDescription: String {
         "[" +
             "type.isValid: \(type.isValid), " +
             "viewWidth: \(viewWidth), " +
@@ -323,9 +337,8 @@ public class ConversationStyle: NSObject {
 }
 
 extension ConversationStyle {
-
     public func quotedReplyHighlightColor() -> UIColor {
-        UIColor.init(rgbHex: 0xB5B5B5)
+        UIColor(rgbHex: 0xB5B5B5)
     }
 
     public func quotedReplyAuthorColor() -> UIColor {

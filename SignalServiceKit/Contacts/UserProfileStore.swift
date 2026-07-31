@@ -22,19 +22,19 @@ public class UserProfileStoreImpl: UserProfileStore {
     }
 
     public func fetchUserProfiles(for serviceId: ServiceId, tx: DBReadTransaction) -> [OWSUserProfile] {
-        return UserProfileFinder().fetchUserProfiles(serviceId: serviceId, tx: SDSDB.shimOnlyBridge(tx))
+        return UserProfileFinder().fetchUserProfiles(serviceId: serviceId, tx: tx)
     }
 
     public func fetchUserProfiles(for phoneNumber: E164, tx: DBReadTransaction) -> [OWSUserProfile] {
-        return UserProfileFinder().fetchUserProfiles(phoneNumber: phoneNumber.stringValue, tx: SDSDB.shimOnlyBridge(tx))
+        return UserProfileFinder().fetchUserProfiles(phoneNumber: phoneNumber.stringValue, tx: tx)
     }
 
     public func updateUserProfile(_ userProfile: OWSUserProfile, tx: DBWriteTransaction) {
-        userProfile.anyOverwritingUpdate(transaction: SDSDB.shimOnlyBridge(tx))
+        userProfile.anyOverwritingUpdate(transaction: tx)
     }
 
     public func removeUserProfile(_ userProfile: OWSUserProfile, tx: DBWriteTransaction) {
-        userProfile.anyRemove(transaction: SDSDB.shimOnlyBridge(tx))
+        userProfile.anyRemove(transaction: tx)
     }
 }
 
@@ -57,7 +57,7 @@ class MockUserProfileStore: UserProfileStore {
 
     func updateUserProfile(_ userProfile: OWSUserProfile, tx: DBWriteTransaction) {
         let index = userProfiles.firstIndex(where: { $0.uniqueId == userProfile.uniqueId })!
-        userProfiles[index] = userProfile.copy() as! OWSUserProfile
+        userProfiles[index] = userProfile.shallowCopy()
     }
 
     func removeUserProfile(_ userProfile: OWSUserProfile, tx: DBWriteTransaction) {

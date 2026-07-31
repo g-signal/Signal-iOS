@@ -53,7 +53,7 @@ public class SpamCaptchaViewController: UIViewController, CaptchaViewDelegate {
         captchaView?.loadCaptcha()
     }
 
-    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return UIDevice.current.isIPad ? .all : .portrait
     }
 }
@@ -80,8 +80,9 @@ extension SpamCaptchaViewController {
         let continueButton = OWSFlatButton()
         continueButton.setTitle(
             title: CommonStrings.continueButton,
-            font: UIFont.dynamicTypeBodyClamped.semibold(),
-            titleColor: .white)
+            font: UIFont.dynamicTypeHeadlineClamped,
+            titleColor: .white,
+        )
         continueButton.setBackgroundColors(upColor: Theme.accentBlueColor)
         continueButton.layer.cornerRadius = 8
         continueButton.layer.masksToBounds = true
@@ -91,7 +92,7 @@ extension SpamCaptchaViewController {
             titleLabel,
             bodyLabel,
             UIView.spacer(withHeight: 72),
-            continueButton
+            continueButton,
         ])
         stackView.axis = .vertical
         stackView.alignment = .center
@@ -107,25 +108,29 @@ extension SpamCaptchaViewController {
             let confirmationSheet = ActionSheetController(
                 title: OWSLocalizedString(
                     "SPAM_CAPTCHA_DISMISS_CONFIRMATION_TITLE",
-                    comment: "Title for confirmation dialog confirming to ignore verification."),
+                    comment: "Title for confirmation dialog confirming to ignore verification.",
+                ),
                 message: OWSLocalizedString(
                     "SPAM_CAPTCHA_DISMISS_CONFIRMATION_MESSAGE",
-                    comment: "Message for confirmation dialog confirming to ignore verification.")
-                )
+                    comment: "Message for confirmation dialog confirming to ignore verification.",
+                ),
+            )
 
             confirmationSheet.addAction(
                 ActionSheetAction(
                     title: OWSLocalizedString("SPAM_CAPTCHA_SKIP_VERIFICATION_ACTION", comment: "Action to skip verification"),
-                    style: .destructive
-                ))
+                    style: .destructive,
+                ),
+            )
             confirmationSheet.addAction(
                 ActionSheetAction(
                     title: CommonStrings.cancelButton,
                     style: .cancel,
                     handler: { _ in
                         presentActionSheet(from: fromVC)
-                    }
-                ))
+                    },
+                ),
+            )
             fromVC.present(confirmationSheet, animated: true, completion: nil)
         }
 
@@ -135,7 +140,8 @@ extension SpamCaptchaViewController {
         }
 
         stackView.autoPinEdgesToSuperviewMargins(
-            with: UIEdgeInsets(hMargin: 24, vMargin: 16))
+            with: UIEdgeInsets(hMargin: 24, vMargin: 16),
+        )
         continueButton.autoPinWidthToSuperviewMargins()
 
         fromVC.present(sheet, animated: true, completion: nil)
@@ -144,11 +150,13 @@ extension SpamCaptchaViewController {
     static func presentCaptchaVC(from fromVC: UIViewController) {
         let vc = SpamCaptchaViewController()
         vc.completionHandler = { token in
-            if let token = token {
+            if let token {
                 fromVC.presentToast(
                     text: OWSLocalizedString(
                         "SPAM_CAPTCHA_COMPLETED_TOAST",
-                        comment: "Text for toast presented after spam verification has been completed"))
+                        comment: "Text for toast presented after spam verification has been completed",
+                    ),
+                )
                 SSKEnvironment.shared.spamChallengeResolverRef.handleIncomingCaptchaChallengeToken(token)
             }
             vc.dismiss(animated: true)

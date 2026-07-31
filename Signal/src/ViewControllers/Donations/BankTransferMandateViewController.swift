@@ -3,8 +3,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-import SignalUI
 import SignalServiceKit
+import SignalUI
 
 @MainActor
 class BankTransferMandateViewController: OWSTableViewController2 {
@@ -30,7 +30,7 @@ class BankTransferMandateViewController: OWSTableViewController2 {
 
     init(
         bankTransferType: OWSRequestFactory.StripePaymentMethod.BankTransfer,
-        didAgree: @escaping (Stripe.PaymentMethod.Mandate) -> Void
+        didAgree: @escaping (Stripe.PaymentMethod.Mandate) -> Void,
     ) {
         self.bankTransferType = bankTransferType
         self.didAgree = didAgree
@@ -52,12 +52,6 @@ class BankTransferMandateViewController: OWSTableViewController2 {
         }
     }
 
-    override func themeDidChange() {
-        super.themeDidChange()
-        updateTableContents()
-        updateBottomFooter()
-    }
-
     private func updateTableContents() {
         let section = OWSTableSection(header: self.makeHeaderView)
 
@@ -75,46 +69,55 @@ class BankTransferMandateViewController: OWSTableViewController2 {
     }
 
     private static let bankIconSize: CGFloat = 40
-    private static let bankIconContainerSize: CGFloat = 64
+    private static let bankIconCircleSize: CGFloat = 64
     /// This URL itself is not used. The action is overridden in the text view delegate function.
     private static let learnMoreURL = URL(string: "https://support.signal.org/")!
 
     private func makeHeaderView() -> UIView {
-        let bankIcon = UIImage(systemName: "building.columns")
-        let bankIconView = UIImageView(image: bankIcon)
+        let bankIconView = UIImageView(image: UIImage(systemName: "building.columns"))
         bankIconView.contentMode = .scaleAspectFit
-        bankIconView.tintColor = Theme.primaryTextColor
-        bankIconView.autoSetDimensions(to: .square(Self.bankIconSize))
+        bankIconView.tintColor = .Signal.label
 
-        let bankIconContainer = UIView()
-        bankIconContainer.backgroundColor = self.cellBackgroundColor
-        bankIconContainer.autoSetDimensions(to: .square(Self.bankIconContainerSize))
-        bankIconContainer.layer.cornerRadius = Self.bankIconContainerSize / 2
-        bankIconContainer.addSubview(bankIconView)
-        bankIconView.autoCenterInSuperview()
+        let bankIconCircle = CircleView()
+        bankIconCircle.backgroundColor = .Signal.secondaryGroupedBackground
+        bankIconCircle.addSubview(bankIconView)
 
-        let titleLabel = UILabel()
-        titleLabel.text = OWSLocalizedString(
+        let bankIconContainer = UIView.container()
+        bankIconContainer.addSubview(bankIconCircle)
+
+        bankIconView.translatesAutoresizingMaskIntoConstraints = false
+        bankIconCircle.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            bankIconView.widthAnchor.constraint(equalToConstant: Self.bankIconSize),
+            bankIconView.heightAnchor.constraint(equalToConstant: Self.bankIconSize),
+
+            bankIconView.centerXAnchor.constraint(equalTo: bankIconCircle.centerXAnchor),
+            bankIconView.centerYAnchor.constraint(equalTo: bankIconCircle.centerYAnchor),
+
+            bankIconCircle.widthAnchor.constraint(equalToConstant: Self.bankIconCircleSize),
+            bankIconCircle.heightAnchor.constraint(equalToConstant: Self.bankIconCircleSize),
+
+            bankIconCircle.topAnchor.constraint(equalTo: bankIconContainer.topAnchor),
+            bankIconCircle.leadingAnchor.constraint(greaterThanOrEqualTo: bankIconContainer.leadingAnchor),
+            bankIconCircle.centerXAnchor.constraint(equalTo: bankIconContainer.centerXAnchor),
+            bankIconCircle.bottomAnchor.constraint(equalTo: bankIconContainer.bottomAnchor),
+        ])
+
+        let titleLabel = UILabel.title1Label(text: OWSLocalizedString(
             "BANK_MANDATE_TITLE",
-            comment: "Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is the title above that mandate."
-        )
-        titleLabel.font = .dynamicTypeTitle1.semibold()
-        titleLabel.textAlignment = .center
-        titleLabel.numberOfLines = 0
+            comment: "Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is the title above that mandate.",
+        ))
 
         let subtitleTextView = LinkingTextView()
         subtitleTextView.delegate = self
         subtitleTextView.attributedText = .composed(of: [
             OWSLocalizedString(
                 "BANK_MANDATE_SUBTITLE",
-                comment: "Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a subtitle about the payment processor Stripe above that mandate."
+                comment: "Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a subtitle about the payment processor Stripe above that mandate.",
             ),
             " ",
-            CommonStrings.learnMore.styled(with: .link(Self.learnMoreURL))
-        ]).styled(with: .color(Theme.secondaryTextAndIconColor), .font(.dynamicTypeSubheadline))
-        subtitleTextView.linkTextAttributes = [
-            .foregroundColor: Theme.accentBlueColor,
-        ]
+            CommonStrings.learnMore.styled(with: .link(Self.learnMoreURL)),
+        ]).styled(with: .color(.Signal.secondaryLabel), .font(.dynamicTypeSubheadline))
         subtitleTextView.textAlignment = .center
 
         let stackView = UIStackView(arrangedSubviews: [
@@ -123,20 +126,24 @@ class BankTransferMandateViewController: OWSTableViewController2 {
             subtitleTextView,
         ])
         stackView.axis = .vertical
-        stackView.alignment = .center
+        stackView.alignment = .fill
         stackView.spacing = 8
         stackView.setCustomSpacing(12, after: bankIconContainer)
 
-        let hPadding: CGFloat = UIDevice.current.isNarrowerThanIPhone6 ? 0 : 8
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = .init(
-            top: 0,
-            leading: hPadding,
-            bottom: 20,
-            trailing: hPadding
-        )
+        // Use container to provide some vertical spacing below.
+        let container = UIView()
+        container.preservesSuperviewLayoutMargins = true
+        container.directionalLayoutMargins.bottom = 24
+        container.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: container.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: container.layoutMarginsGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: container.layoutMarginsGuide.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: container.layoutMarginsGuide.bottomAnchor),
+        ])
 
-        return stackView
+        return container
     }
 
     private static func makeLoadingview() -> UIActivityIndicatorView {
@@ -182,30 +189,29 @@ class BankTransferMandateViewController: OWSTableViewController2 {
         set {}
     }
 
-    private lazy var bottomFooterButton: OWSButton = {
-        let button = OWSButton { [weak self] in
+    private lazy var bottomFooterButton = UIButton(
+        configuration: .largePrimary(title: ""),
+        primaryAction: UIAction { [weak self] _ in
             self?.didTapBottomFooterButton()
-        }
-        button.dimsWhenHighlighted = true
-        button.dimsWhenDisabled = true
-        button.layer.cornerRadius = 12
-        button.backgroundColor = .ows_accentBlue
-        button.titleLabel?.font = .dynamicTypeHeadline
-        button.autoSetDimension(.height, toSize: 48, relation: .greaterThanOrEqual)
-        return button
-    }()
+        },
+    )
 
     private lazy var bottomFooterContainer: UIView = {
+        let stackView = UIStackView.verticalButtonStack(buttons: [bottomFooterButton])
         let view = UIView()
-        view.layoutMargins = .init(margin: 20)
-        view.addSubview(bottomFooterButton)
-        bottomFooterButton.autoPinEdgesToSuperviewMargins()
+        view.preservesSuperviewLayoutMargins = true
+        view.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: view.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
         return view
     }()
 
     private func updateBottomFooter() {
-        bottomFooterContainer.backgroundColor = self.tableBackgroundColor
-
         switch state {
         case .loaded:
             bottomFooterButton.isEnabled = true
@@ -223,15 +229,15 @@ class BankTransferMandateViewController: OWSTableViewController2 {
         if isScrolledCloseToBottom {
             title = OWSLocalizedString(
                 "BANK_MANDATE_AGREE",
-                comment: "Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button to agree to the mandate."
+                comment: "Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button to agree to the mandate.",
             )
         } else {
             title = OWSLocalizedString(
                 "BANK_MANDATE_READ_MORE",
-                comment: "Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button that shows more of the mandate if it is not all visible."
+                comment: "Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button that shows more of the mandate if it is not all visible.",
             )
         }
-        bottomFooterButton.setTitle(title, for: .normal)
+        bottomFooterButton.configuration?.title = title
     }
 
     private func didTapBottomFooterButton() {
@@ -241,7 +247,7 @@ class BankTransferMandateViewController: OWSTableViewController2 {
             let pageHeight = tableView.bounds.height - tableView.safeAreaInsets.top - tableView.safeAreaInsets.bottom
             let yOffset = min(
                 tableView.contentOffset.y + pageHeight,
-                tableView.contentSize.height - tableView.bounds.height
+                tableView.contentSize.height - tableView.bounds.height,
             )
             let newOffset = CGPoint(x: tableView.contentOffset.x, y: yOffset)
             tableView.setContentOffset(newOffset, animated: true)
@@ -254,11 +260,8 @@ class BankTransferMandateViewController: OWSTableViewController2 {
         let request = OWSRequestFactory.bankMandateRequest(bankTransferType: self.bankTransferType)
         do {
             let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(request)
-            guard let json = response.responseBodyJson else {
+            guard let parser = response.responseBodyParamParser else {
                 throw OWSAssertionError("Missing or invalid JSON")
-            }
-            guard let parser = ParamParser(responseObject: json) else {
-                throw OWSAssertionError("Failed to decode JSON response")
             }
             let mandateText: String = try parser.required(key: "mandate")
             self.state = .loaded(mandateText: mandateText)
@@ -291,7 +294,7 @@ extension Stripe.PaymentMethod.Mandate {
     fileprivate static func accept() -> Self {
         .init(mode: .online(
             userAgent: OWSURLSession.userAgentHeaderValueSignalIos,
-            ipAddress: "0.0.0.0"
+            ipAddress: "0.0.0.0",
         ))
     }
 }

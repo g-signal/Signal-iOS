@@ -29,18 +29,25 @@ protocol PhotoCaptureViewControllerDelegate: AnyObject {
 
 protocol PhotoCaptureViewControllerDataSource: AnyObject {
     var numberOfMediaItems: Int { get }
-    func addMedia(attachment: SignalAttachment)
+    func addMedia(attachment: PreviewableAttachment)
 }
 
 class PhotoCaptureViewController: OWSViewController, OWSNavigationChildController {
+    private let attachmentLimits: OutgoingAttachmentLimits
+
+    init(attachmentLimits: OutgoingAttachmentLimits) {
+        self.attachmentLimits = attachmentLimits
+        super.init()
+    }
 
     weak var delegate: PhotoCaptureViewControllerDelegate?
     weak var dataSource: PhotoCaptureViewControllerDataSource?
     private var interactiveDismiss: PhotoCaptureInteractiveDismiss?
 
     private lazy var qrCodeSampleBufferScanner = QRCodeSampleBufferScanner(delegate: self)
-    lazy var cameraCaptureSession = CameraCaptureSession(
+    private lazy var cameraCaptureSession = CameraCaptureSession(
         delegate: self,
+        attachmentLimits: attachmentLimits,
         qrCodeSampleBufferScanner: qrCodeSampleBufferScanner
     )
 
@@ -195,7 +202,7 @@ class PhotoCaptureViewController: OWSViewController, OWSNavigationChildControlle
         // Safe area insets will change during interactive dismiss - ignore those changes.
         guard !(interactiveDismiss?.interactionInProgress ?? false) else { return }
 
-        if let contentLayoutGuideTop = contentLayoutGuideTop {
+        if let contentLayoutGuideTop = previewViewContentLayoutGuideTop {
             contentLayoutGuideTop.constant = view.safeAreaInsets.top
 
             // Rounded corners if preview view isn't full-screen.
@@ -221,8 +228,8 @@ class PhotoCaptureViewController: OWSViewController, OWSNavigationChildControlle
         }
     }
 
-    private let contentLayoutGuide = UILayoutGuide()
-    private var contentLayoutGuideTop: NSLayoutConstraint? // controls vertical position of `contentLayoutGuide` on iPhones.
+    private let previewViewLayoutGuide = UILayoutGuide()
+    private var previewViewContentLayoutGuideTop: NSLayoutConstraint? // controls vertical position of `previewViewLayoutGuide` on iPhones.
 
     // Values match ContentTypeSelectionControl.selectedSegmentIndex.
     private enum ComposerMode: Int {
@@ -425,37 +432,37 @@ class PhotoCaptureViewController: OWSViewController, OWSNavigationChildControlle
     private var doneButtonIPadConstraints: [NSLayoutConstraint]?
 
     private func initializeUI() {
-        // `contentLayoutGuide` defines area occupied by the content:
+        // `previewViewLayoutGuide` defines area occupied by the content:
         // either camera viewfinder or text story composing area.
-        view.addLayoutGuide(contentLayoutGuide)
+        view.addLayoutGuide(previewViewLayoutGuide)
         // Always full-width.
-        view.addConstraints([ contentLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                              contentLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor) ])
+        view.addConstraints([ previewViewLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                              previewViewLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor) ])
         if UIDevice.current.isIPad {
             // Full-height on iPads.
-            view.addConstraints([ contentLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor),
-                                  contentLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor) ])
+            view.addConstraints([ previewViewLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor),
+                                  previewViewLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor) ])
         } else {
             // 9:16 aspect ratio on iPhones.
-            // Note that there's no constraint on the bottom edge of the `contentLayoutGuide`.
+            // Note that there's no constraint on the bottom edge of the `previewViewLayoutGuide`.
             // This works because all iPhones have screens 9:16 or taller.
-            view.addConstraint(contentLayoutGuide.heightAnchor.constraint(equalTo: contentLayoutGuide.widthAnchor, multiplier: 16/9))
+            view.addConstraint(previewViewLayoutGuide.heightAnchor.constraint(equalTo: previewViewLayoutGuide.widthAnchor, multiplier: 16/9))
             // Constrain to the top of the view now and update offset with the height of top safe area later.
             // Can't constrain to the safe area layout guide because safe area insets changes during interactive dismiss.
-            let constraint = contentLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor)
+            let constraint = previewViewLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor)
             view.addConstraint(constraint)
-            contentLayoutGuideTop = constraint
+            previewViewContentLayoutGuideTop = constraint
         }
 
         // Step 1. Initialize all UI elements for iPhone layout (which can also be used on an iPad).
 
-        // Camera Viewfinder - simply occupies the entire frame of `contentLayoutGuide`.
+        // Camera Viewfinder - simply occupies the entire frame of `previewViewLayoutGuide`.
         previewView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(previewView)
-        view.addConstraints([ previewView.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor),
-                              previewView.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor),
-                              previewView.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor),
-                              previewView.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor) ])
+        view.addConstraints([ previewView.leadingAnchor.constraint(equalTo: previewViewLayoutGuide.leadingAnchor),
+                              previewView.topAnchor.constraint(equalTo: previewViewLayoutGuide.topAnchor),
+                              previewView.trailingAnchor.constraint(equalTo: previewViewLayoutGuide.trailingAnchor),
+                              previewView.bottomAnchor.constraint(equalTo: previewViewLayoutGuide.bottomAnchor) ])
         configureCameraGestures()
 
         // Top Bar
@@ -467,7 +474,7 @@ class PhotoCaptureViewController: OWSViewController, OWSNavigationChildControlle
         if UIDevice.current.isIPad {
             topBar.autoPinEdge(toSuperviewSafeArea: .top)
         } else {
-            topBar.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor).isActive = true
+            topBar.topAnchor.constraint(equalTo: previewViewLayoutGuide.topAnchor).isActive = true
         }
 
         // Bottom Bar (contains shutter button)
@@ -487,10 +494,10 @@ class PhotoCaptureViewController: OWSViewController, OWSNavigationChildControlle
         } else {
             // On `notch` devices:
             //  i. Shutter button is placed 16 pts above the bottom edge of the preview view.
-            bottomBar.shutterButtonLayoutGuide.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor, constant: -16).isActive = true
+            bottomBar.shutterButtonLayoutGuide.bottomAnchor.constraint(equalTo: previewViewLayoutGuide.bottomAnchor, constant: -16).isActive = true
 
             //  ii. Other buttons are centered vertically in the black box between bottom of the preview view and top of bottom safe area.
-            bottomBar.controlButtonsLayoutGuide.topAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor).isActive = true
+            bottomBar.controlButtonsLayoutGuide.topAnchor.constraint(equalTo: previewViewLayoutGuide.bottomAnchor).isActive = true
             // Constrain to the bottom of the view now and update offset with the height of bottom safe area later.
             // Can't constrain to the safe area layout guide because safe area insets changes during interactive dismiss.
             let constraint = bottomBar.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -1257,7 +1264,7 @@ extension PhotoCaptureViewController: InteractiveDismissDelegate {
                             didChangeProgress: CGFloat,
                             touchOffset: CGPoint) { }
 
-    func interactiveDismiss(_ interactiveDismiss: UIPercentDrivenInteractiveTransition, didFinishWithVelocity: CGVector?) {
+    func interactiveDismissDidFinish(_ interactiveDismiss: UIPercentDrivenInteractiveTransition) {
         dismiss(animated: true)
     }
 
@@ -1296,14 +1303,13 @@ extension PhotoCaptureViewController: QRCodeSampleBufferScannerDelegate {
         {
             qrCodeScanned = true
 
-            SSKEnvironment.shared.databaseStorageRef.read { tx in
-                UsernameQuerier().queryForUsernameLink(
+            Task {
+                if let result = await UsernameQuerier().queryForUsernameLink(
                     link: usernameLink,
-                    fromViewController: self,
-                    tx: tx,
-                    failureSheetDismissalDelegate: self,
-                    onSuccess: self.showUsernameLinkSheet(username:aci:)
-                )
+                    fromViewController: self
+                ) {
+                    self.showUsernameLinkSheet(username: result.username, aci: result.1)
+                }
             }
         } else if
             let url = URL(string: qrCodeString),
@@ -1453,7 +1459,7 @@ extension PhotoCaptureViewController: CameraCaptureSessionDelegate {
         }
     }
 
-    func cameraCaptureSession(_ session: CameraCaptureSession, didFinishProcessing attachment: SignalAttachment) {
+    func cameraCaptureSession(_ session: CameraCaptureSession, didFinishProcessing attachment: PreviewableAttachment) {
         dataSource?.addMedia(attachment: attachment)
 
         updateDoneButtonAppearance()
@@ -1468,7 +1474,7 @@ extension PhotoCaptureViewController: CameraCaptureSessionDelegate {
     func cameraCaptureSession(_ session: CameraCaptureSession, didFailWith error: Error) {
         setIsRecordingVideo(false, animated: true)
 
-        if case PhotoCaptureError.invalidVideo = error {
+        if error is VideoCaptureFailedError {
             // Don't show an error if the user aborts recording before video
             // recording has begun.
             return

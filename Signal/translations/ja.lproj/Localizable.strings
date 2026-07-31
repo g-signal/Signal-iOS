@@ -1,6 +1,9 @@
 /* Button text to dismiss missing contacts permission alert */
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "今はしない";
 
+/* Footer for the 'about' help section. For non-English languages, exclude the word '501c3'. */
+"ABOUT_SECTION_FOOTER" = "©B&A Messenger\nAGPLv3ライセンスに基づいて提供\nB&Aは非営利団体です";
+
 /* Title for the 'about' help section */
 "ABOUT_SECTION_TITLE" = "B&Aについて";
 
@@ -29,7 +32,7 @@
 "ACCESSIBILITY_LABEL_VOICE_MEMO" = "音声メッセージ";
 
 /* Users can request a report of their account data. Before they get their account export, they are warned to only share account data with trustworthy sources. This is the button on that warning, and tapping it lets users continue. */
-"ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_CONFIRM_BUTTON" = "レポートをエクスポートする";
+"ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_CONFIRM_BUTTON" = "レポートをエクスポート";
 
 /* Users can request a report of their account data. Before they get their account export, they are warned to only share account data with trustworthy sources. This is the message on that warning. */
 "ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_MESSAGE" = "B&A アカウントデータは、信頼できる人またはアプリとのみ共有してください。";
@@ -44,16 +47,16 @@
 "ACCOUNT_DATA_REPORT_EXPORT_AS_JSON_SUBTITLE" = "機械可読のファイル";
 
 /* Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the title on the button that switches to JSON mode. */
-"ACCOUNT_DATA_REPORT_EXPORT_AS_JSON_TITLE" = "JSON 形式でエクスポートする";
+"ACCOUNT_DATA_REPORT_EXPORT_AS_JSON_TITLE" = "JSON 形式でエクスポート";
 
 /* Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the subtitle on the button that switches to plain text mode. */
 "ACCOUNT_DATA_REPORT_EXPORT_AS_TXT_SUBTITLE" = "読みやすいテキストファイル";
 
 /* Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the title on the button that switches to plain text mode. */
-"ACCOUNT_DATA_REPORT_EXPORT_AS_TXT_TITLE" = "TXT 形式でエクスポートする";
+"ACCOUNT_DATA_REPORT_EXPORT_AS_TXT_TITLE" = "TXT 形式でエクスポート";
 
 /* Users can request a report of their account data. Users tap this button to export their data. */
-"ACCOUNT_DATA_REPORT_EXPORT_REPORT_BUTTON" = "レポートをエクスポートする";
+"ACCOUNT_DATA_REPORT_EXPORT_REPORT_BUTTON" = "レポートをエクスポート";
 
 /* Users can request a report of their account data. This text appears at the bottom of this screen, offering more information. */
 "ACCOUNT_DATA_REPORT_FOOTER" = "レポートはエクスポート時にのみ作成され、B&A がお客様の端末に保存することはありません。";
@@ -69,6 +72,12 @@
 
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "メッセージ送信";
+
+/* Message shown in an action sheet when a generic error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_GENERIC_ERROR" = "エラーが発生しました！サポートにお問い合わせください。";
+
+/* Message shown in an action sheet when a network error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_NETWORK_ERROR" = "エラーが発生しました！インターネット接続を確認して再度試してください。";
 
 /* A label for 'tap to download' buttons. */
 "ACTION_TAP_TO_DOWNLOAD" = "タップしてダウンロード";
@@ -125,7 +134,7 @@
 "ALERT_DELIVERY_ISSUE_UNKNOWN_THREAD_MESSAGE_FORMAT" = "%1$@ さんからのメッセージ、ステッカー、リアクション、既読通知またはメディアを、あなたに配送できませんでした。直接送信しようとしたか、グループで送ろうとしたかもしれません。";
 
 /* The label for the 'discard' button in alerts and action sheets. */
-"ALERT_DISCARD_BUTTON" = "破棄する";
+"ALERT_DISCARD_BUTTON" = "破棄";
 
 /* The label for the 'don't save' button in action sheets. */
 "ALERT_DONT_SAVE" = "保存しない";
@@ -134,7 +143,7 @@
 "ALERT_ERROR_TITLE" = "エラー";
 
 /* The label for the 'save' button in action sheets. */
-"ALERT_SAVE" = "保存する";
+"ALERT_SAVE" = "保存";
 
 /* Message for UI warning about an unknown contact thread. */
 "ALERT_UNKNOWN_THREAD_WARNING_CONTACT_MESSAGE" = "この人と共通のグループがありません。望まないメッセージを避けるため、申請は慎重に検討してください。";
@@ -196,6 +205,12 @@
 /* notification body */
 "APN_Message" = "新着メッセージがあるかもしれません";
 
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. The embedded value is 'Update now' (translated via APP_EXPIRED_BOTTOM_UPDATE), and it will be formatted as a tappable link. */
+"APP_EXPIRED_BOTTOM" = "このバージョンのB&Aは期限が切れています。メッセージを送受信するには、%1$@が必要です。";
+
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. This value is a tappable link embedded in a larger sentence. */
+"APP_EXPIRED_BOTTOM_UPDATE" = "今すぐアップデート";
+
 /* Default message for the 'app launch failed' alert. */
 "APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "B&Aを起動できません。解決のため、デバッグログを support@baxs.com にお送りください。";
 
@@ -210,6 +225,15 @@
 
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "データベースを読み込めませんでした";
+
+/* Message for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_MESSAGE" = "データベースが破損しているため、B&Aを起動できません。アカウントやメッセージのセキュリティーに影響はありません。";
+
+/* Title for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_TITLE" = "データベースが破損しています";
+
+/* Action in an action sheet offering to attempt recovery of a corrupted database. */
+"APP_LAUNCH_FAILURE_DATABASE_RECOVERY_ACTION_TITLE" = "修復";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "最新バージョンのB&Aにアップグレードしてください。";
@@ -236,7 +260,7 @@
 "APP_LAUNCH_FAILURE_RESTORE_FAILED_TITLE" = "移行を完了できませんでした";
 
 /* Action in an action sheet offering to wipe all app data. */
-"APP_LAUNCH_FAILURE_WIPE_APP_DATA_ACTION_TITLE" = "アプリデータをリセットする";
+"APP_LAUNCH_FAILURE_WIPE_APP_DATA_ACTION_TITLE" = "アプリデータをリセット";
 
 /* Message for an action sheet confirming the user wants to wipe all app data. */
 "APP_LAUNCH_FAILURE_WIPE_APP_DATA_CONFIRMATION_MESSAGE" = "すべてのアプリデータは完全に消去されます。これは、アプリを起動できない場合にのみ必要な処置です。";
@@ -247,17 +271,8 @@
 /* Text prompting user to edit their profile name. */
 "APP_SETTINGS_EDIT_PROFILE_NAME_PROMPT" = "プロフィール名を入力してください";
 
-/* Label for the 'dismiss' button in the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_DISMISS_BUTTON" = "今はしない";
-
-/* Message format for the 'new app version available' alert. Embeds: {{The latest app version number}} */
-"APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "App Storeでバージョン%1$@を入手できます。";
-
-/* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "新バージョンのB&Aが利用可能です";
-
 /* Label for the 'update' button in the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "アップデートする";
+"APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "アップデート";
 
 /* Name indicating that the dark theme is enabled. */
 "APPEARANCE_SETTINGS_DARK_THEME_NAME" = "ダーク";
@@ -314,7 +329,7 @@
 "ARCHIVE_ACTION" = "アーカイブ";
 
 /* Button to try to join a call. The admin may need to approve the request before the user can join. */
-"ASK_TO_JOIN_CALL" = "参加をリクエストする";
+"ASK_TO_JOIN_CALL" = "参加をリクエスト";
 
 /* One of the choices for pre-defined aspect ratio of a photo in media editor. */
 "ASPECT_RATIO_ORIGINAL" = "オリジナル";
@@ -386,13 +401,13 @@
 "ATTACHMENT_HINT" = "送信するメディアを選択します";
 
 /* Button in chat attachment panel that allows to select photos/videos Signal has access to. */
-"ATTACHMENT_KEYBOARD_BUTTON_MANAGE" = "管理する";
+"ATTACHMENT_KEYBOARD_BUTTON_MANAGE" = "管理";
 
 /* A button to select a contact from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_CONTACT" = "連絡先";
 
 /* Button in a context menu from the 'manage' button in attachment panel that allows to select more photos/videos to give Signal access to */
-"ATTACHMENT_KEYBOARD_CONTEXT_MENU_BUTTON_SELECT_MORE" = "他の写真を選択する";
+"ATTACHMENT_KEYBOARD_CONTEXT_MENU_BUTTON_SELECT_MORE" = "他の写真を選択";
 
 /* Button in a context menu from the 'manage' button in attachment panel that opens the iOS system settings for Signal to update access permissions */
 "ATTACHMENT_KEYBOARD_CONTEXT_MENU_BUTTON_SYSTEM_SETTINGS" = "設定へ";
@@ -426,6 +441,9 @@
 
 /* A button to open the photo picker from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_PHOTOS" = "写真";
+
+/* A button to select a poll from the Attachment Keyboard */
+"ATTACHMENT_KEYBOARD_POLL" = "投票";
 
 /* Accessibility label for attaching photos */
 "ATTACHMENT_LABEL" = "添付ファイル";
@@ -487,14 +505,8 @@
 /* Message when trying to show a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_MESSAGE_LABEL" = "ボイスメッセージはご利用になれません";
 
-/* Message for sheet shown when tapping a voice message that has expired and is unavailable for download */
-"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたときに、このボイスメッセージはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過したファイルとメディアは同期できません。";
-
 /* Title for sheet shown when tapping a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "ボイスメッセージを移行できません";
-
-/* Username for recovery key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "B&Aバックアップ";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "色を選択してください";
@@ -556,6 +568,15 @@
 /* Toast indicating that the Recovery Key was correct. */
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "バックアップキーが検証されました。キーの取り扱いは厳重にしてください。";
 
+/* Button label for action sheet to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_ACTION" = "バックアップの設定を終了";
+
+/* Message for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_MESSAGE" = "バックアップの設定が完了していないため、バックアップが作成されていません。設定からバックアップを有効にすることができます。";
+
+/* Title for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_TITLE" = "バックアップの設定を終了しますか？";
+
 /* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "キーを紛失した場合、B&Aはバックアップの復元をサポートできません。保管は安全な場所でおこない、第三者と共有しないでください。";
 
@@ -580,23 +601,47 @@
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "バックアップはいつでも消去可能です";
 
+/* A toast shown when 'Not Now' is tapped from the Backups onboarding intro. */
+"BACKUP_ONBOARDING_INTRO_NOT_NOW_TOAST" = "設定からバックアップを有効にすることができます。";
+
 /* Subtitle for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "B&Aの安全なエンドツーエンドの暗号化ストレージサービスを使用して、メッセージやメディアをバックアップします。スマートフォンを買い替えたり、B&Aを再インストールしてもメッセージを失うことはありません。";
 
 /* Title for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_TITLE" = "B&Aバックアップ";
 
-/* Subtitle for a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "バックアップキーは64文字のコードで、B&Aを再インストールした際には、このコードを使ってバックアップを復元することができます。\n\nキーを忘れた場合、バックアップの復元はできません。B&Aはバックアップの復元をサポートできません。";
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "回復キーは、バックアップを復元するために必要な64文字のコードです。";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_2" = "回復キーはパスワードマネージャーなどの安全な場所に保存し、誰とも共有しないでください。";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_3" = "紛失した場合、メッセージを復元できなくなります。";
+
+/* Title for a continue button for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_CONTINUE_BUTTON_TITLE" = "回復キーを表示";
 
 /* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "あなたのバックアップキー";
+
+/* Body for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY" = "ご利用のお支払い方法で更新できなかったため、バックアップサブスクリプションの有効期限が切れました。\n\nメディアのバックアップを継続するには、再度サブスクリプションの購入が必要です。無料のB&Aバックアッププランには引き続きアクセスできます。";
+
+/* Body for a sheet shown when your Backup plan is downgraded because you stopped using TestFlight. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY_TESTFLIGHT" = "TestFlightを使用しなくなったため、バックアップサブスクリプションの有効期限が切れました。\n\nメディアのバックアップを継続するには、再度サブスクリプションの購入が必要です。無料のB&Aバックアッププランには引き続きアクセスできます。";
+
+/* Primary button for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_PRIMARY_BUTTON" = "バックアップを管理";
+
+/* Title for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_TITLE" = "バックアップサブスクリプションの有効期限が切れています";
 
 /* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "クリップボードにコピー";
 
 /* Title for a button allowing users to create a new 'Recovery Key'. */
-"BACKUP_RECORD_KEY_CREATE_NEW_KEY_BUTTON_TITLE" = "新しいキーを作成する";
+"BACKUP_RECORD_KEY_CREATE_NEW_KEY_BUTTON_TITLE" = "新しいキーを作成";
 
 /* Subtitle for a view allowing users to record their 'Recovery Key'. */
 "BACKUP_RECORD_KEY_SUBTITLE" = "このキーは、アカウントとデータを復元する際に必要です。このキーを安全な場所に保管してください。紛失した場合、アカウントを復元できなくなります。";
@@ -613,11 +658,26 @@
 /* Title for a progress spinner on a modal when restoring messages */
 "BACKUP_RESTORE_MODAL_TITLE" = "メッセージを復元しています…";
 
+/* Message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "自動バックアップが無効になっています。B&Aの権限設定をアップデートして自動バックアップを有効にしてください。";
+
+/* Add-on to a message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE_UPDATE_NOW" = "アップデートする";
+
+/* Title for a button that takes the users to Signal's iOS Settings page. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_GO_TO_SETTINGS_BUTTON" = "設定へ";
+
+/* Message for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_MESSAGE" = "B&Aがメッセージを自動的にバックアップできるようにするには、下の「設定に移動」をタップし、「アプリのバックグラウンド更新」を有効にしてください。";
+
+/* Title for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_TITLE" = "自動バックアップが無効になっています";
+
 /* Message for an action sheet explaining that performing a backup failed with a generic error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR" = "バックアップの作成中に問題が発生しました。もう一度試すか、サポートにお問い合わせください。";
 
 /* Title for a button in an action sheet allowing users to perform a backup, ignoring that WiFi is required. */
-"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NEED_WIFI_ACTION" = "モバイルデータ通信を使ったバックアップを許可する";
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NEED_WIFI_ACTION" = "モバイルデータ通信を使ったバックアップを許可";
 
 /* Message for an action sheet explaining that performing a backup failed because WiFi is required. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NEED_WIFI_MESSAGE" = "モバイルデータ通信を使ってバックアップを行うと、データ通信量が発生する場合があります。WiFiネットワークに接続するか、モバイルデータ通信を使ってのバックアップを許可できます。";
@@ -628,6 +688,9 @@
 /* Message for an action sheet explaining that performing a backup failed with a network error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR" = "バックアップの作成中に問題が発生しました。インターネット接続を確認してもう一度お試しください。";
 
+/* Message for an action sheet explaining that you must be registered to make a Backup. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "バックアップを作成するには登録が必要です。";
+
 /* Description for a progress bar tracking the optimizing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "メディアを最適化しています...";
 
@@ -637,14 +700,26 @@
 /* Description for a progress bar tracking the processing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PROCESSING_MEDIA" = "メディアを処理中です...";
 
+/* Title for an action sheet action explaining the user can now scan a QR code to continue the restore. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_ACTION_TITLE" = "QRコードをスキャン";
+
+/* Body for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_BODY" = "移行させたい端末に表示されたQRコードを、この端末でスキャンしてください";
+
+/* Title for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_TITLE" = "移行の準備ができました";
+
+/* Message describing to the user that the last backup failed. */
+"BACKUP_SETTINGS_BACKUP_FAILED_MESSAGE" = "前回のバックアップは完了していません。「いますぐバックアップする」をタップして、もう一度お試しください。";
+
 /* Title for a button allowing users to upgrade from a free to paid backup plan. */
-"BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "アップグレードする";
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "アップグレード";
+
+/* Text describing the user's free backup plan when they have Backups disabled. */
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_AND_DISABLED_DESCRIPTION" = "バックアップをオフにしました";
 
 /* Text describing the user's free backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_DESCRIPTION" = "現在のバックアッププランは無料プランです";
-
-/* Header describing what the free backup plan includes. */
-"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "テキストと45日間のメディアのバックアップ";
 
 /* Message for a view indicating we failed to fetch someone's Backup plan due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_MESSAGE" = "エラーが発生しました。サポートにお問い合わせください。";
@@ -659,10 +734,10 @@
 "BACKUP_SETTINGS_BACKUP_PLAN_NETWORK_ERROR_TITLE" = "ネットワークエラー";
 
 /* Title for a button allowing users to manage or cancel their paid backup plan. */
-"BACKUP_SETTINGS_BACKUP_PLAN_PAID_ACTION_BUTTON_TITLE" = "変更またはキャンセルする";
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_ACTION_BUTTON_TITLE" = "変更またはキャンセル";
 
 /* Title for a button allowing users to reenable a paid backup plan that has been canceled. */
-"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_ACTION_BUTTON_TITLE" = "再開する";
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_ACTION_BUTTON_TITLE" = "再開";
 
 /* Text describing that the user's paid backup plan has been canceled. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_DESCRIPTION" = "サブスクリプションが解除されました";
@@ -673,11 +748,26 @@
 /* Text explaining that a user's paid plan, which has been canceled, expired on a past date. Embeds {{ the formatted expiration date }}. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_PAST_EXPIRATION_FORMAT" = "%1$@に失効しています";
 
+/* Title for a button allowing users to manage a paid backup plan that failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_ACTION_BUTTON_TITLE" = "サブスクリプションを管理";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_1" = "支払い方法が承認されませんでした";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_2" = "お支払い方法が現在も有効なものであるかをご確認ください";
+
 /* Title for a button allowing users to manage their backup plan as a tester. */
-"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "プランを管理する";
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "プランを管理";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "有料ですが、テスターとして登録している限り無料です";
+
+/* Title for a button allowing users to renew their backup subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_ACTION_BUTTON_TITLE" = "更新";
+
+/* Text describing that the user's paid backup plan did not correspond to a App Store subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_DESCRIPTION" = "この端末上でご利用中のサブスクリプションは確認できませんでした。B&Aバックアップを引き続き使用するには、更新手続きをしてください。";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "テキストとすべてのメディアのバックアップ";
@@ -718,26 +808,35 @@
 /* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "新しい回復キーを作成するには、登録する必要があります。";
 
+/* Explanation text for a sheet warning users they've reached a rate limit for creating Recovery Key. {{ Embeds 1: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_BODY" = "新しい回復キーを作成すると、 %1$@バックアップを有効にできなくなります。不正使用を防ぐために、作成できるキーの数は制限されています。";
+
+/* Action in an action sheet allowing to continue to rotate their key */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_CONTINUE_ACTION" = "新しいキーを作成";
+
+/* Title for a sheet warning users they've reached a rate limit for creating Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_TITLE" = "回復キー作成回数の上限に達しました";
+
 /* Toast shown when a new Recovery Key has been created successfully. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "新しいキーが作成されました！";
 
 /* TItle for a sheet warning users that Backups must be disabled to create a new Recovery Key. */
-"BACKUP_SETTINGS_CREATE_NEW_KEY_WARNING_SHEET_BACKUPS_MUST_BE_DISABLED_TITLE" = "無効にして新しいキーを作成する";
+"BACKUP_SETTINGS_CREATE_NEW_KEY_WARNING_SHEET_BACKUPS_MUST_BE_DISABLED_TITLE" = "無効にして新しいキーを作成";
 
 /* Body for a sheet warning users about creating a new Recovery Key. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_WARNING_SHEET_BODY" = "新しいキーを作成する必要があるのは、第三者にあなたのキーを知られた場合だけです。新しいキーを作成するには、まずバックアップを無効にする必要があります。\n\nバックアップを無効にして新しいキーを作成した後、バックアップを再度有効にしてもう一度アップロードし直してください。";
 
 /* Title for a sheet warning users about creating a new Recovery Key. */
-"BACKUP_SETTINGS_CREATE_NEW_KEY_WARNING_SHEET_TITLE" = "新しい回復キーを作成する";
+"BACKUP_SETTINGS_CREATE_NEW_KEY_WARNING_SHEET_TITLE" = "新しい回復キーを作成";
 
 /* Footer for a menu section allowing users to turn off Backups. */
 "BACKUP_SETTINGS_DISABLE_BACKUPS_BUTTON_FOOTER" = "バックアップデータはすべて消去されます。新しいバックアップは作成されません。";
 
 /* Title for a button allowing users to turn off Backups. */
-"BACKUP_SETTINGS_DISABLE_BACKUPS_BUTTON_TITLE" = "バックアップをオフにして消去する";
+"BACKUP_SETTINGS_DISABLE_BACKUPS_BUTTON_TITLE" = "バックアップをオフにして消去";
 
 /* Title for a button in an action sheet confirming the user wants to disable Backups. */
-"BACKUP_SETTINGS_DISABLING_CONFIRMATION_ACTION_SHEET_CONFIRM" = "オフにして消去する";
+"BACKUP_SETTINGS_DISABLING_CONFIRMATION_ACTION_SHEET_CONFIRM" = "オフにして消去";
 
 /* Message for an action sheet confirming the user wants to disable Backups. */
 "BACKUP_SETTINGS_DISABLING_CONFIRMATION_ACTION_SHEET_MESSAGE" = "これまでのバックアップは消去されて、以降のバックアップはされません。";
@@ -760,14 +859,23 @@
 /* Message shown in an action sheet when the user tries to disable Backups, but is not registered. */
 "BACKUP_SETTINGS_DISABLING_ERROR_NOT_REGISTERED" = "バックアップを無効にするには登録が必要です。";
 
+/* Button for an action sheet shown when the user disables Backups, letting them manage their subscription. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MANAGE_SUBSCRIPTION_BUTTON" = "サブスクリプションを管理";
+
+/* Message for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MESSAGE" = "サブスクリプションを解約したい場合は、「サブスクリプションを管理する」> B&A >「サブスクリプションを解約する」をタップしてください";
+
+/* Title for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_TITLE" = "有料バックアッププランにまだご加入中です";
+
 /* Title for a button shown in Backup Settings that lets a user cancel an in-progress download. */
-"BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_CANCEL_DOWNLOAD" = "ダウンロードをキャンセルする";
+"BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_CANCEL_DOWNLOAD" = "ダウンロードをキャンセル";
 
 /* Title for a button shown in Backup Settings that lets a user initiate an available download. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_INITIATE_DOWNLOAD" = "ダウンロード";
 
 /* Title for a button shown in Backup Settings that lets a user resume a download paused due to needing Wi-Fi. */
-"BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_RESUME_DOWNLOAD_WITHOUT_WIFI" = "ダウンロードを再開する";
+"BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_RESUME_DOWNLOAD_WITHOUT_WIFI" = "ダウンロードを再開";
 
 /* Subtitle for a progress bar tracking downloads that are paused because of low battery. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "ダウンロードを一時停止しました：端末のバッテリー残量が少なくなっています";
@@ -785,7 +893,7 @@
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "ダウンロードを一時停止しました：Wi-Fi接続の待機中です";
 
 /* Subtitle for a progress bar tracking active downloading. Embeds 1:{{ the amount downloaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to download as a file size, e.g. 1 GB }}; 3:{{ the amount downloaded as a percentage, e.g. 10% }}. */
-"BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_RUNNING" = "ダウンロード中：%2$@ のうち %1$@ （%3$@%%）";
+"BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_RUNNING" = "ダウンロード中：%2$@ のうち %1$@ （%3$@）";
 
 /* Subtitle for a view explaining that downloads are available but not running. Embeds {{ the amount available to download as a file size, e.g. 100 MB }}. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_SUSPENDED" = "この端末に保存されていないメディアが%1$@あります。";
@@ -794,7 +902,7 @@
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_SUSPENDED_PAID_SUBSCRIPTION_EXPIRING" = "この端末に保存されていないメディアが%1$@あります。有料のサブスクリプションに加入しない場合は、メディアをオフロードできません。";
 
 /* Label for a toggleable menu item describing whether to make backups on cellular data. */
-"BACKUP_SETTINGS_ENABLED_BACKUP_ON_CELLULAR_LABEL" = "モバイルデータ通信を使ってバックアップする";
+"BACKUP_SETTINGS_ENABLED_BACKUP_ON_CELLULAR_LABEL" = "モバイルデータ通信を使ってバックアップ";
 
 /* Label for a menu item explaining the size of the user's backup. */
 "BACKUP_SETTINGS_ENABLED_BACKUP_SIZE_LABEL" = "バックアップの容量";
@@ -814,20 +922,29 @@
 /* Label for a menu item offering to show the user their recovery key. */
 "BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "バックアップキーを表示する";
 
+/* Body for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_BODY" = "この端末ではサブスクリプションを復元できませんでした。この問題は、別のAppleアカウントでApp Storeにサインインしている場合や、Androidスマートフォンから移行した場合に発生することがあります。\n\n以前お使いになっていたスマートフォンで有効なサブスクリプションがある場合は、更新前にそれを解約することをお勧めします。";
+
+/* Button for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_GOT_IT_BUTTON" = "わかりました";
+
+/* Title for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_TITLE" = "サブスクリプションが見つかりません";
+
 /* Title for a button allowing users to trigger a manual backup. */
-"BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "いますぐバックアップする";
+"BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "いますぐバックアップ";
 
 /* Title for a button shown under a progress bar tracking a manual backup, which lets the user cancel the backup. */
-"BACKUP_SETTINGS_MANUAL_BACKUP_CANCEL_BUTTON" = "バックアップをキャンセルする";
+"BACKUP_SETTINGS_MANUAL_BACKUP_CANCEL_BUTTON" = "バックアップをキャンセル";
 
 /* Action in an action sheet allowing users to download their offloaded media later. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_LATER_ACTION" = "後でダウンロードする";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_LATER_ACTION" = "後でダウンロード";
 
 /* Message for an action sheet allowing users to download their offloaded media. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_MESSAGE" = "バックアップ内に、この端末に保存されていないメディアがあります。ダウンロードには時間がかかる場合があります。ダウンロードが中断されないようにB&Aを開いたままにしてください。";
 
 /* Action in an action sheet allowing users to download their offloaded media now. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_NOW_ACTION" = "今すぐダウンロードする";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_NOW_ACTION" = "今すぐダウンロード";
 
 /* Title for an action sheet allowing users to download their offloaded media. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_DOWNLOAD_SHEET_TITLE" = "オフロード済みのメディアをダウンロードしますか？";
@@ -848,19 +965,40 @@
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_FOOTER_UNAVAILABLE" = "ストレージの最適化は、B&Aバックアップの有料版でのみご利用いただけます。この機能をご利用になるには、バックアッププランをアップグレードしてください。";
 
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
-"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "端末上のストレージを最適化する";
+"BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "端末上のストレージを最適化";
+
+/* Subtitle for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_SUBTITLE" = "バックアップストレージの上限に達しました。チャットやメディアのバックアップを続けるには、B&Aの空き容量を増やしてください。";
+
+/* Title for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_TITLE" = "バックアップストレージがいっぱいです";
 
 /* Title for a button allowing users to re-enable Backups, after it had been previously disabled. */
-"BACKUP_SETTINGS_REENABLE_BACKUPS_BUTTON_TITLE" = "バックアップをもう一度有効にする";
+"BACKUP_SETTINGS_REENABLE_BACKUPS_BUTTON_TITLE" = "バックアップを再度有効化";
 
 /* Title for an action in a sheet warning the user about skipping downloads. */
-"BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_ACTION_SKIP" = "ダウンロードをスキップする";
+"BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_ACTION_SKIP" = "ダウンロードをスキップ";
 
 /* Message for a sheet warning the user about skipping downloads. */
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_MESSAGE" = "この端末に保存されていないバックアップデータがあります。有料のサブスクリプションに加入しない場合は、メディアと添付ファイルは、完全に消去されます。";
 
 /* Title for a sheet warning the user about skipping downloads. */
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "ダウンロードをスキップしますか？";
+
+/* Title for detail button in notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_DETAIL_BUTTON" = "詳細";
+
+/* Title for notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_TITLE" = "バックアップのサブスクリプションを有効化することができませんでした";
+
+/* Body for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_BODY" = "今月内で、サブスクリプションを有効化しようとした端末が多すぎます。\n\nB&Aアカウントを何度も再登録したか、同じサブスクリプションを使用している端末が多すぎる可能性があります。";
+
+/* Button for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_GOT_IT_BUTTON" = "わかりました";
+
+/* Title for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_TITLE" = "バックアップのサブスクリプションを有効化することができませんでした";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "アップロードを一時停止しました：端末のバッテリー残量が少なくなっています";
@@ -874,6 +1012,9 @@
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "アップロードを一時停止しました：Wi-Fi接続の待機中です";
 
+/* Subtitle for a progress bar tracking uploads that are paused because the user is out of remote storage space. Embeds 1:{{ total storage space provided, e.g. 100 GB }}; 2:{{ space the user needs to free up by deleting media, e.g. 1 GB }}. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_OUT_OF_STORAGE_SPACE_FORMAT" = "ご利用中のバックアッププランに設定された、%1$@ストレージ容量の上限に達しました。新しいチャットやメディアをバックアップするには、B&Aの%2$@の空き容量を増やしてから、「今すぐバックアップする」をタップしてください。";
+
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "アップロード中：%2$@のうち%1$@（%3$@）";
 
@@ -882,6 +1023,21 @@
 
 /* Title for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "B&Aバックアップへようこそ。今すぐバックアップを開始しましょう。";
+
+/* Message for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_MESSAGE" = "お支払い方法が現在も有効なものであるかをご確認ください。「サブスクリプションを管理する」>「B&A」>「支払い方法をアップデートする」をタップします。";
+
+/* Primary button for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_PRIMARY_BUTTON" = "サブスクリプションを管理";
+
+/* Title for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "バックアップサブスクリプションの更新ができませんでした";
+
+/* Body for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "問題解決のためにデバッグログを送信してください！";
+
+/* Title for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "メディアのバックアップ中にエラーが発生しました";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "B&Aバックアップ";
@@ -893,7 +1049,7 @@
 "BACKUPS_TURNED_ON_TITLE" = "バックアップを有効にしました";
 
 /* Action text for backups enabled megaphone taking user to backup settings */
-"BACKUPS_VIEW_SETTINGS_BUTTON" = "設定を表示する";
+"BACKUPS_VIEW_SETTINGS_BUTTON" = "設定を表示";
 
 /* Section header for badge view section in the badge configuration page */
 "BADGE_CONFIGURATION_BADGE_SECTION_TITLE" = "マイバッジ";
@@ -902,7 +1058,7 @@
 "BADGE_CONFIGURATION_TITLE" = "バッジ";
 
 /* When viewing someone else's badge, you'll see a sheet. If they got the badge by donating, a \"Donate to Signal\" button will be shown. This is the text in that button. */
-"BADGE_DETAILS_DONATE_TO_SIGNAL" = "今すぐ寄付する";
+"BADGE_DETAILS_DONATE_TO_SIGNAL" = "今すぐ寄付";
 
 /* When viewing someone else's donor badge, you'll see a sheet. This is the title on that sheet. Embeds {badge owner's short name} */
 "BADGE_DETAILS_TITLE_FOR_SUPPORTER" = "%1$@ さんはB&Aをサポートしています";
@@ -917,7 +1073,7 @@
 "BADGE_EXPIRED_BOOST_TITLE" = "バッジが失効しました";
 
 /* Button text when a badge expires, asking users to donate */
-"BADGE_EXPIRED_DONATE_BUTTON" = "寄付する";
+"BADGE_EXPIRED_DONATE_BUTTON" = "寄付";
 
 /* Text for the 'learn more' link in a sheet explaining there's been an issue with your badge. */
 "BADGE_EXPIRED_LEARN_MORE_LINK" = "さらに詳しく";
@@ -938,10 +1094,10 @@
 "BADGE_THANKS_BODY" = "このバッジをプロフィールに表示して、サポートしていることを示すことができます。";
 
 /* Label prompting the user to display the new badge on their profile on the badge thank you sheet. */
-"BADGE_THANKS_DISPLAY_ON_PROFILE_LABEL" = "プロフィールに表示する";
+"BADGE_THANKS_DISPLAY_ON_PROFILE_LABEL" = "プロフィールに表示";
 
 /* Label prompting the user to feature the new badge on their profile on the badge thank you sheet. */
-"BADGE_THANKS_MAKE_FEATURED" = "このバッジを表示する";
+"BADGE_THANKS_MAKE_FEATURED" = "このバッジを表示";
 
 /* When you make a donation to Signal, you will receive a badge. A thank-you sheet appears when this happens. This is the title of that sheet. */
 "BADGE_THANKS_TITLE" = "ご支援をありがとうございます！";
@@ -950,13 +1106,13 @@
 "BADGE_THANKS_TOGGLE_FOOTER" = "複数のバッジを持っている場合は、自分のプロフィールに表示するバッジを選ぶことができます。";
 
 /* On the bank donation screen, show a link below the input form to show help about finding account info. */
-"BANK_DONATION_FOOTER_FIND_ACCOUNT_INFO" = "アカウント情報を確認する";
+"BANK_DONATION_FOOTER_FIND_ACCOUNT_INFO" = "アカウント情報を確認";
 
 /* On the bank transfer donation screen, a small amount of information text is shown. This is that text. It should (1) instruct users to enter their bank information (2) tell them that Signal does not collect or store their personal information. */
 "BANK_DONATION_SUBHEADER_TEXT" = "口座情報を入力してください。B&Aがお客様の個人情報を収集したり保存したりすることはありません。";
 
 /* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button to agree to the mandate. */
-"BANK_MANDATE_AGREE" = "同意する";
+"BANK_MANDATE_AGREE" = "同意";
 
 /* Users can donate to Signal with a bank account. We are required to show them a mandate with information about bank transfers. This is a label for a button that shows more of the mandate if it is not all visible. */
 "BANK_MANDATE_READ_MORE" = "さらに表示";
@@ -977,7 +1133,7 @@
 "BLOCK_GROUP_BEHAVIOR_EXPLANATION" = "今後このグループからは、メッセージや更新を受信しません。";
 
 /* Button label for the 'block' button */
-"BLOCK_LIST_BLOCK_BUTTON" = "ブロックする";
+"BLOCK_LIST_BLOCK_BUTTON" = "ブロック";
 
 /* A format for the 'block group' action sheet title. Embeds the {{group name}}. */
 "BLOCK_LIST_BLOCK_GROUP_TITLE_FORMAT" = "ブロックして「%1$@」グループを抜けますか？";
@@ -1016,7 +1172,7 @@
 "BLOCK_LIST_UNBLOCK_TITLE_FORMAT" = "%1$@ のブロックを解除しますか？";
 
 /* A label for the block button in the block list view */
-"BLOCK_LIST_VIEW_BLOCK_BUTTON" = "ブロックする";
+"BLOCK_LIST_VIEW_BLOCK_BUTTON" = "ブロック";
 
 /* The message format of the 'conversation blocked' alert. Embeds the {{conversation title}}. */
 "BLOCK_LIST_VIEW_BLOCKED_ALERT_MESSAGE_FORMAT" = "%1$@ はブロックされています。";
@@ -1042,14 +1198,11 @@
 /* An explanation of the consequences of blocking another user. */
 "BLOCK_USER_BEHAVIOR_EXPLANATION" = "ブロックされたユーザーは、あなたにメッセージや通話を発信することができなくなります。";
 
-/* Tooltip highlighting the blur image editing tool. */
-"BLUR_TOOLTIP" = "新機能: 顔や任意の場所をぼかすことができます";
-
 /* Default text for the custom amount field of the boost view. */
 "BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "金額を入力してください";
 
 /* Label for the 'add' button. */
-"BUTTON_ADD" = "追加する";
+"BUTTON_ADD" = "追加";
 
 /* Label for 'continue' button. */
 "BUTTON_CONTINUE" = "続ける";
@@ -1085,16 +1238,16 @@
 "BUTTON_PREVIOUS" = "前へ";
 
 /* Button text to enable batch selection mode */
-"BUTTON_SELECT" = "選択する";
+"BUTTON_SELECT" = "選択";
 
 /* Label for the 'set' button. */
-"BUTTON_SET" = "設定する";
+"BUTTON_SET" = "設定";
 
 /* Label for the 'share' button. */
 "BUTTON_SHARE" = "共有";
 
 /* Label for the 'submit' button. */
-"BUTTON_SUBMIT" = "送信する";
+"BUTTON_SUBMIT" = "送信";
 
 /* Label for the 'unmute' button. */
 "BUTTON_UNMUTE" = "ミュート解除";
@@ -1106,7 +1259,7 @@
 "BUTTON_YES" = "はい";
 
 /* Label for button that lets users call a contact again. */
-"CALL_AGAIN_BUTTON_TITLE" = "リダイヤルする";
+"CALL_AGAIN_BUTTON_TITLE" = "リダイヤル";
 
 /* notification body for a missed call in the last 24 hours. Embeds {{time}}, e.g. '3:30 PM'. */
 "CALL_AUDIO_MISSED_24_HOURS_NOTIFICATION_BODY_FORMAT" = "📞 不在着信 %1$@";
@@ -1127,13 +1280,13 @@
 "CALL_AUDIO_PERMISSION_TITLE" = "マイクへのアクセス許可が必要です";
 
 /* label for button shown when an incoming call rings */
-"CALL_CONTROLS_INCOMING_ANSWER" = "応答する";
+"CALL_CONTROLS_INCOMING_ANSWER" = "応答";
 
 /* Label for button shown when an incoming call rings. This particular label has room for two lines; you may insert a manual linebreak with '\n' as long as both lines are 15 characters or shorter (8 fullwidth characters or shorter), as in the English translation. */
-"CALL_CONTROLS_INCOMING_ANSWER_WITHOUT_VIDEO" = "ビデオなしで\n応答する";
+"CALL_CONTROLS_INCOMING_ANSWER_WITHOUT_VIDEO" = "ビデオなしで\n応答";
 
 /* label for button shown when an incoming call rings */
-"CALL_CONTROLS_INCOMING_DECLINE" = "拒否する";
+"CALL_CONTROLS_INCOMING_DECLINE" = "拒否";
 
 /* Title used to represent details about a call. */
 "CALL_DETAILS" = "通話詳細";
@@ -1142,10 +1295,10 @@
 "CALL_LINK" = "通話リンク";
 
 /* Button to open a screen to edit the name of a Call Link. Also used as the title of that screen once it opens. */
-"CALL_LINK_ADD_NAME" = "通話名を追加する";
+"CALL_LINK_ADD_NAME" = "通話名を追加";
 
 /* Button to copy a Call Link to the clipboard. */
-"CALL_LINK_COPY" = "リンクをコピーする";
+"CALL_LINK_COPY" = "リンクをコピー";
 
 /* Navigation bar title for the sheet used to create & configure a Call Link. */
 "CALL_LINK_CREATE" = "通話リンクを作成";
@@ -1157,7 +1310,7 @@
 "CALL_LINK_CREATION_OR_UPDATE_FAILURE_SHEET_TITLE" = "ネットワークエラー";
 
 /* A button to delete a call link that's shown after tapping the (i) info button on an item in the calls tab. */
-"CALL_LINK_DELETE_ACTION" = "リンクを消去する";
+"CALL_LINK_DELETE_ACTION" = "リンクを消去";
 
 /* Text shown in an overlay toast trying and failing to delete a call link. */
 "CALL_LINK_DELETE_FAILED" = "通話リンクを消去できませんでした。";
@@ -1172,16 +1325,16 @@
 "CALL_LINK_DELETED" = "通話リンクを消去しました。";
 
 /* Button to open a screen to edit the name of a Call Link. Also used as the title of that screen once it opens. */
-"CALL_LINK_EDIT_NAME" = "通話名を編集する";
+"CALL_LINK_EDIT_NAME" = "通話名を編集";
 
 /* Description of sheet presented when joining call from call link sheet fails. */
 "CALL_LINK_JOIN_CALL_FAILURE_SHEET_DESCRIPTION" = "通話に参加できませんでした。インターネット接続を確認して再度試してください。";
 
 /* Button on an action sheet to approve a request to join a call link. */
-"CALL_LINK_JOIN_REQUEST_APPROVE_BUTTON" = "承認する";
+"CALL_LINK_JOIN_REQUEST_APPROVE_BUTTON" = "承認";
 
 /* Button on an action sheet to deny a request to join a call link. */
-"CALL_LINK_JOIN_REQUEST_DENY_BUTTON" = "拒否する";
+"CALL_LINK_JOIN_REQUEST_DENY_BUTTON" = "拒否";
 
 /* Tappable label that appears below a user's name on a toast when they request to join a call link. */
 "CALL_LINK_JOIN_REQUEST_PROMPT" = "待機中…";
@@ -1199,22 +1352,22 @@
 "CALL_LINK_MULTI_CONFIRM" = "作成した通話リンクを消去すると、共有している他のメンバーもこのリンクを使えなくなります。";
 
 /* Title for button to approve all requests to join a call. */
-"CALL_LINK_REQUEST_SHEET_APPROVE_ALL_BUTTON" = "全員承認する";
+"CALL_LINK_REQUEST_SHEET_APPROVE_ALL_BUTTON" = "全員承認";
 
 /* Title for button to deny all requests to join a call. */
-"CALL_LINK_REQUEST_SHEET_DENY_ALL_BUTTON" = "全員拒否する";
+"CALL_LINK_REQUEST_SHEET_DENY_ALL_BUTTON" = "全員拒否";
 
 /* Header for the sheet displaying a list of requests to join a call. */
 "CALL_LINK_REQUEST_SHEET_HEADER" = "この通話への参加リクエスト";
 
 /* Name of a toggle switch to enable/disable admin approval for joining a Call Link. */
-"CALL_LINK_REQUIRE_APPROVAL" = "管理者の承認を必要とする";
+"CALL_LINK_REQUIRE_APPROVAL" = "管理者の承認を必要にする";
 
 /* Button to open UI to share a Call Link with someone on Signal. */
 "CALL_LINK_SHARE_VIA_SIGNAL" = "B&A 経由でリンクを共有する";
 
 /* Button to open the system share sheet to share a Call Link. */
-"CALL_LINK_SHARE_VIA_SYSTEM" = "リンクを共有する";
+"CALL_LINK_SHARE_VIA_SYSTEM" = "リンクを共有";
 
 /* An error alert that's shown when deleting multiple calls and some of them couldn't be deleted. */
 "CALL_LINK_SOME_NOT_DELETED" = "一部の通話リンクを消去できませんでした。インターネット接続を確認して再度試してください。";
@@ -1228,6 +1381,87 @@
 /* notification body */
 "CALL_MISSED_BECAUSE_OF_IDENTITY_CHANGE_NOTIFICATION_BODY" = "☎️ 発信者の安全番号が変更されたことによる不在着信";
 
+/* Title for toast which appears after submitting a call quality survey */
+"CALL_QUALITY_SURVEY_COMPLETION_TOAST" = "フィードバックをありがとうございます！";
+
+/* Footer text explaining custom issue descriptions in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_FOOTER" = "問題に関して、できるだけ詳細にご記入ください。ここで共有いただいた内容はすべて非公開であり、B&Aでの通話品質の改善の為のみに使用されます。";
+
+/* Placeholder text for the custom issue entry in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_PLACEHOLDER" = "問題について記入してください";
+
+/* Footer text explaining what debug logs contain in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER" = "私たちと共有されるのは最低限のアプリ情報であり、通話内容は含まれません。";
+
+/* Header text explaining the purpose of sharing debug logs in the call quality survey. The text inside the <link> tags is tappable for viewing the diagnostic information. */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_HEADER" = "提出すると、<link>通話に関する診断情報</link>とフィードバックが共有されます。デバッグログの共有（任意）は、通話品質の向上につながります。";
+
+/* Link text to open a preview of debug logs in the call quality survey. Appended to CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_PREVIEW_LINK" = "デバッグログを表示する";
+
+/* Title for the debug log sharing screen in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TITLE" = "改善にご協力ください";
+
+/* Label for the toggle to share debug log in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TOGGLE" = "デバッグログを共有する";
+
+/* Title for preview of the call diagnostic info that will be sent with the survey */
+"CALL_QUALITY_SURVEY_DIAGNOSTICS_TITLE" = "診断情報";
+
+/* Button label for indicating the call did not have issues in the call quality survey */
+"CALL_QUALITY_SURVEY_GREAT_BUTTON" = "良好";
+
+/* Button label for indicating the call had issues in the call quality survey */
+"CALL_QUALITY_SURVEY_HAD_ISSUES_BUTTON" = "問題あり";
+
+/* Label for audio issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO" = "音声の問題";
+
+/* Label for audio dropout issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_DROP" = "音声が聞こえない時がある";
+
+/* Label for local echo issue option in call quality survey, indicating the user heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_LOCAL_ECHO" = "音声が反響する";
+
+/* Label for remote echo issue option in call quality survey, indicating other participants heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_REMOTE_ECHO" = "他の人に、自分の声が反響して聞こえる";
+
+/* Label for audio stuttering issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_STUTTERING" = "音声が途切れる";
+
+/* Label for call dropped issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_CALL_DROPPED" = "通話が切れる";
+
+/* Label for custom issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_OTHER" = "その他";
+
+/* Label for video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO" = "ビデオの問題";
+
+/* Label for poor video quality issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_QUALITY" = "ビデオの画質が悪い";
+
+/* Label for low resolution video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_RESOLUTION" = "解像度が低い";
+
+/* Label for camera not working issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_NO_CAMERA" = "カメラが動作しない";
+
+/* Header text on the call quality survey issues screen */
+"CALL_QUALITY_SURVEY_ISSUES_HEADER" = "該当するものをすべて選んでください";
+
+/* Title for the sheet in the call quality survey where issues with the call can be selected */
+"CALL_QUALITY_SURVEY_ISSUES_SHEET_TITLE" = "どのような問題がありますか?";
+
+/* Header text explaining the purpose of the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_HEADER" = "B&Aの通話品質改善にご協力をお願いいたします。個人情報は一切保存されません。";
+
+/* Title for the initial rating screen in the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_TITLE" = "通話状態はいかがでしたか？";
+
+/* Button text to submit the call quality survey */
+"CALL_QUALITY_SURVEY_SUBMIT_BUTTON" = "送信";
+
 /* Label on button for raising hand in call. */
 "CALL_RAISE_HAND_BUTTON_LABEL" = "手を挙げる";
 
@@ -1238,10 +1472,10 @@
 "CALL_SCREEN_STATUS_NO_ANSWER" = "応答なし";
 
 /* Button to start a call */
-"CALL_START_BUTTON" = "通話を開始する";
+"CALL_START_BUTTON" = "通話を開始";
 
 /* Label for call button for alert offering to call a user. */
-"CALL_USER_ALERT_CALL_BUTTON" = "発信する";
+"CALL_USER_ALERT_CALL_BUTTON" = "発信";
 
 /* Message format for alert offering to call a user. Embeds {{the user's display name or phone number}}. */
 "CALL_USER_ALERT_MESSAGE_FORMAT" = "%1$@ に発信しますか？";
@@ -1262,16 +1496,16 @@
 "CALL_VIDEO_MISSED_WEEK_NOTIFICATION_BODY_FORMAT" = "📹 %1$@ にビデオ通話着信があり";
 
 /* label for accepting incoming video calls as audio only */
-"CALL_VIEW_ACCEPT_INCOMING_CALL_AUDIO_ONLY_LABEL" = "ビデオなしで応答する";
+"CALL_VIEW_ACCEPT_INCOMING_CALL_AUDIO_ONLY_LABEL" = "ビデオなしで応答";
 
 /* label for accepting incoming calls */
-"CALL_VIEW_ACCEPT_INCOMING_CALL_LABEL" = "応答する";
+"CALL_VIEW_ACCEPT_INCOMING_CALL_LABEL" = "応答";
 
 /* Accessibility label for selection the audio source */
 "CALL_VIEW_AUDIO_SOURCE_LABEL" = "音声";
 
 /* label for declining incoming calls */
-"CALL_VIEW_DECLINE_INCOMING_CALL_LABEL" = "拒否する";
+"CALL_VIEW_DECLINE_INCOMING_CALL_LABEL" = "拒否";
 
 /* Accessibility label for hang up call */
 "CALL_VIEW_HANGUP_LABEL" = "通話を終了";
@@ -1292,10 +1526,10 @@
 "CALL_VIEW_SWITCH_CAMERA_DIRECTION" = "カメラを切り替える";
 
 /* Accessibility label for turning off call ringing */
-"CALL_VIEW_TURN_OFF_RINGING" = "呼び出し音をオフにする";
+"CALL_VIEW_TURN_OFF_RINGING" = "呼び出し音をオフ";
 
 /* Accessibility label for turning on call ringing */
-"CALL_VIEW_TURN_ON_RINGING" = "呼び出し音をオンにする";
+"CALL_VIEW_TURN_ON_RINGING" = "呼び出し音をオン";
 
 /* Accessibility label for turning off the camera */
 "CALL_VIEW_TURN_VIDEO_OFF_LABEL" = "カメラを切る";
@@ -1337,7 +1571,7 @@
 "CALLS_TAB_COALESCED_CALLS_TITLE_FORMAT" = "%1$@ (%2$@)";
 
 /* Title for a button allowing the user to delete all the calls from the Calls Tab. */
-"CALLS_TAB_DELETE_ALL_CALLS_BUTTON_TITLE" = "消去する";
+"CALLS_TAB_DELETE_ALL_CALLS_BUTTON_TITLE" = "消去";
 
 /* Message for a prompt confirming that the user wants to delete all the calls from the Calls Tab. */
 "CALLS_TAB_DELETE_ALL_CALLS_PROMPT_MESSAGE" = "すべての通話履歴を完全に消去します。";
@@ -1346,7 +1580,7 @@
 "CALLS_TAB_DELETE_ALL_CALLS_PROMPT_TITLE" = "通話履歴を消去しますか？";
 
 /* Title for a long-press context menu action to delete a call, triggered from a call in the Calls Tab. */
-"CALLS_TAB_DELETE_CALL_ACTION_TITLE" = "消去する";
+"CALLS_TAB_DELETE_CALL_ACTION_TITLE" = "消去";
 
 /* An option in a segmented control in the Calls Tab allowing the user to select the filter option 'all calls'; i.e., 'unfiltered'. */
 "CALLS_TAB_FILTER_PICKER_OPTION_ALL" = "すべて";
@@ -1355,16 +1589,16 @@
 "CALLS_TAB_FILTER_PICKER_OPTION_MISSED" = "不在着信";
 
 /* Title for an action, either long-press context menu or swipe, offering to take the user to the chat associated with a call in the Calls Tab. */
-"CALLS_TAB_GO_TO_CHAT_ACTION_TITLE" = "チャットする";
+"CALLS_TAB_GO_TO_CHAT_ACTION_TITLE" = "チャット";
 
 /* Title for a button offering to let the user join an ongoing call, associated with a call in the Calls Tab. */
-"CALLS_TAB_JOIN_CALL_BUTTON_TITLE" = "参加する";
+"CALLS_TAB_JOIN_CALL_BUTTON_TITLE" = "参加";
 
 /* Title for a long-press context menu action to join a video call, triggered from a call in the Calls Tab. */
-"CALLS_TAB_JOIN_VIDEO_CALL_ACTION_TITLE" = "ビデオ通話に参加する";
+"CALLS_TAB_JOIN_VIDEO_CALL_ACTION_TITLE" = "ビデオ通話に参加";
 
 /* Title for a long-press context menu action to join a voice call, triggered from a call in the Calls Tab. */
-"CALLS_TAB_JOIN_VOICE_CALL_ACTION_TITLE" = "音声通話に参加する";
+"CALLS_TAB_JOIN_VOICE_CALL_ACTION_TITLE" = "音声通話に参加";
 
 /* Label explaining that the user has no missed calls, so their Calls Tab is empty. */
 "CALLS_TAB_NO_MISSED_CALLS_LABEL" = "不在着信はありません";
@@ -1388,7 +1622,7 @@
 "CALLS_TAB_SELECT_CALL_ACTION_TITLE" = "選択する";
 
 /* Title for a button allowing the user to select one or more calls, from the Calls Tab. */
-"CALLS_TAB_SELECT_CALLS_BUTTON_TITLE" = "選択する";
+"CALLS_TAB_SELECT_CALLS_BUTTON_TITLE" = "選択";
 
 /* Title for a long-press context menu action to start a video call, triggered from a call in the Calls Tab. */
 "CALLS_TAB_START_VIDEO_CALL_ACTION_TITLE" = "ビデオ通話";
@@ -1400,7 +1634,7 @@
 "CALLS_TAB_VIEW_CALL_INFO_ACTION_TITLE" = "詳細";
 
 /* Accessibility hint describing what you can do with the camera button */
-"CAMERA_BUTTON_HINT" = "写真を撮影して送信する";
+"CAMERA_BUTTON_HINT" = "写真を撮影して送信";
 
 /* Accessibility label for camera button. */
 "CAMERA_BUTTON_LABEL" = "カメラ";
@@ -1556,10 +1790,10 @@
 "CHAT_COLORS_AUTO_TOOLTIP" = "自動で色を壁紙に合わせます";
 
 /* Title for context menu action to disable chat list filter (e.g., Filter by Unread) */
-"CHAT_LIST_CLEAR_FILTER_MENU_ACTION" = "未読のフィルタリングを解除する";
+"CHAT_LIST_CLEAR_FILTER_MENU_ACTION" = "未読のフィルタリングを解除";
 
 /* Button displayed in chat list to clear the unread filter when no chats are unread */
-"CHAT_LIST_EMPTY_FILTER_CLEAR_BUTTON" = "検索条件を解除する";
+"CHAT_LIST_EMPTY_FILTER_CLEAR_BUTTON" = "検索条件を解除";
 
 /* Button at top of chat list indicating the active filter is 'Filtered by Unread' and tapping will clear the filter */
 "CHAT_LIST_FILTERED_BY_UNREAD_CLEAR_BUTTON" = "未読でフィルタリング";
@@ -1568,7 +1802,7 @@
 "CHAT_LIST_TITLE_INBOX" = "チャット";
 
 /* Title for context menu action to enable Filter by Unread */
-"CHAT_LIST_UNREAD_FILTER_MENU_ACTION" = "未読をフィルタリングする";
+"CHAT_LIST_UNREAD_FILTER_MENU_ACTION" = "未読をフィルタリング";
 
 /* Message displayed on chat list when Filter by Unread is enabled but no unread chats are available */
 "CHAT_LIST_UNREAD_FILTER_NO_CHATS" = "未読のチャットはありません";
@@ -1579,17 +1813,8 @@
 /* Text for a bullet point in a list of Backup features, describing that all text messages are included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_TEXT_BACKUP" = "すべてのテキストメッセージのバックアップ";
 
-/* Text for a bullet point in a list of Backup features, describing that recent media is included. */
-"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "過去45日間のメディア";
-
-/* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
+/* Text for a bullet point in a list of Backup features, describing the amount of included storage. Embeds {{ the amount of storage preformatted as a localized byte count, e.g. '100 GB' }}. */
 "CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "1TBのストレージ（最大25万枚の写真）";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "エラーが発生しました！サポートにお問い合わせください。";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a network error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NETWORK_ERROR" = "エラーが発生しました！インターネット接続を確認して再度試してください。";
 
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but is not registered. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED" = "バックアップを有効にするには登録が必要です。";
@@ -1600,11 +1825,23 @@
 /* Message shown in an action sheet when the user tries to confirm selecting the paid plan, but encountered an error while redeeming their completed purchase. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_PURCHASE_REDEMPTION" = "エラーが発生しました！サポートにお問い合わせください。";
 
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED" = "新しい回復キーの作成回数の上限に達しました。不正使用を防ぐために、今後%1$@バックアップを有効にすることはできません。%1$@後に再度お試しください。";
+
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. {{ Embeds 1 & 2: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED_TITLE" = "バックアップを有効にできませんでした";
+
 /* A label indicating that a given Backup plan option is what the user has already enabled. */
 "CHOOSE_BACKUP_PLAN_CURRENT_PLAN_LABEL" = "現在のプラン";
 
-/* Subtitle for the free plan option, when choosing a Backup plan. */
-"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "テキスト+45日間のメディア";
+/* Text for a button that will downgrade the user from the paid Backup plan to the free one. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_BUTTON_TEXT" = "プランを変更する";
+
+/* Button for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_PROCEED_BUTTON" = "プランを変更する";
+
+/* Title for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_TITLE" = "無料プランにダウングレードしますか？";
 
 /* Title for the free plan option, when choosing a Backup plan. */
 "CHOOSE_BACKUP_PLAN_FREE_PLAN_TITLE" = "無料プラン";
@@ -1624,6 +1861,9 @@
 /* Subtitle for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_SUBTITLE" = "すべてのバックアッププランはエンドツーエンドで暗号化されます。B&Aは非営利団体であり、バックアップを有料でご利用いただくことは私たちの活動をサポートしていただくことに繋がります。";
 
+/* Title for a label allowing users to view Signal's Terms & Conditions. */
+"CHOOSE_BACKUP_PLAN_TERM_AND_PRIVACY_POLICY_TEXT" = "利用規約とプライバシーポリシー";
+
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "バックアッププランを選択する";
 
@@ -1631,7 +1871,7 @@
 "COLOR_AND_WALLPAPER_SETTINGS_TITLE" = "チャットの色と壁紙";
 
 /* Activity Sheet label */
-"COMPARE_SAFETY_NUMBER_ACTION" = "クリップボードと比較する";
+"COMPARE_SAFETY_NUMBER_ACTION" = "クリップボードと比較";
 
 /* Accessibility hint describing what you can do with the compose button */
 "COMPOSE_BUTTON_HINT" = "チャットを始めるB&Aユーザを選択または検索します。";
@@ -1652,13 +1892,13 @@
 "COMPOSE_MESSAGE_USERNAME_SEARCH_SECTION_TITLE" = "ユーザーネームで検索";
 
 /* Menu action to display limited contact picker. */
-"COMPOSE_SCREEN_LIMITED_CONTACTS_ACTION_MANAGE" = "その他の連絡先を選択する";
+"COMPOSE_SCREEN_LIMITED_CONTACTS_ACTION_MANAGE" = "その他の連絡先を選択";
 
 /* Menu action visit app contact permission in settings. */
 "COMPOSE_SCREEN_LIMITED_CONTACTS_ACTION_SETTINGS" = "設定へ";
 
 /* Multi-line label explaining why compose-screen contact picker may be missing contacts. */
-"COMPOSE_SCREEN_LIMITED_CONTACTS_CTA" = "管理する";
+"COMPOSE_SCREEN_LIMITED_CONTACTS_CTA" = "管理";
 
 /* Multi-line label explaining why compose-screen contact picker is empty. */
 "COMPOSE_SCREEN_LIMITED_CONTACTS_PERMISSION" = "B&Aは、システムの連絡先へのアクセスが制限されています";
@@ -1691,7 +1931,7 @@
 "CONFIRM_LEAVE_GROUP_TITLE" = "本当に抜けますか？";
 
 /* Button text */
-"CONFIRM_LINK_NEW_DEVICE_ACTION" = "新しい端末をリンクする";
+"CONFIRM_LINK_NEW_DEVICE_ACTION" = "新しい端末をリンク";
 
 /* Indicates that the user has blocked the other account. Embeds {{name}} */
 "CONTACT_ABOUT_SHEET_BLOCKED_USER_FORMAT" = "%1$@ はブロックされました";
@@ -1775,7 +2015,7 @@
 "CONTACT_PERMISSION_ACTION_SHEET_STEP_ONE" = "以下の「設定へ」をタップ";
 
 /* Second step for contact permission action sheet */
-"CONTACT_PERMISSION_ACTION_SHEET_STEP_TWO" = "「連絡先」を有効にする";
+"CONTACT_PERMISSION_ACTION_SHEET_STEP_TWO" = "「連絡先」を有効化";
 
 /* Title for contact permission action sheet */
 "CONTACT_PERMISSION_ACTION_SHEET_TITLE" = "「連絡先」をオン";
@@ -1883,10 +2123,10 @@
 "CONTACT_SUPPORT_SELECT_A_FILTER" = "理由を選択してください";
 
 /* Button text */
-"CONTACT_SUPPORT_SUBMIT_WITH_LOG" = "デバッグログを添付して送信する";
+"CONTACT_SUPPORT_SUBMIT_WITH_LOG" = "デバッグログを添付して送信";
 
 /* Button text */
-"CONTACT_SUPPORT_SUBMIT_WITHOUT_LOG" = "デバッグログなしで送信する";
+"CONTACT_SUPPORT_SUBMIT_WITHOUT_LOG" = "デバッグログなしで送信";
 
 /* Label for 'open address in maps app' button in contact view. */
 "CONTACT_VIEW_OPEN_ADDRESS_IN_MAPS_APP" = "地図で開く";
@@ -1907,7 +2147,7 @@
 "CONTEXT_MENU_DETAILS" = "詳細";
 
 /* Context menu edit button title */
-"CONTEXT_MENU_EDIT_MESSAGE" = "編集する";
+"CONTEXT_MENU_EDIT_MESSAGE" = "編集";
 
 /* Context menu button title */
 "CONTEXT_MENU_FORWARD_MESSAGE" = "転送";
@@ -1996,6 +2236,9 @@
 /* Footer for the 'attributes access' section in conversation settings view. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "グループ名、アイコン、説明、消えるメッセージのタイマーを編集できるユーザを選択してください。";
 
+/* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "グループ名、写真、説明、消えるメッセージのタイマー、ピン留めされたメッセージなどの編集権限を設定します。";
+
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "B&Aをサポートすると、あなたのプロフィールにバッジが表示されます。バッジをタップすると詳細が表示されます。";
 
@@ -2053,6 +2296,9 @@
 /* Label for 'member requests & invites' action in conversation settings view. */
 "CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES" = "申請と招待";
 
+/* Label for 'member label' action in conversation settings view. */
+"CONVERSATION_SETTINGS_MEMBER_TAG" = "メンバーラベル";
+
 /* label for 'always' option for mention notifications in conversation settings */
 "CONVERSATION_SETTINGS_MENTION_MODE_AlWAYS" = "常に通知する";
 
@@ -2075,7 +2321,7 @@
 "CONVERSATION_SETTINGS_MUTE_ALWAYS_ACTION" = "常時";
 
 /* Button to mute the chat */
-"CONVERSATION_SETTINGS_MUTE_BUTTON" = "ミュート";
+"CONVERSATION_SETTINGS_MUTE_BUTTON" = "ミュートする";
 
 /* Label for button to mute a thread for eight hours. */
 "CONVERSATION_SETTINGS_MUTE_EIGHT_HOUR_ACTION" = "8時間";
@@ -2251,22 +2497,10 @@
 /* Tooltip highlighting the custom chat color controls. */
 "CUSTOM_CHAT_COLOR_SETTINGS_TOOLTIP" = "ドラッグしてグラデーションの方向を変更できます";
 
-/* Button to run the database integrity check */
-"DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "実行";
-
-/* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "これは問題を解決するのに役立ち、完了するまでに数分かかる場合があります。 このチェックの実行中にB&Aを閉じることはできますが、ログを送信するために戻ってください。";
-
-/* Button to skip database integrity check step */
-"DATABASE_INTEGRITY_CHECK_SKIP" = "スキップ";
-
-/* Title for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_TITLE" = "データベース診断を実行しますか？";
-
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so keep that in mind. This is the description on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_DESCRIPTION" = "メッセージ履歴の一部が破損している可能性があります。アカウントやメッセージのセキュリティーに影響はありません。「続行」をタップするとデータが復元されます。";
 
-/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
+/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "データ取得時の問題";
 
 /* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
@@ -2356,6 +2590,12 @@
 /* Accessibility label for the ? vector asset used to get info about debug logs */
 "DEBUG_LOG_INFO_BUTTON" = "デバッグログについて";
 
+/* Header text displayed above the debug log preview */
+"DEBUG_LOG_PREVIEW_HEADER" = "提出すると、ログは非公開の固有URLで30日間オンライン上に掲載されます。";
+
+/* Title for the debug log preview screen */
+"DEBUG_LOG_PREVIEW_TITLE" = "デバッグログ";
+
 /* info message text in conversation view */
 "DECLINED_VIDEO_CALL" = "ビデオ通話を拒否しました";
 
@@ -2428,23 +2668,17 @@
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "このメッセージは、ご利用のすべての端末から消去されます。";
 
-/* Label for a button in an info sheet confirming that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_BUTTON" = "わかりました";
-
-/* Subtitle for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_SUBTITLE" = "メッセージやチャットを消去した場合、ご利用のスマートフォンと、すべてのリンク済み端末からも消去されます。";
-
-/* Title for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_TITLE" = "消去機能がすべての端末で同期されるようになりました";
-
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "消去されたアカウント";
 
 /* Notification warning the user that they have been de-registered. */
 "DEREGISTRATION_NOTIFICATION" = "この端末上のB&Aからログアウトしました。";
 
-/* Label for button that lets users re-register using the same phone number. */
-"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "この電話番号を再登録する";
+/* Button that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_BUTTON" = "再登録する";
+
+/* Title for prompt that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_PROMPT_TITLE" = "この電話番号を再登録しますか？";
 
 /* Label warning the user that they have been de-registered. */
 "DEREGISTRATION_WARNING" = "この端末は登録されていません。以前、おそらく別の端末で B&A に電話番号を登録したことが原因です。";
@@ -2485,23 +2719,14 @@
 /* The explanation for the device transfer 'choice' view when linking a device */
 "DEVICE_TRANSFER_CHOICE_LINKED_EXPLANATION" = "メッセージ履歴とアカウントデータを移行する方法を選択してください";
 
-/* The body for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_BODY" = "アカウントやメッセージを移行せずに続行する";
-
 /* The body for the device transfer 'choice' view 'register' option when linking a device when message syncing is available */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_BODY_LINK_AND_SYNC" = "スマートフォンからメッセージや最近のメディアを移行することができます";
 
 /* The title for the device transfer 'choice' view 'register' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_TITLE" = "新しい端末として設定";
 
-/* The title for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_TITLE" = "移行せずに登録する";
-
 /* The title for the device transfer 'choice' view */
 "DEVICE_TRANSFER_CHOICE_TITLE" = "アカウントとメッセージの移行";
-
-/* The body for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_BODY" = "以前のiOS端末からアカウントとメッセージ履歴を移行します";
 
 /* The body for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_BODY" = "以前のiOS端末からアカウントとメッセージ履歴を移行します";
@@ -2509,26 +2734,11 @@
 /* The title for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_TITLE" = "他のiPadから移行する";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_TITLE" = "iOS端末から移行する";
-
-/* Button shown to contract a QR code and exit the fullscreen view. */
-"DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "縮小表示する";
-
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "移行を完了できませんでした。両端末でB&Aが開いていることを確認して、もう一度お試しください。";
 
-/* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
-"DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "新しい端末を確認できませんでした、再度試してください。";
-
 /* An error indicating that something went wrong with the transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_GENERIC" = "移行を完了できませんでした。両端末が近くにあることを確認して、もう一度お試しください。";
-
-/* An error indicating the user must scan this code with a linked device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_LINKED" = "このiPadをリンク済み端末にするには、古いiPadでスキャンする必要があります";
-
-/* An error indicating the user must scan this code with a primary device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_PRIMARY" = "アカウントを移行するには、iPhoneでスキャンする必要があります";
 
 /* An error indicating that the user does not have enough free space on their device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "移行のための空き領域が不足しています";
@@ -2536,41 +2746,11 @@
 /* An error indicating the user must update their device before trying to transfer. */
 "DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "B&Aを最新版にアップデートしてから再度試してください";
 
-/* Button shown to expand a QR code and view it fullscreen. */
-"DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "拡大表示する";
-
-/* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "新しいiOS端末にB&Aアカウントを移動します。新しい端末を手元に置き、電源を入れてください。";
-
-/* The title on the acttion sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_TITLE" = "アカウントの移行";
-
-/* The explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION" = "以前の端末をお手元に置き、Wi-FiとBluetoothが有効になっていることを確認してからQRコードをスキャンしてください。";
-
-/* The second explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION2" = "このQRコードが新しいiOS端末のフレーム内に入るようにしてください。";
-
-/* A prompt to provide further explanation if the user is not seeing the transfer on both devices. */
-"DEVICE_TRANSFER_QRCODE_NOT_SEEING" = "旧端末側で表示がありせんか？";
-
-/* The title for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_TITLE" = "QRコードをスキャン";
-
 /* The explanation on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "端末同士を近づけてください。どちらの端末も電源を切らず、B&Aを開いたままにしてください。転送はエンドツーエンドで暗号化されます。";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "データ受信中";
-
-/* Text indicating that we are connecting to the scanned device */
-"DEVICE_TRANSFER_SCANNING_CONNECTING" = "接続しています…";
-
-/* The explanation for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_EXPLANATION" = "QRコードを円の中に入れてください";
-
-/* The title for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_TITLE" = "新しい端末をカメラにかざしてください";
 
 /* Status message on new device when cancelling transfer. */
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_CANCELLING" = "古いiPhoneへの接続をキャンセルしています…";
@@ -2608,11 +2788,8 @@
 /* Status message on old device when transfer is starting. */
 "DEVICE_TRANSFER_STATUS_OLD_DEVICE_STARTING" = "新しいiPhoneへの接続を待っています…";
 
-/* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "端末同士を近くに置いてください。どちらも電源を切らず、B&Aを開いたままにしてください。";
-
-/* The title on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_TITLE" = "データ移行中";
+/* Action asking user to try again after transfer failure. */
+"DEVICE_TRANSFER_TRY_AGAIN_ACTION" = "再度試す";
 
 /* table cell label in conversation settings */
 "DISAPPEARING_MESSAGES" = "消えるメッセージ";
@@ -2893,17 +3070,17 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ があなたの代わりにB&Aに寄付をしました！プロフィールにB&Aをサポートしていることを表示しましょう。";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "プライベートメッセージ。広告なし、トラッキングなし、監視なし。";
+/* Body text for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BODY" = "B&Aは、独立した非営利団体としてメッセージと通話のプライバシーを守ることに取り組んでいます。広告なし、トラッキングなし、監視なし。B&Aのこの取り組みのために、ご支援をお願いします。";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "B&Aは寄付によって支えられています。これは、お客様のプライバシーが私たちの活動の最重要事項であることを意味します。B&Aは皆様のために作られたものです。皆様のデータや利益のためではありません。";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_1" = "寄付をすると、プロフィールにバッジが表示（任意）されます";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "B&Aが誰にとっても楽しめて、信頼性と有用性があり続けるために、皆様の寄付をお願いします。";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_2" = "皆さんのプライバシーを守ることが私たちの使命です";
 
-/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "B&Aは他のアプリとは異なります。";
+/* Bullet point for a sheet discussing donating to Signal. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
+"DONATION_READ_MORE_SHEET_BULLET_3" = "B&Aは非営利団体です。";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "寄付額";
@@ -3046,20 +3223,17 @@
 /* Text describing to the user that they're going to pay a monthly donation to Signal */
 "DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "B&Aへの月々の寄付";
 
-/* Title for the 'more' section on the donation screen */
-"DONATION_VIEW_MORE_SECTION_TITLE" = "その他";
-
 /* Title for the 'my support' section in the donation view */
 "DONATION_VIEW_MY_SUPPORT_TITLE" = "マイサポート";
-
-/* Title for the \"other ways to donate\" section on the donation view. */
-"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "その他の寄付の方法";
 
 /* Title on the 'Donate to Signal' screen */
 "DONATION_VIEW_TITLE" = "B&Aへの寄付";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "通貨";
+
+/* Label for a button that says 'Don't show again'. */
+"DONT_SHOW_AGAIN_BUTTON_TITLE" = "今後表示しない";
 
 /* Message for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_MESSAGE" = "編集するには、メッセージをすばやく2回タップします。メッセージは、送信後24時間まで編集できます。";
@@ -3316,9 +3490,6 @@
 /* Footer for message cell for documents/files when they are expired and unavailable for download */
 "FILE_UNAVAILABLE_FOOTER" = "ファイルがダウンロードできません";
 
-/* Message for sheet shown when tapping a document/file that has expired and is unavailable for download */
-"FILE_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたとき、このファイルはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過したファイルとメディアは同期できません。";
-
 /* Title for sheet shown when tapping a document/file that has expired and is unavailable for download */
 "FILE_UNAVAILABLE_SHEET_TITLE" = "ファイルがダウンロードできません";
 
@@ -3352,12 +3523,6 @@
 /* Tooltip notifying users that the flip camera button moved to the picture-in-picture view of themselves in a call */
 "FLIP_CAMERA_BUTTON_MOVED_TO_PIP_TOOLTIP" = "カメラアイコンがここへ移動しました。画面をタップして試してみてください";
 
-/* Message for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_MESSAGE" = "転送メッセージがすぐに送信されるようになりました。";
-
-/* Title for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_TITLE" = "より速い転送";
-
 /* Indicates that a single message was forwarded. */
 "FORWARD_MESSAGE_MESSAGES_SENT_1" = "メッセージを送信しました";
 
@@ -3385,11 +3550,11 @@
 /* Title for the 'Get Started' banner */
 "GET_STARTED_BANNER_TITLE" = "始めましょう";
 
-/* 'Get Started' button directing users to appearance */
-"GET_STARTED_CARD_APPEARANCE" = "外観";
-
 /* 'Get Started' button direction users to avatar builder */
 "GET_STARTED_CARD_AVATAR_BUILDER" = "画像を追加する";
+
+/* 'Get Started' button directing users to Chat Color settings */
+"GET_STARTED_CARD_CHAT_COLOR" = "チャットの色";
 
 /* 'Get Started' button directing users to invite friends */
 "GET_STARTED_CARD_INVITE_FRIENDS" = "友達を招待する";
@@ -3595,9 +3760,6 @@
 /* Toast view text informing user about swiping to speaker view */
 "GROUP_CALL_SPEAKER_VIEW_TOAST" = "上にスワイプして表示を変更";
 
-/* Tooltip highlighting group calls. */
-"GROUP_CALL_START_TOOLTIP" = "タップしてグループ通話を開始";
-
 /* Text explaining that you started a group call. */
 "GROUP_CALL_STARTED_BY_YOU" = "グループ通話を開始しました";
 
@@ -3736,6 +3898,12 @@
 /* Message indicating that 'announcement-only' mode was enabled by a remote user. Embeds {{ user who enabled 'announcement-only' mode }}. */
 "GROUP_IS_ANNOUNCEMENT_ONLY_ENABLED_BY_REMOTE_USER_FORMAT" = "%1$@ がグループ設定を変更し、メッセージ送信を管理者に限定しました。";
 
+/* Message text for the 'group invite link' action sheet. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE" = "このグループに参加して、あなたの名前と写真をグループのメンバーと共有しますか？";
+
+/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE_W_REQUEST" = "参加をリクエストすると、あなたの名前と写真がこのグループのメンバーと共有されます。管理者のリクエスト承認が必要です。";
+
 /* Subtitle indicating that the local user has been blocked from joining the group */
 "GROUP_LINK_ACTION_SHEET_VIEW_BLOCKED_FROM_JOINING_SUBTITLE" = "管理者があなたを削除したため、グループリンクからはこのグループに参加できません。管理者に連絡して、グループに再度追加してもらってください。";
 
@@ -3754,14 +3922,8 @@
 /* Label indicating that the group info is being loaded in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_LOADING_TITLE" = "読み込みんでいます…";
 
-/* Message text for the 'group invite link' action sheet. */
-"GROUP_LINK_ACTION_SHEET_VIEW_MESSAGE" = "このグループに参加して、あなたの名前と写真をそのメンバーと共有しますか？";
-
 /* Label for the 'request to join' button in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_BUTTON" = "参加を申請する";
-
-/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
-"GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_MESSAGE" = "このグループに参加するには、管理者の承認が必要です。参加を申請すると、あなたの名前と画像がそのメンバーと共有されます。";
 
 /* Error message the attempt to request to join the group failed due to network connectivity. */
 "GROUP_LINK_COULD_NOT_REQUEST_TO_JOIN_GROUP_DUE_TO_NETWORK_ERROR_MESSAGE" = "インターネット接続を確認して、再度試してください。";
@@ -4045,6 +4207,12 @@
 /* Name for a group story on the stories list. Embeds {author's name}, {group name} */
 "GROUP_STORY_NAME_FORMAT" = "%1$@ から %2$@";
 
+/* Text indicating you reacted to a group story (the header on the bubble says \"You\") */
+"GROUP_STORY_REPLY_REACTION_SECOND_PERSON" = "ストーリーにリアクションしました";
+
+/* Text indicating someone else reacted to a group story (the header on the bubble says their name, e.g. \"Bob\") */
+"GROUP_STORY_REPLY_REACTION_THIRD_PERSON" = "ストーリーにリアクションしました";
+
 /* Button to delete the story on the 'group story settings' view */
 "GROUP_STORY_SETTINGS_DELETE_BUTTON" = "グループストーリーを削除する";
 
@@ -4263,6 +4431,18 @@
 
 /* Title for the conversation list's 'archive' mode. */
 "HOME_VIEW_TITLE_ARCHIVE" = "アーカイブ";
+
+/* Title for the conversation list's backup storage full context menu action. */
+"HOME_VIEW_TITLE_BACKUP_OUT_OF_STORAGE_QUOTA" = "バックアップストレージがいっぱいです";
+
+/* Title for the conversation list's failed to redeem backup subscription context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_FAILED_TO_REDEEM" = "バックアップサブスクリプションのエラー";
+
+/* Title for the conversation list's backup subscription not found locally context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_NOT_FOUND_LOCALLY" = "バックアップサブスクリプションが見つかりません";
+
+/* Title for the conversation list's failed to backup context menu action. */
+"HOME_VIEW_TITLE_FAILED_TO_BACKUP" = "バックアップできませんでした";
 
 /* Title for the 'Select Chats' option in the ChatList. */
 "HOME_VIEW_TITLE_SELECT_CHATS" = "チャットを選択";
@@ -4546,8 +4726,8 @@
 /* confirm the users intent to link a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TITLE" = "リンクを完了します";
 
-/* subtitle for choosing to send message history when linking a new device */
-"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE" = "テキストメッセージと過去45日間のメディアを移行する";
+/* Subtitle for choosing to send message history when linking a new device, if you have the paid tier enabled. */
+"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_PAID_PLAN_SUBTITLE" = "テキストメッセージとすべてのメディアを移行します";
 
 /* title for choosing to send message history when linking a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_TITLE" = "メッセージ履歴を移行する";
@@ -4708,24 +4888,6 @@
 /* Shown to users while the app is loading, asking them not to close the app. */
 "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "B&Aを閉じないでください。";
 
-/* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "B&Aのアカウントを移動するには、両方の端末をLANに接続する必要があります。";
-
-/* A button asking the user if they need further help getting their transfer working. */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "お困りですか？";
-
-/* First step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_ONE" = "両方の端末で設定を開いてください";
-
-/* Third step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "LANを有効にしてください";
-
-/* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "B&Aに移ってください";
-
-/* Title for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "LAN接続を有効にしてください";
-
 /* A string indicating that the user can search for a location */
 "LOCATION_PICKER_SEARCH_PLACEHOLDER" = "名前や住所で検索";
 
@@ -4830,6 +4992,24 @@
 
 /* toast indicating that we will remind the user later */
 "MEGAPHONE_WILL_REMIND_LATER" = "あとで通知します。";
+
+/* Label for an action to add a member label */
+"MEMBER_LABEL_ADD" = "メンバーラベルを追加";
+
+/* Heading shown above the preview of a message bubble with the edited member label. */
+"MEMBER_LABEL_PREVIEW_HEADING" = "プレビュー";
+
+/* Text shown in the preview message bubble when a user is editing their member label. */
+"MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "ハロー！";
+
+/* Placeholder text in text field where user can edit their member label. */
+"MEMBER_LABEL_VIEW_PLACEHOLDER_TEXT" = "ラベルを追加";
+
+/* Subtitle for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_SUBTITLE" = "自分自身や、このグループ内での自分の役割を説明するメンバーラベルを設定します。メンバーラベルはこのグループ内でのみ表示されます。";
+
+/* Title for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_TITLE" = "メンバーラベル";
 
 /* Action sheet button title */
 "MESSAGE_ACTION_COPY_TEXT" = "メッセージテキストをコピー";
@@ -5428,6 +5608,18 @@
 /* A string describing that the user has no groups in common other than the group implied by the current UI context */
 "NO_OTHER_GROUPS_IN_COMMON" = "他の共通のグループはありません";
 
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-link' (translated via NOT_LINKED_BOTTOM_RELINK), and it will be formatted as a tappable link. */
+"NOT_LINKED_BOTTOM" = "この端末はリンクされていません。この端末でB&Aを引き続きご利用になるには、 %1$@が必要です。";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_LINKED_BOTTOM_RELINK" = "再リンク";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-register' (translated via NOT_REGISTERED_BOTTOM_REREGISTER), and it will be formatted as a tappable link. */
+"NOT_REGISTERED_BOTTOM" = "この端末は登録されていません。B&Aを引き続きご利用になるには、%1$@が必要です。";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_REGISTERED_BOTTOM_REREGISTER" = "再登録";
+
 /* Label for 1:1 conversation with yourself. */
 "NOTE_TO_SELF" = "自分用メモ";
 
@@ -5515,20 +5707,35 @@
 /* Label for the 'skip and create new pin' button when reglock is disabled during onboarding. */
 "ONBOARDING_2FA_SKIP_AND_CREATE_NEW_PIN" = "スキップして新しいPINを作成";
 
+/* Label for action to use Recovery Key instead of PIN for registration. */
+"ONBOARDING_2FA_SKIP_AND_USE_RECOVERY_KEY" = "回復キーを使用する";
+
 /* Explanation for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE" = "もしPINを忘れてしまっても、新しく作成できます。アカウントを登録して使用することもできますが、プロフィールなどの保存されている設定情報は失われます。";
 
 /* Title for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "PINの入力を省略しますか？";
 
-/* The body for the device transfer 'choice' view 'transfer' option */
+/* The body for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "有料のB&Aバックアッププランからテキストメッセージとメディアを復元します";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
+/* The title for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "B&Aバックアップの復元";
+
+/* Body for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_BODY" = "復元を今スキップすると、後で復元することはできません。この端末でバックアップを再度有効にすると、現在のバックアップが新しいメッセージ履歴に置き換えられます。";
+
+/* Title for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_TITLE" = "復元をスキップしますか？";
 
 /* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "メッセージ履歴とアカウントデータを復元する方法を選択してください。";
+
+/* Message body displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_BODY" = "AndroidからiOSにメッセージとメディアを移行する場合は、以前ご利用していた端末でB&Aバックアップを有効にしておかなければなりません。";
+
+/* Title displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_TITLE" = "復元するバックアップがありません";
 
 /* The body for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_BODY" = "メッセージやメディアを転送せずに続ける";
@@ -5659,6 +5866,9 @@
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "以前利用していた端末がある場合";
 
+/* Text indicating Signal is a nonprofit on the 'onboarding splash' view. For non-English languages, exclude the word '501c3'. */
+"ONBOARDING_SPLASH_NONPROFIT" = "B&Aは非営利団体です";
+
 /* Button for restoring or transferring account in the 'onboarding splash' view. */
 "ONBOARDING_SPLASH_RESTORE_OR_TRANSFER_BUTTON_TITLE" = "アカウントの復元または移行";
 
@@ -5764,6 +5974,21 @@
 /* Title of prompt notifying restore failed for unknown reasons. */
 "OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_TITLE" = "不明なエラー";
 
+/* Action button to backup before continuing. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_BACKUP_ACTION" = "いますぐバックアップ";
+
+/* Body text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_BODY" = "移行する前に今すぐバックアップしてください。まだバックアップされていないメッセージがある可能性があります。";
+
+/* Title text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_TITLE" = "端末の準備をしましょう";
+
+/* Action button to skip backup and continue. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_SKIP_ACTION" = "スキップして続行";
+
+/* Description for form confirming restore from backup without size detail. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_RESTORE_DESCRIPTION" = "最終バックアップは%1$@の%2$@です。";
+
 /* Body of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "B&Aアカウントとメッセージは他の端末への移行を開始しました。この端末上でB&Aはご利用できなくなりました。";
 
@@ -5817,9 +6042,6 @@
 
 /* Footer for message cell for long text when it is expired and unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_FOOTER" = "このメッセージは不完全です";
-
-/* Message for sheet shown when tapping oversized text that has expired and is unavailable for download */
-"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたとき、このメッセージの完全なテキストはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過した長いテキストメッセージは同期できません。";
 
 /* Title for sheet shown when tapping oversized text that has expired and is unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_SHEET_TITLE" = "完全なメッセージがダウンロードできません";
@@ -6145,9 +6367,6 @@
 /* Message indicating that a request to join the group was successfully approved. Embeds {{ the name of the approved user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_APPROVED_FORMAT" = "「%1$@」を追加しました。";
 
-/* Label for the 'view requests' button in the pending member requests banner. */
-"PENDING_GROUP_MEMBERS_REQUEST_BANNER_VIEW_REQUESTS" = "申請を見る";
-
 /* Message indicating that a request to join the group was successfully denied. Embeds {{ the name of the denied user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_DENIED_FORMAT" = "「%1$@」を拒否しました。";
 
@@ -6263,9 +6482,6 @@
 "PHOTO_CAPTURE_GENERIC_ERROR" = "画像をキャプチャできません。";
 
 /* alert title */
-"PHOTO_CAPTURE_UNABLE_TO_CAPTURE_IMAGE" = "画像をキャプチャできません。";
-
-/* alert title */
 "PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA" = "カメラを設定できませんでした。";
 
 /* Button label for opening the chat on a sheet presented from photo capture view indicating that a username QR code was found. */
@@ -6276,9 +6492,6 @@
 
 /* Title for sheet presented from photo capture view indicating that a username QR code was found. Embeds {{username}}. */
 "PHOTO_CAPTURE_USERNAME_QR_CODE_FOUND_TITLE_FORMAT" = "%1$@が見つかりました";
-
-/* alert title, generic error preventing user from capturing a video that is too long */
-"PHOTO_CAPTURE_VIDEO_SIZE_ERROR" = "動画が長すぎます。";
 
 /* Pressing this button pins a thread */
 "PIN_ACTION" = "ピン留めする";
@@ -6364,6 +6577,9 @@
 /* If the user is re-registering, they need to enter their PIN to restore all their data. In some cases, they can skip this entry and lose some data. This text is shown on a button that lets them begin to do this. */
 "PIN_ENTER_EXISTING_SKIP" = "PIN を使用しない";
 
+/* If the user is re-registering, they need to enter their PIN to restore all their data. If they don't remember their PIN, they may remember their Recovery Key which can be used instead of a PIN. */
+"PIN_ENTER_EXISTING_USE_RECOVERY_KEY" = "回復キーを使用する";
+
 /* Error title indicating that the attempt to recreate a PIN failed. */
 "PIN_RECREATION_ERROR_TITLE" = "PINの作成に失敗しました";
 
@@ -6421,8 +6637,80 @@
 /* An explanation that you have already pinned the maximum number of conversations. */
 "PINNED_CONVERSATION_LIMIT" = "ピン留めできるチャットは4件までです。";
 
+/* Accessibility label prefix for banner showing a pinned message */
+"PINNED_MESSAGE_BANNER_AX_LABEL" = "ピン留めされたメッセージ：";
+
+/* Shown when another user pins a message. Embeds {{ another user }}. */
+"PINNED_MESSAGE_CHAT_EVENT_OTHER" = "%1$@がメッセージをピン留めしました";
+
+/* Shown when the local user pins a message. */
+"PINNED_MESSAGE_CHAT_EVENT_SELF" = "メッセージをピン留めしました";
+
+/* Accessibility label for pin message button */
+"PINNED_MESSAGE_MENU_ACCESSIBILITY_LABEL" = "ピン留めされたメッセージメニュー";
+
+/* Label for button to pin a message */
+"PINNED_MESSAGE_PIN_ACTION_TITLE" = "ピン留めする";
+
+/* Message for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BODY" = "メッセージをピン留めすると、一番最初にピン留めしたメッセージと置き換えられます。";
+
+/* Option in pinned message action sheet to replace oldest pin. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BUTTON" = "置き換える";
+
+/* Title for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_TITLE" = "最初にピン留めしたものと置き換えますか？";
+
+/* Body for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_BODY" = "インターネット接続を確認して再度試してください。";
+
+/* Title for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_TITLE" = "メッセージをピン留めできませんでした";
+
+/* Text to show on a toast when someone unpins a message */
+"PINNED_MESSAGE_TOAST" = "メッセージのピン留めが解除されました";
+
+/* Label for button to unpin a message */
+"PINNED_MESSAGE_UNPIN_ACTION_TITLE" = "ピン留め解除";
+
+/* Option in pinned message action sheet to pin for 24 hours. */
+"PINNED_MESSAGES_24_HOURS" = "24時間";
+
+/* Option in pinned message action sheet to pin for 30 days. */
+"PINNED_MESSAGES_30_DAYS" = "30日";
+
+/* Option in pinned message action sheet to pin for 7 days. */
+"PINNED_MESSAGES_7_DAYS" = "7日";
+
+/* Title for Pinned Messages detail view */
+"PINNED_MESSAGES_DETAILS_TITLE" = "ピン留めされたメッセージ";
+
+/* Title for an action sheet to indicate how long to keep the pin active */
+"PINNED_MESSAGES_EXPIRY_SHEET_TITLE" = "ピン留めしておく期間";
+
+/* Option in pinned message action sheet to pin with no expiry. */
+"PINNED_MESSAGES_FOREVER" = "無期限";
+
+/* Action menu item to go to a message in the conversation view */
+"PINNED_MESSAGES_GO_TO_MESSAGE" = "メッセージへ移動する";
+
+/* Action menu item to see all pinned messages */
+"PINNED_MESSAGES_SEE_ALL_MESSAGES" = "すべてのメッセージを見る";
+
+/* Action menu item to unpin a message */
+"PINNED_MESSAGES_UNPIN" = "ピン留め解除";
+
+/* Title for a button to unpin all pinned messages. */
+"PINNED_MESSAGES_UNPIN_ALL" = "すべてのピン留めを解除";
+
 /* The title for pinned conversation section on the conversation list */
 "PINNED_SECTION_TITLE" = "ピン留め中";
+
+/* Body for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_BODY" = "消えるメッセージは、期間が過ぎてチャットから消えた時にピン留めも解除されます。";
+
+/* Title for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_TITLE" = "消えるメッセージをピン留めする";
 
 /* Action text for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_ACTION" = "PINを作成";
@@ -6439,11 +6727,35 @@
 /* Accessibility label for button to start media playback */
 "PLAY_BUTTON_ACCESSABILITY_LABEL" = "メディアを再生";
 
+/* Accessibility label for poll message. Embeds {{ poll question }}. */
+"POLL_ACCESSIBILITY_LABEL" = "投票：%1$@";
+
+/* Accessibility label for a vote option that is not selected by the user. */
+"POLL_ACCESSIBILITY_LABEL_OPTION_PENDING" = "保留中";
+
+/* Title for a toggle allowing multiple votes for a poll. */
+"POLL_ALLOW_MULTIPLE_LABEL" = "複数投票を許可";
+
+/* Button to view a poll after its ended */
+"POLL_BUTTON_VIEW_POLL" = "投票結果を見る";
+
 /* Button to view poll results */
 "POLL_BUTTON_VIEW_RESULTS" = "結果を表示する";
 
 /* Button to view poll votes */
 "POLL_BUTTON_VIEW_VOTES" = "投票結果を表示する";
+
+/* Toast telling user to add a question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION" = "質問を追加する";
+
+/* Toast telling user to add options and question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION_OR_ENOUGH_OPTIONS" = "質問と、少なくとも2つの選択肢を追加してください";
+
+/* Toast telling user to add more options to poll. */
+"POLL_CREATE_ERROR_TOAST_NOT_ENOUGH_OPTIONS" = "少なくとも2つの選択肢を追加してください";
+
+/* Title of create poll pane */
+"POLL_CREATE_TITLE" = "新しい投票";
 
 /* Label for button to end a poll */
 "POLL_DETAILS_END_POLL" = "投票を終了する";
@@ -6451,20 +6763,56 @@
 /* Title of poll details pane */
 "POLL_DETAILS_TITLE" = "投票の詳細";
 
+/* Title for an action sheet confirming the user wants end a poll. */
+"POLL_END_CONFIRMATION" = "投票を終了しますか？";
+
+/* Message for an action sheet confirming the user wants to end a poll. */
+"POLL_END_CONFIRMATION_MESSAGE" = "グループメンバーは投票ができなくなります。";
+
+/* Shown when another user ends a poll. Embeds {{ another user }} and {{ poll question }}. */
+"POLL_ENDED_BY_OTHER_CHAT_LIST_UPDATE" = "%1$@が「%2$@」の投票を締め切りました";
+
+/* Shown when the local user ends a poll. Embeds {{ poll question }}. */
+"POLL_ENDED_BY_YOU_CHAT_LIST_UPDATE" = "あなたが「%1$@」の投票を締め切りました";
+
 /* Notification that {{contact}} ended a poll with question {{poll question}} */
 "POLL_ENDED_NOTIFICATION" = "%1$@は「%2$@」へ投票済です";
+
+/* Label specifying the poll is finished and these are the final results */
+"POLL_FINAL_RESULTS_LABEL" = "最終結果";
 
 /* Label specifying the message type as a poll */
 "POLL_LABEL" = "投票";
 
+/* String to display when a poll has no votes */
+"POLL_NO_VOTES" = "投票なし";
+
+/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
+"POLL_OPTION_PLACEHOLDER_PREFIX" = "オプション";
+
+/* Header for the poll options text boxes when making a new poll */
+"POLL_OPTIONS_LABEL" = "オプション";
+
 /* Prefix for a poll preview */
 "POLL_PREFIX" = "投票：";
+
+/* Header for the poll question text box when making a new poll */
+"POLL_QUESTION_LABEL" = "質問";
+
+/* Placeholder text for poll question */
+"POLL_QUESTION_PLACEHOLDER_TEXT" = "質問する";
+
+/* Title of poll details pane when poll is ended */
+"POLL_RESULTS_TITLE" = "投票結果";
 
 /* Label specifying the user can select more than one option */
 "POLL_SELECT_LABEL_MULTIPLE" = "1 つ以上選択してください";
 
 /* Label specifying the user can select one option */
 "POLL_SELECT_LABEL_SINGULAR" = "1つ選択";
+
+/* Notification that {{contact}} voted in a poll with question {{poll question}} */
+"POLL_VOTED_NOTIFICATION" = "%1$@が「%2$@」に投票しました";
 
 /* Badge indicating that the user is verified. */
 "PRIVACY_IDENTITY_IS_VERIFIED_BADGE" = "検証済み";
@@ -6661,6 +7009,15 @@
 /* Title of alert shown when push tokens sync job succeeds. */
 "PUSH_REGISTER_SUCCESS" = "プッシュ通知を再登録しました。";
 
+/* Body for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_BODY" = "移行させたい端末に表示されたQRコードを、この端末でスキャンしてください";
+
+/* Title for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_TITLE" = "QRコードをスキャン";
+
+/* Message for an action sheet telling users how to use quick restore, when trying to open an external quick restore URL. */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "新しい端末へこのアカウントを移行するには、「続ける」をタップしてから、B&AカメラでQRコードをスキャンしてください。その際は必ず、B&Aに直接表示されたQRコードのみをスキャンしてください。";
+
 /* Accessibility label stating the author of the message to which you are replying. Embeds: {{ the author of the message to which you are replying }}. */
 "QUOTED_REPLY_ACCESSIBILITY_LABEL_FORMAT" = "%1$@への返信";
 
@@ -6676,11 +7033,11 @@
 /* Toast alert text shown when tapping on a quoted message which we cannot scroll to because the local copy of the message didn't exist when the quote was received. */
 "QUOTED_REPLY_ORIGINAL_MESSAGE_REMOTELY_SOURCED" = "元のメッセージが見つかりません。";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to your own story. */
-"QUOTED_REPLY_REACTION_TO_OWN_STORY" = "あなたのストーリーにリアクションがありました";
+/* Label explaining that the content of a quoted message includes you reacting to someone's story. Embeds {{ %1$@ the story author }}. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_SECOND_PERSON" = "%1$@さんのストーリーにリアクションしました";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to a story. Embeds {{ story author name }} */
-"QUOTED_REPLY_REACTION_TO_STORY_FORMAT" = "%1$@さんのストーリーにリアクションする";
+/* Label explaining that the content of a quoted message includes someone reacting to your story. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_THIRD_PERSON" = "あなたのストーリーにリアクションしました";
 
 /* Message header when you are quoting a story. Embeds {{ story author name }} */
 "QUOTED_REPLY_STORY_AUTHOR_INDICATOR_FORMAT" = "%1$@・ストーリー";
@@ -6702,6 +7059,9 @@
 
 /* Indicates this message is a quoted reply to a video file. */
 "QUOTED_REPLY_TYPE_VIDEO" = "動画";
+
+/* Indicates this message is a quoted reply to a voice message. */
+"QUOTED_REPLY_TYPE_VOICE_MESSAGE" = "音声メッセージ";
 
 /* Label for a button to lower your raised hand in a call. */
 "RAISED_HANDS_LOWER_HAND_BUTTON" = "手を降ろす";
@@ -6841,6 +7201,9 @@
 /* Body for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
+/* Body for a sheet warning users about an incorrect recovery key and having hit a rate limit on retries. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_RATE_LIMIT_BODY" = "回復キーの試行回数が上限に達しました。セキュリティ対策として、試行回数には上限が設定されています。一時間待ってから再度お試しください。";
+
 /* Title for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "バックアップキーが正しくありません";
 
@@ -6892,12 +7255,6 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "国番号";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "続行すると、同じ電話番号で登録されている他の端末のB&Aが無効化されます。";
-
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "アカウントとメッセージの移行";
-
 /* Description for the screen that allows users to enter their recovery key. */
 "REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "バックアップキーは、アカウントとデータを復元するために必要な64桁のコードです。";
 
@@ -6939,6 +7296,9 @@
 
 /* During registration, users are asked to enter their phone number. This is the subtitle on that screen, which gives users some instructions. */
 "REGISTRATION_PHONE_NUMBER_SUBTITLE" = "あなたの電話番号を入力して開始します。";
+
+/* During re-registration, users are asked to confirm their phone number. This is the subtitle on that screen, which gives users some instructions. */
+"REGISTRATION_PHONE_NUMBER_SUBTITLE_2" = "以下の電話番号に認証コードが送信されます。";
 
 /* During registration, users are asked to enter their phone number. This is the title on that screen. */
 "REGISTRATION_PHONE_NUMBER_TITLE" = "あなたの電話番号";
@@ -6993,6 +7353,15 @@
 
 /* Error shown if an SMS/call service provider is temporarily unable to send a verification code to the provided number. */
 "REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "SMSプロバイダーの問題により、B&AはSMSコードを送信できませんでした。時間をおいてからもう一度お試しください。";
+
+/* Third step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_ENABLE_BACKUPS" = "バックアップを有効にして、バックアップが完了するまでお待ちください";
+
+/* First step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_OPEN_SIGNAL" = "以前利用していた端末でB&Aを開きます";
+
+/* Second step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_TAP_SETTINGS" = "設定 > バックアップ　の順にタップします";
 
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "メッセージを送信する前に登録が必要です。";
@@ -7066,6 +7435,18 @@
 /* Label warning the user that something is wrong with their username link. */
 "REMINDER_VIEW_USERNAME_LINK_CORRUPTED_WARNING" = "ユーザーネームのQRコードとリンクに問題が発生したため、無効になりました。新しいリンクを作成して他のユーザーと共有してください。";
 
+/* A message that displays when one person in a call remotely muted another participant. Embeds {{name}} {{name}} */
+"REMOTE_MUTE_TOAST_A_MUTED_B" = "%1$@が%2$@をミュートしました。";
+
+/* A message that displays when your microphone is remotely muted by another call participant. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_SOMEONE_MUTED_YOU" = "%1$@があなたをミュートしました。";
+
+/* A message that displays when you remotely muted another call participant's microphone. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_YOU_MUTED_SOMEONE" = "%1$@をミュートしました。";
+
+/* A message that displays when you joined a call on two devices and mute one from the other. */
+"REMOTE_MUTE_TOAST_YOU_MUTED_YOURSELF" = "別の端末で自分をミュートしました。";
+
 /* Accessibility label for a button that removes the preview from a drafted message. */
 "REMOVE_PREVIEW" = "プレビューを削除";
 
@@ -7083,6 +7464,30 @@
 
 /* Configure reactions reset button text */
 "RESET" = "リセット";
+
+/* Body for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_BODY" = "メディアの復元は完了していません。キャンセルした場合は、この端末を再リンクすることで再度復元できます。";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_PRIMARY_BUTTON" = "復元を続ける";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_SECONDARY_BUTTON" = "復元をキャンセルする";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_TITLE" = "メディアを復元しています";
+
+/* Message for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_MESSAGE" = "メディアの復元は完了していません。キャンセルした場合は、この端末を再リンクすることで再度復元できます。";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_PRIMARY_BUTTON" = "復元を続ける";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_SECONDARY_BUTTON" = "復元をキャンセルする";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_TITLE" = "メディアの復元をキャンセルしますか？";
 
 /* Button title shown on chat list banner for restoring media from a backup when paused because the device has insufficient disk space, to see a bottom sheet with more details about next steps. */
 "RESTORING_MEDIA_BANNER_DISK_SPACE_BUTTON" = "詳細";
@@ -7605,9 +8010,6 @@
 
 /* No comment provided by engineer. */
 "SETTINGS_CLEAR_HISTORY" = "チャット履歴の消去";
-
-/* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicensed under the GPLv3";
 
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "データ通信量";
@@ -8500,6 +8902,12 @@
 /* The name for the sticker category 'Featured' */
 "STICKER_CATEGORY_FEATURED_NAME" = "おすすめ";
 
+/* Subtitle of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_SUBTITLE" = "ステッカーを送ると、ここに表示されます";
+
+/* Title of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_TITLE" = "最近使ったステッカーはありません";
+
 /* The name for the sticker category 'Recents' */
 "STICKER_CATEGORY_RECENTS_NAME" = "最近使った絵文字";
 
@@ -8508,9 +8916,6 @@
 
 /* Message when trying to show a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_MESSAGE_LABEL" = "ステッカーはご利用になれません";
-
-/* Message for sheet shown when tapping a sticker that has expired and is unavailable for download */
-"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたとき、このファイルはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過したメディアやファイルは同期できません。";
 
 /* Title for sheet shown when tapping a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_SHEET_TITLE" = "ステッカーはご利用になれません";
@@ -8659,21 +9064,6 @@
 /* Context menu action to share the selected story */
 "STORIES_SHARE_STORY_ACTION" = "共有";
 
-/* Section title shown when sending to non-story conversations but failing to send the file to stories. */
-"STORIES_SHARESHEET_PARTIAL_SEND_REMAINING_SECTION_TITLE" = "送信済み";
-
-/* Section title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_STORIES_SECTION_TITLE" = "送信されませんでした";
-
-/* Title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_TITLE" = "一部送信済み";
-
-/* Subtitle shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_SUBTITLE" = "選択したファイル形式はサポートされていません。";
-
-/* Title shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_TITLE" = "送信できません";
-
 /* Title for the stories view. */
 "STORIES_TITLE" = "ストーリー";
 
@@ -8722,8 +9112,11 @@
 /* Title for the story privacy settings view */
 "STORY_PRIVACY_TITLE" = "ストーリー保護";
 
-/* inbox and notification text for a reaction to a story authored by the local user. Embeds {{reaction emoji}} */
-"STORY_REACTION_LOCAL_AUTHOR_PREVIEW_FORMAT" = "%1$@のリアクションがあなたのストーリーにありました";
+/* Text explaining that you reacted to someone else's story. Embeds {{ %1$@ reaction emoji, %2$@ story author name }}. */
+"STORY_REACTION_PREVIEW_FORMAT_SECOND_PERSON" = "%2$@さんのストーリーに%1$@のリアクションをしました";
+
+/* Text explaining that someone reacted to your story. Embeds {{ %1$@ reaction emoji }}. */
+"STORY_REACTION_PREVIEW_FORMAT_THIRD_PERSON" = "あなたのストーリーに%1$@のリアクションをしました";
 
 /* quote text for a reaction to a story by the user (the header on the bubble says \"You\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_SECOND_PERSON" = "%1$@のリアクションをストーリーにしました";
@@ -8731,17 +9124,8 @@
 /* quote text for a reaction to a story by some other user (the header on the bubble says their name, e.g. \"Bob\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_THIRD_PERSON" = "%1$@のリアクションをストーリーにしました";
 
-/* inbox and notification text for a reaction to a story authored by another user. Embeds {{ %1$@ reaction emoji, %2$@ story author name }} */
-"STORY_REACTION_REMOTE_AUTHOR_PREVIEW_FORMAT" = "%1$@のリアクションを%2$@さんのストーリーにしました";
-
 /* Button for replying to a story with no existing replies. */
 "STORY_REPLY_BUTTON" = "返信";
-
-/* Text indicating you reacted to a story (the header on the bubble says \"You\") */
-"STORY_REPLY_REACTION_SECOND_PERSON" = "ストーリーにリアクションしました";
-
-/* Text indicating someone else reacted to a story (the header on the bubble says their name, e.g. \"Bob\") */
-"STORY_REPLY_REACTION_THIRD_PERSON" = "ストーリーにリアクションしました";
 
 /* placeholder text for replying to a story */
 "STORY_REPLY_TEXT_FIELD_PLACEHOLDER" = "返信";
@@ -8965,35 +9349,23 @@
 /* Option in selected text edit menu to make text bold */
 "TEXT_MENU_BOLD" = "太字";
 
-/* Option in selected text edit menu to clear all text formatting in the selected text range */
-"TEXT_MENU_CLEAR_FORMATTING" = "書式設定のクリア";
-
 /* Option in selected text edit menu to view text formatting options */
 "TEXT_MENU_FORMAT" = "書式設定";
 
 /* Option in selected text edit menu to make text italic */
 "TEXT_MENU_ITALIC" = "斜体";
 
-/* Option in selected text edit menu to look up word definitions */
-"TEXT_MENU_LOOK_UP" = "検索";
-
 /* Option in selected text edit menu to make text monospace */
 "TEXT_MENU_MONOSPACE" = "等幅";
 
-/* Option in selected text edit menu to replace text with suggestions */
-"TEXT_MENU_REPLACE" = "置き換え";
-
-/* Option in selected text edit menu to share selected text */
-"TEXT_MENU_SHARE" = "共有";
+/* Option in selected text edit menu to remove all text formatting in the selected text range */
+"TEXT_MENU_REMOVE_FORMATTING" = "書式設定の削除";
 
 /* Option in selected text edit menu to make text spoiler */
 "TEXT_MENU_SPOILER" = "スポイラー";
 
 /* Option in selected text edit menu to make text strikethrough */
 "TEXT_MENU_STRIKETHROUGH" = "取り消し線";
-
-/* Option in selected text edit menu to translate the word */
-"TEXT_MENU_TRANSLATE" = "翻訳";
 
 /* text indicating the message was remotely deleted */
 "THIS_MESSAGE_WAS_DELETED" = "このメッセージは消去されました。";
@@ -9526,45 +9898,81 @@
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "消えるメッセージのタイマーを%1$@に設定しました。";
 
-/* BA custom strings */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "バックアップを作成中です：%1$@";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "バックアップをエクスポート中...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "バックアップをアップロード中...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "バックアップメディアをアップロード中...";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "いますぐバックアップする";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "後でバックアップする";
-"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "この連絡先で多数のエラーが起きました。あとで再度試してください。";
-"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "無効にする";
-"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "PINを無効にする前に、登録ロックを解除してください。";
-"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "登録ロックを無効にしますか？";
-"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "PINを作成しましたが、登録ロックを有効化できませんでした。インターネット接続を確認して再度試してください。";
-"PIN_CREATION_REGLOCK_ERROR_TITLE" = "登録ロックを有効化できませんでした";
-"PIN_DISABLE_ERROR_MESSAGE" = "PINを無効にできませんでした。";
-"PIN_DISABLE_ERROR_TITLE" = "PINの無効化に失敗";
-"REGISTER_RATE_LIMITING_BODY" = "急ぎすぎです。少し待ってから再試行してください。";
-"VOICE_MESSAGE_FILE_NAME" = "B&A";
+/* ===== B&A Custom Strings ===== */
 
-/* BA custom strings */
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたときに、このボイスメッセージはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過したファイルとメディアは同期できません。";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたとき、このファイルはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過したファイルとメディアは同期できません。";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたとき、このメッセージの完全なテキストはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過した長いテキストメッセージは同期できません。";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "この端末をリンクしたとき、このファイルはスマートフォンから移行されませんでした。端末をリンクした時点で45日以上経過したメディアやファイルは同期できません。";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "テキストと45日間のメディアのバックアップ";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "過去45日間のメディア";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "テキスト+45日間のメディア";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "その他";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "その他の寄付の方法";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Copyright B&A Messenger\nLicensed under the GPLv3";
+
+/* Link BAXS platform account */
+
 "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "BAXSアカウントをリンクするには、［続ける］→［QRコードをスキャン］をタップし、もう一度QRコードをスキャンしてください。";
+
 "LINK_BA_PLATFORM_ACCOUNT_TITLE" = "BAプラットフォームアカウントを連携";
+
 "LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "連携済みBAXSアカウント";
+
 "LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "BAプラットフォームアカウント";
+
 "LINK_BA_PLATFORM_SCAN_FOOTER" = "BA決済プラットフォームに表示されたQRコードをスキャンして、アカウントを連携してください。";
+
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "QRコードをスキャン";
-"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "携帯電話";
-"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "メールアドレス";
-"LINK_BA_PLATFORM_USER_ID" = "User ID";
-"LINK_BA_PLATFORM_USER_NAME" = "User Name";
-"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BAプラットフォームアカウントを連携";
-"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "\"%@\"にアカウントを連携しますか？";
-"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BAプラットフォームアカウントを連携しました。";
-"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "無効なQRコード";
-"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "このQRコードは有効なBAプラットフォーム連携コードではありません。";
+
 "LINK_BA_PLATFORM_SCAN_AGAIN" = "再スキャン";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "携帯電話";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "メールアドレス";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "BAプラットフォームアカウントを連携";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "\"%@\"にアカウントを連携しますか？";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "BAプラットフォームアカウントを連携しました。";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "無効なQRコード";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "このQRコードは有効なBAプラットフォーム連携コードではありません。";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "連携できません";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "このQRコードは連携に使用できません。";
+
 "LINK_BA_PLATFORM_FAILED_TITLE" = "連携に失敗しました";
+
 "LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "BAプラットフォームが連携リクエストを拒否しました。";
+
 "LINK_BA_PLATFORM_TIMEOUT_TITLE" = "連携がタイムアウトしました";
+
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BAプラットフォームが時間内に応答しませんでした。もう一度お試しください。";
+
 "LINK_BA_PLATFORM_ERROR_TITLE" = "エラー";
+

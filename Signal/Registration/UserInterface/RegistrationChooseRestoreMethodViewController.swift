@@ -61,10 +61,15 @@ class RegistrationChooseRestoreMethodViewController: OWSViewController {
         iconName: String,
         iconSize: CGFloat? = nil,
         selector: Selector
-    ) -> OWSFlatButton {
-        let button = RegistrationChoiceButton(title: title, body: body, iconName: iconName, iconSize: iconSize)
-        button.addTarget(target: self, selector: selector)
-        return button
+    ) -> UIButton {
+        return UIButton.registrationChoiceButton(
+            title: title,
+            subtitle: body,
+            iconName: iconName,
+            primaryAction: UIAction { [weak self] _ in
+                self?.perform(selector)
+            }
+        )
     }
 
     private lazy var restoreFromBackupButton = choiceButton(
@@ -120,11 +125,11 @@ class RegistrationChooseRestoreMethodViewController: OWSViewController {
         })
     }()
 
-    private lazy var cancelButton = OWSFlatButton.secondaryButtonForRegistration(
-        title: CommonStrings.cancelButton,
-        target: self,
-        selector: #selector(didTapCancel)
-    )
+    private lazy var cancelButton: UIButton = {
+        let button = UIButton(configuration: .mediumSecondary(title: CommonStrings.cancelButton))
+        button.addTarget(self, action: #selector(didTapCancel), for: .touchUpInside)
+        return button
+    }()
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -243,7 +248,7 @@ class RegistrationChooseRestoreMethodViewController: OWSViewController {
 
         func labelWithImage(imageName: String, text: String) -> UIView {
             let image = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
-            image.tintColor = UIColor.colorForRegistrationExplanationLabel
+            image.tintColor = UIColor.Signal.secondaryLabel
             let label = UILabel.explanationLabelForRegistration(text: text)
             label.textAlignment = .natural
             let stackView = UIStackView(
@@ -277,10 +282,11 @@ class RegistrationChooseRestoreMethodViewController: OWSViewController {
         ])
 
         // Show the 'No backup to restore'
-        let continueButton = OWSFlatButton.primaryButtonForRegistration(
-            title: CommonStrings.okayButton,
-            target: self,
-            selector: #selector(didTapCancel)
+        let continueButton = UIButton(
+            configuration: .largePrimary(title: CommonStrings.okayButton),
+            primaryAction: UIAction { [weak self] _ in
+                self?.didTapCancel()
+            }
         )
         view.addSubview(continueButton)
         continueButton.autoSetDimension(.width, toSize: 280)
@@ -293,8 +299,8 @@ class RegistrationChooseRestoreMethodViewController: OWSViewController {
 
     private func render() {
         view.backgroundColor = Theme.backgroundColor
-        titleLabel.textColor = .colorForRegistrationTitleLabel
-        explanationLabel.textColor = .colorForRegistrationExplanationLabel
+        titleLabel.textColor = UIColor.Signal.label
+        explanationLabel.textColor = UIColor.Signal.secondaryLabel
     }
 
     // MARK: Events

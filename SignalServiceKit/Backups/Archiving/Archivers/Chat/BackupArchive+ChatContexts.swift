@@ -105,28 +105,28 @@ extension BackupArchive {
         private let threadCache = SharedMap<ChatId, CachedThreadInfo>()
 
         init(
+            customChatColorContext: CustomChatColorArchivingContext,
+            recipientContext: RecipientArchivingContext,
+            startDate: Date,
+            remoteConfig: RemoteConfig,
             bencher: BackupArchive.ArchiveBencher,
             attachmentByteCounter: BackupArchiveAttachmentByteCounter,
-            currentBackupAttachmentUploadEra: String,
-            customChatColorContext: CustomChatColorArchivingContext,
             includedContentFilter: IncludedContentFilter,
-            recipientContext: RecipientArchivingContext,
-            startTimestampMs: UInt64,
-            tx: DBReadTransaction
+            tx: DBReadTransaction,
         ) {
             self.customChatColorContext = customChatColorContext
             self.recipientContext = recipientContext
             super.init(
+                startDate: startDate,
+                remoteConfig: remoteConfig,
                 bencher: bencher,
                 attachmentByteCounter: attachmentByteCounter,
-                currentBackupAttachmentUploadEra: currentBackupAttachmentUploadEra,
                 includedContentFilter: includedContentFilter,
-                startTimestampMs: startTimestampMs,
-                tx: tx
+                tx: tx,
             )
         }
 
-        internal func assignChatId(to thread: TSThread) -> ChatId {
+        func assignChatId(to thread: TSThread) -> ChatId {
             defer {
                 currentChatId = ChatId(value: currentChatId.value + 1)
             }
@@ -141,7 +141,7 @@ extension BackupArchive {
                     threadCache[currentChatId] = .noteToSelfThread
                 } else {
                     threadCache[currentChatId] = .contactThread(
-                        contactAddress: contactAddress.asSingleServiceIdBackupAddress()
+                        contactAddress: contactAddress.asSingleServiceIdBackupAddress(),
                     )
                 }
             } else if thread is TSGroupThread {
@@ -150,14 +150,12 @@ extension BackupArchive {
             return currentChatId
         }
 
-        internal subscript(_ threadUniqueId: ThreadUniqueId) -> ChatId? {
-            // swiftlint:disable:next implicit_getter
-            get { map[threadUniqueId] }
+        subscript(_ threadUniqueId: ThreadUniqueId) -> ChatId? {
+            map[threadUniqueId]
         }
 
-        internal subscript(_ chatId: ChatId) -> CachedThreadInfo? {
-            // swiftlint:disable:next implicit_getter
-            get { threadCache[chatId] }
+        subscript(_ chatId: ChatId) -> CachedThreadInfo? {
+            threadCache[chatId]
         }
     }
 
@@ -172,30 +170,31 @@ extension BackupArchive {
         private let groupIdMap = SharedMap<ChatId, (Int64, GroupId)>()
         private let pinnedThreadIndexMap = SharedMap<ThreadUniqueId, UInt32>()
 
-        internal init(
+        init(
             customChatColorContext: CustomChatColorRestoringContext,
             recipientContext: RecipientRestoringContext,
-            startTimestampMs: UInt64,
+            startDate: Date,
+            remoteConfig: RemoteConfig,
             attachmentByteCounter: BackupArchiveAttachmentByteCounter,
             isPrimaryDevice: Bool,
-            tx: DBWriteTransaction
+            tx: DBWriteTransaction,
         ) {
             self.customChatColorContext = customChatColorContext
             self.recipientContext = recipientContext
             super.init(
-                startTimestampMs: startTimestampMs,
+                startDate: startDate,
+                remoteConfig: remoteConfig,
                 attachmentByteCounter: attachmentByteCounter,
                 isPrimaryDevice: isPrimaryDevice,
-                tx: tx
+                tx: tx,
             )
         }
 
-        internal subscript(_ recipientId: RecipientId) -> ChatId? {
-            // swiftlint:disable:next implicit_getter
-            get { recipientToChatMap[recipientId] }
+        subscript(_ recipientId: RecipientId) -> ChatId? {
+            recipientToChatMap[recipientId]
         }
 
-        internal subscript(_ chatId: ChatId) -> ChatThread? {
+        subscript(_ chatId: ChatId) -> ChatThread? {
             if let (rowId, contactThread) = contactThreadMap[chatId] {
                 return ChatThread(threadType: .contact(contactThread), threadRowId: rowId)
             }
@@ -208,10 +207,10 @@ extension BackupArchive {
             return nil
         }
 
-        internal func mapChatId(
+        func mapChatId(
             _ chatId: ChatId,
             to thread: ChatThread,
-            recipientId: RecipientId
+            recipientId: RecipientId,
         ) {
             switch thread.threadType {
             case .contact(let tSContactThread):
@@ -223,10 +222,10 @@ extension BackupArchive {
         }
 
         /// Given a newly encountered pinned thread, return all pinned thread ids encountered so far, in order.
-        internal func pinnedThreadOrder(
+        func pinnedThreadOrder(
             newPinnedThreadId: ThreadUniqueId,
             newPinnedThreadChatId: ChatId,
-            newPinnedThreadIndex: UInt32
+            newPinnedThreadIndex: UInt32,
         ) -> [ThreadUniqueId] {
             pinnedThreadIndexMap[newPinnedThreadId] = newPinnedThreadIndex
             setChatIsPinned(chatId: newPinnedThreadChatId)
@@ -239,7 +238,7 @@ extension BackupArchive {
                     }
                     return (key, value)
                 }
-                .sorted(by: { (lhs, rhs) in
+                .sorted(by: { lhs, rhs in
                     let lhsSortIndex: UInt32 = lhs.1
                     let rhsSortIndex: UInt32 = rhs.1
                     return lhsSortIndex < rhsSortIndex
@@ -280,7 +279,7 @@ extension BackupArchive {
         func updateLastVisibleInteractionRowId(
             interactionRowId: Int64,
             wasRead: Bool,
-            chatId: ChatId
+            chatId: ChatId,
         ) {
             var actions = postFrameRestoreActions[chatId] ?? .default
             if
@@ -299,7 +298,7 @@ extension BackupArchive {
             groupThread: TSGroupThread,
             chatId: ChatId,
             senderAci: Aci,
-            timestamp: UInt64
+            timestamp: UInt64,
         ) {
             let actions = postFrameRestoreActions[chatId] ?? .default
             let oldTimestamp = actions.groupMemberLastInteractionTimestamp[senderAci]
@@ -346,24 +345,24 @@ extension BackupArchive {
         private let map = SharedMap<CustomChatColor.Key, CustomChatColorId>()
 
         override init(
+            startDate: Date,
+            remoteConfig: RemoteConfig,
             bencher: BackupArchive.ArchiveBencher,
             attachmentByteCounter: BackupArchiveAttachmentByteCounter,
-            currentBackupAttachmentUploadEra: String,
             includedContentFilter: IncludedContentFilter,
-            startTimestampMs: UInt64,
-            tx: DBReadTransaction
+            tx: DBReadTransaction,
         ) {
             super.init(
+                startDate: startDate,
+                remoteConfig: remoteConfig,
                 bencher: bencher,
                 attachmentByteCounter: attachmentByteCounter,
-                currentBackupAttachmentUploadEra: currentBackupAttachmentUploadEra,
                 includedContentFilter: includedContentFilter,
-                startTimestampMs: startTimestampMs,
-                tx: tx
+                tx: tx,
             )
         }
 
-        internal func assignCustomChatColorId(to customChatColorKey: CustomChatColor.Key) -> CustomChatColorId {
+        func assignCustomChatColorId(to customChatColorKey: CustomChatColor.Key) -> CustomChatColorId {
             defer {
                 currentCustomChatColorId = CustomChatColorId(value: currentCustomChatColorId.value + 1)
             }
@@ -371,9 +370,8 @@ extension BackupArchive {
             return currentCustomChatColorId
         }
 
-        internal subscript(_ customChatColorKey: CustomChatColor.Key) -> CustomChatColorId? {
-            // swiftlint:disable:next implicit_getter
-            get { map[customChatColorKey] }
+        subscript(_ customChatColorKey: CustomChatColor.Key) -> CustomChatColorId? {
+            map[customChatColorKey]
         }
     }
 
@@ -384,28 +382,30 @@ extension BackupArchive {
         let accountDataContext: AccountDataRestoringContext
 
         init(
-            startTimestampMs: UInt64,
+            accountDataContext: AccountDataRestoringContext,
+            startDate: Date,
+            remoteConfig: RemoteConfig,
             attachmentByteCounter: BackupArchiveAttachmentByteCounter,
             isPrimaryDevice: Bool,
-            accountDataContext: AccountDataRestoringContext,
-            tx: DBWriteTransaction
+            tx: DBWriteTransaction,
         ) {
             self.accountDataContext = accountDataContext
             super.init(
-                startTimestampMs: startTimestampMs,
+                startDate: startDate,
+                remoteConfig: remoteConfig,
                 attachmentByteCounter: attachmentByteCounter,
                 isPrimaryDevice: isPrimaryDevice,
-                tx: tx
+                tx: tx,
             )
         }
 
-        internal subscript(_ chatColorId: CustomChatColorId) -> CustomChatColor.Key? {
+        subscript(_ chatColorId: CustomChatColorId) -> CustomChatColor.Key? {
             map[chatColorId]
         }
 
-        internal func mapCustomChatColorId(
+        func mapCustomChatColorId(
             _ customChatColorId: CustomChatColorId,
-            to key: CustomChatColor.Key
+            to key: CustomChatColor.Key,
         ) {
             map[customChatColorId] = key
         }

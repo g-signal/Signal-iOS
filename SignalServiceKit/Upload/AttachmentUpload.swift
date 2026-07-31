@@ -10,7 +10,7 @@ extension Upload.Constants {
     fileprivate static let maxUploadProgressRetries = 2
 }
 
-public struct AttachmentUpload {
+public enum AttachmentUpload {
     // MARK: - Upload Entrypoint
 
     /// The main entry point into the CDN2/CDN3 upload flow.
@@ -20,20 +20,20 @@ public struct AttachmentUpload {
         attempt: Upload.Attempt<Metadata>,
         dateProvider: @escaping DateProvider,
         sleepTimer: Upload.Shims.SleepTimer,
-        progress: OWSProgressSink?
+        progress: OWSProgressSink?,
     ) async throws -> Upload.Result<Metadata> {
         try Task.checkCancellation()
 
         let progressSource = await progress?.addSource(
             withLabel: "upload",
-            unitCount: UInt64(attempt.encryptedDataLength)
+            unitCount: UInt64(attempt.encryptedDataLength),
         )
 
         return try await attemptUpload(
             attempt: attempt,
             dateProvider: dateProvider,
             sleepTimer: sleepTimer,
-            progress: progressSource
+            progress: progressSource,
         )
     }
 
@@ -52,27 +52,27 @@ public struct AttachmentUpload {
         attempt: Upload.Attempt<Metadata>,
         dateProvider: @escaping DateProvider,
         sleepTimer: Upload.Shims.SleepTimer,
-        progress: OWSProgressSource?
+        progress: OWSProgressSource?,
     ) async throws -> Upload.Result<Metadata> {
         attempt.logger.info("Begin upload. (CDN\(attempt.cdnNumber))")
         try await performResumableUpload(
             attempt: attempt,
             sleepTimer: sleepTimer,
-            progress: progress
+            progress: progress,
         )
         return Upload.Result(
             cdnKey: attempt.cdnKey,
             cdnNumber: attempt.cdnNumber,
             localUploadMetadata: attempt.localMetadata,
             beginTimestamp: attempt.beginTimestamp,
-            finishTimestamp: dateProvider().ows_millisecondsSince1970
+            finishTimestamp: dateProvider().ows_millisecondsSince1970,
         )
     }
 
     /// Consult the UploadEndpoint to determine how much has already been uploaded.
     private static func getResumableUploadProgress<Metadata: UploadMetadata>(
         attempt: Upload.Attempt<Metadata>,
-        count: UInt = 0
+        count: UInt = 0,
     ) async throws -> Upload.ResumeProgress {
         do {
             return try await attempt.endpoint.getResumableUploadProgress(attempt: attempt)
@@ -100,7 +100,7 @@ public struct AttachmentUpload {
         sleepTimer: Upload.Shims.SleepTimer,
         count: UInt = 0,
         priorUploadProgress: Upload.ResumeProgress? = nil,
-        progress: OWSProgressSource?
+        progress: OWSProgressSource?,
     ) async throws {
         guard count < Upload.Constants.uploadMaxRetries else {
             throw Upload.Error.uploadFailure(recovery: .noMoreRetries)
@@ -128,6 +128,14 @@ public struct AttachmentUpload {
             case .uploaded(let updatedBytesAlreadUploaded):
                 attempt.logger.info("Endpoint reported \(updatedBytesAlreadUploaded)/\(attempt.encryptedDataLength) uploaded.")
                 bytesAlreadyUploaded = updatedBytesAlreadUploaded
+                if bytesAlreadyUploaded == totalDataLength {
+                    attempt.logger.info("Complete upload reported by endpoint.")
+                    progress?.incrementCompletedUnitCount(by: UInt64(totalDataLength))
+                    return
+                } else if bytesAlreadyUploaded > totalDataLength {
+                    attempt.logger.warn("Endpoint reported upload size larger than local size. Marking as failed")
+                    throw Upload.Error.uploadFailure(recovery: .restart(.afterBackoff))
+                }
             case .restart:
                 attempt.logger.warn("Error with fetching progress. Restart upload.")
                 throw Upload.Error.uploadFailure(recovery: .restart(.afterBackoff))
@@ -169,9 +177,9 @@ public struct AttachmentUpload {
             try await attempt.endpoint.performUpload(
                 startPoint: bytesAlreadyUploaded,
                 attempt: attempt,
-                progress: internalProgress
+                progress: internalProgress,
             )
-            attempt.logger.warn("Attachment uploaded successfully. \(bytesAlreadyUploaded) -> \(internalProgress.completedUnitCount) (\(downloadTimeLogString(internalProgress.completedUnitCount))")
+            attempt.logger.info("Attachment uploaded successfully. \(bytesAlreadyUploaded) -> \(internalProgress.completedUnitCount) (\(downloadTimeLogString(internalProgress.completedUnitCount))")
         } catch {
             if let statusCode = error.httpStatusCode {
                 attempt.logger.warn("Encountered error during upload. (code=\(statusCode)")
@@ -184,6 +192,11 @@ public struct AttachmentUpload {
             var latestUploadProgressBytes: UInt32 = UInt32(truncatingIfNeeded: internalProgress.completedUnitCount)
             var uploadReportedRemoteProgress = false
             switch error {
+            case .partialUpload(let bytesUploaded):
+                attempt.logger.info("Endpoint successfully uploaded chunk of \(bytesUploaded) bytes.")
+                uploadReportedRemoteProgress = true
+                latestUploadProgressBytes += bytesUploaded
+                failureMode = .resume(.immediately)
             case .uploadFailure(let retryMode):
                 // if a failure mode was passed back
                 failureMode = retryMode
@@ -222,7 +235,7 @@ public struct AttachmentUpload {
             }
 
             if uploadReportedRemoteProgress {
-                attempt.logger.warn("Upload reported making progress: \(bytesAlreadyUploaded) -> \(latestUploadProgressBytes) (\(downloadTimeLogString(UInt64(latestUploadProgressBytes))))")
+                attempt.logger.info("Upload reported making progress: \(bytesAlreadyUploaded) -> \(latestUploadProgressBytes) (\(downloadTimeLogString(UInt64(latestUploadProgressBytes))))")
             }
 
             switch failureMode {
@@ -256,7 +269,7 @@ public struct AttachmentUpload {
                 sleepTimer: sleepTimer,
                 count: nextAttemptCount,
                 priorUploadProgress: latestUploadProgress,
-                progress: progress
+                progress: progress,
             )
         }
     }
@@ -270,7 +283,7 @@ public struct AttachmentUpload {
         signalService: OWSSignalServiceProtocol,
         fileSystem: Upload.Shims.FileSystem,
         dateProvider: @escaping DateProvider,
-        logger: PrefixedLogger
+        logger: PrefixedLogger,
     ) async throws -> Upload.Attempt<Upload.LocalUploadMetadata> {
         return try await buildAttempt(
             for: localMetadata,
@@ -281,7 +294,7 @@ public struct AttachmentUpload {
             signalService: signalService,
             fileSystem: fileSystem,
             dateProvider: dateProvider,
-            logger: logger
+            logger: logger,
         )
     }
 
@@ -292,7 +305,7 @@ public struct AttachmentUpload {
         signalService: OWSSignalServiceProtocol,
         fileSystem: Upload.Shims.FileSystem,
         dateProvider: @escaping DateProvider,
-        logger: PrefixedLogger
+        logger: PrefixedLogger,
     ) async throws -> Upload.Attempt<Upload.LinkNSyncUploadMetadata> {
         return try await buildAttempt(
             for: metadata,
@@ -303,7 +316,7 @@ public struct AttachmentUpload {
             signalService: signalService,
             fileSystem: fileSystem,
             dateProvider: dateProvider,
-            logger: logger
+            logger: logger,
         )
     }
 
@@ -314,7 +327,7 @@ public struct AttachmentUpload {
         signalService: OWSSignalServiceProtocol,
         fileSystem: Upload.Shims.FileSystem,
         dateProvider: @escaping DateProvider,
-        logger: PrefixedLogger
+        logger: PrefixedLogger,
     ) async throws -> Upload.Attempt<Upload.EncryptedBackupUploadMetadata> {
         return try await buildAttempt(
             for: localMetadata,
@@ -325,7 +338,7 @@ public struct AttachmentUpload {
             signalService: signalService,
             fileSystem: fileSystem,
             dateProvider: dateProvider,
-            logger: logger
+            logger: logger,
         )
     }
 
@@ -338,7 +351,7 @@ public struct AttachmentUpload {
         signalService: OWSSignalServiceProtocol,
         fileSystem: Upload.Shims.FileSystem,
         dateProvider: @escaping DateProvider,
-        logger: PrefixedLogger
+        logger: PrefixedLogger,
     ) async throws -> Upload.Attempt<Metadata> {
         let endpoint: UploadEndpoint = try {
             switch form.cdnNumber {
@@ -347,14 +360,14 @@ public struct AttachmentUpload {
                     form: form,
                     signalService: signalService,
                     fileSystem: fileSystem,
-                    logger: logger
+                    logger: logger,
                 )
             case 3:
                 return UploadEndpointCDN3(
                     form: form,
                     signalService: signalService,
                     fileSystem: fileSystem,
-                    logger: logger
+                    logger: logger,
                 )
             default:
                 throw OWSAssertionError("Unsupported Endpoint: \(form.cdnNumber)")
@@ -376,7 +389,7 @@ public struct AttachmentUpload {
             endpoint: endpoint,
             uploadLocation: uploadLocation,
             isResumedUpload: existingSessionUrl != nil,
-            logger: logger
+            logger: logger,
         )
     }
 }
@@ -385,13 +398,13 @@ extension Upload {
     struct FormRequest {
         private let networkManager: NetworkManager
 
-        public init(
-            networkManager: NetworkManager
+        init(
+            networkManager: NetworkManager,
         ) {
             self.networkManager = networkManager
         }
 
-        public func start() async throws -> Upload.Form {
+        func start() async throws -> Upload.Form {
             let request = OWSRequestFactory.allocAttachmentRequestV4()
             return try await fetchUploadForm(request: request)
         }

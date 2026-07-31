@@ -1,6 +1,9 @@
 /* Button text to dismiss missing contacts permission alert */
 "AB_PERMISSION_MISSING_ACTION_NOT_NOW" = "Όχι τώρα";
 
+/* Footer for the 'about' help section. For non-English languages, exclude the word '501c3'. */
+"ABOUT_SECTION_FOOTER" = "Πνευματική ιδιοκτησία B&A Messenger\nΥπό την άδεια AGPLv3\nΤο B&A είναι ένας μη κερδοσκοπικός οργανισμός.";
+
 /* Title for the 'about' help section */
 "ABOUT_SECTION_TITLE" = "Σχετικά με το B&A";
 
@@ -69,6 +72,12 @@
 
 /* Label for button that lets you send a message to a contact. */
 "ACTION_SEND_MESSAGE" = "Αποστολή μηνύματος";
+
+/* Message shown in an action sheet when a generic error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_GENERIC_ERROR" = "Κάτι πήγε στραβά. Επικοινώνησε με την υποστήριξη.";
+
+/* Message shown in an action sheet when a network error occurs. */
+"ACTION_SHEET_DISPLAYABLE_ERROR_NETWORK_ERROR" = "Κάτι πήγε στραβά. Έλεγξε τη σύνδεσή σου και δοκίμασε πάλι.";
 
 /* A label for 'tap to download' buttons. */
 "ACTION_TAP_TO_DOWNLOAD" = "Πάτα για λήψη";
@@ -196,6 +205,12 @@
 /* notification body */
 "APN_Message" = "Ίσως έχεις νέα μηνύματα";
 
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. The embedded value is 'Update now' (translated via APP_EXPIRED_BOTTOM_UPDATE), and it will be formatted as a tappable link. */
+"APP_EXPIRED_BOTTOM" = "Αυτή η έκδοση B&A έχει λήξει. %1$@ για να στείλεις και να λάβεις μηνύματα.";
+
+/* Shown in place of the text input box in a conversation when the app has expired and the user is no longer allowed to send messages. This value is a tappable link embedded in a larger sentence. */
+"APP_EXPIRED_BOTTOM_UPDATE" = "Αναβάθμιση τώρα";
+
 /* Default message for the 'app launch failed' alert. */
 "APP_LAUNCH_FAILURE_ALERT_MESSAGE" = "Το B&A δεν μπορεί να ανοίξει. Παρακαλώ στείλε ένα αρχείο καταγραφής σφαλμάτων στη διεύθυνση support@baxs.com για να μπορέσουμε να λύσουμε το πρόβλημα.";
 
@@ -210,6 +225,15 @@
 
 /* Error indicating that the app could not launch because the database could not be loaded. */
 "APP_LAUNCH_FAILURE_COULD_NOT_LOAD_DATABASE" = "Δεν φορτώθηκε η βάση δεδομένων";
+
+/* Message for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_MESSAGE" = "Δεν είναι δυνατή η εκκίνηση του B&A επειδή η βάση δεδομένων είναι κατεστραμμένη. Δεν υπήρξε καμία επίδραση στην ασφάλεια του λογαριασμού ή των μηνυμάτων σου.";
+
+/* Title for an action sheet explaining that Signal can't launch because the database is corrupted. */
+"APP_LAUNCH_FAILURE_DATABASE_CORRUPTED_TITLE" = "Η βάση δεδομένων έχει καταστραφεί";
+
+/* Action in an action sheet offering to attempt recovery of a corrupted database. */
+"APP_LAUNCH_FAILURE_DATABASE_RECOVERY_ACTION_TITLE" = "Επιδιόρθωση";
 
 /* Error indicating that the app could not launch without reverting unknown database migrations. */
 "APP_LAUNCH_FAILURE_INVALID_DATABASE_VERSION_MESSAGE" = "Παρακαλώ αναβάθμισε το B&A στην τελευταία έκδοση";
@@ -246,15 +270,6 @@
 
 /* Text prompting user to edit their profile name. */
 "APP_SETTINGS_EDIT_PROFILE_NAME_PROMPT" = "Συμπλήρωσε το όνομά σου";
-
-/* Label for the 'dismiss' button in the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_DISMISS_BUTTON" = "Όχι τώρα";
-
-/* Message format for the 'new app version available' alert. Embeds: {{The latest app version number}} */
-"APP_UPDATE_NAG_ALERT_MESSAGE_FORMAT" = "Η έκδοση %1$@ είναι διαθέσιμη στο App Store.";
-
-/* Title for the 'new app version available' alert. */
-"APP_UPDATE_NAG_ALERT_TITLE" = "Μια νέα έκδοση του B&A είναι διαθέσιμη";
 
 /* Label for the 'update' button in the 'new app version available' alert. */
 "APP_UPDATE_NAG_ALERT_UPDATE_BUTTON" = "Ενημέρωση";
@@ -427,6 +442,9 @@
 /* A button to open the photo picker from the Attachment Keyboard */
 "ATTACHMENT_KEYBOARD_PHOTOS" = "Φωτογραφία";
 
+/* A button to select a poll from the Attachment Keyboard */
+"ATTACHMENT_KEYBOARD_POLL" = "Δημοσκόπηση";
+
 /* Accessibility label for attaching photos */
 "ATTACHMENT_LABEL" = "Συνημμένο";
 
@@ -487,14 +505,8 @@
 /* Message when trying to show a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_MESSAGE_LABEL" = "Το ηχητικό μήνυμα δεν είναι διαθέσιμο";
 
-/* Message for sheet shown when tapping a voice message that has expired and is unavailable for download */
-"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Αυτό το ηχητικό μήνυμα δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός αρχείων και πολυμέσων παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
-
 /* Title for sheet shown when tapping a voice message that has expired and is unavailable for download */
 "AUDIO_UNAVAILABLE_SHEET_TITLE" = "Το ηχητικό μήνυμα δεν είναι διαθέσιμο";
-
-/* Username for recovery key autofill */
-"AUTOFILL_BACKUP_KEY_USERNAME" = "Αντίγραφα ασφαλείας B&A";
 
 /* Text prompting the user to choose a color when editing their avatar */
 "AVATAR_EDIT_VIEW_CHOOSE_A_COLOR" = "Επιλογή χρώματος";
@@ -556,6 +568,15 @@
 /* Toast indicating that the Recovery Key was correct. */
 "BACKUP_KEY_REMINDER_SUCCESSFUL_TOAST" = "Το εφεδρικό κλειδί είναι σωστό. Κράτησε το κλειδί σου ασφαλές.";
 
+/* Button label for action sheet to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_ACTION" = "Έξοδος από τη ρύθμιση αντιγράφων ασφαλείας";
+
+/* Message for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_MESSAGE" = "Δεν ολοκλήρωσες τη ρύθμιση των αντιγράφων ασφαλείας και δεν έχει δημιουργηθεί κανένα αντίγραφο ασφαλείας. Μπορείς να ενεργοποιήσεις τα αντίγραφα ασφαλείας στις Ρυθμίσεις.";
+
+/* Title for action sheet when attempting to cancel backup onboarding */
+"BACKUP_ONBOARDING_CANCEL_SHEET_TITLE" = "Έξοδος από τη ρύθμιση αντιγράφων ασφαλείας;";
+
 /* Body for a sheet warning users to their 'Recovery Key' safe. */
 "BACKUP_ONBOARDING_CONFIRM_KEY_KEEP_KEY_SAFE_SHEET_BODY" = "Το B&A δεν θα μπορεί να σε βοηθήσει να επαναφέρεις το αντίγραφο ασφαλείας σου εάν χάσεις το κλειδί σου. Αποθήκευσέ το με ασφάλεια και μην το μοιράζεσαι με άλλους.";
 
@@ -580,17 +601,41 @@
 /* Bullet point on a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_BULLET_3" = "Διαγραφή αντιγράφων ασφαλείας ανά πάσα στιγμή";
 
+/* A toast shown when 'Not Now' is tapped from the Backups onboarding intro. */
+"BACKUP_ONBOARDING_INTRO_NOT_NOW_TOAST" = "Μπορείς να ενεργοποιήσεις τα αντίγραφα ασφαλείας στις Ρυθμίσεις.";
+
 /* Subtitle for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_SUBTITLE" = "Δημιούργησε αντίγραφα ασφαλείας των μηνυμάτων και των πολυμέσων σου χρησιμοποιώντας την ασφαλή, κρυπτογραφημένη από άκρο σε άκρο υπηρεσία αποθήκευσης του B&A. Δε θα χάσεις τα μηνύματά σου αν αγοράσεις νέο τηλέφωνο ή επανεγκαταστήσεις το B&A.";
 
 /* Title for a view introducing Backups during an onboarding flow. */
 "BACKUP_ONBOARDING_INTRO_TITLE" = "Αντίγραφα ασφαλείας B&A";
 
-/* Subtitle for a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_SUBTITLE" = "Το εφεδρικό κλειδί σου είναι ένας 64-ψήφιος κωδικός που σου επιτρέπει να επαναφέρεις το αντίγραφο ασφαλείας σου κατά την επανεγκατάσταση του B&A.\n\nΕάν ξεχάσεις τον κλειδί σου, δεν θα μπορέσεις να επαναφέρεις τα αντίγραφα ασφαλείας σου. Το B&A δεν μπορεί να σε βοηθήσει να ανακτήσεις τα αντίγραφα ασφαλείας σου.";
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "Το κλειδί ανάκτησης είναι ένας κωδικός 64 χαρακτήρων που θα χρειαστείς για να επαναφέρεις το αντίγραφο ασφαλείας σου.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_2" = "Αποθήκευσε το κλειδί ανάκτησης με ασφάλεια, όπως σε έναν διαχειριστή κωδικών πρόσβασης, και μην το κοινοποιήσεις σε κανέναν.";
+
+/* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_3" = "Εάν το χάσεις, δεν θα μπορείς να ανακτήσεις τα μηνύματά σου.";
+
+/* Title for a continue button for a view introducing the 'Recovery Key' during an onboarding flow. */
+"BACKUP_ONBOARDING_KEY_INTRO_CONTINUE_BUTTON_TITLE" = "Προβολή κλειδιού ανάκτησης";
 
 /* Title for a view introducing the 'Recovery Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_TITLE" = "Το εφεδρικό κλειδί σου";
+
+/* Body for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY" = "Η συνδρομή σου για δημιουργία αντιγράφων ασφαλείας έληξε επειδή δεν ήταν δυνατή η ανανέωσή της με τη μέθοδο πληρωμής σου.\n\nΓια να συνεχίσεις να δημιουργείς αντίγραφα ασφαλείας πολυμέσων, μπορείς να εγγραφείς ξανά. Θα συνεχίσεις να έχεις πρόσβαση στο δωρεάν πρόγραμμα Αντίγραφα ασφαλείας B&A.";
+
+/* Body for a sheet shown when your Backup plan is downgraded because you stopped using TestFlight. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_BODY_TESTFLIGHT" = "Η συνδρομή σου για αντίγραφα ασφαλείας έληξε επειδή δεν χρησιμοποιείς πλέον το TestFlight.\n\nΓια να συνεχίσεις να δημιουργείς αντίγραφα ασφαλείας πολυμέσων, μπορείς να εγγραφείς ξανά. Θα συνεχίσεις να έχεις πρόσβαση στο δωρεάν πρόγραμμα Αντίγραφα ασφαλείας B&A.";
+
+/* Primary button for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_PRIMARY_BUTTON" = "Διαχείριση αντιγράφων ασφαλείας";
+
+/* Title for a sheet shown when your Backup plan is downgraded. */
+"BACKUP_PLAN_DOWNGRADED_SHEET_TITLE" = "Η συνδρομή σου για δημιουργία αντιγράφων ασφαλείας έληξε";
 
 /* Title for a button allowing users to copy their 'Recovery Key' to the clipboard. */
 "BACKUP_RECORD_KEY_COPY_TO_CLIPBOARD_BUTTON_TITLE" = "Αντιγραφή στο πρόχειρο";
@@ -613,6 +658,21 @@
 /* Title for a progress spinner on a modal when restoring messages */
 "BACKUP_RESTORE_MODAL_TITLE" = "Επαναφορά μηνυμάτων...";
 
+/* Message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "Τα αυτόματα αντίγραφα ασφαλείας είναι απενεργοποιημένα. Ενεργοποίησε τα αυτόματα αντίγραφα ασφαλείας ενημερώνοντας τα δικαιώματα του B&A.";
+
+/* Add-on to a message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE_UPDATE_NOW" = "Ενημέρωση τώρα";
+
+/* Title for a button that takes the users to Signal's iOS Settings page. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_GO_TO_SETTINGS_BUTTON" = "Πήγαινε στις Ρυθμίσεις";
+
+/* Message for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_MESSAGE" = "Για να επιτρέψεις στο B&A να δημιουργεί αυτόματα αντίγραφα ασφαλείας των μηνυμάτων σου, πάτα \"Μετάβαση στις Ρυθμίσεις\" παρακάτω και ενεργοποίησε την \"Ανανέωση εφαρμογών στο παρασκήνιο\"";
+
+/* Title for a sheet warning the user about the Background App Refresh permission. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_SHEET_TITLE" = "Αυτόματα αντίγραφα ασφαλείας απενεργοποιημένα";
+
 /* Message for an action sheet explaining that performing a backup failed with a generic error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_GENERIC_ERROR" = "Κάτι πήγε στραβά με τη δημιουργία του αντιγράφου ασφαλείας σου. Παρακαλώ δοκίμασε ξανά ή επικοινώνησε με την υποστήριξη.";
 
@@ -628,6 +688,9 @@
 /* Message for an action sheet explaining that performing a backup failed with a network error. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NETWORK_ERROR" = "Κάτι πήγε στραβά με τη δημιουργία του αντιγράφου ασφαλείας σου. Έλεγξε τη σύνδεσή σου στο διαδίκτυο και δοκιμάστε ξανά.";
 
+/* Message for an action sheet explaining that you must be registered to make a Backup. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "Πρέπει να έχεις εγγραφεί για να δημιουργήσεις αντίγραφο ασφαλείας.";
+
 /* Description for a progress bar tracking the optimizing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "Βελτιστοποίηση πολυμέσων...";
 
@@ -637,14 +700,26 @@
 /* Description for a progress bar tracking the processing of Backup media. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PROCESSING_MEDIA" = "Επεξεργασία πολυμέσων...";
 
+/* Title for an action sheet action explaining the user can now scan a QR code to continue the restore. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_ACTION_TITLE" = "Σκανάρισμα κωδικού QR";
+
+/* Body for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_BODY" = "Χρησιμοποίησε αυτή τη συσκευή για να σκανάρεις τον κωδικό QR στη συσκευή που θέλεις να κάνεις μεταφορά";
+
+/* Title for an action sheet explaining the backup succeeded and a restore can continue. */
+"BACKUP_SETTINGS_BACKUP_EXPORT_SUCCEEDED_READY_TO_RESTORE_TITLE" = "Έτοιμο για μεταφορά";
+
+/* Message describing to the user that the last backup failed. */
+"BACKUP_SETTINGS_BACKUP_FAILED_MESSAGE" = "Δεν ήταν δυνατή η ολοκλήρωση του τελευταίου αντιγράφου ασφαλείας. Πάτα \"Δημιουργία αντιγράφου ασφαλείας τώρα\" και δοκίμασε ξανά.";
+
 /* Title for a button allowing users to upgrade from a free to paid backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_ACTION_BUTTON_TITLE" = "Αναβάθμιση";
 
+/* Text describing the user's free backup plan when they have Backups disabled. */
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_AND_DISABLED_DESCRIPTION" = "Απενεργοποίησες τα αντίγραφα ασφαλείας";
+
 /* Text describing the user's free backup plan. */
 "BACKUP_SETTINGS_BACKUP_PLAN_FREE_DESCRIPTION" = "Το πρόγραμμα αντιγράφων ασφαλείας σου είναι δωρεάν";
-
-/* Header describing what the free backup plan includes. */
-"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Αντίγραφα ασφαλείας κειμένου + των πολυμέσων 45 ημερών";
 
 /* Message for a view indicating we failed to fetch someone's Backup plan due to an unexpected error. */
 "BACKUP_SETTINGS_BACKUP_PLAN_GENERIC_ERROR_MESSAGE" = "Παρουσιάστηκε σφάλμα. Επικοινώνησε με την υποστήριξη.";
@@ -673,11 +748,26 @@
 /* Text explaining that a user's paid plan, which has been canceled, expired on a past date. Embeds {{ the formatted expiration date }}. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_CANCELED_PAST_EXPIRATION_FORMAT" = "Έληξε στις %1$@";
 
+/* Title for a button allowing users to manage a paid backup plan that failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_ACTION_BUTTON_TITLE" = "Διαχείριση συνδρομής";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_1" = "Η μέθοδος πληρωμής απορρίφθηκε";
+
+/* Text describing that the user's paid backup plan has failed to renew. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FAILED_TO_RENEW_DESCRIPTION_2" = "Επιβεβαίωσε ότι η μέθοδος πληρωμής είναι επικαιροποιημένη";
+
 /* Title for a button allowing users to manage their backup plan as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_ACTION_BUTTON_TITLE" = "Διαχείριση προγράμματος";
 
 /* Text describing that the user's backup plan is paid, but free for them as a tester. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_FREE_FOR_TESTERS_DESCRIPTION" = "Επί πληρωμή, αλλά δωρεάν εφόσον παραμένεις δοκιμαστής";
+
+/* Title for a button allowing users to renew their backup subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_ACTION_BUTTON_TITLE" = "Ανανέωση";
+
+/* Text describing that the user's paid backup plan did not correspond to a App Store subscription on this device. */
+"BACKUP_SETTINGS_BACKUP_PLAN_PAID_BUT_IAP_NOT_FOUND_LOCALLY_DESCRIPTION" = "Η συνδρομή σου σε αυτήν τη συσκευή δεν βρέθηκε. Ανανέωσε για να συνεχίσεις να χρησιμοποιείς τα Αντίγραφα ασφαλείας B&A.";
 
 /* Header describing what the paid backup plan includes. */
 "BACKUP_SETTINGS_BACKUP_PLAN_PAID_HEADER" = "Αντίγραφα ασφαλείας κειμένου + όλων των πολυμέσων";
@@ -717,6 +807,15 @@
 
 /* Message shown in an action sheet when the user tries to create a new Recovery Key, but is not registered. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_ERROR_NOT_REGISTERED" = "Πρέπει να έχεις εγγραφεί για να δημιουργήσεις ένα νέο κλειδί ανάκτησης.";
+
+/* Explanation text for a sheet warning users they've reached a rate limit for creating Recovery Key. {{ Embeds 1: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_BODY" = "Εάν δημιουργήσεις ένα νέο κλειδί ανάκτησης, δεν θα μπορείς να ενεργοποιήσεις τα αντίγραφα ασφαλείας για %1$@. Ο αριθμός των κλειδιών που μπορείς να δημιουργήσεις είναι περιορισμένος για την αποφυγή κατάχρησης.";
+
+/* Action in an action sheet allowing to continue to rotate their key */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_CONTINUE_ACTION" = "Δημιουργία νέου κλειδιού";
+
+/* Title for a sheet warning users they've reached a rate limit for creating Recovery Key. */
+"BACKUP_SETTINGS_CREATE_NEW_KEY_LIMIT_REACHED_WARNING_SHEET_TITLE" = "Συμπληρώθηκε το όριο κλειδιών ανάκτησης";
 
 /* Toast shown when a new Recovery Key has been created successfully. */
 "BACKUP_SETTINGS_CREATE_NEW_KEY_SUCCESS_TOAST" = "Δημιουργήθηκε νέο κλειδί!";
@@ -759,6 +858,15 @@
 
 /* Message shown in an action sheet when the user tries to disable Backups, but is not registered. */
 "BACKUP_SETTINGS_DISABLING_ERROR_NOT_REGISTERED" = "Πρέπει να έχεις εγγραφεί για να απενεργοποιήσεις τα Αντίγραφα ασφαλείας.";
+
+/* Button for an action sheet shown when the user disables Backups, letting them manage their subscription. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MANAGE_SUBSCRIPTION_BUTTON" = "Διαχείριση συνδρομής";
+
+/* Message for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_MESSAGE" = "Αν θέλεις να ακυρώσεις τη συνδρομή σου, πάτα Διαχείριση συνδρομής > B&A > Ακύρωση συνδρομής";
+
+/* Title for an action sheet shown when the user disables Backups, but is still subscribed to the paid plan. */
+"BACKUP_SETTINGS_DISABLING_SUBSCRIPTION_CANCEL_ACTION_SHEET_TITLE" = "Εξακολουθείς να είσαι εγγεγραμμένος σε ένα πρόγραμμα δημιουργίας αντιγράφων ασφαλείας επί πληρωμή";
 
 /* Title for a button shown in Backup Settings that lets a user cancel an in-progress download. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_ACTION_BUTTON_CANCEL_DOWNLOAD" = "Ακύρωση λήψης";
@@ -814,6 +922,15 @@
 /* Label for a menu item offering to show the user their recovery key. */
 "BACKUP_SETTINGS_ENABLED_VIEW_BACKUP_KEY_LABEL" = "Προβολή εφεδρικού κλειδιού";
 
+/* Body for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_BODY" = "Δεν ήταν δυνατή η επαναφορά της συνδρομής σου σε αυτή τη συσκευή. Αυτό μπορεί να συμβεί εάν έχεις συνδεθεί στο App Store με διαφορετικό λογαριασμό Apple ή εάν έχεις κάνει μεταφορά από τηλέφωνο Android.\n\nΕάν έχεις μια ενεργή συνδρομή στο παλιό σου τηλέφωνο, σκέψου να την ακυρώσεις πριν ανανεωθεί.";
+
+/* Button for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_GOT_IT_BUTTON" = "Εντάξει";
+
+/* Title for a sheet explaining that the user's Backups subscription was not found on this device. */
+"BACKUP_SETTINGS_IAP_NOT_FOUND_LOCALLY_SHEET_TITLE" = "Η συνδρομή δεν βρέθηκε";
+
 /* Title for a button allowing users to trigger a manual backup. */
 "BACKUP_SETTINGS_MANUAL_BACKUP_BUTTON_TITLE" = "Δημιουργία αντίγραφου τώρα";
 
@@ -850,6 +967,12 @@
 /* Title for a toggle allowing users to change the Optimize Local Storage setting. */
 "BACKUP_SETTINGS_OPTIMIZE_LOCAL_STORAGE_TOGGLE_TITLE" = "Βελτιστοποίηση αποθηκευτικού χώρου συσκευής";
 
+/* Subtitle for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_SUBTITLE" = "Έχεις φτάσει το όριο του αποθηκευτικού χώρου αντιγράφων ασφαλείας. Απελευθέρωσε χώρο στο B&A για να συνεχίσεις να δημιουργείς αντίγραφα ασφαλείας των συνομιλιών και των πολυμέσων.";
+
+/* Title for a notification telling the user they are out of remote storage space. */
+"BACKUP_SETTINGS_OUT_OF_STORAGE_SPACE_NOTIFICATION_TITLE" = "Ο αποθηκευτικός χώρος αντιγράφων ασφαλείας είναι πλήρης";
+
 /* Title for a button allowing users to re-enable Backups, after it had been previously disabled. */
 "BACKUP_SETTINGS_REENABLE_BACKUPS_BUTTON_TITLE" = "Ενεργοποίηση αντιγράφων ασφαλείας εκ νέου";
 
@@ -861,6 +984,21 @@
 
 /* Title for a sheet warning the user about skipping downloads. */
 "BACKUP_SETTINGS_SKIP_DOWNLOADS_WARNING_SHEET_TITLE" = "Παράλειψη λήψης;";
+
+/* Title for detail button in notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_DETAIL_BUTTON" = "Λεπτομέρειες";
+
+/* Title for notice that the user's Backups subscription couldn't be redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_NOTICE_TITLE" = "Δεν ήταν δυνατή η εξαργύρωση της συνδρομής σου για δημιουργία αντιγράφων ασφαλείας";
+
+/* Body for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_BODY" = "Πάρα πολλές συσκευές προσπάθησαν να εξαργυρώσουν τη συνδρομή σου αυτόν τον μήνα.\n\nΕνδέχεται να έχεις κάνει επανεγγραφή του λογαριασμού σου B&A πάρα πολλές φορές ή να έχεις πάρα πολλές συσκευές που χρησιμοποιούν την ίδια συνδρομή.";
+
+/* Button for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_GOT_IT_BUTTON" = "Εντάξει";
+
+/* Title for a sheet explaining that the user's Backups subscription was already redeemed. */
+"BACKUP_SETTINGS_SUBSCRIPTION_ALREADY_REDEEMED_SHEET_TITLE" = "Δεν ήταν δυνατή η εξαργύρωση της συνδρομής σου για δημιουργία αντιγράφων ασφαλείας";
 
 /* Subtitle for a progress bar tracking uploads that are paused because of low battery. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_LOW_BATTERY" = "Η μεταφόρτωση διακόπηκε: η μπαταρία της συσκευής είναι χαμηλή";
@@ -874,14 +1012,32 @@
 /* Subtitle for a progress bar tracking uploads that are paused because they need WiFi. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "Η μεταφόρτωση διακόπηκε: αναμονή για Wi-Fi";
 
+/* Subtitle for a progress bar tracking uploads that are paused because the user is out of remote storage space. Embeds 1:{{ total storage space provided, e.g. 100 GB }}; 2:{{ space the user needs to free up by deleting media, e.g. 1 GB }}. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_PAUSED_OUT_OF_STORAGE_SPACE_FORMAT" = "Έφτασες το όριο αποθηκευτικού χώρου %1$@ που περιλαμβάνεται στο πρόγραμμα δημιουργίας αντιγράφων ασφαλείας σου. Για να δημιουργήσεις αντίγραφα ασφαλείας νέων συνομιλιών και πολυμέσων, απελευθέρωσε %2$@ χώρου στο B&A και μετά πάτα «Δημιουργία αντίγραφου τώρα».";
+
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
-"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "Μεταφόρτωση: %1$@ από %2$@ (%3$@%%)";
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "Μεταφόρτωση: %1$@ από %2$@ (%3$@)";
 
 /* Message for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE" = "Ανάλογα με το μέγεθος του αντιγράφου ασφαλείας σου, αυτό μπορεί να διαρκέσει πολύ. Μπορείς να χρησιμοποιείς το τηλέφωνό σου όπως συνήθως, κατά τη διάρκεια της δημιουργίας αντιγράφων ασφαλείας.";
 
 /* Title for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_TITLE" = "Καλωσόρισες στα Αντίγραφα ασφαλείας B&A. Ξεκίνα τη δημιουργία αντιγράφων ασφαλείας τώρα.";
+
+/* Message for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_MESSAGE" = "Επιβεβαίωσε ότι η μέθοδος πληρωμής είναι επικαιροποιημένη. Πάτησε Διαχείριση συνδρομής > B&A > Ενημέρωση μεθόδου πληρωμής.";
+
+/* Primary button for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_PRIMARY_BUTTON" = "Διαχείριση συνδρομής";
+
+/* Title for a sheet shown when your Backup subscription fails to renew. */
+"BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "Η συνδρομή σου για δημιουργία αντιγράφων ασφαλείας δεν ανανεώθηκε";
+
+/* Body for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "Στείλε μας αρχεία καταγραφής εντοπισμού σφαλμάτων για να βοηθήσουμε στην επίλυση του προβλήματος!";
+
+/* Title for system notification when we detect paid backup media uploads have encountered a problem */
+"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "Παρουσιάστηκε σφάλμα κατά την δημιουργία αντιγράφων ασφαλείας των πολυμέσων σου";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "Αντίγραφα ασφαλείας B&A";
@@ -1041,9 +1197,6 @@
 
 /* An explanation of the consequences of blocking another user. */
 "BLOCK_USER_BEHAVIOR_EXPLANATION" = "Οι αποκλεισμένοι χρήστες δεν θα μπορούν να σε καλέσουν ή να σου στείλουν μηνύματα.";
-
-/* Tooltip highlighting the blur image editing tool. */
-"BLUR_TOOLTIP" = "Νέο: Θόλωσε τα πρόσωπα ή ζωγράφισε οπουδήποτε για να θολώσεις.";
 
 /* Default text for the custom amount field of the boost view. */
 "BOOST_VIEW_CUSTOM_AMOUNT_PLACEHOLDER" = "Εισαγωγή προσαρμοσμένου ποσού";
@@ -1227,6 +1380,87 @@
 
 /* notification body */
 "CALL_MISSED_BECAUSE_OF_IDENTITY_CHANGE_NOTIFICATION_BODY" = "☎️ Αναπάντητη κλήση επειδή ο αριθμός ασφαλείας αυτού/ης που σε κάλεσε άλλαξε.";
+
+/* Title for toast which appears after submitting a call quality survey */
+"CALL_QUALITY_SURVEY_COMPLETION_TOAST" = "Ευχαριστούμε για τα σχόλιά σου!";
+
+/* Footer text explaining custom issue descriptions in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_FOOTER" = "Πρόσθεσε τυχόν λεπτομέρειες σχετικές με το πρόβλημα. Οτιδήποτε κοινοποιείς εδώ θα παραμείνει ιδιωτικό και θα χρησιμοποιηθεί μόνο για τη βελτίωση των κλήσεων στο B&A.";
+
+/* Placeholder text for the custom issue entry in the call quality survey */
+"CALL_QUALITY_SURVEY_CUSTOM_ISSUE_PLACEHOLDER" = "Περίγραψε το πρόβλημά σου";
+
+/* Footer text explaining what debug logs contain in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER" = "Οι πληροφορίες που κοινοποιούνται σε εμάς περιέχουν πληροφορίες χαμηλού επιπέδου της εφαρμογής και δεν περιλαμβάνουν το περιεχόμενο των κλήσεών σου.";
+
+/* Header text explaining the purpose of sharing debug logs in the call quality survey. The text inside the <link> tags is tappable for viewing the diagnostic information. */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_HEADER" = "Με την υποβολή θα μοιραστείς τα σχόλιά σου μαζί με <link>διαγνωστικές πληροφορίες σχετικά με την κλήση σου</link>. Μπορείς προαιρετικά να κοινοποιήσεις ένα αρχείο καταγραφής αποσφαλμάτωσης για να μας βοηθήσεις να βελτιώσουμε την ποιότητα των κλήσεων.";
+
+/* Link text to open a preview of debug logs in the call quality survey. Appended to CALL_QUALITY_SURVEY_DEBUG_LOG_FOOTER */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_PREVIEW_LINK" = "Προβολή αρχείου καταγραφής αποσφαλμάτωσης";
+
+/* Title for the debug log sharing screen in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TITLE" = "Βοήθησέ μας να βελτιωθούμε";
+
+/* Label for the toggle to share debug log in the call quality survey */
+"CALL_QUALITY_SURVEY_DEBUG_LOG_TOGGLE" = "Κοινή χρήση αρχείου καταγραφής αποσφαλμάτωσης";
+
+/* Title for preview of the call diagnostic info that will be sent with the survey */
+"CALL_QUALITY_SURVEY_DIAGNOSTICS_TITLE" = "Πληροφορίες διαγνωστικών";
+
+/* Button label for indicating the call did not have issues in the call quality survey */
+"CALL_QUALITY_SURVEY_GREAT_BUTTON" = "Τέλεια";
+
+/* Button label for indicating the call had issues in the call quality survey */
+"CALL_QUALITY_SURVEY_HAD_ISSUES_BUTTON" = "Είχε προβλήματα";
+
+/* Label for audio issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO" = "Πρόβλημα με τον ήχο";
+
+/* Label for audio dropout issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_DROP" = "Ο ήχος διακόπηκε";
+
+/* Label for local echo issue option in call quality survey, indicating the user heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_LOCAL_ECHO" = "Άκουσα ηχώ";
+
+/* Label for remote echo issue option in call quality survey, indicating other participants heard an echo */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_REMOTE_ECHO" = "Άλλοι άκουσαν ηχώ";
+
+/* Label for audio stuttering issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_AUDIO_STUTTERING" = "Ο ήχος είχε διακοπές";
+
+/* Label for call dropped issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_CALL_DROPPED" = "Η κλήση διακόπηκε";
+
+/* Label for custom issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_OTHER" = "Κάτι άλλο";
+
+/* Label for video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO" = "Πρόβλημα με βίντεο";
+
+/* Label for poor video quality issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_QUALITY" = "Κακή ποιότητα βίντεο";
+
+/* Label for low resolution video issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_LOW_RESOLUTION" = "Χαμηλή ανάλυση";
+
+/* Label for camera not working issue option in call quality survey */
+"CALL_QUALITY_SURVEY_ISSUE_VIDEO_NO_CAMERA" = "Η κάμερα δεν λειτούργησε";
+
+/* Header text on the call quality survey issues screen */
+"CALL_QUALITY_SURVEY_ISSUES_HEADER" = "Επίλεξε όλα όσα ισχύουν";
+
+/* Title for the sheet in the call quality survey where issues with the call can be selected */
+"CALL_QUALITY_SURVEY_ISSUES_SHEET_TITLE" = "Τι προβλήματα αντιμετώπισες;";
+
+/* Header text explaining the purpose of the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_HEADER" = "Αυτό μας βοηθά να βελτιώσουμε τις κλήσεις στο B&A. Δεν θα αποθηκευτούν προσωπικά αναγνωρίσιμες πληροφορίες.";
+
+/* Title for the initial rating screen in the call quality survey */
+"CALL_QUALITY_SURVEY_RATING_TITLE" = "Πώς ήταν η κλήση σου;";
+
+/* Button text to submit the call quality survey */
+"CALL_QUALITY_SURVEY_SUBMIT_BUTTON" = "Υποβολή";
 
 /* Label on button for raising hand in call. */
 "CALL_RAISE_HAND_BUTTON_LABEL" = "Σήκωσε το χέρι σου";
@@ -1579,17 +1813,8 @@
 /* Text for a bullet point in a list of Backup features, describing that all text messages are included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_TEXT_BACKUP" = "Πλήρες αντίγραφο ασφαλείας μηνυμάτων κειμένου";
 
-/* Text for a bullet point in a list of Backup features, describing that recent media is included. */
-"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Τελευταίες 45 ημέρες πολυμέσων";
-
-/* Text for a bullet point in a list of Backup features, describing the amount of included storage. */
+/* Text for a bullet point in a list of Backup features, describing the amount of included storage. Embeds {{ the amount of storage preformatted as a localized byte count, e.g. '100 GB' }}. */
 "CHOOSE_BACKUP_PLAN_BULLET_STORAGE_AMOUNT" = "1TB αποθηκευτικού χώρου (~250k φωτογραφίες)";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a generic error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_GENERIC_ERROR" = "Κάτι πήγε στραβά. Επικοινώνησε με την υποστήριξη.";
-
-/* Message shown in an action sheet when the user tries to confirm a plan selection, but encountered a network error. */
-"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NETWORK_ERROR" = "Κάτι πήγε στραβά. Έλεγξε τη σύνδεσή σου και δοκίμασε πάλι.";
 
 /* Message shown in an action sheet when the user tries to confirm a plan selection, but is not registered. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_NOT_REGISTERED" = "Πρέπει να έχεις εγγραφεί για να ενεργοποιήσεις τα Αντίγραφα ασφαλείας.";
@@ -1600,11 +1825,23 @@
 /* Message shown in an action sheet when the user tries to confirm selecting the paid plan, but encountered an error while redeeming their completed purchase. */
 "CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_PURCHASE_REDEMPTION" = "Κάτι πήγε στραβά. Επικοινώνησε με την υποστήριξη.";
 
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED" = "Επειδή έχεις φτάσει το όριο των νέων κλειδιών ανάκτησης, για να αποτρέψεις την κατάχρηση, δεν θα μπορείς να ενεργοποιήσεις τα αντίγραφα ασφαλείας για %1$@. Περίμενε %1$@ και προσπάθησε ξανά.";
+
+/* Message shown in an action sheet when the user tries to confirm a plan selection, but encounters a rate limit. They should wait the requested amount of time and try again. {{ Embeds 1 & 2: the preformatted time they must wait before enabling backups, such as \"1 week\" or \"6 hours\". }} */
+"CHOOSE_BACKUP_PLAN_CONFIRMATION_ERROR_RATE_LIMITED_TITLE" = "Δεν ήταν δυνατή η ενεργοποίηση των αντιγράφων ασφαλείας";
+
 /* A label indicating that a given Backup plan option is what the user has already enabled. */
 "CHOOSE_BACKUP_PLAN_CURRENT_PLAN_LABEL" = "Τρέχον πρόγραμμα";
 
-/* Subtitle for the free plan option, when choosing a Backup plan. */
-"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Κείμενο + 45 ημέρες πολυμέσων";
+/* Text for a button that will downgrade the user from the paid Backup plan to the free one. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_BUTTON_TEXT" = "Αλλαγή προγράμματος";
+
+/* Button for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_PROCEED_BUTTON" = "Αλλαγή προγράμματος";
+
+/* Title for an action sheet confirming the user wants to downgrade their Backup plan. */
+"CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_TITLE" = "Υποβάθμιση σε δωρεάν;";
 
 /* Title for the free plan option, when choosing a Backup plan. */
 "CHOOSE_BACKUP_PLAN_FREE_PLAN_TITLE" = "Δωρεάν";
@@ -1623,6 +1860,9 @@
 
 /* Subtitle for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_SUBTITLE" = "Όλα τα αντίγραφα ασφαλείας είναι κρυπτογραφημένα από άκρο σε άκρο. Το B&A είναι μη κερδοσκοπικό—η πληρωμή για αντίγραφα ασφαλείας βοηθά στην υποστήριξη της αποστολής μας.";
+
+/* Title for a label allowing users to view Signal's Terms & Conditions. */
+"CHOOSE_BACKUP_PLAN_TERM_AND_PRIVACY_POLICY_TEXT" = "Όροι & Πολιτική Απορρήτου";
 
 /* Title for a view allowing users to choose a Backup plan. */
 "CHOOSE_BACKUP_PLAN_TITLE" = "Διάλεξε το πρόγραμμα των αντιγράφων ασφαλείας σου";
@@ -1996,6 +2236,9 @@
 /* Footer for the 'attributes access' section in conversation settings view. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "Διάλεξε ποιοί θα μπορούν να επεξεργάζονται το όνομα της ομάδας, τη φωτογραφία, τη περιγραφή και το χρόνο εξαφάνισης μηνυμάτων.";
 
+/* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "Διάλεξε ποιοι θα μπορούν να επεξεργάζονται το όνομα της ομάδας, τη φωτογραφία, τη περιγραφή, τον χρόνο εξαφάνισης μηνυμάτων και τα καρφιτσωμένα μηνύματα.";
+
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "Πάρε εμβλήματα για το προφίλ σου στηρίζοντας το B&A. Πάτα σε ένα έμβλημα για να μάθεις περισσότερα.";
 
@@ -2052,6 +2295,9 @@
 
 /* Label for 'member requests & invites' action in conversation settings view. */
 "CONVERSATION_SETTINGS_MEMBER_REQUESTS_AND_INVITES" = "Αιτήματα & Προσκλήσεις";
+
+/* Label for 'member label' action in conversation settings view. */
+"CONVERSATION_SETTINGS_MEMBER_TAG" = "Ετικέτα μέλους";
 
 /* label for 'always' option for mention notifications in conversation settings */
 "CONVERSATION_SETTINGS_MENTION_MODE_AlWAYS" = "Να ειδοποιούμαι πάντα";
@@ -2251,22 +2497,10 @@
 /* Tooltip highlighting the custom chat color controls. */
 "CUSTOM_CHAT_COLOR_SETTINGS_TOOLTIP" = "Σύρε για να αλλάξεις τη φορά της διαβάθμισης";
 
-/* Button to run the database integrity check */
-"DATABASE_INTEGRITY_CHECK_ACTION_RUN" = "Εκτέλεση";
-
-/* Message for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_MESSAGE" = "Αυτό θα μας βοηθήσει να λύσουμε το πρόβλημά σου και μπορεί να χρειαστούν αρκετά λεπτά για να ολοκληρωθεί. Μπορείς να κλείσεις το Singal για όσο εκτελείται ο έλεγχος, αλλά επέστρεψε για να υποβάλλεις τα αρχεία καταγραφής σου.";
-
-/* Button to skip database integrity check step */
-"DATABASE_INTEGRITY_CHECK_SKIP" = "Παράλειψη";
-
-/* Title for alert before running a database integrity check */
-"DATABASE_INTEGRITY_CHECK_TITLE" = "Εκτέλεση διάγνωσης βάσης δεδομένων;";
-
 /* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so keep that in mind. This is the description on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_DESCRIPTION" = "Κάποιο τμήμα από το ιστορικό μηνυμάτων σου μπορεί να έχει καταστραφεί. Δεν υπήρξε καμία επίδραση στην ασφάλεια του λογαριασμού ή των μηνυμάτων σου. Πάτα \"Συνέχεια\" για να ανακτήσεις τα δεδομένα σου.";
 
-/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. The user has not been hacked and may be confused by this interface, so try to avoid using terms like \"database\" or \"corrupted\"—terms like \"message history\" are better. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
+/* In some cases, the user's message history can become corrupted, and a recovery interface is shown. This is the title on the first screen of this interface, which gives them some information and asks them to continue. */
 "DATABASE_RECOVERY_AWAITING_USER_CONFIRMATION_TITLE" = "Πρόβλημα με την ανάκτηση δεδομένων";
 
 /* On the database recovery screen, if the user's device storage is nearly full, Signal will not be able to recover the database. A warning screen, which can be bypassed if the user wishes, will be shown. This is the text on the button to bypass the warning. */
@@ -2356,6 +2590,12 @@
 /* Accessibility label for the ? vector asset used to get info about debug logs */
 "DEBUG_LOG_INFO_BUTTON" = "Πληροφορίες για αρχείο καταγραφής εντοπισμού σφαλμάτων";
 
+/* Header text displayed above the debug log preview */
+"DEBUG_LOG_PREVIEW_HEADER" = "Όταν υποβληθεί, το αρχείο καταγραφής θα αναρτηθεί στο διαδίκτυο για 30 ημέρες, σε ένα μοναδικό και μη δημοσιευμένο σύνδεσμο URL.";
+
+/* Title for the debug log preview screen */
+"DEBUG_LOG_PREVIEW_TITLE" = "Αρχείο καταγραφής αποσφαλμάτωσης";
+
 /* info message text in conversation view */
 "DECLINED_VIDEO_CALL" = "Απέρριψες μια βιντεοκλήση";
 
@@ -2428,23 +2668,17 @@
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "Αυτό το μήνυμα θα διαγραφεί από όλες τις συσκευές σου.";
 
-/* Label for a button in an info sheet confirming that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_BUTTON" = "Εντάξει";
-
-/* Subtitle for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_SUBTITLE" = "Όταν διαγράφεις μηνύματα ή συνομιλίες, θα διαγραφούν από το τηλέφωνό σου και από όλες τις συνδεδεμένες συσκευές.";
-
-/* Title for an info sheet explaining that deletes are now synced across devices. */
-"DELETE_FOR_ME_SYNC_MESSAGE_INFO_SHEET_TITLE" = "Η διαγραφή έχει συγχρονιστεί με όλες τις συσκευές σου";
-
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "Διαγραμμένος λογαριασμός";
 
 /* Notification warning the user that they have been de-registered. */
 "DEREGISTRATION_NOTIFICATION" = "Αποσυνδέθηκες από τη B&A σε αυτή τη συσκευή.";
 
-/* Label for button that lets users re-register using the same phone number. */
-"DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER" = "Επανεγγραφή αριθμού τηλεφώνου";
+/* Button that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_BUTTON" = "Επανεγγραφή";
+
+/* Title for prompt that lets users re-register using the same phone number. */
+"DEREGISTRATION_REREGISTER_PROMPT_TITLE" = "Επανεγγραφή αυτού του αριθμού τηλεφώνου;";
 
 /* Label warning the user that they have been de-registered. */
 "DEREGISTRATION_WARNING" = "Αυτή η συσκευή δεν είναι πλέον εγγεγραμμένη. Αυτό συνέβη μάλλον επειδή καταχώρησες τον αριθμό τηλεφώνου σου στο B&A σε άλλη συσκευή.";
@@ -2485,23 +2719,14 @@
 /* The explanation for the device transfer 'choice' view when linking a device */
 "DEVICE_TRANSFER_CHOICE_LINKED_EXPLANATION" = "Επίλεξε πώς θέλεις να μεταφέρεις το ιστορικό μηνυμάτων και τα δεδομένα του λογαριασμού σου";
 
-/* The body for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_BODY" = "Συνέχεια χωρίς την μεταφορά του λογαριασμού και των μηνυμάτων σου";
-
 /* The body for the device transfer 'choice' view 'register' option when linking a device when message syncing is available */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_BODY_LINK_AND_SYNC" = "Θα έχεις την επιλογή να μεταφέρεις μηνύματα και πρόσφατα μέσα από το τηλέφωνό σου";
 
 /* The title for the device transfer 'choice' view 'register' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_REGISTER_LINKED_TITLE" = "Προσθήκη ως Νέα Συσκευή";
 
-/* The title for the device transfer 'choice' view 'register' option */
-"DEVICE_TRANSFER_CHOICE_REGISTER_TITLE" = "Εγγραφή χωρίς μεταφορά";
-
 /* The title for the device transfer 'choice' view */
 "DEVICE_TRANSFER_CHOICE_TITLE" = "Μεταφορά λογαριασμού & μηνυμάτων";
-
-/* The body for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_BODY" = "Μεταφορά λογαριασμού και ιστορικού μηνυμάτων από την παλιά σου συσκευή iOS";
 
 /* The body for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_BODY" = "Μεταφορά λογαριασμού και ιστορικού μηνυμάτων από την παλιά σου συσκευή iOS";
@@ -2509,26 +2734,11 @@
 /* The title for the device transfer 'choice' view 'transfer' option when linking a device */
 "DEVICE_TRANSFER_CHOICE_TRANSFER_LINKED_TITLE" = "Μεταφορά από άλλο iPad";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
-"DEVICE_TRANSFER_CHOICE_TRANSFER_TITLE" = "Μεταφορά από συσκευή iOS";
-
-/* Button shown to contract a QR code and exit the fullscreen view. */
-"DEVICE_TRANSFER_CONTRACT_QR_CODE_BUTTON" = "Μικρότερη προβολή";
-
 /* An error indicating that the other device closed signal mid-transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_BACKGROUNDED" = "Δεν ήταν δυνατή η ολοκλήρωση της μεταφοράς. Βεβαιώσου πως το B&A είναι ανοιχτό και στις δύο συσκευές και δοκίμασε ξανά.";
 
-/* An error indicating that we were unable to verify the identity of the new device to complete the transfer */
-"DEVICE_TRANSFER_ERROR_CERTIFICATE_MISMATCH" = "Αδυναμία επαλήθευσης της νέας συσκευής σου, παρακαλώ δοκίμασε ξανά.";
-
 /* An error indicating that something went wrong with the transfer and it could not complete */
 "DEVICE_TRANSFER_ERROR_GENERIC" = "Δεν ήταν δυνατή η ολοκλήρωση της μεταφοράς. Βεβαιώσου πως οι συσκευές είναι κοντά η μία στην άλλη και προσπάθησε ξανά.";
-
-/* An error indicating the user must scan this code with a linked device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_LINKED" = "Για να ρυθμίσεις το iPad ως συνδεδεμένη συσκευή, πρέπει να σαρώσεις με το παλιό σου iPad";
-
-/* An error indicating the user must scan this code with a primary device to transfer. */
-"DEVICE_TRANSFER_ERROR_MODE_MISMATCH_PRIMARY" = "Για να μεταφέρεις το λογαριασμό σου, πρέπει να σαρώσεις με το iPhone σου";
 
 /* An error indicating that the user does not have enough free space on their device to complete the transfer */
 "DEVICE_TRANSFER_ERROR_NOT_ENOUGH_SPACE" = "Δεν υπάρχει αρκετός ελεύθερος χώρος για την ολοκλήρωση της μεταφοράς";
@@ -2536,41 +2746,11 @@
 /* An error indicating the user must update their device before trying to transfer. */
 "DEVICE_TRANSFER_ERROR_UNSUPPORTED_VERSION" = "Ενημέρωσε το B&A στην τελευταία έκδοση και δοκίμασε ξανά";
 
-/* Button shown to expand a QR code and view it fullscreen. */
-"DEVICE_TRANSFER_EXPAND_QR_CODE_BUTTON" = "Μεγαλύτερη προβολή";
-
-/* The explanation on the action sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_EXPLANATION" = "Μεταφορά του B&A λογαριασμού σου σε νέα συσκευή iOS. Βεβαιώσου πως η νέα σου συσκευή είναι κοντά και είναι ενεργοποιημένη.";
-
-/* The title on the acttion sheet prompting the user if they want to transfer their device. */
-"DEVICE_TRANSFER_PROMPT_TITLE" = "Μεταφορά Λογαριασμού";
-
-/* The explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION" = "Φέρε την παλιά σου συσκευή κοντά, βεβαιώσου ότι το Wi-Fi και το Bluetooth είναι ενεργοποιημένα σε αυτήν και σάρωσε αυτόν τον κωδικό QR.";
-
-/* The second explanation for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_EXPLANATION2" = "Τοποθέτησε αυτόν τον κωδικό QR εντός του πλαισίου της άλλης συσκευής iOS.";
-
-/* A prompt to provide further explanation if the user is not seeing the transfer on both devices. */
-"DEVICE_TRANSFER_QRCODE_NOT_SEEING" = "Δεν βλέπεις το μήνυμα στη παλιά σου συσκευή;";
-
-/* The title for the device transfer qr code view */
-"DEVICE_TRANSFER_QRCODE_TITLE" = "Σκανάρισμα κωδικού QR";
-
 /* The explanation on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_EXPLANATION" = "Κράτησε τις δύο συσκευές κοντά. Μην σβήσεις καμία συσκευή και κράτησε το B&A ανοικτό. Οι μεταφορές είναι κρυπτογραφημένες απ' άκρη σ' άκρη.";
 
 /* The title on the view that shows receiving progress */
 "DEVICE_TRANSFER_RECEIVING_TITLE" = "Λήψη δεδομένων";
-
-/* Text indicating that we are connecting to the scanned device */
-"DEVICE_TRANSFER_SCANNING_CONNECTING" = "Συνδέεται…";
-
-/* The explanation for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_EXPLANATION" = "Τοποθέτησε τον κώδικα QR εντός του κύκλου";
-
-/* The title for the action sheet asking the user to scan the QR code to transfer */
-"DEVICE_TRANSFER_SCANNING_TITLE" = "Κράτησε την νέα σου συσκευή μπροστά στην κάμερα";
 
 /* Status message on new device when cancelling transfer. */
 "DEVICE_TRANSFER_STATUS_NEW_DEVICE_CANCELLING" = "Ακύρωση σύνδεσης με παλιό iPhone…";
@@ -2608,11 +2788,8 @@
 /* Status message on old device when transfer is starting. */
 "DEVICE_TRANSFER_STATUS_OLD_DEVICE_STARTING" = "Αναμονή για σύνδεση με νέο iPhone…";
 
-/* The explanation on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_EXPLANATION" = "Κράτησε τις δύο συσκευές κοντά τη μία στην άλλη. Μην απενεργοποιήσεις καμιά συσκευή και κράτησε το B&A ανοικτό.";
-
-/* The title on the action sheet that shows transfer progress */
-"DEVICE_TRANSFER_TRANSFERRING_TITLE" = "Μεταφορά δεδομένων";
+/* Action asking user to try again after transfer failure. */
+"DEVICE_TRANSFER_TRY_AGAIN_ACTION" = "Ξαναδοκίμασε";
 
 /* table cell label in conversation settings */
 "DISAPPEARING_MESSAGES" = "Μηνύματα που εξαφανίζονται";
@@ -2893,17 +3070,17 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "Ο/Η %1$@ έκανε δωρεά στη B&A εκ μέρους σου! Δείξε την υποστήριξή σου για τη B&A στο προφίλ σου.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 1st paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_1" = "Ιδιωτικά μηνύματα. Χωρίς διαφημίσεις, παρακολούθηση, επιτήρηση.";
+/* Body text for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BODY" = "Ως ανεξάρτητος μη κερδοσκοπικός οργανισμός, το B&A έχει δεσμευτεί για ιδιωτικά μηνύματα και κλήσεις. Χωρίς διαφημίσεις, παρακολούθηση, επιτήρηση. Κάνε σήμερα μια δωρεά για να στηρίξεις το B&A.";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 2nd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_2" = "Το B&A υποστηρίζεται από δωρεές, που σημαίνει ότι η ιδιωτικότητά σου σου βρίσκεται στο επίκεντρο για όλα αυτά που κάνουμε. Το B&A έχει φτιαχτεί για εσένα, όχι για τα δεδομένα σου ή το κέρδος.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_1" = "Απόκτησε ένα προαιρετικό σήμα στο προφίλ σου όταν κάνεις δωρεά";
 
-/* There is a screen where users can read more about their donation to Signal. This is the 3rd paragraph of that screen. */
-"DONATION_READ_MORE_SCREEN_PARAGRAPH_3" = "Εάν μπορείς, κάνε δωρεά σήμερα για να βοηθήσεις να παραμείνει το B&A διασκεδαστικό, αξιόπιστο και διαθέσιμο για όλους.";
+/* Bullet point for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BULLET_2" = "Η ιδιωτικότητά σου είναι η αποστολή μας";
 
-/* There is a screen where users can read more about their donation to Signal. This is the title of that screen. */
-"DONATION_READ_MORE_SCREEN_TITLE" = "Το B&A είναι διαφορετικό.";
+/* Bullet point for a sheet discussing donating to Signal. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
+"DONATION_READ_MORE_SHEET_BULLET_3" = "Το B&A είναι ένας μη κερδοσκοπικός οργανισμός.";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "Ποσό";
@@ -3046,20 +3223,17 @@
 /* Text describing to the user that they're going to pay a monthly donation to Signal */
 "DONATION_VIEW_MONTHLY_DONATION_TO_SIGNAL" = "Μηνιαία δωρεά στο B&A";
 
-/* Title for the 'more' section on the donation screen */
-"DONATION_VIEW_MORE_SECTION_TITLE" = "Περισσότερα";
-
 /* Title for the 'my support' section in the donation view */
 "DONATION_VIEW_MY_SUPPORT_TITLE" = "Η υποστήριξή μου";
-
-/* Title for the \"other ways to donate\" section on the donation view. */
-"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Άλλοι τρόποι δωρεάς";
 
 /* Title on the 'Donate to Signal' screen */
 "DONATION_VIEW_TITLE" = "Κάνε μια δωρεά στο B&A";
 
 /* Label for the currency picker button in donation views */
 "DONATIONS_CURRENCY_PICKER_LABEL" = "Νόμισμα";
+
+/* Label for a button that says 'Don't show again'. */
+"DONT_SHOW_AGAIN_BUTTON_TITLE" = "Να μην εμφανιστεί ξανά";
 
 /* Message for Double Tap to Edit sheet show on first interaction */
 "DOUBLE_TAP_TO_EDIT_ALERT_MESSAGE" = "Πάτα γρήγορα δύο φορές στα μηνύματά σου για να τα επεξεργαστείς. Μπορείς να επεξεργαστείς τα μηνύματά σου έως και 24 ώρες μετά την αποστολή τους.";
@@ -3316,9 +3490,6 @@
 /* Footer for message cell for documents/files when they are expired and unavailable for download */
 "FILE_UNAVAILABLE_FOOTER" = "Το αρχείο δεν είναι διαθέσιμο";
 
-/* Message for sheet shown when tapping a document/file that has expired and is unavailable for download */
-"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Αυτό το αρχείο δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός αρχείων και πολυμέσων παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
-
 /* Title for sheet shown when tapping a document/file that has expired and is unavailable for download */
 "FILE_UNAVAILABLE_SHEET_TITLE" = "Το αρχείο δεν είναι διαθέσιμο";
 
@@ -3352,12 +3523,6 @@
 /* Tooltip notifying users that the flip camera button moved to the picture-in-picture view of themselves in a call */
 "FLIP_CAMERA_BUTTON_MOVED_TO_PIP_TOOLTIP" = "Η Εναλλαγή κάμερας μεταφέρθηκε εδώ, πάτα στο βίντεο για να τη δοκιμάσεις";
 
-/* Message for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_MESSAGE" = "Πλέον τα προωθημένα μηνύματα στέλνονται αμέσως.";
-
-/* Title for alert with information about forwarding messages. */
-"FORWARD_MESSAGE_FIRST_FORWARD_TITLE" = "Γρηγορότερες προωθήσεις";
-
 /* Indicates that a single message was forwarded. */
 "FORWARD_MESSAGE_MESSAGES_SENT_1" = "Το μήνυμα στάλθηκε";
 
@@ -3385,11 +3550,11 @@
 /* Title for the 'Get Started' banner */
 "GET_STARTED_BANNER_TITLE" = "Ξεκίνα";
 
-/* 'Get Started' button directing users to appearance */
-"GET_STARTED_CARD_APPEARANCE" = "Εμφάνιση";
-
 /* 'Get Started' button direction users to avatar builder */
 "GET_STARTED_CARD_AVATAR_BUILDER" = "Βάλε φώτο";
+
+/* 'Get Started' button directing users to Chat Color settings */
+"GET_STARTED_CARD_CHAT_COLOR" = "Χρώμα συνομιλίας";
 
 /* 'Get Started' button directing users to invite friends */
 "GET_STARTED_CARD_INVITE_FRIENDS" = "Πρόσκληση";
@@ -3595,9 +3760,6 @@
 /* Toast view text informing user about swiping to speaker view */
 "GROUP_CALL_SPEAKER_VIEW_TOAST" = "Σύρε προς τα πάνω για αλλαγή οπτικής";
 
-/* Tooltip highlighting group calls. */
-"GROUP_CALL_START_TOOLTIP" = "Πάτα εδώ για να ξεκινήσεις μια ομαδική κλήση";
-
 /* Text explaining that you started a group call. */
 "GROUP_CALL_STARTED_BY_YOU" = "Ξεκίνησες μια ομαδική κλήση";
 
@@ -3736,6 +3898,12 @@
 /* Message indicating that 'announcement-only' mode was enabled by a remote user. Embeds {{ user who enabled 'announcement-only' mode }}. */
 "GROUP_IS_ANNOUNCEMENT_ONLY_ENABLED_BY_REMOTE_USER_FORMAT" = "Ο/Η %1$@ άλλαξε τις ρυθμίσεις της ομάδας για να επιτρέπεται μόνο σε διαχειριστές να στέλνουν μηνύματα.";
 
+/* Message text for the 'group invite link' action sheet. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE" = "Θέλεις να μπεις σε αυτή την ομάδα και να μοιραστείς το όνομα και τη φωτογραφία σου με τα μέλη της;";
+
+/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
+"GROUP_LINK_ACTION_SHEET_JOIN_MESSAGE_W_REQUEST" = "Όταν υποβάλεις αίτημα συμμετοχής, το όνομα και η φωτογραφία σου θα κοινοποιηθούν στα μέλη αυτής της ομάδας. Ένας διαχειριστής πρέπει να αποδεχτεί το αίτημά σου.";
+
 /* Subtitle indicating that the local user has been blocked from joining the group */
 "GROUP_LINK_ACTION_SHEET_VIEW_BLOCKED_FROM_JOINING_SUBTITLE" = "Δεν μπορείς να μπεις στην ομάδα μέσω του συνδέσμου της ομάδας, επειδή κάποιος διαχειριστής σε αφαίρεσε. Επικοινώνησε με έναν διαχειριστή για να προστεθείς ξανά στην ομάδα.";
 
@@ -3754,14 +3922,8 @@
 /* Label indicating that the group info is being loaded in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_LOADING_TITLE" = "Φορτώνει…";
 
-/* Message text for the 'group invite link' action sheet. */
-"GROUP_LINK_ACTION_SHEET_VIEW_MESSAGE" = "Θέλεις να μπεις σε αυτή την ομάδα και να μοιραστείς το όνομα και τη φωτογραφία σου με τα μέλη της;";
-
 /* Label for the 'request to join' button in the 'group invite link' action sheet. */
 "GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_BUTTON" = "Αίτημα εισόδου";
-
-/* Message text for the 'group invite link' action sheet, if the user will be requesting to join. */
-"GROUP_LINK_ACTION_SHEET_VIEW_REQUEST_TO_JOIN_MESSAGE" = "Κάποιος διαχειριστής/τρια αυτής της ομάδας θα πρέπει να εγκρίνει το αίτημά σου για να μπορέσεις να μπεις στην ομάδα. Όταν ζητήσεις να μπεις, το όνομα και η φωτογραφία σου θα μοιραστούν με τα μέλη της.";
 
 /* Error message the attempt to request to join the group failed due to network connectivity. */
 "GROUP_LINK_COULD_NOT_REQUEST_TO_JOIN_GROUP_DUE_TO_NETWORK_ERROR_MESSAGE" = "Επιβεβαίωσε πως είσαι συνδεδεμένος/η στο διαδίκτυο και ξαναδοκίμασε.";
@@ -4045,6 +4207,12 @@
 /* Name for a group story on the stories list. Embeds {author's name}, {group name} */
 "GROUP_STORY_NAME_FORMAT" = "%1$@ προς %2$@";
 
+/* Text indicating you reacted to a group story (the header on the bubble says \"You\") */
+"GROUP_STORY_REPLY_REACTION_SECOND_PERSON" = "Αντέδρασες στην ιστορία";
+
+/* Text indicating someone else reacted to a group story (the header on the bubble says their name, e.g. \"Bob\") */
+"GROUP_STORY_REPLY_REACTION_THIRD_PERSON" = "Αντέδρασε στην ιστορία";
+
 /* Button to delete the story on the 'group story settings' view */
 "GROUP_STORY_SETTINGS_DELETE_BUTTON" = "Αφαίρεση ιστορίας ομάδας";
 
@@ -4263,6 +4431,18 @@
 
 /* Title for the conversation list's 'archive' mode. */
 "HOME_VIEW_TITLE_ARCHIVE" = "Αρχείο";
+
+/* Title for the conversation list's backup storage full context menu action. */
+"HOME_VIEW_TITLE_BACKUP_OUT_OF_STORAGE_QUOTA" = "Ο αποθηκευτικός χώρος αντιγράφων ασφαλείας είναι πλήρης";
+
+/* Title for the conversation list's failed to redeem backup subscription context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_FAILED_TO_REDEEM" = "Σφάλμα συνδρομής αντιγράφων ασφαλείας";
+
+/* Title for the conversation list's backup subscription not found locally context menu action. */
+"HOME_VIEW_TITLE_BACKUP_SUBSCRIPTION_NOT_FOUND_LOCALLY" = "Δεν βρέθηκε συνδρομή αντιγράφων ασφαλείας";
+
+/* Title for the conversation list's failed to backup context menu action. */
+"HOME_VIEW_TITLE_FAILED_TO_BACKUP" = "Αποτυχία δημιουργίας αντιγράφων ασφαλείας";
 
 /* Title for the 'Select Chats' option in the ChatList. */
 "HOME_VIEW_TITLE_SELECT_CHATS" = "Επιλογή συνομιλιών";
@@ -4546,8 +4726,8 @@
 /* confirm the users intent to link a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TITLE" = "Ολοκλήρωση σύνδεσης";
 
-/* subtitle for choosing to send message history when linking a new device */
-"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE" = "Μετάφερε τα μηνύματα κειμένου σου και τα πολυμέσα των τελευταίων 45 ημερών";
+/* Subtitle for choosing to send message history when linking a new device, if you have the paid tier enabled. */
+"LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_PAID_PLAN_SUBTITLE" = "Μετάφερε τα μηνύματα κειμένου και όλα τα πολυμέσα σου";
 
 /* title for choosing to send message history when linking a new device */
 "LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_TITLE" = "Μεταφορά ιστορικού μηνυμάτων";
@@ -4708,24 +4888,6 @@
 /* Shown to users while the app is loading, asking them not to close the app. */
 "LOADING_VIEW_CONTROLLER_DONT_CLOSE_APP" = "Μην κλείνετε το B&A.";
 
-/* Body for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_BODY" = "Για να μεταφέρεις τον λογαριασμό B&A σου, θα πρέπει να ενεργοποιήσεις την πρόσβαση στο τοπικό δίκτυο και στις δύο συσκευές.";
-
-/* A button asking the user if they need further help getting their transfer working. */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_NEED_HELP" = "Χρειάζεσαι βοήθεια;";
-
-/* First step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_ONE" = "Σε κάθε συσκευή, άνοιξε τις Ρυθμίσεις";
-
-/* Third step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_THREE" = "Ενεργοποίησε το \"Τοπικό δίκτυο\"";
-
-/* Second step for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_STEP_TWO" = "Πήγαινε στο B&A";
-
-/* Title for local network permission action sheet */
-"LOCAL_NETWORK_PERMISSION_ACTION_SHEET_TITLE" = "Ενεργοποίησε τη Πρόσβαση στο τοπικό δίκτυο";
-
 /* A string indicating that the user can search for a location */
 "LOCATION_PICKER_SEARCH_PLACEHOLDER" = "Εύρεση βάση ονόματος ή διεύθυνσης";
 
@@ -4830,6 +4992,24 @@
 
 /* toast indicating that we will remind the user later */
 "MEGAPHONE_WILL_REMIND_LATER" = "Θα στο θυμίσουμε αργότερα.";
+
+/* Label for an action to add a member label */
+"MEMBER_LABEL_ADD" = "Προσθήκη ετικέτας μέλους";
+
+/* Heading shown above the preview of a message bubble with the edited member label. */
+"MEMBER_LABEL_PREVIEW_HEADING" = "Προεπισκόπηση";
+
+/* Text shown in the preview message bubble when a user is editing their member label. */
+"MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "Γεια σου!";
+
+/* Placeholder text in text field where user can edit their member label. */
+"MEMBER_LABEL_VIEW_PLACEHOLDER_TEXT" = "Πρόσθεσε την ετικέτα σου";
+
+/* Subtitle for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_SUBTITLE" = "Όρισε μια ετικέτα μέλους για να περιγράψεις τον εαυτό σου ή τον ρόλο σου σε αυτήν την ομάδα. Οι ετικέτες μέλους είναι ορατές μόνο εντός αυτής της ομάδας.";
+
+/* Title for a view where users can edit and preview their member label. */
+"MEMBER_LABEL_VIEW_TITLE" = "Ετικέτα μέλους";
 
 /* Action sheet button title */
 "MESSAGE_ACTION_COPY_TEXT" = "Αντιγραφή κειμένου μηνύματος";
@@ -5428,6 +5608,18 @@
 /* A string describing that the user has no groups in common other than the group implied by the current UI context */
 "NO_OTHER_GROUPS_IN_COMMON" = "Καμμία άλλη κοινή ομάδα";
 
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-link' (translated via NOT_LINKED_BOTTOM_RELINK), and it will be formatted as a tappable link. */
+"NOT_LINKED_BOTTOM" = "Αυτή η συσκευή δεν είναι πια συνδεδεμένη. %1$@ για να συνεχίσεις να χρησιμοποιείς το B&A σε αυτήν τη συσκευή.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_LINKED_BOTTOM_RELINK" = "Επανασύνδεση";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. The embedded value is 'Re-register' (translated via NOT_REGISTERED_BOTTOM_REREGISTER), and it will be formatted as a tappable link. */
+"NOT_REGISTERED_BOTTOM" = "Αυτή η συσκευή δεν είναι πλέον καταχωρημένη. %1$@ για να συνεχίσεις να χρησιμοποιείς το B&A.";
+
+/* Shown in place of the text input box in a conversation when the user is no longer registered can't send messages. This value is a tappable link embedded in a larger sentence. */
+"NOT_REGISTERED_BOTTOM_REREGISTER" = "Επανεγγραφή";
+
 /* Label for 1:1 conversation with yourself. */
 "NOTE_TO_SELF" = "Μήνυμα σε μένα";
 
@@ -5515,20 +5707,35 @@
 /* Label for the 'skip and create new pin' button when reglock is disabled during onboarding. */
 "ONBOARDING_2FA_SKIP_AND_CREATE_NEW_PIN" = "Παράλειψη και δημιουργία νέου PIN";
 
+/* Label for action to use Recovery Key instead of PIN for registration. */
+"ONBOARDING_2FA_SKIP_AND_USE_RECOVERY_KEY" = "Χρήση κλειδιού ανάκτησης";
+
 /* Explanation for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_MESSAGE" = "Αν δεν μπορείς να θυμηθείς το PIN σου, μπορείς να δημιουργήσεις ένα νέο. Θα έχεις τη δυνατότητα να εγγραφτείς και να χρησιμοποιήσεις τον λογαριασμό σου, αλλά θα χαθούν κάποιες αποθηκευμένες ρυθμίσεις όπως οι πληροφορίες προφίλ σου.";
 
 /* Title for the skip pin entry action sheet during onboarding. */
 "ONBOARDING_2FA_SKIP_PIN_ENTRY_TITLE" = "Παράλειψη της εισαγωγής PIN;";
 
-/* The body for the device transfer 'choice' view 'transfer' option */
+/* The body for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_BODY" = "Επανάφερε τα μηνύματα κειμένου και τα πολυμέσα σου από το επί πληρωμή πακέτο δημιουργίας αντιγράφων ασφαλείας B&A";
 
-/* The title for the device transfer 'choice' view 'transfer' option */
+/* The title for the device transfer 'choice' view 'restore backup' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_BACKUPS_TITLE" = "Επαναφορά αντίγραφου ασφαλείας B&A";
+
+/* Body for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_BODY" = "Αν παραλείψεις την επαναφορά τώρα, δεν θα μπορείς να κάνεις επαναφορά αργότερα. Εάν ενεργοποιήσεις ξανά τα αντίγραφα ασφαλείας σε αυτή τη συσκευή, το τρέχον αντίγραφο ασφαλείας θα αντικατασταθεί από το νέο ιστορικό μηνυμάτων σου.";
+
+/* Title for a sheet warning users about skipping restore. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_CONFIRM_SKIP_RESTORE_TITLE" = "Παράλειψη επαναφοράς;";
 
 /* If a user is installing Signal on a new phone, they may be asked whether they want to restore their device from a backup. This is a description of that question. */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_DESCRIPTION" = "Επίλεξε πώς θέλεις να επαναφέρεις το ιστορικό μηνυμάτων και τα δεδομένα του λογαριασμού σου.";
+
+/* Message body displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_BODY" = "Επειδή αλλάζεις από Android σε iOS, ο μόνος τρόπος για να μεταφέρεις τα μηνύματα και τα πολυμέσα σου είναι να ενεργοποιήσεις τα Αντίγραφα ασφαλείας B&A στην παλιά σου συσκευή.";
+
+/* Title displayed to a user during registration if there are no restore options available. */
+"ONBOARDING_CHOOSE_RESTORE_METHOD_NONE_AVAILABLE_TITLE" = "Δεν υπάρχουν αντίγραφα ασφαλείας για επαναφορά";
 
 /* The body for the skip restore 'choice' option */
 "ONBOARDING_CHOOSE_RESTORE_METHOD_SKIP_RESTORE_BODY" = "Συνέχεια χωρίς μεταφορά μηνυμάτων και πολυμέσων";
@@ -5659,6 +5866,9 @@
 /* Title for the 'have my old device' choice of the 'Restore or Transfer' prompt */
 "ONBOARDING_SPLASH_HAVE_OLD_DEVICE_TITLE" = "Έχω το παλιό μου τηλέφωνο";
 
+/* Text indicating Signal is a nonprofit on the 'onboarding splash' view. For non-English languages, exclude the word '501c3'. */
+"ONBOARDING_SPLASH_NONPROFIT" = "Το B&A είναι ένας μη κερδοσκοπικός οργανισμός";
+
 /* Button for restoring or transferring account in the 'onboarding splash' view. */
 "ONBOARDING_SPLASH_RESTORE_OR_TRANSFER_BUTTON_TITLE" = "Επαναφορά ή μεταφορά λογαριασμού";
 
@@ -5764,6 +5974,21 @@
 /* Title of prompt notifying restore failed for unknown reasons. */
 "OUTGOING_DEVICE_REGISTRATION_UNKNOWN_ERROR_TITLE" = "Άγνωστο σφάλμα";
 
+/* Action button to backup before continuing. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_BACKUP_ACTION" = "Δημιουργία αντίγραφου τώρα";
+
+/* Body text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_BODY" = "Δημιούργησε αντίγραφο ασφαλείας τώρα πριν από τη μεταφορά. Ενδέχεται να έχεις λάβει μηνύματα για τα οποία δεν έχουν δημιουργηθεί ακόμη αντίγραφα ασφαλείας.";
+
+/* Title text describing the outgoing transfer. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_INITIAL_VIEW_TITLE" = "Προετοιμασία της συσκευής σου";
+
+/* Action button to skip backup and continue. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_PROMPT_SKIP_ACTION" = "Παράλειψη και Συνέχεια";
+
+/* Description for form confirming restore from backup without size detail. */
+"OUTGOING_DEVICE_RESTORE_BACKUP_RESTORE_DESCRIPTION" = "Το τελευταίο σου αντίγραφο ασφαλείας έγινε στις %1$@ στις %2$@.";
+
 /* Body of prompt notifying device restore started on the new device. */
 "OUTGOING_DEVICE_RESTORE_COMPLETE_BODY" = "Ο λογαριασμός και τα μηνύματά σου στο B&A έχουν ξεκινήσει τη μεταφορά στην άλλη σου συσκευή. Το B&A είναι πλέον ανενεργό σε αυτήν τη συσκευή.";
 
@@ -5817,9 +6042,6 @@
 
 /* Footer for message cell for long text when it is expired and unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_FOOTER" = "Αυτό το μήνυμα είναι ελλιπές";
-
-/* Message for sheet shown when tapping oversized text that has expired and is unavailable for download */
-"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Το πλήρες κείμενο σε αυτό το μήνυμα δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός μεγάλων μηνυμάτων κειμένου παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
 
 /* Title for sheet shown when tapping oversized text that has expired and is unavailable for download */
 "OVERSIZE_TEXT_UNAVAILABLE_SHEET_TITLE" = "Το πλήρες μήνυμα δεν είναι διαθέσιμο";
@@ -6145,9 +6367,6 @@
 /* Message indicating that a request to join the group was successfully approved. Embeds {{ the name of the approved user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_APPROVED_FORMAT" = "Ο/Η \"%1$@\" προστέθηκε.";
 
-/* Label for the 'view requests' button in the pending member requests banner. */
-"PENDING_GROUP_MEMBERS_REQUEST_BANNER_VIEW_REQUESTS" = "Προβολή αιτημάτων";
-
 /* Message indicating that a request to join the group was successfully denied. Embeds {{ the name of the denied user }}. */
 "PENDING_GROUP_MEMBERS_REQUEST_DENIED_FORMAT" = "Ο/Η \"%1$@\" απορρίφθηκε.";
 
@@ -6263,9 +6482,6 @@
 "PHOTO_CAPTURE_GENERIC_ERROR" = "Αδυναμία λήψης εικόνας.";
 
 /* alert title */
-"PHOTO_CAPTURE_UNABLE_TO_CAPTURE_IMAGE" = "Αδυναμία λήψης εικόνας.";
-
-/* alert title */
 "PHOTO_CAPTURE_UNABLE_TO_INITIALIZE_CAMERA" = "Αποτυχία ρύθμισης της κάμερας.";
 
 /* Button label for opening the chat on a sheet presented from photo capture view indicating that a username QR code was found. */
@@ -6276,9 +6492,6 @@
 
 /* Title for sheet presented from photo capture view indicating that a username QR code was found. Embeds {{username}}. */
 "PHOTO_CAPTURE_USERNAME_QR_CODE_FOUND_TITLE_FORMAT" = "Ο χρήστης %1$@ βρέθηκε";
-
-/* alert title, generic error preventing user from capturing a video that is too long */
-"PHOTO_CAPTURE_VIDEO_SIZE_ERROR" = "Πολύ μεγάλο βίντεο.";
 
 /* Pressing this button pins a thread */
 "PIN_ACTION" = "Καρφίτσωμα";
@@ -6364,6 +6577,9 @@
 /* If the user is re-registering, they need to enter their PIN to restore all their data. In some cases, they can skip this entry and lose some data. This text is shown on a button that lets them begin to do this. */
 "PIN_ENTER_EXISTING_SKIP" = "Παράλειψη PIN";
 
+/* If the user is re-registering, they need to enter their PIN to restore all their data. If they don't remember their PIN, they may remember their Recovery Key which can be used instead of a PIN. */
+"PIN_ENTER_EXISTING_USE_RECOVERY_KEY" = "Χρήση κλειδιού ανάκτησης";
+
 /* Error title indicating that the attempt to recreate a PIN failed. */
 "PIN_RECREATION_ERROR_TITLE" = "Αποτυχία δημιουργίας PIN";
 
@@ -6421,8 +6637,80 @@
 /* An explanation that you have already pinned the maximum number of conversations. */
 "PINNED_CONVERSATION_LIMIT" = "Μπορείς να καρφιτσώσες μόνο μέχρι 4 συνομιλίες.";
 
+/* Accessibility label prefix for banner showing a pinned message */
+"PINNED_MESSAGE_BANNER_AX_LABEL" = "Καρφιτσωμένο μήνυμα:";
+
+/* Shown when another user pins a message. Embeds {{ another user }}. */
+"PINNED_MESSAGE_CHAT_EVENT_OTHER" = "Ο χρήστης %1$@ καρφίτσωσε ένα μήνυμα";
+
+/* Shown when the local user pins a message. */
+"PINNED_MESSAGE_CHAT_EVENT_SELF" = "Καρφίτσωσες ένα μήνυμα";
+
+/* Accessibility label for pin message button */
+"PINNED_MESSAGE_MENU_ACCESSIBILITY_LABEL" = "Μενού καρφιτσωμένου μηνύματος";
+
+/* Label for button to pin a message */
+"PINNED_MESSAGE_PIN_ACTION_TITLE" = "Καρφίτσωμα";
+
+/* Message for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BODY" = "Το καρφίτσωμα του μηνύματος θα αντικαταστήσει το παλαιότερο.";
+
+/* Option in pinned message action sheet to replace oldest pin. */
+"PINNED_MESSAGE_REPLACE_OLDEST_BUTTON" = "Αντικατάσταση";
+
+/* Title for an action sheet confirming the user wants to replace oldest pinned message. */
+"PINNED_MESSAGE_REPLACE_OLDEST_TITLE" = "Αντικατάσταση του παλαιότερου καρφιτσωμένου μηνύματος;";
+
+/* Body for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_BODY" = "Έλεγξε τη σύνδεσή σου και δοκίμασε πάλι.";
+
+/* Title for error sheet shown if the pinned message failed to send */
+"PINNED_MESSAGE_SEND_ERROR_SHEET_TITLE" = "Δεν ήταν δυνατό το καρφίτσωμα μηνύματος";
+
+/* Text to show on a toast when someone unpins a message */
+"PINNED_MESSAGE_TOAST" = "Το μήνυμα ξεκαρφιτσώθηκε";
+
+/* Label for button to unpin a message */
+"PINNED_MESSAGE_UNPIN_ACTION_TITLE" = "Ξεκαρφίτσωμα";
+
+/* Option in pinned message action sheet to pin for 24 hours. */
+"PINNED_MESSAGES_24_HOURS" = "24 ώρες";
+
+/* Option in pinned message action sheet to pin for 30 days. */
+"PINNED_MESSAGES_30_DAYS" = "30 ημέρες";
+
+/* Option in pinned message action sheet to pin for 7 days. */
+"PINNED_MESSAGES_7_DAYS" = "7 ημέρες";
+
+/* Title for Pinned Messages detail view */
+"PINNED_MESSAGES_DETAILS_TITLE" = "Καρφιτσωμένα μηνύματα";
+
+/* Title for an action sheet to indicate how long to keep the pin active */
+"PINNED_MESSAGES_EXPIRY_SHEET_TITLE" = "Να μείνει καρφιτσωμένο για...";
+
+/* Option in pinned message action sheet to pin with no expiry. */
+"PINNED_MESSAGES_FOREVER" = "Για πάντα";
+
+/* Action menu item to go to a message in the conversation view */
+"PINNED_MESSAGES_GO_TO_MESSAGE" = "Μετάβαση στο Μήνυμα";
+
+/* Action menu item to see all pinned messages */
+"PINNED_MESSAGES_SEE_ALL_MESSAGES" = "Προβολή όλων των μηνυμάτων";
+
+/* Action menu item to unpin a message */
+"PINNED_MESSAGES_UNPIN" = "Ξεκαρφίτσωμα";
+
+/* Title for a button to unpin all pinned messages. */
+"PINNED_MESSAGES_UNPIN_ALL" = "Ξεκαρφίτσωμα όλων";
+
 /* The title for pinned conversation section on the conversation list */
 "PINNED_SECTION_TITLE" = "Καρφιτσωμένο";
+
+/* Body for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_BODY" = "Τα μηνύματα που εξαφανίζονται θα ξεκαρφιτσώνονται όταν λήξει ο χρόνος τους και το μήνυμα αφαιρεθεί από τη συνομιλία.";
+
+/* Title for a sheet warning users they are pinning a disappearing message. */
+"PINNING_DISAPPEARING_MESSAGE_WARNING_TITLE" = "Καρφίτσωμα μηνυμάτων που εξαφανίζονται";
 
 /* Action text for PIN megaphone when user doesn't have a PIN */
 "PINS_MEGAPHONE_ACTION" = "Δημιουργία PIN";
@@ -6439,11 +6727,35 @@
 /* Accessibility label for button to start media playback */
 "PLAY_BUTTON_ACCESSABILITY_LABEL" = "Αναπαραγωγή πολυμέσων";
 
+/* Accessibility label for poll message. Embeds {{ poll question }}. */
+"POLL_ACCESSIBILITY_LABEL" = "Δημοσκόπηση: %1$@.";
+
+/* Accessibility label for a vote option that is not selected by the user. */
+"POLL_ACCESSIBILITY_LABEL_OPTION_PENDING" = "Εκκρεμεί";
+
+/* Title for a toggle allowing multiple votes for a poll. */
+"POLL_ALLOW_MULTIPLE_LABEL" = "Να επιτρέπονται οι πολλαπλές ψήφοι";
+
+/* Button to view a poll after its ended */
+"POLL_BUTTON_VIEW_POLL" = "Προβολή δημοσκόπησης";
+
 /* Button to view poll results */
 "POLL_BUTTON_VIEW_RESULTS" = "Προβολή αποτελεσμάτων";
 
 /* Button to view poll votes */
 "POLL_BUTTON_VIEW_VOTES" = "Προβολή ψήφων";
+
+/* Toast telling user to add a question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION" = "Πρόσθεσε ερώτηση";
+
+/* Toast telling user to add options and question to poll. */
+"POLL_CREATE_ERROR_TOAST_NO_QUESTION_OR_ENOUGH_OPTIONS" = "Πρόσθεσε μια ερώτηση και τουλάχιστον 2 επιλογές";
+
+/* Toast telling user to add more options to poll. */
+"POLL_CREATE_ERROR_TOAST_NOT_ENOUGH_OPTIONS" = "Πρόσθεσε τουλάχιστον 2 επιλογές";
+
+/* Title of create poll pane */
+"POLL_CREATE_TITLE" = "Νέα δημοσκόπηση";
 
 /* Label for button to end a poll */
 "POLL_DETAILS_END_POLL" = "Λήξη δημοσκόπησης";
@@ -6451,20 +6763,56 @@
 /* Title of poll details pane */
 "POLL_DETAILS_TITLE" = "Λεπτομέρειες δημοσκόπησης";
 
+/* Title for an action sheet confirming the user wants end a poll. */
+"POLL_END_CONFIRMATION" = "Λήξη δημοσκόπησης;";
+
+/* Message for an action sheet confirming the user wants to end a poll. */
+"POLL_END_CONFIRMATION_MESSAGE" = "Τα μέλη της ομάδας δεν θα μπορούν πλέον να ψηφίσουν σε αυτή τη δημοσκόπηση.";
+
+/* Shown when another user ends a poll. Embeds {{ another user }} and {{ poll question }}. */
+"POLL_ENDED_BY_OTHER_CHAT_LIST_UPDATE" = "Ο χρήστης %1$@ ολοκλήρωσε τη δημοσκόπηση: %2$@";
+
+/* Shown when the local user ends a poll. Embeds {{ poll question }}. */
+"POLL_ENDED_BY_YOU_CHAT_LIST_UPDATE" = "Ολοκλήρωσες τη δημοσκόπηση: %1$@";
+
 /* Notification that {{contact}} ended a poll with question {{poll question}} */
 "POLL_ENDED_NOTIFICATION" = "Ο χρήστης %1$@ ολοκλήρωσε την δημοσκόπηση «%2$@»";
+
+/* Label specifying the poll is finished and these are the final results */
+"POLL_FINAL_RESULTS_LABEL" = "Τελικά αποτελέσματα";
 
 /* Label specifying the message type as a poll */
 "POLL_LABEL" = "Δημοσκόπηση";
 
+/* String to display when a poll has no votes */
+"POLL_NO_VOTES" = "Δεν υπάρχουν ψήφοι";
+
+/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
+"POLL_OPTION_PLACEHOLDER_PREFIX" = "Επιλογή";
+
+/* Header for the poll options text boxes when making a new poll */
+"POLL_OPTIONS_LABEL" = "Επιλογές";
+
 /* Prefix for a poll preview */
 "POLL_PREFIX" = "Δημοσκόπηση:";
+
+/* Header for the poll question text box when making a new poll */
+"POLL_QUESTION_LABEL" = "Ερώτηση";
+
+/* Placeholder text for poll question */
+"POLL_QUESTION_PLACEHOLDER_TEXT" = "Κάνε μια ερώτηση";
+
+/* Title of poll details pane when poll is ended */
+"POLL_RESULTS_TITLE" = "Αποτελέσματα δημοσκόπησης";
 
 /* Label specifying the user can select more than one option */
 "POLL_SELECT_LABEL_MULTIPLE" = "Επίλεξε ένα ή περισσότερα";
 
 /* Label specifying the user can select one option */
 "POLL_SELECT_LABEL_SINGULAR" = "Επίλεξε μία";
+
+/* Notification that {{contact}} voted in a poll with question {{poll question}} */
+"POLL_VOTED_NOTIFICATION" = "Ο χρήστης %1$@ ψήφισε στη δημοσκόπηση «%2$@»";
 
 /* Badge indicating that the user is verified. */
 "PRIVACY_IDENTITY_IS_VERIFIED_BADGE" = "Επιβεβαιωμένος/η";
@@ -6661,6 +7009,15 @@
 /* Title of alert shown when push tokens sync job succeeds. */
 "PUSH_REGISTER_SUCCESS" = "Επιτυχής επανεγγραφή για λήψη ειδοποιήσεων.";
 
+/* Body for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_BODY" = "Χρησιμοποίησε αυτή τη συσκευή για να σκανάρεις τον κωδικό QR στη συσκευή που θέλεις να κάνεις μεταφορά";
+
+/* Title for sheet with info about scanning a Quick Restore QR code */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_ACTION_TITLE" = "Σκανάρισμα κωδικού QR";
+
+/* Message for an action sheet telling users how to use quick restore, when trying to open an external quick restore URL. */
+"QUICK_RESTORE_URL_OPENED_ACTION_SHEET_EXTERNAL_URL_MESSAGE" = "Για να μεταφέρεις αυτόν τον λογαριασμό σε μια νέα συσκευή, πάτα «Συνέχεια» και σάρωσε ξανά τον κωδικό QR με την κάμερα B&A. Βεβαιώσου ότι σαρώνεις μόνο κωδικούς QR που προέρχονται απευθείας από το B&A.";
+
 /* Accessibility label stating the author of the message to which you are replying. Embeds: {{ the author of the message to which you are replying }}. */
 "QUOTED_REPLY_ACCESSIBILITY_LABEL_FORMAT" = "Απάντηση προς %1$@.";
 
@@ -6676,11 +7033,11 @@
 /* Toast alert text shown when tapping on a quoted message which we cannot scroll to because the local copy of the message didn't exist when the quote was received. */
 "QUOTED_REPLY_ORIGINAL_MESSAGE_REMOTELY_SOURCED" = "Το αρχικό μήνυμα δεν βρέθηκε.";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to your own story. */
-"QUOTED_REPLY_REACTION_TO_OWN_STORY" = "Αντέδρασε στην ιστορία σου";
+/* Label explaining that the content of a quoted message includes you reacting to someone's story. Embeds {{ %1$@ the story author }}. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_SECOND_PERSON" = "Αντέδρασε στην ιστορία του χρήστη %1$@";
 
-/* Header label that appears above quoted messages when the quoted content was includes a reaction to a story. Embeds {{ story author name }} */
-"QUOTED_REPLY_REACTION_TO_STORY_FORMAT" = "Αντέδρασε στην ιστορία του χρήστη %1$@";
+/* Label explaining that the content of a quoted message includes someone reacting to your story. */
+"QUOTED_REPLY_REACTION_TO_STORY_FORMAT_THIRD_PERSON" = "Αντέδρασε στην ιστορία σου";
 
 /* Message header when you are quoting a story. Embeds {{ story author name }} */
 "QUOTED_REPLY_STORY_AUTHOR_INDICATOR_FORMAT" = "%1$@ · Ιστορία";
@@ -6702,6 +7059,9 @@
 
 /* Indicates this message is a quoted reply to a video file. */
 "QUOTED_REPLY_TYPE_VIDEO" = "Βίντεο";
+
+/* Indicates this message is a quoted reply to a voice message. */
+"QUOTED_REPLY_TYPE_VOICE_MESSAGE" = "Μήνυμα φωνής";
 
 /* Label for a button to lower your raised hand in a call. */
 "RAISED_HANDS_LOWER_HAND_BUTTON" = "Κατέβασέ το";
@@ -6841,6 +7201,9 @@
 /* Body for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_BODY" = "Make sure you’ve entered the same 64-digit backup key you saved when enabling B&A backups. Backups can not be recovered without this key.";
 
+/* Body for a sheet warning users about an incorrect recovery key and having hit a rate limit on retries. */
+"REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_RATE_LIMIT_BODY" = "Έχεις εξαντλήσει τις προσπάθειες κλειδιού ανάκτησης. Για την ασφάλειά σου, ο αριθμός των προσπαθειών είναι περιορισμένος. Περίμενε μία ώρα και προσπάθησε ξανά.";
+
 /* Title for a sheet warning users about an incorrect recovery key. */
 "REGISTRATION_BACKUP_RESTORE_ERROR_INCORRECT_KEY_TITLE" = "Λανθασμένο εφεδρικό κλειδί";
 
@@ -6892,12 +7255,6 @@
 /* Label for the country code field */
 "REGISTRATION_DEFAULT_COUNTRY_NAME" = "Κωδικός χώρας";
 
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is a description on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_EXPLANATION" = "Συνεχίζοντας θα απενεργοποιηθεί το B&A σε άλλες συσκευές εγγεγραμμένες με τον ίδιο αριθμό τηλεφώνου.";
-
-/* If a user is installing Signal on a new phone, they may be asked whether they want to transfer their account from their old device. This is the title on the screen that asks them this question. */
-"REGISTRATION_DEVICE_TRANSFER_CHOICE_TITLE" = "Μεταφορά λογαριασμού & μηνυμάτων";
-
 /* Description for the screen that allows users to enter their recovery key. */
 "REGISTRATION_ENTER_BACKUP_KEY_DESCRIPTION" = "Το εφεδρικό κλειδί σου είναι ένας 64ψήφιος κωδικός που απαιτείται για την ανάκτηση του λογαριασμού και των δεδομένων σου.";
 
@@ -6939,6 +7296,9 @@
 
 /* During registration, users are asked to enter their phone number. This is the subtitle on that screen, which gives users some instructions. */
 "REGISTRATION_PHONE_NUMBER_SUBTITLE" = "Γράψε τον αριθμό τηλεφώνου σου για να ξεκινήσεις.";
+
+/* During re-registration, users are asked to confirm their phone number. This is the subtitle on that screen, which gives users some instructions. */
+"REGISTRATION_PHONE_NUMBER_SUBTITLE_2" = "Θα σταλεί κωδικός επαλήθευσης σε αυτόν τον αριθμό:";
 
 /* During registration, users are asked to enter their phone number. This is the title on that screen. */
 "REGISTRATION_PHONE_NUMBER_TITLE" = "Ο αριθμός τηλεφώνου σου";
@@ -6993,6 +7353,15 @@
 
 /* Error shown if an SMS/call service provider is temporarily unable to send a verification code to the provided number. */
 "REGISTRATION_PROVIDER_FAILURE_MESSAGE_TRANSIENT" = "Το B&A δεν μπορεί να στείλει κωδικό SMS λόγω προβλημάτων με τον πάροχο SMS. Δοκίμασε ξανά σε λίγες ώρες.";
+
+/* Third step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_ENABLE_BACKUPS" = "Ενεργοποίησε τα αντίγραφα ασφαλείας και περίμενε μέχρι να ολοκληρωθεί η δημιουργία αντιγράφων ασφαλείας";
+
+/* First step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_OPEN_SIGNAL" = "Άνοιξε το B&A στην παλιά σου συσκευή";
+
+/* Second step in directions for how to make a backup */
+"REGISTRATION_RESTORE_METHOD_MAKE_BACKUP_TUTORIAL_TAP_SETTINGS" = "Πάτα Ρυθμίσεις > Αντίγραφα ασφαλείας";
 
 /* No comment provided by engineer. */
 "REGISTRATION_RESTRICTED_MESSAGE" = "Θα πρέπει να εγγραφείς πριν μπορέσεις να στείλεις ένα μήνυμα.";
@@ -7066,6 +7435,18 @@
 /* Label warning the user that something is wrong with their username link. */
 "REMINDER_VIEW_USERNAME_LINK_CORRUPTED_WARNING" = "Κάτι πήγε στραβά με τον κωδικό QR και τον σύνδεσμο του ονόματος χρήστη σου, δεν ισχύει πλέον. Δημιούργησε έναν νέο σύνδεσμο για κοινή χρήση με άλλους.";
 
+/* A message that displays when one person in a call remotely muted another participant. Embeds {{name}} {{name}} */
+"REMOTE_MUTE_TOAST_A_MUTED_B" = "Ο χρήστης %1$@ έθεσε σε σίγαση τον χρήστη %2$@.";
+
+/* A message that displays when your microphone is remotely muted by another call participant. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_SOMEONE_MUTED_YOU" = "Ο χρήστης %1$@ σε έθεσε σε σίγαση.";
+
+/* A message that displays when you remotely muted another call participant's microphone. Embeds {{name}} */
+"REMOTE_MUTE_TOAST_YOU_MUTED_SOMEONE" = "Έθεσες σε σίγαση τον χρήστη %1$@.";
+
+/* A message that displays when you joined a call on two devices and mute one from the other. */
+"REMOTE_MUTE_TOAST_YOU_MUTED_YOURSELF" = "Έθεσες τον εαυτό σου σε σίγαση από άλλη συσκευή.";
+
 /* Accessibility label for a button that removes the preview from a drafted message. */
 "REMOVE_PREVIEW" = "Αφαίρεση προεπισκόπησης";
 
@@ -7083,6 +7464,30 @@
 
 /* Configure reactions reset button text */
 "RESET" = "Επαναφορά";
+
+/* Body for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_BODY" = "Η επαναφορά των πολυμέσων σου δεν έχει ολοκληρωθεί. Εάν επιλέξεις να την ακυρώσεις, μπορείς να τα επαναφέρεις συνδέοντας ξανά αυτή τη συσκευή.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_PRIMARY_BUTTON" = "Συνέχεια επαναφοράς";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_SECONDARY_BUTTON" = "Ακύρωση επαναφοράς";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_1_TITLE" = "Γίνεται επαναφορά των πολυμέσων σου";
+
+/* Message for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_MESSAGE" = "Η επαναφορά των πολυμέσων σου δεν έχει ολοκληρωθεί. Εάν επιλέξεις να την ακυρώσεις, μπορείς να τα επαναφέρεις συνδέοντας ξανά αυτή τη συσκευή.";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_PRIMARY_BUTTON" = "Συνέχεια επαναφοράς";
+
+/* Button for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_SECONDARY_BUTTON" = "Ακύρωση επαναφοράς";
+
+/* Title for a sheet allowing users to cancel an in-progress media restore. */
+"RESTORING_MEDIA_BANNER_CANCEL_RESTORE_SHEET_2_TITLE" = "Ακύρωση Επαναφοράς Πολυμέσων;";
 
 /* Button title shown on chat list banner for restoring media from a backup when paused because the device has insufficient disk space, to see a bottom sheet with more details about next steps. */
 "RESTORING_MEDIA_BANNER_DISK_SPACE_BUTTON" = "Λεπτομέρειες";
@@ -7262,7 +7667,7 @@
 "SCREEN_LOCK_UNLOCK_SIGNAL" = "Ξεκλείδωμα του B&A";
 
 /* Placeholder text indicating the user can search for contacts by name, username, or phone number. */
-"SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "Όνομα, όνομα χρήστη ή αριθμό τηλεφώνου";
+"SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "Όνομα, όνομα χρήστη ή αριθμός";
 
 /* Placeholder text indicating the user can search for contacts by name or phone number. */
 "SEARCH_BYNAMEORNUMBER_PLACEHOLDER_TEXT" = "Αναζήτηση με όνομα ή αριθμό";
@@ -7605,9 +8010,6 @@
 
 /* No comment provided by engineer. */
 "SETTINGS_CLEAR_HISTORY" = "Εκκαθάριση ιστορικού συνομιλιών";
-
-/* Footer for the 'about' help section */
-"SETTINGS_COPYRIGHT" = "Πνευματική ιδιοκτησία B&A Messenger\nΥπό την άδεια AGPLv3";
 
 /* Label for the 'data' section of the app settings. */
 "SETTINGS_DATA" = "Χρήση δεδομένων";
@@ -8500,6 +8902,12 @@
 /* The name for the sticker category 'Featured' */
 "STICKER_CATEGORY_FEATURED_NAME" = "Προτεινόμενα";
 
+/* Subtitle of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_SUBTITLE" = "Στείλε ένα αυτοκόλλητο και θα εμφανιστεί εδώ";
+
+/* Title of the helper text displayed when Recent stickers are empty. */
+"STICKER_CATEGORY_RECENTS_EMPTY_TITLE" = "Δεν υπάρχουν πρόσφατα αυτοκόλλητα";
+
 /* The name for the sticker category 'Recents' */
 "STICKER_CATEGORY_RECENTS_NAME" = "Πρόσφατα";
 
@@ -8508,9 +8916,6 @@
 
 /* Message when trying to show a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_MESSAGE_LABEL" = "Το αυτοκόλλητο δεν είναι διαθέσιμο";
-
-/* Message for sheet shown when tapping a sticker that has expired and is unavailable for download */
-"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Αυτό το αυτοκόλλητο δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός πολυμέσων και αρχείων παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
 
 /* Title for sheet shown when tapping a sticker that has expired and is unavailable for download */
 "STICKER_UNAVAILABLE_SHEET_TITLE" = "Το αυτοκόλλητο δεν είναι διαθέσιμο";
@@ -8659,21 +9064,6 @@
 /* Context menu action to share the selected story */
 "STORIES_SHARE_STORY_ACTION" = "Μοιράσου";
 
-/* Section title shown when sending to non-story conversations but failing to send the file to stories. */
-"STORIES_SHARESHEET_PARTIAL_SEND_REMAINING_SECTION_TITLE" = "Στάλθηκε σε";
-
-/* Section title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_STORIES_SECTION_TITLE" = "Δεν στάλθηκε στις";
-
-/* Title shown when failing to send an incompatible file to stories, but still sending to non-story conversations. */
-"STORIES_SHARESHEET_PARTIAL_SEND_TITLE" = "Μερική αποστολή";
-
-/* Subtitle shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_SUBTITLE" = "Ο τύπος αρχείου που επιλέχθηκε δεν υποστηρίζεται.";
-
-/* Title shown when failing to send an incompatible file to stories via the sharesheet. */
-"STORIES_SHARESHEET_UNABLE_TO_SEND_SEND_TITLE" = "Δεν είναι δυνατή η αποστολή";
-
 /* Title for the stories view. */
 "STORIES_TITLE" = "Ιστορίες";
 
@@ -8722,8 +9112,11 @@
 /* Title for the story privacy settings view */
 "STORY_PRIVACY_TITLE" = "Ιδιωτικότητα ιστορίας";
 
-/* inbox and notification text for a reaction to a story authored by the local user. Embeds {{reaction emoji}} */
-"STORY_REACTION_LOCAL_AUTHOR_PREVIEW_FORMAT" = "Αντέδρασε με %1$@ στην ιστορία σου";
+/* Text explaining that you reacted to someone else's story. Embeds {{ %1$@ reaction emoji, %2$@ story author name }}. */
+"STORY_REACTION_PREVIEW_FORMAT_SECOND_PERSON" = "Αντέδρασες με %1$@ στην ιστορία του χρήστη %2$@";
+
+/* Text explaining that someone reacted to your story. Embeds {{ %1$@ reaction emoji }}. */
+"STORY_REACTION_PREVIEW_FORMAT_THIRD_PERSON" = "Αντέδρασε με %1$@ στην ιστορία σου";
 
 /* quote text for a reaction to a story by the user (the header on the bubble says \"You\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_SECOND_PERSON" = "Αντέδρασες με %1$@ σε μια ιστορία";
@@ -8731,17 +9124,8 @@
 /* quote text for a reaction to a story by some other user (the header on the bubble says their name, e.g. \"Bob\"). Embeds {{reaction emoji}} */
 "STORY_REACTION_QUOTE_FORMAT_THIRD_PERSON" = "Αντέδρασε με %1$@ σε μια ιστορία";
 
-/* inbox and notification text for a reaction to a story authored by another user. Embeds {{ %1$@ reaction emoji, %2$@ story author name }} */
-"STORY_REACTION_REMOTE_AUTHOR_PREVIEW_FORMAT" = "Αντέδρασε με %1$@ στην ιστορία του χρήστη %2$@";
-
 /* Button for replying to a story with no existing replies. */
 "STORY_REPLY_BUTTON" = "Απάντηση";
-
-/* Text indicating you reacted to a story (the header on the bubble says \"You\") */
-"STORY_REPLY_REACTION_SECOND_PERSON" = "Αντέδρασες στην ιστορία";
-
-/* Text indicating someone else reacted to a story (the header on the bubble says their name, e.g. \"Bob\") */
-"STORY_REPLY_REACTION_THIRD_PERSON" = "Αντέδρασε στην ιστορία";
 
 /* placeholder text for replying to a story */
 "STORY_REPLY_TEXT_FIELD_PLACEHOLDER" = "Απάντηση";
@@ -8965,35 +9349,23 @@
 /* Option in selected text edit menu to make text bold */
 "TEXT_MENU_BOLD" = "Bold";
 
-/* Option in selected text edit menu to clear all text formatting in the selected text range */
-"TEXT_MENU_CLEAR_FORMATTING" = "Διαγραφή μορφοποίησης";
-
 /* Option in selected text edit menu to view text formatting options */
 "TEXT_MENU_FORMAT" = "Μορφοποίηση";
 
 /* Option in selected text edit menu to make text italic */
 "TEXT_MENU_ITALIC" = "Italic";
 
-/* Option in selected text edit menu to look up word definitions */
-"TEXT_MENU_LOOK_UP" = "Αναζήτηση";
-
 /* Option in selected text edit menu to make text monospace */
 "TEXT_MENU_MONOSPACE" = "Monospace";
 
-/* Option in selected text edit menu to replace text with suggestions */
-"TEXT_MENU_REPLACE" = "Αντικατάσταση";
-
-/* Option in selected text edit menu to share selected text */
-"TEXT_MENU_SHARE" = "Μοιράσου";
+/* Option in selected text edit menu to remove all text formatting in the selected text range */
+"TEXT_MENU_REMOVE_FORMATTING" = "Κατάργηση μορφοποίησης";
 
 /* Option in selected text edit menu to make text spoiler */
 "TEXT_MENU_SPOILER" = "Θόλωμα";
 
 /* Option in selected text edit menu to make text strikethrough */
 "TEXT_MENU_STRIKETHROUGH" = "Strikethrough";
-
-/* Option in selected text edit menu to translate the word */
-"TEXT_MENU_TRANSLATE" = "Μετάφραση";
 
 /* text indicating the message was remotely deleted */
 "THIS_MESSAGE_WAS_DELETED" = "Αυτό το μήνυμα διαγράφτηκε.";
@@ -9526,45 +9898,81 @@
 /* Info Message when you update disappearing messages duration. Embeds a {{time amount}} before messages disappear. see the *_TIME_AMOUNT strings for context. */
 "YOU_UPDATED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Όρισες τον χρόνο εξαφάνισης των μηνυμάτων σε %1$@.";
 
-/* BA custom strings */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION" = "Δημιουργία αντιγράφου ασφαλείας: %1$@";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_CREATING_BACKUP" = "Εξαγωγή αντιγράφου ασφαλείας...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_BACKUP" = "Μεταφόρτωση αντιγράφου ασφαλείας...";
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_UPLOADING_MEDIA" = "Μεταφόρτωση αντιγράφου ασφαλείας πολυμέσων...";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_PRIMARY_BUTTON" = "Δημιουργία αντίγραφου τώρα";
-"BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_SECONDARY_BUTTON" = "Δημιουργία αντιγράφων ασφαλείας αργότερα";
-"FAILED_SENDING_BECAUSE_RATE_LIMIT" = "Πάρα πολλές αποτυχίες με αυτή την επαφή. Παρακαλώ ξαναδοκίμασε αργότερα.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_ACTION" = "Απενεργοποίηση";
-"PIN_CREATION_REGLOCK_CONFIRMATION_MESSAGE" = "Για να απενεργοποιήσεις το PIN, θα πρέπει πρώτα να απενεργοποιήσεις το Κλείδωμα Εγγραφής.";
-"PIN_CREATION_REGLOCK_CONFIRMATION_TITLE" = "Απενεργοποίηση του κλειδώματος εγγραφής;";
-"PIN_CREATION_REGLOCK_ERROR_MESSAGE" = "Η δημιουργία PIN ήταν επιτυχής, αλλά δεν ήταν δυνατή η ενεργοποίηση του κλειδώματος εγγραφής. Έλεγξε τη σύνδεσή σου και δοκίμασε ξανά.";
-"PIN_CREATION_REGLOCK_ERROR_TITLE" = "Η ενεργοποίηση του κλειδώματος εγγραφής απέτυχε";
-"PIN_DISABLE_ERROR_MESSAGE" = "Δεν ήταν δυνατή η απενεργοποίηση του PIN σου.";
-"PIN_DISABLE_ERROR_TITLE" = "Αποτυχία απενεργοποίησης PIN";
-"REGISTER_RATE_LIMITING_BODY" = "Έχεις δοκιμάσει πάρα πολλές φορές. Παρακαλώ περίμενε ένα λεπτό πριν ξαναδοκιμάσεις.";
-"VOICE_MESSAGE_FILE_NAME" = "B&A";
+/* ===== B&A Custom Strings ===== */
 
-/* BA custom strings */
+/* Unavailable media sheets */
+
+"AUDIO_UNAVAILABLE_SHEET_MESSAGE" = "Αυτό το ηχητικό μήνυμα δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός αρχείων και πολυμέσων παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
+
+"FILE_UNAVAILABLE_SHEET_MESSAGE" = "Αυτό το αρχείο δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός αρχείων και πολυμέσων παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
+
+"OVERSIZE_TEXT_UNAVAILABLE_SHEET_MESSAGE" = "Το πλήρες κείμενο σε αυτό το μήνυμα δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός μεγάλων μηνυμάτων κειμένου παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
+
+"STICKER_UNAVAILABLE_SHEET_MESSAGE" = "Αυτό το αυτοκόλλητο δεν μεταφέρθηκε από το τηλέφωνό σου όταν συνδέθηκε αυτή η συσκευή. Δεν είναι δυνατός ο συγχρονισμός πολυμέσων και αρχείων παλαιότερων των 45 ημερών κατά τη σύνδεση της συσκευής.";
+
+/* Backup plan */
+
+"BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER" = "Αντίγραφα ασφαλείας κειμένου + των πολυμέσων 45 ημερών";
+
+"CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP" = "Τελευταίες 45 ημέρες πολυμέσων";
+
+"CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE" = "Κείμενο + 45 ημέρες πολυμέσων";
+
+/* Donations */
+
+"DONATION_VIEW_MORE_SECTION_TITLE" = "Περισσότερα";
+
+"DONATION_VIEW_OTHER_WAYS_TO_DONATE_TITLE" = "Άλλοι τρόποι δωρεάς";
+
+/* Settings */
+
+"SETTINGS_COPYRIGHT" = "Πνευματική ιδιοκτησία B&A Messenger\nΥπό την άδεια AGPLv3";
+
+/* Link BAXS platform account */
+
 "PHOTO_CAPTURE_LINK_BA_QR_CODE_FOUND_MESSAGE" = "Φαίνεται πως προσπαθείς να συνδέσεις έναν λογαριασμό BAXS. Πάτησε «Συνέχεια», μετά «Σάρωση κωδικού QR» και σκάναρε ξανά τον κωδικό QR.";
+
 "LINK_BA_PLATFORM_ACCOUNT_TITLE" = "Σύνδεση λογαριασμού πλατφόρμας BA";
+
 "LINK_BA_PLATFORM_LINKED_SECTION_TITLE" = "Συνδεδεμένος λογαριασμός BAXS";
+
 "LINK_BA_PLATFORM_UNLINKED_SECTION_TITLE" = "Λογαριασμός πλατφόρμας BA";
+
 "LINK_BA_PLATFORM_SCAN_FOOTER" = "Σαρώστε τον κωδικό QR που εμφανίζεται στην πλατφόρμα πληρωμών BA για να συνδέσετε τον λογαριασμό σας.";
+
 "LINK_BA_PLATFORM_SCAN_QR_CODE" = "Σάρωση κωδικού QR";
-"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Κινητό";
-"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Email";
-"LINK_BA_PLATFORM_USER_ID" = "User ID";
-"LINK_BA_PLATFORM_USER_NAME" = "User Name";
-"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Σύνδεση λογαριασμού πλατφόρμας BA";
-"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Σύνδεση του λογαριασμού σας με \"%@\";";
-"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Ο λογαριασμός πλατφόρμας BA συνδέθηκε επιτυχώς.";
-"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Μη έγκυρος κωδικός QR";
-"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Αυτός ο κωδικός QR δεν είναι έγκυρος κωδικός σύνδεσης πλατφόρμας BA.";
+
 "LINK_BA_PLATFORM_SCAN_AGAIN" = "Σάρωση ξανά";
+
+"LINK_BA_PLATFORM_OPERATOR_MOBILE" = "Κινητό";
+
+"LINK_BA_PLATFORM_OPERATOR_EMAIL" = "Email";
+
+"LINK_BA_PLATFORM_USER_ID" = "User ID";
+
+"LINK_BA_PLATFORM_USER_NAME" = "User Name";
+
+"LINK_BA_PLATFORM_CONFIRM_TITLE" = "Σύνδεση λογαριασμού πλατφόρμας BA";
+
+"LINK_BA_PLATFORM_CONFIRM_MESSAGE_FORMAT" = "Σύνδεση του λογαριασμού σας με \"%@\";";
+
+"LINK_BA_PLATFORM_SUCCESS_TOAST" = "Ο λογαριασμός πλατφόρμας BA συνδέθηκε επιτυχώς.";
+
+"LINK_BA_PLATFORM_INVALID_QR_TITLE" = "Μη έγκυρος κωδικός QR";
+
+"LINK_BA_PLATFORM_INVALID_QR_MESSAGE" = "Αυτός ο κωδικός QR δεν είναι έγκυρος κωδικός σύνδεσης πλατφόρμας BA.";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_TITLE" = "Αδύνατη η σύνδεση";
+
 "LINK_BA_PLATFORM_CANNOT_LINK_DEFAULT_REASON" = "Αυτός ο κωδικός QR δεν μπορεί να χρησιμοποιηθεί για σύνδεση.";
+
 "LINK_BA_PLATFORM_FAILED_TITLE" = "Αποτυχία σύνδεσης";
+
 "LINK_BA_PLATFORM_FAILED_DEFAULT_REASON" = "Η πλατφόρμα BA απέρριψε το αίτημα σύνδεσης.";
+
 "LINK_BA_PLATFORM_TIMEOUT_TITLE" = "Λήξη χρόνου σύνδεσης";
+
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "Η πλατφόρμα BA δεν απάντησε εγκαίρως. Παρακαλώ δοκιμάστε ξανά.";
+
 "LINK_BA_PLATFORM_ERROR_TITLE" = "Σφάλμα";
+

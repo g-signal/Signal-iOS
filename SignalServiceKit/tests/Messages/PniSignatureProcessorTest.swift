@@ -34,7 +34,7 @@ private class MockRecipientMerger: RecipientMerger {
         appliedMergesFromPniSignatures += 1
     }
 
-    func splitUnregisteredRecipientIfNeeded(localIdentifiers: LocalIdentifiers, unregisteredRecipient: SignalRecipient, tx: DBWriteTransaction) {
+    func splitUnregisteredRecipientIfNeeded(localIdentifiers: LocalIdentifiers, unregisteredRecipient: inout SignalRecipient, tx: DBWriteTransaction) {
         fatalError()
     }
 }
@@ -59,7 +59,7 @@ final class PniSignatureProcessorTest: XCTestCase {
         super.setUp()
 
         recipientDatabaseTable = RecipientDatabaseTable()
-        let recipientFetcher = RecipientFetcherImpl(
+        let recipientFetcher = RecipientFetcher(
             recipientDatabaseTable: recipientDatabaseTable,
             searchableNameIndexer: MockSearchableNameIndexer(),
         )
@@ -70,21 +70,21 @@ final class PniSignatureProcessorTest: XCTestCase {
         pniSignatureProcessor = PniSignatureProcessorImpl(
             identityManager: identityManager,
             recipientDatabaseTable: recipientDatabaseTable,
-            recipientMerger: recipientMerger
+            recipientMerger: recipientMerger,
         )
 
         aci = Aci.constantForTesting("00000000-0000-4000-8000-0000000000a1")
-        aciRecipient = SignalRecipient(aci: aci, pni: nil, phoneNumber: nil)
         aciIdentityKeyPair = IdentityKeyPair.generate()
 
         pni = Pni.constantForTesting("PNI:00000000-0000-4000-8000-0000000000b1")
         phoneNumber = E164("+16505550101")!
-        pniRecipient = SignalRecipient(aci: nil, pni: pni, phoneNumber: phoneNumber)
         pniIdentityKeyPair = IdentityKeyPair.generate()
 
-        mockDB.write { tx in
-            recipientDatabaseTable.insertRecipient(aciRecipient, transaction: tx)
-            recipientDatabaseTable.insertRecipient(pniRecipient, transaction: tx)
+        (aciRecipient, pniRecipient) = mockDB.write { tx in
+            return (
+                try! SignalRecipient.insertRecord(aci: aci, tx: tx),
+                try! SignalRecipient.insertRecord(phoneNumber: phoneNumber, pni: pni, tx: tx),
+            )
         }
         identityManager.recipientIdentities = [
             aciRecipient.uniqueId: OWSRecipientIdentity(
@@ -92,15 +92,15 @@ final class PniSignatureProcessorTest: XCTestCase {
                 identityKey: aciIdentityKeyPair.identityKey.publicKey.keyBytes,
                 isFirstKnownKey: true,
                 createdAt: Date(),
-                verificationState: .default
+                verificationState: .default,
             ),
             pniRecipient.uniqueId: OWSRecipientIdentity(
                 uniqueId: pniRecipient.uniqueId,
                 identityKey: pniIdentityKeyPair.identityKey.publicKey.keyBytes,
                 isFirstKnownKey: true,
                 createdAt: Date(),
-                verificationState: .default
-            )
+                verificationState: .default,
+            ),
         ]
     }
 
@@ -114,7 +114,7 @@ final class PniSignatureProcessorTest: XCTestCase {
                 builder.buildInfallibly(),
                 from: aci,
                 localIdentifiers: .forUnitTests,
-                tx: tx
+                tx: tx,
             )
         }
     }
@@ -130,14 +130,15 @@ final class PniSignatureProcessorTest: XCTestCase {
         let signature = pniIdentityKeyPair.signAlternateIdentity(aciIdentityKeyPair.identityKey)
         XCTAssertThrowsError(
             try buildAndHandlePniSignatureMessage(from: aci, pni: otherPni, signature: signature),
-            "Shouldn't be able to handle the wrong PNI", { error in
+            "Shouldn't be able to handle the wrong PNI",
+            { error in
                 switch error {
                 case PniSignatureProcessorError.missingIdentityKey:
                     break
                 default:
                     XCTFail("Threw wrong type of error.")
                 }
-            }
+            },
         )
         XCTAssertEqual(recipientMerger.appliedMergesFromPniSignatures, 0)
     }
@@ -151,14 +152,15 @@ final class PniSignatureProcessorTest: XCTestCase {
         let signature = pniIdentityKeyPair.signAlternateIdentity(aciIdentityKeyPair.identityKey)
         XCTAssertThrowsError(
             try buildAndHandlePniSignatureMessage(from: aci, pni: pni, signature: signature),
-            "Shouldn't be able to handle PNI after its identity key is gone", { error in
+            "Shouldn't be able to handle PNI after its identity key is gone",
+            { error in
                 switch error {
                 case RecipientIdError.mustNotUsePniBecauseAciExists:
                     break
                 default:
                     XCTFail("Threw wrong type of error.")
                 }
-            }
+            },
         )
         XCTAssertEqual(recipientMerger.appliedMergesFromPniSignatures, 0)
     }
@@ -167,14 +169,15 @@ final class PniSignatureProcessorTest: XCTestCase {
         let signature = IdentityKeyPair.generate().signAlternateIdentity(aciIdentityKeyPair.identityKey)
         XCTAssertThrowsError(
             try buildAndHandlePniSignatureMessage(from: aci, pni: pni, signature: signature),
-            "Shouldn't be able to handle an invalid signature", { error in
+            "Shouldn't be able to handle an invalid signature",
+            { error in
                 switch error {
                 case PniSignatureProcessorError.invalidSignature:
                     break
                 default:
                     XCTFail("Threw wrong type of error.")
                 }
-            }
+            },
         )
         XCTAssertEqual(recipientMerger.appliedMergesFromPniSignatures, 0)
     }

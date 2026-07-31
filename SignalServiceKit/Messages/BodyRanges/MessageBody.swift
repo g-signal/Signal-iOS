@@ -9,7 +9,7 @@ public import LibSignalClient
 /// MessageBody is a container for a message's body as well as the `MessageBodyRanges` that
 /// apply to it.
 /// Most of the work is done by `MessageBodyRanges`; this is just a container for the text too.
-public class MessageBody: NSObject, NSCopying, NSSecureCoding {
+public class MessageBody: NSObject, NSSecureCoding {
     typealias Style = MessageBodyRanges.Style
     typealias CollapsedStyle = MessageBodyRanges.CollapsedStyle
 
@@ -58,10 +58,6 @@ public class MessageBody: NSObject, NSCopying, NSSecureCoding {
         self.ranges = ranges
     }
 
-    public func copy(with zone: NSZone? = nil) -> Any {
-        return MessageBody(text: text, ranges: ranges)
-    }
-
     public func encode(with coder: NSCoder) {
         coder.encode(text, forKey: "text")
         coder.encode(ranges, forKey: "ranges")
@@ -70,13 +66,13 @@ public class MessageBody: NSObject, NSCopying, NSSecureCoding {
     public func hydrating(
         mentionHydrator: MentionHydrator,
         filterStringForDisplay: Bool = true,
-        isRTL: Bool = CurrentAppContext().isRTL
+        isRTL: Bool = CurrentAppContext().isRTL,
     ) -> HydratedMessageBody {
         let body = filterStringForDisplay ? self.filterStringForDisplay() : self
         return HydratedMessageBody(
             messageBody: body,
             mentionHydrator: mentionHydrator,
-            isRTL: isRTL
+            isRTL: isRTL,
         )
     }
 
@@ -104,9 +100,9 @@ public class MessageBody: NSObject, NSCopying, NSSecureCoding {
             guard
                 let newRange = NSRange(
                     location: mention.range.location - strippedPrefixLength,
-                    length: mention.range.length
+                    length: mention.range.length,
                 ).intersection(filteredStringEntireRange),
-                  newRange.length > 0
+                newRange.length > 0
             else {
                 return nil
             }
@@ -117,7 +113,7 @@ public class MessageBody: NSObject, NSCopying, NSSecureCoding {
             guard
                 let newRange = NSRange(
                     location: style.range.location - strippedPrefixLength,
-                    length: style.range.length
+                    length: style.range.length,
                 ).intersection(filteredStringEntireRange),
                 newRange.length > 0
             else {
@@ -125,7 +121,7 @@ public class MessageBody: NSObject, NSCopying, NSSecureCoding {
             }
             return .init(
                 style.value,
-                range: newRange
+                range: newRange,
             )
         }
         return MessageBody(
@@ -133,12 +129,12 @@ public class MessageBody: NSObject, NSCopying, NSSecureCoding {
             ranges: MessageBodyRanges(
                 mentions: adjustedMentions,
                 orderedMentions: orderedAdjustedMentions,
-                collapsedStyles: adjustedStyles
-            )
+                collapsedStyles: adjustedStyles,
+            ),
         )
     }
 
-    public override func isEqual(_ object: Any?) -> Bool {
+    override public func isEqual(_ object: Any?) -> Bool {
         guard let other = object as? MessageBody else {
             return false
         }
@@ -151,7 +147,7 @@ public class MessageBody: NSObject, NSCopying, NSSecureCoding {
         return true
     }
 
-    public override var hash: Int {
+    override public var hash: Int {
         var hasher = Hasher()
         hasher.combine(text)
         hasher.combine(ranges)
@@ -164,7 +160,7 @@ extension MessageBody {
     public func forForwarding(
         to context: TSThread,
         transaction: DBReadTransaction,
-        isRTL: Bool = CurrentAppContext().isRTL
+        isRTL: Bool = CurrentAppContext().isRTL,
     ) -> HydratedMessageBody {
         guard hasMentions else {
             return hydrating(mentionHydrator: { _ in return .preserveMention }, isRTL: isRTL)
@@ -182,7 +178,7 @@ extension MessageBody {
         // not be known to everyone so we need to hydrate them out.
         let mentionHydrator = ContactsMentionHydrator.mentionHydrator(
             excludedAcis: groupMemberAcis,
-            transaction: transaction
+            transaction: transaction,
         )
 
         return hydrating(mentionHydrator: mentionHydrator, isRTL: isRTL)
@@ -195,16 +191,16 @@ extension MessageBody {
     /// This context is not necessarily one single thread; we could be pasting into a composer
     /// for sending to multiple threads. So the input array is _all_ valid addresses.
     public func forPasting(
-        intoContextWithPossibleAddresses possibleAddresses: [SignalServiceAddress],
+        intoContextWithPossibleAcis possibleAcis: [Aci],
         transaction: DBReadTransaction,
-        isRTL: Bool = CurrentAppContext().isRTL
+        isRTL: Bool = CurrentAppContext().isRTL,
     ) -> MessageBody {
         guard hasMentions else {
             return self
         }
         let mentionHydrator = ContactsMentionHydrator.mentionHydrator(
-            excludedAcis: Set(possibleAddresses.compactMap(\.aci)),
-            transaction: transaction
+            excludedAcis: Set(possibleAcis),
+            transaction: transaction,
         )
         return hydrating(mentionHydrator: mentionHydrator, isRTL: isRTL).asMessageBodyForForwarding()
     }
@@ -221,7 +217,7 @@ extension MessageBody {
     /// e.g. 0 being the first character of the substring.
     public func mergeIntoFirstMatchOfStyledSubstring(
         _ substring: String,
-        styles: [NSRangedValue<MessageBodyRanges.Style>]
+        styles: [NSRangedValue<MessageBodyRanges.Style>],
     ) -> MessageBody {
         // First find the offset.
         let substringRange = (text as NSString).range(of: substring)
@@ -230,12 +226,12 @@ extension MessageBody {
         }
         let subrangeStyles = MessageBodyRanges.SubrangeStyles(
             substringRange: substringRange,
-            stylesInSubstring: styles
+            stylesInSubstring: styles,
         )
         let newRanges = self.ranges.mergingStyles(subrangeStyles)
         return MessageBody(
             text: substring,
-            ranges: newRanges
+            ranges: newRanges,
         )
     }
 }

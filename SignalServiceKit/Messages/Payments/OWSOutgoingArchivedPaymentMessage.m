@@ -30,6 +30,50 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [super encodeWithCoder:coder];
+    TSArchivedPaymentInfo *archivedPaymentInfo = self.archivedPaymentInfo;
+    if (archivedPaymentInfo != nil) {
+        [coder encodeObject:archivedPaymentInfo forKey:@"archivedPaymentInfo"];
+    }
+}
+
+- (nullable instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (!self) {
+        return self;
+    }
+    self->_archivedPaymentInfo = [coder decodeObjectOfClass:[TSArchivedPaymentInfo class]
+                                                     forKey:@"archivedPaymentInfo"];
+    return self;
+}
+
+- (NSUInteger)hash
+{
+    NSUInteger result = [super hash];
+    result ^= self.archivedPaymentInfo.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
+    }
+    OWSOutgoingArchivedPaymentMessage *typedOther = (OWSOutgoingArchivedPaymentMessage *)other;
+    if (![NSObject isObject:self.archivedPaymentInfo equalToObject:typedOther.archivedPaymentInfo]) {
+        return NO;
+    }
+    return YES;
+}
+
 - (instancetype)initOutgoingArchivedPaymentMessageWithBuilder:(TSOutgoingMessageBuilder *)messageBuilder
                                                        amount:(nullable NSString *)amount
                                                           fee:(nullable NSString *)fee
@@ -85,7 +129,7 @@ NS_ASSUME_NONNULL_BEGIN
                   storyTimestamp:(nullable NSNumber *)storyTimestamp
               wasRemotelyDeleted:(BOOL)wasRemotelyDeleted
                    customMessage:(nullable NSString *)customMessage
-                groupMetaMessage:(TSGroupMetaMessage)groupMetaMessage
+                groupMetaMessage:(NSInteger)groupMetaMessage
            hasLegacyMessageState:(BOOL)hasLegacyMessageState
              hasSyncedTranscript:(BOOL)hasSyncedTranscript
                   isVoiceMessage:(BOOL)isVoiceMessage

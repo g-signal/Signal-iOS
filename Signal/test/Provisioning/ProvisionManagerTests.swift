@@ -17,7 +17,7 @@ public class ProvisioningManagerTests {
     private var mockDeviceProvisioningService: MockDeviceProvisioningService!
     private var mockIdentityManager: MockIdentityManager!
     private var mockLinkAndSyncManager: MockLinkAndSyncManager!
-    private var mockProfileManager: ProvisioningManager.Mocks.ProfileManager!
+    private var mockProfileManager: OWSFakeProfileManager!
     private var mockReceiptManager: ProvisioningManager.Mocks.ReceiptManager!
     private var mockTsAccountManager: MockTSAccountManager!
 
@@ -31,11 +31,11 @@ public class ProvisioningManagerTests {
         self.deviceManager = MockDeviceManager()
         self.mockDeviceProvisioningService = MockDeviceProvisioningService()
         self.mockLinkAndSyncManager = MockLinkAndSyncManager()
-        self.mockProfileManager = ProvisioningManager.Mocks.ProfileManager()
+        self.mockProfileManager = OWSFakeProfileManager()
         self.mockReceiptManager = ProvisioningManager.Mocks.ReceiptManager()
         self.mockTsAccountManager = MockTSAccountManager()
 
-        recipientFetcher = RecipientFetcherImpl(
+        recipientFetcher = RecipientFetcher(
             recipientDatabaseTable: recipientDatabaseTable,
             searchableNameIndexer: MockSearchableNameIndexer(),
         )
@@ -50,7 +50,6 @@ public class ProvisioningManagerTests {
         let myAci = Aci.randomForTesting()
         let myPhoneNumber = E164("+16505550100")!
         let myPni = Pni.randomForTesting()
-        let myRecipient = SignalRecipient(aci: myAci, pni: myPni, phoneNumber: myPhoneNumber)
         let profileKey = Aes256Key.generateRandom()
         let accountEntropyPool = AccountEntropyPool()
         let mrbk = MediaRootBackupKey(backupKey: .generateRandom())
@@ -66,19 +65,19 @@ public class ProvisioningManagerTests {
         db.write { tx in
             accountKeyStore.setAccountEntropyPool(accountEntropyPool, tx: tx)
             accountKeyStore.setMediaRootBackupKey(mrbk, tx: tx)
-            recipientDatabaseTable.insertRecipient(myRecipient, transaction: tx)
             mockIdentityManager.setIdentityKeyPair(myAciIdentityKeyPair.asECKeyPair, for: .aci, tx: tx)
             mockIdentityManager.setIdentityKeyPair(myPniIdentityKeyPair.asECKeyPair, for: .pni, tx: tx)
+            _ = try! SignalRecipient.insertRecord(aci: myAci, phoneNumber: myPhoneNumber, pni: myPni, tx: tx)
         }
 
         mockTsAccountManager.localIdentifiersMock = {
             return LocalIdentifiers(
                 aci: myAci,
                 pni: myPni,
-                e164: myPhoneNumber
+                e164: myPhoneNumber,
             )
         }
-        mockProfileManager.localUserProfile = OWSUserProfile(address: .localUser, profileKey: profileKey)
+        mockProfileManager.localProfile = OWSUserProfile(address: .localUser, profileKey: profileKey)
         mockReceiptManager.areReadReceiptsEnabledValue = readReceiptsEnabled
         mockDeviceProvisioningService.deviceProvisioningCodes.append(provisioningCode)
 
@@ -91,14 +90,14 @@ public class ProvisioningManagerTests {
             linkAndSyncManager: mockLinkAndSyncManager,
             profileManager: mockProfileManager,
             receiptManager: mockReceiptManager,
-            tsAccountManager: mockTsAccountManager
+            tsAccountManager: mockTsAccountManager,
         )
 
         // New device: Build the linking URL that is shown in the QR code
         let provisioningUrl = DeviceProvisioningURL(
             type: .linkDevice,
             ephemeralDeviceId: ephemeralDeviceId,
-            publicKey: newDeviceIdentityKeyPair.publicKey
+            publicKey: newDeviceIdentityKeyPair.publicKey,
         )
 
         // Old device: Using the provisioning URL read from the new device, build a provisioning
@@ -112,7 +111,7 @@ public class ProvisioningManagerTests {
         let provisioningCipher = ProvisioningCipher(ourKeyPair: newDeviceIdentityKeyPair)
         let provisionMessageData = try provisioningCipher.decrypt(
             data: provisionEnvelope.body,
-            theirPublicKey: PublicKey(provisionEnvelope.publicKey)
+            theirPublicKey: PublicKey(provisionEnvelope.publicKey),
         )
         let provisionMessage = try LinkingProvisioningMessage(plaintext: provisionMessageData)
 
@@ -120,7 +119,7 @@ public class ProvisioningManagerTests {
         // values populated by the old device
         switch provisionMessage.rootKey {
         case .accountEntropyPool(let aep):
-            #expect(aep.rawData == accountEntropyPool.rawData)
+            #expect(aep == accountEntropyPool)
         case .masterKey:
             Issue.record("Expected AEP, but found MasterKey")
         }
@@ -165,7 +164,7 @@ private class MockLinkAndSyncManager: LinkAndSyncManager {
     func waitForLinkingAndUploadBackup(
         ephemeralBackupKey: MessageRootBackupKey,
         tokenId: DeviceProvisioningTokenId,
-        progress: OWSSequentialProgressRootSink<PrimaryLinkNSyncProgressPhase>
+        progress: OWSSequentialProgressRootSink<PrimaryLinkNSyncProgressPhase>,
     ) async throws(PrimaryLinkNSyncError) {
         return
     }
@@ -174,8 +173,8 @@ private class MockLinkAndSyncManager: LinkAndSyncManager {
         localIdentifiers: LocalIdentifiers,
         auth: ChatServiceAuth,
         ephemeralBackupKey: MessageRootBackupKey,
-        progress: OWSSequentialProgressRootSink<SecondaryLinkNSyncProgressPhase>
-    ) async throws(SecondaryLinkNSyncError) {
+        progress: OWSSequentialProgressRootSink<SecondaryLinkNSyncProgressPhase>,
+    ) async throws {
         return
     }
 }

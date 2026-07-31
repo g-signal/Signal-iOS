@@ -78,9 +78,23 @@ lastVisibleSortIdOnScreenPercentageObsolete:lastVisibleSortIdOnScreenPercentageO
 
 // --- CODE GENERATION MARKER
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    return [super initWithCoder:coder];
+    NSUInteger result = [super hash];
+    result ^= self.groupModel.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
+    }
+    TSGroupThread *typedOther = (TSGroupThread *)other;
+    if (![NSObject isObject:self.groupModel equalToObject:typedOther.groupModel]) {
+        return NO;
+    }
+    return YES;
 }
 
 - (instancetype)initWithGroupModel:(TSGroupModelV2 *)groupModel

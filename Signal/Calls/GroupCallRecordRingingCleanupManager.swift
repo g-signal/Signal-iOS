@@ -38,7 +38,7 @@ class GroupCallRecordRingingCleanupManager {
     private let db: any DB
     private let interactionStore: InteractionStore
     private let groupCallPeekClient: GroupCallPeekClient
-    private let notificationPresenter: Shims.NotificationPresenter
+    private let notificationPresenter: NotificationPresenter
     private let threadStore: ThreadStore
 
     init(
@@ -48,14 +48,14 @@ class GroupCallRecordRingingCleanupManager {
         interactionStore: InteractionStore,
         groupCallPeekClient: GroupCallPeekClient,
         notificationPresenter: NotificationPresenter,
-        threadStore: ThreadStore
+        threadStore: ThreadStore,
     ) {
         self.callRecordStore = callRecordStore
         self.callRecordQuerier = callRecordQuerier
         self.db = db
         self.interactionStore = interactionStore
         self.groupCallPeekClient = groupCallPeekClient
-        self.notificationPresenter = Wrappers.NotificationPresenter(notificationPresenter: notificationPresenter)
+        self.notificationPresenter = notificationPresenter
         self.threadStore = threadStore
     }
 
@@ -64,7 +64,7 @@ class GroupCallRecordRingingCleanupManager {
             let ringingGroupCallCursor = callRecordQuerier.fetchCursor(
                 callStatus: .group(.ringing),
                 ordering: .descending,
-                tx: tx
+                tx: tx,
             ),
             let ringingCallRecords = try? ringingGroupCallCursor.drain()
         else { return }
@@ -83,7 +83,7 @@ class GroupCallRecordRingingCleanupManager {
             callRecordStore.updateCallAndUnreadStatus(
                 callRecord: ringingCallRecord,
                 newCallStatus: .group(.ringingMissed),
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -91,8 +91,8 @@ class GroupCallRecordRingingCleanupManager {
         /// groupings to load the group thread for each row ID.
         let callRecordsByGroupId: [(GroupIdentifier, [CallRecord])] = Dictionary(
             grouping: callRecordsToPeek,
-            by: { $0.conversationId }
-        ).compactMap { (conversationId, callRecords) -> (GroupIdentifier, [CallRecord])? in
+            by: { $0.conversationId },
+        ).compactMap { conversationId, callRecords -> (GroupIdentifier, [CallRecord])? in
             switch conversationId {
             case .thread(let threadRowId):
                 guard
@@ -102,7 +102,7 @@ class GroupCallRecordRingingCleanupManager {
                     return nil
                 }
                 return (groupId, callRecords)
-            case .callLink(_):
+            case .callLink:
                 return nil
             }
         }
@@ -111,7 +111,7 @@ class GroupCallRecordRingingCleanupManager {
             Task {
                 try await peekGroupAndNotifyIfNecessary(
                     groupId: groupId,
-                    callRecords: callRecords
+                    callRecords: callRecords,
                 )
             }
         }
@@ -123,7 +123,7 @@ class GroupCallRecordRingingCleanupManager {
     /// the ringing record is still ongoing), posts a notification.
     private func peekGroupAndNotifyIfNecessary(
         groupId: GroupIdentifier,
-        callRecords: [CallRecord]
+        callRecords: [CallRecord],
     ) async throws {
         let peekInfo = try await self.groupCallPeekClient.fetchPeekInfo(groupId: groupId)
         let callId = peekInfo.eraId.map({ callIdFromEra($0) })
@@ -155,53 +155,13 @@ class GroupCallRecordRingingCleanupManager {
                     continue
                 }
 
-                self.notificationPresenter.notifyUserGroupCallStarted(
-                    groupCallInteraction: groupCallInteraction,
-                    groupThread: groupThread,
-                    tx: tx
+                self.notificationPresenter.notifyUser(
+                    forPreviewableInteraction: groupCallInteraction,
+                    thread: groupThread,
+                    wantsSound: true,
+                    transaction: tx,
                 )
             }
         }
-    }
-}
-
-// MARK: - Shims
-
-private extension GroupCallRecordRingingCleanupManager {
-    enum Shims {
-        typealias NotificationPresenter = GroupCallRecordRingingCleanupManager_NotificationPresenter_Shim
-    }
-
-    enum Wrappers {
-        typealias NotificationPresenter = GroupCallRecordRingingCleanupManager_NotificationPresenter_Wrapper
-    }
-}
-
-private protocol GroupCallRecordRingingCleanupManager_NotificationPresenter_Shim {
-    func notifyUserGroupCallStarted(
-        groupCallInteraction: OWSGroupCallMessage,
-        groupThread: TSGroupThread,
-        tx: DBWriteTransaction
-    )
-}
-
-private class GroupCallRecordRingingCleanupManager_NotificationPresenter_Wrapper: GroupCallRecordRingingCleanupManager_NotificationPresenter_Shim {
-    private let notificationPresenter: any NotificationPresenter
-
-    init(notificationPresenter: any NotificationPresenter) {
-        self.notificationPresenter = notificationPresenter
-    }
-
-    func notifyUserGroupCallStarted(
-        groupCallInteraction: OWSGroupCallMessage,
-        groupThread: TSGroupThread,
-        tx: DBWriteTransaction
-    ) {
-        notificationPresenter.notifyUser(
-            forPreviewableInteraction: groupCallInteraction,
-            thread: groupThread,
-            wantsSound: true,
-            transaction: SDSDB.shimOnlyBridge(tx)
-        )
     }
 }

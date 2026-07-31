@@ -7,35 +7,32 @@ public class AttachmentManagerImpl: AttachmentManager {
 
     private let attachmentDownloadManager: AttachmentDownloadManager
     private let attachmentStore: AttachmentStore
-    private let backupAttachmentUploadQueueRunner: BackupAttachmentUploadQueueRunner
     private let backupAttachmentUploadScheduler: BackupAttachmentUploadScheduler
     private let dateProvider: DateProvider
     private let orphanedAttachmentCleaner: OrphanedAttachmentCleaner
     private let orphanedAttachmentStore: OrphanedAttachmentStore
-    private let orphanedBackupAttachmentManager: OrphanedBackupAttachmentManager
+    private let orphanedBackupAttachmentScheduler: OrphanedBackupAttachmentScheduler
     private let remoteConfigManager: RemoteConfigManager
     private let stickerManager: Shims.StickerManager
 
     public init(
         attachmentDownloadManager: AttachmentDownloadManager,
         attachmentStore: AttachmentStore,
-        backupAttachmentUploadQueueRunner: BackupAttachmentUploadQueueRunner,
         backupAttachmentUploadScheduler: BackupAttachmentUploadScheduler,
         dateProvider: @escaping DateProvider,
         orphanedAttachmentCleaner: OrphanedAttachmentCleaner,
         orphanedAttachmentStore: OrphanedAttachmentStore,
-        orphanedBackupAttachmentManager: OrphanedBackupAttachmentManager,
+        orphanedBackupAttachmentScheduler: OrphanedBackupAttachmentScheduler,
         remoteConfigManager: RemoteConfigManager,
-        stickerManager: Shims.StickerManager
+        stickerManager: Shims.StickerManager,
     ) {
         self.attachmentDownloadManager = attachmentDownloadManager
         self.attachmentStore = attachmentStore
-        self.backupAttachmentUploadQueueRunner = backupAttachmentUploadQueueRunner
         self.backupAttachmentUploadScheduler = backupAttachmentUploadScheduler
         self.dateProvider = dateProvider
         self.orphanedAttachmentCleaner = orphanedAttachmentCleaner
         self.orphanedAttachmentStore = orphanedAttachmentStore
-        self.orphanedBackupAttachmentManager = orphanedBackupAttachmentManager
+        self.orphanedBackupAttachmentScheduler = orphanedBackupAttachmentScheduler
         self.remoteConfigManager = remoteConfigManager
         self.stickerManager = stickerManager
     }
@@ -44,94 +41,82 @@ public class AttachmentManagerImpl: AttachmentManager {
 
     // MARK: Creating Attachments from source
 
-    public func createAttachmentPointers(
-        from protos: [OwnedAttachmentPointerProto],
-        tx: DBWriteTransaction
+    public func createAttachmentPointer(
+        from ownedProto: OwnedAttachmentPointerProto,
+        tx: DBWriteTransaction,
     ) throws {
-        guard protos.count < UInt32.max else {
-            throw OWSAssertionError("Input array too large")
-        }
-        try createAttachments(
-            protos,
-            mimeType: \.proto.contentType,
-            owner: \.owner,
-            output: \.proto,
-            createFn: {
-                try self._createAttachmentPointer(
-                    from: $0,
-                    owner: $1,
-                    sourceOrder: $2,
-                    tx: $3
-                )
-            },
-            tx: tx
+        let sanitizedOwnedProto = OwnedAttachmentPointerProto(
+            proto: ownedProto.proto,
+            owner: sanitizeOversizeTextOwner(
+                currentOwner: ownedProto.owner,
+                mimeType: ownedProto.proto.contentType ?? "",
+            ),
+        )
+
+        try _createAttachmentPointer(
+            from: sanitizedOwnedProto.proto,
+            owner: sanitizedOwnedProto.owner,
+            tx: tx,
         )
     }
 
-    public func createAttachmentPointers(
-        from backupProtos: [OwnedAttachmentBackupPointerProto],
+    public func createAttachmentPointer(
+        from ownedBackupProto: OwnedAttachmentBackupPointerProto,
         uploadEra: String,
         attachmentByteCounter: BackupArchiveAttachmentByteCounter,
-        tx: DBWriteTransaction
-    ) -> [OwnedAttachmentBackupPointerProto.CreationError] {
-        let results = createAttachments(
-            backupProtos,
-            mimeType: { $0.proto.contentType },
-            owner: \.owner,
-            output: { $0 },
-            createFn: {
-                 return self._createAttachmentPointer(
-                    from: $0,
-                    owner: $1,
-                    sourceOrder: $2,
-                    uploadEra: uploadEra,
-                    attachmentByteCounter: attachmentByteCounter,
-                    tx: $3
-                )
-            },
-            tx: tx
+        tx: DBWriteTransaction,
+    ) -> OwnedAttachmentBackupPointerProto.CreationError? {
+        let sanitizedOwnedBackupProto = OwnedAttachmentBackupPointerProto(
+            proto: ownedBackupProto.proto,
+            renderingFlag: ownedBackupProto.renderingFlag,
+            clientUUID: ownedBackupProto.clientUUID,
+            owner: sanitizeOversizeTextOwner(
+                currentOwner: ownedBackupProto.owner,
+                mimeType: ownedBackupProto.proto.contentType,
+            ),
         )
-        return results.compactMap { result in
-            switch result {
-            case .success:
-                return nil
-            case .failure(let error):
-                return error
-            }
+
+        switch _createAttachmentPointer(
+            from: sanitizedOwnedBackupProto,
+            uploadEra: uploadEra,
+            attachmentByteCounter: attachmentByteCounter,
+            tx: tx,
+        ) {
+        case .success:
+            return nil
+        case .failure(let error):
+            return error
         }
     }
 
-    public func createAttachmentStreams(
-        consuming dataSources: [OwnedAttachmentDataSource],
-        tx: DBWriteTransaction
+    public func createAttachmentStream(
+        from ownedDataSource: OwnedAttachmentDataSource,
+        tx: DBWriteTransaction,
     ) throws {
-        guard dataSources.count < UInt32.max else {
-            throw OWSAssertionError("Input array too large")
-        }
-        try createAttachments(
-            dataSources,
-            mimeType: { $0.mimeType },
-            owner: \.owner,
-            output: \.source,
-            createFn: {
-                try self._createAttachmentStream(
-                    consuming: $0,
-                    owner: $1,
-                    sourceOrder: $2,
-                    tx: $3
-                )
-            },
-            tx: tx
+        let sanitizedOwnedDataSource = OwnedAttachmentDataSource(
+            dataSource: ownedDataSource.source,
+            owner: sanitizeOversizeTextOwner(
+                currentOwner: ownedDataSource.owner,
+                mimeType: ownedDataSource.mimeType,
+            ),
         )
+
+        try _createAttachmentStream(
+            from: sanitizedOwnedDataSource,
+            tx: tx,
+        )
+
         // When we create the attachment streams we schedule a backup of the
         // new attachments. Kick the tires so that upload starts happening now.
-        backupAttachmentUploadQueueRunner.backUpAllAttachmentsAfterTxCommits(tx: tx)
+        tx.addSyncCompletion {
+            NotificationCenter.default.post(name: .startBackupAttachmentUploadQueue, object: nil)
+        }
     }
 
     public func updateAttachmentWithOversizeTextFromBackup(
         attachmentId: Attachment.IDType,
         pendingAttachment: PendingAttachment,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) throws {
         guard let attachment = attachmentStore.fetch(id: attachmentId, tx: tx) else {
             // The attachment got deleted? Should be impossible but ultimately fine.
@@ -146,170 +131,55 @@ public class AttachmentManagerImpl: AttachmentManager {
         try _updateAttachmentWithOversizeTextFromBackup(
             attachment: attachment,
             pendingAttachment: pendingAttachment,
-            tx: tx
+            tx: tx,
         )
     }
 
     // MARK: Quoted Replies
 
-    public func quotedReplyAttachmentInfo(
-        originalMessage: TSMessage,
-        tx: DBReadTransaction
-    ) -> QuotedAttachmentInfo? {
-        guard let originalMessageRowId = originalMessage.sqliteRowId else {
-            owsFailDebug("Cloning attachment for un-inserted message")
-            return nil
-        }
-        return _quotedReplyAttachmentInfo(originalMessageRowId: originalMessageRowId, tx: tx).0?.info
-    }
-
-    public func createQuotedReplyMessageThumbnailBuilder(
-        from dataSource: QuotedReplyAttachmentDataSource,
-        tx: DBWriteTransaction
-    ) -> OwnedAttachmentBuilder<QuotedAttachmentInfo> {
-        let (info, isStub) = self._quotedReplyAttachmentInfo(
-            originalAttachmentMimeType: dataSource.originalAttachmentMimeType,
-            originalReferenceSourceFilename: dataSource.originalAttachmentSourceFilename,
-            originalReferenceRenderingFlag: dataSource.renderingFlag
-        )
-        if isStub {
-            return .withoutFinalizer(info)
-        }
-        return OwnedAttachmentBuilder<QuotedAttachmentInfo>(
-            info: info,
-            finalize: { [self, dataSource] ownerId, tx in
-                let replyMessageOwner: AttachmentReference.OwnerBuilder.MessageAttachmentBuilder
-                switch ownerId {
-                case .quotedReplyAttachment(let metadata):
-                    replyMessageOwner = metadata
-                default:
-                    owsFailDebug("Invalid owner sent to quoted reply builder!")
-                    return
-                }
-
-                try self.createQuotedReplyMessageThumbnail(
-                    consuming: .init(
-                        dataSource: dataSource,
-                        owner: replyMessageOwner
-                    ),
-                    tx: tx
-                )
-            }
-        )
-    }
-
-    private func createQuotedReplyMessageThumbnail(
-        consuming dataSource: OwnedQuotedReplyAttachmentDataSource,
-        tx: DBWriteTransaction
+    public func createQuotedReplyMessageThumbnail(
+        from quotedReplyAttachmentDataSource: QuotedReplyAttachmentDataSource,
+        owningMessageAttachmentBuilder: AttachmentReference.OwnerBuilder.MessageAttachmentBuilder,
+        tx: DBWriteTransaction,
     ) throws {
-        switch dataSource.source.source {
-        case .originalAttachment:
-            // If the goal is to capture the original message's attachment,
-            // ensure we can actually capture its info.
-            if let originalMessageRowId = dataSource.source.originalMessageRowId {
-                let (info, isStub) = _quotedReplyAttachmentInfo(originalMessageRowId: originalMessageRowId, tx: tx)
-                guard
-                    info != nil,
-                    !isStub
-                else {
-                    return
-                }
-            }
-        case .pendingAttachment, .quotedAttachmentProto:
-            break
-        }
         try _createQuotedReplyMessageThumbnail(
-            dataSource: dataSource,
-            tx: tx
+            dataSource: quotedReplyAttachmentDataSource,
+            referenceOwner: .quotedReplyAttachment(owningMessageAttachmentBuilder),
+            tx: tx,
         )
-    }
-
-    // MARK: Removing Attachments
-
-    public func removeAttachment(
-        reference: AttachmentReference,
-        tx: DBWriteTransaction
-    ) throws {
-        try attachmentStore.removeOwner(
-            reference: reference,
-            tx: tx
-        )
-    }
-
-    public func removeAllAttachments(
-        from owners: [AttachmentReference.OwnerId],
-        tx: DBWriteTransaction
-    ) throws {
-        try attachmentStore.fetchReferences(owners: owners, tx: tx)
-            .forEach { reference in
-                try attachmentStore.removeAllOwners(
-                    withId: reference.owner.id,
-                    for: reference.attachmentRowId,
-                    tx: tx
-                )
-            }
     }
 
     // MARK: - Helpers
 
-    private typealias OwnerId = AttachmentReference.OwnerId
-    private typealias OwnerBuilder = AttachmentReference.OwnerBuilder
-
     // MARK: Creating Attachments from source
 
-    @discardableResult
-    private func createAttachments<Input, Output, Result>(
-        _ inputArray: [Input],
-        mimeType: (Input) -> String?,
-        owner: (Input) -> OwnerBuilder,
-        output: (Input) -> Output,
-        createFn: (Output, OwnerBuilder, UInt32?, DBWriteTransaction) throws -> Result,
-        tx: DBWriteTransaction
-    ) rethrows -> [Result] {
-        var results = [Result]()
-        var indexOffset: Int = 0
-        for (i, input) in inputArray.enumerated() {
-            let sourceOrder: UInt32?
-            var ownerForInput = owner(input)
-            switch ownerForInput {
-            case .messageBodyAttachment(let metadata):
-                // Convert text mime type attachments in the first spot to oversize text.
-                if mimeType(input) == MimeType.textXSignalPlain.rawValue {
-                    ownerForInput = .messageOversizeText(.init(
-                        messageRowId: metadata.messageRowId,
-                        receivedAtTimestamp: metadata.receivedAtTimestamp,
-                        threadRowId: metadata.threadRowId,
-                        isPastEditRevision: metadata.isPastEditRevision
-                    ))
-                    indexOffset = -1
-                    sourceOrder = nil
-                } else {
-                    sourceOrder = UInt32(i + indexOffset)
-                }
-            default:
-                sourceOrder = nil
-                if inputArray.count > 1 {
-                    // Only allow multiple attachments in the case of message body attachments.
-                    owsFailDebug("Can't have multiple attachments under the same owner reference!")
-                }
-            }
-
-            let result = try createFn(output(input), ownerForInput, sourceOrder, tx)
-            results.append(result)
+    private func sanitizeOversizeTextOwner(
+        currentOwner: AttachmentReference.OwnerBuilder,
+        mimeType: String,
+    ) -> AttachmentReference.OwnerBuilder {
+        if
+            mimeType == MimeType.textXSignalPlain.rawValue,
+            case .messageBodyAttachment(let metadata) = currentOwner
+        {
+            return .messageOversizeText(.init(
+                messageRowId: metadata.messageRowId,
+                receivedAtTimestamp: metadata.receivedAtTimestamp,
+                threadRowId: metadata.threadRowId,
+                isPastEditRevision: metadata.isPastEditRevision,
+            ))
+        } else {
+            return currentOwner
         }
-        return results
     }
 
     private func _createAttachmentPointer(
         from proto: SSKProtoAttachmentPointer,
-        owner: OwnerBuilder,
-        // Nil if no order is to be applied.
-        sourceOrder: UInt32?,
-        tx: DBWriteTransaction
+        owner: AttachmentReference.OwnerBuilder,
+        tx: DBWriteTransaction,
     ) throws {
         let transitTierInfo = try self.transitTierInfo(from: proto)
 
-        let knownIdFromProto: OwnerBuilder.KnownIdInOwner = {
+        let knownIdFromProto: AttachmentReference.OwnerBuilder.KnownIdInOwner = {
             if
                 let uuidData = proto.clientUuid,
                 let uuid = UUID(data: uuidData)
@@ -323,14 +193,14 @@ public class AttachmentManagerImpl: AttachmentManager {
         let sourceFilename = proto.fileName
         let mimeType = self.mimeType(
             fromProtoContentType: proto.contentType,
-            sourceFilename: sourceFilename
+            sourceFilename: sourceFilename,
         )
 
         let attachmentParams = Attachment.ConstructionParams.fromPointer(
             blurHash: proto.blurHash,
             mimeType: mimeType,
             encryptionKey: transitTierInfo.encryptionKey,
-            latestTransitTierInfo: transitTierInfo
+            latestTransitTierInfo: transitTierInfo,
         )
         let sourceMediaSizePixels: CGSize?
         if
@@ -345,31 +215,30 @@ public class AttachmentManagerImpl: AttachmentManager {
         }
 
         let referenceParams = AttachmentReference.ConstructionParams(
-            owner: try owner.build(
-                orderInOwner: sourceOrder,
+            owner: owner.build(
                 knownIdInOwner: knownIdFromProto,
                 renderingFlag: .fromProto(proto),
                 // Not downloaded so we don't know the content type.
                 contentType: nil,
                 // This should be unset for newly-incoming attachments, but it's
                 // still technically in the proto definition.
-                caption: proto.hasCaption ? proto.caption : nil
+                caption: proto.hasCaption ? proto.caption : nil,
             ),
             sourceFilename: sourceFilename,
             sourceUnencryptedByteCount: proto.size,
-            sourceMediaSizePixels: sourceMediaSizePixels
+            sourceMediaSizePixels: sourceMediaSizePixels,
         )
 
         try attachmentStore.insert(
             attachmentParams,
             reference: referenceParams,
-            tx: tx
+            tx: tx,
         )
 
         if let mediaName = attachmentParams.mediaName {
-            orphanedBackupAttachmentManager.didCreateOrUpdateAttachment(
+            orphanedBackupAttachmentScheduler.didCreateOrUpdateAttachment(
                 withMediaName: mediaName,
-                tx: tx
+                tx: tx,
             )
         }
 
@@ -380,20 +249,22 @@ public class AttachmentManagerImpl: AttachmentManager {
             let installedSticker = self.stickerManager.fetchInstalledSticker(
                 packId: stickerInfo.stickerPackId,
                 stickerId: stickerInfo.stickerId,
-                tx: tx
+                tx: tx,
             )
             if installedSticker != nil {
-                guard let newAttachmentReference = attachmentStore.fetchFirstReference(
-                    owner: referenceParams.owner.id,
-                    tx: tx
-                ) else {
+                guard
+                    let newAttachmentReference = attachmentStore.fetchAnyReference(
+                        owner: referenceParams.owner.id,
+                        tx: tx,
+                    )
+                else {
                     throw OWSAssertionError("Missing attachment we just created")
                 }
                 attachmentDownloadManager.enqueueDownloadOfAttachment(
                     id: newAttachmentReference.attachmentRowId,
                     priority: .localClone,
                     source: .transitTier,
-                    tx: tx
+                    tx: tx,
                 )
             }
         default:
@@ -402,7 +273,7 @@ public class AttachmentManagerImpl: AttachmentManager {
     }
 
     private func transitTierInfo(
-        from proto: SSKProtoAttachmentPointer
+        from proto: SSKProtoAttachmentPointer,
     ) throws -> Attachment.TransitTierInfo {
         let cdnNumber = proto.cdnNumber
         guard let cdnKey = proto.cdnKey?.nilIfEmpty, cdnNumber > 0 else {
@@ -424,29 +295,26 @@ public class AttachmentManagerImpl: AttachmentManager {
             integrityCheck: .digestSHA256Ciphertext(digestSHA256Ciphertext),
             // TODO: [Attachment Streaming] Extract incremental MAC info from the attachment pointer.
             incrementalMacInfo: nil,
-            lastDownloadAttemptTimestamp: nil
+            lastDownloadAttemptTimestamp: nil,
         )
     }
 
     private func _createAttachmentPointer(
         from ownedProto: OwnedAttachmentBackupPointerProto,
-        owner: OwnerBuilder,
-        // Nil if no order is to be applied.
-        sourceOrder: UInt32?,
         uploadEra: String,
         attachmentByteCounter: BackupArchiveAttachmentByteCounter,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> Result<Void, OwnedAttachmentBackupPointerProto.CreationError> {
         let proto = ownedProto.proto
 
         let knownIdFromProto = ownedProto.clientUUID.map {
-            return OwnerBuilder.KnownIdInOwner.known($0)
+            return AttachmentReference.OwnerBuilder.KnownIdInOwner.known($0)
         } ?? .knownNil
 
         let sourceFilename = proto.fileName.nilIfEmpty
         let mimeType = self.mimeType(
             fromProtoContentType: proto.contentType,
-            sourceFilename: sourceFilename
+            sourceFilename: sourceFilename,
         )
 
         let sourceMediaSizePixels: CGSize?
@@ -488,7 +356,7 @@ public class AttachmentManagerImpl: AttachmentManager {
             let transitTierInfo = self.transitTierInfo(
                 from: proto.locatorInfo,
                 owningMessageReceivedAtTimestamp: ownedProto.owningMessageReceivedAtTimestamp,
-                incrementalMacInfo: incrementalMacInfo
+                incrementalMacInfo: incrementalMacInfo,
             )
 
             if proto.locatorInfo.size > 0 {
@@ -511,7 +379,7 @@ public class AttachmentManagerImpl: AttachmentManager {
                     sha256ContentHash: sha256ContentHash,
                     mediaName: Attachment.mediaName(
                         sha256ContentHash: sha256ContentHash,
-                        encryptionKey: encryptionKey
+                        encryptionKey: encryptionKey,
                     ),
                     mediaTierInfo: .init(
                         cdnNumber: mediaTierCdnNumber,
@@ -519,7 +387,7 @@ public class AttachmentManagerImpl: AttachmentManager {
                         sha256ContentHash: sha256ContentHash,
                         incrementalMacInfo: incrementalMacInfo,
                         uploadEra: uploadEra,
-                        lastDownloadAttemptTimestamp: nil
+                        lastDownloadAttemptTimestamp: nil,
                     ),
                     thumbnailMediaTierInfo: .init(
                         // Assume the thumbnail uses the same cdn as fullsize;
@@ -527,8 +395,8 @@ public class AttachmentManagerImpl: AttachmentManager {
                         // the two uploads but worst case we lose the thumbnail.
                         cdnNumber: mediaTierCdnNumber,
                         uploadEra: uploadEra,
-                        lastDownloadAttemptTimestamp: nil
-                    )
+                        lastDownloadAttemptTimestamp: nil,
+                    ),
                 )
             case .encryptedDigest, .none:
                 if let transitTierInfo {
@@ -540,19 +408,19 @@ public class AttachmentManagerImpl: AttachmentManager {
                         sha256ContentHash: nil,
                         mediaName: nil,
                         mediaTierInfo: nil,
-                        thumbnailMediaTierInfo: nil
+                        thumbnailMediaTierInfo: nil,
                     )
                 } else {
                     attachmentParams = .forInvalidBackupAttachment(
                         blurHash: proto.blurHash.nilIfEmpty,
-                        mimeType: mimeType
+                        mimeType: mimeType,
                     )
                 }
             }
         } else {
             attachmentParams = .forInvalidBackupAttachment(
                 blurHash: proto.blurHash.nilIfEmpty,
-                mimeType: mimeType
+                mimeType: mimeType,
             )
             sourceUnencryptedByteCount = nil
         }
@@ -560,41 +428,38 @@ public class AttachmentManagerImpl: AttachmentManager {
         let referenceParams: AttachmentReference.ConstructionParams
         do {
             referenceParams = AttachmentReference.ConstructionParams(
-                owner: try owner.build(
-                    orderInOwner: sourceOrder,
+                owner: ownedProto.owner.build(
                     knownIdInOwner: knownIdFromProto,
                     renderingFlag: ownedProto.renderingFlag,
                     // Not downloaded so we don't know the content type.
                     contentType: nil,
                     // Restored legacy attachments might have a caption.
-                    caption: proto.hasCaption ? proto.caption : nil
+                    caption: proto.hasCaption ? proto.caption : nil,
                 ),
                 sourceFilename: sourceFilename,
                 sourceUnencryptedByteCount: sourceUnencryptedByteCount,
-                sourceMediaSizePixels: sourceMediaSizePixels
+                sourceMediaSizePixels: sourceMediaSizePixels,
             )
-        } catch {
-            return .failure(.dbInsertionError(error))
         }
 
         do {
             let attachmentRowId = try attachmentStore.insert(
                 attachmentParams,
                 reference: referenceParams,
-                tx: tx
+                tx: tx,
             )
 
             if let sourceUnencryptedByteCount {
                 attachmentByteCounter.addToByteCount(
                     attachmentID: attachmentRowId,
-                    byteCount: Cryptography.estimatedMediaTierCDNSize(unencryptedSize: sourceUnencryptedByteCount)
+                    byteCount: Cryptography.estimatedMediaTierCDNSize(unencryptedSize: UInt64(safeCast: sourceUnencryptedByteCount)) ?? UInt64(UInt32.max),
                 )
             }
 
             if let mediaName = attachmentParams.mediaName {
-                orphanedBackupAttachmentManager.didCreateOrUpdateAttachment(
+                orphanedBackupAttachmentScheduler.didCreateOrUpdateAttachment(
                     withMediaName: mediaName,
-                    tx: tx
+                    tx: tx,
                 )
             }
 
@@ -615,10 +480,10 @@ public class AttachmentManagerImpl: AttachmentManager {
                 // We already have an attachment with the same mediaName (likely from this same
                 // backup). Just point the reference at the existing attachment.
                 do {
-                    try attachmentStore.addOwner(
+                    try attachmentStore.addReference(
                         referenceParams,
-                        for: existingAttachmentId,
-                        tx: tx
+                        attachmentRowId: existingAttachmentId,
+                        tx: tx,
                     )
                     return .success(())
                 } catch {
@@ -633,7 +498,7 @@ public class AttachmentManagerImpl: AttachmentManager {
     private func transitTierInfo(
         from locatorInfo: BackupProto_FilePointer.LocatorInfo,
         owningMessageReceivedAtTimestamp: UInt64?,
-        incrementalMacInfo: Attachment.IncrementalMacInfo?
+        incrementalMacInfo: Attachment.IncrementalMacInfo?,
     ) -> Attachment.TransitTierInfo? {
         guard locatorInfo.key.count > 0 else { return nil }
 
@@ -687,13 +552,13 @@ public class AttachmentManagerImpl: AttachmentManager {
             unencryptedByteCount: unencryptedByteCount,
             integrityCheck: integrityCheck,
             incrementalMacInfo: incrementalMacInfo,
-            lastDownloadAttemptTimestamp: nil
+            lastDownloadAttemptTimestamp: nil,
         )
     }
 
     private func mimeType(
         fromProtoContentType contentType: String?,
-        sourceFilename: String?
+        sourceFilename: String?,
     ) -> String {
         if let protoMimeType = contentType?.nilIfEmpty {
             return protoMimeType
@@ -702,7 +567,7 @@ public class AttachmentManagerImpl: AttachmentManager {
             // infer a MIME type from the file extension.
             if
                 let sourceFilename,
-                let fileExtension = sourceFilename.fileExtension?.lowercased().nilIfEmpty,
+                let fileExtension = (sourceFilename as NSString).pathExtension.lowercased().nilIfEmpty,
                 let inferredMimeType = MimeTypeUtil.mimeTypeForFileExtension(fileExtension)?.nilIfEmpty
             {
                 Logger.warn("Missing attachment content type! Inferred MIME type: \(inferredMimeType)")
@@ -715,41 +580,36 @@ public class AttachmentManagerImpl: AttachmentManager {
     }
 
     private func _createAttachmentStream(
-        consuming dataSource: AttachmentDataSource,
-        owner: OwnerBuilder,
-        // Nil if no order is to be applied.
-        sourceOrder: UInt32?,
-        tx: DBWriteTransaction
+        from ownedDataSource: OwnedAttachmentDataSource,
+        tx: DBWriteTransaction,
     ) throws {
-        switch dataSource {
+        switch ownedDataSource.source {
         case .existingAttachment(let existingAttachmentMetadata):
             guard let existingAttachment = attachmentStore.fetch(id: existingAttachmentMetadata.id, tx: tx) else {
                 throw OWSAssertionError("Missing existing attachment!")
             }
 
-            let owner: AttachmentReference.Owner = try owner.build(
-                orderInOwner: sourceOrder,
+            let owner: AttachmentReference.Owner = ownedDataSource.owner.build(
                 knownIdInOwner: .none,
                 renderingFlag: existingAttachmentMetadata.renderingFlag,
-                contentType: existingAttachment.streamInfo?.contentType.raw
+                contentType: existingAttachment.streamInfo?.contentType.raw,
             )
             let referenceParams = AttachmentReference.ConstructionParams(
                 owner: owner,
                 sourceFilename: existingAttachmentMetadata.sourceFilename,
                 sourceUnencryptedByteCount: existingAttachmentMetadata.sourceUnencryptedByteCount,
-                sourceMediaSizePixels: existingAttachmentMetadata.sourceMediaSizePixels
+                sourceMediaSizePixels: existingAttachmentMetadata.sourceMediaSizePixels,
             )
-            try attachmentStore.addOwner(
+            try attachmentStore.addReference(
                 referenceParams,
-                for: existingAttachment.id,
-                tx: tx
+                attachmentRowId: existingAttachment.id,
+                tx: tx,
             )
         case .pendingAttachment(let pendingAttachment):
-            let owner: AttachmentReference.Owner = try owner.build(
-                orderInOwner: sourceOrder,
+            let owner: AttachmentReference.Owner = ownedDataSource.owner.build(
                 knownIdInOwner: .none,
                 renderingFlag: pendingAttachment.renderingFlag,
-                contentType: pendingAttachment.validatedContentType.raw
+                contentType: pendingAttachment.validatedContentType.raw,
             )
             let mediaSizePixels: CGSize?
             switch pendingAttachment.validatedContentType {
@@ -762,11 +622,11 @@ public class AttachmentManagerImpl: AttachmentManager {
                 owner: owner,
                 sourceFilename: pendingAttachment.sourceFilename,
                 sourceUnencryptedByteCount: pendingAttachment.unencryptedByteCount,
-                sourceMediaSizePixels: mediaSizePixels
+                sourceMediaSizePixels: mediaSizePixels,
             )
             let mediaName = Attachment.mediaName(
                 sha256ContentHash: pendingAttachment.sha256ContentHash,
-                encryptionKey: pendingAttachment.encryptionKey
+                encryptionKey: pendingAttachment.encryptionKey,
             )
             let streamInfo = Attachment.StreamInfo(
                 sha256ContentHash: pendingAttachment.sha256ContentHash,
@@ -775,7 +635,7 @@ public class AttachmentManagerImpl: AttachmentManager {
                 unencryptedByteCount: pendingAttachment.unencryptedByteCount,
                 contentType: pendingAttachment.validatedContentType,
                 digestSHA256Ciphertext: pendingAttachment.digestSHA256Ciphertext,
-                localRelativeFilePath: pendingAttachment.localRelativeFilePath
+                localRelativeFilePath: pendingAttachment.localRelativeFilePath,
             )
             let attachmentParams = Attachment.ConstructionParams.fromStream(
                 blurHash: pendingAttachment.blurHash,
@@ -783,18 +643,18 @@ public class AttachmentManagerImpl: AttachmentManager {
                 encryptionKey: pendingAttachment.encryptionKey,
                 streamInfo: streamInfo,
                 sha256ContentHash: pendingAttachment.sha256ContentHash,
-                mediaName: mediaName
+                mediaName: mediaName,
             )
 
             let hasOrphanRecord = orphanedAttachmentStore.orphanAttachmentExists(
                 with: pendingAttachment.orphanRecordId,
-                tx: tx
+                tx: tx,
             )
 
             do {
                 let hasExistingAttachmentWithSameFile = attachmentStore.fetchAttachment(
                     sha256ContentHash: pendingAttachment.sha256ContentHash,
-                    tx: tx
+                    tx: tx,
                 )?.streamInfo?.localRelativeFilePath == pendingAttachment.localRelativeFilePath
 
                 // Typically, we'd expect an orphan record to exist (which ensures that
@@ -811,28 +671,28 @@ public class AttachmentManagerImpl: AttachmentManager {
                 try attachmentStore.insert(
                     attachmentParams,
                     reference: referenceParams,
-                    tx: tx
+                    tx: tx,
                 )
                 if hasOrphanRecord {
                     // Make sure to clear out the pending attachment from the orphan table so it isn't deleted!
                     orphanedAttachmentCleaner.releasePendingAttachment(withId: pendingAttachment.orphanRecordId, tx: tx)
                 }
                 if let mediaName = attachmentParams.mediaName {
-                    orphanedBackupAttachmentManager.didCreateOrUpdateAttachment(
+                    orphanedBackupAttachmentScheduler.didCreateOrUpdateAttachment(
                         withMediaName: mediaName,
-                        tx: tx
+                        tx: tx,
                     )
 
                     if
                         let attachment = attachmentStore.fetchAttachment(
                             mediaName: mediaName,
-                            tx: tx
+                            tx: tx,
                         )
                     {
-                        try backupAttachmentUploadScheduler.enqueueIfNeededWithOwner(
+                        backupAttachmentUploadScheduler.enqueueIfNeededWithOwner(
                             attachment,
                             owner: owner,
-                            tx: tx
+                            tx: tx,
                         )
                     }
                 }
@@ -852,8 +712,8 @@ public class AttachmentManagerImpl: AttachmentManager {
                         orphanedAttachmentCleaner: orphanedAttachmentCleaner,
                         orphanedAttachmentStore: orphanedAttachmentStore,
                         backupAttachmentUploadScheduler: backupAttachmentUploadScheduler,
-                        orphanedBackupAttachmentManager: orphanedBackupAttachmentManager,
-                        tx: tx
+                        orphanedBackupAttachmentScheduler: orphanedBackupAttachmentScheduler,
+                        tx: tx,
                     )
                 } else {
                     throw error
@@ -862,10 +722,10 @@ public class AttachmentManagerImpl: AttachmentManager {
                 // Already have an attachment with the same plaintext hash or media name! Create a new reference to it instead.
                 // If this fails and throws, the database won't be in an invalid state even if not rolled
                 // back; the existing attachment just doesn't get its new owner.
-                try attachmentStore.addOwner(
+                try attachmentStore.addReference(
                     referenceParams,
-                    for: existingAttachmentId,
-                    tx: tx
+                    attachmentRowId: existingAttachmentId,
+                    tx: tx,
                 )
                 return
             }
@@ -875,11 +735,11 @@ public class AttachmentManagerImpl: AttachmentManager {
     private func _updateAttachmentWithOversizeTextFromBackup(
         attachment: Attachment,
         pendingAttachment: PendingAttachment,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) throws {
         let mediaName = Attachment.mediaName(
             sha256ContentHash: pendingAttachment.sha256ContentHash,
-            encryptionKey: pendingAttachment.encryptionKey
+            encryptionKey: pendingAttachment.encryptionKey,
         )
         let streamInfo = Attachment.StreamInfo(
             sha256ContentHash: pendingAttachment.sha256ContentHash,
@@ -888,7 +748,7 @@ public class AttachmentManagerImpl: AttachmentManager {
             unencryptedByteCount: pendingAttachment.unencryptedByteCount,
             contentType: pendingAttachment.validatedContentType,
             digestSHA256Ciphertext: pendingAttachment.digestSHA256Ciphertext,
-            localRelativeFilePath: pendingAttachment.localRelativeFilePath
+            localRelativeFilePath: pendingAttachment.localRelativeFilePath,
         )
 
         do {
@@ -908,7 +768,7 @@ public class AttachmentManagerImpl: AttachmentManager {
                 // for oversize text so it doesn't really matter but give
                 // a real date anyway.
                 timestamp: dateProvider().ows_millisecondsSince1970,
-                tx: tx
+                tx: tx,
             )
             // Make sure to clear out the pending attachment from the orphan table so it isn't deleted!
             self.orphanedAttachmentCleaner.releasePendingAttachment(withId: pendingAttachment.orphanRecordId, tx: tx)
@@ -936,27 +796,27 @@ public class AttachmentManagerImpl: AttachmentManager {
             // Just hold all refs in memory; there shouldn't in practice be
             // so many pointers to the same attachment.
             var references = [AttachmentReference]()
-            try self.attachmentStore.enumerateAllReferences(
+            self.attachmentStore.enumerateAllReferences(
                 toAttachmentId: attachment.id,
-                tx: tx
+                tx: tx,
             ) { reference, _ in
                 references.append(reference)
             }
             try references.forEach { reference in
-                try self.attachmentStore.removeOwner(
+                try self.attachmentStore.removeReference(
                     reference: reference,
-                    tx: tx
+                    tx: tx,
                 )
                 let newOwnerParams = AttachmentReference.ConstructionParams(
                     owner: reference.owner.forReassignmentWithContentType(pendingAttachment.validatedContentType.raw),
                     sourceFilename: reference.sourceFilename,
                     sourceUnencryptedByteCount: reference.sourceUnencryptedByteCount,
-                    sourceMediaSizePixels: reference.sourceMediaSizePixels
+                    sourceMediaSizePixels: reference.sourceMediaSizePixels,
                 )
-                try self.attachmentStore.addOwner(
+                try self.attachmentStore.addReference(
                     newOwnerParams,
-                    for: existingAttachmentId,
-                    tx: tx
+                    attachmentRowId: existingAttachmentId,
+                    tx: tx,
                 )
             }
         }
@@ -971,27 +831,27 @@ public class AttachmentManagerImpl: AttachmentManager {
     /// If non-nil, will be used exclusively to determine upload eligibility, ignoring any other owning references
     /// that may exist. This is okay when creating a single new reference and assuming the attachment would
     /// have already been scheduled for upload had existing references made it eligible.
-    internal static func handleAttachmentInsertError(
+    static func handleAttachmentInsertError(
         _ error: AttachmentInsertError,
         newAttachmentOwner: AttachmentReference.Owner? = nil,
         pendingAttachmentStreamInfo: Attachment.StreamInfo,
         pendingAttachmentEncryptionKey: Data,
         pendingAttachmentMimeType: String,
-        pendingAttachmentOrphanRecordId: OrphanedAttachmentRecord.IDType?,
+        pendingAttachmentOrphanRecordId: OrphanedAttachmentRecord.RowId?,
         pendingAttachmentLatestTransitTierInfo: Attachment.TransitTierInfo?,
         pendingAttachmentOriginalTransitTierInfo: Attachment.TransitTierInfo?,
         attachmentStore: AttachmentStore,
         orphanedAttachmentCleaner: OrphanedAttachmentCleaner,
         orphanedAttachmentStore: OrphanedAttachmentStore,
         backupAttachmentUploadScheduler: BackupAttachmentUploadScheduler,
-        orphanedBackupAttachmentManager: OrphanedBackupAttachmentManager,
-        tx: DBWriteTransaction
+        orphanedBackupAttachmentScheduler: OrphanedBackupAttachmentScheduler,
+        tx: DBWriteTransaction,
     ) throws -> Attachment.IDType {
         let existingAttachmentId: Attachment.IDType
         switch error {
         case
-                .duplicatePlaintextHash(let id),
-                .duplicateMediaName(let id):
+            .duplicatePlaintextHash(let id),
+            .duplicateMediaName(let id):
             existingAttachmentId = id
         }
 
@@ -1026,22 +886,25 @@ public class AttachmentManagerImpl: AttachmentManager {
 
             // Orphan the existing remote upload, both fullsize and thumbnail.
             // We're using a new encryption key now which means a new mediaName.
-            try orphanedBackupAttachmentManager.orphanExistingMediaTierUploads(
+            orphanedBackupAttachmentScheduler.orphanExistingMediaTierUploads(
                 of: existingAttachment,
-                tx: tx
+                tx: tx,
             )
 
             // Orphan the local thumbnail file, if the attachment had one, since
             // we now use a different encryption key and we don't keep thumbnails
             // when we have a stream, anyway.
             if let thumbnailRelativeFilePath = existingAttachment.localRelativeFilePathThumbnail {
-                var thumbnailOrphanRecord = OrphanedAttachmentRecord(
-                    localRelativeFilePath: nil,
-                    localRelativeFilePathThumbnail: thumbnailRelativeFilePath,
-                    localRelativeFilePathAudioWaveform: nil,
-                    localRelativeFilePathVideoStillFrame: nil
+                _ = OrphanedAttachmentRecord.insertRecord(
+                    OrphanedAttachmentRecord.InsertableRecord(
+                        isPendingAttachment: false,
+                        localRelativeFilePath: nil,
+                        localRelativeFilePathThumbnail: thumbnailRelativeFilePath,
+                        localRelativeFilePathAudioWaveform: nil,
+                        localRelativeFilePathVideoStillFrame: nil,
+                    ),
+                    tx: tx,
                 )
-                try orphanedAttachmentStore.insert(&thumbnailOrphanRecord, tx: tx)
             }
         }
 
@@ -1083,8 +946,8 @@ public class AttachmentManagerImpl: AttachmentManager {
                 if
                     infoDigest == pendingAttachmentStreamInfo.digestSHA256Ciphertext,
                     originalTransitTierInfo == nil
-                        || originalTransitTierInfo!.uploadTimestamp
-                            < candidateOriginalTransitTierInfo.uploadTimestamp
+                    || originalTransitTierInfo!.uploadTimestamp
+                    < candidateOriginalTransitTierInfo.uploadTimestamp
                 {
                     originalTransitTierInfo = candidateOriginalTransitTierInfo
                 }
@@ -1102,23 +965,23 @@ public class AttachmentManagerImpl: AttachmentManager {
             originalTransitTierInfo: originalTransitTierInfo,
             mediaTierInfo: mediaTierInfo,
             thumbnailMediaTierInfo: thumbnailMediaTierInfo,
-            tx: tx
+            tx: tx,
         )
 
         if let pendingAttachmentOrphanRecordId {
             // Make sure to clear out the pending attachment from the orphan table so it isn't deleted!
             orphanedAttachmentCleaner.releasePendingAttachment(
                 withId: pendingAttachmentOrphanRecordId,
-                tx: tx
+                tx: tx,
             )
         }
 
         // Make sure to clear out any orphaning jobs for the newly assigned
         // mediaName, in case it collides with an attachment that was
         // deleted recently.
-        orphanedBackupAttachmentManager.didCreateOrUpdateAttachment(
+        orphanedBackupAttachmentScheduler.didCreateOrUpdateAttachment(
             withMediaName: pendingAttachmentStreamInfo.mediaName,
-            tx: tx
+            tx: tx,
         )
 
         // Anything that _can_ be uploaded, _should_ be enqueued for upload
@@ -1126,15 +989,15 @@ public class AttachmentManagerImpl: AttachmentManager {
         // and whether to actually upload, but let it know about every new
         // stream created.
         if let newAttachmentOwner {
-            try backupAttachmentUploadScheduler.enqueueIfNeededWithOwner(
+            backupAttachmentUploadScheduler.enqueueIfNeededWithOwner(
                 existingAttachment,
                 owner: newAttachmentOwner,
-                tx: tx
+                tx: tx,
             )
         } else {
-            try backupAttachmentUploadScheduler.enqueueUsingHighestPriorityOwnerIfNeeded(
+            backupAttachmentUploadScheduler.enqueueUsingHighestPriorityOwnerIfNeeded(
                 existingAttachment,
-                tx: tx
+                tx: tx,
             )
         }
         return existingAttachmentId
@@ -1142,103 +1005,20 @@ public class AttachmentManagerImpl: AttachmentManager {
 
     // MARK: Quoted Replies
 
-    private struct WrappedQuotedAttachmentInfo {
-        let originalAttachmentReference: AttachmentReference
-        let originalAttachment: Attachment
-        let info: QuotedAttachmentInfo
-    }
-
-    private func _quotedReplyAttachmentInfo(
-        originalMessageRowId: Int64,
-        tx: DBReadTransaction
-    ) -> (WrappedQuotedAttachmentInfo?, isStub: Bool) {
-        guard
-            let originalReference = attachmentStore.attachmentToUseInQuote(
-                originalMessageRowId: originalMessageRowId,
-                tx: tx
-            ),
-            let originalAttachment = attachmentStore.fetch(id: originalReference.attachmentRowId, tx: tx)
-        else {
-            return (nil, true)
-        }
-        let (info, isStub) = self._quotedReplyAttachmentInfo(
-            originalAttachmentMimeType: originalAttachment.mimeType,
-            originalReferenceSourceFilename: originalReference.sourceFilename,
-            originalReferenceRenderingFlag: originalReference.renderingFlag
-        )
-        return (
-            .init(
-                originalAttachmentReference: originalReference,
-                originalAttachment: originalAttachment,
-                info: info
-            ),
-            isStub
-        )
-    }
-
-    private func _quotedReplyAttachmentInfo(
-        originalAttachmentMimeType: String,
-        originalReferenceSourceFilename: String?,
-        originalReferenceRenderingFlag: AttachmentReference.RenderingFlag
-    ) -> (QuotedAttachmentInfo, isStub: Bool) {
-        let renderingFlag: AttachmentReference.RenderingFlag
-        switch originalReferenceRenderingFlag {
-        case .borderless:
-            // Not allowed in quoted
-            renderingFlag = .default
-        default:
-            renderingFlag = originalReferenceRenderingFlag
-        }
-        guard MimeTypeUtil.isSupportedVisualMediaMimeType(originalAttachmentMimeType) else {
-            // Can't make a thumbnail, just return a stub.
-            return (
-                QuotedAttachmentInfo(
-                    info: .stub(
-                        withOriginalAttachmentMimeType: originalAttachmentMimeType,
-                        originalAttachmentSourceFilename: originalReferenceSourceFilename
-                    ),
-                    renderingFlag: renderingFlag
-                ),
-                isStub: true
-            )
-        }
-
-        return (
-            QuotedAttachmentInfo(
-                info: .forThumbnailReference(
-                    withOriginalAttachmentMimeType: originalAttachmentMimeType,
-                    originalAttachmentSourceFilename: originalReferenceSourceFilename
-                ),
-                renderingFlag: renderingFlag
-            ),
-            isStub: false
-        )
-    }
-
     private func _createQuotedReplyMessageThumbnail(
-        dataSource: OwnedQuotedReplyAttachmentDataSource,
-        tx: DBWriteTransaction
+        dataSource: QuotedReplyAttachmentDataSource,
+        referenceOwner: AttachmentReference.OwnerBuilder,
+        tx: DBWriteTransaction,
     ) throws {
-        let referenceOwner = AttachmentReference.OwnerBuilder.quotedReplyAttachment(dataSource.owner)
-
-        switch dataSource.source.source {
-        case .quotedAttachmentProto(let quotedAttachmentProtoSource):
-            try self._createAttachmentPointer(
-                from: quotedAttachmentProtoSource.thumbnail,
-                owner: referenceOwner,
-                sourceOrder: nil,
-                tx: tx
-            )
+        switch dataSource {
         case .pendingAttachment(let pendingAttachmentSource):
-            try self._createAttachmentStream(
-                consuming: .pendingAttachment(pendingAttachmentSource.pendingAttachment),
-                owner: referenceOwner,
-                sourceOrder: nil,
-                tx: tx
+            try createAttachmentStream(
+                from: OwnedAttachmentDataSource(
+                    dataSource: .pendingAttachment(pendingAttachmentSource.pendingAttachment),
+                    owner: referenceOwner,
+                ),
+                tx: tx,
             )
-            // When we create the attachment stream we schedule a backup of the
-            // new attachment. Kick the tires so that upload starts happening now.
-            backupAttachmentUploadQueueRunner.backUpAllAttachmentsAfterTxCommits(tx: tx)
         case .originalAttachment(let originalAttachmentSource):
             guard let originalAttachment = attachmentStore.fetch(id: originalAttachmentSource.id, tx: tx) else {
                 // The original has been deleted.
@@ -1267,7 +1047,7 @@ public class AttachmentManagerImpl: AttachmentManager {
                 // that we will download the original later and fill the thumbnail in.
                 thumbnailMimeType = MimeTypeUtil.thumbnailMimetype(
                     fullsizeMimeType: originalAttachment.mimeType,
-                    quality: .small
+                    quality: .small,
                 )
                 thumbnailBlurHash = originalAttachment.blurHash
                 thumbnailTransitTierInfo = nil
@@ -1281,49 +1061,58 @@ public class AttachmentManagerImpl: AttachmentManager {
                 thumbnailBlurHash: thumbnailBlurHash,
                 thumbnailMimeType: thumbnailMimeType,
                 thumbnailEncryptionKey: thumbnailEncryptionKey,
-                thumbnailTransitTierInfo: thumbnailTransitTierInfo
+                thumbnailTransitTierInfo: thumbnailTransitTierInfo,
             )
             let referenceParams = AttachmentReference.ConstructionParams(
-                owner: try referenceOwner.build(
-                    orderInOwner: nil,
+                owner: referenceOwner.build(
                     knownIdInOwner: .none,
                     renderingFlag: originalAttachmentSource.renderingFlag,
-                    contentType: nil
+                    contentType: nil,
                 ),
                 sourceFilename: originalAttachmentSource.sourceFilename,
                 sourceUnencryptedByteCount: originalAttachmentSource.sourceUnencryptedByteCount,
-                sourceMediaSizePixels: originalAttachmentSource.sourceMediaSizePixels
+                sourceMediaSizePixels: originalAttachmentSource.sourceMediaSizePixels,
             )
 
             try attachmentStore.insert(
                 attachmentParams,
                 reference: referenceParams,
-                tx: tx
+                tx: tx,
             )
 
             if let mediaName = attachmentParams.mediaName {
-                orphanedBackupAttachmentManager.didCreateOrUpdateAttachment(
+                orphanedBackupAttachmentScheduler.didCreateOrUpdateAttachment(
                     withMediaName: mediaName,
-                    tx: tx
+                    tx: tx,
                 )
             }
 
             // If we know we have a stream, enqueue the download at high priority
             // so that copy happens ASAP.
             if originalAttachment.asStream() != nil {
-                guard let newAttachmentReference = attachmentStore.fetchFirstReference(
-                    owner: referenceParams.owner.id,
-                    tx: tx
-                ) else {
+                guard
+                    let newAttachmentReference = attachmentStore.fetchAnyReference(
+                        owner: referenceParams.owner.id,
+                        tx: tx,
+                    )
+                else {
                     throw OWSAssertionError("Missing attachment we just created")
                 }
                 attachmentDownloadManager.enqueueDownloadOfAttachment(
                     id: newAttachmentReference.attachmentRowId,
                     priority: .localClone,
                     source: .transitTier,
-                    tx: tx
+                    tx: tx,
                 )
             }
+        case .notFoundLocallyAttachment(let notFoundLocallyAttachmentSource):
+            try createAttachmentPointer(
+                from: OwnedAttachmentPointerProto(
+                    proto: notFoundLocallyAttachmentSource.thumbnailPointerProto,
+                    owner: referenceOwner,
+                ),
+                tx: tx,
+            )
         }
     }
 }
@@ -1346,6 +1135,6 @@ public class _AttachmentManagerImpl_StickerManagerWrapper: _AttachmentManagerImp
     public init() {}
 
     public func fetchInstalledSticker(packId: Data, stickerId: UInt32, tx: DBReadTransaction) -> InstalledSticker? {
-        return StickerManager.fetchInstalledSticker(packId: packId, stickerId: stickerId, transaction: SDSDB.shimOnlyBridge(tx))
+        return StickerManager.fetchInstalledSticker(packId: packId, stickerId: stickerId, transaction: tx)
     }
 }

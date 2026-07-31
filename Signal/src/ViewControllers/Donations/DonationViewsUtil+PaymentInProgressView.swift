@@ -13,20 +13,20 @@ extension DonationViewsUtil {
         operation: () async throws(E) -> T,
     ) async throws(E) -> T {
         let backdropView = UIView()
-        backdropView.backgroundColor = Theme.backdropColor
+        backdropView.backgroundColor = .Signal.backdrop
         backdropView.alpha = 0
         viewController.view.addSubview(backdropView)
         backdropView.autoPinEdgesToSuperviewEdges()
 
         let progressViewContainer = UIView()
-        progressViewContainer.backgroundColor = Theme.backgroundColor
+        progressViewContainer.backgroundColor = .Signal.background
         progressViewContainer.layer.cornerRadius = 12
         backdropView.addSubview(progressViewContainer)
         progressViewContainer.autoCenterInSuperview()
 
         let progressView = AnimatedProgressView(loadingText: OWSLocalizedString(
             "SUSTAINER_VIEW_PROCESSING_PAYMENT",
-            comment: "Loading indicator on the sustainer view"
+            comment: "Loading indicator on the sustainer view",
         ))
         viewController.view.addSubview(progressView)
         progressView.autoCenterInSuperview()

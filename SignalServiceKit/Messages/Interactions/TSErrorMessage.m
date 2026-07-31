@@ -9,15 +9,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-NSUInteger TSErrorMessageSchemaVersion = 2;
-
 #pragma mark -
 
 @interface TSErrorMessage ()
 
 @property (nonatomic, getter=wasRead) BOOL read;
-
-@property (nonatomic, readonly) NSUInteger errorMessageSchemaVersion;
 
 @end
 
@@ -25,32 +21,39 @@ NSUInteger TSErrorMessageSchemaVersion = 2;
 
 @implementation TSErrorMessage
 
-- (nullable instancetype)initWithCoder:(NSCoder *)coder
+- (NSUInteger)hash
 {
-    self = [super initWithCoder:coder];
-    if (!self) {
-        return self;
+    NSUInteger result = [super hash];
+    result ^= (NSUInteger)self.errorType;
+    result ^= self.read;
+    result ^= self.recipientAddress.hash;
+    result ^= self.sender.hash;
+    result ^= self.wasIdentityVerified;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![super isEqual:other]) {
+        return NO;
     }
-
-    if (self.errorMessageSchemaVersion < 1) {
-        _read = YES;
+    TSErrorMessage *typedOther = (TSErrorMessage *)other;
+    if (self.errorType != typedOther.errorType) {
+        return NO;
     }
-
-    if (self.errorMessageSchemaVersion == 1) {
-        NSString *_Nullable phoneNumber = [coder decodeObjectForKey:@"recipientId"];
-        if (phoneNumber) {
-            _recipientAddress = [SignalServiceAddress legacyAddressWithServiceIdString:nil phoneNumber:phoneNumber];
-            OWSAssertDebug(_recipientAddress.isValid);
-        }
+    if (self.read != typedOther.read) {
+        return NO;
     }
-
-    _errorMessageSchemaVersion = TSErrorMessageSchemaVersion;
-
-    if (self.isDynamicInteraction) {
-        self.read = YES;
+    if (![NSObject isObject:self.recipientAddress equalToObject:typedOther.recipientAddress]) {
+        return NO;
     }
-
-    return self;
+    if (![NSObject isObject:self.sender equalToObject:typedOther.sender]) {
+        return NO;
+    }
+    if (self.wasIdentityVerified != typedOther.wasIdentityVerified) {
+        return NO;
+    }
+    return YES;
 }
 
 - (instancetype)initErrorMessageWithBuilder:(TSErrorMessageBuilder *)errorMessageBuilder
@@ -64,7 +67,6 @@ NSUInteger TSErrorMessageSchemaVersion = 2;
     _errorType = errorMessageBuilder.errorType;
     _sender = errorMessageBuilder.senderAddress;
     _recipientAddress = errorMessageBuilder.recipientAddress;
-    _errorMessageSchemaVersion = TSErrorMessageSchemaVersion;
     _wasIdentityVerified = errorMessageBuilder.wasIdentityVerified;
 
     if (self.isDynamicInteraction) {
@@ -201,7 +203,10 @@ NSUInteger TSErrorMessageSchemaVersion = 2;
                 NSString *senderName =
                     [SSKEnvironment.shared.contactManagerObjcRef shortDisplayNameStringForAddress:self.sender
                                                                                       transaction:transaction];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
                 return [[NSString alloc] initWithFormat:formatString, senderName];
+#pragma clang diagnostic pop
             } else {
                 return OWSLocalizedString(
                     @"ERROR_MESSAGE_DECRYPTION_FAILURE_UNKNOWN_SENDER", @"Error message for a decryption failure.");

@@ -28,7 +28,7 @@ extension DraftQuotedReplyModel {
 
     public static func fromOriginalPaymentMessage(
         _ message: TSMessage,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> DraftQuotedReplyModel? {
         guard let paymentMessage = message as? OWSPaymentMessage else {
             return nil
@@ -37,7 +37,7 @@ extension DraftQuotedReplyModel {
         return DraftQuotedReplyModel.fromOriginalPaymentMessage(
             message,
             amountString: amountString,
-            tx: tx
+            tx: tx,
         )
     }
 
@@ -45,7 +45,7 @@ extension DraftQuotedReplyModel {
         originalMessage: TSMessage,
         replyMessage: TSMessage,
         quotedReply: TSQuotedMessage,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> DraftQuotedReplyModel? {
         guard let paymentMessage = originalMessage as? OWSPaymentMessage else {
             return nil
@@ -56,14 +56,14 @@ extension DraftQuotedReplyModel {
             replyMessage: replyMessage,
             quotedReply: quotedReply,
             amountString: amountString,
-            tx: tx
+            tx: tx,
         )
     }
 
     private static func amountString(
         _ paymentMessage: OWSPaymentMessage,
         interactionType: OWSInteractionType,
-        tx: DBReadTransaction
+        tx: DBReadTransaction,
     ) -> String {
         // Commented out due to MobileCoin removal
         // return PaymentsFormat.paymentPreviewText(
@@ -73,7 +73,7 @@ extension DraftQuotedReplyModel {
         // ) ??
         return OWSLocalizedString(
             "PAYMENTS_PREVIEW_TEXT_UNKNOWN",
-            comment: "Payments Preview Text shown in quoted replies, for unknown payments."
+            comment: "Payments Preview Text shown in quoted replies, for unknown payments.",
         )
     }
 }

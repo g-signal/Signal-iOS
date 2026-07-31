@@ -72,9 +72,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>¿Añadir participante a &quot;%2$@&quot;?</string>
+			<string>¿Añadir participante a "%2$@"?</string>
 			<key>other</key>
-			<string>¿Añadir %1$d participantes a &quot;%2$@&quot;?</string>
+			<string>¿Añadir %1$d participantes a "%2$@"?</string>
 		</dict>
 	</dict>
 	<key>ADD_GROUP_MEMBERS_VIEW_CONFIRM_ALERT_TITLE_%d</key>
@@ -91,6 +91,22 @@
 			<string>Añadir nuevo participante</string>
 			<key>other</key>
 			<string>Añadir nuevos participantes</string>
+		</dict>
+	</dict>
+	<key>BACKUP_SETTINGS_BACKUP_PLAN_FREE_HEADER_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Mensajes de texto + %1$d día de archivos multimedia</string>
+			<key>other</key>
+			<string>Mensajes de texto + %1$d días de archivos multimedia</string>
 		</dict>
 	</dict>
 	<key>CALLS_TAB_DELETE_MULTIPLE_TITLE</key>
@@ -301,6 +317,54 @@
 			<string>Tienes %1$d chats con este color. ¿Quieres guardar los cambios en todos los chats?</string>
 		</dict>
 	</dict>
+	<key>CHOOSE_BACKUP_PLAN_BULLET_RECENT_MEDIA_BACKUP_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Último día de archivos multimedia</string>
+			<key>other</key>
+			<string>Últimos %1$d días de archivos multimedia</string>
+		</dict>
+	</dict>
+	<key>CHOOSE_BACKUP_PLAN_DOWNGRADE_CONFIRMATION_ACTION_SHEET_MESSAGE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Si cambias de plan, todos tus mensajes de texto y el último día de archivos multimedia se incluirán en tu copia de seguridad.</string>
+			<key>other</key>
+			<string>Si cambias de plan, todos tus mensajes de texto y los últimos %1$d días de archivos multimedia se incluirán en tu copia de seguridad.</string>
+		</dict>
+	</dict>
+	<key>CHOOSE_BACKUP_PLAN_FREE_PLAN_SUBTITLE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Mensajes de texto + %1$d día de archivos multimedia</string>
+			<key>other</key>
+			<string>Mensajes de texto + %1$d días de archivos multimedia</string>
+		</dict>
+	</dict>
 	<key>CONVERSATION_DELETE_CONFIRMATIONS_ALERT_TITLE_%d</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -499,9 +563,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Los grupos de Signal funcionan mejor con %1$d o menos participantes. Añadir más participantes causará retrasos al enviar y recibir mensajes.</string>
+			<string>Los grupos de B&amp;A funcionan mejor con %1$d o menos participantes. Añadir más participantes causará retrasos al enviar y recibir mensajes.</string>
 			<key>other</key>
-			<string>Los grupos de Signal funcionan mejor con %1$d o menos participantes. Añadir más participantes causará retrasos al enviar y recibir mensajes.</string>
+			<string>Los grupos de B&amp;A funcionan mejor con %1$d o menos participantes. Añadir más participantes causará retrasos al enviar y recibir mensajes.</string>
 		</dict>
 	</dict>
 	<key>GROUP_CALL_HAS_MAX_DEVICES_%d</key>
@@ -659,9 +723,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Signal sonará en la app de %2$@, %3$@ y %1$d más</string>
+			<string>B&amp;A sonará en la app de %2$@, %3$@ y %1$d más</string>
 			<key>other</key>
-			<string>Signal sonará en la app de %2$@, %3$@ y %1$d más</string>
+			<string>B&amp;A sonará en la app de %2$@, %3$@ y %1$d más</string>
 		</dict>
 	</dict>
 	<key>GROUP_INVITES_SENT_ALERT_TITLE_%d</key>
@@ -739,9 +803,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Se ha encontrado %1$d conflicto de nombre en este grupo. Revisa la lista de participantes a continuación y selecciona la opción que desees.</string>
+			<string>Se ha encontrado %1$d conflicto de nombre en este grupo. Revisa la lista de participantes a continuación y selecciona la opción que quieras.</string>
 			<key>other</key>
-			<string>Se han encontrado %1$d conflictos de nombre en este grupo. Revisa la lista de participantes a continuación y selecciona la opción que desees.</string>
+			<string>Se han encontrado %1$d conflictos de nombre en este grupo. Revisa la lista de participantes a continuación y selecciona la opción que quieras.</string>
 		</dict>
 	</dict>
 	<key>GROUP_MEMBERSHIP_NAME_SINGLE_COLLISION_HEADER_%d</key>
@@ -755,9 +819,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d participante del grupo tiene el mismo nombre. Revisa la lista de participantes a continuación y selecciona la opción que desees.</string>
+			<string>%1$d participante del grupo tiene el mismo nombre. Revisa la lista de participantes a continuación y selecciona la opción que quieras.</string>
 			<key>other</key>
-			<string>%1$d participantes del grupo tienen el mismo nombre. Revisa la lista de participantes a continuación y selecciona la opción que desees.</string>
+			<string>%1$d participantes del grupo tienen el mismo nombre. Revisa la lista de participantes a continuación y selecciona la opción que quieras.</string>
 		</dict>
 	</dict>
 	<key>GROUP_MEMBER_COUNT_LABEL_%d</key>
@@ -947,9 +1011,25 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Para mantener &quot;%2$@&quot; vinculado, abre Signal en ese dispositivo en un plazo de %1$d día.</string>
+			<string>Para mantener "%2$@" vinculado, abre B&amp;A en ese dispositivo en un plazo de %1$d día.</string>
 			<key>other</key>
-			<string>Para mantener &quot;%2$@&quot; vinculado, abre Signal en ese dispositivo en un plazo de %1$d días.</string>
+			<string>Para mantener "%2$@" vinculado, abre B&amp;A en ese dispositivo en un plazo de %1$d días.</string>
+		</dict>
+	</dict>
+	<key>LINK_DEVICE_CONFIRMATION_ALERT_TRANSFER_SUBTITLE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Transfiere todos tus mensajes de texto y tu último día de archivos multimedia</string>
+			<key>other</key>
+			<string>Transfiere todos tus mensajes de texto y tus últimos %1$d días de archivos multimedia</string>
 		</dict>
 	</dict>
 	<key>MANY_GROUPS_IN_COMMON_%d</key>
@@ -1048,22 +1128,6 @@
 			<string>Reenviar %1$d</string>
 		</dict>
 	</dict>
-	<key>MESSAGES_VIEW_GROUP_N_MEMBERS_BLOCKED_%d</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@caption@</string>
-		<key>caption</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>Has bloqueado a %1$d participante de este grupo</string>
-			<key>other</key>
-			<string>Has bloqueado a %1$d participantes de este grupo</string>
-		</dict>
-	</dict>
 	<key>MESSAGE_ACTIONS_TOOLBAR_CAPTION_%d</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -1155,9 +1219,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Mis contactos de Signal · %1$d persona</string>
+			<string>Mis contactos de B&amp;A · %1$d persona</string>
 			<key>other</key>
-			<string>Mis contactos de Signal · %1$d personas</string>
+			<string>Mis contactos de B&amp;A · %1$d personas</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ALL_CONNECTIONS_EXCLUDING_%d</key>
@@ -1171,9 +1235,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Mis contactos de Signal · excepto %1$d</string>
+			<string>Mis contactos de B&amp;A · excepto %1$d</string>
 			<key>other</key>
-			<string>Mis contactos de Signal · excepto %1$d</string>
+			<string>Mis contactos de B&amp;A · excepto %1$d</string>
 		</dict>
 	</dict>
 	<key>MY_STORY_VIEWERS_ONLY_%d</key>
@@ -1315,9 +1379,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>¿Retirar la invitación al grupo enviada por &quot;%2$@&quot;?</string>
+			<string>¿Retirar la invitación al grupo enviada por "%2$@"?</string>
 			<key>other</key>
-			<string>¿Retirar %1$d invitaciones al grupo enviadas por &quot;%2$@&quot;?</string>
+			<string>¿Retirar %1$d invitaciones al grupo enviadas por "%2$@"?</string>
 		</dict>
 	</dict>
 	<key>POLL_VOTE_COUNT</key>
@@ -1382,22 +1446,6 @@
 			<string>%1$d intento</string>
 			<key>other</key>
 			<string>%1$d intentos</string>
-		</dict>
-	</dict>
-	<key>STORIES_SHARESHEET_PARTIAL_SEND_SUBTITLE_%d</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%1$#@text@</string>
-		<key>text</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>No se han podido compartir todos los elementos en la historia seleccionada porque el tipo de archivo no es compatible.</string>
-			<key>other</key>
-			<string>No se han podido compartir todos los elementos en las historias seleccionadas porque el tipo de archivo no es compatible.</string>
 		</dict>
 	</dict>
 	<key>STORY_REPLIES_COUNT_%d</key>
@@ -1507,9 +1555,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>ld</string>
 			<key>one</key>
-			<string>Está en &quot;%1$@&quot;, &quot;%2$@&quot; y otro grupo más</string>
+			<string>Está en "%1$@", "%2$@" y otro grupo más</string>
 			<key>other</key>
-			<string>Está en &quot;%1$@&quot;, &quot;%2$@&quot; y %3$ld grupos más</string>
+			<string>Está en "%1$@", "%2$@" y %3$ld grupos más</string>
 		</dict>
 	</dict>
 	<key>THREAD_DETAILS_OTHER_MEMBERS_COUNT_%ld</key>
@@ -1526,6 +1574,70 @@
 			<string>%1$ld más</string>
 			<key>other</key>
 			<string>%1$ld más</string>
+		</dict>
+	</dict>
+	<key>UNAVAILABLE_ATTACHMENT_AUDIO_SHEET_MESSAGE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Este mensaje de voz no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de %1$d día de antigüedad.</string>
+			<key>other</key>
+			<string>Este mensaje de voz no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de %1$d días de antigüedad.</string>
+		</dict>
+	</dict>
+	<key>UNAVAILABLE_ATTACHMENT_FILE_SHEET_MESSAGE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Este documento no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de %1$d día de antigüedad.</string>
+			<key>other</key>
+			<string>Este documento no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de %1$d días de antigüedad.</string>
+		</dict>
+	</dict>
+	<key>UNAVAILABLE_ATTACHMENT_OVERSIZE_TEXT_SHEET_MESSAGE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>El texto completo de este mensaje no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de %1$d día de antigüedad.</string>
+			<key>other</key>
+			<string>El texto completo de este mensaje no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de %1$d días de antigüedad.</string>
+		</dict>
+	</dict>
+	<key>UNAVAILABLE_ATTACHMENT_STICKER_SHEET_MESSAGE_%d</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@text@</string>
+		<key>text</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Este sticker no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de %1$d día de antigüedad.</string>
+			<key>other</key>
+			<string>Este sticker no se transfirió desde tu teléfono cuando se vinculó este dispositivo. No se pueden sincronizar los archivos que en el momento de vinculación del dispositivo tengan más de %1$d días de antigüedad.</string>
 		</dict>
 	</dict>
 	<key>USERNAME_SELECTION_TOO_SHORT_ERROR_MESSAGE_%d</key>

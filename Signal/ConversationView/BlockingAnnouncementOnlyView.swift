@@ -6,7 +6,7 @@
 import SignalServiceKit
 import SignalUI
 
-class BlockingAnnouncementOnlyView: UIStackView {
+class BlockingAnnouncementOnlyView: ConversationBottomPanelView {
 
     private let thread: TSThread
     private let forceDarkMode: Bool
@@ -25,55 +25,40 @@ class BlockingAnnouncementOnlyView: UIStackView {
 
         super.init(frame: .zero)
 
-        createDefaultContents()
-    }
+        if forceDarkMode {
+            overrideUserInterfaceStyle = .dark
+        }
 
-    private func createDefaultContents() {
-        // We want the background to extend to the bottom of the screen
-        // behind the safe area, so we add that inset to our bottom inset
-        // instead of pinning this view to the safe area
-        let safeAreaInset = safeAreaInsets.bottom
-
-        autoresizingMask = .flexibleHeight
-
-        axis = .vertical
-        spacing = 11
-        layoutMargins = UIEdgeInsets(top: 16, leading: 16, bottom: 20 + safeAreaInset, trailing: 16)
-        isLayoutMarginsRelativeArrangement = true
-        alignment = .fill
-
-        let blurView = UIVisualEffectView(effect: forceDarkMode ? Theme.darkThemeBarBlurEffect : Theme.barBlurEffect)
-        addSubview(blurView)
-        blurView.autoPinEdgesToSuperviewEdges()
-
-        let format = OWSLocalizedString("GROUPS_ANNOUNCEMENT_ONLY_BLOCKING_SEND_OR_CALL_FORMAT",
-                                       comment: "Format for indicator that only group administrators can starts a group call and sends messages to an 'announcement-only' group. Embeds {{ a \"admins\" link. }}.")
-        let adminsText = OWSLocalizedString("GROUPS_ANNOUNCEMENT_ONLY_ADMINISTRATORS",
-                                           comment: "Label for group administrators in the 'announcement-only' group UI.")
+        let format = OWSLocalizedString(
+            "GROUPS_ANNOUNCEMENT_ONLY_BLOCKING_SEND_OR_CALL_FORMAT",
+            comment: "Format for indicator that only group administrators can starts a group call and sends messages to an 'announcement-only' group. Embeds {{ a \"admins\" link. }}.",
+        )
+        let adminsText = OWSLocalizedString(
+            "GROUPS_ANNOUNCEMENT_ONLY_ADMINISTRATORS",
+            comment: "Label for group administrators in the 'announcement-only' group UI.",
+        )
         let text = String(format: format, adminsText)
         let attributedString = NSMutableAttributedString(string: text)
-        attributedString.setAttributes([
-            .foregroundColor: forceDarkMode ? .ows_accentBlueDark : Theme.accentBlueColor
-        ],
-        forSubstring: adminsText)
+        attributedString.setAttributes([.foregroundColor: UIColor.Signal.link], forSubstring: adminsText)
 
         let label = UILabel()
         label.font = .dynamicTypeSubheadlineClamped
-        label.textColor = forceDarkMode ? Theme.darkThemeSecondaryTextAndIconColor : Theme.secondaryTextAndIconColor
+        label.textColor = .Signal.secondaryLabel
         label.attributedText = attributedString
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.isUserInteractionEnabled = true
         label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapContactAdmins)))
-        addArrangedSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(label)
 
-        let lineView = UIView()
-        lineView.backgroundColor = forceDarkMode ? .ows_gray75 : Theme.hairlineColor
-        addSubview(lineView)
-        lineView.autoSetDimension(.height, toSize: 1)
-        lineView.autoPinWidthToSuperview()
-        lineView.autoPinEdge(toSuperviewEdge: .top)
+        addConstraints([
+            label.topAnchor.constraint(equalTo: contentLayoutGuide.topAnchor),
+            label.leadingAnchor.constraint(equalTo: contentLayoutGuide.leadingAnchor),
+            label.trailingAnchor.constraint(equalTo: contentLayoutGuide.trailingAnchor),
+            label.bottomAnchor.constraint(equalTo: contentLayoutGuide.bottomAnchor),
+        ])
     }
 
     private func fetchGroupAdminAddresses(tx: DBReadTransaction) -> [SignalServiceAddress] {
@@ -95,15 +80,11 @@ class BlockingAnnouncementOnlyView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override var intrinsicContentSize: CGSize {
-        return .zero
-    }
-
     // MARK: -
 
     @objc
-    public func didTapContactAdmins() {
-        guard let fromViewController = fromViewController else {
+    func didTapContactAdmins() {
+        guard let fromViewController else {
             owsFailDebug("Missing fromViewController.")
             return
         }
@@ -117,7 +98,7 @@ class BlockingAnnouncementOnlyView: UIStackView {
             return
         }
 
-        let sheet = MessageUserSubsetSheet(addresses: groupAdmins, forceDarkMode: forceDarkMode)
+        let sheet = MessageUserSubsetSheet(addresses: groupAdmins, forceDarkMode: forceDarkMode, groupThread: thread as? TSGroupThread)
         fromViewController.present(sheet, animated: true)
     }
 }
@@ -127,65 +108,87 @@ class BlockingAnnouncementOnlyView: UIStackView {
 class MessageUserSubsetSheet: OWSTableSheetViewController {
     private let addresses: [SignalServiceAddress]
     private let forceDarkMode: Bool
+    private let groupThread: TSGroupThread?
 
-    init(addresses: [SignalServiceAddress], forceDarkMode: Bool) {
+    init(addresses: [SignalServiceAddress], forceDarkMode: Bool, groupThread: TSGroupThread?) {
         owsAssertDebug(!addresses.isEmpty)
         self.addresses = addresses
         self.forceDarkMode = forceDarkMode
+        self.groupThread = groupThread
 
         super.init()
 
         tableViewController.forceDarkMode = forceDarkMode
 
-        tableViewController.defaultSeparatorInsetLeading = (OWSTableViewController2.cellHInnerMargin +
-                                                            CGFloat(AvatarBuilder.smallAvatarSizePoints) +
-                                                            ContactCellView.avatarTextHSpacing)
+        tableViewController.defaultSeparatorInsetLeading = (
+            OWSTableViewController2.cellHInnerMargin +
+                CGFloat(AvatarBuilder.smallAvatarSizePoints) +
+                ContactCellView.avatarTextHSpacing,
+        )
 
         tableViewController.tableView.register(
             ContactTableViewCell.self,
-            forCellReuseIdentifier: ContactTableViewCell.reuseIdentifier)
-
-        updateViewState()
+            forCellReuseIdentifier: ContactTableViewCell.reuseIdentifier,
+        )
     }
 
     // MARK: -
 
-    public override func updateTableContents(shouldReload: Bool = true) {
+    override func tableContents() -> OWSTableContents {
         let contents = OWSTableContents()
-        defer { tableViewController.setContents(contents, shouldReload: shouldReload) }
 
         let section = OWSTableSection()
-        let header = OWSLocalizedString("GROUPS_ANNOUNCEMENT_ONLY_CONTACT_ADMIN",
-                                       comment: "Label indicating the user can contact a group administrators of an 'announcement-only' group.")
-        section.headerAttributedTitle = NSAttributedString(string: header, attributes: [
-            .font: UIFont.dynamicTypeBodyClamped.semibold(),
-            .foregroundColor: forceDarkMode ? Theme.darkThemePrimaryColor : Theme.primaryTextColor
-            ])
+        section.headerTitle = OWSLocalizedString(
+            "GROUPS_ANNOUNCEMENT_ONLY_CONTACT_ADMIN",
+            comment: "Label indicating the user can contact a group administrators of an 'announcement-only' group.",
+        )
         contents.add(section)
+
+        var groupNameColors: GroupNameColors?
+        if
+            let groupThread,
+            let localAci = SSKEnvironment.shared.databaseStorageRef.read(block: { tx in DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: tx)?.aci })
+        {
+            groupNameColors = GroupNameColors.forThread(groupThread, localAci: localAci)
+        }
+
         for address in addresses {
             section.add(OWSTableItem(
-                            dequeueCellBlock: { [weak self] tableView in
-                                guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.reuseIdentifier) as? ContactTableViewCell else {
-                                    owsFailDebug("Missing cell.")
-                                    return UITableViewCell()
-                                }
+                dequeueCellBlock: { [weak self] tableView in
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: ContactTableViewCell.reuseIdentifier) as? ContactTableViewCell else {
+                        owsFailDebug("Missing cell.")
+                        return UITableViewCell()
+                    }
 
-                                cell.selectionStyle = .none
+                    cell.selectionStyle = .none
 
-                                let configuration = ContactCellConfiguration(address: address, localUserDisplayMode: .asLocalUser)
-                                configuration.forceDarkAppearance = self?.forceDarkMode ?? false
+                    let configuration = ContactCellConfiguration(address: address, localUserDisplayMode: .asLocalUser)
+                    configuration.forceDarkAppearance = self?.forceDarkMode ?? false
 
-                                SSKEnvironment.shared.databaseStorageRef.read {
-                                    cell.configure(configuration: configuration, transaction: $0)
-                                }
+                    if
+                        BuildFlags.MemberLabel.receive,
+                        let groupThread = self?.groupThread,
+                        let senderAci = address.aci,
+                        let memberLabelString = groupThread.groupModel.groupMembership.memberLabel(for: senderAci),
+                        let groupNameColors
+                    {
+                        configuration.memberLabel = MemberLabel(label: memberLabelString, groupNameColor: groupNameColors.color(for: senderAci))
+                    }
 
-                                return cell
-                            },
+                    SSKEnvironment.shared.databaseStorageRef.read {
+                        cell.configure(configuration: configuration, transaction: $0)
+                    }
+
+                    return cell
+                },
                 actionBlock: { [weak self] in
                     self?.dismiss(animated: true) {
                         SignalApp.shared.presentConversationForAddress(address, action: .compose, animated: true)
                     }
-                }))
+                },
+            ))
         }
+
+        return contents
     }
 }

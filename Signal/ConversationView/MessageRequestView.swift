@@ -100,7 +100,7 @@ class MessageRequestView: UIStackView {
 
         if let groupThread = thread as? TSGroupThread,
             groupThread.isGroupV2Thread {
-            self.mode = (groupThread.isLocalUserInvitedMember
+            self.mode = (groupThread.groupModel.groupMembership.isLocalUserInvitedMember
                 ? .groupInviteRequest
                 : .contactOrGroupRequest)
         } else {
@@ -154,8 +154,8 @@ class MessageRequestView: UIStackView {
         let hasReportedSpam = finder.hasUserReportedSpam(transaction: transaction)
 
         var isLocalUserInvitedMember = false
-        if let groupThread = thread as? TSGroupThread, groupThread.isLocalUserInvitedMember {
-            isLocalUserInvitedMember = groupThread.isLocalUserInvitedMember
+        if let groupThread = thread as? TSGroupThread, groupThread.groupModel.groupMembership.isLocalUserInvitedMember {
+            isLocalUserInvitedMember = groupThread.groupModel.groupMembership.isLocalUserInvitedMember
         }
 
         return MessageRequestType(

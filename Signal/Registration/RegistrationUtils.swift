@@ -42,17 +42,22 @@ public class RegistrationUtils {
             return
         }
 
-        let actionSheet = ActionSheetController()
+        let actionSheet = ActionSheetController(
+            title: NSLocalizedString(
+                "DEREGISTRATION_REREGISTER_PROMPT_TITLE",
+                comment: "Title for prompt that lets users re-register using the same phone number.",
+            ),
+        )
         actionSheet.addAction(ActionSheetAction(
             title: NSLocalizedString(
-                "DEREGISTRATION_REREGISTER_WITH_SAME_PHONE_NUMBER",
-                comment: "Label for button that lets users re-register using the same phone number."
+                "DEREGISTRATION_REREGISTER_BUTTON",
+                comment: "Button that lets users re-register using the same phone number.",
             ),
-            style: .destructive,
+            style: .default,
             handler: { _ in
                 Logger.info("Reregistering from banner")
                 RegistrationUtils.reregister(fromViewController: viewController, appReadiness: appReadiness)
-            }
+            },
         ))
         actionSheet.addAction(OWSActionSheets.cancelAction)
         viewController.presentActionSheet(actionSheet)
@@ -73,7 +78,7 @@ public class RegistrationUtils {
                 localAci: localIdentifiers.aci,
                 discoverability: DependenciesBridge.shared.phoneNumberDiscoverabilityManager.phoneNumberDiscoverability(tx: tx),
                 wasPrimaryDevice: DependenciesBridge.shared.tsAccountManager.registrationState(tx: tx).isPrimaryDevice ?? false,
-                tx: tx
+                tx: tx,
             )
             return true
         }
@@ -94,7 +99,7 @@ public class RegistrationUtils {
         let coordinator = SSKEnvironment.shared.databaseStorageRef.write {
             return loader.coordinator(
                 forDesiredMode: desiredMode,
-                transaction: $0
+                transaction: $0,
             )
         }
         let navController = RegistrationNavigationController.withCoordinator(coordinator, appReadiness: appReadiness)

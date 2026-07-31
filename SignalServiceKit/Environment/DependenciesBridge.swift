@@ -32,13 +32,14 @@ public class DependenciesBridge {
 
         return _shared
     }
+
     private static var _shared: DependenciesBridge?
 
-    #if TESTABLE_BUILD
+#if TESTABLE_BUILD
     static var hasShared: Bool {
         return _shared != nil
     }
-    #endif
+#endif
 
     static func setShared(_ dependenciesBridge: DependenciesBridge?, isRunningTests: Bool) {
         owsPrecondition((_shared == nil && dependenciesBridge != nil) || isRunningTests)
@@ -49,7 +50,6 @@ public class DependenciesBridge {
     public let accountEntropyPoolManager: AccountEntropyPoolManager
     public let adHocCallRecordManager: any AdHocCallRecordManager
     public let appExpiry: AppExpiry
-    public let attachmentCloner: SignalAttachmentCloner
     public let attachmentContentValidator: AttachmentContentValidator
     public let attachmentDownloadManager: AttachmentDownloadManager
     public let attachmentDownloadStore: AttachmentDownloadStore
@@ -65,13 +65,13 @@ public class DependenciesBridge {
     public let backgroundMessageFetcherFactory: BackgroundMessageFetcherFactory
     public let backupArchiveErrorPresenter: BackupArchiveErrorPresenter
     public let backupArchiveManager: BackupArchiveManager
-    public let backupAttachmentDownloadManager: BackupAttachmentDownloadManager
     public let backupAttachmentDownloadProgress: BackupAttachmentDownloadProgress
     public let backupAttachmentDownloadStore: BackupAttachmentDownloadStore
     public let backupAttachmentDownloadQueueStatusReporter: BackupAttachmentDownloadQueueStatusReporter
+    public let backupAttachmentCoordinator: BackupAttachmentCoordinator
     public let backupAttachmentUploadProgress: BackupAttachmentUploadProgress
-    public let backupAttachmentUploadQueueRunner: BackupAttachmentUploadQueueRunner
     public let backupAttachmentUploadQueueStatusReporter: BackupAttachmentUploadQueueStatusReporter
+    public let backupAttachmentUploadStore: BackupAttachmentUploadStore
     public let backupDisablingManager: BackupDisablingManager
     public let backupExportJob: BackupExportJob
     public let backupExportJobRunner: BackupExportJobRunner
@@ -79,12 +79,13 @@ public class DependenciesBridge {
     public let backupIdService: BackupIdService
     public let backupKeyService: BackupKeyService
     public let backupListMediaManager: BackupListMediaManager
-    public let backupRefreshManager: BackupRefreshManager
-    public let backupRequestManager: BackupRequestManager
+    public let backupListMediaStore: BackupListMediaStore
     public let backupPlanManager: BackupPlanManager
+    public let backupRequestManager: BackupRequestManager
     public let backupSubscriptionManager: BackupSubscriptionManager
     public let backupTestFlightEntitlementManager: BackupTestFlightEntitlementManager
     public let badgeCountFetcher: BadgeCountFetcher
+    let blockedRecipientStore: BlockedRecipientStore
     public let callLinkStore: any CallLinkRecordStore
     public let callRecordDeleteManager: any CallRecordDeleteManager
     public let callRecordMissedCallManager: CallRecordMissedCallManager
@@ -94,10 +95,11 @@ public class DependenciesBridge {
     public let chatColorSettingStore: ChatColorSettingStore
     public let chatConnectionManager: ChatConnectionManager
     public let contactShareManager: ContactShareManager
+    public let cron: Cron
     public let currentCallProvider: any CurrentCallProvider
     public let databaseChangeObserver: DatabaseChangeObserver
     public let db: any DB
-    public let deletedCallRecordCleanupManager: DeletedCallRecordCleanupManager
+    public let deletedCallRecordExpirationJob: DeletedCallRecordExpirationJob
     let deletedCallRecordStore: DeletedCallRecordStore
     let deleteForMeIncomingSyncMessageManager: DeleteForMeIncomingSyncMessageManager
     public let deleteForMeOutgoingSyncMessageManager: DeleteForMeOutgoingSyncMessageManager
@@ -106,6 +108,7 @@ public class DependenciesBridge {
     public let deviceStore: OWSDeviceStore
     public let deviceSleepManager: (any DeviceSleepManager)?
     public let disappearingMessagesConfigurationStore: DisappearingMessagesConfigurationStore
+    public let disappearingMessagesExpirationJob: DisappearingMessagesExpirationJob
     public let donationReceiptCredentialResultStore: DonationReceiptCredentialResultStore
     public let editManager: EditManager
     public let editMessageStore: EditMessageStore
@@ -122,7 +125,6 @@ public class DependenciesBridge {
     let incomingCallEventSyncMessageManager: IncomingCallEventSyncMessageManager
     let incomingCallLogEventSyncMessageManager: IncomingCallLogEventSyncMessageManager
     public let incomingPniChangeNumberProcessor: IncomingPniChangeNumberProcessor
-    public let incrementalMessageTSAttachmentMigrator: IncrementalMessageTSAttachmentMigrator
     public let individualCallRecordManager: IndividualCallRecordManager
     public let interactionDeleteManager: InteractionDeleteManager
     public let interactionStore: InteractionStore
@@ -138,11 +140,12 @@ public class DependenciesBridge {
     public let mediaBandwidthPreferenceStore: MediaBandwidthPreferenceStore
     public let messageStickerManager: MessageStickerManager
     public let nicknameManager: any NicknameManager
-    public let orphanedBackupAttachmentManager: OrphanedBackupAttachmentManager
     public let orphanedAttachmentCleaner: OrphanedAttachmentCleaner
     public let archivedPaymentStore: ArchivedPaymentStore
     public let phoneNumberDiscoverabilityManager: PhoneNumberDiscoverabilityManager
     public let phoneNumberVisibilityFetcher: any PhoneNumberVisibilityFetcher
+    public let pinnedMessageManager: PinnedMessageManager
+    public let pinnedMessageExpirationJob: PinnedMessageExpirationJob
     public let pinnedThreadManager: PinnedThreadManager
     public let pinnedThreadStore: PinnedThreadStore
     public let pollMessageManager: PollMessageManager
@@ -164,8 +167,10 @@ public class DependenciesBridge {
     public let svr: SecureValueRecovery
     public let svrCredentialStorage: SVRAuthCredentialStorage
     public let storageServiceRecordIkmMigrator: StorageServiceRecordIkmMigrator
+    public let storyMessageExpirationJob: StoryMessageExpirationJob
     public let storyRecipientManager: StoryRecipientManager
     public let storyRecipientStore: StoryRecipientStore
+    public let subscriptionConfigManager: SubscriptionConfigManager
     public let svrLocalStorage: SVRLocalStorage
     public let threadAssociatedDataStore: ThreadAssociatedDataStore
     public let threadRemover: ThreadRemover
@@ -186,7 +191,6 @@ public class DependenciesBridge {
         accountEntropyPoolManager: AccountEntropyPoolManager,
         adHocCallRecordManager: any AdHocCallRecordManager,
         appExpiry: AppExpiry,
-        attachmentCloner: SignalAttachmentCloner,
         attachmentContentValidator: AttachmentContentValidator,
         attachmentDownloadManager: AttachmentDownloadManager,
         attachmentDownloadStore: AttachmentDownloadStore,
@@ -202,13 +206,13 @@ public class DependenciesBridge {
         backgroundMessageFetcherFactory: BackgroundMessageFetcherFactory,
         backupArchiveErrorPresenter: BackupArchiveErrorPresenter,
         backupArchiveManager: BackupArchiveManager,
-        backupAttachmentDownloadManager: BackupAttachmentDownloadManager,
         backupAttachmentDownloadProgress: BackupAttachmentDownloadProgress,
         backupAttachmentDownloadStore: BackupAttachmentDownloadStore,
         backupAttachmentDownloadQueueStatusReporter: BackupAttachmentDownloadQueueStatusReporter,
+        backupAttachmentCoordinator: BackupAttachmentCoordinator,
         backupAttachmentUploadProgress: BackupAttachmentUploadProgress,
-        backupAttachmentUploadQueueRunner: BackupAttachmentUploadQueueRunner,
         backupAttachmentUploadQueueStatusReporter: BackupAttachmentUploadQueueStatusReporter,
+        backupAttachmentUploadStore: BackupAttachmentUploadStore,
         backupDisablingManager: BackupDisablingManager,
         backupExportJob: BackupExportJob,
         backupExportJobRunner: BackupExportJobRunner,
@@ -216,12 +220,13 @@ public class DependenciesBridge {
         backupIdService: BackupIdService,
         backupKeyService: BackupKeyService,
         backupListMediaManager: BackupListMediaManager,
-        backupRefreshManager: BackupRefreshManager,
+        backupListMediaStore: BackupListMediaStore,
         backupRequestManager: BackupRequestManager,
         backupPlanManager: BackupPlanManager,
         backupSubscriptionManager: BackupSubscriptionManager,
         backupTestFlightEntitlementManager: BackupTestFlightEntitlementManager,
         badgeCountFetcher: BadgeCountFetcher,
+        blockedRecipientStore: BlockedRecipientStore,
         callLinkStore: any CallLinkRecordStore,
         callRecordDeleteManager: CallRecordDeleteManager,
         callRecordMissedCallManager: CallRecordMissedCallManager,
@@ -231,10 +236,11 @@ public class DependenciesBridge {
         chatColorSettingStore: ChatColorSettingStore,
         chatConnectionManager: ChatConnectionManager,
         contactShareManager: ContactShareManager,
+        cron: Cron,
         currentCallProvider: any CurrentCallProvider,
         databaseChangeObserver: DatabaseChangeObserver,
         db: any DB,
-        deletedCallRecordCleanupManager: DeletedCallRecordCleanupManager,
+        deletedCallRecordExpirationJob: DeletedCallRecordExpirationJob,
         deletedCallRecordStore: DeletedCallRecordStore,
         deleteForMeIncomingSyncMessageManager: DeleteForMeIncomingSyncMessageManager,
         deleteForMeOutgoingSyncMessageManager: DeleteForMeOutgoingSyncMessageManager,
@@ -243,6 +249,7 @@ public class DependenciesBridge {
         deviceSleepManager: (any DeviceSleepManager)?,
         deviceStore: OWSDeviceStore,
         disappearingMessagesConfigurationStore: DisappearingMessagesConfigurationStore,
+        disappearingMessagesExpirationJob: DisappearingMessagesExpirationJob,
         donationReceiptCredentialResultStore: DonationReceiptCredentialResultStore,
         editManager: EditManager,
         editMessageStore: EditMessageStore,
@@ -259,7 +266,6 @@ public class DependenciesBridge {
         incomingCallEventSyncMessageManager: IncomingCallEventSyncMessageManager,
         incomingCallLogEventSyncMessageManager: IncomingCallLogEventSyncMessageManager,
         incomingPniChangeNumberProcessor: IncomingPniChangeNumberProcessor,
-        incrementalMessageTSAttachmentMigrator: IncrementalMessageTSAttachmentMigrator,
         individualCallRecordManager: IndividualCallRecordManager,
         interactionDeleteManager: InteractionDeleteManager,
         interactionStore: InteractionStore,
@@ -275,11 +281,12 @@ public class DependenciesBridge {
         mediaBandwidthPreferenceStore: MediaBandwidthPreferenceStore,
         messageStickerManager: MessageStickerManager,
         nicknameManager: any NicknameManager,
-        orphanedBackupAttachmentManager: OrphanedBackupAttachmentManager,
         orphanedAttachmentCleaner: OrphanedAttachmentCleaner,
         archivedPaymentStore: ArchivedPaymentStore,
         phoneNumberDiscoverabilityManager: PhoneNumberDiscoverabilityManager,
         phoneNumberVisibilityFetcher: any PhoneNumberVisibilityFetcher,
+        pinnedMessageManager: PinnedMessageManager,
+        pinnedMessageExpirationJob: PinnedMessageExpirationJob,
         pinnedThreadManager: PinnedThreadManager,
         pinnedThreadStore: PinnedThreadStore,
         pollMessageManager: PollMessageManager,
@@ -299,8 +306,10 @@ public class DependenciesBridge {
         sentMessageTranscriptReceiver: SentMessageTranscriptReceiver,
         signalProtocolStoreManager: SignalProtocolStoreManager,
         storageServiceRecordIkmMigrator: StorageServiceRecordIkmMigrator,
+        storyMessageExpirationJob: StoryMessageExpirationJob,
         storyRecipientManager: StoryRecipientManager,
         storyRecipientStore: StoryRecipientStore,
+        subscriptionConfigManager: SubscriptionConfigManager,
         svr: SecureValueRecovery,
         svrCredentialStorage: SVRAuthCredentialStorage,
         svrLocalStorage: SVRLocalStorage,
@@ -316,13 +325,12 @@ public class DependenciesBridge {
         usernameLookupManager: UsernameLookupManager,
         usernameValidationManager: UsernameValidationManager,
         wallpaperImageStore: WallpaperImageStore,
-        wallpaperStore: WallpaperStore
+        wallpaperStore: WallpaperStore,
     ) {
         self.accountAttributesUpdater = accountAttributesUpdater
         self.accountEntropyPoolManager = accountEntropyPoolManager
         self.adHocCallRecordManager = adHocCallRecordManager
         self.appExpiry = appExpiry
-        self.attachmentCloner = attachmentCloner
         self.attachmentContentValidator = attachmentContentValidator
         self.attachmentDownloadManager = attachmentDownloadManager
         self.attachmentDownloadStore = attachmentDownloadStore
@@ -338,13 +346,13 @@ public class DependenciesBridge {
         self.backgroundMessageFetcherFactory = backgroundMessageFetcherFactory
         self.backupArchiveErrorPresenter = backupArchiveErrorPresenter
         self.backupArchiveManager = backupArchiveManager
-        self.backupAttachmentDownloadManager = backupAttachmentDownloadManager
         self.backupAttachmentDownloadProgress = backupAttachmentDownloadProgress
         self.backupAttachmentDownloadStore = backupAttachmentDownloadStore
         self.backupAttachmentDownloadQueueStatusReporter = backupAttachmentDownloadQueueStatusReporter
+        self.backupAttachmentCoordinator = backupAttachmentCoordinator
         self.backupAttachmentUploadProgress = backupAttachmentUploadProgress
-        self.backupAttachmentUploadQueueRunner = backupAttachmentUploadQueueRunner
         self.backupAttachmentUploadQueueStatusReporter = backupAttachmentUploadQueueStatusReporter
+        self.backupAttachmentUploadStore = backupAttachmentUploadStore
         self.backupDisablingManager = backupDisablingManager
         self.backupExportJob = backupExportJob
         self.backupExportJobRunner = backupExportJobRunner
@@ -352,12 +360,13 @@ public class DependenciesBridge {
         self.backupIdService = backupIdService
         self.backupKeyService = backupKeyService
         self.backupListMediaManager = backupListMediaManager
-        self.backupRefreshManager = backupRefreshManager
+        self.backupListMediaStore = backupListMediaStore
         self.backupRequestManager = backupRequestManager
         self.backupPlanManager = backupPlanManager
         self.backupSubscriptionManager = backupSubscriptionManager
         self.backupTestFlightEntitlementManager = backupTestFlightEntitlementManager
         self.badgeCountFetcher = badgeCountFetcher
+        self.blockedRecipientStore = blockedRecipientStore
         self.callLinkStore = callLinkStore
         self.callRecordDeleteManager = callRecordDeleteManager
         self.callRecordMissedCallManager = callRecordMissedCallManager
@@ -367,10 +376,11 @@ public class DependenciesBridge {
         self.chatColorSettingStore = chatColorSettingStore
         self.chatConnectionManager = chatConnectionManager
         self.contactShareManager = contactShareManager
+        self.cron = cron
         self.currentCallProvider = currentCallProvider
         self.databaseChangeObserver = databaseChangeObserver
         self.db = db
-        self.deletedCallRecordCleanupManager = deletedCallRecordCleanupManager
+        self.deletedCallRecordExpirationJob = deletedCallRecordExpirationJob
         self.deletedCallRecordStore = deletedCallRecordStore
         self.deleteForMeIncomingSyncMessageManager = deleteForMeIncomingSyncMessageManager
         self.deleteForMeOutgoingSyncMessageManager = deleteForMeOutgoingSyncMessageManager
@@ -379,6 +389,7 @@ public class DependenciesBridge {
         self.deviceSleepManager = deviceSleepManager
         self.deviceStore = deviceStore
         self.disappearingMessagesConfigurationStore = disappearingMessagesConfigurationStore
+        self.disappearingMessagesExpirationJob = disappearingMessagesExpirationJob
         self.donationReceiptCredentialResultStore = donationReceiptCredentialResultStore
         self.editManager = editManager
         self.editMessageStore = editMessageStore
@@ -395,7 +406,6 @@ public class DependenciesBridge {
         self.incomingCallEventSyncMessageManager = incomingCallEventSyncMessageManager
         self.incomingCallLogEventSyncMessageManager = incomingCallLogEventSyncMessageManager
         self.incomingPniChangeNumberProcessor = incomingPniChangeNumberProcessor
-        self.incrementalMessageTSAttachmentMigrator = incrementalMessageTSAttachmentMigrator
         self.individualCallRecordManager = individualCallRecordManager
         self.interactionDeleteManager = interactionDeleteManager
         self.interactionStore = interactionStore
@@ -411,11 +421,12 @@ public class DependenciesBridge {
         self.mediaBandwidthPreferenceStore = mediaBandwidthPreferenceStore
         self.messageStickerManager = messageStickerManager
         self.nicknameManager = nicknameManager
-        self.orphanedBackupAttachmentManager = orphanedBackupAttachmentManager
         self.orphanedAttachmentCleaner = orphanedAttachmentCleaner
         self.archivedPaymentStore = archivedPaymentStore
         self.phoneNumberDiscoverabilityManager = phoneNumberDiscoverabilityManager
         self.phoneNumberVisibilityFetcher = phoneNumberVisibilityFetcher
+        self.pinnedMessageManager = pinnedMessageManager
+        self.pinnedMessageExpirationJob = pinnedMessageExpirationJob
         self.pinnedThreadManager = pinnedThreadManager
         self.pinnedThreadStore = pinnedThreadStore
         self.pollMessageManager = pollMessageManager
@@ -435,8 +446,10 @@ public class DependenciesBridge {
         self.sentMessageTranscriptReceiver = sentMessageTranscriptReceiver
         self.signalProtocolStoreManager = signalProtocolStoreManager
         self.storageServiceRecordIkmMigrator = storageServiceRecordIkmMigrator
+        self.storyMessageExpirationJob = storyMessageExpirationJob
         self.storyRecipientManager = storyRecipientManager
         self.storyRecipientStore = storyRecipientStore
+        self.subscriptionConfigManager = subscriptionConfigManager
         self.svr = svr
         self.svrCredentialStorage = svrCredentialStorage
         self.svrLocalStorage = svrLocalStorage

@@ -9,15 +9,17 @@ import XCTest
 @testable import SignalServiceKit
 
 private class MockGroupMemberUpdaterTemporaryShims: GroupMemberUpdaterTemporaryShims {
-    var fetchableLatestInteractionTimestamps = [(
-        groupThreadId: String,
-        serviceId: String,
-        interactionTimestamp: UInt64)
+    var fetchableLatestInteractionTimestamps = [
+        (
+            groupThreadId: String,
+            serviceId: String,
+            interactionTimestamp: UInt64,
+        )
     ]()
     func fetchLatestInteractionTimestamp(
         groupThreadId: String,
         groupMemberAddress: SignalServiceAddress,
-        transaction: DBReadTransaction
+        transaction: DBReadTransaction,
     ) -> UInt64? {
         let resultIndex = fetchableLatestInteractionTimestamps.firstIndex {
             $0.groupThreadId == groupThreadId && $0.serviceId == groupMemberAddress.serviceId?.serviceIdUppercaseString
@@ -41,7 +43,7 @@ class GroupMemberUpdaterTest: XCTestCase {
     private lazy var groupMemberUpdater = GroupMemberUpdaterImpl(
         temporaryShims: mockGroupMemberUpdaterTemporaryShims,
         groupMemberStore: mockGroupMemberStore,
-        signalServiceAddressCache: mockSignalServiceAddressCache
+        signalServiceAddressCache: mockSignalServiceAddressCache,
     )
 
     func testUpdateRecords() {
@@ -106,7 +108,7 @@ class GroupMemberUpdaterTest: XCTestCase {
         signalRecipients.append(("00000000-0000-4000-8000-000000000009", "PNI:00000000-0000-4000-8000-00000000000A", "+16505550105"))
         groupThreadMembers.append(("00000000-0000-4000-8000-000000000009", "+16505550105"))
         mockPhoneNumberVisibilityFetcher.acisWithHiddenPhoneNumbers.insert(
-            Aci.constantForTesting("00000000-0000-4000-8000-00000000000A")
+            Aci.constantForTesting("00000000-0000-4000-8000-00000000000A"),
         )
         groupThreadMembers.append(("PNI:00000000-0000-4000-8000-00000000000A", "+16505550105"))
         fetchableInteractionTimestamps.append(("00000000-0000-4000-8000-000000000009", 10))
@@ -117,12 +119,13 @@ class GroupMemberUpdaterTest: XCTestCase {
         mockDB.write { tx in
             for signalRecipient in signalRecipients {
                 mockSignalServiceAddressCache.updateRecipient(
-                    SignalRecipient(
+                    try! SignalRecipient.insertRecord(
                         aci: Aci.constantForTesting(signalRecipient.aci),
+                        phoneNumber: E164(signalRecipient.phoneNumber),
                         pni: signalRecipient.pni.map { Pni.constantForTesting($0) },
-                        phoneNumber: E164(signalRecipient.phoneNumber)
+                        tx: tx,
                     ),
-                    tx: tx
+                    tx: tx,
                 )
             }
         }
@@ -136,7 +139,7 @@ class GroupMemberUpdaterTest: XCTestCase {
             mockGroupMemberUpdaterTemporaryShims.fetchableLatestInteractionTimestamps.append((
                 groupThread.uniqueId,
                 fetchableInteractionTimestamp.serviceId,
-                fetchableInteractionTimestamp.interactionTimestamp
+                fetchableInteractionTimestamp.interactionTimestamp,
             ))
         }
 
@@ -146,12 +149,12 @@ class GroupMemberUpdaterTest: XCTestCase {
                     fullGroupMember: TSGroupMember(
                         address: NormalizedDatabaseRecordAddress(
                             serviceId: oldGroupMember.serviceId.map { try! ServiceId.parseFrom(serviceIdString: $0) },
-                            phoneNumber: oldGroupMember.phoneNumber
+                            phoneNumber: oldGroupMember.phoneNumber,
                         )!,
                         groupThreadId: groupThread.uniqueId,
-                        lastInteractionTimestamp: oldGroupMember.interactionTimestamp
+                        lastInteractionTimestamp: oldGroupMember.interactionTimestamp,
                     ),
-                    tx: $0
+                    tx: $0,
                 )
             }
         }
@@ -194,7 +197,7 @@ class GroupMemberUpdaterTest: XCTestCase {
         return SignalServiceAddress(
             serviceId: serviceId.map { try! ServiceId.parseFrom(serviceIdString: $0) },
             phoneNumber: phoneNumber,
-            cache: mockSignalServiceAddressCache
+            cache: mockSignalServiceAddressCache,
         )
     }
 }

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+public import LibSignalClient
 public import SignalServiceKit
 public import SignalUI
 
@@ -18,11 +19,11 @@ extension ConversationViewController: BodyRangesTextViewDelegate {
     }
 
     public func textViewMentionPickerReferenceView(_ textView: BodyRangesTextView) -> UIView? {
-        bottomBar
+        bottomBarContainer
     }
 
-    public func textViewMentionPickerPossibleAddresses(_ textView: BodyRangesTextView, tx: DBReadTransaction) -> [SignalServiceAddress] {
-        supportsMentions ? thread.recipientAddresses(with: SDSDB.shimOnlyBridge(tx)) : []
+    public func textViewMentionPickerPossibleAcis(_ textView: BodyRangesTextView, tx: DBReadTransaction) -> [Aci] {
+        supportsMentions ? thread.recipientAddresses(with: tx).compactMap(\.aci) : []
     }
 
     public func textViewMentionCacheInvalidationKey(_ textView: BodyRangesTextView) -> String {
@@ -38,8 +39,14 @@ extension ConversationViewController: BodyRangesTextViewDelegate {
     }
 
     public func textViewDidInsertMemoji(_ memojiGlyph: OWSAdaptiveImageGlyph) {
-        // Note: attachment might be nil or have an error at this point; that's fine.
-        let attachment = SignalAttachment.attachmentFromMemoji(memojiGlyph)
-        self.didPasteAttachments(attachment.map { [$0] })
+        do {
+            let attachmentLimits = OutgoingAttachmentLimits.currentLimits()
+            self.didPasteAttachments(
+                [try PasteboardAttachment.loadPreviewableMemojiAttachment(fromMemojiGlyph: memojiGlyph)],
+                attachmentLimits: attachmentLimits,
+            )
+        } catch {
+            self.showErrorAlert(attachmentError: error as? SignalAttachmentError)
+        }
     }
 }

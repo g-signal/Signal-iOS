@@ -77,7 +77,7 @@ class GroupViewHelper {
         case .member:
             return groupModelV2.groupMembership.isFullMember(localAddress)
         case .administrator:
-            return (groupModelV2.groupMembership.isFullMemberAndAdministrator(localAddress))
+            return groupModelV2.groupMembership.isFullMemberAndAdministrator(localAddress)
         }
     }
 
@@ -90,6 +90,8 @@ class GroupViewHelper {
     // * DM state
     // * Group title (if group)
     // * Group avatar (if group)
+    // * Pinned Messages (if group)
+    // * Member Labels (if group)
     var canEditConversationAttributes: Bool {
         return canLocalUserEditConversation { groupAccess in
             return groupAccess.attributes
@@ -108,45 +110,51 @@ class GroupViewHelper {
         guard let groupThread = thread as? TSGroupThread else {
             return false
         }
-        return (!threadViewModel.hasPendingMessageRequest &&
-            groupThread.isGroupV2Thread &&
-            groupThread.isLocalUserFullMemberAndAdministrator)
+        return
+            !threadViewModel.hasPendingMessageRequest
+                && groupThread.isGroupV2Thread
+                && groupThread.groupModel.groupMembership.isLocalUserFullMemberAndAdministrator
+
     }
 
     var canRevokePendingInvites: Bool {
         guard let groupThread = thread as? TSGroupThread else {
             return false
         }
-        return (!threadViewModel.hasPendingMessageRequest &&
-            groupThread.isGroupV2Thread &&
-            groupThread.isLocalUserFullMemberAndAdministrator)
+        return
+            !threadViewModel.hasPendingMessageRequest
+                && groupThread.isGroupV2Thread
+                && groupThread.groupModel.groupMembership.isLocalUserFullMemberAndAdministrator
+
     }
 
     var canResendInvites: Bool {
-        return (!threadViewModel.hasPendingMessageRequest && isLocalUserFullMember)
+        return !threadViewModel.hasPendingMessageRequest && isLocalUserFullMember
     }
 
     var canApproveMemberRequests: Bool {
         guard let groupThread = thread as? TSGroupThread else {
             return false
         }
-        return (!threadViewModel.hasPendingMessageRequest &&
-            groupThread.isGroupV2Thread &&
-            groupThread.isLocalUserFullMemberAndAdministrator)
+        return
+            !threadViewModel.hasPendingMessageRequest
+                && groupThread.isGroupV2Thread
+                && groupThread.groupModel.groupMembership.isLocalUserFullMemberAndAdministrator
+
     }
 
     var isLocalUserFullMember: Bool {
         guard let groupThread = thread as? TSGroupThread else {
             return true
         }
-        return groupThread.isLocalUserFullMember
+        return groupThread.groupModel.groupMembership.isLocalUserFullMember
     }
 
     var isLocalUserFullOrInvitedMember: Bool {
         guard let groupThread = thread as? TSGroupThread else {
             return true
         }
-        return groupThread.isLocalUserFullOrInvitedMember
+        return groupThread.groupModel.groupMembership.isLocalUserFullOrInvitedMember
     }
 
     func isFullOrInvitedMember(_ address: SignalServiceAddress) -> Bool {

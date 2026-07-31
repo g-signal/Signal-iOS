@@ -318,7 +318,7 @@ class RegistrationPhoneNumberViewController: OWSViewController {
         navigationItem.rightBarButtonItem = canSubmit(isBlockedByValidationError: isBlockedByValidationError) ? nextBarButton : nil
 
         phoneNumberInput.isEnabled = canChangePhoneNumber
-        phoneNumberInput.render()
+        // phoneNumberInput.render() -- removed upstream
 
         // We always render the warning label but sometimes invisibly. This avoids UI jumpiness.
         if isBlockedByValidationError, let validationError {
@@ -338,8 +338,8 @@ class RegistrationPhoneNumberViewController: OWSViewController {
 
         view.backgroundColor = Theme.backgroundColor
         nextBarButton.tintColor = Theme.accentBlueColor
-        titleLabel.textColor = .colorForRegistrationTitleLabel
-        explanationLabel.textColor = .colorForRegistrationExplanationLabel
+        titleLabel.textColor = Theme.primaryTextColor
+        explanationLabel.textColor = Theme.secondaryTextAndIconColor
 
         // In some cases, the safe area insets will change unexpectedly after presenting a view
         // controller. This causes layout jumpiness.

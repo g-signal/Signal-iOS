@@ -19,8 +19,6 @@ class NSEContext: NSObject, AppContext {
     func canPresentNotifications() -> Bool { true }
 
     let appLaunchTime = Date()
-    // In NSE foreground and launch are the same.
-    var appForegroundTime: Date { return appLaunchTime }
 
     func appDocumentDirectoryPath() -> String {
         guard let documentDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last else {
@@ -49,7 +47,7 @@ class NSEContext: NSObject, AppContext {
 
     let memoryPressureSource = DispatchSource.makeMemoryPressureSource(
         eventMask: .all,
-        queue: .global()
+        queue: .global(),
     )
 
     override init() {
@@ -85,17 +83,12 @@ class NSEContext: NSObject, AppContext {
 
     func runNowOrWhenMainAppIsActive(_ block: () -> Void) {}
 
-    @MainActor
-    func resetAppDataAndExit() -> Never {
-        owsFail("Should not reset app data from NSE")
-    }
-
     var debugLogsDirPath: String {
         DebugLogger.nseDebugLogsDirPath
     }
 }
 
-fileprivate extension DispatchSourceMemoryPressure {
+private extension DispatchSourceMemoryPressure {
     var memoryEvent: DispatchSource.MemoryPressureEvent {
         DispatchSource.MemoryPressureEvent(rawValue: data)
     }

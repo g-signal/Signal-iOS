@@ -22,13 +22,11 @@ public class PaymentsCurrenciesImpl: PaymentsCurrenciesSwift, PaymentsCurrencies
             self,
             selector: #selector(updateConversionRates),
             name: PaymentsConstants.arePaymentsEnabledDidChange,
-            object: nil
+            object: nil,
         )
     }
 
     public func warmCaches() {
-        owsAssertDebug(GRDBSchemaMigrator.areMigrationsComplete)
-
         SSKEnvironment.shared.databaseStorageRef.read { transaction in
             self.currentCurrencyCode = Self.loadCurrentCurrencyCode(transaction: transaction)
         }
@@ -61,12 +59,18 @@ public class PaymentsCurrenciesImpl: PaymentsCurrenciesSwift, PaymentsCurrencies
     }
 
     private static func loadCurrentCurrencyCode(transaction: DBReadTransaction) -> Currency.Code {
-        if let currencyCode = Self.keyValueStore.getString(Self.currentCurrencyCodeKey,
-                                                           transaction: transaction) {
+        if
+            let currencyCode = Self.keyValueStore.getString(
+                Self.currentCurrencyCodeKey,
+                transaction: transaction,
+            )
+        {
             return currencyCode
         }
-        if let localeCurrencyCode = Locale.current.currencyCode,
-           localeCurrencyCode.count == 3 {
+        if
+            let localeCurrencyCode = Locale.current.currencyCode,
+            localeCurrencyCode.count == 3
+        {
             return localeCurrencyCode
         }
         if Platform.isSimulator {
@@ -173,20 +177,15 @@ public class PaymentsCurrenciesImpl: PaymentsCurrenciesSwift, PaymentsCurrencies
         let request = OWSRequestFactory.currencyConversionRequest()
         let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(request)
 
-        guard let json = response.responseBodyJson else {
+        guard let parser = response.responseBodyParamParser else {
             throw OWSAssertionError("Missing or invalid JSON")
-        }
-        guard let parser = ParamParser(responseObject: json) else {
-            throw OWSAssertionError("Invalid responseObject.")
         }
         let timestamp: UInt64 = try parser.required(key: "timestamp")
         let serviceDate = Date(millisecondsSince1970: timestamp)
-        let currencyObjects: [Any] = try parser.required(key: "currencies")
+        let currencyObjects: [[String: Any]] = try parser.required(key: "currencies")
         var conversionRateMap = ConversionRateMap()
         for currencyObject in currencyObjects {
-            guard let currencyParser = ParamParser(responseObject: currencyObject) else {
-                throw OWSAssertionError("Invalid currencyObject.")
-            }
+            let currencyParser = ParamParser(currencyObject)
             let base: String = try currencyParser.required(key: "base")
             guard base == PaymentsConstants.mobileCoinCurrencyIdentifier else {
                 continue
@@ -217,33 +216,41 @@ public class PaymentsCurrenciesImpl: PaymentsCurrenciesSwift, PaymentsCurrencies
 
     private func conversionInfos(for currencyInfos: [Currency.Info]) -> [CurrencyConversionInfo] {
 
-        guard let conversionRates = conversionRates else {
+        guard let conversionRates else {
             return []
         }
 
         var infos = [CurrencyConversionInfo]()
         for currencyInfo in currencyInfos {
-            guard let info = conversionInfo(forCurrencyCode: currencyInfo.code,
-                                            conversionRates: conversionRates) else {
+            guard
+                let info = conversionInfo(
+                    forCurrencyCode: currencyInfo.code,
+                    conversionRates: conversionRates,
+                )
+            else {
                 continue
             }
             infos.append(info)
         }
-        infos.sort { (left, right) in
+        infos.sort { left, right in
             left.name < right.name
         }
         return infos
     }
 
     public func conversionInfo(forCurrencyCode currencyCode: Currency.Code) -> CurrencyConversionInfo? {
-        conversionInfo(forCurrencyCode: currencyCode,
-                       conversionRates: self.conversionRates)
+        conversionInfo(
+            forCurrencyCode: currencyCode,
+            conversionRates: self.conversionRates,
+        )
     }
 
-    private func conversionInfo(forCurrencyCode currencyCode: Currency.Code,
-                                conversionRates: ConversionRates?) -> CurrencyConversionInfo? {
+    private func conversionInfo(
+        forCurrencyCode currencyCode: Currency.Code,
+        conversionRates: ConversionRates?,
+    ) -> CurrencyConversionInfo? {
 
-        guard let conversionRates = conversionRates else {
+        guard let conversionRates else {
             return nil
         }
         guard let conversionRate = conversionRates.conversionRateMap[currencyCode] else {
@@ -257,10 +264,12 @@ public class PaymentsCurrenciesImpl: PaymentsCurrenciesSwift, PaymentsCurrencies
             owsFailDebug("Missing name for currencyCode: \(currencyCode)")
             return nil
         }
-        return CurrencyConversionInfo(currencyCode: currencyCode,
-                                      name: name,
-                                      conversionRate: conversionRate,
-                                      conversionDate: conversionRates.serviceDate)
+        return CurrencyConversionInfo(
+            currencyCode: currencyCode,
+            name: name,
+            conversionRate: conversionRate,
+            conversionDate: conversionRates.serviceDate,
+        )
     }
 
     private static let preferredCurrencyCodes: [Currency.Code] = [
@@ -269,7 +278,7 @@ public class PaymentsCurrenciesImpl: PaymentsCurrenciesSwift, PaymentsCurrencies
         "JPY",
         "CNY",
         "AUD",
-        "CAD"
+        "CAD",
     ]
 
     private static let supportedCurrencyCodesList: [Currency.Code] = [
@@ -570,7 +579,7 @@ public class PaymentsCurrenciesImpl: PaymentsCurrenciesSwift, PaymentsCurrencies
         "ZRZ",
         "ZWD",
         "ZWL",
-        "ZWR"
+        "ZWR",
     ]
 
     static var supportedCurrencyCodes: Set<Currency.Code> {

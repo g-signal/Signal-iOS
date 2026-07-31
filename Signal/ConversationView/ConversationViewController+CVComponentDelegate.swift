@@ -123,6 +123,19 @@ extension ConversationViewController: CVComponentDelegate {
         collectionViewActiveContextMenuInteraction?.initiatingGestureRecognizerDidEnd()
     }
 
+    public func didLongPressPoll(
+        _ cell: CVCell,
+        itemViewModel: CVItemViewModelImpl,
+        shouldAllowReply: Bool,
+    ) {
+        let messageActions = MessageActions.pollActions(
+            itemViewModel: itemViewModel,
+            shouldAllowReply: shouldAllowReply,
+            delegate: self,
+        )
+        self.presentContextMenu(with: messageActions, focusedOn: cell, andModel: itemViewModel)
+    }
+
     // MARK: -
 
     public func willBecomeVisibleWithFailedOrPendingDownloads(_ message: TSMessage) {
@@ -147,11 +160,13 @@ extension ConversationViewController: CVComponentDelegate {
                 return
             }
 
-            let messageHasAnyEnqueuedBackupDownloads = try db.read { tx throws in
-                let referencedAttachments = attachmentStore
-                    .fetchAllReferencedAttachments(owningMessageRowId: messageRowId, tx: tx)
+            let messageHasAnyEnqueuedBackupDownloads = db.read { tx in
+                let referencedAttachments = attachmentStore.fetchReferencedAttachmentsOwnedByMessage(
+                    messageRowId: messageRowId,
+                    tx: tx,
+                )
 
-                return try referencedAttachments.contains { referencedAttachment in
+                return referencedAttachments.contains { referencedAttachment in
                     // We only auto-download on appear if we've got a cdn number to try.
                     // The user can still manual download if there isn't one (using fallback cdn).
                     guard referencedAttachment.attachment.mediaTierInfo?.cdnNumber != nil else {
@@ -160,10 +175,10 @@ extension ConversationViewController: CVComponentDelegate {
                     // Otherwise use presence in the backup download queue to indicate
                     // downloadability; this just functionally bumps the priority so the
                     // download happens immediately and unconditionally.
-                    let enqueuedDownload = try backupAttachmentDownloadStore.getEnqueuedDownload(
+                    let enqueuedDownload = backupAttachmentDownloadStore.getEnqueuedDownload(
                         attachmentRowId: referencedAttachment.attachment.id,
                         thumbnail: false,
-                        tx: tx
+                        tx: tx,
                     )
                     switch enqueuedDownload?.state {
                     case nil, .done:
@@ -606,17 +621,19 @@ extension ConversationViewController: CVComponentDelegate {
     }
 
     public func didTapUsernameLink(usernameLink: Usernames.UsernameLink) {
-        SSKEnvironment.shared.databaseStorageRef.read { tx in
-            UsernameQuerier().queryForUsernameLink(
-                link: usernameLink,
-                fromViewController: self,
-                tx: tx,
-                onSuccess: { _, aci in
-                    SignalApp.shared.presentConversationForAddress(
-                        SignalServiceAddress(aci),
-                        animated: true
-                    )
-                }
+        Task {
+            guard
+                let (_, aci) = await UsernameQuerier().queryForUsernameLink(
+                    link: usernameLink,
+                    fromViewController: self,
+                )
+            else {
+                return
+            }
+
+            SignalApp.shared.presentConversationForAddress(
+                SignalServiceAddress(aci),
+                animated: true,
             )
         }
     }
@@ -785,7 +802,7 @@ extension ConversationViewController: CVComponentDelegate {
             return
         }
         Task {
-            await GroupManager.sendGroupUpdateMessage(groupId: groupId)
+            _ = await GroupManager.sendGroupUpdateMessage(groupId: groupId)
             Logger.info("Group updated, removing group creation error.")
 
             await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
@@ -1262,8 +1279,103 @@ extension ConversationViewController: CVComponentDelegate {
     }
 
     public func didTapViewVotes(poll: OWSPoll) {
-        let pollDetails = PollDetailsViewController(poll: poll)
-        self.present(pollDetails, animated: true)
+        let message: TSMessage? = DependenciesBridge.shared.db.read { tx in
+            InteractionFinder.fetch(rowId: poll.interactionId, transaction: tx) as? TSMessage
+        }
+
+        guard let message else {
+            return
+        }
+
+        let pollDetails = PollDetailsViewController(
+            poll: poll,
+            message: message,
+            pollManager: DependenciesBridge.shared.pollMessageManager,
+            db: DependenciesBridge.shared.db,
+            databaseChangeObserver: DependenciesBridge.shared.databaseChangeObserver,
+        )
+        pollDetails.delegate = self
+        self.present(OWSNavigationController(rootViewController: pollDetails), animated: true)
+    }
+
+    public func didTapViewPoll(pollInteractionUniqueId: String) {
+        ensureInteractionLoadedThenScrollToInteraction(
+            pollInteractionUniqueId,
+            alignment: .centerIfNotEntirelyOnScreen,
+            isAnimated: true,
+        )
+    }
+
+    public func didTapVoteOnPoll(poll: OWSPoll, optionIndex: UInt32, isUnvote: Bool) {
+        guard
+            let groupThread = self.thread as? TSGroupThread,
+            !threadViewModel.hasPendingMessageRequest,
+            groupThread.groupModel.groupMembership.isLocalUserFullMember
+        else {
+            return
+        }
+
+        do {
+            try DependenciesBridge.shared.db.write { tx in
+                let targetPoll = DependenciesBridge.shared.interactionStore.fetchInteraction(
+                    rowId: poll.interactionId,
+                    tx: tx,
+                )
+
+                guard let targetPoll else {
+                    return
+                }
+
+                guard
+                    let pollVoteMessage = try DependenciesBridge.shared.pollMessageManager.applyPendingVoteToLocalState(
+                        pollInteraction: targetPoll,
+                        optionIndex: optionIndex,
+                        isUnvote: isUnvote,
+                        thread: groupThread,
+                        tx: tx,
+                    )
+                else {
+                    Logger.error("Unable to update local poll state with votes")
+                    return
+                }
+
+                // Touch message so it reloads to show updated vote state.
+                SSKEnvironment.shared.databaseStorageRef.touch(interaction: targetPoll, shouldReindex: false, tx: tx)
+
+                let preparedMessage = PreparedOutgoingMessage.preprepared(
+                    transientMessageWithoutAttachments: pollVoteMessage,
+                )
+
+                SSKEnvironment.shared.messageSenderJobQueueRef.add(
+                    message: preparedMessage,
+                    transaction: tx,
+                )
+            }
+        } catch {
+            Logger.error("Unable to update local poll state with votes: \(error)")
+        }
+    }
+
+    public func didTapViewPinnedMessage(pinnedMessageUniqueId: String) {
+        ensureInteractionLoadedThenScrollToInteraction(
+            pinnedMessageUniqueId,
+            alignment: .centerIfNotEntirelyOnScreen,
+            isAnimated: true,
+        )
+    }
+}
+
+// MARK: - PollDetailsViewControllerDelegate
+
+extension ConversationViewController: PollDetailsViewControllerDelegate {
+    public func terminatePoll(poll: OWSPoll) {
+        if let groupThread = self.thread as? TSGroupThread {
+            do {
+                try DependenciesBridge.shared.pollMessageManager.sendPollTerminateMessage(poll: poll, thread: groupThread)
+            } catch {
+                Logger.error("Failed to end poll: \(error)")
+            }
+        }
     }
 }
 

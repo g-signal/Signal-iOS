@@ -5,6 +5,13 @@
 
 import UIKit
 
+public extension NSDirectionalEdgeInsets {
+
+    static var buttonContainerLayoutMargins: NSDirectionalEdgeInsets {
+        return .init(top: 0, leading: 12, bottom: 16, trailing: 12)
+    }
+}
+
 public extension UIStackView {
 
     func addArrangedSubviews(_ subviews: [UIView]) {
@@ -60,7 +67,7 @@ public extension UIStackView {
     func addBackgroundBlurView(
         blur: UIBlurEffect.Style,
         accessibilityFallbackColor: UIColor? = nil,
-        cornerRadius: CGFloat = 0
+        cornerRadius: CGFloat = 0,
     ) -> UIView {
         if
             UIAccessibility.isReduceTransparencyEnabled,
@@ -68,7 +75,7 @@ public extension UIStackView {
         {
             return self.addBackgroundView(
                 withBackgroundColor: accessibilityFallbackColor,
-                cornerRadius: cornerRadius
+                cornerRadius: cornerRadius,
             )
         } else {
             let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: blur))
@@ -97,6 +104,16 @@ public extension UIStackView {
         backgroundView.backgroundColor = backgroundColor
         self.addBackgroundView(backgroundView)
         return backgroundView
+    }
+
+    class func verticalButtonStack(buttons: [UIButton], isFullWidthButtons: Bool = true) -> UIStackView {
+        let stackView = UIStackView(arrangedSubviews: buttons)
+        stackView.axis = .vertical
+        stackView.spacing = 12
+        stackView.alignment = isFullWidthButtons ? .fill : .center
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.directionalLayoutMargins = .buttonContainerLayoutMargins
+        return stackView
     }
 }
 

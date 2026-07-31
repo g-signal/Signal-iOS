@@ -5,14 +5,8 @@
 
 import Foundation
 
-public enum OWSURLSessionError: Error, IsRetryableProvider {
+public enum OWSURLSessionError: Error {
     case responseTooLarge
-
-    public var isRetryableProvider: Bool {
-        switch self {
-        case .responseTooLarge: return false
-        }
-    }
 }
 
 public class OWSURLSession: OWSURLSessionProtocol {
@@ -91,10 +85,10 @@ public class OWSURLSession: OWSURLSessionProtocol {
 
     // MARK: Initializers
 
-    required public init(
+    public required init(
         endpoint: OWSURLSessionEndpoint,
         configuration: URLSessionConfiguration,
-        maxResponseSize: Int?,
+        maxResponseSize: UInt64?,
         canUseSignalProxy: Bool,
         onFailureCallback: ((any Error) -> Void)?,
     ) {
@@ -112,41 +106,41 @@ public class OWSURLSession: OWSURLSessionProtocol {
         _ = self.delegateBox
     }
 
-    convenience public init(
+    public convenience init(
         securityPolicy: HttpSecurityPolicy,
-        configuration: URLSessionConfiguration
+        configuration: URLSessionConfiguration,
     ) {
         self.init(
             endpoint: OWSURLSessionEndpoint(
                 baseUrl: nil,
                 frontingInfo: nil,
                 securityPolicy: securityPolicy,
-                extraHeaders: [:]
+                extraHeaders: [:],
             ),
             configuration: configuration,
             maxResponseSize: nil,
-            canUseSignalProxy: false
+            canUseSignalProxy: false,
         )
     }
 
-    convenience public init(
+    public convenience init(
         baseUrl: URL? = nil,
         securityPolicy: HttpSecurityPolicy,
         configuration: URLSessionConfiguration,
         extraHeaders: HttpHeaders = HttpHeaders(),
-        maxResponseSize: Int? = nil,
-        canUseSignalProxy: Bool = false
+        maxResponseSize: UInt64? = nil,
+        canUseSignalProxy: Bool = false,
     ) {
         self.init(
             endpoint: OWSURLSessionEndpoint(
                 baseUrl: baseUrl,
                 frontingInfo: nil,
                 securityPolicy: securityPolicy,
-                extraHeaders: extraHeaders
+                extraHeaders: extraHeaders,
             ),
             configuration: configuration,
             maxResponseSize: maxResponseSize,
-            canUseSignalProxy: canUseSignalProxy
+            canUseSignalProxy: canUseSignalProxy,
         )
     }
 
@@ -155,18 +149,19 @@ public class OWSURLSession: OWSURLSessionProtocol {
     public func performUpload(
         request: URLRequest,
         requestData: Data,
-        progress: OWSProgressSource?
-    ) async throws -> any HTTPResponse {
+        progress: OWSProgressSource?,
+    ) async throws -> HTTPResponse {
         // Log the request with data
         var logRequest = request
         logRequest.httpBody = requestData
         NetworkRequestLogger.shared.logRequest(logRequest)
 
+
         return try await performUpload(
             request: request,
             ignoreAppExpiry: false,
             progress: progress,
-            taskBlock: { self.session.uploadTask(with: request, from: requestData) }
+            taskBlock: { self.session.uploadTask(with: request, from: requestData) },
         )
     }
 
@@ -174,18 +169,18 @@ public class OWSURLSession: OWSURLSessionProtocol {
         request: URLRequest,
         fileUrl: URL,
         ignoreAppExpiry: Bool,
-        progress: OWSProgressSource?
+        progress: OWSProgressSource?,
     ) async throws -> HTTPResponse {
         return try await performUpload(
             request: request,
             ignoreAppExpiry: ignoreAppExpiry,
             progress: progress,
-            taskBlock: { self.session.uploadTask(with: request, fromFile: fileUrl) }
+            taskBlock: { self.session.uploadTask(with: request, fromFile: fileUrl) },
         )
     }
 
-    public func performRequest(request: URLRequest, ignoreAppExpiry: Bool) async throws -> any HTTPResponse {
-        if !ignoreAppExpiry && DependenciesBridge.shared.appExpiry.isExpired(now: Date()) {
+    public func performRequest(request: URLRequest, ignoreAppExpiry: Bool) async throws -> HTTPResponse {
+        if !ignoreAppExpiry, DependenciesBridge.shared.appExpiry.isExpired(now: Date()) {
             throw AppExpiredError()
         }
 
@@ -201,13 +196,13 @@ public class OWSURLSession: OWSURLSessionProtocol {
             urlResponse: urlResponse,
             responseData: responseData,
             originalRequest: task.originalRequest,
-            requestConfig: requestConfig
+            requestConfig: requestConfig,
         )
     }
 
     public func performDownload(
         request: URLRequest,
-        progress: OWSProgressSource?
+        progress: OWSProgressSource?,
     ) async throws -> OWSUrlDownloadResponse {
         let request = prepareRequest(request: request)
         guard let requestUrl = request.url else {
@@ -222,7 +217,7 @@ public class OWSURLSession: OWSURLSessionProtocol {
     public func performDownload(
         requestUrl: URL,
         resumeData: Data,
-        progress: OWSProgressSource?
+        progress: OWSProgressSource?,
     ) async throws -> OWSUrlDownloadResponse {
         return try await performDownload(requestUrl: requestUrl, progress: progress) {
             // Don't use a completion block or the delegate will be ignored for download tasks.
@@ -268,7 +263,7 @@ public class OWSURLSession: OWSURLSessionProtocol {
         }!
     }
 
-    private let maxResponseSize: Int?
+    private let maxResponseSize: UInt64?
 
     private let canUseSignalProxy: Bool
 
@@ -297,13 +292,13 @@ public class OWSURLSession: OWSURLSessionProtocol {
         return RequestConfig(
             requestUrl: requestUrl,
             require2xxOr3xx: require2xxOr3xx,
-            shouldHandleRemoteDeprecation: shouldHandleRemoteDeprecation
+            shouldHandleRemoteDeprecation: shouldHandleRemoteDeprecation,
         )
     }
 
     private func handleDataResult(urlResponse: URLResponse?, responseData: Data, originalRequest: URLRequest?, requestConfig: RequestConfig) async throws -> HTTPResponse {
         let httpUrlResponse = try await handleResult(urlResponse: urlResponse, responseData: responseData, originalRequest: originalRequest, requestConfig: requestConfig)
-        return HTTPResponseImpl.build(requestUrl: requestConfig.requestUrl, httpUrlResponse: httpUrlResponse, bodyData: responseData)
+        return HTTPResponse(requestUrl: requestConfig.requestUrl, httpUrlResponse: httpUrlResponse, bodyData: responseData)
     }
 
     private func handleDownloadResult(urlResponse: URLResponse?, downloadUrl: URL, originalRequest: URLRequest?, requestConfig: RequestConfig) async throws -> OWSUrlDownloadResponse {
@@ -350,7 +345,7 @@ public class OWSURLSession: OWSURLSessionProtocol {
                         requestUrl: requestUrl,
                         responseStatus: statusCode,
                         responseHeaders: responseHeaders,
-                        responseData: responseData
+                        responseData: responseData,
                     ))
                 } else {
                     owsFailDebug("Missing status code.")
@@ -406,7 +401,7 @@ public class OWSURLSession: OWSURLSessionProtocol {
 
     // MARK: - Issuing Requests
 
-    public func performRequest(_ rawRequest: TSRequest) async throws -> any HTTPResponse {
+    public func performRequest(_ rawRequest: TSRequest) async throws -> HTTPResponse {
         let appExpiry = DependenciesBridge.shared.appExpiry
         guard !appExpiry.isExpired(now: Date()) else {
             throw AppExpiredError()
@@ -447,7 +442,7 @@ public class OWSURLSession: OWSURLSessionProtocol {
             request = try self.endpoint.buildRequest(
                 rawRequest.url.absoluteString,
                 method: method,
-                headers: httpHeaders
+                headers: httpHeaders,
             )
         } catch {
             owsFailDebug("Missing or invalid request: \(rawRequest.url).")
@@ -480,9 +475,9 @@ public class OWSURLSession: OWSURLSessionProtocol {
         request: URLRequest,
         ignoreAppExpiry: Bool,
         progress: OWSProgressSource?,
-        taskBlock: () -> URLSessionUploadTask
+        taskBlock: () -> URLSessionUploadTask,
     ) async throws -> HTTPResponse {
-        if !ignoreAppExpiry && DependenciesBridge.shared.appExpiry.isExpired(now: Date()) {
+        if !ignoreAppExpiry, DependenciesBridge.shared.appExpiry.isExpired(now: Date()) {
             throw AppExpiredError()
         }
 
@@ -490,7 +485,8 @@ public class OWSURLSession: OWSURLSessionProtocol {
         let requestConfig = requestConfig(requestUrl: request.url!)
         let task = taskBlock()
 
-        let (urlResponse, responseData): (URLResponse?, Data)
+        let urlResponse: URLResponse?
+        let responseData: Data
         do {
             (urlResponse, responseData) = try await runTask(task, taskState: {
                 return DataTaskState(progressSource: progress, completion: $0)
@@ -502,14 +498,14 @@ public class OWSURLSession: OWSURLSessionProtocol {
             urlResponse: urlResponse,
             responseData: responseData,
             originalRequest: task.originalRequest,
-            requestConfig: requestConfig
+            requestConfig: requestConfig,
         )
     }
 
     private func performDownload(
         requestUrl: URL,
         progress: OWSProgressSource?,
-        taskBlock: () -> URLSessionDownloadTask
+        taskBlock: () -> URLSessionDownloadTask,
     ) async throws -> OWSUrlDownloadResponse {
         let appExpiry = DependenciesBridge.shared.appExpiry
         if appExpiry.isExpired(now: Date()) {
@@ -527,7 +523,7 @@ public class OWSURLSession: OWSURLSessionProtocol {
             urlResponse: urlResponse,
             downloadUrl: downloadUrl,
             originalRequest: task.originalRequest,
-            requestConfig: requestConfig
+            requestConfig: requestConfig,
         )
     }
 
@@ -554,7 +550,7 @@ public class OWSURLSession: OWSURLSessionProtocol {
                 if cancelState.increment() == 2 {
                     task.cancel()
                 }
-            }
+            },
         )
     }
 
@@ -645,13 +641,15 @@ public class OWSURLSession: OWSURLSessionProtocol {
 
     fileprivate func urlSession(
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping URLAuthenticationChallengeCompletion
+        completionHandler: @escaping URLAuthenticationChallengeCompletion,
     ) {
         var disposition: URLSession.AuthChallengeDisposition = .performDefaultHandling
         var credential: URLCredential?
 
-        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-           let serverTrust = challenge.protectionSpace.serverTrust {
+        if
+            challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+            let serverTrust = challenge.protectionSpace.serverTrust
+        {
             if endpoint.securityPolicy.evaluate(serverTrust: serverTrust, domain: challenge.protectionSpace.host) {
                 credential = URLCredential(trust: serverTrust)
                 disposition = .useCredential
@@ -681,7 +679,7 @@ extension OWSURLSession {
     func urlSession(
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping URLAuthenticationChallengeCompletion
+        completionHandler: @escaping URLAuthenticationChallengeCompletion,
     ) {
         urlSession(didReceive: challenge, completionHandler: completionHandler)
     }
@@ -691,11 +689,11 @@ extension OWSURLSession {
         task: URLSessionTask,
         willPerformHTTPRedirection response: HTTPURLResponse,
         newRequest: URLRequest,
-        completionHandler: @escaping (URLRequest?) -> Void
+        completionHandler: @escaping (URLRequest?) -> Void,
     ) {
         guard allowRedirects else { return completionHandler(nil) }
 
-        if let customRedirectHandler = customRedirectHandler {
+        if let customRedirectHandler {
             completionHandler(customRedirectHandler(newRequest))
         } else {
             completionHandler(newRequest)
@@ -706,7 +704,7 @@ extension OWSURLSession {
         _ session: URLSession,
         task: URLSessionTask,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping URLAuthenticationChallengeCompletion
+        completionHandler: @escaping URLAuthenticationChallengeCompletion,
     ) {
         urlSession(didReceive: challenge, completionHandler: completionHandler)
     }
@@ -723,11 +721,14 @@ extension OWSURLSession {
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         if let maxResponseSize {
-            guard let fileSize = OWSFileSystem.fileSize(of: location) else {
-                taskDidFail(downloadTask, error: OWSAssertionError("Unknown download size."))
+            let fileSize: UInt64
+            do {
+                fileSize = try OWSFileSystem.fileSize(of: location)
+            } catch {
+                taskDidFail(downloadTask, error: error)
                 return
             }
-            guard fileSize.intValue <= maxResponseSize else {
+            guard fileSize <= maxResponseSize else {
                 taskDidFail(downloadTask, error: OWSURLSessionError.responseTooLarge)
                 return
             }
@@ -750,7 +751,7 @@ extension OWSURLSession {
         downloadTask: URLSessionDownloadTask,
         didWriteData bytesWritten: Int64,
         totalBytesWritten: Int64,
-        totalBytesExpectedToWrite: Int64
+        totalBytesExpectedToWrite: Int64,
     ) {
         if isResponseTooLarge(bytesReceived: totalBytesWritten, bytesExpected: totalBytesExpectedToWrite) {
             taskDidFail(downloadTask, error: OWSURLSessionError.responseTooLarge)
@@ -768,7 +769,7 @@ extension OWSURLSession {
         _ session: URLSession,
         downloadTask: URLSessionDownloadTask,
         didResumeAtOffset fileOffset: Int64,
-        expectedTotalBytes: Int64
+        expectedTotalBytes: Int64,
     ) {
         if isResponseTooLarge(bytesReceived: fileOffset, bytesExpected: expectedTotalBytes) {
             taskDidFail(downloadTask, error: OWSURLSessionError.responseTooLarge)
@@ -786,7 +787,7 @@ extension OWSURLSession {
         _ session: URLSession,
         dataTask: URLSessionDataTask,
         didReceive response: URLResponse,
-        completionHandler: @escaping (URLSession.ResponseDisposition) -> Void
+        completionHandler: @escaping (URLSession.ResponseDisposition) -> Void,
     ) {
         if isResponseTooLarge(bytesReceived: 0, bytesExpected: response.expectedContentLength) {
             taskDidFail(dataTask, error: OWSURLSessionError.responseTooLarge)
@@ -940,14 +941,14 @@ extension URLSessionDelegateBox: URLSessionDelegate, URLSessionTaskDelegate, URL
         downloadTask: URLSessionDownloadTask,
         didWriteData bytesWritten: Int64,
         totalBytesWritten: Int64,
-        totalBytesExpectedToWrite: Int64
+        totalBytesExpectedToWrite: Int64,
     ) {
         weakDelegate?.urlSession(
             session,
             downloadTask: downloadTask,
             didWriteData: bytesWritten,
             totalBytesWritten: totalBytesWritten,
-            totalBytesExpectedToWrite: totalBytesExpectedToWrite
+            totalBytesExpectedToWrite: totalBytesExpectedToWrite,
         )
     }
 
@@ -955,13 +956,13 @@ extension URLSessionDelegateBox: URLSessionDelegate, URLSessionTaskDelegate, URL
         _ session: URLSession,
         downloadTask: URLSessionDownloadTask,
         didResumeAtOffset fileOffset: Int64,
-        expectedTotalBytes: Int64
+        expectedTotalBytes: Int64,
     ) {
         weakDelegate?.urlSession(
             session,
             downloadTask: downloadTask,
             didResumeAtOffset: fileOffset,
-            expectedTotalBytes: expectedTotalBytes
+            expectedTotalBytes: expectedTotalBytes,
         )
     }
 
@@ -971,13 +972,13 @@ extension URLSessionDelegateBox: URLSessionDelegate, URLSessionTaskDelegate, URL
         _ session: URLSession,
         task: URLSessionTask,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping URLAuthenticationChallengeCompletion
+        completionHandler: @escaping URLAuthenticationChallengeCompletion,
     ) {
         weakDelegate?.urlSession(
             session,
             task: task,
             didReceive: challenge,
-            completionHandler: completionHandler
+            completionHandler: completionHandler,
         )
     }
 
@@ -986,14 +987,14 @@ extension URLSessionDelegateBox: URLSessionDelegate, URLSessionTaskDelegate, URL
         task: URLSessionTask,
         didSendBodyData bytesSent: Int64,
         totalBytesSent: Int64,
-        totalBytesExpectedToSend: Int64
+        totalBytesExpectedToSend: Int64,
     ) {
         weakDelegate?.urlSession(
             session,
             task: task,
             didSendBodyData: bytesSent,
             totalBytesSent: totalBytesSent,
-            totalBytesExpectedToSend: totalBytesExpectedToSend
+            totalBytesExpectedToSend: totalBytesExpectedToSend,
         )
     }
 
@@ -1001,19 +1002,19 @@ extension URLSessionDelegateBox: URLSessionDelegate, URLSessionTaskDelegate, URL
         weakDelegate?.urlSession(
             session,
             task: task,
-            didCompleteWithError: error
+            didCompleteWithError: error,
         )
     }
 
     func urlSession(
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping URLAuthenticationChallengeCompletion
+        completionHandler: @escaping URLAuthenticationChallengeCompletion,
     ) {
         weakDelegate?.urlSession(
             session,
             didReceive: challenge,
-            completionHandler: completionHandler
+            completionHandler: completionHandler,
         )
     }
 
@@ -1022,14 +1023,14 @@ extension URLSessionDelegateBox: URLSessionDelegate, URLSessionTaskDelegate, URL
         task: URLSessionTask,
         willPerformHTTPRedirection response: HTTPURLResponse,
         newRequest: URLRequest,
-        completionHandler: @escaping (URLRequest?) -> Void
+        completionHandler: @escaping (URLRequest?) -> Void,
     ) {
         weakDelegate?.urlSession(
             session,
             task: task,
             willPerformHTTPRedirection: response,
             newRequest: newRequest,
-            completionHandler: completionHandler
+            completionHandler: completionHandler,
         )
     }
 
@@ -1037,7 +1038,7 @@ extension URLSessionDelegateBox: URLSessionDelegate, URLSessionTaskDelegate, URL
         _ session: URLSession,
         dataTask: URLSessionDataTask,
         didReceive response: URLResponse,
-        completionHandler: @escaping (URLSession.ResponseDisposition) -> Void
+        completionHandler: @escaping (URLSession.ResponseDisposition) -> Void,
     ) {
         guard let delegate = weakDelegate else {
             completionHandler(.cancel)
@@ -1047,7 +1048,7 @@ extension URLSessionDelegateBox: URLSessionDelegate, URLSessionTaskDelegate, URL
             session,
             dataTask: dataTask,
             didReceive: response,
-            completionHandler: completionHandler
+            completionHandler: completionHandler,
         )
     }
 

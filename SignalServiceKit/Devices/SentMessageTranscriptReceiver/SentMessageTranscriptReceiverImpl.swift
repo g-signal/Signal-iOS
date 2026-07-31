@@ -10,13 +10,14 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
 
     private let attachmentDownloads: AttachmentDownloadManager
     private let attachmentManager: AttachmentManager
-    private let disappearingMessagesJob: Shims.DisappearingMessagesJob
+    private let disappearingMessagesExpirationJob: DisappearingMessagesExpirationJob
     private let earlyMessageManager: Shims.EarlyMessageManager
     private let groupManager: Shims.GroupManager
     private let interactionDeleteManager: InteractionDeleteManager
     private let interactionStore: InteractionStore
     private let messageStickerManager: MessageStickerManager
-    private let paymentsHelper: Shims.PaymentsHelper
+    private let paymentsHelper: PaymentsHelper
+    private let pollMessageManager: PollMessageManager
     private let signalProtocolStoreManager: SignalProtocolStoreManager
     private let tsAccountManager: TSAccountManager
     private let viewOnceMessages: Shims.ViewOnceMessages
@@ -24,26 +25,28 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
     public init(
         attachmentDownloads: AttachmentDownloadManager,
         attachmentManager: AttachmentManager,
-        disappearingMessagesJob: Shims.DisappearingMessagesJob,
+        disappearingMessagesExpirationJob: DisappearingMessagesExpirationJob,
         earlyMessageManager: Shims.EarlyMessageManager,
         groupManager: Shims.GroupManager,
         interactionDeleteManager: InteractionDeleteManager,
         interactionStore: InteractionStore,
         messageStickerManager: MessageStickerManager,
-        paymentsHelper: Shims.PaymentsHelper,
+        paymentsHelper: PaymentsHelper,
+        pollMessageManager: PollMessageManager,
         signalProtocolStoreManager: SignalProtocolStoreManager,
         tsAccountManager: TSAccountManager,
-        viewOnceMessages: Shims.ViewOnceMessages
+        viewOnceMessages: Shims.ViewOnceMessages,
     ) {
         self.attachmentDownloads = attachmentDownloads
         self.attachmentManager = attachmentManager
-        self.disappearingMessagesJob = disappearingMessagesJob
+        self.disappearingMessagesExpirationJob = disappearingMessagesExpirationJob
         self.earlyMessageManager = earlyMessageManager
         self.groupManager = groupManager
         self.interactionDeleteManager = interactionDeleteManager
         self.interactionStore = interactionStore
         self.messageStickerManager = messageStickerManager
         self.paymentsHelper = paymentsHelper
+        self.pollMessageManager = pollMessageManager
         self.signalProtocolStoreManager = signalProtocolStoreManager
         self.tsAccountManager = tsAccountManager
         self.viewOnceMessages = viewOnceMessages
@@ -52,7 +55,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
     public func process(
         _ transcript: SentMessageTranscript,
         localIdentifiers: LocalIdentifiers,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> Result<TSOutgoingMessage?, Error> {
 
         func validateTimestampInt64() -> Bool {
@@ -109,10 +112,9 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
                 thread: paymentNotification.target.thread,
                 paymentNotification: paymentNotification.notification,
                 messageTimestamp: messageTimestamp,
-                tx: tx
+                transaction: tx,
             )
             return .success(nil)
-
         case .archivedPayment(let archivedPayment):
 
             guard validateProtocolVersion(for: transcript, thread: archivedPayment.target.thread, tx: tx) else {
@@ -126,12 +128,12 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
                     expiresInSeconds: archivedPayment.expirationDurationSeconds,
                     // Archived payments don't set the chat timer; version is irrelevant.
                     expireTimerVersion: nil,
-                    expireStartedAt: archivedPayment.expirationStartedAt
+                    expireStartedAt: archivedPayment.expirationStartedAt,
                 ),
                 amount: archivedPayment.amount,
                 fee: archivedPayment.fee,
                 note: archivedPayment.note,
-                tx: tx
+                tx: tx,
             )
 
             interactionStore.insertInteraction(message, tx: tx)
@@ -139,7 +141,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
                 message,
                 recipientStates: transcript.recipientStates,
                 isSentUpdate: false,
-                tx: tx
+                tx: tx,
             )
 
             return .success(message)
@@ -154,7 +156,6 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
 
             updateDisappearingMessageTokenIfNecessary(target: target, localIdentifiers: localIdentifiers, tx: tx)
             return .success(nil)
-
         case .message(let messageParams):
             Logger.info("Recording transcript in thread: \(messageParams.target.thread.logString) timestamp: \(transcript.timestamp)")
             guard validateTimestampValue() else {
@@ -164,7 +165,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
                 messageParams: messageParams,
                 transcript: transcript,
                 localIdentifiers: localIdentifiers,
-                tx: tx
+                tx: tx,
             ).map { $0 }
         }
     }
@@ -173,26 +174,13 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
         messageParams: SentMessageTranscriptType.Message,
         transcript: SentMessageTranscript,
         localIdentifiers: LocalIdentifiers,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> Result<TSOutgoingMessage, Error> {
         guard validateProtocolVersion(for: transcript, thread: messageParams.target.thread, tx: tx) else {
             return .failure(OWSAssertionError("Protocol version validation failed"))
         }
 
         updateDisappearingMessageTokenIfNecessary(target: messageParams.target, localIdentifiers: localIdentifiers, tx: tx)
-
-        let linkPreviewBuilder: OwnedAttachmentBuilder<OWSLinkPreview>?
-        let quotedMessageBuilder: OwnedAttachmentBuilder<TSQuotedMessage>?
-        let contactBuilder: OwnedAttachmentBuilder<OWSContact>?
-        let messageStickerBuilder: OwnedAttachmentBuilder<MessageSticker>?
-        do {
-            linkPreviewBuilder = try messageParams.makeLinkPreviewBuilder(tx)
-            quotedMessageBuilder = try messageParams.makeQuotedMessageBuilder(tx)
-            contactBuilder = try messageParams.makeContactBuilder(tx)
-            messageStickerBuilder = try messageParams.makeMessageStickerBuilder(tx)
-        } catch let error {
-            return .failure(error)
-        }
 
         let outgoingMessageBuilder = TSOutgoingMessageBuilder(
             thread: messageParams.target.thread,
@@ -204,7 +192,6 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
             expireTimerVersion: messageParams.expireTimerVersion,
             expireStartedAt: messageParams.expirationStartedAt,
             isVoiceMessage: false,
-            groupMetaMessage: .unspecified,
             isSmsMessageRestoredFromBackup: false,
             isViewOnceMessage: messageParams.isViewOnceMessage,
             isViewOnceComplete: false,
@@ -214,26 +201,26 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
             storyAuthorAci: messageParams.storyAuthorAci,
             storyTimestamp: messageParams.storyTimestamp,
             storyReactionEmoji: nil,
-            quotedMessage: quotedMessageBuilder?.info,
-            contactShare: contactBuilder?.info,
-            linkPreview: linkPreviewBuilder?.info,
-            messageSticker: messageStickerBuilder?.info,
+            quotedMessage: messageParams.validatedQuotedReply?.quotedReply,
+            contactShare: messageParams.validatedContactShare?.contact,
+            linkPreview: messageParams.validatedLinkPreview?.preview,
+            messageSticker: messageParams.validatedMessageSticker?.sticker,
             giftBadge: messageParams.giftBadge,
-            isPoll: false // TODO(KC): fill in once poll sending is implemented
+            isPoll: messageParams.validatedPollCreate != nil,
         )
         var outgoingMessage = interactionStore.buildOutgoingMessage(builder: outgoingMessageBuilder, tx: tx)
 
         let hasRenderableContent = outgoingMessageBuilder.hasRenderableContent(
             hasBodyAttachments: messageParams.attachmentPointerProtos.isEmpty.negated,
-            hasLinkPreview: linkPreviewBuilder != nil,
-            hasQuotedReply: quotedMessageBuilder != nil,
-            hasContactShare: contactBuilder != nil,
-            hasSticker: messageStickerBuilder != nil,
+            hasLinkPreview: messageParams.validatedLinkPreview != nil,
+            hasQuotedReply: messageParams.validatedQuotedReply != nil,
+            hasContactShare: messageParams.validatedContactShare != nil,
+            hasSticker: messageParams.validatedMessageSticker != nil,
             // Payment notifications go through a different path.
             hasPayment: false,
-            hasPoll: false // TODO(KC): fill in once poll sending is implemented
+            hasPoll: messageParams.validatedPollCreate != nil,
         )
-        if !hasRenderableContent && !outgoingMessage.isViewOnceMessage {
+        if !hasRenderableContent, !outgoingMessage.isViewOnceMessage {
             switch messageParams.target {
             case .group(let thread):
                 if thread.isGroupV2Thread {
@@ -254,7 +241,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
             withTimestamp: outgoingMessage.timestamp,
             threadId: outgoingMessage.uniqueThreadId,
             author: localIdentifiers.aciAddress,
-            tx: tx
+            tx: tx,
         )
         if let existingFailedMessage = existingFailedMessage as? TSOutgoingMessage {
             // Update the reference to the outgoing message so that we apply all updates to the
@@ -270,65 +257,100 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
             // The sender may have resent the message. If so, we should swap it in place of the placeholder
             interactionStore.insertOrReplacePlaceholder(for: outgoingMessage, from: localIdentifiers.aciAddress, tx: tx)
 
+            if let validatedPollCreate = messageParams.validatedPollCreate {
+                do {
+                    try pollMessageManager.processIncomingPollCreate(
+                        interactionId: outgoingMessage.sqliteRowId!,
+                        pollCreateProto: validatedPollCreate.pollCreateProto,
+                        transaction: tx,
+                    )
+                } catch {
+                    Logger.error("Failed to insert poll \(error)")
+                    // Roll back the message
+                    interactionDeleteManager.delete(outgoingMessage, sideEffects: .default(), tx: tx)
+                }
+            }
+
             do {
-                try attachmentManager.createAttachmentPointers(
-                    from: messageParams.attachmentPointerProtos.map { proto in
-                        return .init(
+                for (idx, proto) in messageParams.attachmentPointerProtos.enumerated() {
+                    try attachmentManager.createAttachmentPointer(
+                        from: OwnedAttachmentPointerProto(
                             proto: proto,
                             owner: .messageBodyAttachment(.init(
                                 messageRowId: outgoingMessage.sqliteRowId!,
                                 receivedAtTimestamp: outgoingMessage.receivedAtTimestamp,
                                 threadRowId: threadRowId,
                                 isViewOnce: outgoingMessage.isViewOnceMessage,
-                                isPastEditRevision: outgoingMessage.isPastEditRevision()
-                            ))
-                        )
-                    },
-                    tx: tx
-                )
+                                isPastEditRevision: outgoingMessage.isPastEditRevision(),
+                                orderInMessage: UInt32(idx),
+                            )),
+                        ),
+                        tx: tx,
+                    )
+                }
 
-                try quotedMessageBuilder?.finalize(
-                    owner: .quotedReplyAttachment(.init(
-                        messageRowId: outgoingMessage.sqliteRowId!,
-                        receivedAtTimestamp: outgoingMessage.receivedAtTimestamp,
-                        threadRowId: threadRowId,
-                        isPastEditRevision: outgoingMessage.isPastEditRevision()
-                    )),
-                    tx: tx
-                )
-
-                try linkPreviewBuilder?.finalize(
-                    owner: .messageLinkPreview(.init(
-                        messageRowId: outgoingMessage.sqliteRowId!,
-                        receivedAtTimestamp: outgoingMessage.receivedAtTimestamp,
-                        threadRowId: threadRowId,
-                        isPastEditRevision: outgoingMessage.isPastEditRevision()
-                    )),
-                    tx: tx
-                )
-
-                try messageStickerBuilder.map {
-                    try $0.finalize(
-                        owner: .messageSticker(.init(
+                if
+                    let quotedReplyAttachmentDataSource = messageParams.validatedQuotedReply?.thumbnailDataSource,
+                    MimeTypeUtil.isSupportedVisualMediaMimeType(quotedReplyAttachmentDataSource.originalAttachmentMimeType)
+                {
+                    try attachmentManager.createQuotedReplyMessageThumbnail(
+                        from: quotedReplyAttachmentDataSource,
+                        owningMessageAttachmentBuilder: .init(
                             messageRowId: outgoingMessage.sqliteRowId!,
                             receivedAtTimestamp: outgoingMessage.receivedAtTimestamp,
                             threadRowId: threadRowId,
                             isPastEditRevision: outgoingMessage.isPastEditRevision(),
-                            stickerPackId: $0.info.packId,
-                            stickerId: $0.info.stickerId
-                        )),
-                        tx: tx
+                        ),
+                        tx: tx,
                     )
                 }
-                try contactBuilder?.finalize(
-                    owner: .messageContactAvatar(.init(
-                        messageRowId: outgoingMessage.sqliteRowId!,
-                        receivedAtTimestamp: outgoingMessage.receivedAtTimestamp,
-                        threadRowId: threadRowId,
-                        isPastEditRevision: outgoingMessage.isPastEditRevision()
-                    )),
-                    tx: tx
-                )
+
+                if let linkPreviewImageProto = messageParams.validatedLinkPreview?.imageProto {
+                    try attachmentManager.createAttachmentPointer(
+                        from: OwnedAttachmentPointerProto(
+                            proto: linkPreviewImageProto,
+                            owner: .messageLinkPreview(.init(
+                                messageRowId: outgoingMessage.sqliteRowId!,
+                                receivedAtTimestamp: outgoingMessage.receivedAtTimestamp,
+                                threadRowId: threadRowId,
+                                isPastEditRevision: outgoingMessage.isPastEditRevision(),
+                            )),
+                        ),
+                        tx: tx,
+                    )
+                }
+
+                if let validatedMessageSticker = messageParams.validatedMessageSticker {
+                    try attachmentManager.createAttachmentPointer(
+                        from: OwnedAttachmentPointerProto(
+                            proto: validatedMessageSticker.proto,
+                            owner: .messageSticker(.init(
+                                messageRowId: outgoingMessage.sqliteRowId!,
+                                receivedAtTimestamp: outgoingMessage.receivedAtTimestamp,
+                                threadRowId: threadRowId,
+                                isPastEditRevision: outgoingMessage.isPastEditRevision(),
+                                stickerPackId: validatedMessageSticker.sticker.packId,
+                                stickerId: validatedMessageSticker.sticker.stickerId,
+                            )),
+                        ),
+                        tx: tx,
+                    )
+                }
+
+                if let contactAvatarProto = messageParams.validatedContactShare?.avatarProto {
+                    try attachmentManager.createAttachmentPointer(
+                        from: OwnedAttachmentPointerProto(
+                            proto: contactAvatarProto,
+                            owner: .messageContactAvatar(.init(
+                                messageRowId: outgoingMessage.sqliteRowId!,
+                                receivedAtTimestamp: outgoingMessage.receivedAtTimestamp,
+                                threadRowId: threadRowId,
+                                isPastEditRevision: outgoingMessage.isPastEditRevision(),
+                            )),
+                        ),
+                        tx: tx,
+                    )
+                }
             } catch let error {
                 Logger.error("Attachment failure: \(error)")
                 // Roll back the message
@@ -339,7 +361,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
         owsAssertDebug(interactionStore.insertedMessageHasRenderableContent(
             message: outgoingMessage,
             rowId: outgoingMessage.sqliteRowId!,
-            tx: tx
+            tx: tx,
         ))
 
         let recipientStates: [SignalServiceAddress: TSOutgoingMessageRecipientState] = {
@@ -348,7 +370,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
                 // If this is a sent transcript that went to our Note to Self,
                 // we should force it as read.
                 return [
-                    localIdentifiers.aciAddress: TSOutgoingMessageRecipientState(status: .read)
+                    localIdentifiers.aciAddress: TSOutgoingMessageRecipientState(status: .read),
                 ]
             case .contact, .group:
                 return transcript.recipientStates
@@ -358,24 +380,24 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
             outgoingMessage,
             recipientStates: recipientStates,
             isSentUpdate: false,
-            tx: tx
+            tx: tx,
         )
 
         if let expirationStartedAt = messageParams.expirationStartedAt {
             /// The insert and update methods above may start expiration for
             /// this message, but transcript.expirationStartedAt may be earlier,
-            /// so we need to pass that to the OWSDisappearingMessagesJob in
+            /// so we need to pass that to DisappearingMessagesExpirationJob in
             /// case it needs to back-date the expiration.
-            disappearingMessagesJob.startExpiration(
-                for: outgoingMessage,
+            disappearingMessagesExpirationJob.startExpiration(
+                forMessage: outgoingMessage,
                 expirationStartedAt: expirationStartedAt,
-                tx: tx
+                tx: tx,
             )
         }
 
         self.earlyMessageManager.applyPendingMessages(for: outgoingMessage, localIdentifiers: localIdentifiers, tx: tx)
 
-        if (outgoingMessage.isViewOnceMessage) {
+        if outgoingMessage.isViewOnceMessage {
             // Don't download attachments for "view-once" messages from linked devices.
             // To be extra-conservative, always mark as complete immediately.
             viewOnceMessages.markAsComplete(message: outgoingMessage, sendSyncMessages: false, tx: tx)
@@ -389,7 +411,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
     private func validateProtocolVersion(
         for transcript: SentMessageTranscript,
         thread: TSThread,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> Bool {
         if
             let requiredProtocolVersion = transcript.requiredProtocolVersion,
@@ -401,7 +423,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
                 thread: thread,
                 timestamp: MessageTimestampGenerator.sharedInstance.generateTimestamp(),
                 sender: nil,
-                protocolVersion: UInt(requiredProtocolVersion)
+                protocolVersion: UInt(requiredProtocolVersion),
             )
             interactionStore.insertInteraction(message, tx: tx)
             return false
@@ -412,7 +434,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
     private func updateDisappearingMessageTokenIfNecessary(
         target: SentMessageTranscriptTarget,
         localIdentifiers: LocalIdentifiers,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         switch target {
         case .group:
@@ -423,7 +445,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
                 disappearingMessageToken: disappearingMessageToken,
                 changeAuthor: localIdentifiers.aci,
                 localIdentifiers: localIdentifiers,
-                tx: tx
+                tx: tx,
             )
         }
     }
@@ -433,7 +455,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
     private func processRecipientUpdate(
         _ transcript: SentMessageTranscript,
         groupThread: TSGroupThread,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) -> Result<TSOutgoingMessage?, Error> {
 
         if transcript.recipientStates.isEmpty {
@@ -487,7 +509,7 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
                 message,
                 recipientStates: transcript.recipientStates,
                 isSentUpdate: true,
-                tx: tx
+                tx: tx,
             )
 
             // In theory more than one message could be found.
@@ -505,7 +527,6 @@ public class SentMessageTranscriptReceiverImpl: SentMessageTranscriptReceiver {
     }
 
     private func archiveSessions(for address: SignalServiceAddress, tx: DBWriteTransaction) {
-        let sessionStore = signalProtocolStoreManager.signalProtocolStore(for: .aci).sessionStore
-        sessionStore.archiveAllSessions(for: address, tx: tx)
+        self.signalProtocolStoreManager.signalProtocolStore(for: .aci).sessionStore.archiveSessions(forAddress: address, tx: tx)
     }
 }

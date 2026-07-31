@@ -27,6 +27,8 @@ class ProvisioningBaseViewController: OWSViewController, OWSNavigationChildContr
 
         primaryView.layoutMargins = primaryLayoutMargins
 
+        view.backgroundColor = .Signal.background
+
         if shouldShowBackButton() {
             let backButton = UIButton()
             backButton.setTemplateImage(UIImage(imageLiteralResourceName: "NavBarBack"), tintColor: Theme.secondaryTextAndIconColor)
@@ -74,71 +76,17 @@ class ProvisioningBaseViewController: OWSViewController, OWSNavigationChildContr
         }
     }
 
-    func primaryButton(title: String, selector: Selector) -> OWSFlatButton {
-        primaryButton(title: title, target: self, selector: selector)
+    // The margins for `primaryView` will update to reflect the current traitCollection.
+    // Subclasses should add primaryView as the single child of self.view and add any further
+    // subviews to primaryView.
+    let primaryView = UIView()
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        primaryView.layoutMargins = primaryLayoutMargins
     }
 
-    func primaryButton(title: String, target: Any, selector: Selector) -> OWSFlatButton {
-        let button = OWSFlatButton.button(
-            title: title,
-            font: UIFont.dynamicTypeBodyClamped.semibold(),
-            titleColor: .white,
-            backgroundColor: .ows_accentBlue,
-            target: target,
-            selector: selector)
-        button.button.layer.cornerRadius = 14
-        button.contentEdgeInsets = UIEdgeInsets(hMargin: 4, vMargin: 14)
-        return button
-    }
-
-    func primaryButton(title: String, action: UIAction) -> OWSFlatButton {
-        let button = OWSFlatButton.button(
-            title: title,
-            font: UIFont.dynamicTypeBodyClamped.semibold(),
-            titleColor: .white,
-            backgroundColor: .ows_accentBlue,
-            action: action)
-        button.button.layer.cornerRadius = 14
-        button.contentEdgeInsets = UIEdgeInsets(hMargin: 4, vMargin: 14)
-        return button
-    }
-
-    func linkButton(title: String, selector: Selector) -> OWSFlatButton {
-        linkButton(title: title, target: self, selector: selector)
-    }
-
-    func linkButton(title: String, target: Any, selector: Selector) -> OWSFlatButton {
-        let button = OWSFlatButton.button(
-            title: title,
-            font: UIFont.dynamicTypeSubheadlineClamped,
-            titleColor: Theme.accentBlueColor,
-            backgroundColor: .clear,
-            target: target,
-            selector: selector)
-        button.enableMultilineLabel()
-        button.button.layer.cornerRadius = 8
-        button.contentEdgeInsets = UIEdgeInsets(hMargin: 4, vMargin: 8)
-        return button
-    }
-
-    class func horizontallyWrap(primaryButton: UIView) -> UIView {
-        primaryButton.autoSetDimension(.width, toSize: 280)
-
-        let buttonWrapper = UIView()
-        buttonWrapper.addSubview(primaryButton)
-
-        primaryButton.autoPinEdge(toSuperviewEdge: .top)
-        primaryButton.autoPinEdge(toSuperviewEdge: .bottom)
-        primaryButton.autoHCenterInSuperview()
-        NSLayoutConstraint.autoSetPriority(.defaultLow) {
-            primaryButton.autoPinEdge(toSuperviewEdge: .leading)
-            primaryButton.autoPinEdge(toSuperviewEdge: .trailing)
-        }
-
-        return buttonWrapper
-    }
-
-    // MARK: - Overrides
+    // MARK: -
 
     @objc
     func navigateBack() {
@@ -151,23 +99,6 @@ class ProvisioningBaseViewController: OWSViewController, OWSNavigationChildContr
 
     var shouldCancelNavigationBack: Bool {
         true
-    }
-
-    // The margins for `primaryView` will update to reflect the current traitCollection.
-    // This includes handling changes to traits - e.g. when splitting an iPad or rotating
-    // some iPhones.
-    //
-    // Subclasses should add primaryView as the single child of self.view and add any further
-    // subviews to primaryView.
-    //
-    // If not for iOS10, we could get rid of primaryView, and manipulate the layoutMargins on
-    // self.view directly, however on iOS10, UIKit VC presentation machinery resets the
-    // layoutMargins *after* this method is called.
-    let primaryView = UIView()
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        primaryView.layoutMargins = primaryLayoutMargins
     }
 
     // MARK: - Orientation

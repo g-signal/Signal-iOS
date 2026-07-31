@@ -50,7 +50,7 @@ public class EmojiCountsCollectionView: UICollectionView {
         selectItem(at: IndexPath(item: index, section: 0), animated: true, scrollPosition: .centeredHorizontally)
     }
 
-    required public init(coder: NSCoder) {
+    public required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -111,9 +111,7 @@ class EmojiCountCell: UICollectionViewCell {
         super.init(frame: .zero)
 
         let selectedBackground = UIView()
-        selectedBackground.backgroundColor = (Theme.isDarkThemeEnabled
-            ? UIColor.ows_gray60
-            : UIColor.ows_gray05)
+        selectedBackground.backgroundColor = UIColor.Signal.secondaryFill
         selectedBackgroundView = selectedBackground
 
         let stackView = UIStackView(arrangedSubviews: [emoji, count])
@@ -142,9 +140,11 @@ class EmojiCountCell: UICollectionViewCell {
             count.text = item.count.abbreviatedString
         } else {
             count.text = String(
-                format: OWSLocalizedString("REACTION_DETAIL_ALL_FORMAT",
-                                          comment: "The header used to indicate All reactions to a given message. Embeds {{number of reactions}}"),
-                item.count.abbreviatedString
+                format: OWSLocalizedString(
+                    "REACTION_DETAIL_ALL_FORMAT",
+                    comment: "The header used to indicate All reactions to a given message. Embeds {{number of reactions}}",
+                ),
+                item.count.abbreviatedString,
             )
         }
     }

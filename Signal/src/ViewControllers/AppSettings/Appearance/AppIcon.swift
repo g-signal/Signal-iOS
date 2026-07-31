@@ -38,6 +38,13 @@ enum AppIcon: String {
         }
     }
 
+    var shouldShowShadow: Bool {
+        switch self {
+        case .default: return true
+        default: return false
+        }
+    }
+
     var alternateIconName: String? {
         if case .default = self {
             nil
@@ -60,19 +67,6 @@ enum AppIcon: String {
         case .notes: ImageResource.AppIconPreview.notes
         case .weather: ImageResource.AppIconPreview.weather
         case .waves: ImageResource.AppIconPreview.wave
-        }
-    }
-
-    /// Indicates if the icon should be rendered with a shadow in the picker.
-    ///
-    /// Some icons have a white background and should show a subtle
-    /// shadow in the picker to separate it from the background.
-    var shouldShowShadow: Bool {
-        switch self {
-        case .white, .bubbles:
-            true
-        default:
-            false
         }
     }
 }

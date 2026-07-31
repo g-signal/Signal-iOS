@@ -19,10 +19,10 @@ public final class BackupDisablingManager {
 
     private let accountEntropyPoolManager: AccountEntropyPoolManager
     private let authCredentialStore: AuthCredentialStore
+    private let backupAttachmentCoordinator: BackupAttachmentCoordinator
     private let backupAttachmentDownloadQueueStatusManager: BackupAttachmentDownloadQueueStatusManager
     private let backupCDNCredentialStore: BackupCDNCredentialStore
     private let backupKeyService: BackupKeyService
-    private let backupListMediaManager: BackupListMediaManager
     private let backupPlanManager: BackupPlanManager
     private let backupSettingsStore: BackupSettingsStore
     private let db: DB
@@ -34,10 +34,10 @@ public final class BackupDisablingManager {
     init(
         accountEntropyPoolManager: AccountEntropyPoolManager,
         authCredentialStore: AuthCredentialStore,
+        backupAttachmentCoordinator: BackupAttachmentCoordinator,
         backupAttachmentDownloadQueueStatusManager: BackupAttachmentDownloadQueueStatusManager,
         backupCDNCredentialStore: BackupCDNCredentialStore,
         backupKeyService: BackupKeyService,
-        backupListMediaManager: BackupListMediaManager,
         backupPlanManager: BackupPlanManager,
         backupSettingsStore: BackupSettingsStore,
         db: DB,
@@ -45,10 +45,10 @@ public final class BackupDisablingManager {
     ) {
         self.accountEntropyPoolManager = accountEntropyPoolManager
         self.authCredentialStore = authCredentialStore
+        self.backupAttachmentCoordinator = backupAttachmentCoordinator
         self.backupAttachmentDownloadQueueStatusManager = backupAttachmentDownloadQueueStatusManager
         self.backupCDNCredentialStore = backupCDNCredentialStore
         self.backupKeyService = backupKeyService
-        self.backupListMediaManager = backupListMediaManager
         self.backupPlanManager = backupPlanManager
         self.backupSettingsStore = backupSettingsStore
         self.db = db
@@ -79,33 +79,29 @@ public final class BackupDisablingManager {
     ) async -> BackupAttachmentDownloadQueueStatus {
         logger.info("Disabling Backups...")
 
-        do {
-            try await db.awaitableWriteWithRollbackIfThrows { tx in
-                switch backupPlanManager.backupPlan(tx: tx) {
-                case .disabling:
-                    owsFail("Unexpectedly attempted to start disabling, but already disabling!")
-                case .disabled, .free, .paid, .paidExpiringSoon, .paidAsTester:
-                    break
-                }
-
-                try backupPlanManager.setBackupPlan(.disabling, tx: tx)
-
-                switch aepSideEffect {
-                case nil:
-                    break
-                case .rotate(let newAEP):
-                    // Persist the new AEP in this class' KVStore temporarily.
-                    // Once we're done disabling, we'll save it officially.
-                    kvStore.setString(newAEP.rawData, key: StoreKeys.aepBeingRotated, transaction: tx)
-                }
+        await db.awaitableWrite { tx in
+            switch backupPlanManager.backupPlan(tx: tx) {
+            case .disabling:
+                owsFail("Unexpectedly attempted to start disabling, but already disabling!")
+            case .disabled, .free, .paid, .paidExpiringSoon, .paidAsTester:
+                break
             }
 
-            logger.info("Backups set locally as disabling. Starting async disabling work...")
-            Task {
-                await disableRemotelyIfNecessary()
+            backupPlanManager.setBackupPlan(.disabling, tx: tx)
+
+            switch aepSideEffect {
+            case nil:
+                break
+            case .rotate(let newAEP):
+                // Persist the new AEP in this class' KVStore temporarily.
+                // Once we're done disabling, we'll save it officially.
+                kvStore.setString(newAEP.rawString, key: StoreKeys.aepBeingRotated, transaction: tx)
             }
-        } catch {
-            logger.error("Failed to mark Backups disabling locally! \(error)")
+        }
+
+        logger.info("Backups set locally as disabling. Starting async disabling work...")
+        Task {
+            await disableRemotelyIfNecessary()
         }
 
         // We may have just made the download queue non-empty. Ensure we wait
@@ -163,7 +159,7 @@ public final class BackupDisablingManager {
             logger.info("Waiting for list-media before disabling...")
 
             try await Retry.performWithIndefiniteNetworkRetries {
-                try await backupListMediaManager.queryListMediaIfNeeded()
+                try await backupAttachmentCoordinator.queryListMediaIfNeeded()
             }
 
             logger.info("Done waiting for list-media.")
@@ -187,7 +183,7 @@ public final class BackupDisablingManager {
                 try await Retry.performWithIndefiniteNetworkRetries {
                     try await backupKeyService.deleteBackupKey(
                         localIdentifiers: localIdentifiers,
-                        auth: .implicit()
+                        auth: .implicit(),
                     )
                 }
 
@@ -202,41 +198,36 @@ public final class BackupDisablingManager {
             successfullyDisabledRemotely = false
         }
 
-        do {
-            try await db.awaitableWriteWithRollbackIfThrows { tx in
-                if successfullyDisabledRemotely {
-                    kvStore.removeValue(forKey: StoreKeys.remoteDisablingFailed, transaction: tx)
-                } else {
-                    kvStore.setBool(true, key: StoreKeys.remoteDisablingFailed, transaction: tx)
-                }
-
-                try backupPlanManager.setBackupPlan(.disabled, tx: tx)
-
-                // Wipe these, which are now outdated.
-                backupSettingsStore.resetLastBackupDate(tx: tx)
-                backupSettingsStore.resetLastBackupSizeBytes(tx: tx)
-                backupSettingsStore.resetShouldAllowBackupUploadsOnCellular(tx: tx)
-
-                // With Backups disabled, these credentials are no longer valid
-                // and are no longer safe to use.
-                authCredentialStore.removeAllBackupAuthCredentials(tx: tx)
-                backupCDNCredentialStore.wipe(tx: tx)
-
-                if let aepBeingRotatedString = kvStore.getString(StoreKeys.aepBeingRotated, transaction: tx) {
-                    logger.warn("Rotating AEP after disabling Backups!")
-
-                    accountEntropyPoolManager.setAccountEntropyPool(
-                        newAccountEntropyPool: try! AccountEntropyPool(key: aepBeingRotatedString),
-                        disablePIN: false,
-                        tx: tx
-                    )
-                }
+        await db.awaitableWrite { tx in
+            if successfullyDisabledRemotely {
+                kvStore.removeValue(forKey: StoreKeys.remoteDisablingFailed, transaction: tx)
+            } else {
+                kvStore.setBool(true, key: StoreKeys.remoteDisablingFailed, transaction: tx)
             }
 
-            logger.info("Successfully disabled Backups locally!")
-        } catch {
-            logger.error("Failed to mark Backups disabled locally! \(error)")
+            backupPlanManager.setBackupPlan(.disabled, tx: tx)
+
+            // Wipe these, which are now outdated.
+            backupSettingsStore.resetLastBackupDetails(tx: tx)
+            backupSettingsStore.resetShouldAllowBackupUploadsOnCellular(tx: tx)
+
+            // With Backups disabled, these credentials are no longer valid
+            // and are no longer safe to use.
+            authCredentialStore.removeAllBackupAuthCredentials(tx: tx)
+            backupCDNCredentialStore.wipe(tx: tx)
+
+            if let aepBeingRotatedString = kvStore.getString(StoreKeys.aepBeingRotated, transaction: tx) {
+                logger.warn("Rotating AEP after disabling Backups!")
+
+                accountEntropyPoolManager.setAccountEntropyPool(
+                    newAccountEntropyPool: try! AccountEntropyPool(key: aepBeingRotatedString),
+                    disablePIN: false,
+                    tx: tx,
+                )
+            }
         }
+
+        logger.info("Successfully disabled Backups locally!")
     }
 
     private func _waitForBackupAttachmentDownloads() async {

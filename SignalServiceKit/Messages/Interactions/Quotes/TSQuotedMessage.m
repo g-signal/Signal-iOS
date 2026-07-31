@@ -37,19 +37,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 // MARK: -
 
-+ (instancetype)stubWithOriginalAttachmentMimeType:(NSString *)originalAttachmentMimeType
+- (instancetype)initWithOriginalAttachmentMimeType:(NSString *_Nullable)originalAttachmentMimeType
                   originalAttachmentSourceFilename:(NSString *_Nullable)originalAttachmentSourceFilename
 {
-    return [[OWSAttachmentInfo alloc] initWithOriginalAttachmentMimeType:originalAttachmentMimeType
-                                        originalAttachmentSourceFilename:originalAttachmentSourceFilename];
-}
-
-+ (instancetype)forThumbnailReferenceWithOriginalAttachmentMimeType:(NSString *)originalAttachmentMimeType
-                                   originalAttachmentSourceFilename:
-                                       (NSString *_Nullable)originalAttachmentSourceFilename
-{
-    return [[OWSAttachmentInfo alloc] initWithOriginalAttachmentMimeType:originalAttachmentMimeType
-                                        originalAttachmentSourceFilename:originalAttachmentSourceFilename];
+    self = [super init];
+    if (self) {
+        _contentType = originalAttachmentMimeType;
+        _sourceFilename = originalAttachmentSourceFilename;
+    }
+    return self;
 }
 
 #if TESTABLE_BUILD
@@ -61,29 +57,66 @@ NS_ASSUME_NONNULL_BEGIN
 }
 #endif
 
-- (instancetype)initWithOriginalAttachmentMimeType:(NSString *_Nullable)originalAttachmentMimeType
-                  originalAttachmentSourceFilename:(NSString *_Nullable)originalAttachmentSourceFilename
+// MARK: -
+
++ (BOOL)supportsSecureCoding
 {
-    self = [super init];
-    if (self) {
-        _schemaVersion = self.class.currentSchemaVersion;
-        _contentType = originalAttachmentMimeType;
-        _sourceFilename = originalAttachmentSourceFilename;
-    }
-    return self;
+    return YES;
 }
 
-// MARK: -
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    NSString *attachmentId = self.attachmentId;
+    if (attachmentId != nil) {
+        [coder encodeObject:attachmentId forKey:@"attachmentId"];
+    }
+    NSString *contentType = self.contentType;
+    if (contentType != nil) {
+        [coder encodeObject:contentType forKey:@"contentType"];
+    }
+    NSString *sourceFilename = self.sourceFilename;
+    if (sourceFilename != nil) {
+        [coder encodeObject:sourceFilename forKey:@"sourceFilename"];
+    }
+}
 
 - (nullable instancetype)initWithCoder:(NSCoder *)coder
 {
-    self = [super initWithCoder:coder];
+    self = [super init];
     if (!self) {
         return self;
     }
-
-    _schemaVersion = self.class.currentSchemaVersion;
+    self->_attachmentId = [coder decodeObjectOfClass:[NSString class] forKey:@"attachmentId"];
+    self->_contentType = [coder decodeObjectOfClass:[NSString class] forKey:@"contentType"];
+    self->_sourceFilename = [coder decodeObjectOfClass:[NSString class] forKey:@"sourceFilename"];
     return self;
+}
+
+- (NSUInteger)hash
+{
+    NSUInteger result = 0;
+    result ^= self.attachmentId.hash;
+    result ^= self.contentType.hash;
+    result ^= self.sourceFilename.hash;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![other isMemberOfClass:self.class]) {
+        return NO;
+    }
+    OWSAttachmentInfo *typedOther = (OWSAttachmentInfo *)other;
+    if (![NSObject isObject:self.attachmentId equalToObject:typedOther.attachmentId]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.contentType equalToObject:typedOther.contentType]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.sourceFilename equalToObject:typedOther.sourceFilename]) {
+        return NO;
+    }
+    return YES;
 }
 
 @end
@@ -106,6 +139,7 @@ NS_ASSUME_NONNULL_BEGIN
      receivedQuotedAttachmentInfo:(nullable OWSAttachmentInfo *)attachmentInfo
                       isGiftBadge:(BOOL)isGiftBadge
           isTargetMessageViewOnce:(BOOL)isTargetMessageViewOnce
+                           isPoll:(BOOL)isPoll
 {
     OWSAssertDebug(authorAddress.isValid);
 
@@ -122,6 +156,7 @@ NS_ASSUME_NONNULL_BEGIN
     _quotedAttachment = attachmentInfo;
     _isGiftBadge = isGiftBadge;
     _isTargetMessageViewOnce = isTargetMessageViewOnce;
+    _isPoll = isPoll;
 
     return self;
 }
@@ -134,6 +169,7 @@ NS_ASSUME_NONNULL_BEGIN
        quotedAttachmentForSending:(nullable OWSAttachmentInfo *)attachmentInfo
                       isGiftBadge:(BOOL)isGiftBadge
           isTargetMessageViewOnce:(BOOL)isTargetMessageViewOnce
+                           isPoll:(BOOL)isPoll
 {
     OWSAssertDebug(authorAddress.isValid);
 
@@ -150,19 +186,62 @@ NS_ASSUME_NONNULL_BEGIN
     _quotedAttachment = attachmentInfo;
     _isGiftBadge = isGiftBadge;
     _isTargetMessageViewOnce = isTargetMessageViewOnce;
+    _isPoll = isPoll;
 
     return self;
 }
 
-- (id)initWithCoder:(NSCoder *)coder
++ (BOOL)supportsSecureCoding
 {
-    self = [super initWithCoder:coder];
+    return YES;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    SignalServiceAddress *authorAddress = self.authorAddress;
+    if (authorAddress != nil) {
+        [coder encodeObject:authorAddress forKey:@"authorAddress"];
+    }
+    NSString *body = self.body;
+    if (body != nil) {
+        [coder encodeObject:body forKey:@"body"];
+    }
+    MessageBodyRanges *bodyRanges = self.bodyRanges;
+    if (bodyRanges != nil) {
+        [coder encodeObject:bodyRanges forKey:@"bodyRanges"];
+    }
+    [coder encodeObject:[self valueForKey:@"bodySource"] forKey:@"bodySource"];
+    [coder encodeObject:[self valueForKey:@"isGiftBadge"] forKey:@"isGiftBadge"];
+    [coder encodeObject:[self valueForKey:@"isPoll"] forKey:@"isPoll"];
+    [coder encodeObject:[self valueForKey:@"isTargetMessageViewOnce"] forKey:@"isTargetMessageViewOnce"];
+    OWSAttachmentInfo *quotedAttachment = self.quotedAttachment;
+    if (quotedAttachment != nil) {
+        [coder encodeObject:quotedAttachment forKey:@"quotedAttachment"];
+    }
+    [coder encodeObject:[self valueForKey:@"timestamp"] forKey:@"timestamp"];
+}
+
+- (nullable instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
     if (!self) {
         return self;
     }
+    self->_authorAddress = [coder decodeObjectOfClass:[SignalServiceAddress class] forKey:@"authorAddress"];
+    self->_body = [coder decodeObjectOfClass:[NSString class] forKey:@"body"];
+    self->_bodyRanges = [coder decodeObjectOfClass:[MessageBodyRanges class] forKey:@"bodyRanges"];
+    self->_bodySource = [(NSNumber *)[coder decodeObjectOfClass:[NSNumber class]
+                                                         forKey:@"bodySource"] unsignedIntegerValue];
+    self->_isGiftBadge = [(NSNumber *)[coder decodeObjectOfClass:[NSNumber class] forKey:@"isGiftBadge"] boolValue];
+    self->_isPoll = [(NSNumber *)[coder decodeObjectOfClass:[NSNumber class] forKey:@"isPoll"] boolValue];
+    self->_isTargetMessageViewOnce = [(NSNumber *)[coder decodeObjectOfClass:[NSNumber class]
+                                                                      forKey:@"isTargetMessageViewOnce"] boolValue];
+    self->_quotedAttachment = [coder decodeObjectOfClass:[OWSAttachmentInfo class] forKey:@"quotedAttachment"];
+    self->_timestamp = [(NSNumber *)[coder decodeObjectOfClass:[NSNumber class]
+                                                        forKey:@"timestamp"] unsignedLongLongValue];
 
     if (_authorAddress == nil) {
-        NSString *phoneNumber = [coder decodeObjectForKey:@"authorId"];
+        NSString *phoneNumber = [coder decodeObjectOfClass:[NSString class] forKey:@"authorId"];
         _authorAddress = [SignalServiceAddress legacyAddressWithServiceIdString:nil phoneNumber:phoneNumber];
         OWSAssertDebug(_authorAddress.isValid);
     }
@@ -181,6 +260,72 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
+- (NSUInteger)hash
+{
+    NSUInteger result = 0;
+    result ^= self.authorAddress.hash;
+    result ^= self.body.hash;
+    result ^= self.bodyRanges.hash;
+    result ^= self.bodySource;
+    result ^= self.isGiftBadge;
+    result ^= self.isPoll;
+    result ^= self.isTargetMessageViewOnce;
+    result ^= self.quotedAttachment.hash;
+    result ^= self.timestamp;
+    return result;
+}
+
+- (BOOL)isEqual:(id)other
+{
+    if (![other isMemberOfClass:self.class]) {
+        return NO;
+    }
+    TSQuotedMessage *typedOther = (TSQuotedMessage *)other;
+    if (![NSObject isObject:self.authorAddress equalToObject:typedOther.authorAddress]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.body equalToObject:typedOther.body]) {
+        return NO;
+    }
+    if (![NSObject isObject:self.bodyRanges equalToObject:typedOther.bodyRanges]) {
+        return NO;
+    }
+    if (self.bodySource != typedOther.bodySource) {
+        return NO;
+    }
+    if (self.isGiftBadge != typedOther.isGiftBadge) {
+        return NO;
+    }
+    if (self.isPoll != typedOther.isPoll) {
+        return NO;
+    }
+    if (self.isTargetMessageViewOnce != typedOther.isTargetMessageViewOnce) {
+        return NO;
+    }
+    if (![NSObject isObject:self.quotedAttachment equalToObject:typedOther.quotedAttachment]) {
+        return NO;
+    }
+    if (self.timestamp != typedOther.timestamp) {
+        return NO;
+    }
+    return YES;
+}
+
+- (id)copyWithZone:(nullable NSZone *)zone
+{
+    TSQuotedMessage *result = [[[self class] allocWithZone:zone] init];
+    result->_authorAddress = self.authorAddress;
+    result->_body = self.body;
+    result->_bodyRanges = self.bodyRanges;
+    result->_bodySource = self.bodySource;
+    result->_isGiftBadge = self.isGiftBadge;
+    result->_isPoll = self.isPoll;
+    result->_isTargetMessageViewOnce = self.isTargetMessageViewOnce;
+    result->_quotedAttachment = self.quotedAttachment;
+    result->_timestamp = self.timestamp;
+    return result;
+}
+
 + (instancetype)quotedMessageFromBackupWithTargetMessageTimestamp:(nullable NSNumber *)timestamp
                                                     authorAddress:(SignalServiceAddress *)authorAddress
                                                              body:(nullable NSString *)body
@@ -189,6 +334,7 @@ NS_ASSUME_NONNULL_BEGIN
                                              quotedAttachmentInfo:(nullable OWSAttachmentInfo *)attachmentInfo
                                                       isGiftBadge:(BOOL)isGiftBadge
                                           isTargetMessageViewOnce:(BOOL)isTargetMessageViewOnce
+                                                           isPoll:(BOOL)isPoll
 {
     OWSAssertDebug(authorAddress.isValid);
 
@@ -202,7 +348,8 @@ NS_ASSUME_NONNULL_BEGIN
                                            bodySource:bodySource
                          receivedQuotedAttachmentInfo:attachmentInfo
                                           isGiftBadge:isGiftBadge
-                              isTargetMessageViewOnce:isTargetMessageViewOnce];
+                              isTargetMessageViewOnce:isTargetMessageViewOnce
+                                               isPoll:isPoll];
 }
 
 - (nullable NSNumber *)getTimestampValue

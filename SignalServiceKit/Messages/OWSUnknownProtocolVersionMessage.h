@@ -25,7 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithThread:(TSThread *)thread
                      timestamp:(uint64_t)timestamp
                     serverGuid:(nullable NSString *)serverGuid
-                   messageType:(TSInfoMessageType)infoMessage
+                   messageType:(TSInfoMessageType)messageType
+            expireTimerVersion:(nullable NSNumber *)expireTimerVersion
+              expiresInSeconds:(unsigned int)expiresInSeconds
            infoMessageUserInfo:(nullable NSDictionary<InfoMessageUserInfoKey, id> *)infoMessageUserInfo NS_UNAVAILABLE;
 
 - (instancetype)initWithGrdbId:(int64_t)grdbId
@@ -68,8 +70,6 @@ NS_ASSUME_NONNULL_BEGIN
                      timestamp:(uint64_t)timestamp
                         sender:(nullable SignalServiceAddress *)sender
                protocolVersion:(NSUInteger)protocolVersion NS_DESIGNATED_INITIALIZER;
-
-- (nullable instancetype)initWithCoder:(NSCoder *)coder NS_DESIGNATED_INITIALIZER;
 
 // --- CODE GENERATION MARKER
 

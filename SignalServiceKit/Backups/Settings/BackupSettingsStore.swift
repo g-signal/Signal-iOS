@@ -5,13 +5,6 @@
 
 import LibSignalClient
 
-public struct MostRecentlyEnabledBackupsDetails: Codable {
-    public let enabledTime: Date
-    public let notificationDelay: TimeInterval
-
-    public var shouldRemindUserAfter: Date { enabledTime.addingTimeInterval(notificationDelay) }
-}
-
 public enum BackupPlan: RawRepresentable {
     case disabled
     case disabling
@@ -52,7 +45,10 @@ public enum BackupPlan: RawRepresentable {
 // MARK: -
 
 extension NSNotification.Name {
+    public static let lastBackupDetailsDidChange = Notification.Name("BackupSettingsStore.lastBackupDetailsDidChange")
     public static let backupAttachmentDownloadQueueSuspensionStatusDidChange = Notification.Name("BackupSettingsStore.backupAttachmentDownloadQueueSuspensionStatusDidChange")
+    public static let backupAttachmentUploadQueueSuspensionStatusDidChange = Notification.Name("BackupSettingsStore.backupAttachmentUploadQueueSuspensionStatusDidChange")
+    public static let hasConsumedMediaTierCapacityStatusDidChange = Notification.Name("BackupSettingsStore.hasConsumedMediaTierCapacityStatusDidChange")
     public static let shouldAllowBackupDownloadsOnCellularChanged = Notification.Name("BackupSettingsStore.shouldAllowBackupDownloadsOnCellularChanged")
     public static let shouldAllowBackupUploadsOnCellularChanged = Notification.Name("BackupSettingsStore.shouldAllowBackupUploadsOnCellularChanged")
 }
@@ -69,25 +65,27 @@ public struct BackupSettingsStore {
         static let lastBackupFileSizeBytes = "lastBackupFileSizeBytes"
         static let lastBackupSizeBytes = "lastBackupSizeBytes"
         static let isBackupAttachmentDownloadQueueSuspended = "isBackupAttachmentDownloadQueueSuspended"
+        static let isBackupAttachmentUploadQueueSuspended = "isBackupAttachmentUploadQueueSuspended"
+        static let hasConsumedMediaTierCapacity = "hasConsumedMediaTierCapacity"
         static let shouldAllowBackupDownloadsOnCellular = "shouldAllowBackupDownloadsOnCellular"
         static let shouldAllowBackupUploadsOnCellular = "shouldAllowBackupUploadsOnCellular"
         static let shouldOptimizeLocalStorage = "shouldOptimizeLocalStorage"
         static let lastRecoveryKeyReminderDate = "lastBackupKeyReminderDate"
         static let haveSetBackupID = "haveSetBackupID"
-        static let lastBackupRefreshDate = "lastBackupRefreshDate"
         static let lastBackupEnabledDetails = "lastBackupEnabledDetails"
-        static let lastBackupFailed = "lastBackupFailed"
 
-        static let mostRecentDateKey = "mostRecentPromptDate"
-        static let promptCountKey = "promptCount"
+        static let backgroundBackupErrorCount = "backgroundBackupErrorCount"
+        static let interactiveBackupErrorCount = "interactiveBackupErrorCount"
     }
 
     private let kvStore: KeyValueStore
     private let errorStateStore: KeyValueStore
+    private let refreshBackupStore: CronStore
 
     public init() {
         kvStore = KeyValueStore(collection: "BackupSettingsStore")
         errorStateStore = KeyValueStore(collection: "BackupSettingsErrorStateStore")
+        refreshBackupStore = CronStore(uniqueKey: .refreshBackup)
     }
 
     // MARK: -
@@ -98,18 +96,10 @@ public struct BackupSettingsStore {
         return kvStore.getBool(Keys.haveEverBeenEnabled, defaultValue: false, transaction: tx)
     }
 
-    /// Not intended for production use.
+    /// Wipes whether Backups have ever been enabled.
     ///
-    /// Wipes whether Backups have ever been enabled. Throws if Backups are not
-    /// currently disabled.
-    public func wipeHaveBackupsEverBeenEnabled(tx: DBWriteTransaction) throws(OWSAssertionError) {
-        switch backupPlan(tx: tx) {
-        case .disabled:
-            break
-        case .disabling, .free, .paid, .paidExpiringSoon, .paidAsTester:
-            throw OWSAssertionError("Backups must be disabled to wipe haveBackupsEverBeenEnabled.")
-        }
-
+    /// **Not intended for production use.**
+    public func wipeHaveBackupsEverBeenEnabled(tx: DBWriteTransaction) {
         kvStore.removeValue(forKey: Keys.haveEverBeenEnabled, transaction: tx)
     }
 
@@ -143,16 +133,23 @@ public struct BackupSettingsStore {
 
     // MARK: -
 
+    public struct LastBackupEnabledDetails: Codable {
+        public let enabledTime: Date
+        public let notificationDelay: TimeInterval
+
+        public var shouldRemindUserAfter: Date { enabledTime.addingTimeInterval(notificationDelay) }
+    }
+
     public func lastBackupEnabledDetails(
-        tx: DBReadTransaction
-    ) -> MostRecentlyEnabledBackupsDetails? {
+        tx: DBReadTransaction,
+    ) -> LastBackupEnabledDetails? {
         do {
             return try kvStore.getCodableValue(
                 forKey: Keys.lastBackupEnabledDetails,
-                transaction: tx
+                transaction: tx,
             )
         } catch {
-            owsFailDebug("Failed to get MostRecentlyEnabledBackupsDetails \(error)")
+            owsFailDebug("Failed to get LastBackupEnabledDetails \(error)")
             return nil
         }
     }
@@ -160,27 +157,103 @@ public struct BackupSettingsStore {
     public func setLastBackupEnabledDetails(
         backupsEnabledTime: Date,
         notificationDelay: TimeInterval,
-        tx: DBWriteTransaction
+        tx: DBWriteTransaction,
     ) {
         do {
             try kvStore.setCodable(
-                MostRecentlyEnabledBackupsDetails(
+                LastBackupEnabledDetails(
                     enabledTime: backupsEnabledTime,
-                    notificationDelay: notificationDelay
+                    notificationDelay: notificationDelay,
                 ),
                 key: Keys.lastBackupEnabledDetails,
-                transaction: tx
+                transaction: tx,
             )
         } catch {
-            owsFailDebug("Failed to set MostRecentlyEnabledBackupsDetails")
+            owsFailDebug("Failed to set LastBackupEnabledDetails")
         }
     }
 
     public func clearLastBackupEnabledDetails(tx: DBWriteTransaction) {
         kvStore.removeValue(
             forKey: Keys.lastBackupEnabledDetails,
-            transaction: tx
+            transaction: tx,
         )
+    }
+
+    // MARK: -
+
+    public struct LastBackupDetails {
+        /// The date of our last backup.
+        public let date: Date
+        /// The size of our most recent Backup proto file.
+        public let backupFileSizeBytes: UInt64
+        /// The total size of our most recent backup, including the Backup proto
+        /// file and all backed-up media. Only set if we're on the paid tier.
+        public let backupTotalSizeBytes: UInt64?
+
+        public init(date: Date, backupFileSizeBytes: UInt64, backupTotalSizeBytes: UInt64?) {
+            self.date = date
+            self.backupFileSizeBytes = backupFileSizeBytes
+            self.backupTotalSizeBytes = backupTotalSizeBytes
+        }
+    }
+
+    public func lastBackupDetails(tx: DBReadTransaction) -> LastBackupDetails? {
+        guard
+            let lastBackupDate = kvStore.getDate(Keys.lastBackupDate, transaction: tx),
+            let backupFileSizeBytes = kvStore.getUInt64(Keys.lastBackupFileSizeBytes, transaction: tx)
+        else {
+            return nil
+        }
+
+        let backupTotalSizeBytes: UInt64?
+        switch backupPlan(tx: tx) {
+        case .disabled, .disabling, .free:
+            backupTotalSizeBytes = nil
+        case .paid, .paidExpiringSoon, .paidAsTester:
+            backupTotalSizeBytes = kvStore.getUInt64(Keys.lastBackupSizeBytes, transaction: tx)
+        }
+
+        return LastBackupDetails(
+            date: lastBackupDate,
+            backupFileSizeBytes: backupFileSizeBytes,
+            backupTotalSizeBytes: backupTotalSizeBytes,
+        )
+    }
+
+    public func setLastBackupDetails(
+        date: Date,
+        backupFileSizeBytes: UInt64,
+        backupMediaSizeBytes: UInt64,
+        tx: DBWriteTransaction,
+    ) {
+        kvStore.setDate(date, key: Keys.lastBackupDate, transaction: tx)
+        kvStore.setUInt64(backupFileSizeBytes, key: Keys.lastBackupFileSizeBytes, transaction: tx)
+        kvStore.setUInt64(backupFileSizeBytes + backupMediaSizeBytes, key: Keys.lastBackupSizeBytes, transaction: tx)
+
+        if firstBackupDate(tx: tx) == nil {
+            setFirstBackupDate(date, tx: tx)
+        }
+
+        refreshBackupStore.setMostRecentDate(Date(), jitter: 0, tx: tx)
+
+        // We did a backup, so clear all error state.
+        errorStateStore.removeAll(transaction: tx)
+
+        tx.addSyncCompletion {
+            NotificationCenter.default.postOnMainThread(name: .lastBackupDetailsDidChange, object: nil)
+        }
+    }
+
+    public func resetLastBackupDetails(tx: DBWriteTransaction) {
+        kvStore.removeValue(forKey: Keys.lastBackupDate, transaction: tx)
+        kvStore.removeValue(forKey: Keys.lastBackupFileSizeBytes, transaction: tx)
+        kvStore.removeValue(forKey: Keys.lastBackupSizeBytes, transaction: tx)
+        refreshBackupStore.setMostRecentDate(.distantPast, jitter: 0, tx: tx)
+
+        tx.addSyncCompletion {
+            NotificationCenter.default.postOnMainThread(name: .lastBackupDetailsDidChange, object: nil)
+        }
     }
 
     // MARK: -
@@ -189,109 +262,50 @@ public struct BackupSettingsStore {
         return kvStore.getDate(Keys.firstBackupDate, transaction: tx)
     }
 
-    private func setFirstBackupDate(_ firstBackupDate: Date?, tx: DBWriteTransaction) {
-        if let firstBackupDate {
-            kvStore.setDate(firstBackupDate, key: Keys.firstBackupDate, transaction: tx)
-        } else {
-            kvStore.removeValue(forKey: Keys.firstBackupDate, transaction: tx)
+    private func setFirstBackupDate(_ firstBackupDate: Date, tx: DBWriteTransaction) {
+        kvStore.setDate(firstBackupDate, key: Keys.firstBackupDate, transaction: tx)
+    }
+
+    // MARK: -
+
+    public enum ErrorBadgeTarget {
+        case chatListAvatar
+        case chatListMenuItem
+
+        fileprivate var key: String {
+            switch self {
+            case .chatListAvatar: "avatar_muted"
+            case .chatListMenuItem: "menu_muted"
+            }
         }
     }
 
-    // MARK: -
-
-    public func lastBackupDate(tx: DBReadTransaction) -> Date? {
-        return kvStore.getDate(Keys.lastBackupDate, transaction: tx)
+    public func getErrorBadgeMuted(target: ErrorBadgeTarget, tx: DBReadTransaction) -> Bool {
+        errorStateStore.getBool(target.key, defaultValue: false, transaction: tx)
     }
 
-    public func setLastBackupDate(_ lastBackupDate: Date, tx: DBWriteTransaction) {
-        kvStore.setDate(lastBackupDate, key: Keys.lastBackupDate, transaction: tx)
-
-        if firstBackupDate(tx: tx) == nil {
-            setFirstBackupDate(lastBackupDate, tx: tx)
-        }
-
-        setLastBackupRefreshDate(lastBackupDate, tx: tx)
-
-        // Clear any persisted error state
-        kvStore.removeValue(forKey: Keys.lastBackupFailed, transaction: tx)
-        errorStateStore.removeAll(transaction: tx)
-    }
-
-    public func resetLastBackupDate(tx: DBWriteTransaction) {
-        kvStore.removeValue(forKey: Keys.lastBackupDate, transaction: tx)
-        setFirstBackupDate(nil, tx: tx)
+    public func setErrorBadgeMuted(target: ErrorBadgeTarget, tx: DBWriteTransaction) {
+        errorStateStore.setBool(true, key: target.key, transaction: tx)
     }
 
     // MARK: -
 
-    /// THe size of the user's most recent Backup proto file.
-    public func lastBackupFileSizeBytes(tx: DBReadTransaction) -> UInt64? {
-        return kvStore.getUInt64(Keys.lastBackupFileSizeBytes, transaction: tx)
+    public func getInteractiveBackupErrorCount(tx: DBReadTransaction) -> Int {
+        errorStateStore.getInt(Keys.interactiveBackupErrorCount, defaultValue: 0, transaction: tx)
     }
 
-    /// The total size of a user's most recent Backup, including their Backup
-    /// proto file and backed-up media.
-    ///
-    /// Only relevant on the paid tier.
-    public func lastBackupSizeBytes(tx: DBReadTransaction) -> UInt64? {
-        switch backupPlan(tx: tx) {
-        case .disabled, .disabling, .free:
-            return nil
-        case .paid, .paidExpiringSoon, .paidAsTester:
-            return kvStore.getUInt64(Keys.lastBackupSizeBytes, transaction: tx)
-        }
+    public func incrementInteractiveBackupErrorCount(tx: DBWriteTransaction) {
+        let nextCount = getInteractiveBackupErrorCount(tx: tx) + 1
+        errorStateStore.setInt(nextCount, key: Keys.interactiveBackupErrorCount, transaction: tx)
     }
 
-    public func setLastBackupSizeBytes(
-        backupFileSizeBytes: UInt64,
-        backupMediaSizeBytes: UInt64,
-        tx: DBWriteTransaction
-    ) {
-        kvStore.setUInt64(backupFileSizeBytes, key: Keys.lastBackupFileSizeBytes, transaction: tx)
-        kvStore.setUInt64(backupFileSizeBytes + backupMediaSizeBytes, key: Keys.lastBackupSizeBytes, transaction: tx)
+    public func getBackgroundBackupErrorCount(tx: DBReadTransaction) -> Int {
+        errorStateStore.getInt(Keys.backgroundBackupErrorCount, defaultValue: 0, transaction: tx)
     }
 
-    public func resetLastBackupSizeBytes(tx: DBWriteTransaction) {
-        kvStore.removeValue(forKey: Keys.lastBackupFileSizeBytes, transaction: tx)
-        kvStore.removeValue(forKey: Keys.lastBackupSizeBytes, transaction: tx)
-    }
-
-    // MARK: -
-
-    public func getLastBackupFailed(tx: DBReadTransaction) -> Bool {
-        kvStore.getBool(Keys.lastBackupFailed, defaultValue: false, transaction: tx)
-    }
-
-    public func setLastBackupFailed(tx: DBWriteTransaction) {
-        kvStore.setBool(true, key: Keys.lastBackupFailed, transaction: tx)
-    }
-
-    // MARK: -
-
-    public func getErrorBadgeMuted(target: String, tx: DBReadTransaction) -> Bool {
-        errorStateStore.getBool(target + "_muted", defaultValue: false, transaction: tx)
-    }
-
-    public func setErrorBadgeMuted(target: String, tx: DBWriteTransaction) {
-        errorStateStore.setBool(true, key: target + "_muted", transaction: tx)
-    }
-
-    // MARK: -
-
-    public func getBackupErrorPromptCount(tx: DBReadTransaction) -> Int {
-        errorStateStore.getInt(Keys.promptCountKey, defaultValue: 0, transaction: tx)
-    }
-
-    public func setBackupErrorPromptCount(_ count: Int, tx: DBWriteTransaction) {
-        errorStateStore.setInt(count, key: Keys.promptCountKey, transaction: tx)
-    }
-
-    public func getBackupErrorLastPromptDate(tx: DBReadTransaction) -> Date? {
-        errorStateStore.getDate(Keys.mostRecentDateKey, transaction: tx)
-    }
-
-    public func setBackupErrorLastPromptDate(_ date: Date, tx: DBWriteTransaction) {
-        errorStateStore.setDate(date, key: Keys.mostRecentDateKey, transaction: tx)
+    public func incrementBackgroundBackupErrorCount(tx: DBWriteTransaction) {
+        let nextCount = getBackgroundBackupErrorCount(tx: tx) + 1
+        errorStateStore.setInt(nextCount, key: Keys.backgroundBackupErrorCount, transaction: tx)
     }
 
     // MARK: -
@@ -307,13 +321,9 @@ public struct BackupSettingsStore {
     public func setIsBackupDownloadQueueSuspended(_ isSuspended: Bool, tx: DBWriteTransaction) {
         kvStore.setBool(isSuspended, key: Keys.isBackupAttachmentDownloadQueueSuspended, transaction: tx)
 
-        // The "allow cellular downloads" setting isn't exposed as a toggle, and
-        // instead lasts for the duration of the "current download" once set.
-        //
-        // If the user has taken action on the download queue, treat that as the
-        // "current download" rotating, and consequently forget any past
-        // cellular-download state.
-        _setShouldAllowBackupDownloadsOnCellular(nil, tx: tx)
+        // Since the user has taken action to suspend the download queue, reset
+        // "temporary" cellular downloads state (in case we had set it).
+        setShouldAllowBackupDownloadsOnCellular(false, tx: tx)
 
         tx.addSyncCompletion {
             NotificationCenter.default.post(name: .backupAttachmentDownloadQueueSuspensionStatusDidChange, object: nil)
@@ -322,20 +332,51 @@ public struct BackupSettingsStore {
 
     // MARK: -
 
-    public func shouldAllowBackupDownloadsOnCellular(tx: DBReadTransaction) -> Bool {
-        return kvStore.getBool(Keys.shouldAllowBackupDownloadsOnCellular, defaultValue: false, transaction: tx)
+    public func hasConsumedMediaTierCapacity(tx: DBReadTransaction) -> Bool {
+        return kvStore.getBool(Keys.hasConsumedMediaTierCapacity, defaultValue: false, transaction: tx)
     }
 
-    public func setShouldAllowBackupDownloadsOnCellular(tx: DBWriteTransaction) {
-        _setShouldAllowBackupDownloadsOnCellular(true, tx: tx)
-    }
+    /// When we get the relevant error response from the server on an attempt to copy a transit tier
+    /// upload to the media tier, we set this to true, so that we stop attempting uploads until we have
+    /// the chance to perform cleanup.
+    /// This only gets set to false again once we (attempt) clean up, which may free up enough space to
+    /// resume uploading.
+    public func setHasConsumedMediaTierCapacity(_ hasConsumedMediaTierCapacity: Bool, tx: DBWriteTransaction) {
+        kvStore.setBool(hasConsumedMediaTierCapacity, key: Keys.hasConsumedMediaTierCapacity, transaction: tx)
 
-    private func _setShouldAllowBackupDownloadsOnCellular(_ shouldAllowBackupDownloadsOnCellular: Bool?, tx: DBWriteTransaction) {
-        if let shouldAllowBackupDownloadsOnCellular {
-            kvStore.setBool(shouldAllowBackupDownloadsOnCellular, key: Keys.shouldAllowBackupDownloadsOnCellular, transaction: tx)
-        } else {
-            kvStore.removeValue(forKey: Keys.shouldAllowBackupDownloadsOnCellular, transaction: tx)
+        tx.addSyncCompletion {
+            NotificationCenter.default.postOnMainThread(name: .hasConsumedMediaTierCapacityStatusDidChange, object: nil)
         }
+    }
+
+    // MARK: -
+
+    public func isBackupAttachmentUploadQueueSuspended(tx: DBReadTransaction) -> Bool {
+        return kvStore.getBool(Keys.isBackupAttachmentUploadQueueSuspended, defaultValue: false, transaction: tx)
+    }
+
+    public func setIsBackupUploadQueueSuspended(_ isSuspended: Bool, tx: DBWriteTransaction) {
+        kvStore.setBool(isSuspended, key: Keys.isBackupAttachmentUploadQueueSuspended, transaction: tx)
+
+        tx.addSyncCompletion {
+            NotificationCenter.default.post(name: .backupAttachmentUploadQueueSuspensionStatusDidChange, object: nil)
+        }
+    }
+
+    // MARK: -
+
+    /// Whether downloads of Backup media are allowed to use cellular, rather
+    /// than being restricted to WiFi. Defaults to `false`.
+    ///
+    /// - Note
+    /// This setting is not exposed as a toggle, and is instead a "temporary
+    /// override" that's reset automatically on various triggers.
+    public func shouldAllowBackupDownloadsOnCellular(tx: DBReadTransaction) -> Bool {
+        return kvStore.getBool(Keys.shouldAllowBackupDownloadsOnCellular, transaction: tx) ?? false
+    }
+
+    public func setShouldAllowBackupDownloadsOnCellular(_ shouldAllowBackupDownloadsOnCellular: Bool, tx: DBWriteTransaction) {
+        kvStore.setBool(shouldAllowBackupDownloadsOnCellular, key: Keys.shouldAllowBackupDownloadsOnCellular, transaction: tx)
 
         tx.addSyncCompletion {
             NotificationCenter.default.post(name: .shouldAllowBackupDownloadsOnCellularChanged, object: nil)
@@ -379,19 +420,9 @@ public struct BackupSettingsStore {
     public func setHaveSetBackupID(haveSetBackupID: Bool, tx: DBWriteTransaction) {
         kvStore.setBool(haveSetBackupID, key: Keys.haveSetBackupID, transaction: tx)
     }
-
-    // MARK: -
-
-    public func lastBackupRefreshDate(tx: DBReadTransaction) -> Date? {
-        return kvStore.getDate(Keys.lastBackupRefreshDate, transaction: tx)
-    }
-
-    public func setLastBackupRefreshDate(_ lastBackupRefreshDate: Date, tx: DBWriteTransaction) {
-        kvStore.setDate(lastBackupRefreshDate, key: Keys.lastBackupRefreshDate, transaction: tx)
-    }
 }
 
-fileprivate extension BackupPlan {
+private extension BackupPlan {
     var asStorageServiceBackupTier: UInt64? {
         switch self {
         case .disabled, .disabling:

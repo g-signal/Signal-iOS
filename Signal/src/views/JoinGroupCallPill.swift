@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import SignalServiceKit
 import SignalUI
 import UIKit
-import SignalServiceKit
 
 class JoinGroupCallPill: UIControl {
 
-    public var buttonText: String? {
+    var buttonText: String? {
         get { return callLabel.text }
         set {
             callLabel.text = newValue
@@ -52,7 +52,7 @@ class JoinGroupCallPill: UIControl {
         super.init(frame: .zero)
         let contentStack = UIStackView(arrangedSubviews: [
             callImageView,
-            callLabel
+            callLabel,
         ])
         contentStack.axis = .horizontal
         contentStack.spacing = 4
@@ -60,7 +60,7 @@ class JoinGroupCallPill: UIControl {
         contentStack.isLayoutMarginsRelativeArrangement = true
         contentStack.layoutMargins = .init(hMargin: 12, vMargin: 4)
 
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) {
             addSubview(contentStack)
             contentStack.autoPinEdgesToSuperviewEdges()
         } else {
@@ -99,8 +99,7 @@ class JoinGroupCallPill: UIControl {
         callLabel.textColor = isEnabled ? enabledColor : .ows_whiteAlpha40
         callImageView.tintColor = isEnabled ? enabledColor : .ows_whiteAlpha40
 
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
-        } else {
+        if #unavailable(iOS 26) {
             // When we're highlighted, we should unhide the dimming view to darken the pill
             dimmingView.isHidden = !isHighlighted
         }

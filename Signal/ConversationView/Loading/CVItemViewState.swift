@@ -100,7 +100,7 @@ struct CVItemModelBuilder: CVItemBuilding {
 
     // TODO: How should we handle failed stickers?
     // TODO: Do we need a new equivalent of clearNeedsUpdate?
-    mutating func buildItems() -> [CVItemModel] {
+    mutating func buildItems(localAci: Aci) -> [CVItemModel] {
         // Contact Offers / Thread Details are the first item in the thread
         if messageLoader.shouldShowThreadDetails {
             // The thread details should have a stable timestamp.
@@ -148,7 +148,7 @@ struct CVItemModelBuilder: CVItemBuilding {
             owsAssertDebug(item != nil)
         }
 
-        let groupNameColors = GroupNameColors.groupNameColors(forThread: thread)
+        let groupNameColors = GroupNameColors.forThread(thread, localAci: localAci)
         let displayNameCache = DisplayNameCache()
 
         // Update the properties of the view items.
@@ -193,7 +193,7 @@ struct CVItemModelBuilder: CVItemBuilding {
             return nil
         }
 
-        let groupNameColors = GroupNameColors.groupNameColors(forThread: thread)
+        let groupNameColors = GroupNameColors.forThread(thread, localAci: itemBuildingContext.localAci)
         let displayNameCache = DisplayNameCache()
 
         configureItemViewState(item: itemBuilder,
@@ -248,6 +248,7 @@ struct CVItemModelBuilder: CVItemBuilding {
             itemViewState.footerState = CVComponentFooter.buildState(
                 interaction: interaction,
                 tapForMoreState: tapForMoreState,
+                isPinnedMessage: false,
                 transaction: transaction
             )
         }
@@ -411,9 +412,10 @@ struct CVItemModelBuilder: CVItemBuilding {
                         }
                     }
 
-                    let senderNameColor = groupNameColors.color(for: incomingSenderAddress)
+                    let senderNameColor = groupNameColors.color(for: incomingSenderAddress.serviceId as? Aci)
                     itemViewState.senderNameState = CVComponentState.SenderName(senderName: mutableName,
-                                                                                senderNameColor: senderNameColor)
+                                                                                senderNameColor: senderNameColor,
+                                                                                memberLabel: nil)
                 }
 
                 // Show the sender avatar for incoming group messages unless
@@ -508,7 +510,7 @@ struct CVItemModelBuilder: CVItemBuilding {
             let nextMessage = nextItem?.interaction as? TSMessage,
             let rowId = nextMessage.sqliteRowId,
             let attachment = DependenciesBridge.shared.attachmentStore
-                .fetchFirstReferencedAttachment(for: .messageBodyAttachment(messageRowId: rowId), tx: transaction),
+                .fetchAnyReferencedAttachment(for: .messageBodyAttachment(messageRowId: rowId), tx: transaction),
             attachment.attachment.asStream()?.contentType.isAudio
                 ?? MimeTypeUtil.isSupportedAudioMimeType(attachment.attachment.mimeType)
         {

@@ -69,7 +69,7 @@ extension ChatListViewController {
     func showToolbar() {
         AssertIsOnMainThread()
 
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) {
             self.updateCaptions()
             self.navigationController?.setToolbarHidden(false, animated: true)
             (self.tabBarController as? HomeTabBarController)?.setTabBarHidden(true)
@@ -91,12 +91,12 @@ extension ChatListViewController {
                 DispatchQueue.main.async {
                     self.viewState.multiSelectState.toolbar?.toolbar.setItems(
                         self.makeToolbarButtons(),
-                        animated: false
+                        animated: false,
                     )
                 }
                 UIView.animate(withDuration: 0.25, animations: {
                     tbc.alpha = 1
-                }) { [weak self] (_) in
+                }) { [weak self] _ in
                     self?.tableView.contentSize.height += tbc.height
                 }
             }
@@ -148,8 +148,11 @@ extension ChatListViewController {
 
         let archiveBtn = UIBarButtonItem(
             title: viewState.chatListMode == .archive ? CommonStrings.unarchiveAction : CommonStrings.archiveAction,
-            style: .plain, target: self, action: #selector(performArchive))
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+            style: .plain,
+            target: self,
+            action: #selector(performArchive),
+        )
+        if #available(iOS 26, *) {
             archiveBtn.image = UIImage(resource: .archive)
         }
         archiveBtn.isEnabled = hasSelectedEntries
@@ -174,11 +177,11 @@ extension ChatListViewController {
             readButton = UIBarButtonItem(
                 title: OWSLocalizedString(
                     "HOME_VIEW_TOOLBAR_READ_ALL",
-                    comment: "Title 'Read All' button in the toolbar of the ChatList if multi-section is active."
+                    comment: "Title 'Read All' button in the toolbar of the ChatList if multi-section is active.",
                 ),
                 style: .plain,
                 target: self,
-                action: #selector(performReadAll)
+                action: #selector(performReadAll),
             )
             readButton.isEnabled = false
             readButton.isEnabled = readButton.isEnabled || hasUnreadEntry(threadUniqueIds: renderState.pinnedThreadUniqueIds)
@@ -186,7 +189,7 @@ extension ChatListViewController {
         }
 
         let deleteBtn = UIBarButtonItem(title: CommonStrings.deleteButton, style: .plain, target: self, action: #selector(performDelete))
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) {
             deleteBtn.image = UIImage(resource: .trash)
         }
         deleteBtn.isEnabled = hasSelectedEntries
@@ -204,7 +207,7 @@ extension ChatListViewController {
     private func hideToolbar() {
         AssertIsOnMainThread()
 
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) {
             (self.tabBarController as? HomeTabBarController)?.setTabBarHidden(false)
             self.navigationController?.setToolbarHidden(true, animated: true)
             return
@@ -217,7 +220,7 @@ extension ChatListViewController {
                     // remove the extra space for the toolbar if necessary
                     tableView.contentSize.height = tableView.sizeThatFitsMaxSize.height
                 }
-            } completion: { [weak self] (_) in
+            } completion: { [weak self] _ in
                 toolbar.removeFromSuperview()
                 self?.viewState.multiSelectState.toolbar = nil
                 if
@@ -237,17 +240,20 @@ extension ChatListViewController {
         if count == 0 {
             title = viewState.multiSelectState.title
         } else {
-            let format = OWSLocalizedString("MESSAGE_ACTIONS_TOOLBAR_CAPTION_%d", tableName: "PluralAware",
-                                           comment: "Label for the toolbar used in the multi-select mode. The number of selected items (1 or more) is passed.")
+            let format = OWSLocalizedString(
+                "MESSAGE_ACTIONS_TOOLBAR_CAPTION_%d",
+                tableName: "PluralAware",
+                comment: "Label for the toolbar used in the multi-select mode. The number of selected items (1 or more) is passed.",
+            )
             title = String.localizedStringWithFormat(format, count)
         }
 
-        if #available(iOS 26, *), FeatureFlags.iOS26SDKIsAvailable {
+        if #available(iOS 26, *) {
             toolbarItems = makeToolbarButtons()
         } else {
             viewState.multiSelectState.toolbar?.toolbar.setItems(
                 makeToolbarButtons(),
-                animated: false
+                animated: false,
             )
         }
     }
@@ -299,33 +305,32 @@ extension ChatListViewController {
             return
         }
 
-        DeleteForMeInfoSheetCoordinator.fromGlobals().coordinateDelete(
-            fromViewController: self
-        ) { [weak self] _, threadSoftDeleteManager in
-            self?.showDeleteAllActionSheet(
-                threadSoftDeleteManager: threadSoftDeleteManager
-            )
-        }
-    }
+        let db = DependenciesBridge.shared.db
+        let threadSoftDeleteManager = DependenciesBridge.shared.threadSoftDeleteManager
 
-    private func showDeleteAllActionSheet(threadSoftDeleteManager: any ThreadSoftDeleteManager) {
         /// We need to grab these now, since they'll be `nil`-ed out when we
         /// show the modal spinner below.
         let selectedIndexPaths = tableView.indexPathsForSelectedRows ?? []
 
         let title: String
         let message: String
-        let labelFormat = OWSLocalizedString("CONVERSATION_DELETE_CONFIRMATIONS_ALERT_TITLE_%d", tableName: "PluralAware",
-                                            comment: "Title for the 'conversations delete confirmation' alert for multiple messages. Embeds: {{ %@ the number of currently selected items }}.")
+        let labelFormat = OWSLocalizedString(
+            "CONVERSATION_DELETE_CONFIRMATIONS_ALERT_TITLE_%d",
+            tableName: "PluralAware",
+            comment: "Title for the 'conversations delete confirmation' alert for multiple messages. Embeds: {{ %@ the number of currently selected items }}.",
+        )
         title = String.localizedStringWithFormat(labelFormat, selectedIndexPaths.count)
-        let messageFormat = OWSLocalizedString("CONVERSATION_DELETE_CONFIRMATION_ALERT_MESSAGES_%d", tableName: "PluralAware",
-                                              comment: "Message for the 'conversations delete confirmation' alert for multiple messages.")
+        let messageFormat = OWSLocalizedString(
+            "CONVERSATION_DELETE_CONFIRMATION_ALERT_MESSAGES_%d",
+            tableName: "PluralAware",
+            comment: "Message for the 'conversations delete confirmation' alert for multiple messages.",
+        )
         message = String.localizedStringWithFormat(messageFormat, selectedIndexPaths.count)
 
         let alert = ActionSheetController(title: title, message: message)
         alert.addAction(ActionSheetAction(
             title: CommonStrings.deleteButton,
-            style: .destructive
+            style: .destructive,
         ) { [weak self] _ in
             guard let self else { return }
 
@@ -333,17 +338,17 @@ extension ChatListViewController {
             // thing in a UI-blocking modal.
             ModalActivityIndicatorViewController.present(
                 fromViewController: self,
-                canCancel: false
+                canCancel: false,
             ) { modal in
                 // We want to protect this whole operation with a single write
                 // transaction, to ensure the contents of the threads don't
                 // change as we're deleting them.
-                SSKEnvironment.shared.databaseStorageRef.write { transaction in
+                db.write { transaction in
                     self.performOn(indexPaths: selectedIndexPaths) { threadViewModels in
                         threadSoftDeleteManager.softDelete(
                             threads: threadViewModels.map { $0.threadRecord },
                             sendDeleteForMeSyncMessage: true,
-                            tx: transaction
+                            tx: transaction,
                         )
                     }
                 }
@@ -392,12 +397,12 @@ public class MultiSelectState {
 
             _isActive = active
             // turn off current edit mode if necessary (removes leading and trailing actions)
-            if let tableView = tableView, active && tableView.isEditing && cancelCurrentEditAction {
+            if let tableView, active && tableView.isEditing && cancelCurrentEditAction {
                 tableView.setEditing(false, animated: true)
             }
             if active || !actionPerformed {
                 tableView?.setEditing(active, animated: true)
-            } else if let tableView = tableView {
+            } else if let tableView {
                 // The animation of unsetting the setEditing flag will be performed
                 // in the tableView.beginUpdates/endUpdates block (called in applyPartialLoadResult).
                 // This results in a nice combined animation.
