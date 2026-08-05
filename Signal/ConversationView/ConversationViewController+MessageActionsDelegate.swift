@@ -286,6 +286,7 @@ extension ConversationViewController: MessageActionsDelegate {
     }
 }
 
+extension ConversationViewController {
     func messageActionsEndPoll(_ itemViewModel: CVItemViewModelImpl) {
         if let poll = itemViewModel.componentState.poll?.state.poll {
             do {

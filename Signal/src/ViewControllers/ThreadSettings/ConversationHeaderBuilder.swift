@@ -36,6 +36,8 @@ struct ConversationHeaderBuilder {
         options: Options,
         memberLabel: MemberLabelForRendering?,
         delegate: ConversationHeaderDelegate,
+    ) -> UIView {
+        if let groupThread = thread as? TSGroupThread {
             return ConversationHeaderBuilder.buildHeaderForGroup(
                 groupThread: groupThread,
                 sizeClass: sizeClass,
