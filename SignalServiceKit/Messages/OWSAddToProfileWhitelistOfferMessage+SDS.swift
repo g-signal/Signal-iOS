@@ -14,15 +14,14 @@ import GRDB
 @objc
 public extension OWSAddToProfileWhitelistOfferMessage {
     // NOTE: This method will fail if the object has unexpected type.
-    class func anyFetchAddToProfileWhitelistOfferMessage(
+    class func fetchAddToProfileWhitelistOfferMessageViaCache(
         uniqueId: String,
         transaction: DBReadTransaction
     ) -> OWSAddToProfileWhitelistOfferMessage? {
         assert(!uniqueId.isEmpty)
 
-        guard let object = anyFetch(uniqueId: uniqueId,
-                                    transaction: transaction) else {
-                                        return nil
+        guard let object = fetchViaCache(uniqueId: uniqueId, transaction: transaction) else {
+            return nil
         }
         guard let instance = object as? OWSAddToProfileWhitelistOfferMessage else {
             owsFailDebug("Object has unexpected type: \(type(of: object))")

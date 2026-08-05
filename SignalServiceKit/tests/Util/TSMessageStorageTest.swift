@@ -52,7 +52,7 @@ final class TSMessageStorageTest: SSKBaseTest {
             newMessage.anyInsert(transaction: tx)
 
             guard
-                let fetchedMessage = TSIncomingMessage.anyFetchIncomingMessage(
+                let fetchedMessage = TSIncomingMessage.fetchIncomingMessageViaCache(
                     uniqueId: newMessage.uniqueId,
                     transaction: tx,
                 )
@@ -86,7 +86,7 @@ final class TSMessageStorageTest: SSKBaseTest {
 
             for (idx, message) in messages.enumerated() {
                 guard
-                    let fetchedMessage = TSIncomingMessage.anyFetchIncomingMessage(
+                    let fetchedMessage = TSIncomingMessage.fetchIncomingMessageViaCache(
                         uniqueId: message.uniqueId,
                         transaction: tx,
                     )
@@ -106,7 +106,7 @@ final class TSMessageStorageTest: SSKBaseTest {
                 .softDelete(threads: [thread], sendDeleteForMeSyncMessage: false, tx: tx)
 
             for message in messages {
-                XCTAssertNil(TSIncomingMessage.anyFetchIncomingMessage(
+                XCTAssertNil(TSIncomingMessage.fetchIncomingMessageViaCache(
                     uniqueId: message.uniqueId,
                     transaction: tx,
                 ))
@@ -141,7 +141,7 @@ final class TSMessageStorageTest: SSKBaseTest {
 
             for (idx, message) in messages.enumerated() {
                 guard
-                    let fetchedMessage = TSIncomingMessage.anyFetchIncomingMessage(
+                    let fetchedMessage = TSIncomingMessage.fetchIncomingMessageViaCache(
                         uniqueId: message.uniqueId,
                         transaction: tx,
                     )
@@ -161,7 +161,7 @@ final class TSMessageStorageTest: SSKBaseTest {
                 .softDelete(threads: [groupThread], sendDeleteForMeSyncMessage: false, tx: tx)
 
             for message in messages {
-                XCTAssertNil(TSIncomingMessage.anyFetchIncomingMessage(
+                XCTAssertNil(TSIncomingMessage.fetchIncomingMessageViaCache(
                     uniqueId: message.uniqueId,
                     transaction: tx,
                 ))

@@ -92,7 +92,7 @@ public class RegistrationNavigationController: OWSNavigationController {
         Task { @MainActor [self] in
             let step = await step.awaitable()
 
-            if let progressModal = self.presentedViewController as? BackupProgressModal {
+            if let progressModal = self.presentedViewController as? BackupRestoreProgressModal {
                 Logger.info("Dismissing progress view")
                 await progressModal.completeAndDismiss()
             }
@@ -391,7 +391,10 @@ public class RegistrationNavigationController: OWSNavigationController {
             return Controller(
                 type: RegistrationEnterAccountEntropyPoolViewController.self,
                 make: { presenter in
-                    return RegistrationEnterAccountEntropyPoolViewController(state: state, presenter: presenter)
+                    return RegistrationEnterAccountEntropyPoolViewController(
+                        state: state,
+                        presenter: presenter,
+                    )
                 },
                 // No state to update.
                 update: nil,
@@ -733,7 +736,7 @@ extension RegistrationNavigationController: RegistrationRestoreFromBackupConfirm
 
     func restoreFromBackupConfirmed() {
         Task { @MainActor in
-            let progressModal = BackupProgressModal(style: .backupRestore)
+            let progressModal = BackupRestoreProgressModal(style: .backupRestore)
             let (progress, stream) = await OWSSequentialProgress<BackupRestoreProgressPhase>.createSink()
             Task { @MainActor in
                 for await progress in stream {

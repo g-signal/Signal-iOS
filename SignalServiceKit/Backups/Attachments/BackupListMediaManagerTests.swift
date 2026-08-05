@@ -14,7 +14,6 @@ public class BackupListMediaManagerTests {
     let accountKeyStore: AccountKeyStore
     let attachmentStore = AttachmentStore()
     let backupAttachmentDownloadStore = BackupAttachmentDownloadStore()
-    let backupAttachmentUploadScheduler = BackupAttachmentUploadSchedulerMock()
     let backupAttachmentUploadStore = BackupAttachmentUploadStore()
     private let backupRequestManager = BackupRequestManagerMock()
     let backupSettingsStore = BackupSettingsStore()
@@ -22,6 +21,7 @@ public class BackupListMediaManagerTests {
     let orphanedBackupAttachmentStore = OrphanedBackupAttachmentStore()
     let remoteConfigManager = StubbableRemoteConfigManager()
     let tsAccountManager = MockTSAccountManager()
+    let backupAttachmentUploadScheduler: BackupAttachmentUploadScheduler
 
     let listMediaManager: BackupListMediaManager
 
@@ -32,6 +32,15 @@ public class BackupListMediaManagerTests {
         self.accountKeyStore = AccountKeyStore(
             backupSettingsStore: backupSettingsStore,
         )
+        self.backupAttachmentUploadScheduler = BackupAttachmentUploadScheduler(
+            attachmentStore: attachmentStore,
+            backupAttachmentUploadStore: backupAttachmentUploadStore,
+            backupAttachmentUploadEraStore: BackupAttachmentUploadEraStore(),
+            dateProvider: { Date() },
+            interactionStore: InteractionStoreImpl(),
+            remoteConfigProvider: StubbableRemoteConfigManager(),
+        )
+
         self.listMediaManager = BackupListMediaManagerImpl(
             accountKeyStore: accountKeyStore,
             attachmentStore: attachmentStore,
@@ -40,11 +49,16 @@ public class BackupListMediaManagerTests {
             ),
             backupAttachmentDownloadProgress: BackupAttachmentDownloadProgressMock(),
             backupAttachmentDownloadStore: backupAttachmentDownloadStore,
-            backupAttachmentUploadProgress: BackupAttachmentUploadProgressMock(),
+            backupAttachmentUploadProgress: BackupAttachmentUploadProgressMock(initialCompleted: 0, total: 100),
             backupAttachmentUploadScheduler: backupAttachmentUploadScheduler,
             backupAttachmentUploadStore: backupAttachmentUploadStore,
             backupAttachmentUploadEraStore: BackupAttachmentUploadEraStore(),
             backupListMediaStore: BackupListMediaStore(),
+            backupMediaErrorNotificationPresenter: BackupMediaErrorNotificationPresenter(
+                dateProvider: { Date() },
+                db: db,
+                notificationPresenter: NoopNotificationPresenterImpl(),
+            ),
             backupRequestManager: backupRequestManager,
             backupSettingsStore: backupSettingsStore,
             dateProvider: dateProvider,
@@ -91,7 +105,6 @@ public class BackupListMediaManagerTests {
                         uploadEra: localUploadEra,
                         lastDownloadAttemptTimestamp: nil,
                     ),
-                    scheduleDownload: true,
                     tx: tx,
                 )
             }
@@ -125,7 +138,6 @@ public class BackupListMediaManagerTests {
                 return insertAttachment(
                     mediaName: mediaName,
                     mediaTierInfo: nil,
-                    scheduleUpload: true,
                     tx: tx,
                 )
             }
@@ -235,6 +247,12 @@ public class BackupListMediaManagerTests {
         // Case 1 should've been marked as not uploaded to media tier,
         // removed from download queue and added to upload queue.
         db.read { tx in
+            let enqueuedAttachmentIds = backupAttachmentUploadStore.fetchNextUploads(
+                count: 60,
+                isFullsize: true,
+                tx: tx,
+            ).map(\.attachmentRowId)
+
             for attachmentId in localOnlyIds {
                 let attachment = attachmentStore.fetch(id: attachmentId, tx: tx)!
                 #expect(attachment.mediaTierInfo == nil)
@@ -245,7 +263,7 @@ public class BackupListMediaManagerTests {
                     tx: tx,
                 ) == nil)
 
-                #expect(self.backupAttachmentUploadScheduler.enqueuedAttachmentIds.contains(attachmentId))
+                #expect(enqueuedAttachmentIds.contains(attachmentId))
             }
         }
 
@@ -302,29 +320,13 @@ public class BackupListMediaManagerTests {
     private func insertAttachment(
         mediaName: String,
         mediaTierInfo: Attachment.MediaTierInfo?,
-        scheduleDownload: Bool = false,
-        scheduleUpload: Bool = false,
         tx: DBWriteTransaction,
     ) -> Attachment.IDType {
         let thread = TSThread(uniqueId: UUID().uuidString)
         try! thread.asRecord().insert(tx.database)
-        let attachmentParams: Attachment.ConstructionParams
-        if scheduleDownload {
-            attachmentParams = Attachment.ConstructionParams.fromBackup(
-                blurHash: nil,
-                mimeType: "image/jpeg",
-                encryptionKey: UUID().data,
-                latestTransitTierInfo: nil,
-                sha256ContentHash: UUID().data,
-                mediaName: mediaName,
-                mediaTierInfo: mediaTierInfo,
-                thumbnailMediaTierInfo: nil,
-            )
-        } else {
-            attachmentParams = Attachment.ConstructionParams.mockStream(
-                mediaName: mediaName,
-            )
-        }
+        let attachmentParams = Attachment.ConstructionParams.mockStream(
+            mediaName: mediaName,
+        )
         var attachmentRecord = Attachment.Record(params: attachmentParams)
         try! attachmentRecord.insert(tx.database)
         if let mediaTierInfo {
@@ -346,35 +348,11 @@ public class BackupListMediaManagerTests {
                 creationTimestamp: 0,
             ))),
         )
-        let reference = try! attachmentStore.addReference(
+        _ = attachmentStore.addReference(
             referenceParams,
             attachmentRowId: attachmentRecord.sqliteId!,
             tx: tx,
         )
-
-        if scheduleDownload {
-            try! backupAttachmentDownloadStore.enqueue(
-                ReferencedAttachment(
-                    reference: reference,
-                    attachment: Attachment(record: attachmentRecord),
-                ),
-                thumbnail: false,
-                canDownloadFromMediaTier: true,
-                state: .ready,
-                currentTimestamp: 0,
-                tx: tx,
-            )
-        }
-
-        if scheduleUpload {
-            backupAttachmentUploadStore.enqueue(
-                try! Attachment(record: attachmentRecord).asStream()!,
-                owner: .threadWallpaper,
-                fullsize: true,
-                tx: tx,
-            )
-        }
-
         return attachmentRecord.sqliteId!
     }
 }

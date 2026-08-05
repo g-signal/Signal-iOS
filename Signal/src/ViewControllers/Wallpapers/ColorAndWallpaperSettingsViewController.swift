@@ -273,8 +273,8 @@ public class ColorAndWallpaperSettingsViewController: OWSTableViewController2 {
         Task {
             do {
                 let wallpaperStore = DependenciesBridge.shared.wallpaperStore
-                let onInsert = { [wallpaperStore] (tx: DBWriteTransaction) throws -> Void in
-                    try wallpaperStore.reset(for: thread, tx: tx)
+                let onInsert = { [wallpaperStore] (tx: DBWriteTransaction) -> Void in
+                    wallpaperStore.reset(for: thread, tx: tx)
                 }
 
                 if let thread {
@@ -300,28 +300,15 @@ public class ColorAndWallpaperSettingsViewController: OWSTableViewController2 {
     }
 
     private func resetAllWallpapers() {
-        SSKEnvironment.shared.databaseStorageRef.asyncWrite { tx in
-            do {
-                let wallpaperStore = DependenciesBridge.shared.wallpaperStore
-                try wallpaperStore.resetAll(tx: tx)
-                try DependenciesBridge.shared.wallpaperImageStore.resetAllWallpaperImages(tx: tx)
-            } catch {
-                owsFailDebug("Failed to reset all wallpapers with error: \(error)")
-                DispatchQueue.main.async {
-                    OWSActionSheets.showErrorAlert(
-                        message: OWSLocalizedString(
-                            "WALLPAPER_SETTINGS_FAILED_TO_RESET",
-                            comment: "An error indicating to the user that we failed to reset all wallpapers.",
-                        ),
-                    )
-                }
-            }
-            tx.addSyncCompletion {
-                Task { @MainActor in
-                    self.updateTableContents()
-                }
-            }
+        let db = DependenciesBridge.shared.db
+        let wallpaperStore = DependenciesBridge.shared.wallpaperStore
+        let wallpaperImageStore = DependenciesBridge.shared.wallpaperImageStore
+        db.write { tx in
+            wallpaperStore.resetAll(tx: tx)
+            wallpaperImageStore.resetAllWallpaperImages(tx: tx)
         }
+
+        updateTableContents()
     }
 
     // MARK: - Reset Chat Colors
@@ -400,6 +387,7 @@ public class ColorAndWallpaperSettingsViewController: OWSTableViewController2 {
 
 private class MiniPreviewView: UIView {
     private let hasWallpaper: Bool
+    private let shouldDimWallpaperInDarkMode: Bool
     private let chatColor: ColorOrGradientSetting
 
     init(wallpaperViewBuilder: WallpaperViewBuilder?, chatColor: ColorOrGradientSetting) {
@@ -408,10 +396,17 @@ private class MiniPreviewView: UIView {
         if let wallpaperViewBuilder {
             stackViewContainer = wallpaperViewBuilder.build().asPreviewView()
             hasWallpaper = true
+            switch wallpaperViewBuilder {
+            case .colorOrGradient(_, let shouldDimInDarkMode):
+                shouldDimWallpaperInDarkMode = shouldDimInDarkMode
+            case .customPhoto(_, let shouldDimInDarkMode):
+                shouldDimWallpaperInDarkMode = shouldDimInDarkMode
+            }
         } else {
             stackViewContainer = UIView()
             stackViewContainer.backgroundColor = Theme.backgroundColor
             hasWallpaper = false
+            shouldDimWallpaperInDarkMode = false
         }
         self.hasWallpaper = hasWallpaper
         self.chatColor = chatColor
@@ -471,14 +466,24 @@ private class MiniPreviewView: UIView {
     }
 
     func buildIncomingBubble() -> UIView {
-        let containerView = UIView()
+        let chatColorView = CVColorOrGradientView()
+        chatColorView.configure(
+            value: ConversationStyle.bubbleChatColorIncoming(
+                hasWallpaper: hasWallpaper,
+                shouldDimWallpaperInDarkMode: shouldDimWallpaperInDarkMode,
+                isDarkThemeEnabled: Theme.isDarkThemeEnabled,
+            ),
+            referenceView: self,
+        )
+
         let bubbleView = UIView()
         bubbleView.layer.cornerRadius = 10
+        bubbleView.layer.masksToBounds = true
         bubbleView.autoSetDimensions(to: CGSize(width: 100, height: 30))
-        bubbleView.backgroundColor = ConversationStyle.bubbleColorIncoming(
-            hasWallpaper: hasWallpaper,
-            isDarkThemeEnabled: Theme.isDarkThemeEnabled,
-        )
+        bubbleView.addSubview(chatColorView)
+        chatColorView.autoPinEdgesToSuperviewEdges()
+
+        let containerView = UIView()
         containerView.addSubview(bubbleView)
         bubbleView.autoPinEdge(toSuperviewEdge: .leading, withInset: 8)
         bubbleView.autoPinHeightToSuperview()

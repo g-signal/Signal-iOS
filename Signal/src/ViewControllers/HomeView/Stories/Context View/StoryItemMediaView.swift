@@ -184,11 +184,11 @@ class StoryItemMediaView: UIView {
         if let attachmentIdToMarkViewed {
             let timestamp = Date().ows_millisecondsSince1970
             Task {
-                try await DependenciesBridge.shared.db.awaitableWrite { tx in
+                await DependenciesBridge.shared.db.awaitableWrite { tx in
                     guard let attachment = DependenciesBridge.shared.attachmentStore.fetch(id: attachmentIdToMarkViewed, tx: tx) else {
                         return
                     }
-                    try DependenciesBridge.shared.attachmentStore.markViewedFullscreen(
+                    DependenciesBridge.shared.attachmentStore.markViewedFullscreen(
                         attachment: attachment,
                         timestamp: timestamp,
                         tx: tx,
@@ -350,7 +350,7 @@ class StoryItemMediaView: UIView {
         if
             case .privateStory(let uniqueId) = delegate?.context,
             let privateStoryThread = SSKEnvironment.shared.databaseStorageRef.read(
-                block: { TSPrivateStoryThread.anyFetchPrivateStoryThread(uniqueId: uniqueId, transaction: $0) },
+                block: { TSPrivateStoryThread.fetchPrivateStoryThreadViaCache(uniqueId: uniqueId, transaction: $0) },
             ),
             !privateStoryThread.isMyStory
         {
@@ -1037,7 +1037,7 @@ class StoryItemMediaView: UIView {
                 downloadState: downloadState,
             ),
             diameter: 56,
-            isDarkThemeEnabled: true,
+            colorConfiguration: .forMediaOverlay(),
             mediaCache: Self.mediaCache,
         )
 

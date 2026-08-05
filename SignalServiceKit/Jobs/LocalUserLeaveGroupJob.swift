@@ -53,7 +53,7 @@ private class LocalUserLeaveGroupJobRunner: JobRunner {
         }
 
         let groupThread = SSKEnvironment.shared.databaseStorageRef.read { tx in
-            return TSGroupThread.anyFetchGroupThread(uniqueId: jobRecord.threadId, transaction: tx)
+            return TSGroupThread.fetchGroupThreadViaCache(uniqueId: jobRecord.threadId, transaction: tx)
         }
 
         guard let groupThread, let groupModel = groupThread.groupModel as? TSGroupModelV2 else {

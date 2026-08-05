@@ -185,7 +185,7 @@ class SignalRecipientTest: SSKBaseTest {
                 withContactAddress: newAddress,
                 transaction: transaction,
             )
-            let newMessage = TSIncomingMessage.anyFetchIncomingMessage(
+            let newMessage = TSIncomingMessage.fetchIncomingMessageViaCache(
                 uniqueId: oldMessage.uniqueId,
                 transaction: transaction,
             )!
@@ -264,7 +264,7 @@ class SignalRecipientTest: SSKBaseTest {
                 withContactAddress: newAddress,
                 transaction: transaction,
             )
-            let newMessage = TSIncomingMessage.anyFetchIncomingMessage(
+            let newMessage = TSIncomingMessage.fetchIncomingMessageViaCache(
                 uniqueId: oldMessage.uniqueId,
                 transaction: transaction,
             )!
@@ -285,7 +285,7 @@ class SignalRecipientTest: SSKBaseTest {
             XCTAssertNotEqual(oldAddress.phoneNumber, newAddress.phoneNumber)
             XCTAssertNotEqual(oldAddress.serviceId, newAddress.serviceId)
 
-            oldThread = TSContactThread.anyFetchContactThread(uniqueId: oldThread.uniqueId, transaction: transaction)!
+            oldThread = TSContactThread.fetchContactThreadViaCache(uniqueId: oldThread.uniqueId, transaction: transaction)!
             XCTAssertNotEqual(oldThread.uniqueId, newThread.uniqueId)
             XCTAssertNil(oldThread.contactPhoneNumber)
             XCTAssertEqual(newAddress, newThread.contactAddress)

@@ -48,10 +48,7 @@ class DeviceTransferOperation: NSObject {
 
             Logger.warn("Missing file for transfer, it probably disappeared or was otherwise deleted. Sending missing file placeholder.")
 
-            url = URL(
-                fileURLWithPath: UUID().uuidString,
-                relativeTo: URL(fileURLWithPath: OWSTemporaryDirectory(), isDirectory: true),
-            )
+            url = OWSFileSystem.temporaryFileUrl(isAvailableWhileDeviceLocked: false)
             guard
                 FileManager.default.createFile(
                     atPath: url.path,

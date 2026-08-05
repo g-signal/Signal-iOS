@@ -53,35 +53,6 @@ public extension Notification.Name {
 
 // MARK: -
 
-/// Reports whether we are able to download Backup attachments, via various
-/// consolidated inputs.
-///
-/// `@MainActor`-isolated because most of the inputs are themselves isolated.
-///
-/// - SeeAlso `BackupAttachmentDownloadTracker`
-@MainActor
-public protocol BackupAttachmentDownloadQueueStatusReporter {
-    func currentStatus(for mode: BackupAttachmentDownloadQueueMode) -> BackupAttachmentDownloadQueueStatus
-
-    func currentStatusAndToken(for mode: BackupAttachmentDownloadQueueMode) -> (BackupAttachmentDownloadQueueStatus, BackupAttachmentDownloadQueueStatusToken)
-
-    /// Synchronously returns the minimum required disk space for downloads.
-    nonisolated func minimumRequiredDiskSpaceToCompleteDownloads() -> UInt64
-
-    /// Check available disk space, optionally clearing in-memory state
-    /// regarding past "out of space" errors.
-    func checkAvailableDiskSpace(clearPreviousOutOfSpaceErrors: Bool)
-}
-
-extension BackupAttachmentDownloadQueueStatusReporter {
-    fileprivate func notifyStatusDidChange(for mode: BackupAttachmentDownloadQueueMode) {
-        NotificationCenter.default.postOnMainThread(
-            name: .backupAttachmentDownloadQueueStatusDidChange(mode: mode),
-            object: nil,
-        )
-    }
-}
-
 /// Grab one of these when starting a job; use it to mark success or failure
 /// This takes a (black box) snapshot of state when the download began so that
 /// when we respond to success or errors we apply them appropriately based
@@ -90,10 +61,23 @@ public protocol BackupAttachmentDownloadQueueStatusToken {}
 
 // MARK: -
 
-/// API for callers to manage the `StatusReporter` in response to relevant
-/// external events.
+/// Tracks and reports the status of the Backup attachment download queue.
+///
+/// `@MainActor`-isolated because most of the inputs are themselves isolated.
+///
+/// - SeeAlso `BackupAttachmentDownloadTracker`
 @MainActor
-public protocol BackupAttachmentDownloadQueueStatusManager: BackupAttachmentDownloadQueueStatusReporter {
+public protocol BackupAttachmentDownloadQueueStatusManager {
+
+    /// The current status of the download queue.
+    /// - Important
+    /// Only returns meaningful values once `beginObservingIfNecessary` has been called.
+    func currentStatus(for mode: BackupAttachmentDownloadQueueMode) -> BackupAttachmentDownloadQueueStatus
+
+    /// The current status of the download queue, and a token.
+    /// - Important
+    /// Only returns meaningful values once `beginObservingIfNecessary` has been called.
+    func currentStatusAndToken(for mode: BackupAttachmentDownloadQueueMode) -> (BackupAttachmentDownloadQueueStatus, BackupAttachmentDownloadQueueStatusToken)
 
     /// Begin observing status updates, if necessary.
     func beginObservingIfNecessary(for mode: BackupAttachmentDownloadQueueMode) -> BackupAttachmentDownloadQueueStatus
@@ -112,6 +96,13 @@ public protocol BackupAttachmentDownloadQueueStatusManager: BackupAttachmentDown
         mode: BackupAttachmentDownloadQueueMode,
     ) async
 
+    /// Synchronously returns the minimum required disk space for downloads.
+    nonisolated func minimumRequiredDiskSpaceToCompleteDownloads() -> UInt64
+
+    /// Check available disk space, optionally clearing in-memory state
+    /// regarding past "out of space" errors.
+    func checkAvailableDiskSpace(clearPreviousOutOfSpaceErrors: Bool)
+
     /// Call when the download queue is emptied.
     func didEmptyQueue(for mode: BackupAttachmentDownloadQueueMode)
 
@@ -121,41 +112,25 @@ public protocol BackupAttachmentDownloadQueueStatusManager: BackupAttachmentDown
 // MARK: -
 
 @MainActor
-public class BackupAttachmentDownloadQueueStatusManagerImpl: BackupAttachmentDownloadQueueStatusManager {
+class BackupAttachmentDownloadQueueStatusManagerImpl: BackupAttachmentDownloadQueueStatusManager {
 
-    // MARK: - BackupAttachmentDownloadQueueStatusReporter
-
-    public func currentStatus(for mode: BackupAttachmentDownloadQueueMode) -> BackupAttachmentDownloadQueueStatus {
+    func currentStatus(for mode: BackupAttachmentDownloadQueueMode) -> BackupAttachmentDownloadQueueStatus {
         return state.asQueueStatus(mode: mode, dateProvider: dateProvider)
     }
 
-    public func currentStatusAndToken(for mode: BackupAttachmentDownloadQueueMode) -> (BackupAttachmentDownloadQueueStatus, BackupAttachmentDownloadQueueStatusToken) {
+    func currentStatusAndToken(for mode: BackupAttachmentDownloadQueueMode) -> (BackupAttachmentDownloadQueueStatus, BackupAttachmentDownloadQueueStatusToken) {
         return (
             state.asQueueStatus(mode: mode, dateProvider: dateProvider),
             BackupAttachmentDownloadQueueStatusTokenImpl(lastNetworkOr5xxErrorTime: state.lastNetworkOr5xxErrorTime),
         )
     }
 
-    public nonisolated func minimumRequiredDiskSpaceToCompleteDownloads() -> UInt64 {
-        return getRequiredDiskSpace()
-    }
-
-    public func checkAvailableDiskSpace(clearPreviousOutOfSpaceErrors: Bool) {
-        state.availableDiskSpace = getAvailableDiskSpace()
-
-        if clearPreviousOutOfSpaceErrors {
-            state.downloadDidExperienceOutOfSpaceError = false
-        }
-    }
-
-    // MARK: - BackupAttachmentDownloadQueueStatusManager
-
-    public func beginObservingIfNecessary(for mode: BackupAttachmentDownloadQueueMode) -> BackupAttachmentDownloadQueueStatus {
+    func beginObservingIfNecessary(for mode: BackupAttachmentDownloadQueueMode) -> BackupAttachmentDownloadQueueStatus {
         observeDeviceAndLocalStatesIfNecessary()
         return currentStatus(for: mode)
     }
 
-    public nonisolated func jobDidExperienceError(
+    nonisolated func jobDidExperienceError(
         _ error: Error,
         token: BackupAttachmentDownloadQueueStatusToken,
         mode: BackupAttachmentDownloadQueueMode,
@@ -176,7 +151,7 @@ public class BackupAttachmentDownloadQueueStatusManagerImpl: BackupAttachmentDow
         }
     }
 
-    public nonisolated func jobDidSucceed(
+    nonisolated func jobDidSucceed(
         token: BackupAttachmentDownloadQueueStatusToken,
         mode: BackupAttachmentDownloadQueueMode,
     ) async {
@@ -188,7 +163,7 @@ public class BackupAttachmentDownloadQueueStatusManagerImpl: BackupAttachmentDow
         }
     }
 
-    public func didEmptyQueue(for mode: BackupAttachmentDownloadQueueMode) {
+    func didEmptyQueue(for mode: BackupAttachmentDownloadQueueMode) {
         switch mode {
         case .thumbnail:
             state.isThumbnailQueueEmpty = true
@@ -209,7 +184,19 @@ public class BackupAttachmentDownloadQueueStatusManagerImpl: BackupAttachmentDow
         }
     }
 
-    public func setIsMainAppAndActiveOverride(_ newValue: Bool) {
+    nonisolated func minimumRequiredDiskSpaceToCompleteDownloads() -> UInt64 {
+        return getRequiredDiskSpace()
+    }
+
+    func checkAvailableDiskSpace(clearPreviousOutOfSpaceErrors: Bool) {
+        state.availableDiskSpace = getAvailableDiskSpace()
+
+        if clearPreviousOutOfSpaceErrors {
+            state.downloadDidExperienceOutOfSpaceError = false
+        }
+    }
+
+    func setIsMainAppAndActiveOverride(_ newValue: Bool) {
         state.isMainAppAndActiveOverride = newValue
     }
 
@@ -440,6 +427,13 @@ public class BackupAttachmentDownloadQueueStatusManagerImpl: BackupAttachmentDow
         }
     }
 
+    private func notifyStatusDidChange(for mode: BackupAttachmentDownloadQueueMode) {
+        NotificationCenter.default.postOnMainThread(
+            name: .backupAttachmentDownloadQueueStatusDidChange(mode: mode),
+            object: nil,
+        )
+    }
+
     // MARK: State Observation
 
     private func observeDeviceAndLocalStatesIfNecessary() {
@@ -612,7 +606,7 @@ public class BackupAttachmentDownloadQueueStatusManagerImpl: BackupAttachmentDow
     }
 
     private nonisolated func getRequiredDiskSpace() -> UInt64 {
-        return remoteConfigManager.currentConfig().attachmentMaxEncryptedBytes * 5
+        return 500_000_000
     }
 
     @objc

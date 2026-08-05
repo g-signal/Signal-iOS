@@ -125,7 +125,7 @@ public final class BackupArchiveThreadStore {
 
         try context.tx.database.execute(
             sql: """
-            UPDATE \(TSThread.table.tableName)
+            UPDATE \(TSThread.databaseTableName)
             SET
                 \(TSThreadSerializer.mentionNotificationModeColumn.columnName) = ?
             WHERE
@@ -142,7 +142,7 @@ public final class BackupArchiveThreadStore {
     ) throws {
         try context.tx.database.execute(
             sql: """
-            UPDATE \(TSThread.table.tableName)
+            UPDATE \(TSThread.databaseTableName)
             SET
                 \(TSThreadSerializer.shouldThreadBeVisibleColumn.columnName) = 1,
                 \(TSThreadSerializer.lastInteractionRowIdColumn.columnName) = ?

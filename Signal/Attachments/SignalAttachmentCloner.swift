@@ -16,7 +16,6 @@ enum SignalAttachmentCloner {
             throw OWSAssertionError("Missing dataUTI.")
         }
 
-        // Just use a random file name on the decrypted copy; its internal use only.
         let decryptedCopyUrl = try attachment.attachmentStream.makeDecryptedCopy(
             filename: attachment.reference.sourceFilename,
         )

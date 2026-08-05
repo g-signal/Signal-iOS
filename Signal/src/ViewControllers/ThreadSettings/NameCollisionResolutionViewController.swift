@@ -60,8 +60,7 @@ class NameCollisionResolutionViewController: OWSTableViewController2 {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate { _ in
             // Force tableview to recalculate self-sized cell height
-            self.tableView.beginUpdates()
-            self.tableView.endUpdates()
+            self.tableView.recomputeRowHeights()
         }
     }
 
@@ -69,7 +68,7 @@ class NameCollisionResolutionViewController: OWSTableViewController2 {
         cellModels = SSKEnvironment.shared.databaseStorageRef.read { readTx -> [[NameCollisionCellModel]] in
             if self.groupViewHelper == nil, self.thread.isGroupThread {
                 let threadViewModel = ThreadViewModel(thread: self.thread, forChatList: false, transaction: readTx)
-                self.groupViewHelper = GroupViewHelper(threadViewModel: threadViewModel)
+                self.groupViewHelper = GroupViewHelper(threadViewModel: threadViewModel, memberLabelCoordinator: nil)
                 self.groupViewHelper?.delegate = self
             }
 

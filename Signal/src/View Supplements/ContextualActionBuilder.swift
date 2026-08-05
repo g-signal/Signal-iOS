@@ -12,25 +12,23 @@ enum ContextualActionBuilder {
     static func makeContextualAction(
         style: UIContextualAction.Style,
         color: UIColor,
-        image: String,
+        imageName: String,
         title: String,
-        handler: @escaping () -> Void,
+        handler: @escaping Handler,
     ) -> UIContextualAction {
-        Self.makeContextualAction(
+        return makeContextualAction(
             style: style,
             color: color,
-            image: image,
+            image: UIImage(named: imageName),
             title: title,
-        ) { completion in
-            handler()
-            completion(true)
-        }
+            handler: handler,
+        )
     }
 
     static func makeContextualAction(
         style: UIContextualAction.Style,
         color: UIColor,
-        image: String,
+        image: UIImage?,
         title: String,
         handler: @escaping Handler,
     ) -> UIContextualAction {
@@ -45,7 +43,7 @@ enum ContextualActionBuilder {
                 handler(completion)
             }
             action.backgroundColor = color
-            action.image = UIImage(named: image)
+            action.image = image
             return action
         } else {
             let action = UIContextualAction(
@@ -56,7 +54,7 @@ enum ContextualActionBuilder {
             }
             action.accessibilityLabel = title
             action.backgroundColor = color
-            action.image = UIImage(named: image)?.withTitle(
+            action.image = image?.withTitle(
                 title,
                 font: .dynamicTypeFootnote.medium(),
                 color: .ows_white,

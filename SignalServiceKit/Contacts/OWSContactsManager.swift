@@ -336,7 +336,7 @@ extension OWSContactsManager: ContactManager {
         let onlyNeedToCheckForOneMutualGroup = !requireMultipleMutualGroups
 
         for groupThreadId in groupThreadIds {
-            guard let groupThread = TSGroupThread.anyFetchGroupThread(uniqueId: groupThreadId, transaction: tx) else {
+            guard let groupThread = TSGroupThread.fetchGroupThreadViaCache(uniqueId: groupThreadId, transaction: tx) else {
                 owsFailDebug("Missing group thread")
                 continue
             }

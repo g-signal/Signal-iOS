@@ -83,7 +83,7 @@ public struct TSPaymentsActivationRequestModel: Codable, FetchableRecord, Persis
         failIfThrows {
             return try TSPaymentsActivationRequestModel.fetchAll(transaction.database)
                 .compactMap { model in
-                    return TSThread.anyFetch(uniqueId: model.threadUniqueId, transaction: transaction)
+                    return TSThread.fetchViaCache(uniqueId: model.threadUniqueId, transaction: transaction)
                 }
         }
     }

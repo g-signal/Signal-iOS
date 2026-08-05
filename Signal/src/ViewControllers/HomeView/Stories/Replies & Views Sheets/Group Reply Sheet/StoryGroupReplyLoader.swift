@@ -212,7 +212,7 @@ class StoryGroupReplyLoader {
     }
 
     private func buildItems(reusableInteractionIds: [String], transaction: DBReadTransaction) -> [String: StoryGroupReplyViewItem] {
-        guard let groupThread = TSGroupThread.anyFetchGroupThread(uniqueId: threadUniqueId, transaction: transaction) else {
+        guard let groupThread = TSGroupThread.fetchGroupThreadViaCache(uniqueId: threadUniqueId, transaction: transaction) else {
             owsFailDebug("Missing group thread for story")
             return replyItems
         }
@@ -234,7 +234,7 @@ class StoryGroupReplyLoader {
             }
         }
 
-        let groupNameColors = GroupNameColors.forThread(groupThread, localAci: localIdentifiers.aci)
+        let groupNameColors = GroupNameColors.forThread(groupThread)
         let displayNamesByAddress = SSKEnvironment.shared.contactManagerImplRef.displayNamesByAddress(
             for: Array(authorAddresses),
             transaction: transaction,

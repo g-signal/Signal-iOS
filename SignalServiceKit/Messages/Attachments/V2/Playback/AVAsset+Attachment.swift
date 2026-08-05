@@ -78,7 +78,6 @@ extension AVAsset {
             "audio/aac": "m4a",
             "audio/mp3": "mp3",
             "audio/mp4": "mp4",
-            "audio/mpeg": "mp3",
             "audio/x-m4a": "m4a",
             "audio/x-m4b": "m4b",
             "audio/x-m4p": "m4p",

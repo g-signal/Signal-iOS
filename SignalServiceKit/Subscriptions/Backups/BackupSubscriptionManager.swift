@@ -151,6 +151,7 @@ final class BackupSubscriptionManagerImpl: BackupSubscriptionManager {
 
     private let logger = PrefixedLogger(prefix: "[Backups][Sub]")
 
+    private let appContext: AppContext
     private let backupPlanManager: BackupPlanManager
     private let backupSubscriptionIssueStore: BackupSubscriptionIssueStore
     private let backupSubscriptionRedeemer: BackupSubscriptionRedeemer
@@ -163,6 +164,7 @@ final class BackupSubscriptionManagerImpl: BackupSubscriptionManager {
     private let whoAmIManager: WhoAmIManager
 
     init(
+        appContext: AppContext,
         backupPlanManager: BackupPlanManager,
         backupSubscriptionIssueStore: BackupSubscriptionIssueStore,
         backupSubscriptionRedeemer: BackupSubscriptionRedeemer,
@@ -173,6 +175,7 @@ final class BackupSubscriptionManagerImpl: BackupSubscriptionManager {
         tsAccountManager: TSAccountManager,
         whoAmIManager: WhoAmIManager,
     ) {
+        self.appContext = appContext
         self.backupPlanManager = backupPlanManager
         self.backupSubscriptionIssueStore = backupSubscriptionIssueStore
         self.backupSubscriptionRedeemer = backupSubscriptionRedeemer
@@ -191,7 +194,19 @@ final class BackupSubscriptionManagerImpl: BackupSubscriptionManager {
     private func doStartupLogging() async {
         let latestTransaction = await self.latestTransaction(onlyEntitling: false)
         let latestEntitlingTransaction = await self.latestTransaction(onlyEntitling: true)
-        let localIAPSubscriberData = db.read { store.getIAPSubscriberData(tx: $0) }
+        let localIAPSubscriberData: IAPSubscriberData?
+        let localBackupPlan: BackupPlan
+        (
+            localIAPSubscriberData,
+            localBackupPlan,
+        ) = db.read {
+            (
+                store.getIAPSubscriberData(tx: $0),
+                backupPlanManager.backupPlan(tx: $0),
+            )
+        }
+
+        let logger = logger.suffixed(with: "BackupPlan: \(localBackupPlan)")
 
         if let latestEntitlingTransaction {
             if let localIAPSubscriberData, localIAPSubscriberData.matches(storeKitTransaction: latestEntitlingTransaction) {
@@ -573,6 +588,10 @@ final class BackupSubscriptionManagerImpl: BackupSubscriptionManager {
     }
 
     private func _redeemSubscriptionIfNecessary() async throws {
+        guard appContext.isMainApp else {
+            throw OWSAssertionError("Shouldn't be redeeming subscripions outside the main app process!")
+        }
+
         if
             let preexistingRedemptionContext = db.read(block: {
                 return BackupSubscriptionRedemptionContext.fetch(tx: $0)

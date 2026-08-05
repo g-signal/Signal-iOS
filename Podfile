@@ -9,15 +9,15 @@ use_frameworks!
 source 'https://cdn.cocoapods.org/'
 
 pod 'blurhash', podspec: './ThirdParty/blurhash.podspec'
-pod 'SwiftProtobuf', "1.31.1"
+pod 'SwiftProtobuf', "1.35.1"
 
 ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = '3b7529b01a7787ae8530d2d4aef2b6decc1937fda2e2a91b18417f988d3af439'
 pod 'LibSignalClient', git: 'https://github.com/g-signal/libsignal.git', tag: 'v0.86.15-BA', testspecs: ["Tests"]
 # pod 'LibSignalClient', path: '../libsignal', testspecs: ["Tests"]
 
-ENV['RINGRTC_PREBUILD_CHECKSUM'] = 'd474dd93d163a259494db79b1ed09d6cae0b934178347450c6f94fc29782af12'
+ENV['RINGRTC_PREBUILD_CHECKSUM'] = '40530246cc8b2ede448fe8582fa6983411a6c735e955ec4660d1f40b2e0ad2af'
 # ENV['RINGRTC_USE_FILE_BASED_CAMERA'] = '1'
-pod 'SignalRingRTC', git: 'https://github.com/signalapp/ringrtc', tag: 'v2.63.0', inhibit_warnings: true
+pod 'SignalRingRTC', git: 'https://github.com/signalapp/ringrtc', tag: 'v2.65.1', inhibit_warnings: true
 # pod 'SignalRingRTC', path: '../ringrtc', testspecs: ["Tests"]
 
 pod 'GRDB.swift/SQLCipher'

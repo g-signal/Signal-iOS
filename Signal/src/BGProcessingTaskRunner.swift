@@ -72,8 +72,10 @@ extension BGProcessingTaskRunner where Self: Sendable {
                     do {
                         logger.info("Starting...")
                         try await self.run()
-                        bgTask.setTaskCompleted(success: true)
                         logger.info("Success!")
+                        await scheduleBGProcessingTaskIfNeeded()
+                        logger.info("Re-scheduled.")
+                        bgTask.setTaskCompleted(success: true)
                     } catch is CancellationError {
                         // Re-schedule so we try to run it again. We do this unconditionally
                         // because tasks we cancel haven't finished and have more work to do.
@@ -97,18 +99,13 @@ extension BGProcessingTaskRunner where Self: Sendable {
         )
     }
 
-    public func scheduleBGProcessingTaskIfNeeded() {
-        // Note: this file only exists in the main app (Signal/src) so this is guaranteed.
-        owsAssertDebug(CurrentAppContext().isMainApp)
-
+    public func scheduleBGProcessingTaskIfNeeded() async {
         let startCondition = self.startCondition()
         guard startCondition != .never else {
             return
         }
 
-        Task {
-            await self.scheduleBGProcessingTask(startCondition: startCondition)
-        }
+        await self.scheduleBGProcessingTask(startCondition: startCondition)
     }
 
     private func scheduleBGProcessingTask(startCondition: BGProcessingTaskStartCondition) async {
@@ -149,8 +146,8 @@ extension BGProcessingTaskRunner where Self: Sendable {
     /// true if the entire migration is completed.
     func runInBatches(
         willBegin: () -> Void,
-        runNextBatch: () async throws -> Bool,
-    ) async throws {
+        runNextBatch: () async -> Bool,
+    ) async throws(CancellationError) {
         logger.info("Starting.")
 
         // Note: we _could_ check the minimum date from ``BGProcessingTaskStartCondition.after``,
@@ -166,19 +163,12 @@ extension BGProcessingTaskRunner where Self: Sendable {
         var batchCount = 0
         var didFinish = false
         while !didFinish {
-            do {
-                try Task.checkCancellation()
-            } catch {
+            if Task.isCancelled {
                 logger.warn("Canceled after \(batchCount) batches")
-                throw error
+                throw CancellationError()
             }
 
-            do {
-                didFinish = try await runNextBatch()
-            } catch {
-                logger.error("Failed after \(batchCount) batches: \(error)")
-                throw error
-            }
+            didFinish = await runNextBatch()
             batchCount += 1
         }
         logger.info("Finished after \(batchCount) batches")

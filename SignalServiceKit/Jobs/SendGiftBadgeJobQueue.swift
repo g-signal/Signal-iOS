@@ -259,7 +259,7 @@ private class SendGiftBadgeJobRunner: JobRunner {
     }
 
     private func getValidatedThread(threadUniqueId: String, tx: DBReadTransaction) throws -> TSContactThread {
-        guard let thread = TSContactThread.anyFetchContactThread(uniqueId: threadUniqueId, transaction: tx) else {
+        guard let thread = TSContactThread.fetchContactThreadViaCache(uniqueId: threadUniqueId, transaction: tx) else {
             throw OWSGenericError("Thread for gift badge sending no longer exists")
         }
         guard !SSKEnvironment.shared.blockingManagerRef.isThreadBlocked(thread, transaction: tx) else {

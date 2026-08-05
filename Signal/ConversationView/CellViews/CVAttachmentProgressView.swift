@@ -4,13 +4,13 @@
 //
 
 import Lottie
-public import SignalServiceKit
-public import SignalUI
+import SignalServiceKit
+import SignalUI
 
 // A view for presenting attachment upload/download/failure/pending state.
-public class CVAttachmentProgressView: ManualLayoutView {
+class CVAttachmentProgressView: ManualLayoutView {
 
-    public enum Direction {
+    enum Direction {
         case upload(attachmentStream: AttachmentStream)
         case download(attachmentPointer: AttachmentPointer, downloadState: AttachmentDownloadState)
 
@@ -24,70 +24,94 @@ public class CVAttachmentProgressView: ManualLayoutView {
         }
     }
 
+    struct ColorConfiguration {
+        let foregroundColor: UIColor
+        let backgroundColor: UIColor
+
+        private init(foregroundColor: UIColor, backgroundColor: UIColor) {
+            self.foregroundColor = foregroundColor
+            self.backgroundColor = backgroundColor
+        }
+
+        init(conversationStyle: ConversationStyle, isIncoming: Bool) {
+            foregroundColor = conversationStyle.bubbleTextColor(isIncoming: isIncoming)
+            backgroundColor = switch (conversationStyle.hasWallpaper, isIncoming) {
+            case (true, true): UIColor.Signal.MaterialBase.button
+            case (_, true): UIColor.Signal.LightBase.button
+            case (_, false): UIColor.Signal.ColorBase.button
+            }
+        }
+
+        /// Creates a configuration with fixed colors to be displayed on top of media thumbnail.
+        static func forMediaOverlay() -> ColorConfiguration {
+            ColorConfiguration(foregroundColor: .white, backgroundColor: .ows_blackAlpha50)
+        }
+    }
+
     private let direction: Direction
     private let diameter: CGFloat
-    private let isDarkThemeEnabled: Bool
 
     private let stateView: StateView
 
     private var attachmentId: Attachment.IDType { direction.attachmentId }
 
-    public init(
+    init(
         direction: Direction,
         diameter: CGFloat = 44,
-        isDarkThemeEnabled: Bool,
+        colorConfiguration: ColorConfiguration,
         mediaCache: CVMediaCache,
     ) {
         self.direction = direction
         self.diameter = diameter
-        self.isDarkThemeEnabled = isDarkThemeEnabled
         self.stateView = StateView(
             diameter: diameter,
             direction: direction,
-            isDarkThemeEnabled: isDarkThemeEnabled,
             mediaCache: mediaCache,
         )
 
         super.init(name: "CVAttachmentProgressView")
 
-        createViews()
+        stateView.tintColor = colorConfiguration.foregroundColor
+        let circleView = ManualLayoutView.circleView(name: "circleView")
+        circleView.backgroundColor = colorConfiguration.backgroundColor
+        circleView.addSubviewToCenterOnSuperview(stateView, size: .square(diameter))
+        addSubviewToFillSuperviewEdges(circleView)
 
         configureState()
     }
 
-    private enum State: Equatable {
-        case none
-        case tapToDownload
-        case downloadFailed
-        case downloadUnknownProgress
-        case uploadUnknownProgress
-        case downloadProgress(progress: CGFloat)
-        case uploadProgress(progress: CGFloat)
+    private class StateView: ManualLayoutView {
+        enum State: Equatable {
+            case none
+            case tapToDownload
+            case downloadFailed
+            case downloadUnknownProgress
+            case uploadUnknownProgress
+            case downloadProgress(progress: CGFloat)
+            case uploadProgress(progress: CGFloat)
 
-        var debugDescription: String {
-            switch self {
-            case .none:
-                return "none"
-            case .tapToDownload:
-                return "tapToDownload"
-            case .downloadFailed:
-                return "downloadFailed"
-            case .downloadUnknownProgress:
-                return "downloadUnknownProgress"
-            case .uploadUnknownProgress:
-                return "uploadUnknownProgress"
-            case .downloadProgress(let progress):
-                return "downloadProgress: \(progress)"
-            case .uploadProgress(let progress):
-                return "uploadProgress: \(progress)"
+            var debugDescription: String {
+                switch self {
+                case .none:
+                    return "none"
+                case .tapToDownload:
+                    return "tapToDownload"
+                case .downloadFailed:
+                    return "downloadFailed"
+                case .downloadUnknownProgress:
+                    return "downloadUnknownProgress"
+                case .uploadUnknownProgress:
+                    return "uploadUnknownProgress"
+                case .downloadProgress(let progress):
+                    return "downloadProgress: \(progress)"
+                case .uploadProgress(let progress):
+                    return "uploadProgress: \(progress)"
+                }
             }
         }
-    }
 
-    private class StateView: ManualLayoutView {
         private let diameter: CGFloat
         private let direction: Direction
-        private let isDarkThemeEnabled: Bool
         private lazy var imageView = CVImageView()
         private var unknownProgressView: LottieAnimationView?
         private var progressView: LottieAnimationView?
@@ -104,12 +128,10 @@ public class CVAttachmentProgressView: ManualLayoutView {
         init(
             diameter: CGFloat,
             direction: Direction,
-            isDarkThemeEnabled: Bool,
             mediaCache: CVMediaCache,
         ) {
             self.diameter = diameter
             self.direction = direction
-            self.isDarkThemeEnabled = isDarkThemeEnabled
             self.mediaCache = mediaCache
 
             super.init(name: "CVAttachmentProgressView.StateView")
@@ -118,18 +140,16 @@ public class CVAttachmentProgressView: ManualLayoutView {
         }
 
         private func applyState(oldState: State, newState: State) {
-
             switch newState {
             case .none:
                 reset()
+
             case .tapToDownload:
-                if oldState != newState {
-                    presentIcon(templateName: Theme.iconName(.arrowDown), isInsideProgress: false)
-                }
+                presentIcon(templateName: Theme.iconName(.arrowDown), isInsideProgress: false)
+
             case .downloadFailed:
-                if oldState != newState {
-                    presentIcon(templateName: Theme.iconName(.refresh), isInsideProgress: false)
-                }
+                presentIcon(templateName: Theme.iconName(.refresh), isInsideProgress: false)
+
             case .downloadProgress(let progress):
                 switch oldState {
                 case .downloadProgress:
@@ -138,6 +158,7 @@ public class CVAttachmentProgressView: ManualLayoutView {
                     presentProgress(progress: progress)
                     presentIcon(templateName: Theme.iconName(.buttonX), isInsideProgress: true)
                 }
+
             case .uploadProgress(let progress):
                 switch oldState {
                 case .uploadProgress:
@@ -145,9 +166,11 @@ public class CVAttachmentProgressView: ManualLayoutView {
                 default:
                     presentProgress(progress: progress)
                 }
+
             case .downloadUnknownProgress:
                 presentUnknownProgress()
                 presentIcon(templateName: Theme.iconName(.buttonX), isInsideProgress: true)
+
             case .uploadUnknownProgress:
                 presentUnknownProgress()
             }
@@ -161,7 +184,7 @@ public class CVAttachmentProgressView: ManualLayoutView {
                 reset()
             }
 
-            imageView.setTemplateImageName(templateName, tintColor: .ows_white)
+            imageView.setTemplateImageName(templateName, tintColor: tintColor)
             addSubviewToCenterOnSuperview(imageView, size: .square(floor(0.44 * diameter)))
         }
 
@@ -180,6 +203,10 @@ public class CVAttachmentProgressView: ManualLayoutView {
             animationView.backgroundBehavior = .pause
             animationView.loopMode = .playOnce
             animationView.contentMode = .scaleAspectFit
+            animationView.setValueProvider(
+                ColorValueProvider(tintColor.lottieColorValue),
+                keypath: AnimationKeypath(keypath: "**.Stroke 1.Color"),
+            )
             // We DO NOT play this animation; we "scrub" it to reflect
             // attachment upload/download progress.
             updateProgress(progress: progress)
@@ -201,6 +228,10 @@ public class CVAttachmentProgressView: ManualLayoutView {
             animationView.backgroundBehavior = .pauseAndRestore
             animationView.loopMode = .loop
             animationView.contentMode = .scaleAspectFit
+            animationView.setValueProvider(
+                ColorValueProvider(tintColor.lottieColorValue),
+                keypath: AnimationKeypath(keypath: "**.Stroke 1.Color"),
+            )
             animationView.play()
 
             addSubviewToFillSuperviewEdges(animationView)
@@ -212,9 +243,8 @@ public class CVAttachmentProgressView: ManualLayoutView {
         ) -> LottieAnimationView {
             if let animationView {
                 return animationView
-            } else {
-                return mediaCache.buildLottieAnimationView(name: animationName)
             }
+            return mediaCache.buildLottieAnimationView(name: animationName)
         }
 
         private func updateProgress(progress: CGFloat) {
@@ -244,16 +274,7 @@ public class CVAttachmentProgressView: ManualLayoutView {
         }
     }
 
-    private func createViews() {
-        let innerContentView = self.stateView
-
-        let circleView = ManualLayoutView.circleView(name: "circleView")
-        circleView.backgroundColor = .ows_blackAlpha50
-        circleView.addSubviewToCenterOnSuperview(innerContentView, size: .square(diameter))
-        addSubviewToFillSuperviewEdges(circleView)
-    }
-
-    public var layoutSize: CGSize {
+    var layoutSize: CGSize {
         .square(diameter)
     }
 
@@ -389,7 +410,7 @@ public class CVAttachmentProgressView: ManualLayoutView {
         }
     }
 
-    public enum ProgressType {
+    enum ProgressType {
         case none
         case uploading(attachmentStream: AttachmentStream)
         case pendingDownload(attachmentPointer: AttachmentPointer)
@@ -397,7 +418,7 @@ public class CVAttachmentProgressView: ManualLayoutView {
         case unknown
     }
 
-    public static func progressType(
+    static func progressType(
         forAttachment attachment: CVAttachment,
         interaction: TSInteraction,
     ) -> ProgressType {

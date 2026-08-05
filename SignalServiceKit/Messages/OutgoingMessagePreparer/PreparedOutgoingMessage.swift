@@ -81,7 +81,7 @@ public class PreparedOutgoingMessage {
         switch jobRecord.messageType {
         case .persisted(let messageId, _):
             guard
-                let interaction = TSOutgoingMessage.anyFetch(uniqueId: messageId, transaction: tx),
+                let interaction = TSOutgoingMessage.fetchViaCache(uniqueId: messageId, transaction: tx),
                 let message = interaction as? TSOutgoingMessage
             else {
                 return nil
@@ -89,7 +89,7 @@ public class PreparedOutgoingMessage {
             return .init(messageType: .persisted(.init(rowId: message.sqliteRowId!, message: message)))
         case .editMessage(let editedMessageId, let messageForSending, _):
             guard
-                let interaction = TSOutgoingMessage.anyFetch(uniqueId: editedMessageId, transaction: tx),
+                let interaction = TSOutgoingMessage.fetchViaCache(uniqueId: editedMessageId, transaction: tx),
                 let editedMessage = interaction as? TSOutgoingMessage
             else {
                 return nil

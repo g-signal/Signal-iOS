@@ -5,6 +5,7 @@
 
 // import MobileCoin // Commented out due to MobileCoin removal
 public import SignalServiceKit
+import LibSignalClient
 import SignalUI
 
 public enum CVAttachment: Equatable {
@@ -121,6 +122,16 @@ public struct CVComponentState: Equatable {
         let avatarDataSource: ConversationAvatarDataSource
     }
 
+    struct DeleteAuthor: Equatable {
+        enum AuthorType: Equatable {
+            case admin(aci: Aci, groupColor: UIColor)
+            case regular
+        }
+
+        let displayName: String
+        let authorType: AuthorType
+    }
+
     let senderAvatar: SenderAvatar?
 
     enum BodyText: Equatable {
@@ -133,7 +144,7 @@ public struct CVComponentState: Equatable {
 
         // We use the "body text" component to
         // render the "remotely deleted" indicator.
-        case remotelyDeleted
+        case remotelyDeleted(deleteAuthor: DeleteAuthor?)
 
         var displayableText: DisplayableText? {
             switch self {
@@ -243,7 +254,7 @@ public struct CVComponentState: Equatable {
     let hasRenderableContent: Bool
 
     struct QuotedReply: Equatable {
-        let viewState: QuotedMessageView.State
+        let viewState: CVQuotedMessageView.State
 
         var quotedReplyModel: QuotedReplyModel { viewState.quotedReplyModel }
     }
@@ -363,8 +374,7 @@ public struct CVComponentState: Equatable {
         typealias ReferencedUser = CVTextLabel.ReferencedUserItem
 
         let title: NSAttributedString
-        let titleColor: UIColor
-        let titleSelectionBackgroundColor: UIColor
+        let titleColorOverride: UIColor?
         let action: CVMessageAction?
 
         struct Expiration: Equatable {
@@ -380,8 +390,7 @@ public struct CVComponentState: Equatable {
 
         init(
             title: NSAttributedString,
-            titleColor: UIColor,
-            titleSelectionBackgroundColor: UIColor,
+            titleColorOverride: UIColor?,
             action: CVMessageAction?,
             expiration: Expiration?,
         ) {
@@ -391,9 +400,7 @@ public struct CVComponentState: Equatable {
                 range: NSRange(location: 0, length: mutableTitle.length),
             )
             self.title = NSAttributedString(attributedString: mutableTitle)
-
-            self.titleColor = titleColor
-            self.titleSelectionBackgroundColor = titleSelectionBackgroundColor
+            self.titleColorOverride = titleColorOverride
             self.action = action
             self.expiration = expiration
 
@@ -1192,6 +1199,58 @@ private extension CVComponentState.Builder {
         return FailedOrPendingDownloads(attachmentPointers: attachmentPointers)
     }
 
+    /// If the message was deleted remotely, display the delete author's name.
+    private func displayNameForDeleteMessage(message: TSMessage) -> CVComponentState.DeleteAuthor? {
+        let adminDeleteManager = DependenciesBridge.shared.adminDeleteManager
+
+        let adminAuthorAci = adminDeleteManager.adminDeleteAuthor(
+            interactionId: interaction.sqliteRowId!,
+            tx: transaction,
+        )
+
+        if let adminAuthorAci {
+            if adminAuthorAci == localAci, message.isOutgoing {
+                // Display usual self delete message for outgoing self-deletion.
+                return nil
+            } else if let incomingMessage = message as? TSIncomingMessage, incomingMessage.authorAddress.aci == adminAuthorAci {
+                // Display usual (non-admin) other user delete for incoming self-deletion.
+                let displayName = SSKEnvironment.shared.contactManagerRef.displayName(
+                    for: SignalServiceAddress(adminAuthorAci),
+                    tx: transaction,
+                ).resolvedValue()
+                return CVComponentState.DeleteAuthor(
+                    displayName: displayName,
+                    authorType: .regular,
+                )
+            } else {
+                // Only display admin name if non self-delete.
+                let displayName = SSKEnvironment.shared.contactManagerRef.displayName(
+                    for: SignalServiceAddress(adminAuthorAci),
+                    tx: transaction,
+                ).resolvedValue()
+                let groupNameColor = GroupNameColors.forThread(thread).color(for: adminAuthorAci)
+                return CVComponentState.DeleteAuthor(
+                    displayName: displayName,
+                    authorType: .admin(aci: adminAuthorAci, groupColor: groupNameColor),
+                )
+            }
+        }
+
+        // Non-admin outgoing message shows no author.
+        guard let incomingMessage = message as? TSIncomingMessage else {
+            return nil
+        }
+        let displayName = SSKEnvironment.shared.contactManagerRef.displayName(
+            for: incomingMessage.authorAddress,
+            tx: transaction,
+        ).resolvedValue()
+
+        return CVComponentState.DeleteAuthor(
+            displayName: displayName,
+            authorType: .regular,
+        )
+    }
+
     mutating func populateAndBuild(
         message: TSMessage,
         revealedSpoilerIdsSnapshot: Set<StyleIdType>,
@@ -1199,7 +1258,9 @@ private extension CVComponentState.Builder {
 
         if message.wasRemotelyDeleted {
             // If the message has been remotely deleted, suppress everything else.
-            self.bodyText = .remotelyDeleted
+
+            let remoteDeleteAuthor = displayNameForDeleteMessage(message: message)
+            self.bodyText = .remotelyDeleted(deleteAuthor: remoteDeleteAuthor)
             return build()
         }
 
@@ -1557,7 +1618,18 @@ private extension CVComponentState.Builder {
                     transaction: transaction,
                 )
             } else if let quotedMessage = message.quotedMessage {
-                return QuotedReplyModel.build(replyMessage: message, quotedMessage: quotedMessage, transaction: transaction)
+                var memberLabel: String?
+                if
+                    BuildFlags.MemberLabel.display, let groupThread = thread as? TSGroupThread,
+                    let originalMessageAuthor = quotedMessage.authorAddress.aci
+                {
+                    memberLabel = groupThread.groupModel.groupMembership.memberLabel(for: originalMessageAuthor)?.labelForRendering()
+                    memberLabel = memberLabel?
+                        .components(separatedBy: .whitespaces)
+                        .joined(separator: SignalSymbol.LeadingCharacter.nonBreakingSpace.rawValue)
+                }
+
+                return QuotedReplyModel.build(replyMessage: message, quotedMessage: quotedMessage, memberLabel: memberLabel, transaction: transaction)
             } else {
                 return nil
             }
@@ -1575,7 +1647,7 @@ private extension CVComponentState.Builder {
                 transaction: transaction,
             )
         }
-        let viewState = QuotedMessageView.stateForConversation(
+        let viewState = CVQuotedMessageView.stateForConversation(
             quotedReplyModel: quotedReplyModel,
             displayableQuotedText: displayableQuotedText,
             conversationStyle: conversationStyle,

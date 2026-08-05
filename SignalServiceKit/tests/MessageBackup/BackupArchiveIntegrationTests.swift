@@ -63,6 +63,36 @@ class BackupArchiveIntegrationTests: XCTestCase {
     /// match said prefix.
     private let whichIntegrationTestCases: [String] = []
 
+    /// Test cases that we knowingly skip.
+    private let knownSkippedTestCases: [String] = [
+        // Not relevant for iOS
+        "android_account_data",
+        // Not implemented yet
+        "chat_folder",
+        "chat_item_standard_message_standard_attachments_incremental_mac",
+        "notification_profile",
+        // These include group updates that include fields that iOS doesn't
+        // store, but that Desktop uses. Those fields are probably removable by
+        // Desktop, but that's complicated, so instead we've kept them in the
+        // tests and iOS is skipping the problematic test cases.
+        //
+        // (Note that Android persists the actual change action protos, rather
+        // than a reinterpretation thereof, so they generally don't care what's
+        // in them for round-trip purposes.)
+        //
+        // 09, 43, and 44 include `GroupMemberAddedUpdate`, which includes the
+        // fields `hadOpenInvitation` and `inviterAci`.
+        //
+        // 10, 47, and 48 include `GroupInvitationRevokedUpdate`, which includes
+        // the fields `inviteeAci` and `inviterPni`.
+        "chat_item_group_change_chat_multiple_update_09",
+        "chat_item_group_change_chat_multiple_update_10",
+        "chat_item_group_change_chat_update_43",
+        "chat_item_group_change_chat_update_44",
+        "chat_item_group_change_chat_update_47",
+        "chat_item_group_change_chat_update_48",
+    ]
+
     // MARK: -
 
     /// Performs a round-trip import/export test on all `.binproto` integration
@@ -76,6 +106,14 @@ class BackupArchiveIntegrationTests: XCTestCase {
 
             return allBinprotoUrls.filter { binprotoUrl in
                 let binprotoName = (binprotoUrl.lastPathComponent as NSString).deletingPathExtension
+
+                if
+                    knownSkippedTestCases.contains(where: { testCasePrefix in
+                        binprotoName.starts(with: testCasePrefix)
+                    })
+                {
+                    return false
+                }
 
                 if whichIntegrationTestCases.isEmpty {
                     return true
@@ -425,7 +463,7 @@ private enum CrashyMocks {
         func notifyUserOfPollVote(forMessage message: TSOutgoingMessage, voteAuthor: Aci, thread: TSThread, transaction: DBWriteTransaction) { failTest(Self.self) }
         func scheduleNotifyForNewLinkedDevice(deviceLinkTimestamp: Date) { failTest(Self.self) }
         func scheduleNotifyForBackupsEnabled(backupsTimestamp: Date) { failTest(Self.self) }
-        func notifyUserOfListMediaIntegrityCheckFailure() { failTest(Self.self) }
+        func notifyUserOfBackupsMediaError() { failTest(Self.self) }
         func notifyUserToRelaunchAfterTransfer(completion: @escaping () -> Void) { failTest(Self.self) }
         func notifyUserOfDeregistration(tx: DBWriteTransaction) { failTest(Self.self) }
         func clearAllNotifications() { failTest(Self.self) }

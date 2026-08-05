@@ -53,7 +53,7 @@ public class ContactCellConfiguration: NSObject {
 
     public var avatarSizeClass: ConversationAvatarView.Configuration.SizeClass?
 
-    public var memberLabel: MemberLabel?
+    public var memberLabel: MemberLabelForRendering?
 
     public init(address: SignalServiceAddress, localUserDisplayMode: LocalUserDisplayMode) {
         self.dataSource = .address(address)
@@ -234,13 +234,24 @@ public class ContactCellView: ManualStackView {
                 if
                     let memberLabel = configuration.memberLabel
                 {
-                    let memberLabelLabel = CVMemberLabel(
-                        label: memberLabel.label,
-                        font: .dynamicTypeCaption1,
-                        backgroundColor: memberLabel.groupNameColor,
+                    let memberLabelLabel = CVCapsuleLabel(
+                        attributedText: NSAttributedString(string: memberLabel.label),
+                        textColor: memberLabel.groupNameColor,
+                        font: nil,
+                        highlightRange: NSRange(location: 0, length: (memberLabel.label as NSString).length),
+                        highlightFont: .dynamicTypeCaption1Clamped,
+                        axLabelPrefix: OWSLocalizedString(
+                            "MEMBER_LABEL_AX_PREFIX",
+                            comment: "Accessibility prefix for member labels.",
+                        ),
+                        isQuotedReply: false,
+                        numberOfLines: 1,
+                        onTap: nil,
                     )
+
                     textStackSubviews.append(memberLabelLabel)
-                    let memberLabelSize = memberLabelLabel.sizeThatFits(.square(.greatestFiniteMagnitude))
+                    let memberLabelSize = memberLabelLabel.labelSize(maxWidth: .greatestFiniteMagnitude)
+
                     textStackSubviewInfos.append(memberLabelSize.asManualSubviewInfo)
                 } else if let attributedSubtitle = configuration.attributedSubtitle?.nilIfEmpty {
                     subtitleLabel.attributedText = attributedSubtitle

@@ -309,7 +309,7 @@ final class PrivateStorySettingsViewController: OWSTableViewController2 {
             databaseStorage.write { transaction in
                 let recipientDatabaseTable = DependenciesBridge.shared.recipientDatabaseTable
                 guard
-                    let storyThread = TSPrivateStoryThread.anyFetchPrivateStoryThread(uniqueId: self.thread.uniqueId, transaction: transaction),
+                    let storyThread = TSPrivateStoryThread.fetchPrivateStoryThreadViaCache(uniqueId: self.thread.uniqueId, transaction: transaction),
                     storyThread.storyViewMode == .explicit,
                     let recipientId = recipientDatabaseTable.fetchRecipient(address: address, tx: transaction)?.id
                 else {

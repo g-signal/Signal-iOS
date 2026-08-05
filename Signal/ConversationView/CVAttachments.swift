@@ -165,7 +165,7 @@ extension AudioAttachment {
         SSKEnvironment.shared.databaseStorageRef.asyncWrite { tx in
             let uniqueId = incomingMessage.uniqueId
             guard
-                let latestMessage = TSIncomingMessage.anyFetchIncomingMessage(uniqueId: uniqueId, transaction: tx),
+                let latestMessage = TSIncomingMessage.fetchIncomingMessageViaCache(uniqueId: uniqueId, transaction: tx),
                 let latestThread = latestMessage.thread(tx: tx)
             else {
                 return

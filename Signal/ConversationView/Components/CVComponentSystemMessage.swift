@@ -45,15 +45,13 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         )
     }
 
-    private var bubbleBackgroundColor: UIColor {
-        Theme.backgroundColor
-    }
-
     private var outerHStackConfig: CVStackViewConfig {
+        let topMargin: CGFloat = itemModel.itemViewState.isFirstInCluster ? 0 : 4
+        let bottomMargin: CGFloat = itemModel.itemViewState.isLastInCluster ? 0 : 4
         let cellLayoutMargins = UIEdgeInsets(
-            top: 0,
+            top: topMargin,
             leading: conversationStyle.fullWidthGutterLeading,
-            bottom: 0,
+            bottom: bottomMargin,
             trailing: conversationStyle.fullWidthGutterTrailing,
         )
         return CVStackViewConfig(
@@ -68,25 +66,26 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         return CVStackViewConfig(
             axis: .horizontal,
             alignment: .center,
-            spacing: 4,
+            spacing: 6,
             layoutMargins: .zero,
         )
     }
 
     private var innerVStackConfig: CVStackViewConfig {
+        var topMargin: CGFloat = 4
+        var bottomMargin: CGFloat = 3
+        let hMargin: CGFloat = 12
 
-        let layoutMargins: UIEdgeInsets
-        if itemModel.itemViewState.isFirstInCluster {
-            layoutMargins = UIEdgeInsets(hMargin: 10, vMargin: 10)
-        } else {
-            layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
+        // Increase margins all around if there will be a button in this bubble.
+        if action != nil, !itemViewState.shouldCollapseSystemMessageAction {
+            topMargin = 8
+            bottomMargin = 12
         }
-
         return CVStackViewConfig(
             axis: .vertical,
             alignment: .center,
-            spacing: 12,
-            layoutMargins: layoutMargins,
+            spacing: 8,
+            layoutMargins: UIEdgeInsets(top: topMargin, leading: hMargin, bottom: bottomMargin, trailing: hMargin),
         )
     }
 
@@ -124,12 +123,6 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         let themeHasChanged = conversationStyle.isDarkThemeEnabled != componentView.isDarkThemeEnabled
         let hasWallpaper = conversationStyle.hasWallpaper
         let wallpaperModeHasChanged = hasWallpaper != componentView.hasWallpaper
-        let isFirstInCluster = itemModel.itemViewState.isFirstInCluster
-        let isLastInCluster = itemModel.itemViewState.isLastInCluster
-        let hasClusteringChanges = (
-            componentView.isFirstInCluster != isFirstInCluster ||
-                componentView.isLastInCluster != isLastInCluster,
-        )
         let hasSelectionChanges = (
             componentView.isShowingSelectionUI != isShowingSelectionUI ||
                 componentView.wasShowingSelectionUI != wasShowingSelectionUI,
@@ -147,7 +140,6 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
             componentView.rootView.superview != nil &&
                 !themeHasChanged &&
                 !wallpaperModeHasChanged &&
-                !hasClusteringChanges &&
                 !hasSelectionChanges &&
                 !hasActionButton &&
                 !componentView.hasActionButton,
@@ -158,8 +150,6 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
 
         componentView.isDarkThemeEnabled = conversationStyle.isDarkThemeEnabled
         componentView.hasWallpaper = hasWallpaper
-        componentView.isFirstInCluster = isFirstInCluster
-        componentView.isLastInCluster = isLastInCluster
         componentView.isShowingSelectionUI = isShowingSelectionUI
         componentView.wasShowingSelectionUI = wasShowingSelectionUI
         componentView.hasActionButton = hasActionButton
@@ -174,7 +164,10 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
 
         // Configuring the text label should happen in both reuse and non-reuse
         // scenarios
-        textLabel.configureForRendering(config: textLabelConfig, spoilerAnimationManager: componentDelegate.spoilerState.animationManager)
+        textLabel.configureForRendering(
+            config: textLabelConfig,
+            spoilerAnimationManager: componentDelegate.spoilerState.animationManager,
+        )
         componentView.innerHStack.accessibilityLabel = textLabelConfig.text.accessibilityDescription
         componentView.innerHStack.isAccessibilityElement = true
 
@@ -182,7 +175,7 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
             messageTimerView.configure(
                 expirationTimestampMs: expiration.expirationTimestamp,
                 disappearingMessageInterval: expiration.expiresInSeconds,
-                tintColor: systemMessage.titleColor,
+                tintColor: textColor,
             )
         }
 
@@ -249,33 +242,35 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
                 let actionButtonSize = cellMeasurement.size(key: Self.measurementKey_buttonSize)
             {
 
-                let buttonLabelConfig = self.buttonLabelConfig(action: action)
-                let button = OWSButton(title: action.title) {}
-                componentView.button = button
+                let buttonLabelConfig = buttonLabelConfig(action: action)
+                let button = UIButton(
+                    configuration: .gray(),
+                )
+                button.configuration?.title = action.title
                 button.accessibilityIdentifier = action.accessibilityIdentifier
-                button.titleLabel?.textAlignment = .center
-                button.titleLabel?.font = buttonLabelConfig.font
-                button.setTitleColor(buttonLabelConfig.textColor, for: .normal)
-                if interaction is OWSGroupCallMessage {
-                    button.backgroundColor = UIColor.ows_accentGreen
-                } else {
-                    if isDarkThemeEnabled, hasWallpaper {
-                        button.backgroundColor = .ows_gray65
+                button.configuration?.contentInsets = buttonContentInsets
+                button.configuration?.titleTextAttributesTransformer = .defaultFont(buttonLabelConfig.font)
+                button.configuration?.baseForegroundColor = buttonLabelConfig.textColor
+                button.configuration?.baseBackgroundColor = {
+                    if interaction is OWSGroupCallMessage {
+                        .Signal.green
+                    } else if hasWallpaper {
+                        .Signal.MaterialBase.button
                     } else {
-                        button.backgroundColor = Theme.conversationButtonBackgroundColor
+                        .Signal.secondaryFill
                     }
-
-                    switch action.action {
-                    case .didTapActivatePayments, .didTapSendPayment:
-                        button.layer.borderColor = UIColor.Signal.opaqueSeparator.cgColor
-                        button.layer.borderWidth = 1.5
-                    default: break
-                    }
+                }()
+                switch action.action {
+                case .didTapActivatePayments, .didTapSendPayment:
+                    button.layer.borderColor = UIColor.Signal.opaqueSeparator.cgColor
+                    button.layer.borderWidth = 1.5
+                default: break
                 }
-                button.ows_contentEdgeInsets = buttonContentEdgeInsets
                 button.layer.cornerRadius = actionButtonSize.height / 2
                 button.isUserInteractionEnabled = false
                 innerVStackViews.append(button)
+
+                componentView.button = button
             }
 
             innerHStack.configure(
@@ -303,53 +298,45 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
                 subviews: outerHStackViews,
             )
 
-            componentView.wallpaperBlurView?.removeFromSuperview()
-            componentView.wallpaperBlurView = nil
-
-            componentView.backgroundView?.removeFromSuperview()
-            componentView.backgroundView = nil
-
             let bubbleView: UIView
-
             if hasWallpaper {
+                let corners: BubbleConfiguration.Corners = {
+                    if #available(iOS 26, *) {
+                        if hasActionButton {
+                            .segmented(
+                                sharpCorners: [.topLeading, .topTrailing],
+                                sharpCornerRadius: 20,
+                                wideCornerRadius: 26,
+                            )
+                        } else {
+                            .capsule(maxRadius: 12)
+                        }
+                    } else {
+                        .uniform(12)
+                    }
+                }()
                 let wallpaperBlurView = componentView.ensureWallpaperBlurView()
                 configureWallpaperBlurView(
                     wallpaperBlurView: wallpaperBlurView,
-                    maskCornerRadius: 0,
                     componentDelegate: componentDelegate,
+                    bubbleConfig: BubbleConfiguration(
+                        corners: corners,
+                        stroke: ConversationStyle.bubbleStroke(isDarkThemeEnabled: isDarkThemeEnabled),
+                    ),
                 )
                 bubbleView = wallpaperBlurView
             } else {
                 let backgroundView = UIView()
                 backgroundView.backgroundColor = Theme.backgroundColor
+                backgroundView.layer.cornerRadius = 12
                 componentView.backgroundView = backgroundView
                 bubbleView = backgroundView
             }
-
-            if isFirstInCluster, isLastInCluster {
-                innerVStack.addSubviewToFillSuperviewEdges(bubbleView)
-                innerVStack.sendSubviewToBack(bubbleView)
-
-                bubbleView.layer.cornerRadius = 8
-                bubbleView.layer.maskedCorners = .all
-                bubbleView.clipsToBounds = true
-            } else {
-                outerVStack.addSubviewToFillSuperviewEdges(bubbleView)
-                outerVStack.sendSubviewToBack(bubbleView)
-
-                if isFirstInCluster {
-                    bubbleView.layer.cornerRadius = 12
-                    bubbleView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-                    bubbleView.clipsToBounds = true
-                } else if isLastInCluster {
-                    bubbleView.layer.cornerRadius = 12
-                    bubbleView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-                    bubbleView.clipsToBounds = true
-                }
-            }
+            innerVStack.addSubviewToFillSuperviewEdges(bubbleView)
+            innerVStack.sendSubviewToBack(bubbleView)
         }
 
-        // Configure hOuterStack/hInnerStack animations animations
+        // Configure hOuterStack/hInnerStack animations.
         if isShowingSelectionUI || wasShowingSelectionUI {
             // Configure selection animations
             let selectionViewWidth = ConversationStyle.selectionViewWidth
@@ -411,19 +398,20 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
 
     private var textLabelConfig: CVTextLabel.Config {
         let selectionStyling: [NSAttributedString.Key: Any] = [
-            .backgroundColor: systemMessage.titleSelectionBackgroundColor,
+            .backgroundColor: Theme.isDarkThemeEnabled ? UIColor.ows_gray80 : UIColor.ows_gray05,
         ]
+        let textColor = textColor
 
         return CVTextLabel.Config(
             text: .attributedText(systemMessage.title),
-            displayConfig: .forUnstyledText(font: Self.textLabelFont, textColor: systemMessage.titleColor),
+            displayConfig: .forUnstyledText(font: Self.textLabelFont, textColor: textColor),
             font: Self.textLabelFont,
-            textColor: systemMessage.titleColor,
+            textColor: textColor,
             selectionStyling: selectionStyling,
             textAlignment: .center,
             lineBreakMode: .byWordWrapping,
             items: systemMessage.namesInTitle.map { .referencedUser(referencedUserItem: $0) },
-            linkifyStyle: .underlined(bodyTextColor: systemMessage.titleColor),
+            linkifyStyle: .underlined(bodyTextColor: textColor),
         )
     }
 
@@ -432,22 +420,26 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         if interaction is OWSGroupCallMessage {
             textColor = Theme.isDarkThemeEnabled ? .ows_whiteAlpha90 : .white
         } else {
-            textColor = Theme.conversationButtonTextColor
+            textColor = Theme.primaryTextColor
         }
         return CVLabelConfig.unstyledText(
             action.title,
-            font: UIFont.dynamicTypeFootnote.semibold(),
+            font: UIFont.dynamicTypeFootnote.medium(),
             textColor: textColor,
             textAlignment: .center,
         )
     }
 
-    private var buttonContentEdgeInsets: UIEdgeInsets {
-        UIEdgeInsets(hMargin: 12, vMargin: 6)
+    private var buttonContentInsets: NSDirectionalEdgeInsets {
+        NSDirectionalEdgeInsets(hMargin: 10, vMargin: 5)
     }
 
     private static var textLabelFont: UIFont {
         UIFont.dynamicTypeFootnote
+    }
+
+    private var textColor: UIColor {
+        systemMessage.titleColorOverride ?? conversationStyle.systemMessageTextColor
     }
 
     private static let measurementKey_innerHStack = "CVComponentSystemMessage.measurementKey_innerHStack"
@@ -477,6 +469,9 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         // Padding around the outerVStack (leading and trailing side)
         maxContentWidth -= (outerHStackConfig.spacing + minBubbleHMargin) * 2
 
+        // innerhStack margins
+        maxContentWidth -= innerHStackConfig.layoutMargins.totalWidth
+
         maxContentWidth = max(0, maxContentWidth)
 
         let textSize = CVTextLabel.measureSize(
@@ -502,13 +497,13 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         var innerVStackSubviewInfos = [ManualStackSubviewInfo]()
         innerVStackSubviewInfos.append(innerHStackMeasurement.measuredSize.asManualSubviewInfo)
         if let action, !itemViewState.shouldCollapseSystemMessageAction {
-            let buttonLabelConfig = self.buttonLabelConfig(action: action)
+            let buttonLabelConfig = buttonLabelConfig(action: action)
             let actionButtonSize = (
                 CVText.measureLabel(
                     config: buttonLabelConfig,
                     maxWidth: maxContentWidth,
                 ) +
-                    buttonContentEdgeInsets.asSize,
+                    buttonContentInsets.asSize,
             )
             measurementBuilder.setSize(key: Self.measurementKey_buttonSize, size: actionButtonSize)
             innerVStackSubviewInfos.append(actionButtonSize.asManualSubviewInfo(hasFixedSize: true))
@@ -637,12 +632,10 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
         fileprivate var backgroundView: UIView?
 
         public let textLabel = CVTextLabel()
-        public fileprivate(set) var button: OWSButton?
+        public fileprivate(set) var button: UIButton?
 
         fileprivate var hasWallpaper = false
         fileprivate var isDarkThemeEnabled = false
-        fileprivate var isFirstInCluster = false
-        fileprivate var isLastInCluster = false
 
         public var isDedicatedCellView = false
 
@@ -676,15 +669,13 @@ public class CVComponentSystemMessage: CVComponentBase, CVRootComponent {
                 messageTimerView.removeFromSuperview()
 
                 wallpaperBlurView?.removeFromSuperview()
-                wallpaperBlurView?.resetContentAndConfiguration()
+                wallpaperBlurView = nil
 
                 backgroundView?.removeFromSuperview()
                 backgroundView = nil
 
                 hasWallpaper = false
                 isDarkThemeEnabled = false
-                isFirstInCluster = false
-                isLastInCluster = false
                 isShowingSelectionUI = false
                 wasShowingSelectionUI = false
                 hasActionButton = false
@@ -704,13 +695,11 @@ extension CVComponentSystemMessage {
         title: NSAttributedString,
         action: Action?,
         expiration: CVComponentState.SystemMessage.Expiration?,
-        titleColor: UIColor? = nil,
-        titleSelectionBackgroundColor: UIColor? = nil,
+        titleColorOverride: UIColor? = nil,
     ) -> CVComponentState.SystemMessage {
         return CVComponentState.SystemMessage(
             title: title,
-            titleColor: titleColor ?? defaultTextColor,
-            titleSelectionBackgroundColor: titleSelectionBackgroundColor ?? defaultSelectionBackgroundColor,
+            titleColorOverride: titleColorOverride,
             action: action,
             expiration: expiration,
         )
@@ -724,7 +713,7 @@ extension CVComponentSystemMessage {
     ) -> CVComponentState.SystemMessage {
 
         let title = Self.title(forInteraction: interaction, transaction: transaction)
-        let maybeOverrideTitleColor = Self.overrideTextColor(forInteraction: interaction)
+        let titleColorOverride = Self.titleColorOverride(forInteraction: interaction)
         let action = Self.action(
             forInteraction: interaction,
             threadViewModel: threadViewModel,
@@ -733,7 +722,12 @@ extension CVComponentSystemMessage {
         )
         let expiration = Self.expiration(forInteraction: interaction, transaction: transaction)
 
-        return buildComponentState(title: title, action: action, expiration: expiration, titleColor: maybeOverrideTitleColor)
+        return buildComponentState(
+            title: title,
+            action: action,
+            expiration: expiration,
+            titleColorOverride: titleColorOverride,
+        )
     }
 
     private static func title(
@@ -857,25 +851,16 @@ extension CVComponentSystemMessage {
         }
     }
 
-    private static var defaultTextColor: UIColor { Theme.secondaryTextAndIconColor }
-    private static var defaultSelectionBackgroundColor: UIColor {
-        Theme.isDarkThemeEnabled ? .ows_gray80 : .ows_gray05
-    }
+    private static func titleColorOverride(forInteraction interaction: TSInteraction) -> UIColor? {
+        guard let call = interaction as? TSCall else { return nil }
 
-    private static func overrideTextColor(forInteraction interaction: TSInteraction) -> UIColor? {
-        if let call = interaction as? TSCall {
-            switch call.callType {
-            case .incomingMissed,
-                 .incomingMissedBecauseOfChangedIdentity,
-                 .incomingMissedBecauseOfDoNotDisturb,
-                 .incomingBusyElsewhere:
-                // We use a custom red here, as we consider changing
-                // our red everywhere for better accessibility
-                return UIColor(rgbHex: 0xE51D0E)
-            default:
-                return nil
-            }
-        } else {
+        switch call.callType {
+        case .incomingMissed,
+             .incomingMissedBecauseOfChangedIdentity,
+             .incomingMissedBecauseOfDoNotDisturb,
+             .incomingBusyElsewhere:
+            return UIColor.Signal.emphasisLabel
+        default:
             return nil
         }
     }

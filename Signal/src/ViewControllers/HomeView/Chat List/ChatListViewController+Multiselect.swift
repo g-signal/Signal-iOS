@@ -265,7 +265,7 @@ extension ChatListViewController {
     func performArchive() {
         performOn(indexPaths: tableView.indexPathsForSelectedRows ?? []) { threadViewModels in
             for threadViewModel in threadViewModels {
-                archiveThread(threadViewModel: threadViewModel, closeConversationBlock: nil)
+                toggleThreadIsArchived(threadViewModel: threadViewModel)
             }
         }
         done()

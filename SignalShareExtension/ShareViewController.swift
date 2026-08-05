@@ -89,6 +89,7 @@ public class ShareViewController: OWSNavigationController, ShareViewDelegate, SA
             )
             .migrateDatabaseSchema()
             .initGlobals(
+                appContext: appContext,
                 appReadiness: appReadiness,
                 backupArchiveErrorPresenterFactory: NoOpBackupArchiveErrorPresenterFactory(),
                 deviceBatteryLevelManager: nil,
@@ -341,7 +342,7 @@ public class ShareViewController: OWSNavigationController, ShareViewDelegate, SA
         let hasIntent = self.extensionContext?.intent != nil
         Logger.info("hasIntent? \(hasIntent)")
         if let threadUniqueId = (self.extensionContext?.intent as? INSendMessageIntent)?.conversationIdentifier {
-            let result = SSKEnvironment.shared.databaseStorageRef.read { TSThread.anyFetch(uniqueId: threadUniqueId, transaction: $0) }
+            let result = SSKEnvironment.shared.databaseStorageRef.read { TSThread.fetchViaCache(uniqueId: threadUniqueId, transaction: $0) }
             Logger.info("hasThread? \(result != nil)")
             return result
         } else {

@@ -46,7 +46,7 @@ class InternalDiskUsageViewController: OWSTableViewController2 {
         let sharedDataSize = folderSizeRecursive(ofPath: OWSFileSystem.appSharedDataDirectoryPath())
 
         let bundleSize = folderSizeRecursive(ofPath: Bundle.main.bundlePath)
-        let tmpSize = folderSizeRecursive(ofPath: OWSTemporaryDirectory())
+        let tmpSize = folderSizeRecursive(ofPath: NSTemporaryDirectory())
     }
 
     let diskUsage: DiskUsage

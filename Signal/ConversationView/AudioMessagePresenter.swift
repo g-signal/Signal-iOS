@@ -45,25 +45,35 @@ class AudioMessagePresenter: AudioPresenter {
         }
     }
 
+    func primaryElementColor(isIncoming: Bool) -> UIColor {
+        isIncoming ? .Signal.label : .Signal.ColorBase.labelPrimary
+    }
+
     func playedColor(isIncoming: Bool) -> UIColor {
-        return isIncoming ? (Theme.isDarkThemeEnabled ? .ows_gray15 : .ows_gray60)
-            : .ows_white
+        primaryElementColor(isIncoming: isIncoming)
     }
 
     func unplayedColor(isIncoming: Bool) -> UIColor {
-        return isIncoming ? (Theme.isDarkThemeEnabled ? .ows_gray60 : .ows_gray25) : .ows_whiteAlpha40
+        isIncoming ? .Signal.tertiaryLabel : .Signal.ColorBase.labelTertiary
     }
 
     func thumbColor(isIncoming: Bool) -> UIColor {
-        return playedColor(isIncoming: isIncoming)
+        primaryElementColor(isIncoming: isIncoming)
     }
 
-    func playPauseContainerBackgroundColor(isIncoming: Bool) -> UIColor {
-        return isIncoming ? (Theme.isDarkThemeEnabled ? .ows_gray60 : .ows_whiteAlpha80) : .ows_whiteAlpha20
+    func playPauseContainerBackgroundColor(
+        conversationStyle: ConversationStyle,
+        isIncoming: Bool,
+    ) -> UIColor {
+        switch (isIncoming, conversationStyle.hasWallpaper) {
+        case (true, true): .Signal.MaterialBase.button
+        case (true, _): .Signal.LightBase.button
+        case (false, _): .Signal.ColorBase.button
+        }
     }
 
     func playPauseAnimationColor(isIncoming: Bool) -> ColorValueProvider {
-        ColorValueProvider(thumbColor(isIncoming: isIncoming).lottieColorValue)
+        ColorValueProvider(primaryElementColor(isIncoming: isIncoming).lottieColorValue)
     }
 
     func playedDotAnimationColor(
@@ -74,7 +84,7 @@ class AudioMessagePresenter: AudioPresenter {
     }
 
     func configureForRendering(conversationStyle: ConversationStyle) {
-        let playbackTimeLabelConfig = Self.playbackTimeLabelConfig(isIncoming: isIncoming, conversationStyle: conversationStyle)
+        let playbackTimeLabelConfig = Self.playbackTimeLabelConfig(isIncoming: isIncoming)
         playbackTimeLabelConfig.applyForRendering(label: playbackTimeLabel)
         playbackTimeLabel.setContentHuggingHigh()
     }
@@ -141,8 +151,7 @@ class AudioMessagePresenter: AudioPresenter {
         ]
     }
 
-    func topLabelConfig(audioAttachment: AudioAttachment, isIncoming: Bool, conversationStyle: ConversationStyle?) -> CVLabelConfig? {
-
+    var topLabelConfig: CVLabelConfig? {
         guard !audioAttachment.isVoiceMessage else {
             return nil
         }
@@ -157,7 +166,7 @@ class AudioMessagePresenter: AudioPresenter {
         return CVLabelConfig.unstyledText(
             text,
             font: Constants.labelFont,
-            textColor: conversationStyle?.bubbleTextColor(isIncoming: isIncoming) ?? .label,
+            textColor: ConversationStyle.bubbleTextColor(isIncoming: isIncoming),
         )
     }
 

@@ -40,11 +40,11 @@ struct ProvisioningProtos_ProvisioningUuid: Sendable {
 
   /// @required
   var uuid: String {
-    get {return _uuid ?? String()}
+    get {_uuid ?? String()}
     set {_uuid = newValue}
   }
   /// Returns true if `uuid` has been explicitly set.
-  var hasUuid: Bool {return self._uuid != nil}
+  var hasUuid: Bool {self._uuid != nil}
   /// Clears the value of `uuid`. Subsequent reads from it will return its default value.
   mutating func clearUuid() {self._uuid = nil}
 
@@ -62,21 +62,21 @@ struct ProvisioningProtos_ProvisionEnvelope: Sendable {
 
   /// @required
   var publicKey: Data {
-    get {return _publicKey ?? Data()}
+    get {_publicKey ?? Data()}
     set {_publicKey = newValue}
   }
   /// Returns true if `publicKey` has been explicitly set.
-  var hasPublicKey: Bool {return self._publicKey != nil}
+  var hasPublicKey: Bool {self._publicKey != nil}
   /// Clears the value of `publicKey`. Subsequent reads from it will return its default value.
   mutating func clearPublicKey() {self._publicKey = nil}
 
   /// @required
   var body: Data {
-    get {return _body ?? Data()}
+    get {_body ?? Data()}
     set {_body = newValue}
   }
   /// Returns true if `body` has been explicitly set.
-  var hasBody: Bool {return self._body != nil}
+  var hasBody: Bool {self._body != nil}
   /// Clears the value of `body`. Subsequent reads from it will return its default value.
   mutating func clearBody() {self._body = nil}
 
@@ -95,172 +95,172 @@ struct ProvisioningProtos_ProvisionMessage: @unchecked Sendable {
 
   /// @required
   var aciIdentityKeyPublic: Data {
-    get {return _storage._aciIdentityKeyPublic ?? Data()}
+    get {_storage._aciIdentityKeyPublic ?? Data()}
     set {_uniqueStorage()._aciIdentityKeyPublic = newValue}
   }
   /// Returns true if `aciIdentityKeyPublic` has been explicitly set.
-  var hasAciIdentityKeyPublic: Bool {return _storage._aciIdentityKeyPublic != nil}
+  var hasAciIdentityKeyPublic: Bool {_storage._aciIdentityKeyPublic != nil}
   /// Clears the value of `aciIdentityKeyPublic`. Subsequent reads from it will return its default value.
   mutating func clearAciIdentityKeyPublic() {_uniqueStorage()._aciIdentityKeyPublic = nil}
 
   /// @required
   var aciIdentityKeyPrivate: Data {
-    get {return _storage._aciIdentityKeyPrivate ?? Data()}
+    get {_storage._aciIdentityKeyPrivate ?? Data()}
     set {_uniqueStorage()._aciIdentityKeyPrivate = newValue}
   }
   /// Returns true if `aciIdentityKeyPrivate` has been explicitly set.
-  var hasAciIdentityKeyPrivate: Bool {return _storage._aciIdentityKeyPrivate != nil}
+  var hasAciIdentityKeyPrivate: Bool {_storage._aciIdentityKeyPrivate != nil}
   /// Clears the value of `aciIdentityKeyPrivate`. Subsequent reads from it will return its default value.
   mutating func clearAciIdentityKeyPrivate() {_uniqueStorage()._aciIdentityKeyPrivate = nil}
 
   /// @required
   var pniIdentityKeyPublic: Data {
-    get {return _storage._pniIdentityKeyPublic ?? Data()}
+    get {_storage._pniIdentityKeyPublic ?? Data()}
     set {_uniqueStorage()._pniIdentityKeyPublic = newValue}
   }
   /// Returns true if `pniIdentityKeyPublic` has been explicitly set.
-  var hasPniIdentityKeyPublic: Bool {return _storage._pniIdentityKeyPublic != nil}
+  var hasPniIdentityKeyPublic: Bool {_storage._pniIdentityKeyPublic != nil}
   /// Clears the value of `pniIdentityKeyPublic`. Subsequent reads from it will return its default value.
   mutating func clearPniIdentityKeyPublic() {_uniqueStorage()._pniIdentityKeyPublic = nil}
 
   /// @required
   var pniIdentityKeyPrivate: Data {
-    get {return _storage._pniIdentityKeyPrivate ?? Data()}
+    get {_storage._pniIdentityKeyPrivate ?? Data()}
     set {_uniqueStorage()._pniIdentityKeyPrivate = newValue}
   }
   /// Returns true if `pniIdentityKeyPrivate` has been explicitly set.
-  var hasPniIdentityKeyPrivate: Bool {return _storage._pniIdentityKeyPrivate != nil}
+  var hasPniIdentityKeyPrivate: Bool {_storage._pniIdentityKeyPrivate != nil}
   /// Clears the value of `pniIdentityKeyPrivate`. Subsequent reads from it will return its default value.
   mutating func clearPniIdentityKeyPrivate() {_uniqueStorage()._pniIdentityKeyPrivate = nil}
 
   var aci: String {
-    get {return _storage._aci ?? String()}
+    get {_storage._aci ?? String()}
     set {_uniqueStorage()._aci = newValue}
   }
   /// Returns true if `aci` has been explicitly set.
-  var hasAci: Bool {return _storage._aci != nil}
+  var hasAci: Bool {_storage._aci != nil}
   /// Clears the value of `aci`. Subsequent reads from it will return its default value.
   mutating func clearAci() {_uniqueStorage()._aci = nil}
 
   var pni: String {
-    get {return _storage._pni ?? String()}
+    get {_storage._pni ?? String()}
     set {_uniqueStorage()._pni = newValue}
   }
   /// Returns true if `pni` has been explicitly set.
-  var hasPni: Bool {return _storage._pni != nil}
+  var hasPni: Bool {_storage._pni != nil}
   /// Clears the value of `pni`. Subsequent reads from it will return its default value.
   mutating func clearPni() {_uniqueStorage()._pni = nil}
 
   var number: String {
-    get {return _storage._number ?? String()}
+    get {_storage._number ?? String()}
     set {_uniqueStorage()._number = newValue}
   }
   /// Returns true if `number` has been explicitly set.
-  var hasNumber: Bool {return _storage._number != nil}
+  var hasNumber: Bool {_storage._number != nil}
   /// Clears the value of `number`. Subsequent reads from it will return its default value.
   mutating func clearNumber() {_uniqueStorage()._number = nil}
 
   /// @required
   var provisioningCode: String {
-    get {return _storage._provisioningCode ?? String()}
+    get {_storage._provisioningCode ?? String()}
     set {_uniqueStorage()._provisioningCode = newValue}
   }
   /// Returns true if `provisioningCode` has been explicitly set.
-  var hasProvisioningCode: Bool {return _storage._provisioningCode != nil}
+  var hasProvisioningCode: Bool {_storage._provisioningCode != nil}
   /// Clears the value of `provisioningCode`. Subsequent reads from it will return its default value.
   mutating func clearProvisioningCode() {_uniqueStorage()._provisioningCode = nil}
 
   var userAgent: String {
-    get {return _storage._userAgent ?? String()}
+    get {_storage._userAgent ?? String()}
     set {_uniqueStorage()._userAgent = newValue}
   }
   /// Returns true if `userAgent` has been explicitly set.
-  var hasUserAgent: Bool {return _storage._userAgent != nil}
+  var hasUserAgent: Bool {_storage._userAgent != nil}
   /// Clears the value of `userAgent`. Subsequent reads from it will return its default value.
   mutating func clearUserAgent() {_uniqueStorage()._userAgent = nil}
 
   /// @required
   var profileKey: Data {
-    get {return _storage._profileKey ?? Data()}
+    get {_storage._profileKey ?? Data()}
     set {_uniqueStorage()._profileKey = newValue}
   }
   /// Returns true if `profileKey` has been explicitly set.
-  var hasProfileKey: Bool {return _storage._profileKey != nil}
+  var hasProfileKey: Bool {_storage._profileKey != nil}
   /// Clears the value of `profileKey`. Subsequent reads from it will return its default value.
   mutating func clearProfileKey() {_uniqueStorage()._profileKey = nil}
 
   var readReceipts: Bool {
-    get {return _storage._readReceipts ?? false}
+    get {_storage._readReceipts ?? false}
     set {_uniqueStorage()._readReceipts = newValue}
   }
   /// Returns true if `readReceipts` has been explicitly set.
-  var hasReadReceipts: Bool {return _storage._readReceipts != nil}
+  var hasReadReceipts: Bool {_storage._readReceipts != nil}
   /// Clears the value of `readReceipts`. Subsequent reads from it will return its default value.
   mutating func clearReadReceipts() {_uniqueStorage()._readReceipts = nil}
 
   var provisioningVersion: UInt32 {
-    get {return _storage._provisioningVersion ?? 0}
+    get {_storage._provisioningVersion ?? 0}
     set {_uniqueStorage()._provisioningVersion = newValue}
   }
   /// Returns true if `provisioningVersion` has been explicitly set.
-  var hasProvisioningVersion: Bool {return _storage._provisioningVersion != nil}
+  var hasProvisioningVersion: Bool {_storage._provisioningVersion != nil}
   /// Clears the value of `provisioningVersion`. Subsequent reads from it will return its default value.
   mutating func clearProvisioningVersion() {_uniqueStorage()._provisioningVersion = nil}
 
   var masterKey: Data {
-    get {return _storage._masterKey ?? Data()}
+    get {_storage._masterKey ?? Data()}
     set {_uniqueStorage()._masterKey = newValue}
   }
   /// Returns true if `masterKey` has been explicitly set.
-  var hasMasterKey: Bool {return _storage._masterKey != nil}
+  var hasMasterKey: Bool {_storage._masterKey != nil}
   /// Clears the value of `masterKey`. Subsequent reads from it will return its default value.
   mutating func clearMasterKey() {_uniqueStorage()._masterKey = nil}
 
   /// 32 bytes
   var ephemeralBackupKey: Data {
-    get {return _storage._ephemeralBackupKey ?? Data()}
+    get {_storage._ephemeralBackupKey ?? Data()}
     set {_uniqueStorage()._ephemeralBackupKey = newValue}
   }
   /// Returns true if `ephemeralBackupKey` has been explicitly set.
-  var hasEphemeralBackupKey: Bool {return _storage._ephemeralBackupKey != nil}
+  var hasEphemeralBackupKey: Bool {_storage._ephemeralBackupKey != nil}
   /// Clears the value of `ephemeralBackupKey`. Subsequent reads from it will return its default value.
   mutating func clearEphemeralBackupKey() {_uniqueStorage()._ephemeralBackupKey = nil}
 
   var accountEntropyPool: String {
-    get {return _storage._accountEntropyPool ?? String()}
+    get {_storage._accountEntropyPool ?? String()}
     set {_uniqueStorage()._accountEntropyPool = newValue}
   }
   /// Returns true if `accountEntropyPool` has been explicitly set.
-  var hasAccountEntropyPool: Bool {return _storage._accountEntropyPool != nil}
+  var hasAccountEntropyPool: Bool {_storage._accountEntropyPool != nil}
   /// Clears the value of `accountEntropyPool`. Subsequent reads from it will return its default value.
   mutating func clearAccountEntropyPool() {_uniqueStorage()._accountEntropyPool = nil}
 
   var mediaRootBackupKey: Data {
-    get {return _storage._mediaRootBackupKey ?? Data()}
+    get {_storage._mediaRootBackupKey ?? Data()}
     set {_uniqueStorage()._mediaRootBackupKey = newValue}
   }
   /// Returns true if `mediaRootBackupKey` has been explicitly set.
-  var hasMediaRootBackupKey: Bool {return _storage._mediaRootBackupKey != nil}
+  var hasMediaRootBackupKey: Bool {_storage._mediaRootBackupKey != nil}
   /// Clears the value of `mediaRootBackupKey`. Subsequent reads from it will return its default value.
   mutating func clearMediaRootBackupKey() {_uniqueStorage()._mediaRootBackupKey = nil}
 
   /// 16-byte UUID
   var aciBinary: Data {
-    get {return _storage._aciBinary ?? Data()}
+    get {_storage._aciBinary ?? Data()}
     set {_uniqueStorage()._aciBinary = newValue}
   }
   /// Returns true if `aciBinary` has been explicitly set.
-  var hasAciBinary: Bool {return _storage._aciBinary != nil}
+  var hasAciBinary: Bool {_storage._aciBinary != nil}
   /// Clears the value of `aciBinary`. Subsequent reads from it will return its default value.
   mutating func clearAciBinary() {_uniqueStorage()._aciBinary = nil}
 
   /// 16-byte UUID
   var pniBinary: Data {
-    get {return _storage._pniBinary ?? Data()}
+    get {_storage._pniBinary ?? Data()}
     set {_uniqueStorage()._pniBinary = newValue}
   }
   /// Returns true if `pniBinary` has been explicitly set.
-  var hasPniBinary: Bool {return _storage._pniBinary != nil}
+  var hasPniBinary: Bool {_storage._pniBinary != nil}
   /// Clears the value of `pniBinary`. Subsequent reads from it will return its default value.
   mutating func clearPniBinary() {_uniqueStorage()._pniBinary = nil}
 

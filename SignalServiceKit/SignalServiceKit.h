@@ -13,7 +13,6 @@ FOUNDATION_EXPORT const unsigned char SignalServiceKitVersionString[];
 
 #import <SignalServiceKit/BaseModel.h>
 #import <SignalServiceKit/DebuggerUtils.h>
-#import <SignalServiceKit/InstalledSticker.h>
 #import <SignalServiceKit/OWSAddToContactsOfferMessage.h>
 #import <SignalServiceKit/OWSAddToProfileWhitelistOfferMessage.h>
 #import <SignalServiceKit/OWSArchivedPaymentMessage.h>
@@ -33,8 +32,6 @@ FOUNDATION_EXPORT const unsigned char SignalServiceKitVersionString[];
 #import <SignalServiceKit/OWSVerificationState.h>
 #import <SignalServiceKit/OWSVerificationStateChangeMessage.h>
 #import <SignalServiceKit/SSKAccessors+SDS.h>
-#import <SignalServiceKit/StickerInfo.h>
-#import <SignalServiceKit/StickerPack.h>
 #import <SignalServiceKit/TSCall.h>
 #import <SignalServiceKit/TSContactThread.h>
 #import <SignalServiceKit/TSErrorMessage.h>
@@ -48,7 +45,6 @@ FOUNDATION_EXPORT const unsigned char SignalServiceKitVersionString[];
 #import <SignalServiceKit/TSInvalidIdentityKeySendingErrorMessage.h>
 #import <SignalServiceKit/TSMessage.h>
 #import <SignalServiceKit/TSOutgoingMessage.h>
-#import <SignalServiceKit/TSPaymentModel.h>
 #import <SignalServiceKit/TSPaymentModels.h>
 #import <SignalServiceKit/TSPrivateStoryThread.h>
 #import <SignalServiceKit/TSQuotedMessage.h>

@@ -148,7 +148,7 @@ struct CVItemModelBuilder: CVItemBuilding {
             owsAssertDebug(item != nil)
         }
 
-        let groupNameColors = GroupNameColors.forThread(thread, localAci: localAci)
+        let groupNameColors = GroupNameColors.forThread(thread)
         let displayNameCache = DisplayNameCache()
 
         // Update the properties of the view items.
@@ -174,12 +174,15 @@ struct CVItemModelBuilder: CVItemBuilding {
         }
     }
 
-    public static func buildStandaloneItem(interaction: TSInteraction,
-                                           thread: TSThread,
-                                           threadAssociatedData: ThreadAssociatedData,
-                                           threadViewModel: ThreadViewModel,
-                                           itemBuildingContext: CVItemBuildingContext,
-                                           transaction: DBReadTransaction) -> CVItemModel? {
+    static func buildStandaloneItem(
+        interaction: TSInteraction,
+        thread: TSThread,
+        threadAssociatedData: ThreadAssociatedData,
+        threadViewModel: ThreadViewModel,
+        itemBuildingContext: CVItemBuildingContext,
+        groupNameColors: GroupNameColors,
+        transaction: DBReadTransaction,
+    ) -> CVItemModel? {
         AssertIsOnMainThread()
 
         let viewStateSnapshot = itemBuildingContext.viewStateSnapshot
@@ -193,7 +196,6 @@ struct CVItemModelBuilder: CVItemBuilding {
             return nil
         }
 
-        let groupNameColors = GroupNameColors.forThread(thread, localAci: itemBuildingContext.localAci)
         let displayNameCache = DisplayNameCache()
 
         configureItemViewState(item: itemBuilder,
@@ -378,6 +380,22 @@ struct CVItemModelBuilder: CVItemBuilding {
 
                     shouldShowSenderName = incomingSenderAddress != previousIncomingSenderAddress
                 }
+
+                var memberLabel: String?
+                if
+                    BuildFlags.MemberLabel.display, let groupThread = thread as? TSGroupThread,
+                    let senderAci = incomingSenderAddress.aci
+                {
+                    memberLabel = groupThread.groupModel.groupMembership.memberLabel(for: senderAci)?.labelForRendering()
+                    memberLabel = memberLabel?
+                        .components(separatedBy: .whitespaces)
+                        .joined(separator: SignalSymbol.LeadingCharacter.nonBreakingSpace.rawValue)
+
+                    if let memberLabel {
+                        itemViewState.accessibilityAuthorName = authorName + "," + memberLabel
+                    }
+                }
+
                 if shouldShowSenderName {
                     let mutableName = NSMutableAttributedString(string: authorName)
                     let senderNameFont = UIFont.dynamicTypeFootnote.semibold()

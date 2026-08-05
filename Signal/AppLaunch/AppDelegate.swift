@@ -68,7 +68,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         clearAppropriateNotificationsAndRestoreBadgeCount()
 
         // On every activation, clear old temp directories.
-        ClearOldTemporaryDirectories()
+        OWSFileSystem.clearOldTemporaryDirectories()
 
         // Ensure that all windows have the correct frame.
         AppEnvironment.shared.windowManagerRef.updateWindowFrames()
@@ -308,13 +308,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         databaseMigratorRunner.registerBGProcessingTask(appReadiness: appReadiness)
 
         appReadiness.runNowOrWhenAppDidBecomeReadyAsync {
-            attachmentValidationRunner.scheduleBGProcessingTaskIfNeeded()
-            backupRunner.scheduleBGProcessingTaskIfNeeded()
-        }
-
-        appReadiness.runNowOrWhenAppDidBecomeReadyAsync {
             Task {
-                databaseMigratorRunner.scheduleBGProcessingTaskIfNeeded()
+                await attachmentValidationRunner.scheduleBGProcessingTaskIfNeeded()
+                await backupRunner.scheduleBGProcessingTaskIfNeeded()
+                await databaseMigratorRunner.scheduleBGProcessingTaskIfNeeded()
 
 #if targetEnvironment(simulator)
                 // The simulator won't run BGProcessingTasks, but we still want to run
@@ -400,6 +397,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         let globalsContinuation = await schemaMigrationContinuation.migrateDatabaseSchema()
         let dataMigrationContinuation = globalsContinuation.initGlobals(
+            appContext: launchContext.appContext,
             appReadiness: appReadiness,
             backupArchiveErrorPresenterFactory: BackupArchiveErrorPresenterFactoryInternal(),
             deviceBatteryLevelManager: DeviceBatteryLevelManagerImpl(),
@@ -722,6 +720,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let storageServiceManager = SSKEnvironment.shared.storageServiceManagerRef
         storageServiceManager.registerForCron(cron)
+
+        let keyTransparencyManager = dependenciesBridge.keyTransparencyManager
+        keyTransparencyManager.registerSelfCheckForCron(cron: cron)
 
         // Note that this does much more than set a flag; it will also run all deferred blocks.
         appReadiness.setAppIsReadyUIStillPending()
@@ -1776,17 +1777,19 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         scheduleBgAppRefresh()
 
+        let attachmentDownloadmanager = DependenciesBridge.shared.attachmentDownloadManager
+        let db = DependenciesBridge.shared.db
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
+
         let registeredState = try? tsAccountManager.registeredStateWithMaybeSneakyTransaction()
         if let registeredState {
             Logger.info("localAci: \(registeredState.localIdentifiers.aci)")
-            SSKEnvironment.shared.databaseStorageRef.write { transaction in
+
+            db.write { transaction in
                 ExperienceUpgradeFinder.markAllCompleteForNewUser(transaction: transaction)
             }
-            DependenciesBridge.shared.attachmentDownloadManager.beginDownloadingIfNecessary()
-            Task {
-                try await StickerManager.downloadPendingSickerPacks()
-            }
+
+            attachmentDownloadmanager.beginDownloadingIfNecessary()
 
             // Schedule a Cron run if we're in the foreground.
             if !self.activeConnectionTokens.isEmpty {

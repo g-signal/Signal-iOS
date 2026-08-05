@@ -19,7 +19,7 @@ class ResendMessagePromptBuilder {
     func build(for message: TSOutgoingMessage) -> UIViewController {
         let sendAgain: () -> Void = { [databaseStorage, messageSenderJobQueue] in
             databaseStorage.write { tx in
-                let latestMessage = TSOutgoingMessage.anyFetchOutgoingMessage(uniqueId: message.uniqueId, transaction: tx)
+                let latestMessage = TSOutgoingMessage.fetchOutgoingMessageViaCache(uniqueId: message.uniqueId, transaction: tx)
                 guard let latestMessage, let latestThread = latestMessage.thread(tx: tx) else {
                     return
                 }
@@ -64,7 +64,7 @@ class ResendMessagePromptBuilder {
             handler: { [databaseStorage] _ in
                 databaseStorage.write { tx in
                     guard
-                        let freshInstance = TSInteraction.anyFetch(
+                        let freshInstance = TSInteraction.fetchViaCache(
                             uniqueId: message.uniqueId,
                             transaction: tx,
                         ) else { return }

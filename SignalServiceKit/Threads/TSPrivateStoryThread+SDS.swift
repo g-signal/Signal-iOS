@@ -14,15 +14,14 @@ import GRDB
 @objc
 public extension TSPrivateStoryThread {
     // NOTE: This method will fail if the object has unexpected type.
-    class func anyFetchPrivateStoryThread(
+    class func fetchPrivateStoryThreadViaCache(
         uniqueId: String,
         transaction: DBReadTransaction
     ) -> TSPrivateStoryThread? {
         assert(!uniqueId.isEmpty)
 
-        guard let object = anyFetch(uniqueId: uniqueId,
-                                    transaction: transaction) else {
-                                        return nil
+        guard let object = fetchViaCache(uniqueId: uniqueId, transaction: transaction) else {
+            return nil
         }
         guard let instance = object as? TSPrivateStoryThread else {
             owsFailDebug("Object has unexpected type: \(type(of: object))")

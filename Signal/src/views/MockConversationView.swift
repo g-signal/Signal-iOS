@@ -142,11 +142,16 @@ class MockConversationView: UIView {
                 for: thread,
                 tx: transaction,
             )
+            let shouldDimWallpaperInDarkMode: Bool = DependenciesBridge.shared.wallpaperStore.fetchDimInDarkModeForRendering(
+                for: thread.uniqueId,
+                tx: transaction,
+            )
             let conversationStyle = ConversationStyle(
                 type: .`default`,
                 thread: self.thread,
                 viewWidth: viewWidth,
                 hasWallpaper: hasWallpaper,
+                shouldDimWallpaperInDarkMode: shouldDimWallpaperInDarkMode,
                 isWallpaperPhoto: false,
                 chatColor: chatColor,
             )
@@ -162,6 +167,8 @@ class MockConversationView: UIView {
                     interaction = MockIncomingMessage(messageBody: text!, thread: self.thread)
                 }
 
+                let groupNameColors = GroupNameColors.forThread(thread)
+
                 guard
                     let renderItem = CVLoader.buildStandaloneRenderItem(
                         interaction: interaction,
@@ -169,6 +176,7 @@ class MockConversationView: UIView {
                         threadAssociatedData: threadAssociatedData,
                         conversationStyle: conversationStyle,
                         spoilerState: SpoilerRenderState(),
+                        groupNameColors: groupNameColors,
                         transaction: transaction,
                     )
                 else {

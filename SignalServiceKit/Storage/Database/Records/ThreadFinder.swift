@@ -23,7 +23,7 @@ public class ThreadFinder {
             let thread = TSThread.grdbFetchOne(
                 sql: """
                     SELECT *
-                    FROM \(ThreadRecord.databaseTableName)
+                    FROM \(TSThread.databaseTableName)
                     WHERE \(threadColumn: .id) = ?
                 """,
                 arguments: [rowId],
@@ -42,7 +42,7 @@ public class ThreadFinder {
             do {
                 return try String.fetchAll(
                     tx.database,
-                    sql: "SELECT \(threadColumn: .uniqueId) FROM \(ThreadRecord.databaseTableName)",
+                    sql: "SELECT \(threadColumn: .uniqueId) FROM \(TSThread.databaseTableName)",
                 )
             } catch {
                 throw error.grdbErrorForLogging
@@ -60,7 +60,7 @@ public class ThreadFinder {
     ) throws {
         let sql = """
             SELECT *
-            FROM \(ThreadRecord.databaseTableName)
+            FROM \(TSThread.databaseTableName)
             WHERE \(threadColumn: .recordType) = \(SDSRecordType.privateStoryThread.rawValue)
         """
         let cursor = try ThreadRecord.fetchCursor(
@@ -88,7 +88,7 @@ public class ThreadFinder {
     ) throws {
         let sql = """
             SELECT *
-            FROM \(ThreadRecord.databaseTableName)
+            FROM \(TSThread.databaseTableName)
             WHERE \(threadColumn: .groupModel) IS NOT NULL
             ORDER BY \(threadColumn: .lastInteractionRowId) DESC
         """
@@ -118,7 +118,7 @@ public class ThreadFinder {
     ) throws {
         let sql = """
             SELECT *
-            FROM \(ThreadRecord.databaseTableName)
+            FROM \(TSThread.databaseTableName)
             WHERE \(threadColumn: .recordType) IS NOT ?
         """
 
@@ -139,7 +139,7 @@ public class ThreadFinder {
     ) throws -> UInt {
         let sql = """
         SELECT COUNT(*)
-        FROM \(ThreadRecord.databaseTableName)
+        FROM \(TSThread.databaseTableName)
         \(threadAssociatedDataJoinClause(isArchived: isArchived))
         WHERE \(threadColumn: .shouldThreadBeVisible) = 1
         """
@@ -164,7 +164,7 @@ public class ThreadFinder {
     ) {
         let sql = """
         SELECT *
-        FROM \(ThreadRecord.databaseTableName)
+        FROM \(TSThread.databaseTableName)
         \(threadAssociatedDataJoinClause(isArchived: isArchived))
         WHERE \(threadColumn: .shouldThreadBeVisible) = 1
         ORDER BY \(threadColumn: .lastInteractionRowId) DESC
@@ -183,7 +183,7 @@ public class ThreadFinder {
     public func fetchContactSyncThreadRowIds(tx: DBReadTransaction) throws -> [Int64] {
         let sql = """
         SELECT \(threadColumn: .id)
-        FROM \(ThreadRecord.databaseTableName)
+        FROM \(TSThread.databaseTableName)
         WHERE \(threadColumn: .shouldThreadBeVisible) = 1
         ORDER BY \(threadColumn: .lastInteractionRowId) DESC
         """
@@ -301,34 +301,11 @@ public class ThreadFinder {
             .hasUserInitiatedInteraction(transaction: tx)
     }
 
-    public func threads(withThreadIds threadIds: Set<String>, transaction: DBReadTransaction) throws -> Set<TSThread> {
-        guard !threadIds.isEmpty else {
-            return []
-        }
-
-        let sql = """
-            SELECT * FROM \(ThreadRecord.databaseTableName)
-            WHERE \(threadColumn: .uniqueId) IN (\(threadIds.map { "\'\($0)'" }.joined(separator: ",")))
-        """
-        let cursor = TSThread.grdbFetchCursor(
-            sql: sql,
-            arguments: [],
-            transaction: transaction,
-        )
-
-        var threads = Set<TSThread>()
-        while let thread = try cursor.next() {
-            threads.insert(thread)
-        }
-
-        return threads
-    }
-
     public func existsGroupThread(transaction: DBReadTransaction) -> Bool {
         let sql = """
             SELECT EXISTS(
                 SELECT 1
-                FROM \(ThreadRecord.databaseTableName)
+                FROM \(TSThread.databaseTableName)
                 WHERE \(threadColumn: .recordType) = ?
                 LIMIT 1
             )
@@ -380,7 +357,7 @@ public class ThreadFinder {
 
         let sql = """
             SELECT *
-            FROM \(ThreadRecord.databaseTableName)
+            FROM \(TSThread.databaseTableName)
             WHERE \(threadColumn: .storyViewMode) != \(TSThreadStoryViewMode.disabled.rawValue)
             AND \(threadColumn: .storyViewMode) != \(TSThreadStoryViewMode.default.rawValue)
             OR (
@@ -391,24 +368,20 @@ public class ThreadFinder {
             ORDER BY \(threadColumn: .lastSentStoryTimestamp) DESC
         """
 
-        let cursor = TSThread.grdbFetchCursor(
-            sql: sql,
-            transaction: transaction,
-        )
-
         var threads = [TSThread]()
-        do {
-            while let thread = try cursor.next() {
+        TSThread.anyEnumerate(
+            transaction: transaction,
+            sql: sql,
+            arguments: [],
+            block: { thread, stop in
                 if let groupThread = thread as? TSGroupThread {
-                    guard groupThread.isStorySendEnabled(transaction: transaction) else { continue }
+                    guard groupThread.isStorySendEnabled(transaction: transaction) else {
+                        return
+                    }
                 }
-
                 threads.append(thread)
-            }
-        } catch {
-            owsFailDebug("Failed to query story threads \(error)")
-        }
-
+            },
+        )
         return threads
     }
 
@@ -418,25 +391,20 @@ public class ThreadFinder {
     ) -> [TSThread] {
         let sql = """
             SELECT *
-            FROM \(ThreadRecord.databaseTableName)
+            FROM \(TSThread.databaseTableName)
             ORDER BY \(threadColumn: .lastInteractionRowId) DESC
             LIMIT \(limit)
         """
 
-        let cursor = TSThread.grdbFetchCursor(
-            sql: sql,
-            transaction: transaction,
-        )
-
         var threads = [TSThread]()
-        do {
-            while let thread = try cursor.next() {
+        TSThread.anyEnumerate(
+            transaction: transaction,
+            sql: sql,
+            arguments: [],
+            block: { thread, stop in
                 threads.append(thread)
-            }
-        } catch {
-            owsFailDebug("Failed to query recent threads \(error)")
-        }
-
+            },
+        )
         return threads
     }
 
@@ -461,7 +429,7 @@ public class ThreadFinder {
                 \(threadColumnFullyQualified: .uniqueId) AS thread_uniqueId,
                 \(ThreadAssociatedData.databaseTableName).isMarkedUnread AS thread_isMarkedUnread,
                 COUNT(i.\(interactionColumn: .uniqueId)) AS interactions_unreadCount
-            FROM \(ThreadRecord.databaseTableName)
+            FROM \(TSThread.databaseTableName)
             INNER JOIN \(ThreadAssociatedData.databaseTableName)
                 ON \(ThreadAssociatedData.databaseTableName).threadUniqueId = \(threadColumnFullyQualified: .uniqueId)
                 AND \(ThreadAssociatedData.databaseTableName).isArchived = 0
@@ -487,7 +455,7 @@ public class ThreadFinder {
         } else {
             let sql = """
             SELECT \(threadColumn: .uniqueId)
-            FROM \(ThreadRecord.databaseTableName)
+            FROM \(TSThread.databaseTableName)
             INNER JOIN \(ThreadAssociatedData.databaseTableName)
                 ON \(ThreadAssociatedData.databaseTableName).threadUniqueId = \(threadColumnFullyQualified: .uniqueId)
                 AND \(ThreadAssociatedData.databaseTableName).isArchived = 0
@@ -507,7 +475,7 @@ public class ThreadFinder {
     ) throws -> [String] {
         let sql = """
         SELECT \(threadColumn: .uniqueId)
-        FROM \(ThreadRecord.databaseTableName)
+        FROM \(TSThread.databaseTableName)
         \(threadAssociatedDataJoinClause(isArchived: true))
         WHERE \(threadColumn: .shouldThreadBeVisible) = 1
         ORDER BY

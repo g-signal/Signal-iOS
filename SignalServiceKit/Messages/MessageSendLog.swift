@@ -302,7 +302,7 @@ public class MessageSendLog {
             // the payload is now missing.
 
             // This block of code just avoids a spurious assert by only asserting if the message has not been marked delivered:
-            let dbCopy = TSOutgoingMessage.anyFetchOutgoingMessage(uniqueId: message.uniqueId, transaction: tx)
+            let dbCopy = TSOutgoingMessage.fetchOutgoingMessageViaCache(uniqueId: message.uniqueId, transaction: tx)
             switch dbCopy?.recipientState(for: SignalServiceAddress(recipientAci))?.status {
             case .delivered, .read, .viewed:
                 break

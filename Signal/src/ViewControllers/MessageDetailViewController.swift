@@ -213,7 +213,7 @@ class MessageDetailViewController: OWSTableViewController2 {
         transaction: DBReadTransaction,
     ) -> CVRenderItem? {
         guard
-            let thread = TSThread.anyFetch(
+            let thread = TSThread.fetchViaCache(
                 uniqueId: interaction.uniqueThreadId,
                 transaction: transaction,
             )
@@ -228,6 +228,7 @@ class MessageDetailViewController: OWSTableViewController2 {
             thread: thread,
             viewWidth: view.width - (cellOuterInsets.totalWidth + (Self.cellHInnerMargin * 2)),
             hasWallpaper: false,
+            shouldDimWallpaperInDarkMode: false,
             isWallpaperPhoto: false,
             chatColor: DependenciesBridge.shared.chatColorSettingStore.resolvedChatColor(
                 for: thread,
@@ -235,12 +236,15 @@ class MessageDetailViewController: OWSTableViewController2 {
             ),
         )
 
+        let groupNameColors = GroupNameColors.forThread(thread)
+
         return CVLoader.buildStandaloneRenderItem(
             interaction: interaction,
             thread: thread,
             threadAssociatedData: threadAssociatedData,
             conversationStyle: conversationStyle,
             spoilerState: spoilerState,
+            groupNameColors: groupNameColors,
             transaction: transaction,
         )
     }
@@ -910,7 +914,7 @@ extension MessageDetailViewController: DatabaseChangeDelegate {
 
         let messageStillExists = SSKEnvironment.shared.databaseStorageRef.read { transaction in
             let uniqueId = message.uniqueId
-            guard let newMessage = TSInteraction.anyFetch(uniqueId: uniqueId, transaction: transaction) as? TSMessage else {
+            guard let newMessage = TSInteraction.fetchViaCache(uniqueId: uniqueId, transaction: transaction) as? TSMessage else {
                 return false
             }
             self.message = newMessage

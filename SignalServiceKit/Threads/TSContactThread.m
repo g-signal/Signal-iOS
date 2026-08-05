@@ -142,7 +142,7 @@ lastVisibleSortIdOnScreenPercentageObsolete:lastVisibleSortIdOnScreenPercentageO
 + (nullable SignalServiceAddress *)contactAddressFromThreadId:(NSString *)threadId
                                                   transaction:(DBReadTransaction *)transaction
 {
-    return [TSContactThread anyFetchContactThreadWithUniqueId:threadId transaction:transaction].contactAddress;
+    return [TSContactThread fetchContactThreadViaCacheWithUniqueId:threadId transaction:transaction].contactAddress;
 }
 
 - (void)anyDidInsertWithTransaction:(DBWriteTransaction *)transaction

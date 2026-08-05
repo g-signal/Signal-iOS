@@ -1,3 +1,1 @@
-• Zorg voor gemakkelijke toegang tot belangrijke informatie met vastgezette berichten. Je meestgestelde vragen, restaurantreserveringen en vakantieplannen staan al bovenaan je prioriteitenlijst. Ze kunnen nu ook bovenaan een chat staan.
-
-
+• Signal Secure Backups is nu beschikbaar! Je kunt nu automatische end-to-end versleutelde back-ups inschakelen zodat je nooit berichten kwijtraakt als je overstapt op een nieuwe telefoon of als je Signal opnieuw installeert. Je kunt gratis een back-up maken van al je berichten en de laatste 45 dagen aan media. Voor een klein maandelijks bedrag ontvang je 100 GB opslag zodat je van al je bijlages een back-up kunt maken. Tik op Back-ups in Signal-instellingen om te beginnen. Iedereen bedankt die deze functie in de bètaperiode heeft getest!

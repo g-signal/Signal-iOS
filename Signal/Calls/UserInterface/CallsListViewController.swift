@@ -1739,10 +1739,11 @@ extension CallsListViewController: UITableViewDelegate {
         let goToChatAction = ContextualActionBuilder.makeContextualAction(
             style: .normal,
             color: .ows_accentBlue,
-            image: "arrow-square-upright-fill",
-            title: Strings.goToChatActionTitle
-        ) { [weak self] in
+            image: .arrowSquareUprightFill,
+            title: Strings.goToChatActionTitle,
+        ) { [weak self] completion in
             self?.goToChat(for: chatThread()!)
+            completion(true)
         }
 
         return .init(actions: [goToChatAction])
@@ -1761,10 +1762,11 @@ extension CallsListViewController: UITableViewDelegate {
         let deleteAction = ContextualActionBuilder.makeContextualAction(
             style: .destructive,
             color: .ows_accentRed,
-            image: "trash-fill",
-            title: CommonStrings.deleteButton
-        ) { [weak self] in
+            image: .trashFill,
+            title: CommonStrings.deleteButton,
+        ) { [weak self] completion in
             self?.promptToDeleteCallIfNeeded(modelReferences: modelReferences)
+            completion(true)
         }
 
         return .init(actions: [deleteAction])
@@ -2109,7 +2111,8 @@ extension CallsListViewController: CallCellDelegate, NewCallViewControllerDelega
             isSystemContact: isSystemContact,
             // Nothing would have been revealed, so this can be a fresh instance
             spoilerState: SpoilerRenderState(),
-            callRecords: callRecords
+            callRecords: callRecords,
+            memberLabelCoordinator: nil,
         )
 
         showCallInfo(viewController: callDetailsView)

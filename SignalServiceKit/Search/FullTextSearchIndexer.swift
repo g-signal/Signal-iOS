@@ -272,7 +272,7 @@ extension FullTextSearchIndexer {
                     continue
                 }
                 let snippet: String = row[matchSnippet]
-                guard let message = TSMessage.anyFetchMessage(uniqueId: uniqueId, transaction: tx) else {
+                guard let message = TSMessage.fetchMessageViaCache(uniqueId: uniqueId, transaction: tx) else {
                     owsFailDebug("Couldn't find message that exists in the FTS table")
                     continue
                 }

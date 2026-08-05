@@ -31,7 +31,8 @@ public class GroupManager: NSObject {
     // Epoch 3: Announcement-Only Groups
     // Epoch 4: Banned Members
     // Epoch 5: Promote pending PNI members
-    public static let changeProtoEpoch: UInt32 = 5
+    // Epoch 6: Member Labels
+    public static let changeProtoEpoch: UInt32 = 6
 
     public static let maxEmbeddedChangeProtoLength: UInt = UInt(OWSMediaUtils.kOversizeTextMessageSizeThresholdBytes)
 
@@ -285,7 +286,7 @@ public class GroupManager: NSObject {
         let setTokenResult = DependenciesBridge.shared.disappearingMessagesConfigurationStore
             .set(token: newToken, for: groupThread, tx: tx)
 
-        if setTokenResult.newConfiguration != setTokenResult.oldConfiguration {
+        if setTokenResult.newConfiguration.asToken != setTokenResult.oldConfiguration.asToken {
             SSKEnvironment.shared.databaseStorageRef.touch(thread: groupThread, shouldReindex: false, tx: tx)
         }
 
@@ -348,7 +349,7 @@ public class GroupManager: NSObject {
             )
 
         // Skip redundant updates.
-        if !result.newConfiguration.hasSameDurationAs(result.oldConfiguration) {
+        if result.newConfiguration.asToken != result.oldConfiguration.asToken {
             let remoteContactName: String? = {
                 if
                     let changeAuthor,
@@ -383,7 +384,7 @@ public class GroupManager: NSObject {
         contactThread: TSContactThread,
         transaction: DBWriteTransaction,
     ) {
-        guard updateResult.newConfiguration != updateResult.oldConfiguration else {
+        guard updateResult.newConfiguration.asVersionedToken != updateResult.oldConfiguration.asVersionedToken else {
             // The update was redundant, don't send an update message.
             return
         }
@@ -483,6 +484,22 @@ public class GroupManager: NSObject {
     }
 
     // MARK: - Change Member Role
+
+    private static func acisToClearMemberLabelsFor(groupModel: TSGroupModelV2, access: GroupV2Access) -> [Aci] {
+        let acisToClearMemberLabelsFor: [Aci] = []
+
+        switch access {
+        case .administrator:
+            let adminSet = groupModel.groupMembership.fullMemberAdministrators
+            let memberSet = groupModel.groupMembership.fullMembers
+            let nonAdminMembers = memberSet.subtracting(adminSet)
+            return nonAdminMembers.compactMap { $0.aci }
+        case .unknown, .any, .member, .unsatisfiable:
+            break
+        }
+
+        return acisToClearMemberLabelsFor
+    }
 
     public static func changeMemberRoleV2(
         groupModel: TSGroupModelV2,
@@ -706,6 +723,16 @@ public class GroupManager: NSObject {
             } catch {
                 owsFailDebug("Error: \(error)")
             }
+        }
+    }
+
+    public static func changeMemberLabel(
+        groupModel: TSGroupModelV2,
+        aci: Aci,
+        label: MemberLabel?,
+    ) async throws {
+        try await updateGroupV2(groupModel: groupModel, description: "Change member label") { groupChangeSet in
+            groupChangeSet.changeLabelForMember(aci, label: label)
         }
     }
 
@@ -1064,14 +1091,13 @@ public class GroupManager: NSObject {
             tx: transaction,
         )
 
-        let hasUserFacingUpdate: Bool = (
-            newGroupModel.hasUserFacingChangeCompared(to: oldGroupModel)
-                || updateDMResult.newConfiguration != updateDMResult.oldConfiguration,
+        let showInfoMessageForChange: Bool = (
+            newGroupModel.showInfoMessageForChangeComparedTo(to: oldGroupModel)
+                || updateDMResult.newConfiguration.asVersionedToken != updateDMResult.oldConfiguration.asVersionedToken,
         )
 
         groupThread.update(
             with: newGroupModel,
-            shouldUpdateChatListUi: hasUserFacingUpdate,
             transaction: transaction,
         )
 
@@ -1083,7 +1109,7 @@ public class GroupManager: NSObject {
             shouldInsertInfoMessages = false
         }
 
-        if hasUserFacingUpdate, shouldInsertInfoMessages {
+        if showInfoMessageForChange, shouldInsertInfoMessages {
             insertGroupUpdateInfoMessage(
                 groupThread: groupThread,
                 oldGroupModel: oldGroupModel,
@@ -1111,7 +1137,7 @@ public class GroupManager: NSObject {
             )
             .lazy
             .compactMap { groupThreadId in
-                return TSGroupThread.anyFetchGroupThread(uniqueId: groupThreadId, transaction: tx)
+                return TSGroupThread.fetchGroupThreadViaCache(uniqueId: groupThreadId, transaction: tx)
             }
             .filter { groupThread in
                 return groupThread.groupMembership.hasProfileKeyInGroup(serviceId: localAci)

@@ -256,7 +256,7 @@ private class StoryThreadCell: ContactTableViewCell {
             return
         case .group(let groupThreadId):
             guard
-                let groupThread = TSGroupThread.anyFetchGroupThread(
+                let groupThread = TSGroupThread.fetchGroupThreadViaCache(
                     uniqueId: groupThreadId,
                     transaction: transaction,
                 )

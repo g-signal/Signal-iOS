@@ -67,9 +67,8 @@ class CVComponentUndownloadableAttachment: CVComponentBase, CVComponent {
         }
 
         let stackView = componentView.stackView
-        let conversationStyle = self.conversationStyle
 
-        if let footerOverlay = self.footerOverlay {
+        if let footerOverlay {
             let footerView: CVComponentView
             if let footerOverlayView = componentView.footerOverlayView {
                 footerView = footerOverlayView
@@ -96,7 +95,7 @@ class CVComponentUndownloadableAttachment: CVComponentBase, CVComponent {
 
         let label = CVTextLabel()
         label.configureForRendering(
-            config: self.labelConfig(
+            config: labelConfig(
                 conversationStyle: conversationStyle,
                 isIncoming: itemModel.interaction is TSIncomingMessage,
             ),
@@ -104,7 +103,7 @@ class CVComponentUndownloadableAttachment: CVComponentBase, CVComponent {
         )
 
         stackView.configure(
-            config: self.stackViewConfig,
+            config: stackViewConfig,
             cellMeasurement: cellMeasurement,
             measurementKey: Self.measurementKey_stackView,
             subviews: [label.view],
@@ -114,7 +113,7 @@ class CVComponentUndownloadableAttachment: CVComponentBase, CVComponent {
     func measure(maxWidth: CGFloat, measurementBuilder: SignalUI.CVCellMeasurement.Builder) -> CGSize {
         owsAssertDebug(maxWidth > 0)
 
-        let config = self.labelConfig(
+        let config = labelConfig(
             conversationStyle: conversationStyle,
             isIncoming: false, // Used for color. Doesn't matter for measurement
         )
@@ -162,19 +161,19 @@ class CVComponentUndownloadableAttachment: CVComponentBase, CVComponent {
         conversationStyle: ConversationStyle,
         isIncoming: Bool,
     ) -> CVTextLabel.Config {
-        let font = UIFont.dynamicTypeBodyClamped
+        let font = UIFont.dynamicTypeSubheadlineClamped
         let textColor = conversationStyle.bubbleTextColor(isIncoming: isIncoming)
 
         return CVTextLabel.Config(
             text: .attributedText(
                 .composed(of: [
                     NSAttributedString.with(
-                        image: self.icon,
+                        image: icon,
                         font: .dynamicTypeSubheadlineClamped,
                         centerVerticallyRelativeTo: font,
                     ),
                     " ",
-                    self.message,
+                    message,
                     SignalSymbol.LeadingCharacter.nonBreakingSpace.rawValue,
                     SignalSymbol.chevronTrailing.attributedString(
                         dynamicTypeBaseSize: 16,

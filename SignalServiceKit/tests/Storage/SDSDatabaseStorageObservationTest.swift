@@ -96,7 +96,7 @@ class SDSDatabaseStorageObservationTest: SSKBaseTest {
             let thread = TSContactThread.getOrCreateThread(withContactAddress: recipient, transaction: transaction)
             var message = TSOutgoingMessage(in: thread, messageBody: "Hello Alice")
             message.anyInsert(transaction: transaction)
-            message = TSOutgoingMessage.anyFetchOutgoingMessage(uniqueId: message.uniqueId, transaction: transaction)!
+            message = TSOutgoingMessage.fetchOutgoingMessageViaCache(uniqueId: message.uniqueId, transaction: transaction)!
 
             let unsavedMessage = TSOutgoingMessage(in: thread, messageBody: "Goodbyte Alice")
 

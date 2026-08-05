@@ -11,40 +11,46 @@ import Testing
 @MainActor
 @Suite(.serialized)
 final class BackupAttachmentUploadTrackerTest: BackupAttachmentTrackerTest<
-    BackupAttachmentUploadTracker.UploadUpdate?,
+    BackupAttachmentUploadTracker.UploadUpdate,
 > {
     typealias UploadUpdate = BackupAttachmentUploadTracker.UploadUpdate
 
     /// Simulates "launching with uploads enqueued from a previous launch".
     @Test
     func testLaunchingWithQueuePopulated() async {
-        let uploadProgress = MockAttachmentUploadProgress(total: 4)
-        let uploadQueueStatusReporter = MockUploadQueueStatusReporter(.running)
+        let uploadProgress = BackupAttachmentUploadProgressMock(
+            initialCompleted: 0,
+            total: 4,
+        )
+        let uploadQueueStatusManager = MockUploadQueueStatusManager(.running)
         let uploadTracker = BackupAttachmentUploadTracker(
-            backupAttachmentUploadQueueStatusReporter: uploadQueueStatusReporter,
+            backupAttachmentUploadQueueStatusManager: uploadQueueStatusManager,
             backupAttachmentUploadProgress: uploadProgress,
         )
 
         let expectedUpdates: [ExpectedUpdate] = [
             ExpectedUpdate(
-                update: UploadUpdate(.running, uploaded: 0, total: 4),
+                update: UploadUpdate(.uploading, uploaded: 0, total: 4),
                 nextSteps: {
                     uploadProgress.progressMock = OWSProgress(completedUnitCount: 1, totalUnitCount: 4)
                 },
             ),
             ExpectedUpdate(
-                update: UploadUpdate(.running, uploaded: 1, total: 4),
+                update: UploadUpdate(.uploading, uploaded: 1, total: 4),
                 nextSteps: {
                     uploadProgress.progressMock = OWSProgress(completedUnitCount: 4, totalUnitCount: 4)
                 },
             ),
             ExpectedUpdate(
-                update: UploadUpdate(.running, uploaded: 4, total: 4),
+                update: UploadUpdate(.uploading, uploaded: 4, total: 4),
                 nextSteps: {
-                    uploadQueueStatusReporter.currentStatusMock = .empty
+                    uploadQueueStatusManager.currentStatusMock = .empty
                 },
             ),
-            ExpectedUpdate(update: nil, nextSteps: {}),
+            ExpectedUpdate(
+                update: UploadUpdate(.noUploadsToReport, uploaded: 4, total: 4),
+                nextSteps: {},
+            ),
         ]
 
         await runTest(updateStream: uploadTracker.updates(), expectedUpdates: expectedUpdates)
@@ -54,16 +60,19 @@ final class BackupAttachmentUploadTrackerTest: BackupAttachmentTrackerTest<
     /// being presented), then stopping (e.g., dismissing), then starting again.
     @Test
     func testTrackingStoppingAndReTracking() async {
-        let uploadProgress = MockAttachmentUploadProgress(total: 4)
-        let uploadQueueStatusReporter = MockUploadQueueStatusReporter(.running)
+        let uploadProgress = BackupAttachmentUploadProgressMock(
+            initialCompleted: 0,
+            total: 4,
+        )
+        let uploadQueueStatusManager = MockUploadQueueStatusManager(.running)
         let uploadTracker = BackupAttachmentUploadTracker(
-            backupAttachmentUploadQueueStatusReporter: uploadQueueStatusReporter,
+            backupAttachmentUploadQueueStatusManager: uploadQueueStatusManager,
             backupAttachmentUploadProgress: uploadProgress,
         )
 
         let firstExpectedUpdates: [ExpectedUpdate] = [
             ExpectedUpdate(
-                update: UploadUpdate(.running, uploaded: 0, total: 4),
+                update: UploadUpdate(.uploading, uploaded: 0, total: 4),
                 nextSteps: {},
             ),
         ]
@@ -71,19 +80,19 @@ final class BackupAttachmentUploadTrackerTest: BackupAttachmentTrackerTest<
 
         let secondExpectedUpdates: [ExpectedUpdate] = [
             ExpectedUpdate(
-                update: UploadUpdate(.running, uploaded: 0, total: 1),
+                update: UploadUpdate(.uploading, uploaded: 0, total: 4),
                 nextSteps: {
-                    uploadProgress.progressMock = OWSProgress(completedUnitCount: 1, totalUnitCount: 1)
+                    uploadProgress.progressMock = OWSProgress(completedUnitCount: 4, totalUnitCount: 4)
                 },
             ),
             ExpectedUpdate(
-                update: UploadUpdate(.running, uploaded: 1, total: 1),
+                update: UploadUpdate(.uploading, uploaded: 4, total: 4),
                 nextSteps: {
-                    uploadQueueStatusReporter.currentStatusMock = .empty
+                    uploadQueueStatusManager.currentStatusMock = .empty
                 },
             ),
             ExpectedUpdate(
-                update: nil,
+                update: UploadUpdate(.noUploadsToReport, uploaded: 4, total: 4),
                 nextSteps: {},
             ),
         ]
@@ -92,34 +101,62 @@ final class BackupAttachmentUploadTrackerTest: BackupAttachmentTrackerTest<
 
     @Test
     func testTrackingMultipleStreamInstances() async {
-        let uploadProgress = MockAttachmentUploadProgress(total: 1)
-        let uploadQueueStatusReporter = MockUploadQueueStatusReporter(.running)
+        let uploadProgress = BackupAttachmentUploadProgressMock(
+            initialCompleted: 0,
+            total: 1,
+        )
+        let uploadQueueStatusManager = MockUploadQueueStatusManager(.running)
         let uploadTracker = BackupAttachmentUploadTracker(
-            backupAttachmentUploadQueueStatusReporter: uploadQueueStatusReporter,
+            backupAttachmentUploadQueueStatusManager: uploadQueueStatusManager,
             backupAttachmentUploadProgress: uploadProgress,
         )
 
         let expectedUpdates: [ExpectedUpdate] = [
             ExpectedUpdate(
-                update: UploadUpdate(.running, uploaded: 0, total: 1),
+                update: UploadUpdate(.uploading, uploaded: 0, total: 1),
                 nextSteps: {
                     uploadProgress.progressMock = OWSProgress(completedUnitCount: 1, totalUnitCount: 1)
                 },
             ),
             ExpectedUpdate(
-                update: UploadUpdate(.running, uploaded: 1, total: 1),
+                update: UploadUpdate(.uploading, uploaded: 1, total: 1),
                 nextSteps: {
-                    uploadQueueStatusReporter.currentStatusMock = .empty
+                    uploadQueueStatusManager.currentStatusMock = .empty
                 },
             ),
             ExpectedUpdate(
-                update: nil,
+                update: UploadUpdate(.noUploadsToReport, uploaded: 1, total: 1),
                 nextSteps: {},
             ),
         ]
 
         await runTest(
             updateStreams: [uploadTracker.updates(), uploadTracker.updates()],
+            expectedUpdates: expectedUpdates,
+        )
+    }
+
+    @Test
+    func testTrackingIgnoresZeroBytesToUpload() async {
+        let uploadProgress = BackupAttachmentUploadProgressMock(
+            initialCompleted: 0,
+            total: 0,
+        )
+        let uploadQueueStatusManager = MockUploadQueueStatusManager(.running)
+        let uploadTracker = BackupAttachmentUploadTracker(
+            backupAttachmentUploadQueueStatusManager: uploadQueueStatusManager,
+            backupAttachmentUploadProgress: uploadProgress,
+        )
+
+        let expectedUpdates: [ExpectedUpdate] = [
+            ExpectedUpdate(
+                update: UploadUpdate(.noUploadsToReport, uploaded: 0, total: 0),
+                nextSteps: {},
+            ),
+        ]
+
+        await runTest(
+            updateStreams: [uploadTracker.updates()],
             expectedUpdates: expectedUpdates,
         )
     }
@@ -135,29 +172,7 @@ private extension BackupAttachmentUploadTracker.UploadUpdate {
 
 // MARK: -
 
-private class MockAttachmentUploadProgress: BackupAttachmentUploadProgressMock {
-    var progressMock: OWSProgress {
-        didSet {
-            mockObserverBlocks.get().forEach { $0(progressMock) }
-        }
-    }
-
-    private let mockObserverBlocks: AtomicValue<[(OWSProgress) -> Void]>
-
-    init(total: UInt64) {
-        self.mockObserverBlocks = AtomicValue([], lock: .init())
-        self.progressMock = OWSProgress(completedUnitCount: 0, totalUnitCount: total)
-    }
-
-    override func addObserver(_ block: @escaping (OWSProgress) -> Void) async throws -> BackupAttachmentUploadProgressObserver {
-        mockObserverBlocks.update { $0.append(block) }
-        return try await super.addObserver(block)
-    }
-}
-
-// MARK: -
-
-private class MockUploadQueueStatusReporter: BackupAttachmentUploadQueueStatusReporter {
+private class MockUploadQueueStatusManager: BackupAttachmentUploadQueueStatusManager {
     var currentStatusMock: BackupAttachmentUploadQueueStatus {
         didSet {
             NotificationCenter.default.postOnMainThread(
@@ -172,12 +187,18 @@ private class MockUploadQueueStatusReporter: BackupAttachmentUploadQueueStatusRe
     }
 
     func currentStatus(for mode: BackupAttachmentUploadQueueMode) -> BackupAttachmentUploadQueueStatus {
-        switch mode {
-        case .fullsize:
-            break
-        case .thumbnail:
-            fatalError("Only use fullsize in these tests")
-        }
         return currentStatusMock
+    }
+
+    func beginObservingIfNecessary(for mode: BackupAttachmentUploadQueueMode) -> BackupAttachmentUploadQueueStatus {
+        return currentStatusMock
+    }
+
+    func didEmptyQueue(for mode: BackupAttachmentUploadQueueMode) {
+        // Nothing
+    }
+
+    func setIsMainAppAndActiveOverride(_ newValue: Bool) {
+        // Nothing
     }
 }

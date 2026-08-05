@@ -5,87 +5,87 @@
 
 import Foundation
 
-private let owsTempDir = {
-    let dirPath = NSTemporaryDirectory().appendingPathComponent("ows_temp_\(UUID())")
-    owsPrecondition(OWSFileSystem.ensureDirectoryExists(dirPath, fileProtectionType: .complete))
-    return dirPath
-}()
+public enum OWSFileSystem {
 
-/// Use instead of NSTemporaryDirectory()
-/// prefer the more restrictice OWSTemporaryDirectory,
-/// unless the temp data may need to be accessed while the device is locked.
-public func OWSTemporaryDirectory() -> String {
-    return owsTempDir
-}
+    private static let tempDirComplete = {
+        let dirPath = NSTemporaryDirectory().appendingPathComponent("ows_temp_\(UUID())")
+        owsPrecondition(OWSFileSystem.ensureDirectoryExists(dirPath, fileProtectionType: .complete))
+        return dirPath
+    }()
 
-public func OWSTemporaryDirectoryAccessibleAfterFirstAuth() -> String {
-    let dirPath = NSTemporaryDirectory()
-    owsPrecondition(OWSFileSystem.ensureDirectoryExists(dirPath, fileProtectionType: .completeUntilFirstUserAuthentication))
-    return dirPath
-}
+    private static let tempDirAfterFirstUnlock = {
+        let tmpPath = NSTemporaryDirectory()
+        owsPrecondition(OWSFileSystem.ensureDirectoryExists(tmpPath, fileProtectionType: .completeUntilFirstUserAuthentication))
+        let dirPath = tmpPath.appendingPathComponent("ows_temp_\(UUID())")
+        owsPrecondition(OWSFileSystem.ensureDirectoryExists(dirPath, fileProtectionType: .completeUntilFirstUserAuthentication))
+        return dirPath
+    }()
 
-private let cleanTmpDispatchQueue = DispatchQueue(label: "org.signal.clean-tmp", qos: .utility)
-/// > NOTE: We need to call this method on launch _and_ every time the app becomes active,
-/// >       since file protection may prevent it from succeeding in the background.
-public func ClearOldTemporaryDirectories() {
-    let dispatchTime = DispatchTime.now() + .seconds(3)
-    cleanTmpDispatchQueue.asyncAfter(deadline: dispatchTime, execute: DispatchWorkItem(block: {
-        ClearOldTemporaryDirectoriesSync()
-    }))
-}
+    private static let cleanTmpDispatchQueue = DispatchQueue(label: "org.signal.clean-tmp", qos: .utility)
 
-private func ClearOldTemporaryDirectoriesSync() {
-    // Ignore the "current" temp directory.
-    let currentTempDirName = (OWSTemporaryDirectory() as NSString).lastPathComponent
-
-    let thresholdDate = CurrentAppContext().appLaunchTime
-    let dirPath = NSTemporaryDirectory()
-    let fileNames: [String]
-    do {
-        fileNames = try FileManager.default.contentsOfDirectory(atPath: dirPath)
-    } catch {
-        owsFailDebug("contentsOfDirectoryAtPath error: \(error)")
-        return
+    /// We need to call this method on launch AND every time the app becomes
+    /// active because file protection may prevent it from succeeding in the
+    /// background.
+    public static func clearOldTemporaryDirectories() {
+        let dispatchTime = DispatchTime.now() + .seconds(3)
+        cleanTmpDispatchQueue.asyncAfter(deadline: dispatchTime, execute: DispatchWorkItem(block: {
+            _clearOldTemporaryDirectories()
+        }))
     }
-    for fileName in fileNames {
-        if fileName == currentTempDirName {
-            continue
+
+    private static func _clearOldTemporaryDirectories() {
+        // Ignore the "current" temp directory.
+        let currentTempDirNames = [
+            (tempDirComplete as NSString).lastPathComponent,
+            (tempDirAfterFirstUnlock as NSString).lastPathComponent,
+        ]
+
+        let thresholdDate = CurrentAppContext().appLaunchTime
+        let dirPath = NSTemporaryDirectory()
+        let fileNames: [String]
+        do {
+            fileNames = try FileManager.default.contentsOfDirectory(atPath: dirPath)
+        } catch {
+            owsFailDebug("contentsOfDirectoryAtPath error: \(error)")
+            return
         }
-
-        let filePath = dirPath.appendingPathComponent(fileName)
-
-        // Delete files with either:
-        //
-        // a) "ows_temp" name prefix.
-        // b) modified time before app launch time.
-        if !fileName.hasPrefix("ows_temp") {
-            do {
-                let attributes = try FileManager.default.attributesOfItem(atPath: filePath)
-                // Don't delete files which were created in the last N minutes.
-                let mtime = attributes[.modificationDate] as? Date
-                guard let mtime else {
-                    Logger.error("failed to get a modification date for file or directory at: \(filePath)")
-                    continue
-                }
-                if mtime > thresholdDate {
-                    continue
-                }
-            } catch {
-                // This is fine; the file may have been deleted since we found it.
-                Logger.error("Could not get attributes of file or directory at: \(filePath)")
+        for fileName in fileNames {
+            if currentTempDirNames.contains(fileName) {
                 continue
             }
-        }
 
-        if !OWSFileSystem.deleteFileIfExists(filePath) {
-            // This can happen if the app launches before the phone is unlocked.
-            // Clean up will occur when app becomes active.
-            Logger.warn("Could not delete old temp directory: \(filePath)")
+            let filePath = dirPath.appendingPathComponent(fileName)
+
+            // Delete files with either:
+            //
+            // a) "ows_temp" name prefix.
+            // b) modified time before app launch time.
+            if !fileName.hasPrefix("ows_temp_") {
+                do {
+                    let attributes = try FileManager.default.attributesOfItem(atPath: filePath)
+                    // Don't delete files which were created in the last N minutes.
+                    let mtime = attributes[.modificationDate] as? Date
+                    guard let mtime else {
+                        Logger.error("failed to get a modification date for file or directory at: \(filePath)")
+                        continue
+                    }
+                    if mtime > thresholdDate {
+                        continue
+                    }
+                } catch {
+                    // This is fine; the file may have been deleted since we found it.
+                    Logger.error("Could not get attributes of file or directory at: \(filePath)")
+                    continue
+                }
+            }
+
+            if !OWSFileSystem.deleteFileIfExists(filePath) {
+                // This can happen if the app launches before the phone is unlocked.
+                // Clean up will occur when app becomes active.
+                Logger.warn("Could not delete old temp directory: \(filePath)")
+            }
         }
     }
-}
-
-public enum OWSFileSystem {
 
     @discardableResult
     private static func protectRecursiveContents(atPath path: String) -> Bool {
@@ -207,9 +207,6 @@ public enum OWSFileSystem {
     public static func fileSize(of fileUrl: URL) throws -> UInt64 {
         return try fileSize(ofPath: fileUrl.path)
     }
-}
-
-extension OWSFileSystem {
 
     /// - Returns: false iff the directory does not exist and could not be created or setting the file protection type fails
     @discardableResult
@@ -226,42 +223,40 @@ extension OWSFileSystem {
             return false
         }
     }
-}
 
-public extension OWSFileSystem {
-    static func fileOrFolderExists(atPath filePath: String) -> Bool {
+    public static func fileOrFolderExists(atPath filePath: String) -> Bool {
         FileManager.default.fileExists(atPath: filePath)
     }
 
-    static func fileOrFolderExists(url: URL) -> Bool {
+    public static func fileOrFolderExists(url: URL) -> Bool {
         fileOrFolderExists(atPath: url.path)
     }
 
-    static func fileExistsAndIsNotDirectory(atPath filePath: String) -> Bool {
+    public static func fileExistsAndIsNotDirectory(atPath filePath: String) -> Bool {
         var isDirectory: ObjCBool = false
         let exists = FileManager.default.fileExists(atPath: filePath, isDirectory: &isDirectory)
         return exists && !isDirectory.boolValue
     }
 
-    static func fileExistsAndIsNotDirectory(url: URL) -> Bool {
+    public static func fileExistsAndIsNotDirectory(url: URL) -> Bool {
         fileExistsAndIsNotDirectory(atPath: url.path)
     }
 
     @discardableResult
-    static func deleteFile(_ filePath: String) -> Bool {
+    public static func deleteFile(_ filePath: String) -> Bool {
         deleteFile(filePath, ignoreIfMissing: false)
     }
 
     @discardableResult
-    static func deleteFileIfExists(_ filePath: String) -> Bool {
+    public static func deleteFileIfExists(_ filePath: String) -> Bool {
         return deleteFile(filePath, ignoreIfMissing: true)
     }
 
-    static func deleteFile(url: URL) throws {
+    public static func deleteFile(url: URL) throws {
         try FileManager.default.removeItem(at: url)
     }
 
-    static func deleteFileIfExists(url: URL) throws {
+    public static func deleteFileIfExists(url: URL) throws {
         do {
             try deleteFile(url: url)
         } catch POSIXError.ENOENT, CocoaError.fileNoSuchFile {
@@ -269,7 +264,7 @@ public extension OWSFileSystem {
         }
     }
 
-    static func moveFile(from fromUrl: URL, to toUrl: URL) throws {
+    public static func moveFile(from fromUrl: URL, to toUrl: URL) throws {
         guard FileManager.default.fileExists(atPath: fromUrl.path) else {
             throw OWSAssertionError("Source file does not exist.")
         }
@@ -295,7 +290,7 @@ public extension OWSFileSystem {
 #endif
     }
 
-    static func copyFile(from fromUrl: URL, to toUrl: URL) throws {
+    public static func copyFile(from fromUrl: URL, to toUrl: URL) throws {
         guard FileManager.default.fileExists(atPath: fromUrl.path) else {
             throw OWSAssertionError("Source file does not exist.")
         }
@@ -318,7 +313,7 @@ public extension OWSFileSystem {
 #endif
     }
 
-    static func recursiveFilesInDirectory(_ dirPath: String) throws -> [String] {
+    public static func recursiveFilesInDirectory(_ dirPath: String) throws -> [String] {
         owsAssertDebug(!dirPath.isEmpty)
 
         do {
@@ -334,27 +329,13 @@ public extension OWSFileSystem {
             return []
         }
     }
-}
 
-// MARK: - Temporary Files
+    // MARK: - Temporary Files
 
-public extension OWSFileSystem {
-
-    static func temporaryFileUrl(
+    public static func temporaryFileUrl(
+        fileName: String? = nil,
         fileExtension: String? = nil,
-        isAvailableWhileDeviceLocked: Bool = false,
-    ) -> URL {
-        return URL(fileURLWithPath: temporaryFilePath(
-            fileName: nil,
-            fileExtension: fileExtension,
-            isAvailableWhileDeviceLocked: isAvailableWhileDeviceLocked,
-        ))
-    }
-
-    static func temporaryFileUrl(
-        fileName: String,
-        fileExtension: String? = nil,
-        isAvailableWhileDeviceLocked: Bool = false,
+        isAvailableWhileDeviceLocked: Bool,
     ) -> URL {
         return URL(fileURLWithPath: temporaryFilePath(
             fileName: fileName,
@@ -363,45 +344,34 @@ public extension OWSFileSystem {
         ))
     }
 
-    static func temporaryFilePath(
+    public static func temporaryFilePath(
         fileName: String? = nil,
         fileExtension: String? = nil,
+        isAvailableWhileDeviceLocked: Bool,
     ) -> String {
-        temporaryFilePath(
-            fileName: fileName,
-            fileExtension: fileExtension,
-            isAvailableWhileDeviceLocked: false,
-        )
-    }
-
-    static func temporaryFilePath(
-        fileName: String? = nil,
-        fileExtension: String? = nil,
-        isAvailableWhileDeviceLocked: Bool = false,
-    ) -> String {
-        let tempDirPath = tempDirPath(availableWhileDeviceLocked: isAvailableWhileDeviceLocked)
+        var tempDirPath = tempDirPath(availableWhileDeviceLocked: isAvailableWhileDeviceLocked)
+        if fileName != nil {
+            tempDirPath = (tempDirPath as NSString).appendingPathComponent(UUID().uuidString)
+            let fileProtectionType: FileProtectionType = isAvailableWhileDeviceLocked ? .completeUntilFirstUserAuthentication : .complete
+            guard ensureDirectoryExists(tempDirPath, fileProtectionType: fileProtectionType) else {
+                owsFail("couldn't create temporary directory")
+            }
+        }
         var fileName = fileName ?? UUID().uuidString
-        if
-            let fileExtension,
-            !fileExtension.isEmpty
-        {
-            fileName = String(format: "\(fileName).\(fileExtension)")
+        if let fileExtension, !fileExtension.isEmpty {
+            fileName += "." + fileExtension
         }
         let filePath = (tempDirPath as NSString).appendingPathComponent(fileName)
         return filePath
     }
 
     private static func tempDirPath(availableWhileDeviceLocked: Bool) -> String {
-        return availableWhileDeviceLocked
-            ? OWSTemporaryDirectoryAccessibleAfterFirstAuth()
-            : OWSTemporaryDirectory()
+        return availableWhileDeviceLocked ? tempDirAfterFirstUnlock : tempDirComplete
     }
-}
 
-// MARK: -
+    // MARK: -
 
-public extension OWSFileSystem {
-    static func deleteFile(_ filePath: String, ignoreIfMissing: Bool = false) -> Bool {
+    public static func deleteFile(_ filePath: String, ignoreIfMissing: Bool = false) -> Bool {
         do {
             try FileManager.default.removeItem(atPath: filePath)
             return true
@@ -420,17 +390,15 @@ public extension OWSFileSystem {
             return false
         }
     }
-}
 
-// MARK: - Remaining space
+    // MARK: - Remaining space
 
-public extension OWSFileSystem {
     /// Get the remaining free space for a path's volume in bytes.
     ///
     /// See [Apple's example][0]. It checks "important" storage (versus "opportunistic" storage).
     ///
     /// [0]: https://developer.apple.com/documentation/foundation/nsurlresourcekey/checking_volume_storage_capacity
-    static func freeSpaceInBytes(forPath path: URL) throws -> UInt64 {
+    public static func freeSpaceInBytes(forPath path: URL) throws -> UInt64 {
         let resourceValues = try path.resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey])
         guard let result = resourceValues.volumeAvailableCapacityForImportantUsage else {
             throw OWSGenericError("Could not determine remaining disk space")

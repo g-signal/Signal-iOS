@@ -550,7 +550,7 @@ public class AvatarBuilder {
                 return .groupDefaultIcon(groupId: groupThread.groupId)
             }
         }
-        if let latestGroupThread = TSGroupThread.anyFetchGroupThread(uniqueId: groupThread.uniqueId, transaction: tx) {
+        if let latestGroupThread = TSGroupThread.fetchGroupThreadViaCache(uniqueId: groupThread.uniqueId, transaction: tx) {
             return requestTypeForGroup(groupThread: latestGroupThread)
         } else {
             owsFailDebug("Missing groupThread.")

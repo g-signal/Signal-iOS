@@ -743,10 +743,7 @@ extension ConversationSettingsViewController {
             membersToRender = Array(membersToRender.prefix(maxMembersToShow - 1))
         }
 
-        var groupNameColors: GroupNameColors?
-        if let localAci = SSKEnvironment.shared.databaseStorageRef.read(block: { tx in DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: tx)?.aci }) {
-            groupNameColors = GroupNameColors.forThread(self.thread, localAci: localAci)
-        }
+        let groupNameColors = GroupNameColors.forThread(self.thread)
 
         for memberAddress in membersToRender {
             guard let verificationState = groupMemberStateMap[memberAddress] else {
@@ -755,6 +752,22 @@ extension ConversationSettingsViewController {
             }
 
             let isLocalUser = memberAddress.isLocalAddress
+
+            var memberLabel: MemberLabelForRendering?
+            if
+                let memberAci = memberAddress.aci,
+                let memberLabelString = groupModel.groupMembership.memberLabel(for: memberAci)?.labelForRendering()
+            {
+                memberLabel = MemberLabelForRendering(
+                    label: memberLabelString,
+                    groupNameColor: groupNameColors.color(
+                        for: memberAddress.aci,
+                    ),
+                )
+            }
+
+            let showAddMemberLabel = isLocalUser && memberLabel == nil && self.groupViewHelper.canEditMemberLabels
+
             section.add(OWSTableItem(customCellBlock: { [weak self] in
                 guard let self else {
                     owsFailDebug("Missing self")
@@ -792,16 +805,24 @@ extension ConversationSettingsViewController {
                         cell.selectionStyle = .default
                     }
 
-                    if BuildFlags.MemberLabel.receive, let memberAci = memberAddress.aci {
-                        if
-                            let memberLabel = groupModel.groupMembership.memberLabel(for: memberAci),
-                            let groupNameColors
-                        {
-                            configuration.memberLabel = MemberLabel(label: memberLabel, groupNameColor: groupNameColors.color(for: memberAddress.aci))
-                        }
+                    if BuildFlags.MemberLabel.display, let memberLabel {
+                        configuration.memberLabel = memberLabel
                     }
 
-                    if isVerified {
+                    if showAddMemberLabel {
+                        configuration.attributedSubtitle = NSAttributedString(
+                            string: OWSLocalizedString(
+                                "MEMBER_LABEL_ADD_CSVC",
+                                comment: "Label that shows up under a local user's row in contacts prompting them to add a member label",
+                            ),
+                            attributes: [.font: UIFont.dynamicTypeCaption1Clamped.medium()],
+                        ) + SignalSymbol.chevronRight.attributedString(
+                            dynamicTypeBaseSize: 10,
+                            weight: .bold,
+                            leadingCharacter: .space,
+                            attributes: [.foregroundColor: UIColor.Signal.secondaryLabel],
+                        )
+                    } else if isVerified {
                         configuration.useVerifiedSubtitle()
                     } else if
                         !memberAddress.isLocalAddress,
@@ -820,7 +841,12 @@ extension ConversationSettingsViewController {
 
                 return cell
             }, actionBlock: { [weak self] in
-                self?.didSelectGroupMember(memberAddress)
+                if showAddMemberLabel {
+                    self?.memberLabelCoordinator?.presenter = self
+                    self?.memberLabelCoordinator?.present()
+                } else {
+                    self?.didSelectGroupMember(memberAddress)
+                }
             }))
         }
 
@@ -896,17 +922,34 @@ extension ConversationSettingsViewController {
             ),
         )
 
-        if BuildFlags.MemberLabel.send, groupViewHelper.canEditConversationAttributes {
+        if BuildFlags.MemberLabel.send {
+            let canEditMemberLabel = groupViewHelper.canEditMemberLabels
+            let iconColor: UIColor
+            let textColor: UIColor
+            if canEditMemberLabel {
+                iconColor = Theme.primaryIconColor
+                textColor = Theme.primaryTextColor
+            } else {
+                iconColor = UIColor.Signal.label.withAlphaComponent(0.3)
+                textColor = UIColor.Signal.label.withAlphaComponent(0.3)
+            }
             section.add(
                 OWSTableItem.disclosureItem(
                     icon: .memberLabel,
+                    tintColor: iconColor,
                     withText: OWSLocalizedString(
                         "CONVERSATION_SETTINGS_MEMBER_TAG",
                         comment: "Label for 'member label' action in conversation settings view.",
                     ),
+                    textColor: textColor,
                     actionBlock: { [weak self] in
-                        let memberLabelViewController = MemberLabelViewController()
-                        self?.present(OWSNavigationController(rootViewController: memberLabelViewController), animated: true)
+                        guard let self else { return }
+                        if canEditMemberLabel {
+                            memberLabelCoordinator?.presenter = self
+                            memberLabelCoordinator?.present()
+                        } else {
+                            owsFailDebug("Unimplemented!")
+                        }
                     },
                 ),
             )

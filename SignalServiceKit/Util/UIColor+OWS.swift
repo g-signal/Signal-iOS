@@ -181,19 +181,9 @@ public extension UIColor {
     // MARK: Accent Colors
 
     /// Nav Bar, Primary Buttons
-    @objc(ows_accentBlueColor)
     class var ows_accentBlue: UIColor {
         // Ultramarine UI
         return UIColor(rgbHex: 0x2C6BED)
-    }
-
-    class var ows_accentBlueDark: UIColor {
-        // Ultramarine UI Light
-        return UIColor(rgbHex: 0x6191F3)
-    }
-
-    class var ows_accentBlueTint: UIColor {
-        return UIColor(rgbHex: 0xB0C8F9)
     }
 
     /// Making calls, success states
@@ -202,20 +192,10 @@ public extension UIColor {
         return UIColor(rgbHex: 0x4CAF50)
     }
 
-    /// Warning, update states
-    class var ows_accentYellow: UIColor {
-        return UIColor(rgbHex: 0xFFD624)
-    }
-
     /// Ending calls, error states
     @objc(ows_accentRedColor)
     class var ows_accentRed: UIColor {
         return UIColor(rgbHex: 0xF44336)
-    }
-
-    /// mute unmute background color
-    class var ows_accentIndigo: UIColor {
-        return UIColor(rgbHex: 0x5951c8)
     }
 
     // MARK: - GreyScale

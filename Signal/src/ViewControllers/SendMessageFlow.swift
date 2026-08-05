@@ -122,7 +122,7 @@ class SendMessageFlow {
         }
 
         let groupThread = SSKEnvironment.shared.databaseStorageRef.read { readTx in
-            TSGroupThread.anyFetchGroupThread(uniqueId: groupThreadId, transaction: readTx)
+            TSGroupThread.fetchGroupThreadViaCache(uniqueId: groupThreadId, transaction: readTx)
         }
 
         owsAssertDebug(groupThread != nil)

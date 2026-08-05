@@ -51,7 +51,7 @@ class BackupArchiveContactAttachmentArchiver: BackupArchiveProtoStreamWriter {
         for email in contact.emails {
             switch archiveContactEmail(email).bubbleUp(resultType, partialErrors: &partialErrors) {
             case .continue(let emailProto):
-                emailProtos.append(emailProto)
+                emailProto.map { emailProtos.append($0) }
             case .bubbleUpError(let errorResult):
                 return errorResult
             }
@@ -148,9 +148,12 @@ class BackupArchiveContactAttachmentArchiver: BackupArchiveProtoStreamWriter {
 
     private func archiveContactEmail(
         _ contactEmail: OWSContactEmail,
-    ) -> BackupArchive.ArchiveInteractionResult<BackupProto_ContactAttachment.Email> {
+    ) -> BackupArchive.ArchiveInteractionResult<BackupProto_ContactAttachment.Email?> {
         var emailProto = BackupProto_ContactAttachment.Email()
-        emailProto.value = contactEmail.email
+        guard let email = contactEmail.email.nilIfEmpty else {
+            return .success(nil)
+        }
+        emailProto.value = email
         if let label = contactEmail.label {
             emailProto.label = label
         }
@@ -172,35 +175,35 @@ class BackupArchiveContactAttachmentArchiver: BackupArchiveProtoStreamWriter {
     ) -> BackupArchive.ArchiveInteractionResult<BackupProto_ContactAttachment.PostalAddress?> {
         var addressProto = BackupProto_ContactAttachment.PostalAddress()
         var isValid = false
-        if let label = contactAddress.label {
+        if let label = contactAddress.label?.nilIfEmpty {
             isValid = true
             addressProto.label = label
         }
-        if let street = contactAddress.street {
+        if let street = contactAddress.street?.nilIfEmpty {
             isValid = true
             addressProto.street = street
         }
-        if let pobox = contactAddress.pobox {
+        if let pobox = contactAddress.pobox?.nilIfEmpty {
             isValid = true
             addressProto.pobox = pobox
         }
-        if let neighborhood = contactAddress.neighborhood {
+        if let neighborhood = contactAddress.neighborhood?.nilIfEmpty {
             isValid = true
             addressProto.neighborhood = neighborhood
         }
-        if let city = contactAddress.city {
+        if let city = contactAddress.city?.nilIfEmpty {
             isValid = true
             addressProto.city = city
         }
-        if let region = contactAddress.region {
+        if let region = contactAddress.region?.nilIfEmpty {
             isValid = true
             addressProto.region = region
         }
-        if let postcode = contactAddress.postcode {
+        if let postcode = contactAddress.postcode?.nilIfEmpty {
             isValid = true
             addressProto.postcode = postcode
         }
-        if let country = contactAddress.country {
+        if let country = contactAddress.country?.nilIfEmpty {
             isValid = true
             addressProto.country = country
         }

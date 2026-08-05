@@ -598,7 +598,7 @@ class GRDBFullTextSearcherTest: SignalBaseTest {
                     owsFailDebug("message result missing message id")
                     continue
                 }
-                guard let interaction = TSInteraction.anyFetch(uniqueId: messageId, transaction: transaction) else {
+                guard let interaction = TSInteraction.fetchViaCache(uniqueId: messageId, transaction: transaction) else {
                     owsFailDebug("couldn't load interaction for message result")
                     continue
                 }

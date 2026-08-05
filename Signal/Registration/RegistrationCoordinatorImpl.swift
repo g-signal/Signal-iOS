@@ -1514,6 +1514,41 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
         }
     }
 
+
+    /// It is possible that, in the time between the last backup and this restore,
+    /// the user has registered without restoring. This can result in the AEP being
+    /// rotated and a new ACI+AEP backupId being registered. If this happens,
+    /// fetching auth credentials  using the original AEP will fail.
+    /// The good news is this may be recoverable by re-registering the passed in ACI+AEP
+    /// backupId as the current backupId. Once that is done, silently retry fetching credentials.
+    /// If the fetch still fails, throw an error.
+    private func fetchBackupServiceAuth(
+        accountEntropyPool: SignalServiceKit.AccountEntropyPool,
+        accountIdentity: AccountIdentity,
+    ) async throws -> BackupServiceAuth {
+        let backupKey = try MessageRootBackupKey(accountEntropyPool: accountEntropyPool, aci: accountIdentity.aci)
+        Logger.info("Fetching backup auth [\(accountEntropyPool.getLoggingKey())]")
+
+        func fetchBackupServiceAuth() async throws -> BackupServiceAuth {
+            return try await self.deps.backupRequestManager.fetchBackupServiceAuthForRegistration(
+                key: backupKey,
+                localAci: accountIdentity.aci,
+                chatServiceAuth: accountIdentity.chatServiceAuth,
+            )
+        }
+
+        do {
+            return try await fetchBackupServiceAuth()
+        } catch SignalError.verificationFailed {
+            try await self.deps.backupIdService.updateMessageBackupIdForRegistration(
+                key: backupKey,
+                auth: accountIdentity.chatServiceAuth,
+            )
+            return try await fetchBackupServiceAuth()
+        }
+    }
+
+
     @MainActor
     private func updateAccountAttributesAndFinish(
         accountIdentity: AccountIdentity,

@@ -294,7 +294,6 @@ extension ForwardMessageViewController {
                         let latestInteraction = TSInteraction.anyFetch(
                             uniqueId: interactionId,
                             transaction: transaction,
-                            ignoreCache: true,
                         ),
                         hasRenderableContent(interaction: latestInteraction, tx: transaction)
                     else {
@@ -781,7 +780,7 @@ private struct ForwardMessageContent {
     ) throws -> Self {
         let items = try selectionItems.map { selectionItem throws -> ForwardMessageItem in
             let interactionId = selectionItem.interactionId
-            guard let interaction = TSInteraction.anyFetch(uniqueId: interactionId, transaction: tx) else {
+            guard let interaction = TSInteraction.fetchViaCache(uniqueId: interactionId, transaction: tx) else {
                 throw ForwardError.missingInteraction
             }
             let componentState = try buildComponentState(interaction: interaction, tx: tx)

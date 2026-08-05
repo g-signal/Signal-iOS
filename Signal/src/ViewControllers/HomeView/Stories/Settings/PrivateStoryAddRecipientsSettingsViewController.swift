@@ -49,7 +49,7 @@ public class PrivateStoryAddRecipientsSettingsViewController: BaseMemberViewCont
         ModalActivityIndicatorViewController.presentAsInvisible(fromViewController: self) { modal in
             SSKEnvironment.shared.databaseStorageRef.asyncWrite { tx in
                 guard
-                    let storyThread = TSPrivateStoryThread.anyFetchPrivateStoryThread(uniqueId: uniqueId, transaction: tx),
+                    let storyThread = TSPrivateStoryThread.fetchPrivateStoryThreadViaCache(uniqueId: uniqueId, transaction: tx),
                     storyThread.storyViewMode == .explicit
                 else {
                     // Conflict during the update; stop.

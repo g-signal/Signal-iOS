@@ -91,7 +91,7 @@ public extension TSMessage {
     func removeAllAttachments(tx: DBWriteTransaction) {
         let attachmentStore = DependenciesBridge.shared.attachmentStore
         for referencedAttachment in allAttachments(transaction: tx) {
-            try? attachmentStore.removeReference(
+            attachmentStore.removeReference(
                 reference: referencedAttachment.reference,
                 tx: tx,
             )
@@ -311,12 +311,33 @@ public extension TSMessage {
     //  * it's not a message with a gift badge
     //  * it has been less than 24 hours since you sent the message
     //    * this includes messages sent in the future
-    var canBeRemotelyDeleted: Bool {
+    var canBeRemotelyDeletedByNonAdmin: Bool {
         guard let outgoingMessage = self as? TSOutgoingMessage else { return false }
         guard !outgoingMessage.wasRemotelyDeleted else { return false }
         guard outgoingMessage.giftBadge == nil else { return false }
 
         let (elapsedTime, isInFuture) = Date.ows_millisecondTimestamp().subtractingReportingOverflow(outgoingMessage.timestamp)
+
+        // TODO: replace with global config
+        guard isInFuture || (elapsedTime <= UInt64.dayInMs) else { return false }
+
+        return true
+    }
+
+    var canBeRemotelyDeletedByAdmin: Bool {
+        guard isIncoming || isOutgoing else { return false }
+
+        if let incomingMessage = self as? TSIncomingMessage {
+            guard !incomingMessage.wasRemotelyDeleted else { return false }
+        }
+
+        if let outgoingMessage = self as? TSOutgoingMessage {
+            guard !outgoingMessage.wasRemotelyDeleted else { return false }
+        }
+
+        let (elapsedTime, isInFuture) = Date.ows_millisecondTimestamp().subtractingReportingOverflow(self.timestamp)
+
+        // TODO: replace with global config
         guard isInFuture || (elapsedTime <= UInt64.dayInMs) else { return false }
 
         return true
@@ -329,7 +350,67 @@ public extension TSMessage {
         case success
     }
 
-    class func tryToRemotelyDeleteMessage(
+    static func remotelyDeleteMessage(
+        _ message: TSMessage,
+        authorAci: Aci,
+        isAdminDelete: Bool,
+        serverTimestamp: UInt64,
+        transaction: DBWriteTransaction,
+    ) -> Bool {
+        if message is TSOutgoingMessage {
+            if SignalServiceAddress(authorAci).isLocalAddress || isAdminDelete {
+                message.markMessageAsRemotelyDeleted(transaction: transaction)
+                return true
+            }
+            owsFailDebug("Can't delete an outgoing message by non-local user unless its an admin delete.")
+            return false
+        } else if var incomingMessageToDelete = message as? TSIncomingMessage {
+            if incomingMessageToDelete.editState == .pastRevision {
+                // The remote delete targeted an old revision, fetch
+                // swap out the target message for the latest (or return an error)
+                // This avoids cases where older edits could be deleted and
+                // leave newer revisions
+                if
+                    let latestEdit = DependenciesBridge.shared.editMessageStore.findMessage(
+                        fromEdit: incomingMessageToDelete,
+                        tx: transaction,
+                    ) as? TSIncomingMessage
+                {
+                    incomingMessageToDelete = latestEdit
+                } else {
+                    Logger.info("Ignoring delete for missing edit target.")
+                    return false
+                }
+            }
+
+            guard let messageToDeleteServerTimestamp = incomingMessageToDelete.serverTimestamp?.uint64Value else {
+                // Older messages might be missing this, but since we only allow deleting for a small
+                // window after you send a message we should generally never hit this path.
+                owsFailDebug("can't delete a message without a serverTimestamp")
+                return false
+            }
+
+            guard messageToDeleteServerTimestamp <= serverTimestamp else {
+                owsFailDebug("Can't delete a message from the future.")
+                return false
+            }
+
+            // TODO: This should eventually be determined via global remote config separated by admin vs regular remote delete.
+            guard serverTimestamp - messageToDeleteServerTimestamp < (2 * UInt64.dayInMs) else {
+                owsFailDebug("Ignoring message delete sent more than 48 hours after the original message")
+                return false
+            }
+
+            incomingMessageToDelete.markMessageAsRemotelyDeleted(transaction: transaction)
+
+            return true
+        } else {
+            owsFailDebug("Message to delete is not incoming or outgoing")
+            return false
+        }
+    }
+
+    class func tryToRemotelyDeleteMessageAsNonAdmin(
         fromAuthor authorAci: Aci,
         sentAtTimestamp: UInt64,
         threadUniqueId: String?,
@@ -349,52 +430,15 @@ public extension TSMessage {
                 transaction: transaction,
             )
         {
-            if messageToDelete is TSOutgoingMessage, SignalServiceAddress(authorAci).isLocalAddress {
-                messageToDelete.markMessageAsRemotelyDeleted(transaction: transaction)
-                return .success
-            } else if var incomingMessageToDelete = messageToDelete as? TSIncomingMessage {
-                if incomingMessageToDelete.editState == .pastRevision {
-                    // The remote delete targeted an old revision, fetch
-                    // swap out the target message for the latest (or return an error)
-                    // This avoids cases where older edits could be deleted and
-                    // leave newer revisions
-                    if
-                        let latestEdit = DependenciesBridge.shared.editMessageStore.findMessage(
-                            fromEdit: incomingMessageToDelete,
-                            tx: transaction,
-                        ) as? TSIncomingMessage
-                    {
-                        incomingMessageToDelete = latestEdit
-                    } else {
-                        Logger.info("Ignoring delete for missing edit target.")
-                        return .invalidDelete
-                    }
-                }
+            let success = remotelyDeleteMessage(
+                messageToDelete,
+                authorAci: authorAci,
+                isAdminDelete: false,
+                serverTimestamp: serverTimestamp,
+                transaction: transaction,
+            )
 
-                guard let messageToDeleteServerTimestamp = incomingMessageToDelete.serverTimestamp?.uint64Value else {
-                    // Older messages might be missing this, but since we only allow deleting for a small
-                    // window after you send a message we should generally never hit this path.
-                    owsFailDebug("can't delete a message without a serverTimestamp")
-                    return .invalidDelete
-                }
-
-                guard messageToDeleteServerTimestamp < serverTimestamp else {
-                    owsFailDebug("Can't delete a message from the future.")
-                    return .invalidDelete
-                }
-
-                guard serverTimestamp - messageToDeleteServerTimestamp < (2 * UInt64.dayInMs) else {
-                    owsFailDebug("Ignoring message delete sent more than 48 hours after the original message")
-                    return .invalidDelete
-                }
-
-                incomingMessageToDelete.markMessageAsRemotelyDeleted(transaction: transaction)
-
-                return .success
-            } else {
-                owsFailDebug("Only incoming messages can be deleted remotely")
-                return .invalidDelete
-            }
+            return success ? .success : .invalidDelete
         } else if
             let storyMessage = StoryFinder.story(
                 timestamp: sentAtTimestamp,

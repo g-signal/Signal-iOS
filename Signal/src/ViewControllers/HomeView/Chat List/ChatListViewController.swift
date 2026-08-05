@@ -24,6 +24,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         loadCoordinator.viewController = self
         viewState.reminderViews.chatListViewController = self
         viewState.backupDownloadProgressView.chatListViewController = self
+        viewState.backupProgressView.chatListViewController = self
         viewState.settingsButtonCreator.delegate = self
         viewState.proxyButtonCreator.delegate = self
         viewState.configure()
@@ -85,6 +86,10 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         viewState.searchController.searchResultsUpdater = self
         searchResultsController.delegate = self
 
+        // Backups
+        viewState.backupDownloadProgressView.startTracking()
+        viewState.backupProgressView.startTracking()
+
         updateBarButtonItems()
         updateArchiveReminderView()
         updateRegistrationReminderView()
@@ -92,7 +97,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         updateExpirationReminderView()
         updatePaymentReminderView()
         updateUsernameReminderView()
-        applyTheme()
+        updateTableViewPaddingIfNeeded()
         observeNotifications()
         DependenciesBridge.shared.db.read { tx in
             self.viewState.backupDownloadProgressViewState.refetchDBState(tx: tx)
@@ -143,6 +148,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
 
         viewState.searchResultsController.viewWillAppear(animated)
         viewState.backupDownloadProgressView.willAppear()
+        viewState.backupProgressView.willAppear()
 
         updateUnreadPaymentNotificationsCountWithSneakyTransaction()
 
@@ -263,6 +269,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
 
         searchResultsController.viewDidDisappear(animated)
         viewState.backupDownloadProgressView.didDisappear()
+        viewState.backupProgressView.didDisapper()
     }
 
     public override func viewIsAppearing(_ animated: Bool) {
@@ -358,6 +365,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
             donationReceiptCredentialResultStore: DependenciesBridge.shared.donationReceiptCredentialResultStore,
             donationSubscriptionManager: DonationSubscriptionManager.self,
             db: DependenciesBridge.shared.db,
+            keyTransparencyStore: KeyTransparencyStore(),
             networkManager: SSKEnvironment.shared.networkManagerRef,
             profileManager: SSKEnvironment.shared.profileManagerRef,
         )
@@ -830,11 +838,13 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
                                              paymentModel: TSPaymentModel,
                                              transaction: DBReadTransaction) {
 
-        guard paymentModel.isIncoming,
-              !paymentModel.isUnidentified,
-              let senderAci = paymentModel.senderOrRecipientAci?.wrappedAciValue,
-              let paymentAmount = paymentModel.paymentAmount,
-              paymentAmount.isValid else {
+        guard
+            paymentModel.isIncoming,
+            !paymentModel.isUnidentified,
+            let senderAci = paymentModel.senderOrRecipientAci,
+            let paymentAmount = paymentModel.paymentAmount,
+            paymentAmount.isValid
+        else {
             configureUnreadPaymentsBannerMultiple(paymentsReminderView, unreadCount: 1)
             return
         }
@@ -1385,10 +1395,19 @@ extension ChatListViewController {
     }
 }
 
-// MARK: -
+// MARK: - ThreadContextualActionProvider
 
-extension ChatListViewController: ThreadSwipeHandler {
-    func updateUIAfterSwipeAction() {
+extension ChatListViewController: ThreadContextualActionProvider {
+    func threadContextualActionShouldCloseThreadIfActive(threadViewModel: ThreadViewModel) {
+        if
+            let conversationSplitViewController,
+            conversationSplitViewController.selectedThread?.uniqueId == threadViewModel.threadUniqueId
+        {
+            conversationSplitViewController.closeSelectedConversation(animated: true)
+        }
+    }
+
+    func threadContextualActionDidComplete() {
         updateViewState()
     }
 }

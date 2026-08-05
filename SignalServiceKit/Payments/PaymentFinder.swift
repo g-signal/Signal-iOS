@@ -12,40 +12,23 @@ public class PaymentFinder {
         paymentStates: [TSPaymentState],
         transaction: DBReadTransaction,
     ) -> [TSPaymentModel] {
-        return paymentModels(paymentStates: paymentStates, grdbTransaction: transaction)
-    }
-
-    private class func paymentModels(
-        paymentStates: [TSPaymentState],
-        grdbTransaction transaction: DBReadTransaction,
-    ) -> [TSPaymentModel] {
-
         let paymentStatesToLookup = paymentStates.compactMap { $0.rawValue }.map { "\($0)" }.joined(separator: ",")
 
         let sql = """
-        SELECT * FROM \(PaymentModelRecord.databaseTableName)
+        SELECT * FROM \(TSPaymentModel.databaseTableName)
         WHERE \(paymentModelColumn: .paymentState) IN (\(paymentStatesToLookup))
         """
-        let cursor = TSPaymentModel.grdbFetchCursor(sql: sql, arguments: [], transaction: transaction)
 
-        var paymentModels = [TSPaymentModel]()
-        do {
-            while let paymentModel = try cursor.next() {
-                paymentModels.append(paymentModel)
-            }
-        } catch {
-            owsFailDebug("unexpected error \(error)")
-        }
-        return paymentModels
+        return fetchAll(sql: sql, arguments: [], tx: transaction)
     }
 
     public class func firstUnreadPaymentModel(transaction: DBReadTransaction) -> TSPaymentModel? {
         let sql = """
-        SELECT * FROM \(PaymentModelRecord.databaseTableName)
+        SELECT * FROM \(TSPaymentModel.databaseTableName)
         WHERE \(paymentModelColumn: .isUnread) = 1
         LIMIT 1
         """
-        return TSPaymentModel.grdbFetchOne(
+        return TSPaymentModel.anyFetch(
             sql: sql,
             arguments: [],
             transaction: transaction,
@@ -54,60 +37,35 @@ public class PaymentFinder {
 
     public class func allUnreadPaymentModels(transaction: DBReadTransaction) -> [TSPaymentModel] {
         let sql = """
-        SELECT * FROM \(PaymentModelRecord.databaseTableName)
+        SELECT * FROM \(TSPaymentModel.databaseTableName)
         WHERE \(paymentModelColumn: .isUnread) = 1
         """
-        do {
-            return try TSPaymentModel.grdbFetchCursor(
-                sql: sql,
-                arguments: [],
-                transaction: transaction,
-            ).all()
-        } catch {
-            owsFail("error: \(error)")
-        }
+        return fetchAll(sql: sql, arguments: [], tx: transaction)
     }
 
     public class func unreadCount(transaction: DBReadTransaction) -> UInt {
-        do {
-            guard
-                let count = try UInt.fetchOne(
-                    transaction.database,
-                    sql: """
-                    SELECT COUNT(*)
-                    FROM \(PaymentModelRecord.databaseTableName)
-                    WHERE \(paymentModelColumn: .isUnread) = 1
-                    """,
-                    arguments: [],
-                )
-            else {
-                throw OWSAssertionError("count was unexpectedly nil")
-            }
-            return count
-        } catch {
-            owsFail("error: \(error)")
+        return failIfThrows {
+            return try UInt.fetchOne(
+                transaction.database,
+                sql: """
+                SELECT COUNT(*)
+                FROM \(TSPaymentModel.databaseTableName)
+                WHERE \(paymentModelColumn: .isUnread) = 1
+                """,
+                arguments: [],
+            )!
         }
     }
-
-    // MARK: -
 
     public class func paymentModels(
         forMcLedgerBlockIndex mcLedgerBlockIndex: UInt64,
         transaction: DBReadTransaction,
     ) -> [TSPaymentModel] {
         let sql = """
-        SELECT * FROM \(PaymentModelRecord.databaseTableName)
+        SELECT * FROM \(TSPaymentModel.databaseTableName)
         WHERE \(paymentModelColumn: .mcLedgerBlockIndex) = ?
         """
-        do {
-            return try TSPaymentModel.grdbFetchCursor(
-                sql: sql,
-                arguments: [mcLedgerBlockIndex],
-                transaction: transaction,
-            ).all()
-        } catch {
-            owsFail("error: \(error)")
-        }
+        return fetchAll(sql: sql, arguments: [mcLedgerBlockIndex], tx: transaction)
     }
 
     public class func paymentModels(
@@ -115,18 +73,10 @@ public class PaymentFinder {
         transaction: DBReadTransaction,
     ) -> [TSPaymentModel] {
         let sql = """
-        SELECT * FROM \(PaymentModelRecord.databaseTableName)
+        SELECT * FROM \(TSPaymentModel.databaseTableName)
         WHERE \(paymentModelColumn: .mcReceiptData) = ?
         """
-        do {
-            return try TSPaymentModel.grdbFetchCursor(
-                sql: sql,
-                arguments: [mcReceiptData],
-                transaction: transaction,
-            ).all()
-        } catch {
-            owsFail("error: \(error)")
-        }
+        return fetchAll(sql: sql, arguments: [mcReceiptData], tx: transaction)
     }
 
     public class func paymentModels(
@@ -134,17 +84,22 @@ public class PaymentFinder {
         transaction: DBReadTransaction,
     ) -> [TSPaymentModel] {
         let sql = """
-        SELECT * FROM \(PaymentModelRecord.databaseTableName)
+        SELECT * FROM \(TSPaymentModel.databaseTableName)
         WHERE \(paymentModelColumn: .mcTransactionData) = ?
         """
-        do {
-            return try TSPaymentModel.grdbFetchCursor(
-                sql: sql,
-                arguments: [mcTransactionData],
-                transaction: transaction,
-            ).all()
-        } catch {
-            owsFail("error: \(error)")
-        }
+        return fetchAll(sql: sql, arguments: [mcTransactionData], tx: transaction)
+    }
+
+    private static func fetchAll(sql: String, arguments: StatementArguments, tx: DBReadTransaction) -> [TSPaymentModel] {
+        var results = [TSPaymentModel]()
+        TSPaymentModel.anyEnumerate(
+            transaction: tx,
+            sql: sql,
+            arguments: arguments,
+            block: { paymentModel, _ in
+                results.append(paymentModel)
+            },
+        )
+        return results
     }
 }

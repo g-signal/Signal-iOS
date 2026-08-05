@@ -120,7 +120,7 @@ public class InteractionStoreImpl: InteractionStore {
         uniqueId: String,
         tx: DBReadTransaction,
     ) -> TSInteraction? {
-        return TSInteraction.anyFetch(uniqueId: uniqueId, transaction: tx)
+        return TSInteraction.fetchViaCache(uniqueId: uniqueId, transaction: tx)
     }
 
     public func findMessage(

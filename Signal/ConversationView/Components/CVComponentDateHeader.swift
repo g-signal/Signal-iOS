@@ -122,7 +122,7 @@ public class CVComponentDateHeader: CVComponentBase, CVRootComponent {
                 cellMeasurement: cellMeasurement,
                 componentDelegate: componentDelegate,
                 hasWallpaper: hasWallpaper,
-                titleLabelConfig: titleLabelConfigForPlainContentView,
+                titleLabelConfig: titleLabelConfig(useProminentTextColor: hasWallpaper),
                 innerStackConfig: innerStackConfig,
                 isReusing: true,
             )
@@ -130,7 +130,7 @@ public class CVComponentDateHeader: CVComponentBase, CVRootComponent {
             let contentViewVisualEffect = componentView.visualEffectContentView
             contentViewVisualEffect?.configure(
                 blurBackgroundColor: blurBackgroundColor,
-                titleLabelConfig: titleLabelConfigForVisualEffectContentView,
+                titleLabelConfig: titleLabelConfig(useProminentTextColor: true),
                 innerStackConfig: innerStackConfig,
             )
         } else {
@@ -145,7 +145,7 @@ public class CVComponentDateHeader: CVComponentBase, CVRootComponent {
                         cellMeasurement: cellMeasurement,
                         componentDelegate: componentDelegate,
                         hasWallpaper: hasWallpaper,
-                        titleLabelConfig: titleLabelConfigForPlainContentView,
+                        titleLabelConfig: titleLabelConfig(useProminentTextColor: hasWallpaper),
                         innerStackConfig: innerStackConfig,
                         isReusing: false,
                     )
@@ -155,7 +155,7 @@ public class CVComponentDateHeader: CVComponentBase, CVRootComponent {
                     let contentView = componentView.ensureVisualEffectContentView()
                     contentView.configure(
                         blurBackgroundColor: blurBackgroundColor,
-                        titleLabelConfig: titleLabelConfigForVisualEffectContentView,
+                        titleLabelConfig: titleLabelConfig(useProminentTextColor: true),
                         innerStackConfig: innerStackConfig,
                     )
                     return contentView.rootView
@@ -189,7 +189,7 @@ public class CVComponentDateHeader: CVComponentBase, CVRootComponent {
             )
         }
 
-        componentView.rootView.accessibilityLabel = titleLabelConfigForPlainContentView.text.accessibilityDescription
+        componentView.rootView.accessibilityLabel = titleLabelConfig().text.accessibilityDescription
         componentView.rootView.isAccessibilityElement = true
         componentView.rootView.accessibilityTraits = .header
     }
@@ -200,29 +200,23 @@ public class CVComponentDateHeader: CVComponentBase, CVRootComponent {
         return State(text: text)
     }
 
-    private func titleLabelConfig(textColor: UIColor) -> CVLabelConfig {
+    /// - Parameter useProminentTextColor: Pass `true` to change text color to be more prominent.
+    ///
+    /// The idea is to make date header text look more promiment when the text is enclosed in a bubble shape.
+    /// If the text is placed agains default background (ie no wallpaper, no sticky header) we need to use a more subtle color.
+    private func titleLabelConfig(useProminentTextColor: Bool = false) -> CVLabelConfig {
+        // More contrasty color if date header has a bubble.
+        // Less contrasty color when there's no wallpaper and text is displayed over chat background.
+        let textColor = useProminentTextColor ? UIColor.Signal.label : UIColor.Signal.secondaryLabel
+        let font = UIFont.dynamicTypeFootnote.medium()
         return CVLabelConfig(
             text: .text(dateHeaderState.text),
-            displayConfig: .forUnstyledText(font: .dynamicTypeFootnote.semibold(), textColor: textColor),
-            font: UIFont.dynamicTypeFootnote.semibold(),
+            displayConfig: .forUnstyledText(font: font, textColor: textColor),
+            font: font,
             textColor: textColor,
             lineBreakMode: .byTruncatingTail,
             textAlignment: .center,
         )
-    }
-
-    private var titleLabelConfigForPlainContentView: CVLabelConfig {
-        return titleLabelConfig(textColor: .Signal.secondaryLabel)
-    }
-
-    private var titleLabelConfigForVisualEffectContentView: CVLabelConfig {
-        let textColor: UIColor
-        if #available(iOS 26.0, *) {
-            textColor = .Signal.label
-        } else {
-            textColor = .Signal.secondaryLabel
-        }
-        return titleLabelConfig(textColor: textColor)
     }
 
     private var outerStackConfig: CVStackViewConfig {
@@ -244,7 +238,7 @@ public class CVComponentDateHeader: CVComponentBase, CVRootComponent {
             axis: .vertical,
             alignment: .center,
             spacing: 0,
-            layoutMargins: UIEdgeInsets(hMargin: 10, vMargin: 4),
+            layoutMargins: UIEdgeInsets(hMargin: 12, vMargin: 3),
         )
     }
 
@@ -262,7 +256,7 @@ public class CVComponentDateHeader: CVComponentBase, CVRootComponent {
                         outerStackConfig.layoutMargins.totalWidth
                 ),
         )
-        let labelSize = CVText.measureLabel(config: titleLabelConfigForPlainContentView, maxWidth: availableWidth)
+        let labelSize = CVText.measureLabel(config: titleLabelConfig(), maxWidth: availableWidth)
 
         let labelInfo = labelSize.asManualSubviewInfo
         let innerStackMeasurement = ManualStackView.measure(
@@ -453,10 +447,6 @@ private class ContentViewNoVisualEffect {
             return wallpaperBlurView
         }
         let wallpaperBlurView = CVWallpaperBlurView()
-        if #available(iOS 26.0, *) {
-            // Will override `cornerRadius` set in `configure...`.
-            wallpaperBlurView.cornerConfiguration = .capsule()
-        }
         self.wallpaperBlurView = wallpaperBlurView
         return wallpaperBlurView
     }
@@ -488,8 +478,13 @@ private class ContentViewNoVisualEffect {
                 let wallpaperBlurView = ensureWallpaperBlurView()
                 CVComponentBase.configureWallpaperBlurView(
                     wallpaperBlurView: wallpaperBlurView,
-                    maskCornerRadius: 8,
                     componentDelegate: componentDelegate,
+                    bubbleConfig: BubbleConfiguration(
+                        corners: .capsule(),
+                        stroke: ConversationStyle.bubbleStroke(
+                            isDarkThemeEnabled: Theme.isDarkThemeEnabled,
+                        ),
+                    ),
                 )
                 innerStack.addSubviewToFillSuperviewEdges(wallpaperBlurView)
             }
@@ -509,7 +504,6 @@ private class ContentViewNoVisualEffect {
             titleLabel.removeFromSuperview()
 
             wallpaperBlurView?.removeFromSuperview()
-            wallpaperBlurView?.resetContentAndConfiguration()
         }
 
         titleLabel.text = nil

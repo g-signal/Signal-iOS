@@ -140,7 +140,10 @@ public class CVComponentFooter: CVComponentBase, CVComponent {
             chatColorView.configure(
                 value: conversationStyle.bubbleChatColor(isIncoming: isIncoming),
                 referenceView: componentDelegate.view,
-                hasPillRounding: true,
+                bubbleConfig: BubbleConfiguration(
+                    corners: .capsule(),
+                    stroke: conversationStyle.bubbleStroke(isIncoming: isIncoming),
+                ),
             )
             innerStack.addSubviewToFillSuperviewEdges(chatColorView)
         }
@@ -481,7 +484,9 @@ public class CVComponentFooter: CVComponentBase, CVComponent {
             }
 
             if outgoingMessage.wasRemotelyDeleted {
-                statusIndicator = nil
+                if messageStatus != .uploading, messageStatus != .sending {
+                    statusIndicator = nil
+                }
             }
         }
 

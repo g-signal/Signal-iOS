@@ -14,15 +14,14 @@ import GRDB
 @objc
 public extension TSGroupThread {
     // NOTE: This method will fail if the object has unexpected type.
-    class func anyFetchGroupThread(
+    class func fetchGroupThreadViaCache(
         uniqueId: String,
         transaction: DBReadTransaction
     ) -> TSGroupThread? {
         assert(!uniqueId.isEmpty)
 
-        guard let object = anyFetch(uniqueId: uniqueId,
-                                    transaction: transaction) else {
-                                        return nil
+        guard let object = fetchViaCache(uniqueId: uniqueId, transaction: transaction) else {
+            return nil
         }
         guard let instance = object as? TSGroupThread else {
             owsFailDebug("Object has unexpected type: \(type(of: object))")

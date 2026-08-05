@@ -14,15 +14,14 @@ import GRDB
 @objc
 public extension TSInvalidIdentityKeySendingErrorMessage {
     // NOTE: This method will fail if the object has unexpected type.
-    class func anyFetchInvalidIdentityKeySendingErrorMessage(
+    class func fetchInvalidIdentityKeySendingErrorMessageViaCache(
         uniqueId: String,
         transaction: DBReadTransaction
     ) -> TSInvalidIdentityKeySendingErrorMessage? {
         assert(!uniqueId.isEmpty)
 
-        guard let object = anyFetch(uniqueId: uniqueId,
-                                    transaction: transaction) else {
-                                        return nil
+        guard let object = fetchViaCache(uniqueId: uniqueId, transaction: transaction) else {
+            return nil
         }
         guard let instance = object as? TSInvalidIdentityKeySendingErrorMessage else {
             owsFailDebug("Object has unexpected type: \(type(of: object))")

@@ -100,7 +100,7 @@ private class SessionResetJobRunner: JobRunner {
 
     private func fetchThread(jobRecord: SessionResetJobRecord, tx: DBReadTransaction) throws -> TSContactThread {
         let threadId = jobRecord.contactThreadId
-        guard let contactThread = TSContactThread.anyFetchContactThread(uniqueId: threadId, transaction: tx) else {
+        guard let contactThread = TSContactThread.fetchContactThreadViaCache(uniqueId: threadId, transaction: tx) else {
             throw OWSGenericError("thread for session reset no longer exists")
         }
         return contactThread

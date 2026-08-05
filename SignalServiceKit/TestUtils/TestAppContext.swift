@@ -10,7 +10,7 @@ import Foundation
 @objc
 public class TestAppContext: NSObject, AppContext {
     public static var testDebugLogsDirPath: String {
-        let dirPath = OWSTemporaryDirectory().appendingPathComponent("TestLogs")
+        let dirPath = OWSFileSystem.temporaryFilePath(isAvailableWhileDeviceLocked: false).appendingPathComponent("TestLogs")
         OWSFileSystem.ensureDirectoryExists(dirPath)
         return dirPath
     }

@@ -40,30 +40,30 @@ struct WebSocketProtos_WebSocketRequestMessage: Sendable {
 
   /// @required
   var verb: String {
-    get {return _verb ?? String()}
+    get {_verb ?? String()}
     set {_verb = newValue}
   }
   /// Returns true if `verb` has been explicitly set.
-  var hasVerb: Bool {return self._verb != nil}
+  var hasVerb: Bool {self._verb != nil}
   /// Clears the value of `verb`. Subsequent reads from it will return its default value.
   mutating func clearVerb() {self._verb = nil}
 
   /// @required
   var path: String {
-    get {return _path ?? String()}
+    get {_path ?? String()}
     set {_path = newValue}
   }
   /// Returns true if `path` has been explicitly set.
-  var hasPath: Bool {return self._path != nil}
+  var hasPath: Bool {self._path != nil}
   /// Clears the value of `path`. Subsequent reads from it will return its default value.
   mutating func clearPath() {self._path = nil}
 
   var body: Data {
-    get {return _body ?? Data()}
+    get {_body ?? Data()}
     set {_body = newValue}
   }
   /// Returns true if `body` has been explicitly set.
-  var hasBody: Bool {return self._body != nil}
+  var hasBody: Bool {self._body != nil}
   /// Clears the value of `body`. Subsequent reads from it will return its default value.
   mutating func clearBody() {self._body = nil}
 
@@ -71,11 +71,11 @@ struct WebSocketProtos_WebSocketRequestMessage: Sendable {
 
   /// @required
   var requestID: UInt64 {
-    get {return _requestID ?? 0}
+    get {_requestID ?? 0}
     set {_requestID = newValue}
   }
   /// Returns true if `requestID` has been explicitly set.
-  var hasRequestID: Bool {return self._requestID != nil}
+  var hasRequestID: Bool {self._requestID != nil}
   /// Clears the value of `requestID`. Subsequent reads from it will return its default value.
   mutating func clearRequestID() {self._requestID = nil}
 
@@ -96,41 +96,41 @@ struct WebSocketProtos_WebSocketResponseMessage: Sendable {
 
   /// @required
   var requestID: UInt64 {
-    get {return _requestID ?? 0}
+    get {_requestID ?? 0}
     set {_requestID = newValue}
   }
   /// Returns true if `requestID` has been explicitly set.
-  var hasRequestID: Bool {return self._requestID != nil}
+  var hasRequestID: Bool {self._requestID != nil}
   /// Clears the value of `requestID`. Subsequent reads from it will return its default value.
   mutating func clearRequestID() {self._requestID = nil}
 
   /// @required
   var status: UInt32 {
-    get {return _status ?? 0}
+    get {_status ?? 0}
     set {_status = newValue}
   }
   /// Returns true if `status` has been explicitly set.
-  var hasStatus: Bool {return self._status != nil}
+  var hasStatus: Bool {self._status != nil}
   /// Clears the value of `status`. Subsequent reads from it will return its default value.
   mutating func clearStatus() {self._status = nil}
 
   var message: String {
-    get {return _message ?? String()}
+    get {_message ?? String()}
     set {_message = newValue}
   }
   /// Returns true if `message` has been explicitly set.
-  var hasMessage: Bool {return self._message != nil}
+  var hasMessage: Bool {self._message != nil}
   /// Clears the value of `message`. Subsequent reads from it will return its default value.
   mutating func clearMessage() {self._message = nil}
 
   var headers: [String] = []
 
   var body: Data {
-    get {return _body ?? Data()}
+    get {_body ?? Data()}
     set {_body = newValue}
   }
   /// Returns true if `body` has been explicitly set.
-  var hasBody: Bool {return self._body != nil}
+  var hasBody: Bool {self._body != nil}
   /// Clears the value of `body`. Subsequent reads from it will return its default value.
   mutating func clearBody() {self._body = nil}
 
@@ -150,29 +150,29 @@ struct WebSocketProtos_WebSocketMessage: Sendable {
   // methods supported on all messages.
 
   var type: WebSocketProtos_WebSocketMessage.TypeEnum {
-    get {return _type ?? .unknown}
+    get {_type ?? .unknown}
     set {_type = newValue}
   }
   /// Returns true if `type` has been explicitly set.
-  var hasType: Bool {return self._type != nil}
+  var hasType: Bool {self._type != nil}
   /// Clears the value of `type`. Subsequent reads from it will return its default value.
   mutating func clearType() {self._type = nil}
 
   var request: WebSocketProtos_WebSocketRequestMessage {
-    get {return _request ?? WebSocketProtos_WebSocketRequestMessage()}
+    get {_request ?? WebSocketProtos_WebSocketRequestMessage()}
     set {_request = newValue}
   }
   /// Returns true if `request` has been explicitly set.
-  var hasRequest: Bool {return self._request != nil}
+  var hasRequest: Bool {self._request != nil}
   /// Clears the value of `request`. Subsequent reads from it will return its default value.
   mutating func clearRequest() {self._request = nil}
 
   var response: WebSocketProtos_WebSocketResponseMessage {
-    get {return _response ?? WebSocketProtos_WebSocketResponseMessage()}
+    get {_response ?? WebSocketProtos_WebSocketResponseMessage()}
     set {_response = newValue}
   }
   /// Returns true if `response` has been explicitly set.
-  var hasResponse: Bool {return self._response != nil}
+  var hasResponse: Bool {self._response != nil}
   /// Clears the value of `response`. Subsequent reads from it will return its default value.
   mutating func clearResponse() {self._response = nil}
 

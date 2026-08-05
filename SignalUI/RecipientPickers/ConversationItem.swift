@@ -210,7 +210,7 @@ public struct GroupConversationItem {
     // can be very large.
     public var groupThread: TSGroupThread? {
         SSKEnvironment.shared.databaseStorageRef.read { transaction in
-            return TSGroupThread.anyFetchGroupThread(uniqueId: groupThreadId, transaction: transaction)
+            return TSGroupThread.fetchGroupThreadViaCache(uniqueId: groupThreadId, transaction: transaction)
         }
     }
 
@@ -251,7 +251,7 @@ extension GroupConversationItem: ConversationItem {
     }
 
     public func getExistingThread(transaction: DBReadTransaction) -> TSThread? {
-        return TSGroupThread.anyFetchGroupThread(uniqueId: groupThreadId, transaction: transaction)
+        return TSGroupThread.fetchGroupThreadViaCache(uniqueId: groupThreadId, transaction: transaction)
     }
 
     public func getOrCreateThread(transaction: DBWriteTransaction) -> TSThread? {
@@ -591,7 +591,7 @@ public struct PrivateStoryConversationItem {
     public let isMyStory: Bool
 
     public func fetchThread(tx: DBReadTransaction) -> TSPrivateStoryThread? {
-        return TSPrivateStoryThread.anyFetchPrivateStoryThread(uniqueId: storyThreadId, transaction: tx)
+        return TSPrivateStoryThread.fetchPrivateStoryThreadViaCache(uniqueId: storyThreadId, transaction: tx)
     }
 }
 
@@ -627,7 +627,7 @@ extension PrivateStoryConversationItem: ConversationItem {
     }
 
     public func getExistingThread(transaction: DBReadTransaction) -> TSThread? {
-        TSPrivateStoryThread.anyFetchPrivateStoryThread(uniqueId: storyThreadId, transaction: transaction)
+        TSPrivateStoryThread.fetchPrivateStoryThreadViaCache(uniqueId: storyThreadId, transaction: transaction)
     }
 
     public func getOrCreateThread(transaction: DBWriteTransaction) -> TSThread? {

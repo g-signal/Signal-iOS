@@ -228,6 +228,22 @@ extension ConversationViewController: CVLoadCoordinatorDelegate {
             ensureBannerState()
         }
 
+        let db = DependenciesBridge.shared.db
+        let tsAccountManager = DependenciesBridge.shared.tsAccountManager
+        let groupNameColors = GroupNameColors.forThread(thread)
+        if let groupModelV2 = newGroupModel as? TSGroupModelV2 {
+            db.read { tx in
+                guard let localIdentifiers = tsAccountManager.localIdentifiers(tx: tx) else {
+                    return
+                }
+                self.memberLabelCoordinator = MemberLabelCoordinator(
+                    groupModel: groupModelV2,
+                    groupNameColors: groupNameColors,
+                    localIdentifiers: localIdentifiers,
+                )
+            }
+        }
+
         // If the message has been deleted / disappeared, we need to dismiss
         dismissMessageContextMenuIfNecessary()
 
@@ -707,16 +723,20 @@ extension ConversationViewController: CVLoadCoordinatorDelegate {
         wallpaperViewBuilder: WallpaperViewBuilder?,
     ) -> ConversationStyle {
         let hasWallpaper: Bool
+        let shouldDimWallpaperInDarkMode: Bool
         let isWallpaperPhoto: Bool
         switch wallpaperViewBuilder {
-        case .customPhoto:
+        case .customPhoto(_, let shouldDimInDarkMode):
             hasWallpaper = true
+            shouldDimWallpaperInDarkMode = shouldDimInDarkMode
             isWallpaperPhoto = true
-        case .colorOrGradient:
+        case .colorOrGradient(_, let shouldDimInDarkMode):
             hasWallpaper = true
+            shouldDimWallpaperInDarkMode = shouldDimInDarkMode
             isWallpaperPhoto = false
         case .none:
             hasWallpaper = false
+            shouldDimWallpaperInDarkMode = false
             isWallpaperPhoto = false
         }
         return ConversationStyle(
@@ -724,6 +744,7 @@ extension ConversationViewController: CVLoadCoordinatorDelegate {
             thread: thread,
             viewWidth: viewWidth,
             hasWallpaper: hasWallpaper,
+            shouldDimWallpaperInDarkMode: shouldDimWallpaperInDarkMode,
             isWallpaperPhoto: isWallpaperPhoto,
             chatColor: chatColor,
         )
@@ -910,4 +931,8 @@ extension ConversationViewController {
     public var showLoadOlderHeader: Bool { loadCoordinator.showLoadOlderHeader }
 
     public var showLoadNewerHeader: Bool { loadCoordinator.showLoadNewerHeader }
+}
+
+extension ConversationViewController: MemberLabelViewControllerPresenter {
+    func reloadMemberLabelIfNeeded() { /* handled in updateWithNewRenderState */ }
 }

@@ -347,18 +347,20 @@ class DeleteSystemContactViewController: OWSTableViewController2 {
                 Logger.warn("Address still a system contact after deletion; possibly duplicate system contact")
                 return
             }
-            await self.dependencies.databaseStorage.awaitableWrite { tx in
-                do {
+            do {
+                try await self.dependencies.databaseStorage.awaitableWrite { tx in
                     try self.dependencies.recipientHidingManager.addHiddenRecipient(
                         SignalServiceAddress(serviceId: self.serviceId, e164: self.e164),
                         inKnownMessageRequestState: false,
                         wasLocallyInitiated: true,
                         tx: tx,
                     )
-                    self.displayDeletedContactToast(displayNameForToast: displayNameForToast)
-                } catch {
-                    owsFailDebug("Failed to hide recipient")
                 }
+                await MainActor.run {
+                    self.displayDeletedContactToast(displayNameForToast: displayNameForToast)
+                }
+            } catch {
+                owsFailDebug("Failed to hide recipient")
             }
         }
 

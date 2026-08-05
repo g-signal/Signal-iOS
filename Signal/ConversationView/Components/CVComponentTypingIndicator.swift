@@ -43,6 +43,14 @@ public class CVComponentTypingIndicator: CVComponentBase, CVRootComponent {
         )
     }
 
+    override public func wallpaperBlurView(componentView: CVComponentView) -> CVWallpaperBlurView? {
+        guard let componentView = componentView as? CVComponentViewTypingIndicator else {
+            owsFailDebug("Unexpected componentView.")
+            return nil
+        }
+        return componentView.wallpaperBlurView
+    }
+
     public func buildComponentView(componentDelegate: CVComponentDelegate) -> CVComponentView {
         CVComponentViewTypingIndicator()
     }
@@ -75,8 +83,27 @@ public class CVComponentTypingIndicator: CVComponentBase, CVRootComponent {
             outerViews.append(avatarView)
         }
 
-        let bubbleView = componentView.bubbleView
-        bubbleView.backgroundColor = conversationStyle.bubbleColorIncoming
+        let bubbleView: UIView
+        if conversationStyle.hasWallpaper {
+            let wallpaperBlurView = componentView.ensureWallpaperBlurView()
+            configureWallpaperBlurView(
+                wallpaperBlurView: wallpaperBlurView,
+                componentDelegate: componentDelegate,
+                bubbleConfig: BubbleConfiguration(
+                    corners: .capsule(),
+                    stroke: ConversationStyle.bubbleStroke(isDarkThemeEnabled: isDarkThemeEnabled),
+                ),
+            )
+            bubbleView = wallpaperBlurView
+        } else {
+            let chatColorView = componentView.chatColorView
+            chatColorView.configure(
+                value: conversationStyle.bubbleChatColorIncoming,
+                referenceView: componentDelegate.view,
+                bubbleConfig: BubbleConfiguration(corners: .capsule()),
+            )
+            bubbleView = chatColorView
+        }
         innerStackView.addSubviewToFillSuperviewEdges(bubbleView)
 
         let typingIndicatorView = componentView.typingIndicatorView
@@ -180,7 +207,19 @@ public class CVComponentTypingIndicator: CVComponentBase, CVRootComponent {
             localUserDisplayMode: .asUser,
             useAutolayout: false,
         )
-        fileprivate let bubbleView = ManualLayoutViewWithLayer.pillView(name: "bubbleView")
+        // Bubble view when there is no chat wallpaper.
+        fileprivate let chatColorView = CVColorOrGradientView()
+        // Bubble view when there is a chat wallpaper.
+        fileprivate var wallpaperBlurView: CVWallpaperBlurView?
+        fileprivate func ensureWallpaperBlurView() -> CVWallpaperBlurView {
+            if let wallpaperBlurView {
+                return wallpaperBlurView
+            }
+            let wallpaperBlurView = CVWallpaperBlurView()
+            self.wallpaperBlurView = wallpaperBlurView
+            return wallpaperBlurView
+        }
+
         fileprivate let typingIndicatorView = TypingIndicatorView()
 
         public var isDedicatedCellView = false
@@ -204,12 +243,15 @@ public class CVComponentTypingIndicator: CVComponentBase, CVRootComponent {
 
             outerStackView.reset()
             innerStackView.reset()
-            bubbleView.reset()
             avatarView.reset()
+
+            chatColorView.reset()
+            chatColorView.removeFromSuperview()
+
+            wallpaperBlurView?.removeFromSuperview()
 
             typingIndicatorView.reset()
             typingIndicatorView.removeFromSuperview()
         }
-
     }
 }

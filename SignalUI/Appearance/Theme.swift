@@ -271,7 +271,6 @@ public final class Theme {
         ])
     }
 
-    @objc
     public class var backgroundColor: UIColor {
         isDarkThemeEnabled
             ? darkThemeBackgroundColor
@@ -279,13 +278,9 @@ public final class Theme {
     }
 
     public class var secondaryBackgroundColor: UIColor {
-        isDarkThemeEnabled
-            ? darkThemeSecondaryBackgroundColor
-            : UIColor.Signal.secondaryBackground.resolvedColor(with: lightTraitCollection)
-    }
-
-    public class var darkThemeSecondaryBackgroundColor: UIColor {
-        UIColor.Signal.secondaryBackground.resolvedColor(with: darkTraitCollection)
+        UIColor.Signal.secondaryBackground.resolvedColor(
+            with: isDarkThemeEnabled ? darkTraitCollection : lightTraitCollection,
+        )
     }
 
     public static var actionSheetBackgroundColor: UIColor {
@@ -304,11 +299,7 @@ public final class Theme {
         if #available(iOS 26, *) {
             return primaryTextColor
         }
-        return legacyPrimaryIconColor
-    }
-
-    public class var legacyPrimaryIconColor: UIColor {
-        isDarkThemeEnabled ? darkThemeLegacyPrimaryIconColor : lightThemeLegacyPrimaryIconColor
+        return isDarkThemeEnabled ? darkThemeLegacyPrimaryIconColor : lightThemeLegacyPrimaryIconColor
     }
 
     public class var secondaryTextAndIconColor: UIColor {
@@ -338,15 +329,6 @@ public final class Theme {
         UIColor.Signal.accent.resolvedColor(with: currentThemeTraitCollection)
     }
 
-    public class var conversationButtonBackgroundColor: UIColor {
-        isDarkThemeEnabled ? .ows_gray80 : .ows_gray02
-    }
-
-    public class var conversationButtonTextColor: UIColor {
-        isDarkThemeEnabled ? .ows_gray05 : .ows_accentBlue
-    }
-
-    @objc
     public class var launchScreenBackgroundColor: UIColor {
         backgroundColor
     }
@@ -478,12 +460,6 @@ public final class Theme {
 
     public class var barStyle: UIBarStyle {
         isDarkThemeEnabled ? .black : .default
-    }
-
-    public class var searchFieldBackgroundColor: UIColor { washColor }
-
-    public class var searchFieldElevatedBackgroundColor: UIColor {
-        isDarkThemeEnabled ? .ows_gray75 : .ows_gray12
     }
 
 #if TESTABLE_BUILD

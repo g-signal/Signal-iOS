@@ -13,6 +13,7 @@ import UIKit
 /// ColorOrGradientValue is used for rendering.
 public enum ColorOrGradientValue: CustomStringConvertible {
     case transparent
+    case blur(blurEffect: UIVisualEffect)
     case solidColor(color: UIColor)
     /// If angleRadians = 0, gradientColor1 is N.
     /// If angleRadians = PI / 2, gradientColor1 is E.
@@ -27,6 +28,8 @@ public enum ColorOrGradientValue: CustomStringConvertible {
         switch self {
         case .transparent:
             return "[transparent]"
+        case .blur:
+            return "[blur]"
         case .solidColor(let color):
             return "[solidColor: \(color.asOWSColor)]"
         case .gradient(let gradientColor1, let gradientColor2, let angleRadians):
@@ -104,5 +107,32 @@ public extension UIColor {
         self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
 
         return OWSColor(red: red.clamp01(), green: green.clamp01(), blue: blue.clamp01())
+    }
+}
+
+// MARK: -
+
+@available(iOS 26, *)
+public extension ColorOrGradientValue {
+
+    func asChatUIElementTintColor() -> UIColor {
+        let bubbleColor: UIColor = {
+            switch self {
+            case .transparent, .blur:
+                return .Signal.accent
+
+            case .solidColor(let color):
+                return color
+
+            case .gradient(let gradientColor1, let gradientColor2, _):
+                return gradientColor1.midPoint(with: gradientColor2)
+            }
+        }()
+        let lightThemeFinalColor = bubbleColor.blendedWithOverlay(.white, opacity: 0.16)
+        let darkThemeFinalColor = bubbleColor.blendedWithOverlay(.black, opacity: 0.1)
+        return UIColor(
+            light: lightThemeFinalColor,
+            dark: darkThemeFinalColor,
+        )
     }
 }

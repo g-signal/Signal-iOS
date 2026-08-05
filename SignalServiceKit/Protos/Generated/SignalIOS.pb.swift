@@ -40,31 +40,31 @@ struct IOSProtos_DeviceName: Sendable {
 
   /// @required
   var ephemeralPublic: Data {
-    get {return _ephemeralPublic ?? Data()}
+    get {_ephemeralPublic ?? Data()}
     set {_ephemeralPublic = newValue}
   }
   /// Returns true if `ephemeralPublic` has been explicitly set.
-  var hasEphemeralPublic: Bool {return self._ephemeralPublic != nil}
+  var hasEphemeralPublic: Bool {self._ephemeralPublic != nil}
   /// Clears the value of `ephemeralPublic`. Subsequent reads from it will return its default value.
   mutating func clearEphemeralPublic() {self._ephemeralPublic = nil}
 
   /// @required
   var syntheticIv: Data {
-    get {return _syntheticIv ?? Data()}
+    get {_syntheticIv ?? Data()}
     set {_syntheticIv = newValue}
   }
   /// Returns true if `syntheticIv` has been explicitly set.
-  var hasSyntheticIv: Bool {return self._syntheticIv != nil}
+  var hasSyntheticIv: Bool {self._syntheticIv != nil}
   /// Clears the value of `syntheticIv`. Subsequent reads from it will return its default value.
   mutating func clearSyntheticIv() {self._syntheticIv = nil}
 
   /// @required
   var ciphertext: Data {
-    get {return _ciphertext ?? Data()}
+    get {_ciphertext ?? Data()}
     set {_ciphertext = newValue}
   }
   /// Returns true if `ciphertext` has been explicitly set.
-  var hasCiphertext: Bool {return self._ciphertext != nil}
+  var hasCiphertext: Bool {self._ciphertext != nil}
   /// Clears the value of `ciphertext`. Subsequent reads from it will return its default value.
   mutating func clearCiphertext() {self._ciphertext = nil}
 

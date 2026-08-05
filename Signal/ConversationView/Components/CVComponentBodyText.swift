@@ -385,7 +385,7 @@ public class CVComponentBodyText: CVComponentBase, CVComponent {
             lineBreakMode: .byWordWrapping,
             numberOfLines: 0,
             cacheKey: textViewConfig.cacheKey,
-            items: bodyTextState.items,
+            items: textViewConfig.linkItems,
             linkifyStyle: textViewConfig.linkifyStyle,
         )
     }
@@ -462,7 +462,7 @@ public class CVComponentBodyText: CVComponentBase, CVComponent {
         case .oversizeTextDownloading:
             return bodyTextLabelConfig(labelConfig: labelConfigForOversizeTextDownloading)
         case .remotelyDeleted:
-            return bodyTextLabelConfig(labelConfig: labelConfigForRemotelyDeleted)
+            return bodyTextLabelConfig(textViewConfig: textViewConfigForRemotelyDeleted)
         }
     }
 
@@ -475,20 +475,118 @@ public class CVComponentBodyText: CVComponentBase, CVComponent {
         )
     }
 
-    private var labelConfigForRemotelyDeleted: CVLabelConfig {
-        let text = (
-            isIncoming
-                ? OWSLocalizedString("THIS_MESSAGE_WAS_DELETED", comment: "text indicating the message was remotely deleted")
-                : OWSLocalizedString("YOU_DELETED_THIS_MESSAGE", comment: "text indicating the message was remotely deleted by you"),
+    private func buildAdminDeleteAttributedString(displayName: String, groupColor: UIColor) -> NSAttributedString {
+        let format = OWSLocalizedString(
+            "DELETED_BY_ADMIN",
+            comment: "Text indicating the message was remotely deleted by an admin. Embeds {{admin display name}}",
         )
-        return CVLabelConfig(
-            text: .text(text),
-            displayConfig: .forUnstyledText(font: textMessageFont.italic(), textColor: bodyTextColor),
-            font: textMessageFont.italic(),
+
+        let attributedString = NSAttributedString.make(
+            fromFormat: format,
+            attributedFormatArgs: [
+                .string(
+                    displayName,
+                    attributes: [.font: textMessageFont.bold(), .foregroundColor: groupColor],
+                ),
+            ],
+        )
+
+        return attributedString
+    }
+
+    private func rangeOfFirstSubstring(
+        in attributedString: NSAttributedString,
+        withColor color: UIColor,
+    ) -> NSRange? {
+        var matchingRange: NSRange?
+        attributedString.enumerateAttribute(
+            .foregroundColor,
+            in: NSRange(location: 0, length: attributedString.length),
+            options: [],
+        ) { value, range, stop in
+            if
+                let currentColor = value as? UIColor,
+                currentColor == color
+            {
+                matchingRange = range
+                stop.pointee = true
+            }
+        }
+        return matchingRange
+    }
+
+    private var textViewConfigForRemotelyDeleted: CVTextViewConfig {
+        let text = NSMutableAttributedString()
+        text.append(
+            SignalSymbol.xCircle.attributedString(
+                dynamicTypeBaseSize: textMessageFont.pointSize,
+            ) + " ",
+        )
+
+        var linkItems: [CVTextLabel.Item] = []
+        switch bodyText {
+        case .remotelyDeleted(let deleteAuthor):
+            if let deleteAuthor {
+                switch deleteAuthor.authorType {
+                case .admin(let aci, let groupColor):
+                    let attributedString = buildAdminDeleteAttributedString(
+                        displayName: deleteAuthor.displayName,
+                        groupColor: groupColor,
+                    )
+                    text.append(attributedString)
+
+                    if
+                        let tapItemRange = rangeOfFirstSubstring(
+                            in: text,
+                            withColor: groupColor,
+                        )
+                    {
+                        linkItems.append(.deleteAuthor(deleteAuthorItem: CVTextLabel.DeleteAuthorItem(
+                            deleteAuthorAci: aci,
+                            range: tapItemRange,
+                        )))
+                    } else {
+                        owsFailDebug("Admin delete is missing tappable range")
+                    }
+
+                case .regular:
+                    let format = OWSLocalizedString(
+                        "DELETED_THIS_MESSAGE",
+                        comment: "Text indicating the message was remotely deleted by its author. Embeds {{ author name }}",
+                    )
+                    text.append(
+                        NSAttributedString(
+                            string: String(format: format, deleteAuthor.displayName),
+                        ),
+                    )
+                }
+            } else {
+                fallthrough
+            }
+        default:
+            let remoteDeleteNoAuthorMessage = (
+                isIncoming
+                    ? NSAttributedString(string: OWSLocalizedString("THIS_MESSAGE_WAS_DELETED", comment: "text indicating the message was remotely deleted"))
+                    : NSAttributedString(string: OWSLocalizedString("YOU_DELETED_THIS_MESSAGE", comment: "text indicating the message was remotely deleted by you")),
+            )
+            text.append(remoteDeleteNoAuthorMessage)
+        }
+
+        let displayConfiguration = HydratedMessageBody.DisplayConfiguration.messageBubble(
+            isIncoming: isIncoming,
+            revealedSpoilerIds: revealedSpoilerIds,
+            searchRanges: .matchedRanges([]),
+        )
+
+        return CVTextViewConfig(
+            text: .attributedText(text),
+            font: textMessageFont,
             textColor: bodyTextColor,
-            numberOfLines: 0,
-            lineBreakMode: .byWordWrapping,
-            textAlignment: .center,
+            textAlignment: .natural,
+            displayConfiguration: displayConfiguration,
+            linkifyStyle: linkifyStyle,
+            linkItems: linkItems,
+            matchedSearchRanges: [],
         )
     }
 
@@ -777,7 +875,7 @@ extension CVComponentBodyText: CVAccessibilityComponent {
         case .oversizeTextDownloading:
             return labelConfigForOversizeTextDownloading.text.accessibilityDescription
         case .remotelyDeleted:
-            return labelConfigForRemotelyDeleted.text.accessibilityDescription
+            return textViewConfigForRemotelyDeleted.text.accessibilityDescription
         }
     }
 }

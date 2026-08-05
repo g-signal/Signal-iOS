@@ -951,29 +951,21 @@ open class ProxiedContentDownloader: NSObject, URLSessionTaskDelegate, URLSessio
 
     // MARK: Temp Directory
 
-    public func ensureDownloadFolder() {
+    private func ensureDownloadFolder() {
         // We write assets to the temporary directory so that iOS can clean them up.
         // We try to eagerly clean up these assets when they are no longer in use.
 
-        let tempDirPath = OWSTemporaryDirectory()
+        let tempDirPath = OWSFileSystem.temporaryFilePath(isAvailableWhileDeviceLocked: false)
         let dirPath = (tempDirPath as NSString).appendingPathComponent(downloadFolderName)
         do {
             let fileManager = FileManager.default
 
-            // Try to delete existing folder if necessary.
-            if fileManager.fileExists(atPath: dirPath) {
-                try fileManager.removeItem(atPath: dirPath)
-                downloadFolderPath = dirPath
-            }
-            // Try to create folder if necessary.
-            if !fileManager.fileExists(atPath: dirPath) {
-                try fileManager.createDirectory(
-                    atPath: dirPath,
-                    withIntermediateDirectories: true,
-                    attributes: nil,
-                )
-                downloadFolderPath = dirPath
-            }
+            try fileManager.createDirectory(
+                atPath: dirPath,
+                withIntermediateDirectories: true,
+                attributes: nil,
+            )
+            downloadFolderPath = dirPath
 
             // Don't back up ProxiedContent downloads.
             OWSFileSystem.protectFileOrFolder(atPath: dirPath)

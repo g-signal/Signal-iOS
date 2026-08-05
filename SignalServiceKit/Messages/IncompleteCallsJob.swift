@@ -37,7 +37,7 @@ public class IncompleteCallsJob {
     ) {
         // Preconditions: Must be a valid call that started before the app launched.
         guard
-            let call = TSCall.anyFetchCall(uniqueId: uniqueId, transaction: writeTx),
+            let call = TSCall.fetchCallViaCache(uniqueId: uniqueId, transaction: writeTx),
             let callRowId = call.sqliteRowId,
             let contactThread = call.thread(tx: writeTx) as? TSContactThread
         else {

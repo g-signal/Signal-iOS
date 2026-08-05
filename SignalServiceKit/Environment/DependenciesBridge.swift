@@ -49,6 +49,7 @@ public class DependenciesBridge {
     public let accountAttributesUpdater: AccountAttributesUpdater
     public let accountEntropyPoolManager: AccountEntropyPoolManager
     public let adHocCallRecordManager: any AdHocCallRecordManager
+    public let adminDeleteManager: AdminDeleteManager
     public let appExpiry: AppExpiry
     public let attachmentContentValidator: AttachmentContentValidator
     public let attachmentDownloadManager: AttachmentDownloadManager
@@ -67,12 +68,11 @@ public class DependenciesBridge {
     public let backupArchiveManager: BackupArchiveManager
     public let backupAttachmentDownloadProgress: BackupAttachmentDownloadProgress
     public let backupAttachmentDownloadStore: BackupAttachmentDownloadStore
-    public let backupAttachmentDownloadQueueStatusReporter: BackupAttachmentDownloadQueueStatusReporter
+    public let backupAttachmentDownloadQueueStatusManager: BackupAttachmentDownloadQueueStatusManager
     public let backupAttachmentCoordinator: BackupAttachmentCoordinator
     public let backupAttachmentUploadProgress: BackupAttachmentUploadProgress
-    public let backupAttachmentUploadQueueStatusReporter: BackupAttachmentUploadQueueStatusReporter
+    public let backupAttachmentUploadQueueStatusManager: BackupAttachmentUploadQueueStatusManager
     public let backupAttachmentUploadStore: BackupAttachmentUploadStore
-    public let backupDisablingManager: BackupDisablingManager
     public let backupExportJob: BackupExportJob
     public let backupExportJobRunner: BackupExportJobRunner
     public let backupFailureStateManager: BackupFailureStateManager
@@ -128,6 +128,7 @@ public class DependenciesBridge {
     public let individualCallRecordManager: IndividualCallRecordManager
     public let interactionDeleteManager: InteractionDeleteManager
     public let interactionStore: InteractionStore
+    public let keyTransparencyManager: KeyTransparencyManager
     public let lastVisibleInteractionStore: LastVisibleInteractionStore
     public let linkAndSyncManager: LinkAndSyncManager
     public let linkPreviewManager: LinkPreviewManager
@@ -190,6 +191,7 @@ public class DependenciesBridge {
         accountAttributesUpdater: AccountAttributesUpdater,
         accountEntropyPoolManager: AccountEntropyPoolManager,
         adHocCallRecordManager: any AdHocCallRecordManager,
+        adminDeleteManager: AdminDeleteManager,
         appExpiry: AppExpiry,
         attachmentContentValidator: AttachmentContentValidator,
         attachmentDownloadManager: AttachmentDownloadManager,
@@ -208,12 +210,11 @@ public class DependenciesBridge {
         backupArchiveManager: BackupArchiveManager,
         backupAttachmentDownloadProgress: BackupAttachmentDownloadProgress,
         backupAttachmentDownloadStore: BackupAttachmentDownloadStore,
-        backupAttachmentDownloadQueueStatusReporter: BackupAttachmentDownloadQueueStatusReporter,
+        backupAttachmentDownloadQueueStatusManager: BackupAttachmentDownloadQueueStatusManager,
         backupAttachmentCoordinator: BackupAttachmentCoordinator,
         backupAttachmentUploadProgress: BackupAttachmentUploadProgress,
-        backupAttachmentUploadQueueStatusReporter: BackupAttachmentUploadQueueStatusReporter,
+        backupAttachmentUploadQueueStatusManager: BackupAttachmentUploadQueueStatusManager,
         backupAttachmentUploadStore: BackupAttachmentUploadStore,
-        backupDisablingManager: BackupDisablingManager,
         backupExportJob: BackupExportJob,
         backupExportJobRunner: BackupExportJobRunner,
         backupFailureStateManager: BackupFailureStateManager,
@@ -269,6 +270,7 @@ public class DependenciesBridge {
         individualCallRecordManager: IndividualCallRecordManager,
         interactionDeleteManager: InteractionDeleteManager,
         interactionStore: InteractionStore,
+        keyTransparencyManager: KeyTransparencyManager,
         lastVisibleInteractionStore: LastVisibleInteractionStore,
         linkAndSyncManager: LinkAndSyncManager,
         linkPreviewManager: LinkPreviewManager,
@@ -330,6 +332,7 @@ public class DependenciesBridge {
         self.accountAttributesUpdater = accountAttributesUpdater
         self.accountEntropyPoolManager = accountEntropyPoolManager
         self.adHocCallRecordManager = adHocCallRecordManager
+        self.adminDeleteManager = adminDeleteManager
         self.appExpiry = appExpiry
         self.attachmentContentValidator = attachmentContentValidator
         self.attachmentDownloadManager = attachmentDownloadManager
@@ -348,12 +351,11 @@ public class DependenciesBridge {
         self.backupArchiveManager = backupArchiveManager
         self.backupAttachmentDownloadProgress = backupAttachmentDownloadProgress
         self.backupAttachmentDownloadStore = backupAttachmentDownloadStore
-        self.backupAttachmentDownloadQueueStatusReporter = backupAttachmentDownloadQueueStatusReporter
+        self.backupAttachmentDownloadQueueStatusManager = backupAttachmentDownloadQueueStatusManager
         self.backupAttachmentCoordinator = backupAttachmentCoordinator
         self.backupAttachmentUploadProgress = backupAttachmentUploadProgress
-        self.backupAttachmentUploadQueueStatusReporter = backupAttachmentUploadQueueStatusReporter
+        self.backupAttachmentUploadQueueStatusManager = backupAttachmentUploadQueueStatusManager
         self.backupAttachmentUploadStore = backupAttachmentUploadStore
-        self.backupDisablingManager = backupDisablingManager
         self.backupExportJob = backupExportJob
         self.backupExportJobRunner = backupExportJobRunner
         self.backupFailureStateManager = backupFailureStateManager
@@ -409,6 +411,7 @@ public class DependenciesBridge {
         self.individualCallRecordManager = individualCallRecordManager
         self.interactionDeleteManager = interactionDeleteManager
         self.interactionStore = interactionStore
+        self.keyTransparencyManager = keyTransparencyManager
         self.lastVisibleInteractionStore = lastVisibleInteractionStore
         self.linkAndSyncManager = linkAndSyncManager
         self.linkPreviewManager = linkPreviewManager

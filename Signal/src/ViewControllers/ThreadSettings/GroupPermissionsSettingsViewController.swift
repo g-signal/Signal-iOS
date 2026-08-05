@@ -31,7 +31,7 @@ class GroupPermissionsSettingsViewController: OWSTableViewController2 {
     init(threadViewModel: ThreadViewModel, delegate: GroupPermissionsSettingsDelegate) {
         owsAssertDebug(threadViewModel.threadRecord.isGroupV2Thread)
         self.threadViewModel = threadViewModel
-        self.groupViewHelper = GroupViewHelper(threadViewModel: threadViewModel)
+        self.groupViewHelper = GroupViewHelper(threadViewModel: threadViewModel, memberLabelCoordinator: nil)
         self.permissionsDelegate = delegate
 
         super.init()
@@ -122,15 +122,15 @@ class GroupPermissionsSettingsViewController: OWSTableViewController2 {
             "CONVERSATION_SETTINGS_EDIT_ATTRIBUTES_ACCESS",
             comment: "Label for 'edit attributes access' action in conversation settings view.",
         )
-        if BuildFlags.PinnedMessages.send {
+        if BuildFlags.MemberLabel.send {
             accessAttributesSection.footerTitle = OWSLocalizedString(
-                "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2",
-                comment: "Footer for the 'attributes access' section in conversation settings view with pinned messages added.",
+                "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V3",
+                comment: "Footer for the 'attributes access' section in conversation settings view with member labels added.",
             )
         } else {
             accessAttributesSection.footerTitle = OWSLocalizedString(
-                "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER",
-                comment: "Footer for the 'attributes access' section in conversation settings view.",
+                "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2",
+                comment: "Footer for the 'attributes access' section in conversation settings view with pinned messages added.",
             )
         }
 
@@ -203,11 +203,42 @@ class GroupPermissionsSettingsViewController: OWSTableViewController2 {
         self.updateNavigation()
     }
 
+    private func showClearMemberLabelWarning(continueHandler: @escaping () -> Void) {
+        let actionSheet = ActionSheetController(
+            title: OWSLocalizedString(
+                "MEMBER_LABEL_CLEAR_WARNING_TITLE",
+                comment: "Title for action sheet when attempting to change the group attributes access to 'administrator'",
+            ),
+            message: OWSLocalizedString(
+                "MEMBER_LABEL_CLEAR_WARNING_BODY",
+                comment: "Body for action sheet when attempting to change the group attributes access to 'administrator'",
+            ),
+        )
+        actionSheet.addAction(.init(
+            title: OWSLocalizedString(
+                "MEMBER_LABEL_CLEAR_CHANGE_PERMISSION_CONTINUE",
+                comment: "Button label on action sheet when attempting to change the group attributes access to 'administrator' and then continue",
+            ),
+            style: .default,
+            handler: { _ in
+                continueHandler()
+            },
+        ))
+        actionSheet.addAction(.cancel)
+
+        if BuildFlags.MemberLabel.send {
+            self.presentActionSheet(actionSheet)
+        } else {
+            continueHandler()
+        }
+    }
+
     private func tryToSetAccessAttributes(_ value: GroupV2Access) {
         guard groupViewHelper.canEditPermissions else {
             showAdminOnlyWarningAlert()
             return
         }
+
         self.newAccessAttributes = value
         self.updateTableContents()
         self.updateNavigation()
@@ -235,7 +266,7 @@ class GroupPermissionsSettingsViewController: OWSTableViewController2 {
     private func reloadThreadAndUpdateContent() {
         let didUpdate = SSKEnvironment.shared.databaseStorageRef.read { transaction -> Bool in
             guard
-                let newThread = TSThread.anyFetch(
+                let newThread = TSThread.fetchViaCache(
                     uniqueId: self.thread.uniqueId,
                     transaction: transaction,
                 )
@@ -248,7 +279,7 @@ class GroupPermissionsSettingsViewController: OWSTableViewController2 {
                 transaction: transaction,
             )
             self.threadViewModel = newThreadViewModel
-            self.groupViewHelper = GroupViewHelper(threadViewModel: newThreadViewModel)
+            self.groupViewHelper = GroupViewHelper(threadViewModel: newThreadViewModel, memberLabelCoordinator: nil)
             self.groupViewHelper.delegate = self
             return true
         }

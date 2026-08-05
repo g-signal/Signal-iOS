@@ -3,13 +3,35 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
+import GRDB
 public import LibSignalClient
 
 extension TSThread {
+    public static var databaseTableName: String { ThreadRecord.databaseTableName }
+
     public typealias RowId = Int64
 
     public var logString: String {
         return (self as? TSGroupThread)?.groupId.toHex() ?? self.uniqueId
+    }
+
+    // [SDS] TODO: Replace with SDSCodableModel.
+    static func anyEnumerate(
+        transaction: DBReadTransaction,
+        sql: String,
+        arguments: StatementArguments,
+        block: (TSThread, UnsafeMutablePointer<ObjCBool>) -> Void,
+    ) {
+        let cursor = TSThread.grdbFetchCursor(sql: sql, arguments: arguments, transaction: transaction)
+        failIfThrows {
+            var stop: ObjCBool = false
+            while let thread = try cursor.next() {
+                block(thread, &stop)
+                if stop.boolValue {
+                    break
+                }
+            }
+        }
     }
 
     // MARK: - updateWith...
@@ -318,7 +340,7 @@ extension TSThread {
         tx.addFinalizationBlock(key: uniqueId) { tx in
             let databaseStorage = SSKEnvironment.shared.databaseStorageRef
 
-            guard let selfThread = Self.anyFetch(uniqueId: self.uniqueId, transaction: tx) else {
+            guard let selfThread = Self.fetchViaCache(uniqueId: self.uniqueId, transaction: tx) else {
                 return
             }
 

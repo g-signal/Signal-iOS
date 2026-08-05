@@ -162,13 +162,7 @@ private class StickerPacksToolbar: UIView {
         if #available(iOS 26, *) {
             // Glass capsule-shaped panel on iOS 26+.
             let glassEffect = UIGlassEffect(style: .regular)
-            // Copied from ConversationInputToolbar.
-            glassEffect.tintColor = UIColor { traitCollection in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return UIColor(white: 0, alpha: 0.2)
-                }
-                return UIColor(white: 1, alpha: 0.12)
-            }
+            glassEffect.tintColor = .Signal.glassBackgroundTint
             let glassEffectView = UIVisualEffectView(effect: glassEffect)
             glassEffectView.clipsToBounds = true
             glassEffectView.cornerConfiguration = .capsule()
@@ -377,9 +371,9 @@ private class StickerPickerPageView: UIView {
 
     private let storyStickerConfiguration: StoryStickerConfiguration
 
-    private var stickerPacks = [StickerPack]()
+    private var stickerPacks = [StickerPackRecord]()
 
-    private var selectedStickerPack: StickerPack? {
+    private var selectedStickerPack: StickerPackRecord? {
         didSet {
             selectedPackChanged(oldSelectedPack: oldValue)
         }
@@ -534,7 +528,7 @@ private class StickerPickerPageView: UIView {
         updateSelectedStickerPack(nil)
     }
 
-    private func updateSelectedStickerPack(_ stickerPack: StickerPack?, scrollToSelected: Bool = false) {
+    private func updateSelectedStickerPack(_ stickerPack: StickerPackRecord?, scrollToSelected: Bool = false) {
         selectedStickerPack = stickerPack
         delegate?.updateSelections(scrollToSelectedItem: scrollToSelected)
     }
@@ -575,7 +569,7 @@ private class StickerPickerPageView: UIView {
         return scrollView
     }()
 
-    private var nextPageStickerPack: StickerPack? {
+    private var nextPageStickerPack: StickerPackRecord? {
         // If we don't have a pack defined, the first pack is always up next
         guard let stickerPack = selectedStickerPack else { return stickerPacks.first }
 
@@ -586,7 +580,7 @@ private class StickerPickerPageView: UIView {
         return stickerPacks[index + 1]
     }
 
-    private var previousPageStickerPack: StickerPack? {
+    private var previousPageStickerPack: StickerPackRecord? {
         // If we don't have a pack defined, the last pack is always previous
         guard let stickerPack = selectedStickerPack else { return stickerPacks.last }
 
@@ -692,7 +686,7 @@ private class StickerPickerPageView: UIView {
         pendingPageChangeUpdates = nil
     }
 
-    private func selectedPackChanged(oldSelectedPack: StickerPack?) {
+    private func selectedPackChanged(oldSelectedPack: StickerPackRecord?) {
         AssertIsOnMainThread()
 
         // We're paging backwards!

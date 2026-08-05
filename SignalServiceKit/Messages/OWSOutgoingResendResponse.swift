@@ -102,7 +102,7 @@ final class OWSOutgoingResendResponse: TransientOutgoingMessage {
                 tx: tx,
             )
         {
-            let originalThread = TSThread.anyFetch(uniqueId: payloadRecord.uniqueThreadId, transaction: tx)
+            let originalThread = TSThread.fetchViaCache(uniqueId: payloadRecord.uniqueThreadId, transaction: tx)
 
             // We should inherit the timestamp of the failed message. This allows the
             // recipient of this message to correlate the resend response with the
@@ -166,7 +166,7 @@ final class OWSOutgoingResendResponse: TransientOutgoingMessage {
         let tsAccountManager = DependenciesBridge.shared.tsAccountManager
         if
             let originalThreadId,
-            let originalThread = TSThread.anyFetch(uniqueId: originalThreadId, transaction: tx),
+            let originalThread = TSThread.fetchViaCache(uniqueId: originalThreadId, transaction: tx),
             originalThread.usesSenderKey,
             let recipientAddress = self.recipientAddresses().first,
             originalThread.recipientAddresses(with: tx).contains(recipientAddress),
@@ -205,7 +205,7 @@ final class OWSOutgoingResendResponse: TransientOutgoingMessage {
         if
             self.didAppendSKDM,
             let originalThreadId,
-            let originalThread = TSThread.anyFetch(uniqueId: originalThreadId, transaction: tx),
+            let originalThread = TSThread.fetchViaCache(uniqueId: originalThreadId, transaction: tx),
             originalThread.usesSenderKey
         {
             do {

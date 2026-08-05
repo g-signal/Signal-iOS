@@ -459,7 +459,7 @@ public extension StoryContext {
                 transaction: transaction,
             )
         case .privateStory(let uniqueId):
-            return TSPrivateStoryThread.anyFetchPrivateStoryThread(uniqueId: uniqueId, transaction: transaction)
+            return TSPrivateStoryThread.fetchPrivateStoryThreadViaCache(uniqueId: uniqueId, transaction: transaction)
         case .none:
             return nil
         }

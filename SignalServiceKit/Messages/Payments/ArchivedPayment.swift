@@ -291,7 +291,7 @@ extension TSPaymentModel {
             blockTimestamp: mcLedgerBlockTimestamp,
             transaction: mcTransactionData,
             receipt: mcReceiptData,
-            senderOrRecipientAci: senderOrRecipientAci?.wrappedAciValue,
+            senderOrRecipientAci: senderOrRecipientAci,
             interactionUniqueId: interactionUniqueId,
         )
     }

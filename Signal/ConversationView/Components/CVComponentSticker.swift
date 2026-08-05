@@ -82,7 +82,7 @@ public class CVComponentSticker: CVComponentBase, CVComponent {
             case .uploading:
                 let progressView = CVAttachmentProgressView(
                     direction: .upload(attachmentStream: attachmentStream.attachmentStream),
-                    isDarkThemeEnabled: conversationStyle.isDarkThemeEnabled,
+                    colorConfiguration: .init(conversationStyle: conversationStyle, isIncoming: isIncoming),
                     mediaCache: mediaCache,
                 )
                 stackView.addSubview(progressView)
@@ -134,7 +134,7 @@ public class CVComponentSticker: CVComponentBase, CVComponent {
                 attachmentPointer: attachmentPointer.attachmentPointer,
                 downloadState: downloadState,
             ),
-            isDarkThemeEnabled: conversationStyle.isDarkThemeEnabled,
+            colorConfiguration: .init(conversationStyle: conversationStyle, isIncoming: isIncoming),
             mediaCache: mediaCache,
         )
         stackView.addSubview(progressView)

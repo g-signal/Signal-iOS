@@ -153,7 +153,7 @@ public class GroupMembershipNameCollisionFinder: NameCollisionFinder {
     }
 
     public func findCollisions(transaction: DBReadTransaction) -> [NameCollision] {
-        guard let updatedThread = TSGroupThread.anyFetchGroupThread(uniqueId: groupThread.uniqueId, transaction: transaction) else {
+        guard let updatedThread = TSGroupThread.fetchGroupThreadViaCache(uniqueId: groupThread.uniqueId, transaction: transaction) else {
             return []
         }
         groupThread = updatedThread

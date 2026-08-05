@@ -270,7 +270,7 @@ public class TypingIndicatorsImpl: NSObject, TypingIndicators {
                 do {
                     let databaseStorage = SSKEnvironment.shared.databaseStorageRef
                     let sendMessagePromise = await databaseStorage.awaitableWrite { transaction -> Promise<Void> in
-                        guard let thread = TSThread.anyFetch(uniqueId: threadUniqueId, transaction: transaction) else {
+                        guard let thread = TSThread.fetchViaCache(uniqueId: threadUniqueId, transaction: transaction) else {
                             return .value(())
                         }
 

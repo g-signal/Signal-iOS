@@ -145,11 +145,8 @@ class MessageUserSubsetSheet: OWSTableSheetViewController {
         contents.add(section)
 
         var groupNameColors: GroupNameColors?
-        if
-            let groupThread,
-            let localAci = SSKEnvironment.shared.databaseStorageRef.read(block: { tx in DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: tx)?.aci })
-        {
-            groupNameColors = GroupNameColors.forThread(groupThread, localAci: localAci)
+        if let groupThread {
+            groupNameColors = GroupNameColors.forThread(groupThread)
         }
 
         for address in addresses {
@@ -166,13 +163,13 @@ class MessageUserSubsetSheet: OWSTableSheetViewController {
                     configuration.forceDarkAppearance = self?.forceDarkMode ?? false
 
                     if
-                        BuildFlags.MemberLabel.receive,
+                        BuildFlags.MemberLabel.display,
                         let groupThread = self?.groupThread,
                         let senderAci = address.aci,
-                        let memberLabelString = groupThread.groupModel.groupMembership.memberLabel(for: senderAci),
+                        let memberLabelString = groupThread.groupModel.groupMembership.memberLabel(for: senderAci)?.labelForRendering(),
                         let groupNameColors
                     {
-                        configuration.memberLabel = MemberLabel(label: memberLabelString, groupNameColor: groupNameColors.color(for: senderAci))
+                        configuration.memberLabel = MemberLabelForRendering(label: memberLabelString, groupNameColor: groupNameColors.color(for: senderAci))
                     }
 
                     SSKEnvironment.shared.databaseStorageRef.read {

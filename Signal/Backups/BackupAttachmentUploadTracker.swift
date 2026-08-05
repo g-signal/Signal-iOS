@@ -9,18 +9,28 @@ import SwiftUI
 /// Manages async streams of `UploadUpdate`s, which represent the state and
 /// progress of Backup Attachment uploads.
 ///
-/// - SeeAlso `BackupAttachmentUploadQueueStatusReporter`
+/// - SeeAlso `BackupAttachmentUploadQueueStatusManager`
 /// - SeeAlso `BackupAttachmentUploadProgress`
 ///
 /// - SeeAlso ``BackupAttachmentDownloadTracker``
 final class BackupAttachmentUploadTracker {
     struct UploadUpdate: Equatable {
         enum State {
-            case running
+            case uploading
+            /// - Note
+            /// We only include "attachments present locally when Backups was
+            /// enabled" in upload progress. So, we may have a non-empty "upload
+            /// queue" but have no uploads we need to track progress for; hence
+            /// the cagey name.
+            /// - SeeAlso `BackupAttachmentUploadProgress`
+            case noUploadsToReport
+            case suspended
+            case notRegisteredAndReady
             case pausedLowBattery
             case pausedLowPowerMode
             case pausedNeedsWifi
             case pausedNeedsInternet
+            case hasConsumedMediaTierCapacity
         }
 
         let state: State
@@ -43,25 +53,27 @@ final class BackupAttachmentUploadTracker {
         }
 
         static func ==(lhs: UploadUpdate, rhs: UploadUpdate) -> Bool {
-            return lhs.state == rhs.state && lhs.percentageUploaded == rhs.percentageUploaded
+            return lhs.state == rhs.state
+                && lhs.bytesUploaded == rhs.bytesUploaded
+                && lhs.totalBytesToUpload == rhs.totalBytesToUpload
         }
     }
 
-    private let backupAttachmentUploadQueueStatusReporter: BackupAttachmentUploadQueueStatusReporter
+    private let backupAttachmentUploadQueueStatusManager: BackupAttachmentUploadQueueStatusManager
     private let backupAttachmentUploadProgress: BackupAttachmentUploadProgress
 
     init(
-        backupAttachmentUploadQueueStatusReporter: BackupAttachmentUploadQueueStatusReporter,
+        backupAttachmentUploadQueueStatusManager: BackupAttachmentUploadQueueStatusManager,
         backupAttachmentUploadProgress: BackupAttachmentUploadProgress,
     ) {
-        self.backupAttachmentUploadQueueStatusReporter = backupAttachmentUploadQueueStatusReporter
+        self.backupAttachmentUploadQueueStatusManager = backupAttachmentUploadQueueStatusManager
         self.backupAttachmentUploadProgress = backupAttachmentUploadProgress
     }
 
-    func updates() -> AsyncStream<UploadUpdate?> {
+    func updates() -> AsyncStream<UploadUpdate> {
         return AsyncStream { continuation in
             let tracker = Tracker(
-                backupAttachmentUploadQueueStatusReporter: backupAttachmentUploadQueueStatusReporter,
+                backupAttachmentUploadQueueStatusManager: backupAttachmentUploadQueueStatusManager,
                 backupAttachmentUploadProgress: backupAttachmentUploadProgress,
                 continuation: continuation,
             )
@@ -89,25 +101,25 @@ private class Tracker {
     typealias UploadUpdate = BackupAttachmentUploadTracker.UploadUpdate
 
     private struct State {
-        var lastReportedUploadProgress: OWSProgress = .zero
+        var lastReportedUploadProgress: OWSProgress?
         var lastReportedUploadQueueStatus: BackupAttachmentUploadQueueStatus?
 
         var uploadQueueStatusObserver: NotificationCenter.Observer?
         var uploadProgressObserver: BackupAttachmentUploadProgress.Observer?
 
-        let streamContinuation: AsyncStream<UploadUpdate?>.Continuation
+        let streamContinuation: AsyncStream<UploadUpdate>.Continuation
     }
 
-    private let backupAttachmentUploadQueueStatusReporter: BackupAttachmentUploadQueueStatusReporter
+    private let backupAttachmentUploadQueueStatusManager: BackupAttachmentUploadQueueStatusManager
     private let backupAttachmentUploadProgress: BackupAttachmentUploadProgress
     private let state: SeriallyAccessedState<State>
 
     init(
-        backupAttachmentUploadQueueStatusReporter: BackupAttachmentUploadQueueStatusReporter,
+        backupAttachmentUploadQueueStatusManager: BackupAttachmentUploadQueueStatusManager,
         backupAttachmentUploadProgress: BackupAttachmentUploadProgress,
-        continuation: AsyncStream<UploadUpdate?>.Continuation,
+        continuation: AsyncStream<UploadUpdate>.Continuation,
     ) {
-        self.backupAttachmentUploadQueueStatusReporter = backupAttachmentUploadQueueStatusReporter
+        self.backupAttachmentUploadQueueStatusManager = backupAttachmentUploadQueueStatusManager
         self.backupAttachmentUploadProgress = backupAttachmentUploadProgress
         self.state = SeriallyAccessedState(State(
             streamContinuation: continuation,
@@ -145,14 +157,14 @@ private class Tracker {
             guard let self else { return }
 
             handleQueueStatusUpdate(
-                backupAttachmentUploadQueueStatusReporter.currentStatus(for: .fullsize),
+                backupAttachmentUploadQueueStatusManager.currentStatus(for: .fullsize),
             )
         }
 
         // Now that we're observing updates, handle the initial value as if we'd
         // just gotten it in an update.
         handleQueueStatusUpdate(
-            backupAttachmentUploadQueueStatusReporter.currentStatus(for: .fullsize),
+            backupAttachmentUploadQueueStatusManager.beginObservingIfNecessary(for: .fullsize),
         )
 
         return uploadQueueStatusObserver
@@ -207,44 +219,53 @@ private class Tracker {
 
     private func yieldCurrentUploadUpdate(state: State) {
         let streamContinuation = state.streamContinuation
-        let lastReportedUploadProgress = state.lastReportedUploadProgress
 
-        guard let lastReportedUploadQueueStatus = state.lastReportedUploadQueueStatus else {
+        guard
+            let lastReportedUploadProgress = state.lastReportedUploadProgress,
+            let lastReportedUploadQueueStatus = state.lastReportedUploadQueueStatus
+        else {
             return
         }
 
         guard lastReportedUploadProgress.totalUnitCount > 0 else {
-            // We have no meaningful progress to report on.
+            // If our "total bytes" to upload is zero, then regardless of the
+            // queue status we have nothing to report.
+            streamContinuation.yield(UploadUpdate(
+                state: .noUploadsToReport,
+                progress: lastReportedUploadProgress,
+            ))
             return
         }
 
-        let uploadUpdateState: UploadUpdate.State? = {
-            switch lastReportedUploadQueueStatus {
-            case .empty:
-                return nil
-            case .notRegisteredAndReady, .appBackgrounded, .suspended:
-                return nil
-            case .running:
-                return .running
-            case .noReachability:
-                return .pausedNeedsInternet
-            case .noWifiReachability:
-                return .pausedNeedsWifi
-            case .lowBattery:
-                return .pausedLowBattery
-            case .lowPowerMode:
-                return .pausedLowPowerMode
-            case .hasConsumedMediaTierCapacity:
-                // This gets bubbled up via other mechanisms; to the UI
-                // this upload state doesn't show a bar so its nil.
-                return nil
-            }
-        }()
-
-        if let uploadUpdateState {
-            streamContinuation.yield(UploadUpdate(state: uploadUpdateState, progress: lastReportedUploadProgress))
-        } else {
-            streamContinuation.yield(nil)
+        let uploadUpdateState: UploadUpdate.State
+        switch lastReportedUploadQueueStatus {
+        case .appBackgrounded:
+            // Don't emit an update when the app is backgrounded, so callers are
+            // left with the last update before backgrounding.
+            return
+        case .running:
+            uploadUpdateState = .uploading
+        case .suspended:
+            uploadUpdateState = .suspended
+        case .empty:
+            uploadUpdateState = .noUploadsToReport
+        case .notRegisteredAndReady:
+            uploadUpdateState = .notRegisteredAndReady
+        case .noReachability:
+            uploadUpdateState = .pausedNeedsInternet
+        case .noWifiReachability:
+            uploadUpdateState = .pausedNeedsWifi
+        case .lowBattery:
+            uploadUpdateState = .pausedLowBattery
+        case .lowPowerMode:
+            uploadUpdateState = .pausedLowPowerMode
+        case .hasConsumedMediaTierCapacity:
+            uploadUpdateState = .hasConsumedMediaTierCapacity
         }
+
+        streamContinuation.yield(UploadUpdate(
+            state: uploadUpdateState,
+            progress: lastReportedUploadProgress,
+        ))
     }
 }

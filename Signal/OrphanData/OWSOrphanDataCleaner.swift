@@ -103,14 +103,8 @@ enum OWSOrphanDataCleaner {
 
         try Task.checkCancellation()
 
-        let groupAvatarFilePaths: Set<String>
-        do {
-            groupAvatarFilePaths = try databaseStorage.read { tx in
-                return try TSGroupModel.allGroupAvatarFilePaths(transaction: tx)
-            }
-        } catch {
-            owsFailDebug("failed to query group avatar file paths: \(error)")
-            throw error
+        let groupAvatarFilePaths = databaseStorage.read { tx in
+            return TSGroupModel.allGroupAvatarFilePaths(transaction: tx)
         }
 
         try Task.checkCancellation()
@@ -272,7 +266,7 @@ enum OWSOrphanDataCleaner {
         for interactionId in orphanedData.interactionIds {
             try Task.checkCancellation()
             await databaseStorage.awaitableWrite { transaction in
-                guard let interaction = TSInteraction.anyFetch(uniqueId: interactionId, transaction: transaction) else {
+                guard let interaction = TSInteraction.fetchViaCache(uniqueId: interactionId, transaction: transaction) else {
                     // This could just be a race condition, but it should be very unlikely.
                     Logger.warn("Could not load interaction: \(interactionId)")
                     return

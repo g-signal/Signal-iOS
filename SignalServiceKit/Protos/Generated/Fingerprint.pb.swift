@@ -40,11 +40,11 @@ struct FingerprintProtos_LogicalFingerprint: Sendable {
 
   /// @required
   var identityData: Data {
-    get {return _identityData ?? Data()}
+    get {_identityData ?? Data()}
     set {_identityData = newValue}
   }
   /// Returns true if `identityData` has been explicitly set.
-  var hasIdentityData: Bool {return self._identityData != nil}
+  var hasIdentityData: Bool {self._identityData != nil}
   /// Clears the value of `identityData`. Subsequent reads from it will return its default value.
   mutating func clearIdentityData() {self._identityData = nil}
 
@@ -62,31 +62,31 @@ struct FingerprintProtos_LogicalFingerprints: Sendable {
 
   /// @required
   var version: UInt32 {
-    get {return _version ?? 0}
+    get {_version ?? 0}
     set {_version = newValue}
   }
   /// Returns true if `version` has been explicitly set.
-  var hasVersion: Bool {return self._version != nil}
+  var hasVersion: Bool {self._version != nil}
   /// Clears the value of `version`. Subsequent reads from it will return its default value.
   mutating func clearVersion() {self._version = nil}
 
   /// @required
   var localFingerprint: FingerprintProtos_LogicalFingerprint {
-    get {return _localFingerprint ?? FingerprintProtos_LogicalFingerprint()}
+    get {_localFingerprint ?? FingerprintProtos_LogicalFingerprint()}
     set {_localFingerprint = newValue}
   }
   /// Returns true if `localFingerprint` has been explicitly set.
-  var hasLocalFingerprint: Bool {return self._localFingerprint != nil}
+  var hasLocalFingerprint: Bool {self._localFingerprint != nil}
   /// Clears the value of `localFingerprint`. Subsequent reads from it will return its default value.
   mutating func clearLocalFingerprint() {self._localFingerprint = nil}
 
   /// @required
   var remoteFingerprint: FingerprintProtos_LogicalFingerprint {
-    get {return _remoteFingerprint ?? FingerprintProtos_LogicalFingerprint()}
+    get {_remoteFingerprint ?? FingerprintProtos_LogicalFingerprint()}
     set {_remoteFingerprint = newValue}
   }
   /// Returns true if `remoteFingerprint` has been explicitly set.
-  var hasRemoteFingerprint: Bool {return self._remoteFingerprint != nil}
+  var hasRemoteFingerprint: Bool {self._remoteFingerprint != nil}
   /// Clears the value of `remoteFingerprint`. Subsequent reads from it will return its default value.
   mutating func clearRemoteFingerprint() {self._remoteFingerprint = nil}
 

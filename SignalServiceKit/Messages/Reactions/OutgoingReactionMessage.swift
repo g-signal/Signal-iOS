@@ -121,7 +121,7 @@ final class OutgoingReactionMessage: TransientOutgoingMessage {
     }
 
     private func buildDataMessageReactionProto(tx: DBReadTransaction) -> SSKProtoDataMessageReaction? {
-        guard let message = TSMessage.anyFetchMessage(uniqueId: messageUniqueId, transaction: tx) else {
+        guard let message = TSMessage.fetchMessageViaCache(uniqueId: messageUniqueId, transaction: tx) else {
             owsFailDebug("Missing message for reaction.")
             return nil
         }
@@ -178,7 +178,7 @@ final class OutgoingReactionMessage: TransientOutgoingMessage {
             owsFailDebug("Missing localAci.")
             return
         }
-        guard let message = TSMessage.anyFetchMessage(uniqueId: messageUniqueId, transaction: tx) else {
+        guard let message = TSMessage.fetchMessageViaCache(uniqueId: messageUniqueId, transaction: tx) else {
             owsFailDebug("Missing message.")
             return
         }

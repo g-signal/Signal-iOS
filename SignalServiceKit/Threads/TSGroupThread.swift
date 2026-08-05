@@ -8,7 +8,6 @@ public import LibSignalClient
 extension TSGroupThread {
     func update(
         with newGroupModel: TSGroupModel,
-        shouldUpdateChatListUi: Bool = true,
         transaction tx: DBWriteTransaction,
     ) {
         let didAvatarChange = newGroupModel.avatarHash == groupModel.avatarHash
@@ -64,7 +63,7 @@ extension TSGroupThread {
     @objc
     public static func fetch(groupId: Data, transaction: DBReadTransaction) -> TSGroupThread? {
         let uniqueId = threadId(forGroupId: groupId, transaction: transaction)
-        return TSGroupThread.anyFetchGroupThread(uniqueId: uniqueId, transaction: transaction)
+        return TSGroupThread.fetchGroupThreadViaCache(uniqueId: uniqueId, transaction: transaction)
     }
 
     // MARK: -

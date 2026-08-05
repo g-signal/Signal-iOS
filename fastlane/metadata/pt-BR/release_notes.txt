@@ -1,3 +1,1 @@
-• Mantenha informações importantes facilmente acessíveis com mensagens fixadas. Agora você pode fixar até três mensagens no topo de qualquer conversa individual ou em grupo para compartilhar informações importantes. 
-
-
+• Os backups seguros do Signal chegaram! Agora você pode optar por ativar backups automáticos criptografados de ponta a ponta para nunca perder uma mensagem ao trocar de celular ou reinstalar o Signal. Você pode fazer backup de todas as suas mensagens e dos últimos 45 dias de arquivos de mídia gratuitamente, ou pode pagar uma pequena taxa mensal para obter 100 GB de armazenamento e fazer backup de todos os seus anexos. Toque em Backups nas configurações do Signal para começar. Agradecemos a todos que ajudaram a testar este recurso durante o período beta!

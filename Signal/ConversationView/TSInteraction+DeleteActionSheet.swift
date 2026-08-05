@@ -5,6 +5,7 @@
 
 import Foundation
 public import SignalServiceKit
+import LibSignalClient
 import SignalUI
 import UIKit
 
@@ -88,6 +89,134 @@ public extension TSInteraction {
         fromViewController.presentActionSheet(actionSheet)
     }
 
+    /// If the local user is an admin, we prefer regular remote delete. We only fallback to
+    /// admin delete if the remote delete timeframe has expired and admin delete timeframe has not.
+    class func buildDeleteMessage(
+        thread: TSThread,
+        message: TSMessage,
+        localIdentifiers: LocalIdentifiers,
+        canAdminDelete: Bool,
+        tx: DBReadTransaction,
+    ) -> TransientOutgoingMessage? {
+        if
+            message.canBeRemotelyDeletedByNonAdmin,
+            let outgoingMessage = message as? TSOutgoingMessage
+        {
+            return OutgoingDeleteMessage(thread: thread, message: outgoingMessage, tx: tx)
+        }
+
+        guard canAdminDelete else {
+            owsFailDebug("Unable to admin-delete incoming message")
+            return nil
+        }
+
+        return OutgoingAdminDeleteMessage(
+            thread: thread,
+            message: message,
+            localIdentifiers: localIdentifiers,
+            tx: tx,
+        )
+    }
+
+    private func buildDeleteForEveryoneAction(thread: TSThread) -> ActionSheetAction? {
+        let adminDeleteManager = DependenciesBridge.shared.adminDeleteManager
+        let db = DependenciesBridge.shared.db
+
+        guard let message = self as? TSMessage else {
+            return nil
+        }
+
+        let canAdminDelete = db.read { tx in adminDeleteManager.canAdminDeleteMessage(message: message, thread: thread, tx: tx) }
+        if message.canBeRemotelyDeletedByNonAdmin || canAdminDelete {
+            return ActionSheetAction(
+                title: CommonStrings.deleteForEveryoneButton,
+                style: .destructive,
+            ) { [weak self] _ in
+                guard self != nil else { return }
+                Self.showDeleteForEveryoneConfirmationIfNecessary {
+                    SSKEnvironment.shared.databaseStorageRef.write { tx in
+                        let latestMessage = TSMessage.fetchMessageViaCache(
+                            uniqueId: message.uniqueId,
+                            transaction: tx,
+                        )
+                        guard let latestMessage, let latestThread = latestMessage.thread(tx: tx) else {
+                            // We can't reach this point in the UI if a message doesn't have a thread.
+                            return owsFailDebug("Trying to delete a message without a thread.")
+                        }
+                        guard let localIdentifiers = DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: tx) else {
+                            return owsFailDebug("LocalIdentifiers missing during message deletion.")
+                        }
+
+                        guard
+                            let deleteMessage = Self.buildDeleteMessage(
+                                thread: latestThread,
+                                message: latestMessage,
+                                localIdentifiers: localIdentifiers,
+                                canAdminDelete: canAdminDelete,
+                                tx: tx,
+                            )
+                        else {
+                            return owsFailDebug("Failure to build outgoing delete for everyone.")
+                        }
+                        // Reset the sending states, so we can render the sending state of the
+                        // deleted message. OutgoingDeleteMessage will automatically pass through
+                        // it's send state to the message record that it is deleting.
+                        // TODO: support sending state animation for incoming messages.
+                        (latestMessage as? TSOutgoingMessage)?.updateWithRecipientAddressStates(deleteMessage.recipientAddressStates, tx: tx)
+
+                        if message.canBeRemotelyDeletedByNonAdmin {
+                            _ = TSMessage.tryToRemotelyDeleteMessageAsNonAdmin(
+                                fromAuthor: localIdentifiers.aci,
+                                sentAtTimestamp: latestMessage.timestamp,
+                                threadUniqueId: latestThread.uniqueId,
+                                serverTimestamp: 0, // TSOutgoingMessage won't have server timestamp.
+                                transaction: tx,
+                            )
+                        } else if
+                            canAdminDelete,
+                            let groupThread = thread as? TSGroupThread
+                        {
+                            let originalMessageAuthorAci: Aci?
+                            let serverTimestamp: UInt64
+                            if let incomingMessage = (latestMessage as? TSIncomingMessage) {
+                                serverTimestamp = incomingMessage.serverTimestamp?.uint64Value ?? 0
+                                originalMessageAuthorAci = incomingMessage.authorAddress.aci
+                            } else {
+                                originalMessageAuthorAci = localIdentifiers.aci
+                                serverTimestamp = 0
+                            }
+
+                            guard let originalMessageAuthorAci else {
+                                owsFailDebug("Unable to admin delete without original message author")
+                                return
+                            }
+
+                            _ = DependenciesBridge.shared.adminDeleteManager.tryToAdminDeleteMessage(
+                                originalMessageAuthorAci: originalMessageAuthorAci,
+                                deleteAuthorAci: localIdentifiers.aci,
+                                sentAtTimestamp: latestMessage.timestamp,
+                                groupThread: groupThread,
+                                threadUniqueId: latestThread.uniqueId,
+                                serverTimestamp: serverTimestamp,
+                                transaction: tx,
+                            )
+                        } else {
+                            owsFailDebug("Unable to delete as admin or as non-admin")
+                            return
+                        }
+
+                        let preparedMessage = PreparedOutgoingMessage.preprepared(
+                            transientMessageWithoutAttachments: deleteMessage,
+                        )
+
+                        SSKEnvironment.shared.messageSenderJobQueueRef.add(message: preparedMessage, transaction: tx)
+                    }
+                }
+            }
+        }
+        return nil
+    }
+
     private func presentDeletionActionSheetForNotNoteToSelf(
         fromViewController: UIViewController,
         thread: TSThread,
@@ -108,54 +237,7 @@ public extension TSInteraction {
             thread: thread,
         ))
 
-        if
-            let outgoingMessage = self as? TSOutgoingMessage,
-            outgoingMessage.canBeRemotelyDeleted
-        {
-            let deleteForEveryoneAction = ActionSheetAction(
-                title: CommonStrings.deleteForEveryoneButton,
-                style: .destructive,
-            ) { [weak self] _ in
-                guard self != nil else { return }
-                Self.showDeleteForEveryoneConfirmationIfNecessary {
-                    SSKEnvironment.shared.databaseStorageRef.write { tx in
-                        let latestMessage = TSOutgoingMessage.anyFetchOutgoingMessage(
-                            uniqueId: outgoingMessage.uniqueId,
-                            transaction: tx,
-                        )
-                        guard let latestMessage, let latestThread = latestMessage.thread(tx: tx) else {
-                            // We can't reach this point in the UI if a message doesn't have a thread.
-                            return owsFailDebug("Trying to delete a message without a thread.")
-                        }
-                        let deleteMessage = OutgoingDeleteMessage(
-                            thread: latestThread,
-                            message: latestMessage,
-                            tx: tx,
-                        )
-                        // Reset the sending states, so we can render the sending state of the
-                        // deleted message. OutgoingDeleteMessage will automatically pass through
-                        // it's send state to the message record that it is deleting.
-                        latestMessage.updateWithRecipientAddressStates(deleteMessage.recipientAddressStates, tx: tx)
-
-                        if let aci = DependenciesBridge.shared.tsAccountManager.localIdentifiers(tx: tx)?.aci {
-                            _ = TSMessage.tryToRemotelyDeleteMessage(
-                                fromAuthor: aci,
-                                sentAtTimestamp: latestMessage.timestamp,
-                                threadUniqueId: latestThread.uniqueId,
-                                serverTimestamp: 0, // TSOutgoingMessage won't have server timestamp.
-                                transaction: tx,
-                            )
-                        } else {
-                            owsFailDebug("Local ACI missing during message deletion.")
-                        }
-                        let preparedMessage = PreparedOutgoingMessage.preprepared(
-                            transientMessageWithoutAttachments: deleteMessage,
-                        )
-
-                        SSKEnvironment.shared.messageSenderJobQueueRef.add(message: preparedMessage, transaction: tx)
-                    }
-                }
-            }
+        if let deleteForEveryoneAction = buildDeleteForEveryoneAction(thread: thread) {
             actionSheetController.addAction(deleteForEveryoneAction)
         }
 
@@ -195,8 +277,8 @@ public extension TSInteraction {
 
             db.asyncWrite { tx in
                 guard
-                    let freshSelf = TSInteraction.anyFetch(uniqueId: self.uniqueId, transaction: tx),
-                    let freshThread = TSThread.anyFetch(uniqueId: thread.uniqueId, transaction: tx)
+                    let freshSelf = TSInteraction.fetchViaCache(uniqueId: self.uniqueId, transaction: tx),
+                    let freshThread = TSThread.fetchViaCache(uniqueId: thread.uniqueId, transaction: tx)
                 else { return }
 
                 interactionDeleteManager.delete(

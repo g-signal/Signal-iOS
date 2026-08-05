@@ -260,7 +260,7 @@ class LongTextViewController: OWSViewController {
 
         let uniqueId = itemViewModel.interaction.uniqueId
         let messageWasDeleted = SSKEnvironment.shared.databaseStorageRef.read {
-            TSInteraction.anyFetch(uniqueId: uniqueId, transaction: $0) == nil
+            TSInteraction.fetchViaCache(uniqueId: uniqueId, transaction: $0) == nil
         }
         guard messageWasDeleted else { return }
 
@@ -346,7 +346,7 @@ class LongTextViewController: OWSViewController {
 
                     var groupViewHelper: GroupViewHelper?
                     if threadViewModel.isGroupThread {
-                        groupViewHelper = GroupViewHelper(threadViewModel: threadViewModel)
+                        groupViewHelper = GroupViewHelper(threadViewModel: threadViewModel, memberLabelCoordinator: nil)
                         groupViewHelper!.delegate = self
                     }
 
@@ -365,6 +365,8 @@ class LongTextViewController: OWSViewController {
                     )
                     self.loadContent()
                     return
+                case .deleteAuthor:
+                    owsFailDebug("delete author should not appear in long message body")
                 }
             }
         }

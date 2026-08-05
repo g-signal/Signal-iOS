@@ -55,11 +55,24 @@ public class CVTextLabel: NSObject {
 
     // MARK: -
 
+    public struct DeleteAuthorItem: Equatable {
+        public let deleteAuthorAci: Aci
+        public let range: NSRange
+
+        public init(deleteAuthorAci: Aci, range: NSRange) {
+            self.deleteAuthorAci = deleteAuthorAci
+            self.range = range
+        }
+    }
+
+    // MARK: -
+
     public enum Item: Equatable, CustomStringConvertible {
         case dataItem(dataItem: TextCheckingDataItem)
         case mention(mentionItem: MentionItem)
         case referencedUser(referencedUserItem: ReferencedUserItem)
         case unrevealedSpoiler(UnrevealedSpoilerItem)
+        case deleteAuthor(deleteAuthorItem: DeleteAuthorItem)
 
         public var range: NSRange {
             switch self {
@@ -71,6 +84,8 @@ public class CVTextLabel: NSObject {
                 return referencedUserItem.range
             case .unrevealedSpoiler(let item):
                 return item.range
+            case .deleteAuthor(let deleteAuthorItem):
+                return deleteAuthorItem.range
             }
         }
 
@@ -84,6 +99,8 @@ public class CVTextLabel: NSObject {
                 return ".referencedUser"
             case .unrevealedSpoiler:
                 return ".unrevealedSpoiler"
+            case .deleteAuthor:
+                return ".deleteAuthor"
             }
         }
     }
@@ -263,7 +280,7 @@ public class CVTextLabel: NSObject {
             let range = item.range
 
             switch item {
-            case .mention, .referencedUser, .unrevealedSpoiler:
+            case .mention, .referencedUser, .unrevealedSpoiler, .deleteAuthor:
                 // Do nothing; these are already styled.
                 continue
             case .dataItem(let dataItem):
@@ -468,6 +485,9 @@ public class CVTextLabel: NSObject {
             case .unrevealedSpoiler:
                 // Don't apply anything for spoilers.
                 return
+            case .deleteAuthor:
+                // Don't apply anything for delete author
+                return
             }
 
             setNeedsDisplay()
@@ -658,6 +678,9 @@ extension CVTextLabel.Label: UIDragInteractionDelegate {
             return []
         case .unrevealedSpoiler:
             // Dragging is not applicable for spoilers.
+            return []
+        case .deleteAuthor:
+            // Dragging is not applicable for admin delete author.
             return []
         case .dataItem(let dataItem):
             animate(selectedItem: selectedItem)

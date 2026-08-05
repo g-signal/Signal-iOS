@@ -67,6 +67,8 @@ extension ConversationViewController {
             didTapOrLongPressUnrevealedSpoiler(unrevealedSpoilerItem)
         case .referencedUser(let referencedUserItem):
             owsFailDebug("Should never have a referenced user item in body text, but tapped \(referencedUserItem)")
+        case .deleteAuthor(let deleteAuthor):
+            didTapOrLongPressDeleteAuthor(aci: deleteAuthor.deleteAuthorAci)
         }
     }
 
@@ -104,6 +106,8 @@ extension ConversationViewController {
             didTapOrLongPressUnrevealedSpoiler(unrevealedSpoilerItem)
         case .referencedUser(let referencedUserItem):
             owsFailDebug("Should never have a referenced user item in body text, but long pressed \(referencedUserItem)")
+        case .deleteAuthor(let deleteAuthor):
+            didTapOrLongPressDeleteAuthor(aci: deleteAuthor.deleteAuthorAci)
         }
     }
 
@@ -456,5 +460,15 @@ extension ConversationViewController {
             updatedInteractionIds: [unrevealedSpoilerItem.interactionUniqueId],
             deletedInteractionIds: [],
         )
+    }
+
+    // Taps and long presses do the same thing.
+    private func didTapOrLongPressDeleteAuthor(aci: Aci) {
+        ProfileSheetSheetCoordinator(
+            address: SignalServiceAddress(aci),
+            groupViewHelper: nil,
+            spoilerState: SpoilerRenderState(),
+        )
+        .presentAppropriateSheet(from: self)
     }
 }

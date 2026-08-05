@@ -344,7 +344,7 @@ extension ChatListViewController {
 extension ChatListViewController: DatabaseChangeDelegate {
 
     public func databaseChangesDidUpdate(databaseChanges: DatabaseChanges) {
-        if databaseChanges.didUpdate(tableName: TSPaymentModel.table.tableName) {
+        if databaseChanges.didUpdate(tableName: TSPaymentModel.databaseTableName) {
             updateUnreadPaymentNotificationsCountWithSneakyTransaction()
         }
 

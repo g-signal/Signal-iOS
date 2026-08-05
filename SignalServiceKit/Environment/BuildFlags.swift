@@ -44,20 +44,14 @@ public enum BuildFlags {
 
         public static let restoreFailOnAnyError = build <= .beta
         public static let detailedBenchLogging = build <= .internal
-        public static let errorDisplay = build <= .internal
+        public static let archiveErrorDisplay = build <= .internal
 
         public static let avoidAppAttestForDevs = build <= .dev
         public static let avoidStoreKitForTesters = build <= .beta
 
+        public static let mediaErrorDisplay = build <= .beta
         public static let useLowerDefaultListMediaRefreshInterval = build <= .beta
-        public static let performListMediaIntegrityChecks = build <= .beta
     }
-
-    public static let runTSAttachmentMigrationInMainAppBackground = true
-    public static let runTSAttachmentMigrationBlockingOnLaunch = true
-
-    public static let pollSend = true
-    public static let pollReceive = true
 
     public static let callQualitySurvey = true
 
@@ -78,16 +72,26 @@ public enum BuildFlags {
     public static let serviceIdBinaryVariableOverhead = !serviceIdStrings || (build <= .dev)
     public static let serviceIdBinaryOneOf = !serviceIdStrings
 
-    public static let serviceIdStrings = TSConstants.isUsingProductionService
+    public static let serviceIdStrings = false
 
     public enum PinnedMessages {
         public static let send = true
         public static let receive = true
     }
 
-    public static let useNewAttachmentLimits = build <= .internal
-
     public enum MemberLabel {
+        public static let display = true
+        public static let send = build <= .beta
+    }
+
+    public enum KeyTransparency {
+        public static let enabled = build <= .dev
+        public static let conservativeSelfCheck = build <= .internal
+    }
+
+    public static let pollOneOnOneSend = build <= .internal
+
+    public enum AdminDelete {
         public static let receive = build <= .dev
         public static let send = build <= .dev
     }
@@ -174,6 +178,24 @@ public enum DebugFlags {
         details: LocalizationNotNeeded("Group calls will connect to sfu.test.voip.signal.org."),
     )
 
+    public static let callingNeverRelay = TestableFlag(
+        false,
+        title: LocalizationNotNeeded("Calling: Never use relay"),
+        details: LocalizationNotNeeded("1:1 calls will not connect to a TURN server (remote party may still use TURN)."),
+    )
+
+    public static let callingForceVp9Off = TestableFlag(
+        false,
+        title: LocalizationNotNeeded("Calling: Never use VP9"),
+        details: LocalizationNotNeeded("1:1 calls will never use VP9 (overrides remote config)."),
+    )
+
+    public static let callingForceVp9On = TestableFlag(
+        false,
+        title: LocalizationNotNeeded("Calling: Always offer VP9"),
+        details: LocalizationNotNeeded("1:1 calls will always offer VP9 (overrides remote config and \"Never use VP9\")."),
+    )
+
     public static let delayedMessageResend = TestableFlag(
         false,
         title: LocalizationNotNeeded("Delayed message resend"),
@@ -192,6 +214,9 @@ public enum DebugFlags {
     public static func allTestableFlags() -> [TestableFlag] {
         return [
             callingUseTestSFU,
+            callingNeverRelay,
+            callingForceVp9Off,
+            callingForceVp9On,
             delayedMessageResend,
             fastPlaceholderExpiration,
             messageSendsFail,

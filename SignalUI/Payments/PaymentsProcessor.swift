@@ -253,7 +253,7 @@ extension PaymentsProcessor: DatabaseChangeDelegate {
     public func databaseChangesDidUpdate(databaseChanges: DatabaseChanges) {
         owsAssertDebug(appReadiness.isAppReady)
 
-        guard databaseChanges.didUpdate(tableName: TSPaymentModel.table.tableName) else {
+        guard databaseChanges.didUpdate(tableName: TSPaymentModel.databaseTableName) else {
             return
         }
 

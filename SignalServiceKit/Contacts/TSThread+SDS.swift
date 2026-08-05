@@ -720,7 +720,7 @@ public extension TSThread {
     // you are inserting or updating rather than calling this method.
     func anyUpsert(transaction: DBWriteTransaction) {
         let isInserting: Bool
-        if TSThread.anyFetch(uniqueId: uniqueId, transaction: transaction) != nil {
+        if TSThread.fetchViaCache(uniqueId: uniqueId, transaction: transaction) != nil {
             isInserting = false
         } else {
             isInserting = true
@@ -762,7 +762,7 @@ public extension TSThread {
             return
         }
 
-        guard let dbCopy = type(of: self).anyFetch(uniqueId: uniqueId, transaction: transaction, ignoreCache: true) else {
+        guard let dbCopy = type(of: self).anyFetch(uniqueId: uniqueId, transaction: transaction) else {
             return
         }
 
@@ -837,23 +837,19 @@ public extension TSThread {
     }
 
     // Fetches a single model by "unique id".
-    class func anyFetch(uniqueId: String,
-                        transaction: DBReadTransaction) -> TSThread? {
+    class func fetchViaCache(uniqueId: String, transaction: DBReadTransaction) -> TSThread? {
         assert(!uniqueId.isEmpty)
 
-        return anyFetch(uniqueId: uniqueId, transaction: transaction, ignoreCache: false)
+        if let cachedCopy = SSKEnvironment.shared.modelReadCachesRef.threadReadCache.getThread(uniqueId: uniqueId, transaction: transaction) {
+            return cachedCopy
+        }
+
+        return anyFetch(uniqueId: uniqueId, transaction: transaction)
     }
 
     // Fetches a single model by "unique id".
-    class func anyFetch(uniqueId: String,
-                        transaction: DBReadTransaction,
-                        ignoreCache: Bool) -> TSThread? {
+    class func anyFetch(uniqueId: String, transaction: DBReadTransaction) -> TSThread? {
         assert(!uniqueId.isEmpty)
-
-        if !ignoreCache,
-            let cachedCopy = SSKEnvironment.shared.modelReadCachesRef.threadReadCache.getThread(uniqueId: uniqueId, transaction: transaction) {
-            return cachedCopy
-        }
 
         let sql = "SELECT * FROM \(ThreadRecord.databaseTableName) WHERE \(threadColumn: .uniqueId) = ?"
         return grdbFetchOne(sql: sql, arguments: [uniqueId], transaction: transaction)

@@ -292,4 +292,47 @@ public extension GroupV2Params {
             throw error
         }
     }
+
+    func decryptMemberLabel(_ ciphertext: Data) throws -> String? {
+        do {
+            let decryptedLabel = try decryptString(ciphertext)
+            return decryptedLabel.filterStringForDisplay().trimToGlyphCount(24).trimToUtf8ByteCount(96)
+        } catch {
+            owsFailDebug("Error: \(error)")
+            throw error
+        }
+    }
+
+    func encryptMemberLabel(_ value: String) throws -> Data {
+        do {
+            return try encryptString(value)
+        } catch {
+            owsFailDebug("Error: \(error)")
+            throw error
+        }
+    }
+
+    func decryptMemberLabelEmoji(_ ciphertext: Data) throws -> String? {
+        do {
+            let decryptedEmoji = try decryptString(ciphertext)
+            owsAssertDebug(decryptedEmoji.containsOnlyEmoji)
+            guard decryptedEmoji.lengthOfBytes(using: .utf8) <= 48 else {
+                throw OWSAssertionError("member label emoji is too long.")
+            }
+            return decryptedEmoji.filterStringForDisplay()
+        } catch {
+            owsFailDebug("Error: \(error)")
+            throw error
+        }
+    }
+
+    func encryptMemberLabelEmoji(_ value: String) throws -> Data {
+        owsAssertDebug(value.containsOnlyEmoji)
+        do {
+            return try encryptString(value)
+        } catch {
+            owsFailDebug("Error: \(error)")
+            throw error
+        }
+    }
 }

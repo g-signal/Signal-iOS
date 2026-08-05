@@ -403,7 +403,7 @@ public extension PaymentsImpl {
             paymentState: .outgoingUnsubmitted,
             paymentAmount: paymentAmount,
             createdDate: Date(),
-            senderOrRecipientAci: recipientAci.map { AciObjC($0) },
+            senderOrRecipientAci: recipientAci,
             memoMessage: memoMessage?.nilIfEmpty,
             isUnread: false,
             interactionUniqueId: nil,
@@ -870,7 +870,7 @@ public extension PaymentsImpl {
             owsFailDebug("Invalid amount.")
             throw PaymentsError.invalidModel
         }
-        guard let recipientAci = paymentModel.senderOrRecipientAci?.wrappedAciValue else {
+        guard let recipientAci = paymentModel.senderOrRecipientAci else {
             owsFailDebug("Invalid recipientAci.")
             throw PaymentsError.invalidModel
         }
@@ -959,7 +959,7 @@ public extension PaymentsImpl {
             return
         }
         _ = sendOutgoingPaymentSyncMessage(
-            recipientAci: recipientAci.wrappedAciValue,
+            recipientAci: recipientAci,
             recipientAddress: recipientAddress,
             paymentAmount: paymentAmount,
             feeAmount: feeAmount,
@@ -992,7 +992,7 @@ public extension PaymentsImpl {
             let interactionUniqueId = paymentModel.interactionUniqueId
         {
             if
-                let existingInteraction = TSInteraction.anyFetch(uniqueId: interactionUniqueId, transaction: transaction),
+                let existingInteraction = TSInteraction.fetchViaCache(uniqueId: interactionUniqueId, transaction: transaction),
                 let message = existingInteraction as? OWSOutgoingPaymentMessage
             {
                 // We already have a message, no need to send anything.

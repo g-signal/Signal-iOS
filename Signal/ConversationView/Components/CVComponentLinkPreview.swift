@@ -36,12 +36,28 @@ public class CVComponentLinkPreview: CVComponentBase, CVComponent {
             return
         }
 
+        let linkPreviewWrapper = componentView.linkPreviewWrapper
         let linkPreviewView = componentView.linkPreviewView
+
+        linkPreviewView.backgroundColor = switch (conversationStyle.hasWallpaper, isIncoming) {
+        case (true, true): UIColor.Signal.MaterialBase.fillSecondary
+        case (_, true): UIColor.Signal.LightBase.fillSecondary
+        case (_, false): UIColor.Signal.ColorBase.fillSecondary
+        }
+        linkPreviewView.layer.masksToBounds = true
+        linkPreviewView.layer.cornerRadius = 10
+
         linkPreviewView.configureForRendering(
             state: linkPreviewState.state,
-            isDraft: false,
-            hasAsymmetricalRounding: false,
+            isIncoming: isIncoming,
             cellMeasurement: cellMeasurement,
+        )
+
+        linkPreviewWrapper.configure(
+            config: stackConfig,
+            cellMeasurement: cellMeasurement,
+            measurementKey: Self.measurementKey_linkPreviewWrapper,
+            subviews: [linkPreviewView],
         )
     }
 
@@ -50,20 +66,33 @@ public class CVComponentLinkPreview: CVComponentBase, CVComponent {
             axis: .vertical,
             alignment: .fill,
             spacing: 0,
-            layoutMargins: .zero,
+            layoutMargins: UIEdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8),
         )
     }
+
+    private static let measurementKey_linkPreviewWrapper = "CVComponentLinkPreview.measurementKey_linkPreviewWrapper"
 
     public func measure(maxWidth: CGFloat, measurementBuilder: CVCellMeasurement.Builder) -> CGSize {
         owsAssertDebug(maxWidth > 0)
 
         let maxWidth = min(maxWidth, conversationStyle.maxMediaMessageWidth)
-        return LinkPreviewView.measure(
-            maxWidth: maxWidth,
+        let maxContentWidth = maxWidth - stackConfig.layoutMargins.totalWidth
+
+        let linkPreviewSize = LinkPreviewView.measure(
+            maxWidth: maxContentWidth,
             measurementBuilder: measurementBuilder,
             state: linkPreviewState.state,
             isDraft: false,
         )
+        let subviewInfos = [linkPreviewSize.asManualSubviewInfo]
+        let stackMeasurement = ManualStackView.measure(
+            config: stackConfig,
+            measurementBuilder: measurementBuilder,
+            measurementKey: Self.measurementKey_linkPreviewWrapper,
+            subviewInfos: subviewInfos,
+            maxWidth: maxWidth,
+        )
+        return stackMeasurement.measuredSize
     }
 
     // MARK: - Events
@@ -86,18 +115,19 @@ public class CVComponentLinkPreview: CVComponentBase, CVComponent {
     public class CVComponentViewLinkPreview: NSObject, CVComponentView {
 
         fileprivate let linkPreviewView = LinkPreviewView(draftDelegate: nil)
+        fileprivate let linkPreviewWrapper = ManualStackView(name: "Link Preview Wrapper")
 
         public var isDedicatedCellView = false
 
         public var rootView: UIView {
-            linkPreviewView
+            linkPreviewWrapper
         }
 
         public func setIsCellVisible(_ isCellVisible: Bool) {}
 
         public func reset() {
+            linkPreviewWrapper.reset()
             linkPreviewView.reset()
         }
-
     }
 }

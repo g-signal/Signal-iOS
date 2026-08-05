@@ -190,7 +190,7 @@ public struct HttpHeaders: Codable, CustomDebugStringConvertible, ExpressibleByD
                 // ["If no 'q' parameter is present, the default weight is 1."][0]
                 // [0]: https://www.rfc-editor.org/rfc/rfc9110.html#section-12.4.2
                 if q == 1 { return language }
-                return String(format: "\(language);q=%0.1g", q)
+                return language + String(format: ";q=%0.1g", q)
             }
         return formattedLanguages.isEmpty ? "*" : formattedLanguages.joined(separator: ", ")
     }

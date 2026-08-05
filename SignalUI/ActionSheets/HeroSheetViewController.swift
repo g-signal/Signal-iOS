@@ -10,7 +10,7 @@ import SignalServiceKit
 open class HeroSheetViewController: StackSheetViewController {
     public enum Hero {
         /// Scaled image to display at the top of the sheet
-        case image(UIImage)
+        case image(UIImage, tintColor: UIColor? = nil)
         /// Lottie name and height to display at the top of the sheet
         case animation(named: String, height: CGFloat)
         case circleIcon(
@@ -32,21 +32,40 @@ open class HeroSheetViewController: StackSheetViewController {
             }
         }
 
+        public struct Toggle {
+            public let text: String
+            public let isOn: Bool
+            public let onValueChanged: (_ isEnabled: Bool) -> Void
+
+            public init(
+                text: String,
+                isOn: Bool,
+                onValueChanged: @escaping (_ isEnabled: Bool) -> Void,
+            ) {
+                self.text = text
+                self.isOn = isOn
+                self.onValueChanged = onValueChanged
+            }
+        }
+
         public let text: String
         public let textAlignment: NSTextAlignment
         public let textColor: UIColor
         public let bulletPoints: [BulletPoint]
+        public let toggle: Toggle?
 
         public init(
             text: String,
             textAlignment: NSTextAlignment = .center,
             textColor: UIColor = .Signal.secondaryLabel,
             bulletPoints: [BulletPoint] = [],
+            toggle: Toggle? = nil,
         ) {
             self.text = text
             self.textAlignment = textAlignment
             self.textColor = textColor
             self.bulletPoints = bulletPoints
+            self.toggle = toggle
         }
     }
 
@@ -189,6 +208,12 @@ open class HeroSheetViewController: StackSheetViewController {
             self.stackView.setCustomSpacing(32, after: bulletView)
         }
 
+        if let toggle = body.toggle {
+            let toggleView = viewForToggle(toggle)
+            self.stackView.addArrangedSubview(toggleView)
+            self.stackView.setCustomSpacing(32, after: toggleView)
+        }
+
         if let primary {
             let primaryButtonView = viewForElement(primary)
             self.stackView.addArrangedSubview(primaryButtonView)
@@ -204,9 +229,12 @@ open class HeroSheetViewController: StackSheetViewController {
     private func viewForHero(_ hero: Hero) -> UIView {
         let heroView: UIView
         switch hero {
-        case let .image(image):
+        case let .image(image, tintColor):
             heroView = UIImageView(image: image)
             heroView.contentMode = .center
+            if let tintColor {
+                heroView.tintColor = tintColor
+            }
         case let .animation(lottieName, height):
             let lottieView = LottieAnimationView(name: lottieName)
             lottieView.autoSetDimension(.height, toSize: height)
@@ -263,6 +291,44 @@ open class HeroSheetViewController: StackSheetViewController {
         bulletLabel.autoPinEdges(toSuperviewMarginsExcludingEdge: .leading)
 
         return bulletContainer
+    }
+
+    private func viewForToggle(_ toggle: Body.Toggle) -> UIView {
+        let label = UILabel()
+        label.text = toggle.text
+        label.font = .dynamicTypeSubheadline
+        label.textAlignment = .natural
+        label.numberOfLines = 0
+        label.textColor = .Signal.label
+
+        let toggleSwitch = UISwitch()
+        toggleSwitch.isOn = toggle.isOn
+        toggleSwitch.addAction(
+            UIAction { [weak self] action in
+                guard
+                    let toggle = self?.body.toggle,
+                    let toggleSwitch = action.sender as? UISwitch
+                else {
+                    return
+                }
+                toggle.onValueChanged(toggleSwitch.isOn)
+            },
+            for: .valueChanged,
+        )
+
+        let containerView = PillView()
+        containerView.backgroundColor = .Signal.tertiaryBackground
+        containerView.layoutMargins = UIEdgeInsets(hMargin: 20, vMargin: 16)
+        containerView.addSubview(label)
+        containerView.addSubview(toggleSwitch)
+
+        label.autoPinEdges(toSuperviewMarginsExcludingEdge: .trailing)
+
+        toggleSwitch.autoPinEdge(.leading, to: .trailing, of: label, withOffset: 16, relation: .greaterThanOrEqual)
+        toggleSwitch.autoPinEdge(toSuperviewMargin: .trailing)
+        toggleSwitch.autoVCenterInSuperview()
+
+        return containerView
     }
 
     private func viewForElement(_ element: Element) -> UIView {
@@ -331,6 +397,26 @@ open class HeroSheetViewController: StackSheetViewController {
             ],
         ),
         primary: nil,
+        secondary: nil,
+    ))
+}
+
+@available(iOS 17, *)
+#Preview("Body w/toggle") {
+    SheetPreviewViewController(sheet: HeroSheetViewController(
+        hero: .image(UIImage(named: "toggle-32")!),
+        title: nil,
+        body: HeroSheetViewController.Body(
+            text: #"Give Boots extra dinner? He'd like you to know he's "extra hungry" tonight."#,
+            toggle: HeroSheetViewController.Body.Toggle(
+                text: "Extra Food?",
+                isOn: true,
+                onValueChanged: { enabled in
+                    print(enabled ? "😸" : "😾")
+                },
+            ),
+        ),
+        primary: .button(.dismissing(title: "Order Up")),
         secondary: nil,
     ))
 }

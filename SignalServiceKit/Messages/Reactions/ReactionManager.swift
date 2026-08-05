@@ -60,7 +60,7 @@ public class ReactionManager: NSObject {
     ) throws -> OutgoingReactionMessage {
         assert(emoji.isSingleEmoji)
 
-        guard let message = TSMessage.anyFetchMessage(uniqueId: messageUniqueId, transaction: tx) else {
+        guard let message = TSMessage.fetchMessageViaCache(uniqueId: messageUniqueId, transaction: tx) else {
             throw OWSAssertionError("Can't find message for reaction.")
         }
 

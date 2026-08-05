@@ -16,8 +16,8 @@ enum AttachmentSaving {
     static func saveToPhotoLibrary(
         referencedAttachmentStreams: [ReferencedAttachmentStream],
     ) {
-        let (assetCreationRequests, _) = referencedAttachmentStreams.reduce(
-            into: (requests: [PHAssetCreationRequestType](), filenames: Set<String>()),
+        let assetCreationRequests = referencedAttachmentStreams.reduce(
+            into: [PHAssetCreationRequestType](),
         ) { result, referencedAttachmentStream in
             let reference = referencedAttachmentStream.reference
             let attachmentStream = referencedAttachmentStream.attachmentStream
@@ -29,16 +29,9 @@ enum AttachmentSaving {
                 break
             }
 
-            let filename = uniqueFilename(
-                sourceFilename: reference.sourceFilename,
-                existingFilenames: &result.filenames,
-            )
-
             let decryptedFileUrl: URL
             do {
-                decryptedFileUrl = try attachmentStream.makeDecryptedCopy(
-                    filename: filename,
-                )
+                decryptedFileUrl = try attachmentStream.makeDecryptedCopy(filename: reference.sourceFilename)
             } catch let error {
                 owsFailDebug("Failed to save decrypted copy of attachment for photo library! \(error)")
                 return
@@ -48,9 +41,9 @@ enum AttachmentSaving {
             case .invalid, .audio, .file:
                 owsFail("Impossible: checked above!")
             case .image, .animatedImage:
-                result.requests.append(.imageTempFile(tmpFileUrl: decryptedFileUrl))
+                result.append(.imageTempFile(tmpFileUrl: decryptedFileUrl))
             case .video:
-                result.requests.append(.videoTempFile(tmpFileUrl: decryptedFileUrl))
+                result.append(.videoTempFile(tmpFileUrl: decryptedFileUrl))
             }
         }
 
@@ -165,38 +158,6 @@ enum AttachmentSaving {
             for tmpFileUrl in assetCreationRequests.compactMap(\.tmpFileUrl) {
                 try? OWSFileSystem.deleteFile(url: tmpFileUrl)
             }
-        }
-    }
-
-    // MARK: -
-
-    static func uniqueFilename(
-        sourceFilename: String?,
-        existingFilenames: inout Set<String>,
-    ) -> String? {
-        if
-            let sourceFilename,
-            existingFilenames.contains(sourceFilename)
-        {
-            // Avoid source filename collisions.
-            let pathExtension = (sourceFilename as NSString).pathExtension
-            let normalizedFilename = (sourceFilename as NSString)
-                .deletingPathExtension
-                .trimmingCharacters(in: .whitespaces)
-
-            var i = 0
-            while true {
-                i += 1
-                var newSourceFilename = normalizedFilename + "_\(i)"
-                newSourceFilename = (newSourceFilename as NSString).appendingPathExtension(pathExtension) ?? newSourceFilename
-                if !existingFilenames.contains(newSourceFilename) {
-                    existingFilenames.insert(newSourceFilename)
-                    return newSourceFilename
-                }
-            }
-        } else {
-            _ = sourceFilename.map { existingFilenames.insert($0) }
-            return sourceFilename
         }
     }
 

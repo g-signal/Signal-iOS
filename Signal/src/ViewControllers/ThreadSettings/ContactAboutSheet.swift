@@ -28,14 +28,14 @@ class ContactAboutSheet: StackSheetViewController {
     private let isLocalUser: Bool
     private let spoilerState: SpoilerRenderState
     private let context: Context
-    private let memberLabel: MemberLabel?
+    private let memberLabel: MemberLabelForRendering?
     private let groupViewHelper: GroupViewHelper?
 
     init(
         thread: TSContactThread,
         spoilerState: SpoilerRenderState,
         context: Context = .default,
-        memberLabel: MemberLabel? = nil,
+        memberLabel: MemberLabelForRendering? = nil,
         groupViewHelper: GroupViewHelper? = nil,
     ) {
         self.thread = thread
@@ -197,9 +197,17 @@ class ContactAboutSheet: StackSheetViewController {
             stackView.addArrangedSubview(label)
         }
 
-        let canEditMemberLabel = groupViewHelper?.canEditConversationAttributes ?? false
-        if BuildFlags.MemberLabel.send, isLocalUser, canEditMemberLabel {
-            stackView.addArrangedSubview(ProfileDetailLabel.memberLabel(memberLabel?.label))
+        if
+            isLocalUser,
+            groupViewHelper?.canEditMemberLabels ?? false,
+            let presenter = fromViewController as? MemberLabelViewControllerPresenter
+        {
+            stackView.addArrangedSubview(ProfileDetailLabel.memberLabel(memberLabel?.label, tapAction: { [weak self] in
+                self?.groupViewHelper?.memberLabelCoordinator?.presenter = presenter
+                self?.dismiss(animated: true, completion: {
+                    self?.groupViewHelper?.memberLabelCoordinator?.present()
+                })
+            }))
         }
 
         if isVerified {

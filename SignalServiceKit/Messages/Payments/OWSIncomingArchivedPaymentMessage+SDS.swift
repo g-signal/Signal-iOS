@@ -14,15 +14,14 @@ import GRDB
 @objc
 public extension OWSIncomingArchivedPaymentMessage {
     // NOTE: This method will fail if the object has unexpected type.
-    class func anyFetchIncomingArchivedPaymentMessage(
+    class func fetchIncomingArchivedPaymentMessageViaCache(
         uniqueId: String,
         transaction: DBReadTransaction
     ) -> OWSIncomingArchivedPaymentMessage? {
         assert(!uniqueId.isEmpty)
 
-        guard let object = anyFetch(uniqueId: uniqueId,
-                                    transaction: transaction) else {
-                                        return nil
+        guard let object = fetchViaCache(uniqueId: uniqueId, transaction: transaction) else {
+            return nil
         }
         guard let instance = object as? OWSIncomingArchivedPaymentMessage else {
             owsFailDebug("Object has unexpected type: \(type(of: object))")

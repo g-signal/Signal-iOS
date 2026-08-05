@@ -50,7 +50,7 @@ public class CVLoader: NSObject {
         return firstly(on: CVUtils.workQueue(isInitialLoad: loadRequest.isInitialLoad)) { () -> CVUpdate in
             // To ensure coherency, the entire load should be done with a single transaction.
             let loadState: LoadState = try SSKEnvironment.shared.databaseStorageRef.read { transaction in
-                let thread = TSThread.anyFetch(uniqueId: threadUniqueId, transaction: transaction)
+                let thread = TSThread.fetchViaCache(uniqueId: threadUniqueId, transaction: transaction)
                 let threadViewModel = { () -> ThreadViewModel in
                     guard let thread else {
                         // If thread has been deleted from the database, use last known model.
@@ -296,6 +296,7 @@ public class CVLoader: NSObject {
             thread: thread,
             viewWidth: containerView.width,
             hasWallpaper: false,
+            shouldDimWallpaperInDarkMode: false,
             isWallpaperPhoto: false,
             chatColor: chatColor,
         )
@@ -303,12 +304,15 @@ public class CVLoader: NSObject {
             conversationStyle: conversationStyle,
             mediaCache: CVMediaCache(),
         )
+        let groupNameColors = GroupNameColors.forThread(thread)
+
         return CVLoader.buildStandaloneRenderItem(
             interaction: interaction,
             thread: thread,
             threadAssociatedData: threadAssociatedData,
             coreState: coreState,
             spoilerState: spoilerState,
+            groupNameColors: groupNameColors,
             transaction: transaction,
         )
     }
@@ -319,6 +323,7 @@ public class CVLoader: NSObject {
         threadAssociatedData: ThreadAssociatedData,
         conversationStyle: ConversationStyle,
         spoilerState: SpoilerRenderState,
+        groupNameColors: GroupNameColors,
         transaction: DBReadTransaction,
     ) -> CVRenderItem? {
         let coreState = CVCoreState(
@@ -331,6 +336,7 @@ public class CVLoader: NSObject {
             threadAssociatedData: threadAssociatedData,
             coreState: coreState,
             spoilerState: spoilerState,
+            groupNameColors: groupNameColors,
             transaction: transaction,
         )
     }
@@ -341,6 +347,7 @@ public class CVLoader: NSObject {
         threadAssociatedData: ThreadAssociatedData,
         coreState: CVCoreState,
         spoilerState: SpoilerRenderState,
+        groupNameColors: GroupNameColors,
         transaction: DBReadTransaction,
     ) -> CVRenderItem? {
         AssertIsOnMainThread()
@@ -375,6 +382,7 @@ public class CVLoader: NSObject {
                 threadAssociatedData: threadAssociatedData,
                 threadViewModel: threadViewModel,
                 itemBuildingContext: itemBuildingContext,
+                groupNameColors: groupNameColors,
                 transaction: transaction,
             )
         else {
@@ -414,6 +422,7 @@ public class CVLoader: NSObject {
             thread: thread,
             viewWidth: mockViewWidth,
             hasWallpaper: false,
+            shouldDimWallpaperInDarkMode: false,
             isWallpaperPhoto: false,
             chatColor: chatColor,
         )

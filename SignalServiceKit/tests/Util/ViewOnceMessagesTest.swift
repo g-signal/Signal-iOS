@@ -32,7 +32,7 @@ class ViewOnceMessagesTest: SSKBaseTest {
         let latestCopy = { (message: TSMessage) -> TSMessage in
             let uniqueId = message.uniqueId
             return SSKEnvironment.shared.databaseStorageRef.read { transaction in
-                return TSMessage.anyFetch(uniqueId: uniqueId, transaction: transaction) as! TSMessage
+                return TSMessage.fetchViaCache(uniqueId: uniqueId, transaction: transaction) as! TSMessage
             }
         }
 

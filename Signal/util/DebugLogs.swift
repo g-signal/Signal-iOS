@@ -197,7 +197,7 @@ enum DebugLogs {
         let dateString = dateFormatter.string(from: Date())
         let logsName = "\(dateString) \(UUID().uuidString)"
 
-        let zipDirUrl = URL(fileURLWithPath: OWSTemporaryDirectory()).appendingPathComponent(logsName)
+        let zipDirUrl = OWSFileSystem.temporaryFileUrl(isAvailableWhileDeviceLocked: false).appendingPathComponent(logsName)
         let zipDirPath = zipDirUrl.path
         OWSFileSystem.ensureDirectoryExists(zipDirPath)
 

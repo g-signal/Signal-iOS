@@ -573,7 +573,7 @@ class PaymentsDetailViewController: OWSTableViewController2 {
 extension PaymentsDetailViewController: DatabaseChangeDelegate {
 
     func databaseChangesDidUpdate(databaseChanges: DatabaseChanges) {
-        guard databaseChanges.didUpdate(tableName: TSPaymentModel.table.tableName) else {
+        guard databaseChanges.didUpdate(tableName: TSPaymentModel.databaseTableName) else {
             return
         }
 

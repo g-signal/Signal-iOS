@@ -11,6 +11,7 @@ public struct BackgroundMessageFetcherFactory {
     private let messageProcessor: MessageProcessor
     private let messageSenderJobQueue: MessageSenderJobQueue
     private let receiptSender: ReceiptSender
+    private let storageServiceManager: any StorageServiceManager
 
     public init(
         chatConnectionManager: any ChatConnectionManager,
@@ -18,12 +19,14 @@ public struct BackgroundMessageFetcherFactory {
         messageProcessor: MessageProcessor,
         messageSenderJobQueue: MessageSenderJobQueue,
         receiptSender: ReceiptSender,
+        storageServiceManager: any StorageServiceManager,
     ) {
         self.chatConnectionManager = chatConnectionManager
         self.groupMessageProcessorManager = groupMessageProcessorManager
         self.messageProcessor = messageProcessor
         self.messageSenderJobQueue = messageSenderJobQueue
         self.receiptSender = receiptSender
+        self.storageServiceManager = storageServiceManager
     }
 
     public func buildFetcher() -> BackgroundMessageFetcher {
@@ -33,6 +36,7 @@ public struct BackgroundMessageFetcherFactory {
             messageProcessor: self.messageProcessor,
             messageSenderJobQueue: self.messageSenderJobQueue,
             receiptSender: self.receiptSender,
+            storageServiceManager: self.storageServiceManager,
         )
     }
 }
@@ -43,6 +47,7 @@ public actor BackgroundMessageFetcher {
     private let messageProcessor: MessageProcessor
     private let messageSenderJobQueue: MessageSenderJobQueue
     private let receiptSender: ReceiptSender
+    private let storageServiceManager: any StorageServiceManager
 
     fileprivate init(
         chatConnectionManager: any ChatConnectionManager,
@@ -50,12 +55,14 @@ public actor BackgroundMessageFetcher {
         messageProcessor: MessageProcessor,
         messageSenderJobQueue: MessageSenderJobQueue,
         receiptSender: ReceiptSender,
+        storageServiceManager: any StorageServiceManager,
     ) {
         self.chatConnectionManager = chatConnectionManager
         self.groupMessageProcessorManager = groupMessageProcessorManager
         self.messageProcessor = messageProcessor
         self.messageSenderJobQueue = messageSenderJobQueue
         self.receiptSender = receiptSender
+        self.storageServiceManager = storageServiceManager
     }
 
     private var connectionTokens = [OWSChatConnection.ConnectionToken]()
@@ -112,10 +119,13 @@ public actor BackgroundMessageFetcher {
             async let pendingMessages: Void = self.messageSenderJobQueue.waitUntilDone()
             // Wait until all sync requests are fulfilled.
             async let pendingOps: Void = MessageReceiver.waitForPendingTasks()
+            // Wait until Storage Service has settled.
+            async let pendingStorageService: Void = self.storageServiceManager.waitForSteadyState()
 
             try await pendingReceipts
             try await pendingMessages
             try await pendingOps
+            try await pendingStorageService
         }
 
         // Finally, wait for any notifications to finish posting

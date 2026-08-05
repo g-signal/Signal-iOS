@@ -74,6 +74,9 @@ public protocol StorageServiceManager {
     /// state at the time this method is invoked, the returned Promise will be
     /// resolved after that state has been fetched".
     func waitForPendingRestores() async throws
+
+    /// Waits for pending operations to finish.
+    func waitForSteadyState() async throws(CancellationError)
 }
 
 extension StorageServiceManager {
@@ -292,17 +295,21 @@ public class StorageServiceManagerImpl: NSObject, StorageServiceManager {
         var pendingRestoreCompletionFutures = [Future<Void>]()
 
         var isRunningOperation = false
+
+        var onSteadyState = [NSObject: Monitor.Continuation]()
     }
 
     private let managerState = AtomicValue(ManagerState(), lock: .init())
 
     private func updateManagerState(block: (inout ManagerState) -> Void) {
-        managerState.map {
-            var mutableValue = $0
-            block(&mutableValue)
-            startNextOperationIfNeeded(&mutableValue)
-            return mutableValue
-        }
+        Monitor.updateAndNotify(
+            in: managerState,
+            block: {
+                block(&$0)
+                startNextOperationIfNeeded(&$0)
+            },
+            conditions: steadyStateCondition,
+        )
     }
 
     private func startNextOperationIfNeeded(_ managerState: inout ManagerState) {
@@ -317,11 +324,7 @@ public class StorageServiceManagerImpl: NSObject, StorageServiceManager {
         // Run the operation & check again when it's done.
         managerState.isRunningOperation = true
 
-        let backgroundTask = OWSBackgroundTask(label: #function)
         Task {
-            defer {
-                backgroundTask.end()
-            }
             let result = await Result { try await nextOperation() }
             self.finishOperation(cleanupBlock: {
                 cleanupBlock?(&$0, {
@@ -626,6 +629,15 @@ public class StorageServiceManagerImpl: NSObject, StorageServiceManager {
             managerState.pendingRestoreCompletionFutures.append(future)
         }
         try await promise.awaitableWithUncooperativeCancellationHandling()
+    }
+
+    private let steadyStateCondition = Monitor.Condition<ManagerState>(
+        isSatisfied: { !$0.isRunningOperation && $0.pendingBackupTimer == nil },
+        waiters: \.onSteadyState,
+    )
+
+    public func waitForSteadyState() async throws(CancellationError) {
+        try await Monitor.waitForCondition(steadyStateCondition, in: managerState)
     }
 
     public func resetLocalData(transaction: DBWriteTransaction) {
@@ -1095,7 +1107,10 @@ class StorageServiceOperation {
             )
         } catch StorageService.StorageError.conflictingManifest(let conflictingManifest) {
             // Throw away all our work, resolve conflicts, and try again.
-            try await self.mergeLocalManifest(withRemoteManifest: conflictingManifest, backupAfterSuccess: true)
+            try await self.mergeLocalManifest(
+                withRemoteManifest: conflictingManifest,
+                mergeReason: .conflictBackingUp,
+            )
             return
         } catch
         StorageService.StorageError.manifestDecryptionFailed(let conflictingVersion) where isPrimaryDevice,
@@ -1173,7 +1188,10 @@ class StorageServiceOperation {
                 return
             case .latestManifest(let manifest):
                 // Our manifest is not the latest, merge in the latest copy.
-                return try await self.mergeLocalManifest(withRemoteManifest: manifest, backupAfterSuccess: false)
+                return try await self.mergeLocalManifest(
+                    withRemoteManifest: manifest,
+                    mergeReason: .fetchedLatest,
+                )
             }
         } catch
         StorageService.StorageError.manifestDecryptionFailed(let manifestVersion) where isPrimaryDevice,
@@ -1476,18 +1494,27 @@ class StorageServiceOperation {
 
     // MARK: - Conflict Resolution
 
+    private enum MergeLocalManifestReason {
+        case fetchedLatest
+        case conflictBackingUp
+    }
+
     private func mergeLocalManifest(
         withRemoteManifest manifest: StorageServiceProtoManifestRecord,
-        backupAfterSuccess: Bool,
+        mergeReason: MergeLocalManifestReason,
     ) async throws {
         var state: State = await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { transaction in
             var state = State.current(transaction: transaction)
 
             normalizePendingMutations(in: &state, transaction: transaction)
 
-            // Increment our conflict count.
-            state.consecutiveConflicts += 1
-            state.save(transaction: transaction)
+            switch mergeReason {
+            case .fetchedLatest:
+                break
+            case .conflictBackingUp:
+                state.consecutiveConflicts += 1
+                state.save(transaction: transaction)
+            }
 
             return state
         }
@@ -1716,7 +1743,12 @@ class StorageServiceOperation {
 
                 state.save(clearConsecutiveConflicts: true, transaction: transaction)
 
-                if backupAfterSuccess {
+                switch mergeReason {
+                case .fetchedLatest:
+                    break
+                case .conflictBackingUp:
+                    // If we're merging because we had a conflict while backing
+                    // up, reattempt that backup now that we've merged.
                     storageServiceManager.backupPendingChanges(authedDevice: self.authedDevice)
                 }
             }
@@ -2130,6 +2162,7 @@ class StorageServiceOperation {
                 dmConfigurationStore: DependenciesBridge.shared.disappearingMessagesConfigurationStore,
                 linkPreviewSettingStore: DependenciesBridge.shared.linkPreviewSettingStore,
                 localUsernameManager: DependenciesBridge.shared.localUsernameManager,
+                keyTransparencyManager: DependenciesBridge.shared.keyTransparencyManager,
                 paymentsHelper: SSKEnvironment.shared.paymentsHelperRef,
                 phoneNumberDiscoverabilityManager: DependenciesBridge.shared.phoneNumberDiscoverabilityManager,
                 pinnedThreadManager: DependenciesBridge.shared.pinnedThreadManager,

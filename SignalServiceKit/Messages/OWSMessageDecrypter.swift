@@ -770,7 +770,7 @@ public class OWSMessageDecrypter {
             await SSKEnvironment.shared.databaseStorageRef.awaitableWrite { tx in
                 for placeholderId in thisBatchPlaceholderIds {
                     guard
-                        let placeholder = OWSRecoverableDecryptionPlaceholder.anyFetchRecoverableDecryptionPlaceholder(
+                        let placeholder = OWSRecoverableDecryptionPlaceholder.fetchRecoverableDecryptionPlaceholderViaCache(
                             uniqueId: placeholderId,
                             transaction: tx,
                         )

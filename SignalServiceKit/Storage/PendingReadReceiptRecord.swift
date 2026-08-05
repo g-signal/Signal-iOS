@@ -7,7 +7,7 @@ import Foundation
 public import GRDB
 public import LibSignalClient
 
-public struct PendingReadReceiptRecord: Codable, FetchableRecord, PersistableRecord {
+public struct PendingReadReceiptRecord: Codable, FetchableRecord, MutablePersistableRecord {
     public static let databaseTableName = "pending_read_receipts"
 
     public private(set) var id: Int64?

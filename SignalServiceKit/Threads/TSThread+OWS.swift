@@ -42,22 +42,7 @@ public extension TSThread {
     }
 
     var canSendReactionToThread: Bool {
-        guard !isGroupV1Thread else {
-            return false
-        }
-        return true
-    }
-
-    var canSendNonChatMessagesToThread: Bool {
-        guard !isGroupV1Thread else {
-            return false
-        }
-        return true
-    }
-
-    @available(swift, obsoleted: 1.0)
-    func canSendChatMessagesToThread() -> Bool {
-        canSendChatMessagesToThread(ignoreAnnouncementOnly: false)
+        return !isGroupV1Thread
     }
 
     func canSendChatMessagesToThread(ignoreAnnouncementOnly: Bool = false) -> Bool {
@@ -131,7 +116,7 @@ extension TSThread {
         transaction: DBReadTransaction,
     ) -> MessageBody? {
         if shouldFetchLatest {
-            guard let thread = TSThread.anyFetch(uniqueId: uniqueId, transaction: transaction) else {
+            guard let thread = TSThread.fetchViaCache(uniqueId: uniqueId, transaction: transaction) else {
                 return nil
             }
             return Self.draft(forThread: thread)

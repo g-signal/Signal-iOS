@@ -37,39 +37,39 @@ struct SVR2Proto_Request: Sendable {
 
   /// oneof inner {
   var backup: SVR2Proto_BackupRequest {
-    get {return _backup ?? SVR2Proto_BackupRequest()}
+    get {_backup ?? SVR2Proto_BackupRequest()}
     set {_backup = newValue}
   }
   /// Returns true if `backup` has been explicitly set.
-  var hasBackup: Bool {return self._backup != nil}
+  var hasBackup: Bool {self._backup != nil}
   /// Clears the value of `backup`. Subsequent reads from it will return its default value.
   mutating func clearBackup() {self._backup = nil}
 
   var expose: SVR2Proto_ExposeRequest {
-    get {return _expose ?? SVR2Proto_ExposeRequest()}
+    get {_expose ?? SVR2Proto_ExposeRequest()}
     set {_expose = newValue}
   }
   /// Returns true if `expose` has been explicitly set.
-  var hasExpose: Bool {return self._expose != nil}
+  var hasExpose: Bool {self._expose != nil}
   /// Clears the value of `expose`. Subsequent reads from it will return its default value.
   mutating func clearExpose() {self._expose = nil}
 
   var restore: SVR2Proto_RestoreRequest {
-    get {return _restore ?? SVR2Proto_RestoreRequest()}
+    get {_restore ?? SVR2Proto_RestoreRequest()}
     set {_restore = newValue}
   }
   /// Returns true if `restore` has been explicitly set.
-  var hasRestore: Bool {return self._restore != nil}
+  var hasRestore: Bool {self._restore != nil}
   /// Clears the value of `restore`. Subsequent reads from it will return its default value.
   mutating func clearRestore() {self._restore = nil}
 
   /// }
   var delete: SVR2Proto_DeleteRequest {
-    get {return _delete ?? SVR2Proto_DeleteRequest()}
+    get {_delete ?? SVR2Proto_DeleteRequest()}
     set {_delete = newValue}
   }
   /// Returns true if `delete` has been explicitly set.
-  var hasDelete: Bool {return self._delete != nil}
+  var hasDelete: Bool {self._delete != nil}
   /// Clears the value of `delete`. Subsequent reads from it will return its default value.
   mutating func clearDelete() {self._delete = nil}
 
@@ -90,39 +90,39 @@ struct SVR2Proto_Response: Sendable {
 
   /// oneof inner {
   var backup: SVR2Proto_BackupResponse {
-    get {return _backup ?? SVR2Proto_BackupResponse()}
+    get {_backup ?? SVR2Proto_BackupResponse()}
     set {_backup = newValue}
   }
   /// Returns true if `backup` has been explicitly set.
-  var hasBackup: Bool {return self._backup != nil}
+  var hasBackup: Bool {self._backup != nil}
   /// Clears the value of `backup`. Subsequent reads from it will return its default value.
   mutating func clearBackup() {self._backup = nil}
 
   var expose: SVR2Proto_ExposeResponse {
-    get {return _expose ?? SVR2Proto_ExposeResponse()}
+    get {_expose ?? SVR2Proto_ExposeResponse()}
     set {_expose = newValue}
   }
   /// Returns true if `expose` has been explicitly set.
-  var hasExpose: Bool {return self._expose != nil}
+  var hasExpose: Bool {self._expose != nil}
   /// Clears the value of `expose`. Subsequent reads from it will return its default value.
   mutating func clearExpose() {self._expose = nil}
 
   var restore: SVR2Proto_RestoreResponse {
-    get {return _restore ?? SVR2Proto_RestoreResponse()}
+    get {_restore ?? SVR2Proto_RestoreResponse()}
     set {_restore = newValue}
   }
   /// Returns true if `restore` has been explicitly set.
-  var hasRestore: Bool {return self._restore != nil}
+  var hasRestore: Bool {self._restore != nil}
   /// Clears the value of `restore`. Subsequent reads from it will return its default value.
   mutating func clearRestore() {self._restore = nil}
 
   /// }
   var delete: SVR2Proto_DeleteResponse {
-    get {return _delete ?? SVR2Proto_DeleteResponse()}
+    get {_delete ?? SVR2Proto_DeleteResponse()}
     set {_delete = newValue}
   }
   /// Returns true if `delete` has been explicitly set.
-  var hasDelete: Bool {return self._delete != nil}
+  var hasDelete: Bool {self._delete != nil}
   /// Clears the value of `delete`. Subsequent reads from it will return its default value.
   mutating func clearDelete() {self._delete = nil}
 

@@ -51,7 +51,7 @@ class EditHistoryTableSheetViewController: OWSTableSheetViewController {
             try self.database.write { tx in
 
                 guard
-                    let thread = TSThread.anyFetch(
+                    let thread = TSThread.fetchViaCache(
                         uniqueId: message.uniqueThreadId,
                         transaction: tx,
                     ) else { return }
@@ -71,7 +71,7 @@ class EditHistoryTableSheetViewController: OWSTableSheetViewController {
 
     private func loadEditHistory() throws {
         let messageStillExists = try database.read { tx in
-            guard let newMessage = TSInteraction.anyFetch(uniqueId: message.uniqueId, transaction: tx) as? TSMessage else {
+            guard let newMessage = TSInteraction.fetchViaCache(uniqueId: message.uniqueId, transaction: tx) as? TSMessage else {
                 return false
             }
             message = newMessage
@@ -82,7 +82,7 @@ class EditHistoryTableSheetViewController: OWSTableSheetViewController {
             ).compactMap { $0.message }
 
             guard
-                let thread = TSThread.anyFetch(
+                let thread = TSThread.fetchViaCache(
                     uniqueId: message.uniqueThreadId,
                     transaction: tx,
                 )
@@ -227,6 +227,7 @@ class EditHistoryTableSheetViewController: OWSTableSheetViewController {
             thread: thread,
             viewWidth: viewWidth,
             hasWallpaper: false,
+            shouldDimWallpaperInDarkMode: false,
             isWallpaperPhoto: false,
             chatColor: DependenciesBridge.shared.chatColorSettingStore.resolvedChatColor(
                 for: thread,
@@ -234,6 +235,8 @@ class EditHistoryTableSheetViewController: OWSTableSheetViewController {
             ),
             isStandaloneRenderItem: true,
         )
+
+        let groupNameColors = GroupNameColors.forThread(thread)
 
         let itemDate = Date(millisecondsSince1970: interaction.timestamp)
         let daysPrior = DateUtil.daysFrom(firstDate: itemDate, toSecondDate: Date())
@@ -248,6 +251,7 @@ class EditHistoryTableSheetViewController: OWSTableSheetViewController {
                     threadAssociatedData: threadAssociatedData,
                     conversationStyle: conversationStyle,
                     spoilerState: self.spoilerState,
+                    groupNameColors: groupNameColors,
                     transaction: tx,
                 )
             {
@@ -262,6 +266,7 @@ class EditHistoryTableSheetViewController: OWSTableSheetViewController {
                 threadAssociatedData: threadAssociatedData,
                 conversationStyle: conversationStyle,
                 spoilerState: self.spoilerState,
+                groupNameColors: groupNameColors,
                 transaction: tx,
             )
         {

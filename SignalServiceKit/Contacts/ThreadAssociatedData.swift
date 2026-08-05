@@ -219,12 +219,12 @@ public class ThreadAssociatedData: NSObject, Codable, FetchableRecord, Persistab
         }
 
         // If the thread model exists, make sure the UI is notified that it has changed.
-        if let thread = TSThread.anyFetch(uniqueId: threadUniqueId, transaction: transaction) {
+        if let thread = TSThread.fetchViaCache(uniqueId: threadUniqueId, transaction: transaction) {
             SSKEnvironment.shared.databaseStorageRef.touch(thread: thread, shouldReindex: false, tx: transaction)
         }
 
         if updateStorageService {
-            guard let thread = TSThread.anyFetch(uniqueId: threadUniqueId, transaction: transaction) else {
+            guard let thread = TSThread.fetchViaCache(uniqueId: threadUniqueId, transaction: transaction) else {
                 return owsFailDebug("Unexpectedly missing thread for storage service update.")
             }
 

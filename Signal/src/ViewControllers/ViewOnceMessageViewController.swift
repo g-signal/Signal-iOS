@@ -266,7 +266,7 @@ class ViewOnceMessageViewController: OWSViewController {
 
         let shouldDismiss: Bool = SSKEnvironment.shared.databaseStorageRef.read { transaction in
             let uniqueId = self.content.messageId
-            guard TSInteraction.anyFetch(uniqueId: uniqueId, transaction: transaction) != nil else {
+            guard TSInteraction.fetchViaCache(uniqueId: uniqueId, transaction: transaction) != nil else {
                 return true
             }
             return false

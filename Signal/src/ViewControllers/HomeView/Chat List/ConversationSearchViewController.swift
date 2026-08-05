@@ -620,11 +620,19 @@ extension ConversationSearchViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        return trailingSwipeActionsConfiguration(for: getThreadViewModelFor(indexPath: indexPath))
+        guard let threadViewModel = getThreadViewModelFor(indexPath: indexPath) else {
+            return nil
+        }
+
+        return trailingSwipeActionsConfiguration(threadViewModel: threadViewModel)
     }
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        return leadingSwipeActionsConfiguration(for: getThreadViewModelFor(indexPath: indexPath))
+        guard let threadViewModel = getThreadViewModelFor(indexPath: indexPath) else {
+            return nil
+        }
+
+        return leadingSwipeActionsConfiguration(threadViewModel: threadViewModel)
     }
 
     private func getThreadViewModelFor(indexPath: IndexPath) -> ThreadViewModel? {
@@ -740,9 +748,14 @@ extension ConversationSearchViewController: DatabaseChangeDelegate {
     }
 }
 
-// MARK: -
+// MARK: - ThreadContextualActionProvider
 
-extension ConversationSearchViewController: ThreadSwipeHandler {
+extension ConversationSearchViewController: ThreadContextualActionProvider {
+    func threadContextualActionShouldCloseThreadIfActive(threadViewModel: ThreadViewModel) {
+        // Ignore
+    }
 
-    func updateUIAfterSwipeAction() { }
+    func threadContextualActionDidComplete() {
+        // Ignore
+    }
 }

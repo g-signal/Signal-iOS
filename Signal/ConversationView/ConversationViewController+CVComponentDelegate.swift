@@ -435,11 +435,11 @@ extension ConversationViewController: CVComponentDelegate {
         let timestamp = Date().ows_millisecondsSince1970
         let attachmentId = attachment.attachmentId
         Task {
-            try await DependenciesBridge.shared.db.awaitableWrite { tx in
+            await DependenciesBridge.shared.db.awaitableWrite { tx in
                 guard let attachment = DependenciesBridge.shared.attachmentStore.fetch(id: attachmentId, tx: tx) else {
                     return
                 }
-                try DependenciesBridge.shared.attachmentStore.markViewedFullscreen(
+                DependenciesBridge.shared.attachmentStore.markViewedFullscreen(
                     attachment: attachment,
                     timestamp: timestamp,
                     tx: tx
@@ -1307,11 +1307,11 @@ extension ConversationViewController: CVComponentDelegate {
     }
 
     public func didTapVoteOnPoll(poll: OWSPoll, optionIndex: UInt32, isUnvote: Bool) {
-        guard
-            let groupThread = self.thread as? TSGroupThread,
-            !threadViewModel.hasPendingMessageRequest,
-            groupThread.groupModel.groupMembership.isLocalUserFullMember
-        else {
+        guard !threadViewModel.hasPendingMessageRequest else {
+            return
+        }
+
+        if let groupThread = self.thread as? TSGroupThread, !groupThread.groupModel.groupMembership.isLocalUserFullMember {
             return
         }
 
@@ -1331,7 +1331,7 @@ extension ConversationViewController: CVComponentDelegate {
                         pollInteraction: targetPoll,
                         optionIndex: optionIndex,
                         isUnvote: isUnvote,
-                        thread: groupThread,
+                        thread: thread,
                         tx: tx,
                     )
                 else {
@@ -1369,12 +1369,10 @@ extension ConversationViewController: CVComponentDelegate {
 
 extension ConversationViewController: PollDetailsViewControllerDelegate {
     public func terminatePoll(poll: OWSPoll) {
-        if let groupThread = self.thread as? TSGroupThread {
-            do {
-                try DependenciesBridge.shared.pollMessageManager.sendPollTerminateMessage(poll: poll, thread: groupThread)
-            } catch {
-                Logger.error("Failed to end poll: \(error)")
-            }
+        do {
+            try DependenciesBridge.shared.pollMessageManager.sendPollTerminateMessage(poll: poll, thread: thread)
+        } catch {
+            Logger.error("Failed to end poll: \(error)")
         }
     }
 }

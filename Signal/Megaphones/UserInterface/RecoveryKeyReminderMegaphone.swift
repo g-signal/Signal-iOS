@@ -32,19 +32,6 @@ class RecoveryKeyReminderMegaphone: MegaphoneView {
         )
 
         let primaryButton = MegaphoneView.Button(title: primaryButtonTitle) {
-//            let backupsReminderCoordinator = BackupsReminderCoordinator(
-//                fromViewController: fromViewController,
-//                dismissHandler: { success in
-//                    self.dismiss()
-//                    if success {
-//                        self.presentToastForNewRepetitionInterval(fromViewController: fromViewController)
-//                    }
-//                    DependenciesBridge.shared.db.write { tx in
-//                        BackupSettingsStore().setLastRecoveryKeyReminderDate(Date(), tx: tx)
-//                    }
-//                })
-//
-//            backupsReminderCoordinator.presentVerifyFlow()
             self.dismiss()
         }
 

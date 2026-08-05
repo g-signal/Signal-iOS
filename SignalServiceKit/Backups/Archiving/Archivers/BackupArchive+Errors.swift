@@ -626,6 +626,9 @@ extension BackupArchive {
                 /// An invalid member (group, distribution list, etc) was specified as a distribution list member.  Includes the offending proto
                 case invalidDistributionListMember(protoClass: Any.Type)
 
+                /// An invalid member label was associated with a group member.
+                case invalidMemberLabel
+
                 /// The backup tier in account settings was set but not able to be parsed by libsignal.
                 case invalidBackupTier
 
@@ -819,9 +822,6 @@ extension BackupArchive {
                 /// recipient types are valid for an ad hoc call.
                 case recipientOfAdHocCallWasNotCallLink
 
-                /// The poll terminate message was not in a group chat
-                case pollTerminateNotFromGroupChat
-
                 /// The poll terminate message author had an invalid non-contact Address
                 case pollTerminateAuthorNotContact
 
@@ -939,6 +939,7 @@ extension BackupArchive {
                     .invalidProfileKey,
                     .invalidContactIdentityKey,
                     .invalidDistributionListMember,
+                    .invalidMemberLabel,
                     .contactWithoutIdentifiers,
                     .otherContactWithLocalIdentifiers,
                     .chatItemInvalidDateSent,
@@ -999,7 +1000,6 @@ extension BackupArchive {
                     .callLinkInvalidRootKey,
                     .callLinkUsedAsChatRecipient,
                     .recipientOfAdHocCallWasNotCallLink,
-                    .pollTerminateNotFromGroupChat,
                     .pollTerminateAuthorNotContact,
                     .pollQuestionEmpty,
                     .pollVoteAuthorNotContact,
@@ -1053,6 +1053,7 @@ extension BackupArchive {
                     .invalidProfileKey,
                     .invalidContactIdentityKey,
                     .invalidDistributionListMember,
+                    .invalidMemberLabel,
                     .invalidBackupTier,
                     .contactWithoutIdentifiers,
                     .otherContactWithLocalIdentifiers,
@@ -1113,7 +1114,6 @@ extension BackupArchive {
                     .callLinkInvalidRootKey,
                     .callLinkUsedAsChatRecipient,
                     .recipientOfAdHocCallWasNotCallLink,
-                    .pollTerminateNotFromGroupChat,
                     .pollTerminateAuthorNotContact,
                     .pollQuestionEmpty,
                     .pollVoteAuthorNotContact,
@@ -1197,7 +1197,7 @@ extension BackupArchive {
             self.error = error
             self.wasFrameDropped = wasFrameDropped
             // Don't serialize proto frames if we aren't displaying errors.
-            if let protoFrame, BuildFlags.Backups.errorDisplay {
+            if let protoFrame, BuildFlags.Backups.archiveErrorDisplay {
                 do {
                     self.protoJson = try String(
                         data: JSONSerialization.data(

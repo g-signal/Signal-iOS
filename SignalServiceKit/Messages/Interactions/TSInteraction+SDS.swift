@@ -4854,7 +4854,7 @@ public extension TSInteraction {
     // you are inserting or updating rather than calling this method.
     func anyUpsert(transaction: DBWriteTransaction) {
         let isInserting: Bool
-        if TSInteraction.anyFetch(uniqueId: uniqueId, transaction: transaction) != nil {
+        if TSInteraction.fetchViaCache(uniqueId: uniqueId, transaction: transaction) != nil {
             isInserting = false
         } else {
             isInserting = true
@@ -4896,7 +4896,7 @@ public extension TSInteraction {
             return
         }
 
-        guard let dbCopy = type(of: self).anyFetch(uniqueId: uniqueId, transaction: transaction, ignoreCache: true) else {
+        guard let dbCopy = type(of: self).anyFetch(uniqueId: uniqueId, transaction: transaction) else {
             return
         }
 
@@ -4971,23 +4971,19 @@ public extension TSInteraction {
     }
 
     // Fetches a single model by "unique id".
-    class func anyFetch(uniqueId: String,
-                        transaction: DBReadTransaction) -> TSInteraction? {
+    class func fetchViaCache(uniqueId: String, transaction: DBReadTransaction) -> TSInteraction? {
         assert(!uniqueId.isEmpty)
 
-        return anyFetch(uniqueId: uniqueId, transaction: transaction, ignoreCache: false)
+        if let cachedCopy = SSKEnvironment.shared.modelReadCachesRef.interactionReadCache.getInteraction(uniqueId: uniqueId, transaction: transaction) {
+            return cachedCopy
+        }
+
+        return anyFetch(uniqueId: uniqueId, transaction: transaction)
     }
 
     // Fetches a single model by "unique id".
-    class func anyFetch(uniqueId: String,
-                        transaction: DBReadTransaction,
-                        ignoreCache: Bool) -> TSInteraction? {
+    class func anyFetch(uniqueId: String, transaction: DBReadTransaction) -> TSInteraction? {
         assert(!uniqueId.isEmpty)
-
-        if !ignoreCache,
-            let cachedCopy = SSKEnvironment.shared.modelReadCachesRef.interactionReadCache.getInteraction(uniqueId: uniqueId, transaction: transaction) {
-            return cachedCopy
-        }
 
         let sql = "SELECT * FROM \(InteractionRecord.databaseTableName) WHERE \(interactionColumn: .uniqueId) = ?"
         return grdbFetchOne(sql: sql, arguments: [uniqueId], transaction: transaction)

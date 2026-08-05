@@ -99,33 +99,47 @@ public class StickerManager: NSObject {
         super.init()
 
         // Resume sticker and sticker pack downloads when app is ready.
-        appReadiness.runNowOrWhenMainAppDidBecomeReadyAsync {
-            if DependenciesBridge.shared.tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegistered {
-                Task {
-                    // This will return once all restored sticker packs have been downloaded
-                    try await self.queueLoader.loadAndRunTasks()
-
-                    // Refresh contents after pending downloads complete
-                    StickerManager.refreshContents()
-                }
-            }
+        appReadiness.runNowOrWhenMainAppDidBecomeReadyAsync { [self] in
+            downloadPendingSickerPacks()
         }
+
+        _ = NotificationCenter.default.addObserver(
+            name: .registrationStateDidChange,
+            block: { [weak self] _ in
+                guard let self else { return }
+                downloadPendingSickerPacks()
+            },
+        )
     }
 
-    // Attempt to download any sticker packs restored via backup.
-    public static func downloadPendingSickerPacks() async throws {
-        try await SSKEnvironment.shared.stickerManagerRef.queueLoader.loadAndRunTasks()
-    }
+    // MARK: -
+
+    private let downloadPendingStickerPacksTaskQueue = SerialTaskQueue()
 
     // The sticker manager is responsible for downloading more than one kind
     // of content; those downloads can fail.  Therefore the sticker manager
     // retries those downloads, sometimes in response to user activity.
-    public class func refreshContents() {
-        // Try to download the manifests for "default" sticker packs.
-        tryToDownloadDefaultStickerPacks()
+    public func downloadPendingSickerPacks() {
+        downloadPendingStickerPacksTaskQueue.enqueue { [self] in
+            let tsAccountManager = DependenciesBridge.shared.tsAccountManager
+            guard tsAccountManager.registrationStateWithMaybeSneakyTransaction.isRegistered else {
+                return
+            }
 
-        // Try to download the stickers for "installed" sticker packs.
-        ensureAllStickerDownloadsAsync()
+            try? await queueLoader.loadAndRunTasks()
+
+            // Try to download the manifests for "default" sticker packs.
+            let manifestDownloadPromises = StickerManager.tryToDownloadDefaultStickerPacks()
+            for promise in manifestDownloadPromises {
+                try? await promise.awaitable()
+            }
+
+            // Try to download the stickers for "installed" sticker packs.
+            let stickerDownloadPromises = StickerManager.ensureAllStickerDownloadsAsync()
+            for promise in stickerDownloadPromises {
+                try? await promise.awaitable()
+            }
+        }
     }
 
     // MARK: - Paths
@@ -160,19 +174,19 @@ public class StickerManager: NSObject {
 
     // MARK: - Sticker Packs
 
-    public class func allStickerPacks() -> [StickerPack] {
-        var result = [StickerPack]()
+    public class func allStickerPacks() -> [StickerPackRecord] {
+        var result = [StickerPackRecord]()
         SSKEnvironment.shared.databaseStorageRef.read { transaction in
             result += allStickerPacks(transaction: transaction)
         }
         return result
     }
 
-    public class func allStickerPacks(transaction: DBReadTransaction) -> [StickerPack] {
-        return StickerPack.anyFetchAll(transaction: transaction)
+    public class func allStickerPacks(transaction: DBReadTransaction) -> [StickerPackRecord] {
+        return StickerPackRecord.anyFetchAll(transaction: transaction)
     }
 
-    public class func installedStickerPacks(transaction: DBReadTransaction) -> [StickerPack] {
+    public class func installedStickerPacks(transaction: DBReadTransaction) -> [StickerPackRecord] {
         return allStickerPacks(transaction: transaction).filter {
             $0.isInstalled
         }
@@ -204,7 +218,7 @@ public class StickerManager: NSObject {
         if shouldRemove {
             uninstallSticker(stickerInfo: stickerPack.coverInfo, transaction: transaction)
 
-            for stickerInfo in stickerPack.stickerInfos {
+            for stickerInfo in stickerPack.stickerInfos() {
                 if stickerInfo == stickerPack.coverInfo {
                     // Don't uninstall the cover for saved packs.
                     continue
@@ -214,7 +228,7 @@ public class StickerManager: NSObject {
 
             stickerPack.anyRemove(transaction: transaction)
         } else {
-            stickerPack.update(withIsInstalled: false, transaction: transaction)
+            stickerPack.updateWith(isInstalled: false, tx: transaction)
         }
 
         if wasLocallyInitiated {
@@ -231,7 +245,7 @@ public class StickerManager: NSObject {
     }
 
     public class func installStickerPack(
-        stickerPack: StickerPack,
+        stickerPack: StickerPackRecord,
         wasLocallyInitiated: Bool,
         transaction: DBWriteTransaction,
     ) {
@@ -243,34 +257,35 @@ public class StickerManager: NSObject {
         )
     }
 
-    public class func fetchStickerPack(stickerPackInfo: StickerPackInfo) -> StickerPack? {
+    public class func fetchStickerPack(stickerPackInfo: StickerPackInfo) -> StickerPackRecord? {
         return SSKEnvironment.shared.databaseStorageRef.read { transaction in
             return fetchStickerPack(stickerPackInfo: stickerPackInfo, transaction: transaction)
         }
     }
 
-    public class func fetchStickerPack(stickerPackInfo: StickerPackInfo, transaction: DBReadTransaction) -> StickerPack? {
-        let uniqueId = StickerPack.uniqueId(for: stickerPackInfo)
-        return StickerPack.anyFetch(uniqueId: uniqueId, transaction: transaction)
+    public class func fetchStickerPack(stickerPackInfo: StickerPackInfo, transaction: DBReadTransaction) -> StickerPackRecord? {
+        let uniqueId = StickerPackRecord.uniqueId(forStickerPackInfo: stickerPackInfo)
+        return StickerPackRecord.anyFetch(uniqueId: uniqueId, transaction: transaction)
     }
 
     private class func tryToDownloadAndSaveStickerPack(
         stickerPackInfo: StickerPackInfo,
         installMode: InstallMode,
         wasLocallyInitiated: Bool,
-    ) {
-        tryToDownloadStickerPack(stickerPackInfo: stickerPackInfo).done(on: DispatchQueue.global()) { stickerPack in
-            self.upsertStickerPack(
-                stickerPack: stickerPack,
-                installMode: installMode,
-                wasLocallyInitiated: wasLocallyInitiated,
-            )
-        }.cauterize()
+    ) -> Promise<Void> {
+        return tryToDownloadStickerPack(stickerPackInfo: stickerPackInfo)
+            .done(on: DispatchQueue.global()) { stickerPack in
+                self.upsertStickerPack(
+                    stickerPack: stickerPack,
+                    installMode: installMode,
+                    wasLocallyInitiated: wasLocallyInitiated,
+                )
+            }
     }
 
     private let packOperationQueue = ConcurrentTaskQueue(concurrentLimit: 3)
 
-    private func tryToDownloadStickerPack(stickerPackInfo: StickerPackInfo) -> Promise<StickerPack> {
+    private func tryToDownloadStickerPack(stickerPackInfo: StickerPackInfo) -> Promise<StickerPackRecord> {
         return Promise.wrapAsync { [packOperationQueue] in
             return try await packOperationQueue.run {
                 return try await DownloadStickerPackOperation.run(stickerPackInfo: stickerPackInfo)
@@ -279,12 +294,12 @@ public class StickerManager: NSObject {
     }
 
     // This method is public so that we can download "transient" (uninstalled) sticker packs.
-    public class func tryToDownloadStickerPack(stickerPackInfo: StickerPackInfo) -> Promise<StickerPack> {
+    public class func tryToDownloadStickerPack(stickerPackInfo: StickerPackInfo) -> Promise<StickerPackRecord> {
         return SSKEnvironment.shared.stickerManagerRef.tryToDownloadStickerPack(stickerPackInfo: stickerPackInfo)
     }
 
     private class func upsertStickerPack(
-        stickerPack: StickerPack,
+        stickerPack: StickerPackRecord,
         installMode: InstallMode,
         wasLocallyInitiated: Bool,
     ) {
@@ -299,7 +314,7 @@ public class StickerManager: NSObject {
     }
 
     private class func upsertStickerPack(
-        stickerPack stickerPackParam: StickerPack,
+        stickerPack stickerPackParam: StickerPackRecord,
         installMode: InstallMode,
         wasLocallyInitiated: Bool,
         transaction: DBWriteTransaction,
@@ -307,15 +322,15 @@ public class StickerManager: NSObject {
         // If we re-insert a sticker pack, make sure that it
         // has a new row id.
         _ = stickerPackParam as NSCopying
-        let stickerPack = stickerPackParam.copy() as! StickerPack
-        stickerPack.clearRowId()
+        let stickerPack = stickerPackParam.copy() as! StickerPackRecord
+        stickerPack.id = nil
 
         let oldCopy = fetchStickerPack(stickerPackInfo: stickerPack.info, transaction: transaction)
         let wasSaved = oldCopy != nil
 
         // Preserve old mutable state.
         if let oldCopy {
-            stickerPack.update(withIsInstalled: oldCopy.isInstalled, transaction: transaction)
+            stickerPack.updateWith(isInstalled: oldCopy.isInstalled, tx: transaction)
         } else {
             stickerPack.anyInsert(transaction: transaction)
         }
@@ -363,7 +378,7 @@ public class StickerManager: NSObject {
     }
 
     private class func markSavedStickerPackAsInstalled(
-        stickerPack: StickerPack,
+        stickerPack: StickerPackRecord,
         wasLocallyInitiated: Bool,
         transaction: DBWriteTransaction,
     ) -> Promise<Void> {
@@ -371,7 +386,7 @@ public class StickerManager: NSObject {
             return .value(())
         }
 
-        stickerPack.update(withIsInstalled: true, transaction: transaction)
+        stickerPack.updateWith(isInstalled: true, tx: transaction)
 
         let promise = installStickerPackContents(stickerPack: stickerPack, transaction: transaction)
 
@@ -386,7 +401,7 @@ public class StickerManager: NSObject {
     }
 
     private class func installStickerPackContents(
-        stickerPack: StickerPack,
+        stickerPack: StickerPackRecord,
         transaction: DBReadTransaction,
         onlyInstallCover: Bool = false,
     ) -> Promise<Void> {
@@ -442,21 +457,21 @@ public class StickerManager: NSObject {
         }
     }
 
-    private class func tryToDownloadDefaultStickerPacks() {
-        DispatchQueue.global().async {
-            self.tryToDownloadStickerPacks(
-                stickerPacks: DefaultStickerPack.packsToAutoInstall,
-                installMode: .installIfUnsaved,
-            )
-            self.tryToDownloadStickerPacks(
-                stickerPacks: DefaultStickerPack.packsToNotAutoInstall,
-                installMode: .doNotInstall,
-            )
-        }
+    private class func tryToDownloadDefaultStickerPacks() -> [Promise<Void>] {
+        let autoInstallPromises = tryToDownloadStickerPacks(
+            stickerPacks: DefaultStickerPack.packsToAutoInstall,
+            installMode: .installIfUnsaved,
+        )
+        let notAutoInstallPromises = tryToDownloadStickerPacks(
+            stickerPacks: DefaultStickerPack.packsToNotAutoInstall,
+            installMode: .doNotInstall,
+        )
+
+        return autoInstallPromises + notAutoInstallPromises
     }
 
     public class func installedStickers(
-        forStickerPack stickerPack: StickerPack,
+        forStickerPack stickerPack: StickerPackRecord,
         verifyExists: Bool,
     ) -> [StickerInfo] {
         return SSKEnvironment.shared.databaseStorageRef.read { transaction in
@@ -469,14 +484,15 @@ public class StickerManager: NSObject {
     }
 
     public class func installedStickers(
-        forStickerPack stickerPack: StickerPack,
+        forStickerPack stickerPack: StickerPackRecord,
         verifyExists: Bool,
         transaction: DBReadTransaction,
     ) -> [StickerInfo] {
+        let installedStickerCache = SSKEnvironment.shared.modelReadCachesRef.installedStickerCache
         var result = [StickerInfo]()
-        for stickerInfo in stickerPack.stickerInfos {
-            let uniqueId = InstalledSticker.uniqueId(for: stickerInfo)
-            guard let installedSticker = InstalledSticker.anyFetch(uniqueId: uniqueId, transaction: transaction) else {
+        for stickerInfo in stickerPack.stickerInfos() {
+            let uniqueId = InstalledStickerRecord.uniqueId(for: stickerInfo)
+            guard let installedSticker = installedStickerCache.getInstalledSticker(uniqueId: uniqueId, transaction: transaction) else {
                 continue
             }
             if verifyExists, self.stickerDataUrl(forInstalledSticker: installedSticker, verifyExists: verifyExists) == nil {
@@ -520,15 +536,16 @@ public class StickerManager: NSObject {
         stickerInfo: StickerInfo,
         transaction: DBReadTransaction,
     ) -> (any StickerMetadata)? {
-        let uniqueId = InstalledSticker.uniqueId(for: stickerInfo)
-        guard let installedSticker = InstalledSticker.anyFetch(uniqueId: uniqueId, transaction: transaction) else {
+        let installedStickerCache = SSKEnvironment.shared.modelReadCachesRef.installedStickerCache
+        let uniqueId = InstalledStickerRecord.uniqueId(for: stickerInfo)
+        guard let installedSticker = installedStickerCache.getInstalledSticker(uniqueId: uniqueId, transaction: transaction) else {
             return nil
         }
         return installedStickerMetadata(installedSticker: installedSticker, transaction: transaction)
     }
 
     public class func installedStickerMetadata(
-        installedSticker: InstalledSticker,
+        installedSticker: InstalledStickerRecord,
         transaction: DBReadTransaction,
     ) -> (any StickerMetadata)? {
         let stickerInfo = installedSticker.info
@@ -556,14 +573,14 @@ public class StickerManager: NSObject {
         return stickerDataUrl(stickerInfo: stickerInfo, stickerType: stickerType, verifyExists: verifyExists)
     }
 
-    public class func stickerDataUrl(forInstalledSticker installedSticker: InstalledSticker, verifyExists: Bool) -> URL? {
+    public class func stickerDataUrl(forInstalledSticker installedSticker: InstalledStickerRecord, verifyExists: Bool) -> URL? {
         let stickerInfo = installedSticker.info
         let stickerType = StickerType.stickerType(forContentType: installedSticker.contentType)
         return stickerDataUrl(stickerInfo: stickerInfo, stickerType: stickerType, verifyExists: verifyExists)
     }
 
     private class func stickerDataUrl(stickerInfo: StickerInfo, stickerType: StickerType, verifyExists: Bool) -> URL? {
-        let uniqueId = InstalledSticker.uniqueId(for: stickerInfo)
+        let uniqueId = InstalledStickerRecord.uniqueId(for: stickerInfo)
         var url = cacheDirUrl()
         // Not all stickers are .webp.
         url.appendPathComponent("\(uniqueId).\(stickerType.fileExtension)")
@@ -575,7 +592,7 @@ public class StickerManager: NSObject {
 
     public class func filePathsForAllInstalledStickers(transaction: DBReadTransaction) -> [String] {
         var filePaths = [String]()
-        InstalledSticker.anyEnumerate(transaction: transaction) { installedSticker, _ in
+        InstalledStickerRecord.anyEnumerate(transaction: transaction) { installedSticker, _ in
             if let stickerDataUrl = stickerDataUrl(forInstalledSticker: installedSticker, verifyExists: false) {
                 filePaths.append(stickerDataUrl.path)
             }
@@ -590,10 +607,9 @@ public class StickerManager: NSObject {
     }
 
     public class func isStickerInstalled(stickerInfo: StickerInfo, transaction: DBReadTransaction) -> Bool {
-        let uniqueId = InstalledSticker.uniqueId(for: stickerInfo)
-        // We use anyFetch(...) instead of anyExists(...) to
-        // leverage the model cache.
-        return InstalledSticker.anyFetch(uniqueId: uniqueId, transaction: transaction) != nil
+        let installedStickerCache = SSKEnvironment.shared.modelReadCachesRef.installedStickerCache
+        let uniqueId = InstalledStickerRecord.uniqueId(for: stickerInfo)
+        return installedStickerCache.getInstalledSticker(uniqueId: uniqueId, transaction: transaction) != nil
     }
 
     typealias CleanupCompletion = () -> Void
@@ -631,24 +647,26 @@ public class StickerManager: NSObject {
         // No need to post stickersOrPacksDidChange; caller will do that.
     }
 
-    public class func fetchInstalledStickerWithSneakyTransaction(stickerInfo: StickerInfo) -> InstalledSticker? {
+    public class func fetchInstalledStickerWithSneakyTransaction(stickerInfo: StickerInfo) -> InstalledStickerRecord? {
         return SSKEnvironment.shared.databaseStorageRef.read { transaction in
             return self.fetchInstalledSticker(stickerInfo: stickerInfo, transaction: transaction)
         }
     }
 
-    public class func fetchInstalledSticker(stickerInfo: StickerInfo, transaction: DBReadTransaction) -> InstalledSticker? {
-        let uniqueId = InstalledSticker.uniqueId(for: stickerInfo)
-        return InstalledSticker.anyFetch(uniqueId: uniqueId, transaction: transaction)
+    public class func fetchInstalledSticker(stickerInfo: StickerInfo, transaction: DBReadTransaction) -> InstalledStickerRecord? {
+        let installedStickerCache = SSKEnvironment.shared.modelReadCachesRef.installedStickerCache
+        let uniqueId = InstalledStickerRecord.uniqueId(for: stickerInfo)
+        return installedStickerCache.getInstalledSticker(uniqueId: uniqueId, transaction: transaction)
     }
 
     public class func fetchInstalledSticker(
         packId: Data,
         stickerId: UInt32,
         transaction: DBReadTransaction,
-    ) -> InstalledSticker? {
-        let uniqueId = StickerInfo.key(withPackId: packId, stickerId: stickerId)
-        return InstalledSticker.anyFetch(uniqueId: uniqueId, transaction: transaction)
+    ) -> InstalledStickerRecord? {
+        let installedStickerCache = SSKEnvironment.shared.modelReadCachesRef.installedStickerCache
+        let uniqueId = StickerInfo.key(packId: packId, stickerId: stickerId)
+        return installedStickerCache.getInstalledSticker(uniqueId: uniqueId, transaction: transaction)
     }
 
     public class func installSticker(
@@ -662,7 +680,7 @@ public class StickerManager: NSObject {
             return false
         }
 
-        let installedSticker = InstalledSticker(
+        let installedSticker = InstalledStickerRecord(
             info: stickerInfo,
             contentType: contentType,
             emojiString: emojiString,
@@ -702,7 +720,7 @@ public class StickerManager: NSObject {
             do {
                 // For every attachment referencing this sticker, we can now enqueue a "download"
                 // that's really just a local file clone, from the newly installed sticker.
-                let attachmentIds = try DependenciesBridge.shared.attachmentStore.allAttachmentIdsForSticker(
+                let attachmentIds = DependenciesBridge.shared.attachmentStore.allAttachmentIdsForSticker(
                     stickerInfo,
                     tx: transaction,
                 )
@@ -715,8 +733,6 @@ public class StickerManager: NSObject {
                         tx: transaction,
                     )
                 }
-            } catch {
-                owsFailDebug("Failed to enqueue attachments \(error.grdbErrorForLogging)")
             }
 
             self.addStickerToEmojiMap(installedSticker, tx: transaction)
@@ -725,11 +741,11 @@ public class StickerManager: NSObject {
     }
 
     private class func tryToDownloadAndInstallSticker(
-        stickerPack: StickerPack,
+        stickerPack: StickerPackRecord,
         item: StickerPackItem,
         transaction: DBReadTransaction,
     ) -> Promise<Bool> {
-        let stickerInfo: StickerInfo = item.stickerInfo(with: stickerPack)
+        let stickerInfo: StickerInfo = item.stickerInfoWith(stickerPack: stickerPack)
         let emojiString = item.emojiString
 
         guard !self.isStickerInstalled(stickerInfo: stickerInfo, transaction: transaction) else {
@@ -804,7 +820,7 @@ public class StickerManager: NSObject {
         return allEmoji(in: emojiString).first.map(String.init)
     }
 
-    private class func addStickerToEmojiMap(_ installedSticker: InstalledSticker, tx: DBWriteTransaction) {
+    private class func addStickerToEmojiMap(_ installedSticker: InstalledStickerRecord, tx: DBWriteTransaction) {
         guard let emojiString = installedSticker.emojiString else {
             return
         }
@@ -814,7 +830,7 @@ public class StickerManager: NSObject {
         }
     }
 
-    private class func removeStickerFromEmojiMap(_ installedSticker: InstalledSticker, tx: DBWriteTransaction) {
+    private class func removeStickerFromEmojiMap(_ installedSticker: InstalledStickerRecord, tx: DBWriteTransaction) {
         guard let emojiString = installedSticker.emojiString else {
             return
         }
@@ -837,10 +853,10 @@ public class StickerManager: NSObject {
         return firstCharacter
     }
 
-    public class func suggestedStickers(for emoji: Character, tx: DBReadTransaction) -> [InstalledSticker] {
+    public class func suggestedStickers(for emoji: Character, tx: DBReadTransaction) -> [InstalledStickerRecord] {
         let stickerIds = emojiMapStore.orderedUniqueArray(forKey: String(emoji), tx: tx)
         return stickerIds.compactMap { stickerId in
-            guard let installedSticker = InstalledSticker.anyFetch(uniqueId: stickerId, transaction: tx) else {
+            guard let installedSticker = InstalledStickerRecord.anyFetch(uniqueId: stickerId, transaction: tx) else {
                 owsFailDebug("Missing installed sticker.")
                 return nil
             }
@@ -857,7 +873,7 @@ public class StickerManager: NSObject {
 
     public class func knownStickerPacksFromMessages(transaction: DBReadTransaction) -> [DatedStickerPackInfo] {
         do {
-            return try DependenciesBridge.shared.attachmentStore
+            return DependenciesBridge.shared.attachmentStore
                 .oldestStickerPackReferences(tx: transaction)
                 .compactMap { stickerReferenceMetadata in
                     // Join to the message so we can get the sticker pack key.
@@ -880,13 +896,13 @@ public class StickerManager: NSObject {
                         ),
                     )
                 }
-        } catch {
-            owsFailDebug("Failed fetching sticker attachments \(error)")
-            return []
         }
     }
 
-    private class func tryToDownloadStickerPacks(stickerPacks: [StickerPackInfo], installMode: InstallMode) {
+    private class func tryToDownloadStickerPacks(
+        stickerPacks: [StickerPackInfo],
+        installMode: InstallMode,
+    ) -> [Promise<Void>] {
         var stickerPacksToDownload = [StickerPackInfo]()
         SSKEnvironment.shared.databaseStorageRef.read { transaction in
             for stickerPackInfo in stickerPacks {
@@ -896,7 +912,7 @@ public class StickerManager: NSObject {
             }
         }
 
-        for stickerPackInfo in stickerPacksToDownload {
+        return stickerPacksToDownload.map { stickerPackInfo -> Promise<Void> in
             StickerManager.tryToDownloadAndSaveStickerPack(
                 stickerPackInfo: stickerPackInfo,
                 installMode: installMode,
@@ -966,7 +982,7 @@ public class StickerManager: NSObject {
         let keys = store.orderedUniqueArray(forKey: kRecentStickersKey, tx: transaction)
         var result = [StickerInfo]()
         for key in keys {
-            guard let installedSticker = InstalledSticker.anyFetch(uniqueId: key, transaction: transaction) else {
+            guard let installedSticker = InstalledStickerRecord.anyFetch(uniqueId: key, transaction: transaction) else {
                 owsFailDebug("Couldn't fetch sticker")
                 continue
             }
@@ -991,22 +1007,24 @@ public class StickerManager: NSObject {
         let stickerKey = try hkdf(outputLength: stickerKeyLength, inputKeyMaterial: packKey, salt: [], info: Data("Sticker Pack".utf8))
         let attachmentKey = try! AttachmentKey(combinedKey: stickerKey)
 
-        let temporaryDecryptedFile = OWSFileSystem.temporaryFileUrl(isAvailableWhileDeviceLocked: true)
+        let temporaryDecryptedFile = OWSFileSystem.temporaryFileUrl(
+            fileExtension: nil,
+            isAvailableWhileDeviceLocked: true,
+        )
         try Cryptography.decryptFile(at: url, metadata: DecryptionMetadata(key: attachmentKey), output: temporaryDecryptedFile)
         return temporaryDecryptedFile
     }
 
-    private class func ensureAllStickerDownloadsAsync() {
-        DispatchQueue.global().async {
-            SSKEnvironment.shared.databaseStorageRef.read { transaction in
-                for stickerPack in self.allStickerPacks(transaction: transaction) {
-                    ensureDownloads(forStickerPack: stickerPack, transaction: transaction)
-                }
+    private class func ensureAllStickerDownloadsAsync() -> [Promise<Void>] {
+        let db = DependenciesBridge.shared.db
+        return db.read { tx in
+            return allStickerPacks(transaction: tx).map { stickerPack -> Promise<Void> in
+                ensureDownloads(forStickerPack: stickerPack, transaction: tx)
             }
         }
     }
 
-    public class func ensureDownloadsAsync(forStickerPack stickerPack: StickerPack) -> Promise<Void> {
+    public class func ensureDownloadsAsync(forStickerPack stickerPack: StickerPackRecord) -> Promise<Void> {
         let (promise, future) = Promise<Void>.pending()
         DispatchQueue.global().async {
             SSKEnvironment.shared.databaseStorageRef.read { transaction in
@@ -1023,7 +1041,7 @@ public class StickerManager: NSObject {
     }
 
     @discardableResult
-    private class func ensureDownloads(forStickerPack stickerPack: StickerPack, transaction: DBReadTransaction) -> Promise<Void> {
+    private class func ensureDownloads(forStickerPack stickerPack: StickerPackRecord, transaction: DBReadTransaction) -> Promise<Void> {
         // TODO: As an optimization, we could flag packs as "complete" if we know all
         // of their stickers are installed.
 
@@ -1059,11 +1077,11 @@ public class StickerManager: NSObject {
         }
     }
 
-    private static func fetchOrphanedPacksAndStickers(tx: DBReadTransaction) -> ([StickerPack], [InstalledSticker]) {
-        var stickerPacks = [String: StickerPack]()
-        var packsToRemove = [StickerPack]()
+    private static func fetchOrphanedPacksAndStickers(tx: DBReadTransaction) -> ([StickerPackRecord], [InstalledStickerRecord]) {
+        var stickerPacks = [String: StickerPackRecord]()
+        var packsToRemove = [StickerPackRecord]()
 
-        for stickerPack in StickerPack.anyFetchAll(transaction: tx) {
+        for stickerPack in StickerPackRecord.anyFetchAll(transaction: tx) {
             if stickerPack.isInstalled || self.isDefaultStickerPack(packId: stickerPack.info.packId) {
                 stickerPacks[stickerPack.info.asKey] = stickerPack
             } else {
@@ -1071,8 +1089,8 @@ public class StickerManager: NSObject {
             }
         }
 
-        var stickersToRemove = [InstalledSticker]()
-        InstalledSticker.anyEnumerate(transaction: tx) { sticker, _ in
+        var stickersToRemove = [InstalledStickerRecord]()
+        InstalledStickerRecord.anyEnumerate(transaction: tx) { sticker, _ in
             let shouldKeepSticker: Bool = {
                 guard let stickerPack = stickerPacks[sticker.info.packInfo.asKey] else {
                     return false
@@ -1149,7 +1167,7 @@ public class StickerManager: NSObject {
         }
         switch type {
         case .install:
-            tryToDownloadAndSaveStickerPack(
+            _ = tryToDownloadAndSaveStickerPack(
                 stickerPackInfo: stickerPackInfo,
                 installMode: .install,
                 wasLocallyInitiated: false,

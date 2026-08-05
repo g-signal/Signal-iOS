@@ -75,21 +75,21 @@ struct DeviceTransferProtos_Database: Sendable {
 
   /// @required
   var database: DeviceTransferProtos_File {
-    get {return _database ?? DeviceTransferProtos_File()}
+    get {_database ?? DeviceTransferProtos_File()}
     set {_database = newValue}
   }
   /// Returns true if `database` has been explicitly set.
-  var hasDatabase: Bool {return self._database != nil}
+  var hasDatabase: Bool {self._database != nil}
   /// Clears the value of `database`. Subsequent reads from it will return its default value.
   mutating func clearDatabase() {self._database = nil}
 
   /// @required
   var wal: DeviceTransferProtos_File {
-    get {return _wal ?? DeviceTransferProtos_File()}
+    get {_wal ?? DeviceTransferProtos_File()}
     set {_wal = newValue}
   }
   /// Returns true if `wal` has been explicitly set.
-  var hasWal: Bool {return self._wal != nil}
+  var hasWal: Bool {self._wal != nil}
   /// Clears the value of `wal`. Subsequent reads from it will return its default value.
   mutating func clearWal() {self._wal = nil}
 
@@ -110,11 +110,11 @@ struct DeviceTransferProtos_Manifest: Sendable {
   var grdbSchemaVersion: UInt64 = 0
 
   var database: DeviceTransferProtos_Database {
-    get {return _database ?? DeviceTransferProtos_Database()}
+    get {_database ?? DeviceTransferProtos_Database()}
     set {_database = newValue}
   }
   /// Returns true if `database` has been explicitly set.
-  var hasDatabase: Bool {return self._database != nil}
+  var hasDatabase: Bool {self._database != nil}
   /// Clears the value of `database`. Subsequent reads from it will return its default value.
   mutating func clearDatabase() {self._database = nil}
 

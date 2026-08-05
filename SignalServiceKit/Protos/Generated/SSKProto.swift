@@ -8839,6 +8839,177 @@ extension SSKProtoDataMessageUnpinMessageBuilder {
 
 #endif
 
+// MARK: - SSKProtoDataMessageAdminDelete
+
+@objc
+public class SSKProtoDataMessageAdminDelete: NSObject, Codable, NSSecureCoding {
+
+    fileprivate let proto: SignalServiceProtos_DataMessage.AdminDelete
+
+    @objc
+    public var targetAuthorAciBinary: Data? {
+        guard hasTargetAuthorAciBinary else {
+            return nil
+        }
+        return proto.targetAuthorAciBinary
+    }
+    @objc
+    public var hasTargetAuthorAciBinary: Bool {
+        return proto.hasTargetAuthorAciBinary
+    }
+
+    @objc
+    public var targetSentTimestamp: UInt64 {
+        return proto.targetSentTimestamp
+    }
+    @objc
+    public var hasTargetSentTimestamp: Bool {
+        return proto.hasTargetSentTimestamp
+    }
+
+    public var hasUnknownFields: Bool {
+        return !proto.unknownFields.data.isEmpty
+    }
+    public var unknownFields: SwiftProtobuf.UnknownStorage? {
+        guard hasUnknownFields else { return nil }
+        return proto.unknownFields
+    }
+
+    private init(proto: SignalServiceProtos_DataMessage.AdminDelete) {
+        self.proto = proto
+    }
+
+    @objc
+    public func serializedData() throws -> Data {
+        return try self.proto.serializedData()
+    }
+
+    @objc
+    public required convenience init(serializedData: Data) throws {
+        let proto = try SignalServiceProtos_DataMessage.AdminDelete(serializedBytes: serializedData)
+        self.init(proto)
+    }
+
+    fileprivate convenience init(_ proto: SignalServiceProtos_DataMessage.AdminDelete) {
+        self.init(proto: proto)
+    }
+
+    public required convenience init(from decoder: Swift.Decoder) throws {
+        let singleValueContainer = try decoder.singleValueContainer()
+        let serializedData = try singleValueContainer.decode(Data.self)
+        try self.init(serializedData: serializedData)
+    }
+    public func encode(to encoder: Swift.Encoder) throws {
+        var singleValueContainer = encoder.singleValueContainer()
+        try singleValueContainer.encode(try serializedData())
+    }
+
+    public static var supportsSecureCoding: Bool { true }
+
+    public required convenience init?(coder: NSCoder) {
+        guard let serializedData = coder.decodeData() else { return nil }
+        do {
+            try self.init(serializedData: serializedData)
+        } catch {
+            owsFailDebug("Failed to decode serialized data \(error)")
+            return nil
+        }
+    }
+
+    public func encode(with coder: NSCoder) {
+        do {
+            coder.encode(try serializedData())
+        } catch {
+            owsFailDebug("Failed to encode serialized data \(error)")
+        }
+    }
+
+    @objc
+    public override var debugDescription: String {
+        return "\(proto)"
+    }
+}
+
+extension SSKProtoDataMessageAdminDelete {
+    @objc
+    public static func builder() -> SSKProtoDataMessageAdminDeleteBuilder {
+        return SSKProtoDataMessageAdminDeleteBuilder()
+    }
+
+    // asBuilder() constructs a builder that reflects the proto's contents.
+    @objc
+    public func asBuilder() -> SSKProtoDataMessageAdminDeleteBuilder {
+        let builder = SSKProtoDataMessageAdminDeleteBuilder()
+        if let _value = targetAuthorAciBinary {
+            builder.setTargetAuthorAciBinary(_value)
+        }
+        if hasTargetSentTimestamp {
+            builder.setTargetSentTimestamp(targetSentTimestamp)
+        }
+        if let _value = unknownFields {
+            builder.setUnknownFields(_value)
+        }
+        return builder
+    }
+}
+
+@objc
+public class SSKProtoDataMessageAdminDeleteBuilder: NSObject {
+
+    private var proto = SignalServiceProtos_DataMessage.AdminDelete()
+
+    @objc
+    fileprivate override init() {}
+
+    @objc
+    @available(swift, obsoleted: 1.0)
+    public func setTargetAuthorAciBinary(_ valueParam: Data?) {
+        guard let valueParam = valueParam else { return }
+        proto.targetAuthorAciBinary = valueParam
+    }
+
+    public func setTargetAuthorAciBinary(_ valueParam: Data) {
+        proto.targetAuthorAciBinary = valueParam
+    }
+
+    @objc
+    public func setTargetSentTimestamp(_ valueParam: UInt64) {
+        proto.targetSentTimestamp = valueParam
+    }
+
+    public func setUnknownFields(_ unknownFields: SwiftProtobuf.UnknownStorage) {
+        proto.unknownFields = unknownFields
+    }
+
+    @objc
+    public func buildInfallibly() -> SSKProtoDataMessageAdminDelete {
+        return SSKProtoDataMessageAdminDelete(proto)
+    }
+
+    @objc
+    public func buildSerializedData() throws -> Data {
+        return try SSKProtoDataMessageAdminDelete(proto).serializedData()
+    }
+}
+
+#if TESTABLE_BUILD
+
+extension SSKProtoDataMessageAdminDelete {
+    @objc
+    public func serializedDataIgnoringErrors() -> Data? {
+        return try! self.serializedData()
+    }
+}
+
+extension SSKProtoDataMessageAdminDeleteBuilder {
+    @objc
+    public func buildIgnoringErrors() -> SSKProtoDataMessageAdminDelete? {
+        return self.buildInfallibly()
+    }
+}
+
+#endif
+
 // MARK: - SSKProtoDataMessageFlags
 
 @objc
@@ -8969,6 +9140,9 @@ public class SSKProtoDataMessage: NSObject, Codable, NSSecureCoding {
     public let unpinMessage: SSKProtoDataMessageUnpinMessage?
 
     @objc
+    public let adminDelete: SSKProtoDataMessageAdminDelete?
+
+    @objc
     public var body: String? {
         guard hasBody else {
             return nil
@@ -9072,7 +9246,8 @@ public class SSKProtoDataMessage: NSObject, Codable, NSSecureCoding {
                  pollTerminate: SSKProtoDataMessagePollTerminate?,
                  pollVote: SSKProtoDataMessagePollVote?,
                  pinMessage: SSKProtoDataMessagePinMessage?,
-                 unpinMessage: SSKProtoDataMessageUnpinMessage?) {
+                 unpinMessage: SSKProtoDataMessageUnpinMessage?,
+                 adminDelete: SSKProtoDataMessageAdminDelete?) {
         self.proto = proto
         self.attachments = attachments
         self.groupV2 = groupV2
@@ -9092,6 +9267,7 @@ public class SSKProtoDataMessage: NSObject, Codable, NSSecureCoding {
         self.pollVote = pollVote
         self.pinMessage = pinMessage
         self.unpinMessage = unpinMessage
+        self.adminDelete = adminDelete
     }
 
     @objc
@@ -9188,6 +9364,11 @@ public class SSKProtoDataMessage: NSObject, Codable, NSSecureCoding {
             unpinMessage = SSKProtoDataMessageUnpinMessage(proto.unpinMessage)
         }
 
+        var adminDelete: SSKProtoDataMessageAdminDelete?
+        if proto.hasAdminDelete {
+            adminDelete = SSKProtoDataMessageAdminDelete(proto.adminDelete)
+        }
+
         self.init(proto: proto,
                   attachments: attachments,
                   groupV2: groupV2,
@@ -9206,7 +9387,8 @@ public class SSKProtoDataMessage: NSObject, Codable, NSSecureCoding {
                   pollTerminate: pollTerminate,
                   pollVote: pollVote,
                   pinMessage: pinMessage,
-                  unpinMessage: unpinMessage)
+                  unpinMessage: unpinMessage,
+                  adminDelete: adminDelete)
     }
 
     public required convenience init(from decoder: Swift.Decoder) throws {
@@ -9324,6 +9506,9 @@ extension SSKProtoDataMessage {
         }
         if let _value = unpinMessage {
             builder.setUnpinMessage(_value)
+        }
+        if let _value = adminDelete {
+            builder.setAdminDelete(_value)
         }
         if let _value = unknownFields {
             builder.setUnknownFields(_value)
@@ -9584,6 +9769,17 @@ public class SSKProtoDataMessageBuilder: NSObject {
 
     public func setUnpinMessage(_ valueParam: SSKProtoDataMessageUnpinMessage) {
         proto.unpinMessage = valueParam.proto
+    }
+
+    @objc
+    @available(swift, obsoleted: 1.0)
+    public func setAdminDelete(_ valueParam: SSKProtoDataMessageAdminDelete?) {
+        guard let valueParam = valueParam else { return }
+        proto.adminDelete = valueParam.proto
+    }
+
+    public func setAdminDelete(_ valueParam: SSKProtoDataMessageAdminDelete) {
+        proto.adminDelete = valueParam.proto
     }
 
     public func setUnknownFields(_ unknownFields: SwiftProtobuf.UnknownStorage) {

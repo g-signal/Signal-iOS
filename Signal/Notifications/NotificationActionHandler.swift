@@ -36,6 +36,8 @@ public class NotificationActionHandler {
                 showCallLobby(userInfo: userInfo)
             case .submitDebugLogs:
                 await submitDebugLogs(supportTag: nil)
+            case .submitDebugLogsForBackupsMediaError:
+                await submitDebugLogs(supportTag: "BackupsMedia")
             case .reregister:
                 await reregister(appReadiness: appReadiness)
             case .showChatList:
@@ -45,8 +47,6 @@ public class NotificationActionHandler {
                 showLinkedDevices()
             case .showBackupsSettings:
                 showBackupsSettings()
-            case .listMediaIntegrityCheck:
-                await submitDebugLogs(supportTag: "BackupsMedia")
             }
         case UNNotificationDismissActionIdentifier:
             // TODO - mark as read?
@@ -302,7 +302,7 @@ public class NotificationActionHandler {
         let lobbyTarget = { () -> LobbyTarget? in
             if let threadUniqueId {
                 return SSKEnvironment.shared.databaseStorageRef.read { tx in
-                    if let groupId = try? (TSThread.anyFetch(uniqueId: threadUniqueId, transaction: tx) as? TSGroupThread)?.groupIdentifier {
+                    if let groupId = try? (TSThread.fetchViaCache(uniqueId: threadUniqueId, transaction: tx) as? TSGroupThread)?.groupIdentifier {
                         return .groupThread(groupId: groupId, uniqueId: threadUniqueId)
                     }
                     return nil
@@ -394,13 +394,13 @@ public class NotificationActionHandler {
         let messageId = userInfo.messageId
 
         return try SSKEnvironment.shared.databaseStorageRef.read { transaction throws -> NotificationMessage in
-            guard let thread = TSThread.anyFetch(uniqueId: threadId, transaction: transaction) else {
+            guard let thread = TSThread.fetchViaCache(uniqueId: threadId, transaction: transaction) else {
                 throw OWSAssertionError("unable to find thread with id: \(threadId)")
             }
 
             let interaction: TSInteraction?
             if let messageId {
-                interaction = TSInteraction.anyFetch(uniqueId: messageId, transaction: transaction)
+                interaction = TSInteraction.fetchViaCache(uniqueId: messageId, transaction: transaction)
             } else {
                 interaction = nil
             }

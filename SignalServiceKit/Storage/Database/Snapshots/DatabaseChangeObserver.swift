@@ -376,7 +376,7 @@ extension DatabaseChangeObserverImpl: TransactionObserver {
         AssertHasDatabaseChangeObserverLock()
 
         pendingChanges.insert(thread: thread)
-        pendingChanges.insert(tableName: TSThread.table.tableName)
+        pendingChanges.insert(tableName: TSThread.databaseTableName)
 
         didModifyPendingChanges()
     }
@@ -426,7 +426,7 @@ extension DatabaseChangeObserverImpl: TransactionObserver {
         AssertHasDatabaseChangeObserverLock()
 
         pendingChanges.insert(thread: thread, shouldUpdateChatListUi: shouldUpdateChatListUi)
-        pendingChanges.insert(tableName: TSThread.table.tableName)
+        pendingChanges.insert(tableName: TSThread.databaseTableName)
 
         if isObserving {
             didModifyPendingChanges()
@@ -483,7 +483,7 @@ extension DatabaseChangeObserverImpl: TransactionObserver {
 
             if event.tableName == InteractionRecord.databaseTableName {
                 pendingChanges.insert(interactionRowId: event.rowID)
-            } else if event.tableName == ThreadRecord.databaseTableName {
+            } else if event.tableName == TSThread.databaseTableName {
                 pendingChanges.insert(threadRowId: event.rowID)
             } else if event.tableName == StoryMessage.databaseTableName {
                 pendingChanges.insert(storyMessageRowId: event.rowID)

@@ -32,6 +32,16 @@ public extension CGSize {
     }
 }
 
+public extension CGPoint {
+    func offsetBy(dx: CGFloat = 0.0, dy: CGFloat = 0.0) -> CGPoint {
+        return offsetBy(CGVector(dx: dx, dy: dy))
+    }
+
+    func offsetBy(_ vector: CGVector) -> CGPoint {
+        return CGPoint(x: x + vector.dx, y: y + vector.dy)
+    }
+}
+
 public extension CGFloat {
 
     static let hairlineWidth: CGFloat = 1 / UIScreen.main.scale

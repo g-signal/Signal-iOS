@@ -112,12 +112,6 @@ open class ActionSheetController: OWSViewController {
         return stackView.height + view.safeAreaInsets.bottom
     }
 
-    public static var messageLabelFont: UIFont { .dynamicTypeSubheadlineClamped }
-
-    public static var messageBaseStyle: BonMot.StringStyle {
-        return BonMot.StringStyle(.font(messageLabelFont), .alignment(.center))
-    }
-
     override public init() {
         super.init()
         modalPresentationStyle = .custom
@@ -440,12 +434,10 @@ public class ActionSheetAction: NSObject {
         self.handler = handler
     }
 
-    public static let buttonBackgroundColor = UIColor { traitCollection in
-        switch traitCollection.userInterfaceStyle {
-        case .dark: .black
-        default: .white
-        }
-    }
+    public static let buttonBackgroundColor = UIColor(
+        light: .white,
+        dark: .black,
+    )
 
     public class Button: UIButton {
         let style: Style

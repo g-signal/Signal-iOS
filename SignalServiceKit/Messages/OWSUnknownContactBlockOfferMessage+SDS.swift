@@ -14,15 +14,14 @@ import GRDB
 @objc
 public extension OWSUnknownContactBlockOfferMessage {
     // NOTE: This method will fail if the object has unexpected type.
-    class func anyFetchUnknownContactBlockOfferMessage(
+    class func fetchUnknownContactBlockOfferMessageViaCache(
         uniqueId: String,
         transaction: DBReadTransaction
     ) -> OWSUnknownContactBlockOfferMessage? {
         assert(!uniqueId.isEmpty)
 
-        guard let object = anyFetch(uniqueId: uniqueId,
-                                    transaction: transaction) else {
-                                        return nil
+        guard let object = fetchViaCache(uniqueId: uniqueId, transaction: transaction) else {
+            return nil
         }
         guard let instance = object as? OWSUnknownContactBlockOfferMessage else {
             owsFailDebug("Object has unexpected type: \(type(of: object))")

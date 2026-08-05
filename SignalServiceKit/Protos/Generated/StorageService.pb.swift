@@ -214,11 +214,11 @@ struct StorageServiceProtos_WriteOperation: Sendable {
   // methods supported on all messages.
 
   var manifest: StorageServiceProtos_StorageManifest {
-    get {return _manifest ?? StorageServiceProtos_StorageManifest()}
+    get {_manifest ?? StorageServiceProtos_StorageManifest()}
     set {_manifest = newValue}
   }
   /// Returns true if `manifest` has been explicitly set.
-  var hasManifest: Bool {return self._manifest != nil}
+  var hasManifest: Bool {self._manifest != nil}
   /// Clears the value of `manifest`. Subsequent reads from it will return its default value.
   mutating func clearManifest() {self._manifest = nil}
 
@@ -400,137 +400,137 @@ struct StorageServiceProtos_ContactRecord: @unchecked Sendable {
   // methods supported on all messages.
 
   var aci: String {
-    get {return _storage._aci}
+    get {_storage._aci}
     set {_uniqueStorage()._aci = newValue}
   }
 
   var e164: String {
-    get {return _storage._e164}
+    get {_storage._e164}
     set {_uniqueStorage()._e164 = newValue}
   }
 
   var pni: String {
-    get {return _storage._pni}
+    get {_storage._pni}
     set {_uniqueStorage()._pni = newValue}
   }
 
   var profileKey: Data {
-    get {return _storage._profileKey}
+    get {_storage._profileKey}
     set {_uniqueStorage()._profileKey = newValue}
   }
 
   var identityKey: Data {
-    get {return _storage._identityKey}
+    get {_storage._identityKey}
     set {_uniqueStorage()._identityKey = newValue}
   }
 
   var identityState: StorageServiceProtos_ContactRecord.IdentityState {
-    get {return _storage._identityState}
+    get {_storage._identityState}
     set {_uniqueStorage()._identityState = newValue}
   }
 
   var givenName: String {
-    get {return _storage._givenName}
+    get {_storage._givenName}
     set {_uniqueStorage()._givenName = newValue}
   }
 
   var familyName: String {
-    get {return _storage._familyName}
+    get {_storage._familyName}
     set {_uniqueStorage()._familyName = newValue}
   }
 
   var username: String {
-    get {return _storage._username}
+    get {_storage._username}
     set {_uniqueStorage()._username = newValue}
   }
 
   var blocked: Bool {
-    get {return _storage._blocked}
+    get {_storage._blocked}
     set {_uniqueStorage()._blocked = newValue}
   }
 
   var whitelisted: Bool {
-    get {return _storage._whitelisted}
+    get {_storage._whitelisted}
     set {_uniqueStorage()._whitelisted = newValue}
   }
 
   var archived: Bool {
-    get {return _storage._archived}
+    get {_storage._archived}
     set {_uniqueStorage()._archived = newValue}
   }
 
   var markedUnread: Bool {
-    get {return _storage._markedUnread}
+    get {_storage._markedUnread}
     set {_uniqueStorage()._markedUnread = newValue}
   }
 
   var mutedUntilTimestamp: UInt64 {
-    get {return _storage._mutedUntilTimestamp}
+    get {_storage._mutedUntilTimestamp}
     set {_uniqueStorage()._mutedUntilTimestamp = newValue}
   }
 
   var hideStory: Bool {
-    get {return _storage._hideStory}
+    get {_storage._hideStory}
     set {_uniqueStorage()._hideStory = newValue}
   }
 
   var unregisteredAtTimestamp: UInt64 {
-    get {return _storage._unregisteredAtTimestamp}
+    get {_storage._unregisteredAtTimestamp}
     set {_uniqueStorage()._unregisteredAtTimestamp = newValue}
   }
 
   var systemGivenName: String {
-    get {return _storage._systemGivenName}
+    get {_storage._systemGivenName}
     set {_uniqueStorage()._systemGivenName = newValue}
   }
 
   var systemFamilyName: String {
-    get {return _storage._systemFamilyName}
+    get {_storage._systemFamilyName}
     set {_uniqueStorage()._systemFamilyName = newValue}
   }
 
   var systemNickname: String {
-    get {return _storage._systemNickname}
+    get {_storage._systemNickname}
     set {_uniqueStorage()._systemNickname = newValue}
   }
 
   var hidden: Bool {
-    get {return _storage._hidden}
+    get {_storage._hidden}
     set {_uniqueStorage()._hidden = newValue}
   }
 
   var nickname: StorageServiceProtos_ContactRecord.Name {
-    get {return _storage._nickname ?? StorageServiceProtos_ContactRecord.Name()}
+    get {_storage._nickname ?? StorageServiceProtos_ContactRecord.Name()}
     set {_uniqueStorage()._nickname = newValue}
   }
   /// Returns true if `nickname` has been explicitly set.
-  var hasNickname: Bool {return _storage._nickname != nil}
+  var hasNickname: Bool {_storage._nickname != nil}
   /// Clears the value of `nickname`. Subsequent reads from it will return its default value.
   mutating func clearNickname() {_uniqueStorage()._nickname = nil}
 
   var note: String {
-    get {return _storage._note}
+    get {_storage._note}
     set {_uniqueStorage()._note = newValue}
   }
 
   var avatarColor: StorageServiceProtos_AvatarColor {
-    get {return _storage._avatarColor ?? .a100}
+    get {_storage._avatarColor ?? .a100}
     set {_uniqueStorage()._avatarColor = newValue}
   }
   /// Returns true if `avatarColor` has been explicitly set.
-  var hasAvatarColor: Bool {return _storage._avatarColor != nil}
+  var hasAvatarColor: Bool {_storage._avatarColor != nil}
   /// Clears the value of `avatarColor`. Subsequent reads from it will return its default value.
   mutating func clearAvatarColor() {_uniqueStorage()._avatarColor = nil}
 
   /// 16-byte UUID
   var aciBinary: Data {
-    get {return _storage._aciBinary}
+    get {_storage._aciBinary}
     set {_uniqueStorage()._aciBinary = newValue}
   }
 
   /// 16-byte UUID
   var pniBinary: Data {
-    get {return _storage._pniBinary}
+    get {_storage._pniBinary}
     set {_uniqueStorage()._pniBinary = newValue}
   }
 
@@ -631,11 +631,11 @@ struct StorageServiceProtos_GroupV2Record: Sendable {
   var storySendMode: StorageServiceProtos_GroupV2Record.StorySendMode = .default
 
   var avatarColor: StorageServiceProtos_AvatarColor {
-    get {return _avatarColor ?? .a100}
+    get {_avatarColor ?? .a100}
     set {_avatarColor = newValue}
   }
   /// Returns true if `avatarColor` has been explicitly set.
-  var hasAvatarColor: Bool {return self._avatarColor != nil}
+  var hasAvatarColor: Bool {self._avatarColor != nil}
   /// Clears the value of `avatarColor`. Subsequent reads from it will return its default value.
   mutating func clearAvatarColor() {self._avatarColor = nil}
 
@@ -690,203 +690,209 @@ struct StorageServiceProtos_AccountRecord: @unchecked Sendable {
   // methods supported on all messages.
 
   var profileKey: Data {
-    get {return _storage._profileKey}
+    get {_storage._profileKey}
     set {_uniqueStorage()._profileKey = newValue}
   }
 
   var givenName: String {
-    get {return _storage._givenName}
+    get {_storage._givenName}
     set {_uniqueStorage()._givenName = newValue}
   }
 
   var familyName: String {
-    get {return _storage._familyName}
+    get {_storage._familyName}
     set {_uniqueStorage()._familyName = newValue}
   }
 
   var avatarURL: String {
-    get {return _storage._avatarURL}
+    get {_storage._avatarURL}
     set {_uniqueStorage()._avatarURL = newValue}
   }
 
   var noteToSelfArchived: Bool {
-    get {return _storage._noteToSelfArchived}
+    get {_storage._noteToSelfArchived}
     set {_uniqueStorage()._noteToSelfArchived = newValue}
   }
 
   var readReceipts: Bool {
-    get {return _storage._readReceipts}
+    get {_storage._readReceipts}
     set {_uniqueStorage()._readReceipts = newValue}
   }
 
   var sealedSenderIndicators: Bool {
-    get {return _storage._sealedSenderIndicators}
+    get {_storage._sealedSenderIndicators}
     set {_uniqueStorage()._sealedSenderIndicators = newValue}
   }
 
   var typingIndicators: Bool {
-    get {return _storage._typingIndicators}
+    get {_storage._typingIndicators}
     set {_uniqueStorage()._typingIndicators = newValue}
   }
 
   /// Legacy link previews flag
   var proxiedLinkPreviews: Bool {
-    get {return _storage._proxiedLinkPreviews}
+    get {_storage._proxiedLinkPreviews}
     set {_uniqueStorage()._proxiedLinkPreviews = newValue}
   }
 
   var noteToSelfMarkedUnread: Bool {
-    get {return _storage._noteToSelfMarkedUnread}
+    get {_storage._noteToSelfMarkedUnread}
     set {_uniqueStorage()._noteToSelfMarkedUnread = newValue}
   }
 
   var linkPreviews: Bool {
-    get {return _storage._linkPreviews}
+    get {_storage._linkPreviews}
     set {_uniqueStorage()._linkPreviews = newValue}
   }
 
   var phoneNumberSharingMode: StorageServiceProtos_AccountRecord.PhoneNumberSharingMode {
-    get {return _storage._phoneNumberSharingMode}
+    get {_storage._phoneNumberSharingMode}
     set {_uniqueStorage()._phoneNumberSharingMode = newValue}
   }
 
   var notDiscoverableByPhoneNumber: Bool {
-    get {return _storage._notDiscoverableByPhoneNumber}
+    get {_storage._notDiscoverableByPhoneNumber}
     set {_uniqueStorage()._notDiscoverableByPhoneNumber = newValue}
   }
 
   var pinnedConversations: [StorageServiceProtos_AccountRecord.PinnedConversation] {
-    get {return _storage._pinnedConversations}
+    get {_storage._pinnedConversations}
     set {_uniqueStorage()._pinnedConversations = newValue}
   }
 
   var preferContactAvatars: Bool {
-    get {return _storage._preferContactAvatars}
+    get {_storage._preferContactAvatars}
     set {_uniqueStorage()._preferContactAvatars = newValue}
   }
 
   var payments: StorageServiceProtos_AccountRecord.Payments {
-    get {return _storage._payments ?? StorageServiceProtos_AccountRecord.Payments()}
+    get {_storage._payments ?? StorageServiceProtos_AccountRecord.Payments()}
     set {_uniqueStorage()._payments = newValue}
   }
   /// Returns true if `payments` has been explicitly set.
-  var hasPayments: Bool {return _storage._payments != nil}
+  var hasPayments: Bool {_storage._payments != nil}
   /// Clears the value of `payments`. Subsequent reads from it will return its default value.
   mutating func clearPayments() {_uniqueStorage()._payments = nil}
 
   var universalExpireTimer: UInt32 {
-    get {return _storage._universalExpireTimer}
+    get {_storage._universalExpireTimer}
     set {_uniqueStorage()._universalExpireTimer = newValue}
   }
 
   var e164: String {
-    get {return _storage._e164}
+    get {_storage._e164}
     set {_uniqueStorage()._e164 = newValue}
   }
 
   var preferredReactionEmoji: [String] {
-    get {return _storage._preferredReactionEmoji}
+    get {_storage._preferredReactionEmoji}
     set {_uniqueStorage()._preferredReactionEmoji = newValue}
   }
 
   var donorSubscriberID: Data {
-    get {return _storage._donorSubscriberID}
+    get {_storage._donorSubscriberID}
     set {_uniqueStorage()._donorSubscriberID = newValue}
   }
 
   var donorSubscriberCurrencyCode: String {
-    get {return _storage._donorSubscriberCurrencyCode}
+    get {_storage._donorSubscriberCurrencyCode}
     set {_uniqueStorage()._donorSubscriberCurrencyCode = newValue}
   }
 
   var displayBadgesOnProfile: Bool {
-    get {return _storage._displayBadgesOnProfile}
+    get {_storage._displayBadgesOnProfile}
     set {_uniqueStorage()._displayBadgesOnProfile = newValue}
   }
 
   var donorSubscriptionManuallyCancelled: Bool {
-    get {return _storage._donorSubscriptionManuallyCancelled}
+    get {_storage._donorSubscriptionManuallyCancelled}
     set {_uniqueStorage()._donorSubscriptionManuallyCancelled = newValue}
   }
 
   var keepMutedChatsArchived: Bool {
-    get {return _storage._keepMutedChatsArchived}
+    get {_storage._keepMutedChatsArchived}
     set {_uniqueStorage()._keepMutedChatsArchived = newValue}
   }
 
   /// Removed 'has' prefix on spec definition to avoid name conflict.
   var myStoryPrivacyHasBeenSet: Bool {
-    get {return _storage._myStoryPrivacyHasBeenSet}
+    get {_storage._myStoryPrivacyHasBeenSet}
     set {_uniqueStorage()._myStoryPrivacyHasBeenSet = newValue}
   }
 
   /// Removed 'has' prefix on spec definition to avoid name conflict.
   var viewedOnboardingStory: Bool {
-    get {return _storage._viewedOnboardingStory}
+    get {_storage._viewedOnboardingStory}
     set {_uniqueStorage()._viewedOnboardingStory = newValue}
   }
 
   var storiesDisabled: Bool {
-    get {return _storage._storiesDisabled}
+    get {_storage._storiesDisabled}
     set {_uniqueStorage()._storiesDisabled = newValue}
   }
 
   var storyViewReceiptsEnabled: StorageServiceProtos_OptionalBool {
-    get {return _storage._storyViewReceiptsEnabled}
+    get {_storage._storyViewReceiptsEnabled}
     set {_uniqueStorage()._storyViewReceiptsEnabled = newValue}
   }
 
   var readOnboardingStory: Bool {
-    get {return _storage._readOnboardingStory}
+    get {_storage._readOnboardingStory}
     set {_uniqueStorage()._readOnboardingStory = newValue}
   }
 
   var username: String {
-    get {return _storage._username}
+    get {_storage._username}
     set {_uniqueStorage()._username = newValue}
   }
 
   /// Removed 'has' prefix on spec definition to avoid name conflict.
   var completedUsernameOnboarding: Bool {
-    get {return _storage._completedUsernameOnboarding}
+    get {_storage._completedUsernameOnboarding}
     set {_uniqueStorage()._completedUsernameOnboarding = newValue}
   }
 
   var usernameLink: StorageServiceProtos_AccountRecord.UsernameLink {
-    get {return _storage._usernameLink ?? StorageServiceProtos_AccountRecord.UsernameLink()}
+    get {_storage._usernameLink ?? StorageServiceProtos_AccountRecord.UsernameLink()}
     set {_uniqueStorage()._usernameLink = newValue}
   }
   /// Returns true if `usernameLink` has been explicitly set.
-  var hasUsernameLink: Bool {return _storage._usernameLink != nil}
+  var hasUsernameLink: Bool {_storage._usernameLink != nil}
   /// Clears the value of `usernameLink`. Subsequent reads from it will return its default value.
   mutating func clearUsernameLink() {_uniqueStorage()._usernameLink = nil}
 
   var backupTier: UInt64 {
-    get {return _storage._backupTier ?? 0}
+    get {_storage._backupTier ?? 0}
     set {_uniqueStorage()._backupTier = newValue}
   }
   /// Returns true if `backupTier` has been explicitly set.
-  var hasBackupTier: Bool {return _storage._backupTier != nil}
+  var hasBackupTier: Bool {_storage._backupTier != nil}
   /// Clears the value of `backupTier`. Subsequent reads from it will return its default value.
   mutating func clearBackupTier() {_uniqueStorage()._backupTier = nil}
 
   var backupSubscriberData: StorageServiceProtos_AccountRecord.IAPSubscriberData {
-    get {return _storage._backupSubscriberData ?? StorageServiceProtos_AccountRecord.IAPSubscriberData()}
+    get {_storage._backupSubscriberData ?? StorageServiceProtos_AccountRecord.IAPSubscriberData()}
     set {_uniqueStorage()._backupSubscriberData = newValue}
   }
   /// Returns true if `backupSubscriberData` has been explicitly set.
-  var hasBackupSubscriberData: Bool {return _storage._backupSubscriberData != nil}
+  var hasBackupSubscriberData: Bool {_storage._backupSubscriberData != nil}
   /// Clears the value of `backupSubscriberData`. Subsequent reads from it will return its default value.
   mutating func clearBackupSubscriberData() {_uniqueStorage()._backupSubscriberData = nil}
 
   var avatarColor: StorageServiceProtos_AvatarColor {
-    get {return _storage._avatarColor ?? .a100}
+    get {_storage._avatarColor ?? .a100}
     set {_uniqueStorage()._avatarColor = newValue}
   }
   /// Returns true if `avatarColor` has been explicitly set.
-  var hasAvatarColor: Bool {return _storage._avatarColor != nil}
+  var hasAvatarColor: Bool {_storage._avatarColor != nil}
   /// Clears the value of `avatarColor`. Subsequent reads from it will return its default value.
   mutating func clearAvatarColor() {_uniqueStorage()._avatarColor = nil}
+
+  /// 44 and 45 related to notification profiles
+  var automaticKeyVerificationDisabled: Bool {
+    get {_storage._automaticKeyVerificationDisabled}
+    set {_uniqueStorage()._automaticKeyVerificationDisabled = newValue}
+  }
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -1974,7 +1980,7 @@ extension StorageServiceProtos_GroupV2Record.StorySendMode: SwiftProtobuf._Proto
 
 extension StorageServiceProtos_AccountRecord: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".AccountRecord"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}profileKey\0\u{1}givenName\0\u{1}familyName\0\u{1}avatarUrl\0\u{1}noteToSelfArchived\0\u{1}readReceipts\0\u{1}sealedSenderIndicators\0\u{1}typingIndicators\0\u{1}proxiedLinkPreviews\0\u{1}noteToSelfMarkedUnread\0\u{1}linkPreviews\0\u{1}phoneNumberSharingMode\0\u{1}notDiscoverableByPhoneNumber\0\u{1}pinnedConversations\0\u{1}preferContactAvatars\0\u{1}payments\0\u{1}universalExpireTimer\0\u{2}\u{2}e164\0\u{1}preferredReactionEmoji\0\u{1}donorSubscriberID\0\u{1}donorSubscriberCurrencyCode\0\u{1}displayBadgesOnProfile\0\u{1}donorSubscriptionManuallyCancelled\0\u{1}keepMutedChatsArchived\0\u{1}myStoryPrivacyHasBeenSet\0\u{1}viewedOnboardingStory\0\u{2}\u{2}storiesDisabled\0\u{1}storyViewReceiptsEnabled\0\u{1}readOnboardingStory\0\u{2}\u{2}username\0\u{1}completedUsernameOnboarding\0\u{1}usernameLink\0\u{2}\u{5}backupTier\0\u{1}backupSubscriberData\0\u{1}avatarColor\0\u{c}\u{12}\u{1}\u{c}\u{1c}\u{1}\u{c} \u{1}\u{c}$\u{1}\u{c}%\u{1}\u{c}&\u{1}\u{c}'\u{1}")
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}profileKey\0\u{1}givenName\0\u{1}familyName\0\u{1}avatarUrl\0\u{1}noteToSelfArchived\0\u{1}readReceipts\0\u{1}sealedSenderIndicators\0\u{1}typingIndicators\0\u{1}proxiedLinkPreviews\0\u{1}noteToSelfMarkedUnread\0\u{1}linkPreviews\0\u{1}phoneNumberSharingMode\0\u{1}notDiscoverableByPhoneNumber\0\u{1}pinnedConversations\0\u{1}preferContactAvatars\0\u{1}payments\0\u{1}universalExpireTimer\0\u{2}\u{2}e164\0\u{1}preferredReactionEmoji\0\u{1}donorSubscriberID\0\u{1}donorSubscriberCurrencyCode\0\u{1}displayBadgesOnProfile\0\u{1}donorSubscriptionManuallyCancelled\0\u{1}keepMutedChatsArchived\0\u{1}myStoryPrivacyHasBeenSet\0\u{1}viewedOnboardingStory\0\u{2}\u{2}storiesDisabled\0\u{1}storyViewReceiptsEnabled\0\u{1}readOnboardingStory\0\u{2}\u{2}username\0\u{1}completedUsernameOnboarding\0\u{1}usernameLink\0\u{2}\u{5}backupTier\0\u{1}backupSubscriberData\0\u{1}avatarColor\0\u{2}\u{4}automaticKeyVerificationDisabled\0\u{c}\u{12}\u{1}\u{c}\u{1c}\u{1}\u{c} \u{1}\u{c}$\u{1}\u{c}%\u{1}\u{c}&\u{1}\u{c}'\u{1}\u{c}+\u{1}")
 
   fileprivate class _StorageClass {
     var _profileKey: Data = Data()
@@ -2012,6 +2018,7 @@ extension StorageServiceProtos_AccountRecord: SwiftProtobuf.Message, SwiftProtob
     var _backupTier: UInt64? = nil
     var _backupSubscriberData: StorageServiceProtos_AccountRecord.IAPSubscriberData? = nil
     var _avatarColor: StorageServiceProtos_AvatarColor? = nil
+    var _automaticKeyVerificationDisabled: Bool = false
 
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
@@ -2057,6 +2064,7 @@ extension StorageServiceProtos_AccountRecord: SwiftProtobuf.Message, SwiftProtob
       _backupTier = source._backupTier
       _backupSubscriberData = source._backupSubscriberData
       _avatarColor = source._avatarColor
+      _automaticKeyVerificationDisabled = source._automaticKeyVerificationDisabled
     }
   }
 
@@ -2110,6 +2118,7 @@ extension StorageServiceProtos_AccountRecord: SwiftProtobuf.Message, SwiftProtob
         case 40: try { try decoder.decodeSingularUInt64Field(value: &_storage._backupTier) }()
         case 41: try { try decoder.decodeSingularMessageField(value: &_storage._backupSubscriberData) }()
         case 42: try { try decoder.decodeSingularEnumField(value: &_storage._avatarColor) }()
+        case 46: try { try decoder.decodeSingularBoolField(value: &_storage._automaticKeyVerificationDisabled) }()
         default: break
         }
       }
@@ -2227,6 +2236,9 @@ extension StorageServiceProtos_AccountRecord: SwiftProtobuf.Message, SwiftProtob
       try { if let v = _storage._avatarColor {
         try visitor.visitSingularEnumField(value: v, fieldNumber: 42)
       } }()
+      if _storage._automaticKeyVerificationDisabled != false {
+        try visitor.visitSingularBoolField(value: _storage._automaticKeyVerificationDisabled, fieldNumber: 46)
+      }
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -2271,6 +2283,7 @@ extension StorageServiceProtos_AccountRecord: SwiftProtobuf.Message, SwiftProtob
         if _storage._backupTier != rhs_storage._backupTier {return false}
         if _storage._backupSubscriberData != rhs_storage._backupSubscriberData {return false}
         if _storage._avatarColor != rhs_storage._avatarColor {return false}
+        if _storage._automaticKeyVerificationDisabled != rhs_storage._automaticKeyVerificationDisabled {return false}
         return true
       }
       if !storagesAreEqual {return false}

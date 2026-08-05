@@ -215,7 +215,7 @@ extension StoryGroupReplyViewController: UITableViewDelegate {
 
     private func askToResendMessage(for item: StoryGroupReplyViewItem) {
         let message = SSKEnvironment.shared.databaseStorageRef.read { tx in
-            TSOutgoingMessage.anyFetchOutgoingMessage(uniqueId: item.interactionUniqueId, transaction: tx)
+            TSOutgoingMessage.fetchOutgoingMessageViaCache(uniqueId: item.interactionUniqueId, transaction: tx)
         }
         guard let message else {
             return
@@ -307,7 +307,7 @@ extension StoryGroupReplyViewController: ContextMenuInteractionDelegate {
                     guard let self else { return }
                     guard
                         let message = SSKEnvironment.shared.databaseStorageRef.read(
-                            block: { TSMessage.anyFetchMessage(uniqueId: item.interactionUniqueId, transaction: $0) },
+                            block: { TSMessage.fetchMessageViaCache(uniqueId: item.interactionUniqueId, transaction: $0) },
                         ) else { return }
                     message.presentDeletionActionSheet(from: self, forceDarkTheme: true)
                 },

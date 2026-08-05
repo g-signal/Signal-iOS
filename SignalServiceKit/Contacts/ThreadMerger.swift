@@ -145,9 +145,12 @@ final class ThreadMerger {
         }
 
         let oldConfig = configPair.intoValue
-        let newConfig = oldConfig.copyAsEnabledWith(durationSeconds: resolvedValue, timerVersion: resolvedVersion)
+        var newConfig = oldConfig
+        newConfig.isEnabled = true
+        newConfig.durationSeconds = resolvedValue
+        newConfig.timerVersion = resolvedVersion
 
-        if newConfig == oldConfig {
+        if newConfig.asVersionedToken == oldConfig.asVersionedToken {
             return
         }
 
@@ -377,7 +380,7 @@ class _ThreadMerger_SDSThreadMergerWrapper: _ThreadMerger_SDSThreadMergerShim {
         else {
             return
         }
-        try? DependenciesBridge.shared.attachmentStore.updateMessageAttachmentThreadRowIdsForThreadMerge(
+        DependenciesBridge.shared.attachmentStore.updateMessageAttachmentThreadRowIdsForThreadMerge(
             fromThreadRowId: fromThreadRowId,
             intoThreadRowId: intoThreadRowId,
             tx: tx,

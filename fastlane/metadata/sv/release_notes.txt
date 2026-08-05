@@ -1,3 +1,1 @@
-• Hjälp till att hålla viktig information lättillgänglig med nålade meddelanden. Dina vanligaste frågor, middagsbokningar och semesterplaner är redan högst upp i tankarna. Nu kan de också vara högst upp i chatten.
-
-
+• Signals säkra säkerhetskopior är här! Nu kan du välja att aktivera automatiska säkerhetskopior med totalsträckskryptering, så att du aldrig förlorar ett meddelande när du skaffar en ny telefon eller installerar om Signal. Du kan säkerhetskopiera alla dina meddelanden och de senaste 45 dagarnas media gratis, eller så kan du betala en liten månadsavgift för att få 100 GB lagringsutrymme för att säkerhetskopiera varje bilaga. Tryck på Säkerhetskopior i dina Signal-inställningar för att komma igång. Tack till alla som hjälpte till att testa den här funktionen under betaperioden!

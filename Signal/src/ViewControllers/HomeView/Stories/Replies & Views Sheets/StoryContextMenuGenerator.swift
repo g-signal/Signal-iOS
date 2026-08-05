@@ -773,7 +773,7 @@ private struct GenericContextAction {
         return ContextualActionBuilder.makeContextualAction(
             style: style,
             color: backgroundColor,
-            image: contextualActionImage ?? Theme.iconName(icon),
+            imageName: contextualActionImage ?? Theme.iconName(icon),
             title: title,
         ) { completion in
             handler(completion)

@@ -219,19 +219,44 @@ public class RemoteConfig {
         getUInt32Value(forFlag: .maxNicknameLength, defaultValue: 32)
     }
 
+    /// Most of our code uses UInt32; add a large bound smaller than that.
+    private static let attachmentHardLimit: UInt64 = 1_610_612_736
+
     public var attachmentMaxEncryptedBytes: UInt64 {
-        return getUInt64Value(forFlag: .attachmentMaxEncryptedBytes, defaultValue: 100 * 1024 * 1024)
+        return min(Self.attachmentHardLimit, getUInt64Value(
+            forFlag: .attachmentMaxEncryptedBytes,
+            defaultValue: 100 * 1024 * 1024,
+        ))
     }
 
     public var attachmentMaxEncryptedReceiveBytes: UInt64 {
-        guard BuildFlags.useNewAttachmentLimits else {
-            return self.attachmentMaxEncryptedBytes
-        }
         let maxEncryptedBytes = self.attachmentMaxEncryptedBytes
-        return getUInt64Value(
+        return min(Self.attachmentHardLimit, getUInt64Value(
             forFlag: .attachmentMaxEncryptedReceiveBytes,
             defaultValue: maxEncryptedBytes + maxEncryptedBytes / 4,
-        )
+        ))
+    }
+
+    public var videoAttachmentMaxEncryptedBytes: UInt64 {
+        return min(Self.attachmentHardLimit, getUInt64Value(
+            forFlag: .videoAttachmentMaxEncryptedBytes,
+            defaultValue: self.attachmentMaxEncryptedBytes,
+        ))
+    }
+
+    public var videoAttachmentMaxEncryptedReceiveBytes: UInt64 {
+        let maxEncryptedBytes = self.videoAttachmentMaxEncryptedBytes
+        return min(Self.attachmentHardLimit, getUInt64Value(
+            forFlag: .videoAttachmentMaxEncryptedReceiveBytes,
+            defaultValue: maxEncryptedBytes + maxEncryptedBytes / 4,
+        ))
+    }
+
+    public var backupAttachmentMaxEncryptedBytes: UInt64 {
+        return min(Self.attachmentHardLimit, getUInt64Value(
+            forFlag: .backupAttachmentMaxEncryptedBytes,
+            defaultValue: self.attachmentMaxEncryptedBytes,
+        ))
     }
 
     public var backupListMediaDefaultRefreshInterval: TimeInterval {
@@ -239,7 +264,7 @@ public class RemoteConfig {
         if BuildFlags.Backups.useLowerDefaultListMediaRefreshInterval {
             defaultValue = .dayInMs
         } else {
-            defaultValue = .dayInMs * 7
+            defaultValue = .weekInMs
         }
 
         let intervalMs = getUInt64Value(forFlag: .backupListMediaDefaultRefreshIntervalMs, defaultValue: defaultValue)
@@ -300,22 +325,11 @@ public class RemoteConfig {
         return isEnabled(.backupsMegaphone)
     }
 
-    public var ringrtcNwPathMonitorTrial: Bool {
-        return !isEnabled(.ringrtcNwPathMonitorTrialKillSwitch, defaultValue: false)
-    }
-
-    public var pollCreate: Bool {
-        guard BuildFlags.pollSend else {
-            return false
-        }
-        return !isEnabled(.pollCreateKillSwitch)
-    }
-
-    public var pollReceive: Bool {
-        guard BuildFlags.pollReceive else {
-            return false
-        }
-        return !isEnabled(.pollReceiveKillSwitch)
+    public var pinnedThreadLimit: UInt {
+        return getUIntValue(
+            forFlag: .pinnedThreadLimit,
+            defaultValue: 4,
+        )
     }
 
     public var pinnedMessageLimit: UInt {
@@ -324,6 +338,42 @@ public class RemoteConfig {
             defaultValue: UInt(3),
         )
     }
+
+    // MARK: - RingRTC
+
+    public var ringrtcNwPathMonitorTrial: Bool {
+        return !isEnabled(.ringrtcNwPathMonitorTrialKillSwitch, defaultValue: false)
+    }
+
+    public var ringrtcVp9Enabled: Bool {
+        return isEnabled(.ringrtcVp9Enabled, defaultValue: false)
+    }
+
+    /// List of "device models" hardware identifiers allow-listed for which
+    /// RingRTC should always offer encoding VP9. (overriden by the deny list)
+    ///
+    /// Compare entries to the value of `String(sysctlKey: "hw.machine")`.
+    public var ringrtcVp9DeviceModelEnablelist: [String] {
+        guard let valueFlag = valueFlags[ValueFlag.ringrtcVp9DeviceModelEnablelist.rawValue] else {
+            return []
+        }
+
+        return valueFlag.split(separator: ".").map { String($0) }
+    }
+
+    /// List of "device models" hardware identifiers deny-listed for which
+    /// RingRTC should avoid encoding VP9.
+    ///
+    /// Compare entries to the value of `String(sysctlKey: "hw.machine")`.
+    public var ringrtcVp9DeviceModelDenylist: [String] {
+        guard let valueFlag = valueFlags[ValueFlag.ringrtcVp9DeviceModelDenylist.rawValue] else {
+            return []
+        }
+
+        return valueFlag.split(separator: ".").map { String($0) }
+    }
+
+    // MARK: -
 
 #if TESTABLE_BUILD
     public var testHotSwappable: Bool? {
@@ -521,7 +571,7 @@ private enum IsEnabledFlag: String, FlagType {
     case applePayMonthlyDonationKillSwitch = "ios.applePayMonthlyDonationKillSwitch"
     case applePayOneTimeDonationKillSwitch = "ios.applePayOneTimeDonationKillSwitch"
     case automaticSessionResetKillSwitch = "ios.automaticSessionResetKillSwitch"
-    case backupsMegaphone = "ios.backupsMegaphone"
+    case backupsMegaphone = "ios.backupsMegaphone2"
     case cardGiftDonationKillSwitch = "ios.cardGiftDonationKillSwitch"
     case cardMonthlyDonationKillSwitch = "ios.cardMonthlyDonationKillSwitch"
     case cardOneTimeDonationKillSwitch = "ios.cardOneTimeDonationKillSwitch"
@@ -532,9 +582,8 @@ private enum IsEnabledFlag: String, FlagType {
     case paypalGiftDonationKillSwitch = "ios.paypalGiftDonationKillSwitch"
     case paypalMonthlyDonationKillSwitch = "ios.paypalMonthlyDonationKillSwitch"
     case paypalOneTimeDonationKillSwitch = "ios.paypalOneTimeDonationKillSwitch"
-    case pollCreateKillSwitch = "ios.pollCreateKillSwitch"
-    case pollReceiveKillSwitch = "ios.pollReceiveKillSwitch"
     case ringrtcNwPathMonitorTrialKillSwitch = "ios.ringrtcNwPathMonitorTrialKillSwitch"
+    case ringrtcVp9Enabled = "ios.ringrtcVp9Enabled.2"
     case serviceExtensionFailureKillSwitch = "ios.serviceExtensionFailureKillSwitch"
 
 #if TESTABLE_BUILD
@@ -559,9 +608,8 @@ private enum IsEnabledFlag: String, FlagType {
         case .paypalGiftDonationKillSwitch: false
         case .paypalMonthlyDonationKillSwitch: false
         case .paypalOneTimeDonationKillSwitch: false
-        case .pollCreateKillSwitch: true
-        case .pollReceiveKillSwitch: true
         case .ringrtcNwPathMonitorTrialKillSwitch: true // cached during launch, so not hot-swapped in practice
+        case .ringrtcVp9Enabled: true
         case .serviceExtensionFailureKillSwitch: true
 
 #if TESTABLE_BUILD
@@ -578,6 +626,7 @@ private enum ValueFlag: String, FlagType {
     case attachmentMaxEncryptedReceiveBytes = "global.attachments.maxReceiveBytes"
     case automaticSessionResetAttemptInterval = "ios.automaticSessionResetAttemptInterval"
     case backgroundRefreshInterval = "ios.backgroundRefreshInterval"
+    case backupAttachmentMaxEncryptedBytes = "ios.backupAttachments.maxBytes"
     case callQualitySurveyPPM = "ios.callQualitySurveyPPM"
     case cdsSyncInterval = "cds.syncInterval.seconds"
     case clientExpiration = "ios.clientExpiration"
@@ -598,9 +647,14 @@ private enum ValueFlag: String, FlagType {
     case replaceableInteractionExpiration = "ios.replaceableInteractionExpiration"
     case sepaEnabledRegions = "global.donations.sepaEnabledRegions"
     case standardMediaQualityLevel = "ios.standardMediaQualityLevel"
+    case videoAttachmentMaxEncryptedBytes = "ios.videoAttachments.maxBytes"
+    case videoAttachmentMaxEncryptedReceiveBytes = "ios.videoAttachments.maxReceiveBytes"
     case backupListMediaDefaultRefreshIntervalMs = "ios.backupListMediaDefaultRefreshIntervalMs"
     case backupListMediaOutOfQuotaRefreshIntervalMs = "ios.backupListMediaOutOfQuotaRefreshIntervalMs"
     case pinnedMessageLimit = "global.pinned_message_limit"
+    case pinnedThreadLimit = "global.pinned_chat_limit"
+    case ringrtcVp9DeviceModelDenylist = "ios.ringrtcVp9DeviceModelDenylist"
+    case ringrtcVp9DeviceModelEnablelist = "ios.ringrtcVp9DeviceModelEnablelist"
 
 #if TESTABLE_BUILD
     case hotSwappable = "test.hotSwappable.value"
@@ -614,6 +668,7 @@ private enum ValueFlag: String, FlagType {
         case .attachmentMaxEncryptedReceiveBytes: true
         case .automaticSessionResetAttemptInterval: true
         case .backgroundRefreshInterval: true
+        case .backupAttachmentMaxEncryptedBytes: true
         case .callQualitySurveyPPM: true
         case .cdsSyncInterval: false
         case .clientExpiration: true
@@ -634,9 +689,14 @@ private enum ValueFlag: String, FlagType {
         case .replaceableInteractionExpiration: false
         case .sepaEnabledRegions: true
         case .standardMediaQualityLevel: true
+        case .videoAttachmentMaxEncryptedBytes: true
+        case .videoAttachmentMaxEncryptedReceiveBytes: true
         case .backupListMediaDefaultRefreshIntervalMs: true
         case .backupListMediaOutOfQuotaRefreshIntervalMs: true
         case .pinnedMessageLimit: true
+        case .pinnedThreadLimit: true
+        case .ringrtcVp9DeviceModelDenylist: true
+        case .ringrtcVp9DeviceModelEnablelist: true
 
 #if TESTABLE_BUILD
         case .hotSwappable: true

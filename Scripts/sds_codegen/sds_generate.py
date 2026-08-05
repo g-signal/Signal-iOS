@@ -1945,9 +1945,10 @@ extension %sSerializer {
 
         # ---- Fetch ----
 
-        ignore_cache = ""
+        cached_method = "anyFetch"
+        uncached_method = "anyFetch"
         if cache_get_code_for_class(clazz) is not None:
-            ignore_cache = ", ignoreCache: true"
+            cached_method = "fetchViaCache"
 
         swift_body += """
 // MARK: - Save/Remove/Update
@@ -1968,7 +1969,7 @@ public extension %(class_name)s {
     // you are inserting or updating rather than calling this method.
     func anyUpsert(transaction: DBWriteTransaction) {
         let isInserting: Bool
-        if %(class_name)s.anyFetch(uniqueId: uniqueId, transaction: transaction) != nil {
+        if %(class_name)s.%(cached_method)s(uniqueId: uniqueId, transaction: transaction) != nil {
             isInserting = false
         } else {
             isInserting = true
@@ -2010,7 +2011,7 @@ public extension %(class_name)s {
             return
         }
 
-        guard let dbCopy = type(of: self).anyFetch(uniqueId: uniqueId, transaction: transaction%(ignore_cache)s) else {
+        guard let dbCopy = type(of: self).%(uncached_method)s(uniqueId: uniqueId, transaction: transaction) else {
             return
         }
 
@@ -2038,7 +2039,8 @@ public extension %(class_name)s {
     }
 """ % {
             "class_name": str(clazz.name),
-            "ignore_cache": ignore_cache,
+            "cached_method": cached_method,
+            "uncached_method": uncached_method,
         }
 
         if has_remove_methods:
@@ -2131,37 +2133,33 @@ public extension %(class_name)s {
             "record_name": record_name,
         }
 
+        cache_code = cache_get_code_for_class(clazz)
+        assert cache_code is not None
         swift_body += """
     // Fetches a single model by "unique id".
-    class func anyFetch(uniqueId: String,
-                        transaction: DBReadTransaction) -> %(class_name)s? {
-        assert(!uniqueId.isEmpty)
-""" % {
-            "class_name": str(clazz.name),
-            "record_name": record_name,
-            "record_identifier": record_identifier(clazz.name),
-        }
-
-        cache_code = cache_get_code_for_class(clazz)
-        if cache_code is not None:
-            swift_body += """
-        return anyFetch(uniqueId: uniqueId, transaction: transaction, ignoreCache: false)
-    }
-
-    // Fetches a single model by "unique id".
-    class func anyFetch(uniqueId: String,
-                        transaction: DBReadTransaction,
-                        ignoreCache: Bool) -> %(class_name)s? {
+    class func fetchViaCache(uniqueId: String, transaction: DBReadTransaction) -> %(class_name)s? {
         assert(!uniqueId.isEmpty)
 
-        if !ignoreCache,
-            let cachedCopy = %(cache_code)s {
+        if let cachedCopy = %(cache_code)s {
             return cachedCopy
         }
+
+        return anyFetch(uniqueId: uniqueId, transaction: transaction)
+    }
 """ % {
-                "class_name": str(clazz.name),
-                "cache_code": str(cache_code),
-            }
+            "class_name": str(clazz.name),
+            "cache_code": str(cache_code),
+        }
+
+        swift_body += """
+
+    // Fetches a single model by "unique id".
+    class func anyFetch(uniqueId: String, transaction: DBReadTransaction) -> %(class_name)s? {
+        assert(!uniqueId.isEmpty)
+
+""" % {
+            "class_name": str(clazz.name),
+        }
 
         swift_body += """
         let sql = "SELECT * FROM \\(%(record_name)s.databaseTableName) WHERE \\(%(record_identifier)sColumn: .uniqueId) = ?"
@@ -2314,15 +2312,14 @@ public extension %(class_name)s {
 @objc
 public extension %s {
     // NOTE: This method will fail if the object has unexpected type.
-    class func anyFetch%s(
+    class func fetch%sViaCache(
         uniqueId: String,
         transaction: DBReadTransaction
     ) -> %s? {
         assert(!uniqueId.isEmpty)
 
-        guard let object = anyFetch(uniqueId: uniqueId,
-                                    transaction: transaction) else {
-                                        return nil
+        guard let object = fetchViaCache(uniqueId: uniqueId, transaction: transaction) else {
+            return nil
         }
         guard let instance = object as? %s else {
             owsFailDebug("Object has unexpected type: \\(type(of: object))")

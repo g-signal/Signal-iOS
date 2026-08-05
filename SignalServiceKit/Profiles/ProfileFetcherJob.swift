@@ -32,6 +32,7 @@ public class ProfileFetcherJob {
     private let tsAccountManager: any TSAccountManager
     private let udManager: any OWSUDManager
     private let versionedProfiles: any VersionedProfiles
+    private let userProfileWriter: UserProfileWriter
 
     init(
         serviceId: ServiceId,
@@ -49,6 +50,7 @@ public class ProfileFetcherJob {
         tsAccountManager: any TSAccountManager,
         udManager: any OWSUDManager,
         versionedProfiles: any VersionedProfiles,
+        userProfileWriter: UserProfileWriter,
     ) {
         self.serviceId = serviceId
         self.groupIdContext = groupIdContext
@@ -65,6 +67,7 @@ public class ProfileFetcherJob {
         self.tsAccountManager = tsAccountManager
         self.udManager = udManager
         self.versionedProfiles = versionedProfiles
+        self.userProfileWriter = userProfileWriter
     }
 
     // MARK: -
@@ -78,14 +81,18 @@ public class ProfileFetcherJob {
         let localIdentifiers = try tsAccountManager.localIdentifiersWithMaybeSneakyTransaction(authedAccount: authedAccount)
         do {
             let fetchedProfile = try await requestProfile(localIdentifiers: localIdentifiers)
-            try await updateProfile(fetchedProfile: fetchedProfile, localIdentifiers: localIdentifiers)
+            try await updateProfile(
+                fetchedProfile: fetchedProfile,
+                localIdentifiers: localIdentifiers,
+                userProfileWriter: userProfileWriter,
+            )
             return fetchedProfile
         } catch ProfileRequestError.notFound {
             let isRegistered = db.read { tx in
                 return recipientDatabaseTable.fetchRecipient(serviceId: serviceId, transaction: tx)?.isRegistered == true
             }
             if isRegistered {
-                try? await accountChecker.checkIfAccountExists(serviceId: serviceId)
+                _ = try? await accountChecker.checkIfAccountExists(serviceId: serviceId)
             }
             throw ProfileRequestError.notFound
         }
@@ -323,6 +330,7 @@ public class ProfileFetcherJob {
     private func updateProfile(
         fetchedProfile: FetchedProfile,
         localIdentifiers: LocalIdentifiers,
+        userProfileWriter: UserProfileWriter,
     ) async throws {
         await updateProfile(
             fetchedProfile: fetchedProfile,
@@ -331,6 +339,7 @@ public class ProfileFetcherJob {
                 localIdentifiers: localIdentifiers,
             ),
             localIdentifiers: localIdentifiers,
+            userProfileWriter: userProfileWriter,
         )
     }
 
@@ -410,6 +419,7 @@ public class ProfileFetcherJob {
         fetchedProfile: FetchedProfile,
         avatarDownloadResult: AvatarDownloadResult,
         localIdentifiers: LocalIdentifiers,
+        userProfileWriter: UserProfileWriter,
     ) async {
         let profile = fetchedProfile.profile
         let serviceId = profile.serviceId
@@ -461,7 +471,7 @@ public class ProfileFetcherJob {
                     avatarFileName: avatarFilename,
                     profileBadges: profileBadgeMetadata,
                     lastFetchDate: Date(),
-                    userProfileWriter: .profileFetch,
+                    userProfileWriter: userProfileWriter,
                     tx: transaction,
                 )
             }

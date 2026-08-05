@@ -159,7 +159,7 @@ public class CVComponentGenericAttachment: CVComponentBase, CVComponent {
         }
         return CVLabelConfig.unstyledText(
             text,
-            font: UIFont.dynamicTypeSubheadline.semibold(),
+            font: UIFont.dynamicTypeSubheadline,
             textColor: textColor,
             lineBreakMode: .byTruncatingMiddle,
         )
@@ -275,7 +275,7 @@ public class CVComponentGenericAttachment: CVComponentBase, CVComponent {
         return CVAttachmentProgressView(
             direction: direction,
             diameter: Self.progressSize,
-            isDarkThemeEnabled: conversationStyle.isDarkThemeEnabled,
+            colorConfiguration: .init(conversationStyle: conversationStyle, isIncoming: isIncoming),
             mediaCache: mediaCache,
         )
     }

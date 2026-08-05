@@ -34,6 +34,7 @@ public class FakeStorageServiceManager: StorageServiceManager {
     public func rotateManifest(mode: ManifestRotationMode, authedDevice: AuthedDevice) async throws {}
 
     public func waitForPendingRestores() async throws { }
+    public func waitForSteadyState() async throws(CancellationError) { }
 
     public func resetLocalData(transaction: DBWriteTransaction) {}
 }

@@ -97,9 +97,7 @@ class MentionPicker: UIView {
             // Blur background.
             if backgroundView == nil {
                 if UIAccessibility.isReduceTransparencyEnabled {
-                    tableView.backgroundColor = overrideUserInterfaceStyle == .dark
-                        ? Theme.darkThemeBackgroundColor
-                        : Theme.backgroundColor
+                    tableView.backgroundColor = .Signal.background
                 } else {
                     backgroundView = UIVisualEffectView(effect: backgroundViewVisualEffect())
                 }
@@ -138,9 +136,10 @@ class MentionPicker: UIView {
                 hairlineView.backgroundColor = .ows_gray65
 
             case .groupReply, .default:
-                hairlineView.backgroundColor = UIColor { traitCollection in
-                    traitCollection.userInterfaceStyle == .dark ? UIColor.ows_gray75 : UIColor.ows_gray05
-                }
+                hairlineView.backgroundColor = UIColor(
+                    light: UIColor.ows_gray05,
+                    dark: UIColor.ows_gray75,
+                )
             }
             hairlineView.translatesAutoresizingMaskIntoConstraints = false
             addSubview(hairlineView)
@@ -181,13 +180,7 @@ class MentionPicker: UIView {
     private func backgroundViewVisualEffect() -> UIVisualEffect? {
         if #available(iOS 26.1, *) {
             let glassEffect = UIGlassEffect(style: .regular)
-            // Copy from ConversationInputToolbar.
-            glassEffect.tintColor = UIColor { traitCollection in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return UIColor(white: 0, alpha: 0.2)
-                }
-                return UIColor(white: 1, alpha: 0.12)
-            }
+            glassEffect.tintColor = .Signal.glassBackgroundTint
             return glassEffect
         }
         // 26.0 would still use a panel with rounded corners, but with blur effect instead of glass.

@@ -219,6 +219,7 @@ extension ConversationViewController {
             threadViewModel: threadViewModel,
             isSystemContact: conversationViewModel.isSystemContact,
             spoilerState: viewState.spoilerState,
+            memberLabelCoordinator: memberLabelCoordinator,
         )
         settingsView.conversationSettingsViewDelegate = self
         viewControllers.append(settingsView)
@@ -276,14 +277,25 @@ extension ConversationViewController {
 
         var groupViewHelper: GroupViewHelper?
         if threadViewModel.isGroupThread {
-            groupViewHelper = GroupViewHelper(threadViewModel: threadViewModel)
+            groupViewHelper = GroupViewHelper(threadViewModel: threadViewModel, memberLabelCoordinator: memberLabelCoordinator)
             groupViewHelper!.delegate = self
+        }
+
+        var memberLabel: MemberLabelForRendering?
+        if
+            let groupThread = thread as? TSGroupThread,
+            let memberAci = address.aci,
+            let memberLabelString = groupThread.groupModel.groupMembership.memberLabel(for: memberAci)?.labelForRendering()
+        {
+            let groupNameColors = GroupNameColors.forThread(groupThread)
+            memberLabel = MemberLabelForRendering(label: memberLabelString, groupNameColor: groupNameColors.color(for: memberAci))
         }
 
         ProfileSheetSheetCoordinator(
             address: address,
             groupViewHelper: groupViewHelper,
             spoilerState: spoilerState,
+            memberLabel: memberLabel,
         )
         .presentAppropriateSheet(from: self)
     }

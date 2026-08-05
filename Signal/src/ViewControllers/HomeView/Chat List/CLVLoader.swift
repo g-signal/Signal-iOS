@@ -144,7 +144,7 @@ public class CLVLoader {
         // Ignore updates to non-visible threads.
         var updatedItemIds = Set<String>()
         for threadId in allUpdatedItemIds {
-            guard let thread = TSThread.anyFetch(uniqueId: threadId, transaction: transaction) else {
+            guard let thread = TSThread.fetchViaCache(uniqueId: threadId, transaction: transaction) else {
                 // Missing thread, it was deleted and should no longer be visible.
                 continue
             }

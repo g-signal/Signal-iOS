@@ -15,7 +15,7 @@ struct BackupEnablementReminderMegaphoneTests {
 
     private let remoteConfigProvider: MockRemoteConfigProvider = {
         let provider = MockRemoteConfigProvider()
-        provider._currentConfig = RemoteConfig(clockSkew: 0, valueFlags: ["ios.backupsMegaphone": "true"])
+        provider._currentConfig = RemoteConfig(clockSkew: 0, valueFlags: ["ios.backupsMegaphone2": "true"])
         return provider
     }()
 

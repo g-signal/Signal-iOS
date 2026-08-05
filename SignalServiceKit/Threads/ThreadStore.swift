@@ -170,7 +170,7 @@ public class ThreadStoreImpl: ThreadStore {
     }
 
     public func fetchThread(uniqueId: String, tx: DBReadTransaction) -> TSThread? {
-        TSThread.anyFetch(uniqueId: uniqueId, transaction: tx)
+        TSThread.fetchViaCache(uniqueId: uniqueId, transaction: tx)
     }
 
     public func fetchContactThreads(serviceId: ServiceId, tx: DBReadTransaction) -> [TSContactThread] {

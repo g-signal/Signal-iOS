@@ -33,6 +33,7 @@ public class AppEnvironment: NSObject {
     private(set) var avatarHistoryManager: AvatarHistoryManager!
     private(set) var backupAttachmentDownloadTracker: BackupAttachmentDownloadTracker!
     private(set) var backupAttachmentUploadTracker: BackupAttachmentUploadTracker!
+    private(set) var backupDisablingManager: BackupDisablingManager!
     private(set) var backupEnablingManager: BackupEnablingManager!
     private(set) var badgeManager: BadgeManager!
     private(set) var callLinkProfileKeySharingManager: CallLinkProfileKeySharingManager!
@@ -54,10 +55,15 @@ public class AppEnvironment: NSObject {
     func setUp(appReadiness: AppReadiness, callService: CallService) {
         let cron = DependenciesBridge.shared.cron
 
+        let authCredentialStore = AuthCredentialStore()
         let backupAttachmentUploadEraStore = BackupAttachmentUploadEraStore()
-        let backupNonceStore = BackupNonceMetadataStore()
+        let backupAttachmentDownloadStore = BackupAttachmentDownloadStore()
+        let backupCDNCredentialStore = BackupCDNCredentialStore()
+        let backupExportJobStore = BackupExportJobStore()
         let backupSettingsStore = BackupSettingsStore()
+        let backupNonceStore = BackupNonceMetadataStore()
         let backupSubscriptionIssueStore = BackupSubscriptionIssueStore()
+        let clvBackupProgressViewStore = CLVBackupProgressView.Store()
 
         let badgeManager = BadgeManager(
             badgeCountFetcher: DependenciesBridge.shared.badgeCountFetcher,
@@ -73,17 +79,32 @@ public class AppEnvironment: NSObject {
             db: DependenciesBridge.shared.db,
         )
         self.backupAttachmentDownloadTracker = BackupAttachmentDownloadTracker(
-            backupAttachmentDownloadQueueStatusReporter: DependenciesBridge.shared.backupAttachmentDownloadQueueStatusReporter,
+            backupAttachmentDownloadQueueStatusManager: DependenciesBridge.shared.backupAttachmentDownloadQueueStatusManager,
             backupAttachmentDownloadProgress: DependenciesBridge.shared.backupAttachmentDownloadProgress,
         )
         self.backupAttachmentUploadTracker = BackupAttachmentUploadTracker(
-            backupAttachmentUploadQueueStatusReporter: DependenciesBridge.shared.backupAttachmentUploadQueueStatusReporter,
+            backupAttachmentUploadQueueStatusManager: DependenciesBridge.shared.backupAttachmentUploadQueueStatusManager,
             backupAttachmentUploadProgress: DependenciesBridge.shared.backupAttachmentUploadProgress,
         )
         self.badgeManager = badgeManager
+        self.backupDisablingManager = BackupDisablingManager(
+            accountEntropyPoolManager: DependenciesBridge.shared.accountEntropyPoolManager,
+            authCredentialStore: authCredentialStore,
+            backupAttachmentCoordinator: DependenciesBridge.shared.backupAttachmentCoordinator,
+            backupAttachmentDownloadQueueStatusManager: DependenciesBridge.shared.backupAttachmentDownloadQueueStatusManager,
+            backupAttachmentDownloadStore: backupAttachmentDownloadStore,
+            backupCDNCredentialStore: backupCDNCredentialStore,
+            backupExportJobStore: backupExportJobStore,
+            backupKeyService: DependenciesBridge.shared.backupKeyService,
+            backupPlanManager: DependenciesBridge.shared.backupPlanManager,
+            backupSettingsStore: backupSettingsStore,
+            clvBackupProgressViewStore: clvBackupProgressViewStore,
+            db: DependenciesBridge.shared.db,
+            tsAccountManager: DependenciesBridge.shared.tsAccountManager,
+        )
         self.backupEnablingManager = BackupEnablingManager(
             backupAttachmentUploadEraStore: backupAttachmentUploadEraStore,
-            backupDisablingManager: DependenciesBridge.shared.backupDisablingManager,
+            backupDisablingManager: self.backupDisablingManager,
             backupKeyService: DependenciesBridge.shared.backupKeyService,
             backupPlanManager: DependenciesBridge.shared.backupPlanManager,
             backupSettingsStore: backupSettingsStore,
@@ -170,7 +191,7 @@ public class AppEnvironment: NSObject {
 
         appReadiness.runNowOrWhenAppDidBecomeReadyAsync {
             let accountEntropyPoolManager = DependenciesBridge.shared.accountEntropyPoolManager
-            let backupDisablingManager = DependenciesBridge.shared.backupDisablingManager
+            let backupExportJobRunner = DependenciesBridge.shared.backupExportJobRunner
             let backupIdService = DependenciesBridge.shared.backupIdService
             let backupSubscriptionManager = DependenciesBridge.shared.backupSubscriptionManager
             let backupTestFlightEntitlementManager = DependenciesBridge.shared.backupTestFlightEntitlementManager
@@ -240,6 +261,9 @@ public class AppEnvironment: NSObject {
                     }
                 }
 
+                // If we had an interrupted BackupExportJob, resume it.
+                backupExportJobRunner.resumeIfNecessary()
+
                 Task {
                     await accountEntropyPoolManager.generateIfMissing()
                 }
@@ -269,7 +293,7 @@ public class AppEnvironment: NSObject {
             }
 
             Task { () async -> Void in
-                await backupDisablingManager.disableRemotelyIfNecessary()
+                await self.backupDisablingManager.disableRemotelyIfNecessary()
             }
 
             Task {

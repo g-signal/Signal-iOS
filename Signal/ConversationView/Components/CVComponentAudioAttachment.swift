@@ -165,7 +165,7 @@ public class CVComponentAudioAttachment: CVComponentBase, CVComponent {
         }
 
         let messageWasDeleted = SSKEnvironment.shared.databaseStorageRef.read { tx in
-            TSInteraction.anyFetch(uniqueId: interaction.uniqueId, transaction: tx) == nil
+            TSInteraction.fetchViaCache(uniqueId: interaction.uniqueId, transaction: tx) == nil
         }
         guard messageWasDeleted else {
             return
@@ -200,11 +200,11 @@ public class CVComponentAudioAttachment: CVComponentBase, CVComponent {
             let timestamp = Date().ows_millisecondsSince1970
             let attachmentId = audioAttachment.attachment.id
             Task {
-                try await DependenciesBridge.shared.db.awaitableWrite { tx in
+                await DependenciesBridge.shared.db.awaitableWrite { tx in
                     guard let attachment = DependenciesBridge.shared.attachmentStore.fetch(id: attachmentId, tx: tx) else {
                         return
                     }
-                    try DependenciesBridge.shared.attachmentStore.markViewedFullscreen(
+                    DependenciesBridge.shared.attachmentStore.markViewedFullscreen(
                         attachment: attachment,
                         timestamp: timestamp,
                         tx: tx,

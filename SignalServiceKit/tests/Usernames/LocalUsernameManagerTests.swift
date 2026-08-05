@@ -641,6 +641,7 @@ private class MockStorageServiceManager: StorageServiceManager {
     func currentManifestVersion(tx: DBReadTransaction) -> UInt64 { owsFail("Not implemented") }
     func currentManifestHasRecordIkm(tx: DBReadTransaction) -> Bool { owsFail("Not implemented") }
     func waitForPendingRestores() async throws { owsFail("Not implemented") }
+    func waitForSteadyState() async throws(CancellationError) { owsFail("Not implemented") }
     func resetLocalData(transaction: DBWriteTransaction) { owsFail("Not implemented!") }
     func recordPendingUpdates(updatedRecipientUniqueIds: [RecipientUniqueId]) { owsFail("Not implemented!") }
     func recordPendingUpdates(updatedAddresses: [SignalServiceAddress]) { owsFail("Not implemented!") }

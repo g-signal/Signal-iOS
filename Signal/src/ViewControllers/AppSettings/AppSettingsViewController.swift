@@ -254,35 +254,31 @@ class AppSettingsViewController: OWSTableViewController2 {
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
         ))
-//        if
-//            isPrimaryDevice,
-//            RemoteConfig.current.allowBackupSettings
-//        {
+
+//        if isPrimaryDevice {
 //            section2.add(.disclosureItem(
 //                icon: .backup,
 //                withText: OWSLocalizedString(
 //                    "SETTINGS_BACKUPS",
-//                    comment: "Label for the 'backups' section of app settings."
+//                    comment: "Label for the 'backups' section of app settings.",
 //                ),
+//                addBetaLabel: false,
 //                actionBlock: { [weak self] in
-//                    guard let self else { return }
+//                    guard
+//                        let self,
+//                        let navigationController
+//                    else { return }
 //
-//                    let backupSettingsStore = BackupSettingsStore()
-//                    let db = DependenciesBridge.shared.db
-//
-//                    let haveBackupsEverBeenEnabled = db.read { tx in
-//                        backupSettingsStore.haveBackupsEverBeenEnabled(tx: tx)
-//                    }
-//
-//                    if haveBackupsEverBeenEnabled {
-//                        let vc = BackupSettingsViewController(onLoadAction: .none)
-//                        navigationController?.pushViewController(vc, animated: true)
-//                    } else {
-//                        BackupOnboardingCoordinator().present(fromViewController: self)
-//                    }
-//                }
+//                    navigationController.pushViewController(
+//                        BackupOnboardingCoordinator().prepareForPresentation(
+//                            inNavController: navigationController,
+//                        ),
+//                        animated: true,
+//                    )
+//                },
 //            ))
 //        }
+
         section2.add(.disclosureItem(
             icon: .settingsDataUsage,
             withText: OWSLocalizedString("SETTINGS_DATA", comment: "Label for the 'data' section of the app settings."),

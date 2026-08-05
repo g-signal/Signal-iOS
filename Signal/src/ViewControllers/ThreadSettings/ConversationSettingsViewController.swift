@@ -23,8 +23,7 @@ public protocol ConversationSettingsViewDelegate: AnyObject {
 
 // MARK: -
 
-// TODO: We should describe which state updates & when it is committed.
-class ConversationSettingsViewController: OWSTableViewController2, BadgeCollectionDataSource {
+class ConversationSettingsViewController: OWSTableViewController2, BadgeCollectionDataSource, MemberLabelViewControllerPresenter {
 
     weak var conversationSettingsViewDelegate: ConversationSettingsViewDelegate?
 
@@ -32,6 +31,7 @@ class ConversationSettingsViewController: OWSTableViewController2, BadgeCollecti
     private(set) var isSystemContact: Bool
     let spoilerState: SpoilerRenderState
     let callRecords: [CallRecord]
+    var memberLabelCoordinator: MemberLabelCoordinator?
 
     var thread: TSThread {
         threadViewModel.threadRecord
@@ -71,12 +71,14 @@ class ConversationSettingsViewController: OWSTableViewController2, BadgeCollecti
         isSystemContact: Bool,
         spoilerState: SpoilerRenderState,
         callRecords: [CallRecord] = [],
+        memberLabelCoordinator: MemberLabelCoordinator?,
     ) {
         self.threadViewModel = threadViewModel
         self.isSystemContact = isSystemContact
         self.spoilerState = spoilerState
         self.callRecords = callRecords
-        groupViewHelper = GroupViewHelper(threadViewModel: threadViewModel)
+        self.memberLabelCoordinator = memberLabelCoordinator
+        groupViewHelper = GroupViewHelper(threadViewModel: threadViewModel, memberLabelCoordinator: memberLabelCoordinator)
 
         disappearingMessagesConfiguration = SSKEnvironment.shared.databaseStorageRef.read { tx in
             let dmConfigurationStore = DependenciesBridge.shared.disappearingMessagesConfigurationStore
@@ -294,7 +296,7 @@ class ConversationSettingsViewController: OWSTableViewController2, BadgeCollecti
 
     func reloadThreadAndUpdateContent() {
         let didUpdate = SSKEnvironment.shared.databaseStorageRef.read { tx -> Bool in
-            guard let newThread = TSThread.anyFetch(uniqueId: self.thread.uniqueId, transaction: tx) else {
+            guard let newThread = TSThread.fetchViaCache(uniqueId: self.thread.uniqueId, transaction: tx) else {
                 return false
             }
             let newThreadViewModel = ThreadViewModel(thread: newThread, forChatList: false, transaction: tx)
@@ -306,7 +308,21 @@ class ConversationSettingsViewController: OWSTableViewController2, BadgeCollecti
                 let address = contactThread.contactAddress
                 return SSKEnvironment.shared.contactManagerRef.fetchSignalAccount(for: address, transaction: tx) != nil
             }()
-            self.groupViewHelper = GroupViewHelper(threadViewModel: newThreadViewModel)
+
+            let tsAccountManager = DependenciesBridge.shared.tsAccountManager
+            if
+                let groupModelV2 = currentGroupModel as? TSGroupModelV2,
+                let localIdentifiers = tsAccountManager.localIdentifiers(tx: tx)
+            {
+                let groupNameColors = GroupNameColors.forThread(newThread)
+                self.memberLabelCoordinator = MemberLabelCoordinator(
+                    groupModel: groupModelV2,
+                    groupNameColors: groupNameColors,
+                    localIdentifiers: localIdentifiers,
+                )
+            }
+
+            self.groupViewHelper = GroupViewHelper(threadViewModel: newThreadViewModel, memberLabelCoordinator: memberLabelCoordinator)
             self.groupViewHelper.delegate = self
 
             self.updateGroupMembers(transaction: tx)
@@ -331,15 +347,14 @@ class ConversationSettingsViewController: OWSTableViewController2, BadgeCollecti
             return
         }
 
-        var memberLabel: MemberLabel?
+        var memberLabel: MemberLabelForRendering?
         if
             let groupThread = thread as? TSGroupThread,
             let memberAci = memberAddress.aci,
-            let memberLabelString = groupThread.groupModel.groupMembership.memberLabel(for: memberAci),
-            let localAci = DependenciesBridge.shared.tsAccountManager.localIdentifiersWithMaybeSneakyTransaction?.aci
+            let memberLabelString = groupThread.groupModel.groupMembership.memberLabel(for: memberAci)?.labelForRendering()
         {
-            let groupNameColors = GroupNameColors.forThread(groupThread, localAci: localAci)
-            memberLabel = MemberLabel(label: memberLabelString, groupNameColor: groupNameColors.color(for: memberAci))
+            let groupNameColors = GroupNameColors.forThread(groupThread)
+            memberLabel = MemberLabelForRendering(label: memberLabelString, groupNameColor: groupNameColors.color(for: memberAci))
         }
 
         ProfileSheetSheetCoordinator(
@@ -1066,6 +1081,12 @@ class ConversationSettingsViewController: OWSTableViewController2, BadgeCollecti
     // when selection behavior is non-mutating
     var availableBadges: [OWSUserProfileBadgeInfo] = []
     var selectedBadgeIndex = 0
+
+    // MARK: - MemberLabelViewControllerPresenter
+
+    func reloadMemberLabelIfNeeded() {
+        self.reloadThreadAndUpdateContent()
+    }
 }
 
 // MARK: -

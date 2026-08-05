@@ -195,7 +195,7 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
     func update(conversationStyle: ConversationStyle) {
         self.conversationStyle = conversationStyle
         if #available(iOS 26, *), let sendButton = trailingEdgeControl as? UIButton {
-            sendButton.tintColor = conversationStyle.chatColorValue.asSendButtonTintColor()
+            sendButton.tintColor = conversationStyle.chatColorValue.asChatUIElementTintColor()
         }
     }
 
@@ -210,21 +210,9 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
 
     public enum Style {
         @available(iOS 26, *)
-        static var glassTintColor: UIColor {
-            // This set of colors is copied to elsewhere.
-            // Please update all places if you change color values.
-            UIColor { traitCollection in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return UIColor(white: 0, alpha: 0.2)
-                }
-                return UIColor(white: 1, alpha: 0.12)
-            }
-        }
-
-        @available(iOS 26, *)
         static func glassEffect(isInteractive: Bool = false) -> UIGlassEffect {
             let glassEffect = UIGlassEffect(style: .regular)
-            glassEffect.tintColor = glassTintColor
+            glassEffect.tintColor = .Signal.glassBackgroundTint
             glassEffect.isInteractive = isInteractive
             return glassEffect
         }
@@ -241,11 +229,10 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
             if #available(iOS 26, *) {
                 return .Signal.label
             }
-            return UIColor { traitCollection in
-                traitCollection.userInterfaceStyle == .dark
-                    ? Theme.darkThemeLegacyPrimaryIconColor
-                    : Theme.lightThemeLegacyPrimaryIconColor
-            }
+            return UIColor(
+                light: Theme.lightThemeLegacyPrimaryIconColor,
+                dark: Theme.darkThemeLegacyPrimaryIconColor,
+            )
         }
     }
 
@@ -382,7 +369,7 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
                 configuration: .glass(),
                 primaryAction: primaryAction,
             )
-            button.tintColor = Style.glassTintColor
+            button.tintColor = .Signal.glassBackgroundTint
             button.configuration?.image = UIImage(imageLiteralResourceName: "plus")
             button.configuration?.baseForegroundColor = Style.buttonTintColor
             button.configuration?.cornerStyle = .capsule
@@ -506,7 +493,7 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
                 },
                 accessibilityIdentifier: UIView.accessibilityIdentifier(in: self, name: "sendButton"),
             )
-            button.tintColor = conversationStyle.bubbleChatColorOutgoing.asSendButtonTintColor()
+            button.tintColor = conversationStyle.bubbleChatColorOutgoing.asChatUIElementTintColor()
             return button
         }
 
@@ -1655,6 +1642,22 @@ public class ConversationInputToolbar: UIView, QuotedReplyPreviewDelegate {
         editTarget = nil
         setMessageBody(nil, animated: animated)
         inputTextView.undoManager?.removeAllActions()
+        resetKeyboardLayout()
+    }
+
+    /// Resets the iOS keyboard from the symbols/numbers pane back to the
+    /// default alphabetic layout by toggling ``keyboardType``. Each
+    /// reload is required — the first forces the keyboard to tear down
+    /// its current layout, and the second rebuilds it in the default
+    /// alpha state. Does not affect the user's selected language.
+    private func resetKeyboardLayout() {
+        guard inputTextView.inputView == nil, inputTextView.isFirstResponder else { return }
+
+        let original = inputTextView.keyboardType
+        inputTextView.keyboardType = (original == .default) ? .emailAddress : .default
+        inputTextView.reloadInputViews()
+        inputTextView.keyboardType = original
+        inputTextView.reloadInputViews()
     }
 
     // MARK: Content Size Change Handling
@@ -3373,32 +3376,4 @@ extension ConversationInputToolbar: AttachmentKeyboardDelegate {
 
 extension ConversationInputToolbar: ConversationBottomBar {
     var shouldAttachToKeyboardLayoutGuide: Bool { true }
-}
-
-@available(iOS 26, *)
-private extension ColorOrGradientValue {
-
-    func asSendButtonTintColor() -> UIColor {
-        let bubbleColor: UIColor = {
-            switch self {
-            case .transparent:
-                return .Signal.accent
-
-            case .solidColor(let color):
-                return color
-
-            case .gradient(let gradientColor1, let gradientColor2, _):
-                return gradientColor1.midPoint(with: gradientColor2)
-            }
-        }()
-        let lightThemeFinalColor = bubbleColor.blendedWithOverlay(.white, opacity: 0.16)
-        let darkThemeFinalColor = bubbleColor.blendedWithOverlay(.black, opacity: 0.1)
-        return UIColor { traitCollection in
-            if traitCollection.userInterfaceStyle == .dark {
-                return darkThemeFinalColor
-            } else {
-                return lightThemeFinalColor
-            }
-        }
-    }
 }

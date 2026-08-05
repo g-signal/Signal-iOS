@@ -32,10 +32,6 @@ public class BackupAttachmentDownloadStore {
         function: StaticString? = #function,
         line: UInt? = #line,
     ) {
-        if let file, let function, let line {
-            Logger.info("Enqueuing \(referencedAttachment.attachment.id) thumbnail? \(thumbnail) from \(file) \(line): \(function)")
-        }
-
         if thumbnail {
             owsPrecondition(canDownloadFromMediaTier, "All thumbnails are media tier")
         }
@@ -113,6 +109,9 @@ public class BackupAttachmentDownloadStore {
         )
         failIfThrows {
             try record.insert(db)
+            if let file, let function, let line {
+                Logger.info("Enqueued \(referencedAttachment.attachment.id) thumbnail? \(thumbnail) from \(file) \(line): \(function)")
+            }
         }
     }
 
@@ -227,15 +226,15 @@ public class BackupAttachmentDownloadStore {
         function: StaticString? = #function,
         line: UInt? = #line,
     ) {
-        if let file, let function, let line {
-            Logger.info("Deleting \(attachmentId) thumbnail? \(thumbnail) from \(file) \(line): \(function)")
-        }
         let query = QueuedBackupAttachmentDownload
             .filter(Column(QueuedBackupAttachmentDownload.CodingKeys.attachmentRowId) == attachmentId)
             .filter(Column(QueuedBackupAttachmentDownload.CodingKeys.isThumbnail) == thumbnail)
 
         failIfThrows {
-            try query.deleteAll(tx.database)
+            let numRemoved = try query.deleteAll(tx.database)
+            if numRemoved > 0, let file, let function, let line {
+                Logger.info("Deleted \(attachmentId) thumbnail? \(thumbnail) from \(file) \(line): \(function)")
+            }
         }
     }
 
@@ -313,10 +312,6 @@ public class BackupAttachmentDownloadStore {
         function: StaticString? = #function,
         line: UInt? = #line,
     ) {
-        if let file, let function, let line {
-            Logger.info("Deleting all done rows from \(file) \(line): \(function)")
-        }
-
         if let byteCountSnapshot = computeEstimatedFinishedFullsizeByteCount(tx: tx) {
             kvStore.setUInt64(byteCountSnapshot, key: self.downloadCompleteBannerByteCountSnapshotKey, transaction: tx)
         }
@@ -328,7 +323,10 @@ public class BackupAttachmentDownloadStore {
             )
 
         failIfThrows {
-            try query.deleteAll(tx.database)
+            let numRemoved = try query.deleteAll(tx.database)
+            if let file, let function, let line {
+                Logger.info("Deleted \(numRemoved) rows from \(file) \(line): \(function)")
+            }
         }
     }
 

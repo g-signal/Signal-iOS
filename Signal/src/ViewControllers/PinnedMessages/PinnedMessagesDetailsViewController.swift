@@ -220,6 +220,7 @@ class PinnedMessagesDetailsViewController: OWSViewController, DatabaseChangeDele
             thread: threadViewModel.threadRecord,
             viewWidth: view.safeAreaLayoutGuide.layoutFrame.width,
             hasWallpaper: false,
+            shouldDimWallpaperInDarkMode: false,
             isWallpaperPhoto: false,
             chatColor: DependenciesBridge.shared.chatColorSettingStore.resolvedChatColor(
                 for: threadViewModel.threadRecord,
@@ -228,12 +229,15 @@ class PinnedMessagesDetailsViewController: OWSViewController, DatabaseChangeDele
             isStandaloneRenderItem: true,
         )
 
+        let groupNameColors = GroupNameColors.forThread(threadViewModel.threadRecord)
+
         return CVLoader.buildStandaloneRenderItem(
             interaction: dateInteraction,
             thread: threadViewModel.threadRecord,
             threadAssociatedData: threadViewModel.associatedData,
             conversationStyle: conversationStyle,
             spoilerState: self.spoilerState,
+            groupNameColors: groupNameColors,
             transaction: tx,
         )
     }
@@ -250,6 +254,7 @@ class PinnedMessagesDetailsViewController: OWSViewController, DatabaseChangeDele
             thread: thread,
             viewWidth: view.safeAreaLayoutGuide.layoutFrame.width - Self.goToMessageButtonSize,
             hasWallpaper: false,
+            shouldDimWallpaperInDarkMode: false,
             isWallpaperPhoto: false,
             chatColor: DependenciesBridge.shared.chatColorSettingStore.resolvedChatColor(
                 for: thread,
@@ -257,12 +262,15 @@ class PinnedMessagesDetailsViewController: OWSViewController, DatabaseChangeDele
             ),
         )
 
+        let groupNameColors = GroupNameColors.forThread(threadViewModel.threadRecord)
+
         return CVLoader.buildStandaloneRenderItem(
             interaction: message,
             thread: thread,
             threadAssociatedData: threadAssociatedData,
             conversationStyle: conversationStyle,
             spoilerState: self.spoilerState,
+            groupNameColors: groupNameColors,
             transaction: tx,
         )
     }

@@ -246,30 +246,27 @@ public class CVComponentBase: NSObject {
 
     public func configureWallpaperBlurView(
         wallpaperBlurView: CVWallpaperBlurView,
-        maskCornerRadius: CGFloat,
         componentDelegate: CVComponentDelegate,
+        bubbleConfig: BubbleConfiguration,
     ) {
         Self.configureWallpaperBlurView(
             wallpaperBlurView: wallpaperBlurView,
-            maskCornerRadius: maskCornerRadius,
             componentDelegate: componentDelegate,
+            bubbleConfig: bubbleConfig,
         )
     }
 
     public static func configureWallpaperBlurView(
         wallpaperBlurView: CVWallpaperBlurView,
-        maskCornerRadius: CGFloat,
         componentDelegate: CVComponentDelegate,
+        bubbleConfig: BubbleConfiguration,
     ) {
-        if let wallpaperBlurProvider = componentDelegate.wallpaperBlurProvider {
-            wallpaperBlurView.configure(
-                provider: wallpaperBlurProvider,
-                maskCornerRadius: maskCornerRadius,
-            )
-        } else {
-            owsFailDebug("Missing wallpaperBlurProvider.")
-            wallpaperBlurView.configureForPreview(maskCornerRadius: maskCornerRadius)
-        }
+        let wallpaperBlurProvider = componentDelegate.wallpaperBlurProvider
+        owsAssertDebug(wallpaperBlurProvider != nil)
+        wallpaperBlurView.configure(
+            provider: wallpaperBlurProvider,
+            bubbleConfig: bubbleConfig,
+        )
     }
 
     public func updateScrollingContent(componentView: CVComponentView) {
@@ -277,7 +274,7 @@ public class CVComponentBase: NSObject {
     }
 
     private func updateWallpaperBlur(componentView: CVComponentView) {
-        guard let wallpaperBlurView = self.wallpaperBlurView(componentView: componentView) else {
+        guard let wallpaperBlurView = wallpaperBlurView(componentView: componentView) else {
             return
         }
         wallpaperBlurView.updateIfNecessary()

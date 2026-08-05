@@ -4,15 +4,10 @@
 //
 
 import Foundation
-import SignalUI
 import SignalServiceKit
+import SignalUI
 
 class RequestAccountDataReportViewController: OWSTableViewController2 {
-    private var learnMoreUrl: URL {
-        // URL(string: "https://support.signal.org/hc/articles/5538911756954")! // Disabled support URL navigation
-        URL(string: "about:blank")! // Disabled support URL navigation
-    }
-
     private enum FileType {
         case json
         case text
@@ -28,41 +23,32 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
 
     // MARK: - Callbacks
 
-    public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         title = OWSLocalizedString(
             "ACCOUNT_DATA_REPORT_TITLE",
-            comment: "Users can request a report of their account data. This is the title on the screen where they do this."
+            comment: "Users can request a report of their account data. This is the title on the screen where they do this.",
         )
-        updateTableContents()
-    }
-
-    public override func themeDidChange() {
-        super.themeDidChange()
         updateTableContents()
     }
 
     // MARK: - Rendering
 
-    private lazy var exportButton: UIView = {
-        let title = OWSLocalizedString(
+    private lazy var exportButton = UIButton(
+        configuration: .largePrimary(title: OWSLocalizedString(
             "ACCOUNT_DATA_REPORT_EXPORT_REPORT_BUTTON",
-            comment: "Users can request a report of their account data. Users tap this button to export their data."
-        )
-        let result = OWSButton(title: title) { [weak self] in self?.didTapExport() }
-        result.dimsWhenHighlighted = true
-        result.layer.cornerRadius = 8
-        result.backgroundColor = .ows_accentBlue
-        result.titleLabel?.font = UIFont.dynamicTypeBody.semibold()
-        result.autoSetDimension(.height, toSize: 48)
-        return result
-    }()
+            comment: "Users can request a report of their account data. Users tap this button to export their data.",
+        )),
+        primaryAction: UIAction { [weak self] _ in
+            self?.didTapExport()
+        },
+    )
 
     private func updateTableContents() {
         self.contents = OWSTableContents(sections: [
             headerSection(),
             chooseFileTypeSection(),
-            exportButtonSection()
+            exportButtonSection(),
         ])
     }
 
@@ -70,55 +56,43 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
         let result = OWSTableSection(items: [
             .init(customCellBlock: {
                 let cell = UITableViewCell()
-                let iconView = UIImageView(image: .init(named: "account_data_report"))
-                iconView.autoSetDimensions(to: .square(88))
 
-                let titleLabel = UILabel()
-                titleLabel.textAlignment = .center
-                titleLabel.font = UIFont.dynamicTypeTitle2.semibold()
-                titleLabel.text = OWSLocalizedString(
-                    "ACCOUNT_DATA_REPORT_TITLE",
-                    comment: "Users can request a report of their account data. This is the title on the screen where they do this."
-                )
-                titleLabel.numberOfLines = 0
-                titleLabel.lineBreakMode = .byWordWrapping
+                let iconView = UIImageView(image: .init(named: "account_data_report"))
+                iconView.translatesAutoresizingMaskIntoConstraints = false
+                let iconViewContainer = UIView.container()
+                iconViewContainer.addSubview(iconView)
+                iconViewContainer.addConstraints([
+                    iconView.topAnchor.constraint(equalTo: iconViewContainer.topAnchor),
+                    iconView.leadingAnchor.constraint(greaterThanOrEqualTo: iconViewContainer.leadingAnchor),
+                    iconView.centerXAnchor.constraint(equalTo: iconViewContainer.centerXAnchor),
+                    iconView.bottomAnchor.constraint(equalTo: iconViewContainer.bottomAnchor, constant: -12),
+                ])
 
                 let descriptionTextView = LinkingTextView()
                 descriptionTextView.attributedText = .composed(
                     of: [
                         OWSLocalizedString(
                             "ACCOUNT_DATA_REPORT_SUBTITLE",
-                            comment: "Users can request a report of their account data. This is the subtitle on the screen where they do this, giving them more information."
-                        )
-                        // CommonStrings.learnMore.styled(with: .link(self.learnMoreUrl)) // Disabled support URL navigation
+                            comment: "Users can request a report of their account data. This is the subtitle on the screen where they do this, giving them more information.",
+                        ),
+//                        CommonStrings.learnMore.styled(with: .link(URL.Support.requestingAccountData)), // Disabled support URL navigation
                     ],
-                    baseStyle: .init(.color(Theme.primaryTextColor), .font(.dynamicTypeBody)),
-                    separator: " "
+                    baseStyle: .init(.color(.Signal.secondaryLabel), .font(.dynamicTypeSubheadline)),
+                    separator: " ",
                 )
-                descriptionTextView.linkTextAttributes = [
-                    .foregroundColor: Theme.accentBlueColor,
-                    .underlineColor: UIColor.clear,
-                    .underlineStyle: NSUnderlineStyle.single.rawValue
-                ]
                 descriptionTextView.textAlignment = .center
 
                 let stackView = UIStackView(arrangedSubviews: [
-                    iconView,
-                    titleLabel,
-                    descriptionTextView
+                    iconViewContainer,
+                    descriptionTextView,
                 ])
                 stackView.axis = .vertical
-                stackView.alignment = .center
                 stackView.spacing = 12
-                stackView.setCustomSpacing(24, after: iconView)
-
-                cell.contentView.backgroundColor = .cyan
-
                 cell.contentView.addSubview(stackView)
                 stackView.autoPinEdgesToSuperviewMargins()
 
                 return cell
-            })
+            }),
         ])
         result.hasBackground = false
         return result
@@ -132,37 +106,37 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
                     return OWSTableItem.buildImageCell(
                         itemName: OWSLocalizedString(
                             "ACCOUNT_DATA_REPORT_EXPORT_AS_TXT_TITLE",
-                            comment: "Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the title on the button that switches to plain text mode."
+                            comment: "Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the title on the button that switches to plain text mode.",
                         ),
                         subtitle: OWSLocalizedString(
                             "ACCOUNT_DATA_REPORT_EXPORT_AS_TXT_SUBTITLE",
-                            comment: "Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the subtitle on the button that switches to plain text mode."
+                            comment: "Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the subtitle on the button that switches to plain text mode.",
                         ),
-                        accessoryType: selectedFileType == .text ? .checkmark : .none
+                        accessoryType: selectedFileType == .text ? .checkmark : .none,
                     )
                 },
                 actionBlock: { [weak self] in
                     self?.didSelectFileType(.text)
-                }
+                },
             ),
             .init(
                 customCellBlock: {
                     return OWSTableItem.buildImageCell(
                         itemName: OWSLocalizedString(
                             "ACCOUNT_DATA_REPORT_EXPORT_AS_JSON_TITLE",
-                            comment: "Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the title on the button that switches to JSON mode."
+                            comment: "Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the title on the button that switches to JSON mode.",
                         ),
                         subtitle: OWSLocalizedString(
                             "ACCOUNT_DATA_REPORT_EXPORT_AS_JSON_SUBTITLE",
-                            comment: "Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the subtitle on the button that switches to JSON mode."
+                            comment: "Users can request a report of their account data. They can choose to export it as plain text (TXT) or as JSON. This is the subtitle on the button that switches to JSON mode.",
                         ),
-                        accessoryType: selectedFileType == .json ? .checkmark : .none
+                        accessoryType: selectedFileType == .json ? .checkmark : .none,
                     )
                 },
                 actionBlock: { [weak self] in
                     self?.didSelectFileType(.json)
-                }
-            )
+                },
+            ),
         ])
     }
 
@@ -172,14 +146,15 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
             guard let self else { return cell }
 
             cell.contentView.addSubview(self.exportButton)
-            self.exportButton.autoPinEdgesToSuperviewMargins()
+            self.exportButton.autoPinHeightToSuperviewMargins()
+            self.exportButton.autoPinWidthToSuperview(withMargin: 12)
 
             return cell
         })])
         result.hasBackground = false
         result.footerTitle = OWSLocalizedString(
             "ACCOUNT_DATA_REPORT_FOOTER",
-            comment: "Users can request a report of their account data. This text appears at the bottom of this screen, offering more information."
+            comment: "Users can request a report of their account data. This text appears at the bottom of this screen, offering more information.",
         )
         return result
     }
@@ -195,16 +170,10 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
             asyncBlock: { modal in
                 do {
                     let response = try await SSKEnvironment.shared.networkManagerRef.asyncRequest(request)
-                    let status = response.responseStatusCode
-                    guard status == 200 else {
-                        throw OWSGenericError("Received a \(status) status code. The request failed")
+                    guard response.responseStatusCode == 200 else {
+                        throw response.asError()
                     }
-                    guard let rawData = response.responseBodyData else {
-                        throw OWSGenericError("Received an empty response")
-                    }
-                    guard let report = try? AccountDataReport(rawData: rawData) else {
-                        throw OWSGenericError("Couldn't parse account data report, presumably due to a bug")
-                    }
+                    let report = try AccountDataReport(rawData: response.responseBodyData ?? Data())
                     modal.dismissIfNotCanceled(completionIfNotCanceled: { [weak self] in
                         self?.confirmExport {
                             self?.didConfirmExport(of: report)
@@ -224,12 +193,12 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
         OWSActionSheets.showActionSheet(
             title: OWSLocalizedString(
                 "ACCOUNT_DATA_REPORT_ERROR_TITLE",
-                comment: "Users can request a report of their account data. If this request fails (probably because of a network connection problem), they will see an error sheet. This is the title on that error."
+                comment: "Users can request a report of their account data. If this request fails (probably because of a network connection problem), they will see an error sheet. This is the title on that error.",
             ),
             message: OWSLocalizedString(
                 "ACCOUNT_DATA_REPORT_ERROR_MESSAGE",
-                comment: "Users can request a report of their account data. If this request fails (probably because of a network connection problem), they will see an error sheet. This is the message on that error."
-            )
+                comment: "Users can request a report of their account data. If this request fails (probably because of a network connection problem), they will see an error sheet. This is the message on that error.",
+            ),
         )
     }
 
@@ -241,15 +210,15 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
         let actionSheet = ActionSheetController(
             message: OWSLocalizedString(
                 "ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_MESSAGE",
-                comment: "Users can request a report of their account data. Before they get their account export, they are warned to only share account data with trustworthy sources. This is the message on that warning."
-            )
+                comment: "Users can request a report of their account data. Before they get their account export, they are warned to only share account data with trustworthy sources. This is the message on that warning.",
+            ),
         )
 
         actionSheet.addAction(.init(
             title: OWSLocalizedString(
                 "ACCOUNT_DATA_REPORT_CONFIRM_EXPORT_CONFIRM_BUTTON",
-                comment: "Users can request a report of their account data. Before they get their account export, they are warned to only share account data with trustworthy sources. This is the button on that warning, and tapping it lets users continue."
-            )
+                comment: "Users can request a report of their account data. Before they get their account export, they are warned to only share account data with trustworthy sources. This is the button on that warning, and tapping it lets users continue.",
+            ),
         ) { _ in
             didConfirm()
         })
@@ -266,12 +235,12 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
             activityItems: [activityItem],
             from: self,
             sourceView: exportButton,
-            completion: cleanup
+            completion: cleanup,
         )
     }
 
     private func prepareForSharing(
-        report: AccountDataReport
+        report: AccountDataReport,
     ) -> (activityItem: Any, cleanup: () -> Void) {
         let data: Data
         let fileExtension: String
@@ -288,15 +257,12 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
         // In practice, this doesn't work when sharing back into Signal. We don't understand why
         // but suspect a platform bug (or, at best, an error message that didn't help us figure out
         // the source of the problem).
-        let temporaryDirUrl = URL(
-            fileURLWithPath: OWSTemporaryDirectory()
-        ).appendingPathComponent(UUID().uuidString)
-        let temporaryFileUrl = temporaryDirUrl.appendingPathComponent(
+        let temporaryFileUrl = OWSFileSystem.temporaryFileUrl(
             // This isn't localized because the report is *also* not localized.
-            "account-data.\(fileExtension)",
-            isDirectory: false
+            fileName: "account-data",
+            fileExtension: fileExtension,
+            isAvailableWhileDeviceLocked: false,
         )
-        OWSFileSystem.ensureDirectoryExists(temporaryDirUrl.path)
 
         let activityItem: Any
         let cleanup: () -> Void
@@ -306,7 +272,7 @@ class RequestAccountDataReportViewController: OWSTableViewController2 {
             activityItem = temporaryFileUrl
             cleanup = {
                 do {
-                    try OWSFileSystem.deleteFile(url: temporaryDirUrl)
+                    try OWSFileSystem.deleteFile(url: temporaryFileUrl)
                 } catch {
                     owsFailBeta("Failed to delete temporary account data report file")
                 }

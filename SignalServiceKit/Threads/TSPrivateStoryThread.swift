@@ -15,7 +15,7 @@ extension TSPrivateStoryThread {
     }
 
     public class func getMyStory(transaction: DBReadTransaction) -> TSPrivateStoryThread! {
-        anyFetchPrivateStoryThread(uniqueId: myStoryUniqueId, transaction: transaction)
+        fetchPrivateStoryThreadViaCache(uniqueId: myStoryUniqueId, transaction: transaction)
     }
 
     @discardableResult

@@ -25,32 +25,32 @@ extension UIColor {
 
     public static func byRGBHex(
         light: UInt32,
-        lightHighContrast: UInt32,
+        lightHighContrast: UInt32? = nil,
         dark: UInt32,
-        darkHighContrast: UInt32,
+        darkHighContrast: UInt32? = nil,
     ) -> UIColor {
         UIColor(
             light: UIColor(rgbHex: light),
-            lightHighContrast: UIColor(rgbHex: lightHighContrast),
+            lightHighContrast: lightHighContrast != nil ? UIColor(rgbHex: lightHighContrast!) : nil,
             dark: UIColor(rgbHex: dark),
-            darkHighContrast: UIColor(rgbHex: darkHighContrast),
+            darkHighContrast: darkHighContrast != nil ? UIColor(rgbHex: darkHighContrast!) : nil,
         )
     }
 
     public convenience init(
         light: UIColor,
-        lightHighContrast: UIColor,
+        lightHighContrast: UIColor? = nil,
         dark: UIColor,
-        darkHighContrast: UIColor,
+        darkHighContrast: UIColor? = nil,
     ) {
         self.init { traitCollection in
             switch (traitCollection.userInterfaceStyle, traitCollection.accessibilityContrast) {
-            case (.dark, .high):
-                darkHighContrast
+            case (.dark, .high) where darkHighContrast != nil:
+                darkHighContrast!
             case (.dark, _):
                 dark
-            case (_, .high):
-                lightHighContrast
+            case (_, .high) where lightHighContrast != nil:
+                lightHighContrast!
             case (_, _):
                 light
             }
@@ -131,9 +131,7 @@ extension UIColor.Signal {
     public static var label: UIColor {
         UIColor(
             light: UIColor(rgbHex: 0x000000),
-            lightHighContrast: UIColor(rgbHex: 0x000000),
             dark: UIColor(rgbHex: 0xFFFFFF),
-            darkHighContrast: UIColor(rgbHex: 0xFFFFFF),
         )
     }
 
@@ -164,19 +162,25 @@ extension UIColor.Signal {
         )
     }
 
+    public static var emphasisLabel: UIColor {
+        UIColor(
+            light: UIColor(rgbHex: 0xE81F28),
+            lightHighContrast: UIColor(rgbHex: 0xE30B14),
+            dark: UIColor(rgbHex: 0xFC3040),
+            darkHighContrast: UIColor(rgbHex: 0xFF515E),
+        )
+    }
+
     // MARK: Background
 
     public static var background: UIColor {
         UIColor.byUserInterfaceLevel(
             base: UIColor.byRGBHex(
                 light: 0xFFFFFF,
-                lightHighContrast: 0xFFFFFF,
                 dark: 0x000000,
-                darkHighContrast: 0x000000,
             ),
             elevated: UIColor.byRGBHex(
                 light: 0xFFFFFF,
-                lightHighContrast: 0xFFFFFF,
                 dark: 0x1C1C1E,
                 darkHighContrast: 0x343438,
             ),
@@ -207,13 +211,11 @@ extension UIColor.Signal {
         UIColor.byUserInterfaceLevel(
             base: UIColor.byRGBHex(
                 light: 0xFFFFFF,
-                lightHighContrast: 0xFFFFFF,
                 dark: 0x2C2C2E,
                 darkHighContrast: 0x444447,
             ),
             elevated: UIColor.byRGBHex(
                 light: 0xFFFFFF,
-                lightHighContrast: 0xFFFFFF,
                 dark: 0x3A3A3C,
                 darkHighContrast: 0x545457,
             ),
@@ -225,13 +227,10 @@ extension UIColor.Signal {
     }
 
     public static var backdrop: UIColor {
-        UIColor { traitCollection in
-            if traitCollection.userInterfaceStyle == .dark {
-                UIColor(white: 0, alpha: 0.48)
-            } else {
-                UIColor(white: 0, alpha: 0.2)
-            }
-        }
+        UIColor(
+            light: UIColor(white: 0, alpha: 0.2),
+            dark: UIColor(white: 0, alpha: 0.48),
+        )
     }
 
     // MARK: Grouped Background
@@ -245,7 +244,6 @@ extension UIColor.Signal {
                 light: 0xEFEFF0,
                 lightHighContrast: 0xE4E4E7,
                 dark: 0x000000,
-                darkHighContrast: 0x000000,
             ),
             elevated: UIColor.byRGBHex(
                 light: 0xEFEFF0,
@@ -260,13 +258,11 @@ extension UIColor.Signal {
         UIColor.byUserInterfaceLevel(
             base: UIColor.byRGBHex(
                 light: 0xFFFFFF,
-                lightHighContrast: 0xFFFFFF,
                 dark: 0x1C1C1E,
                 darkHighContrast: 0x343438,
             ),
             elevated: UIColor.byRGBHex(
                 light: 0xFFFFFF,
-                lightHighContrast: 0xFFFFFF,
                 dark: 0x2C2C2E,
                 darkHighContrast: 0x444447,
             ),
@@ -328,6 +324,121 @@ extension UIColor.Signal {
             lightHighContrast: UIColor(rgbHex: 0x747480, alpha: 0.18),
             dark: UIColor(rgbHex: 0x747480, alpha: 0.18),
             darkHighContrast: UIColor(rgbHex: 0x747480, alpha: 0.28),
+        )
+    }
+
+    // MARK: Material
+
+    /// Designed to be used on top of material (blur / glass) backgrounds.
+    public enum MaterialBase {
+
+        public static var fillPrimary: UIColor {
+            UIColor(
+                light: UIColor(white: 0, alpha: 0.24),
+                dark: UIColor(white: 1, alpha: 0.48),
+            )
+        }
+
+        public static var fillSecondary: UIColor {
+            UIColor(
+                light: UIColor(white: 0, alpha: 0.16),
+                dark: UIColor(white: 1, alpha: 0.24),
+            )
+        }
+
+        public static var fillTertiary: UIColor {
+            UIColor(
+                light: UIColor(white: 0, alpha: 0.1),
+                dark: UIColor(white: 1, alpha: 0.16),
+            )
+        }
+
+        public static var button: UIColor {
+            UIColor(
+                light: UIColor(white: 0, alpha: 0.12),
+                dark: UIColor(white: 1, alpha: 0.2),
+            )
+        }
+    }
+
+    // MARK: Light
+
+    /// To be used on top of neutral backgrounds
+    /// (eg incoming message bubbles when no wallpaper).
+    public enum LightBase {
+
+        public static var fillPrimary: UIColor {
+            UIColor(
+                light: UIColor(white: 1, alpha: 1),
+                dark: UIColor(white: 1, alpha: 0.48),
+            )
+        }
+
+        public static var fillSecondary: UIColor {
+            UIColor(
+                light: UIColor(white: 1, alpha: 0.6),
+                dark: UIColor(white: 1, alpha: 0.16),
+            )
+        }
+
+        public static var fillTertiary: UIColor {
+            UIColor(
+                light: UIColor(white: 1, alpha: 0.2),
+                dark: UIColor(white: 1, alpha: 0.08),
+            )
+        }
+
+        public static var button: UIColor {
+            UIColor(
+                light: UIColor(white: 1, alpha: 0.8),
+                dark: UIColor(white: 1, alpha: 0.2),
+            )
+        }
+    }
+
+    // MARK: Color
+
+    /// To be used on top of any arbitrary color. Fixed across light/dark theme.
+    public enum ColorBase {
+
+        public static var labelPrimary: UIColor {
+            UIColor(white: 1, alpha: 1)
+        }
+
+        public static var labelSecondary: UIColor {
+            UIColor(white: 1, alpha: 0.8)
+        }
+
+        public static var labelTertiary: UIColor {
+            UIColor(white: 1, alpha: 0.4)
+        }
+
+        public static var labelInverted: UIColor {
+            UIColor(white: 0, alpha: 1)
+        }
+
+        public static var fillPrimary: UIColor {
+            UIColor(white: 1, alpha: 0.8)
+        }
+
+        public static var fillSecondary: UIColor {
+            UIColor(white: 1, alpha: 0.6)
+        }
+
+        public static var fillTertiary: UIColor {
+            UIColor(white: 1, alpha: 0.2)
+        }
+
+        public static var button: UIColor {
+            UIColor(white: 1, alpha: 0.2)
+        }
+    }
+
+    @available(iOS 26, *)
+    public static var glassBackgroundTint: UIColor {
+        UIColor(
+            light: UIColor(white: 1, alpha: 0.12),
+            dark: UIColor(white: 0, alpha: 0.2),
         )
     }
 
@@ -406,6 +517,10 @@ extension Color.Signal {
 
     public static var quaternaryLabel: Color {
         Color(UIColor.Signal.quaternaryLabel)
+    }
+
+    public static var emphasisLabel: Color {
+        Color(UIColor.Signal.emphasisLabel)
     }
 
     // MARK: Background

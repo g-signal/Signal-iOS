@@ -80,7 +80,7 @@ class SharingThreadPickerViewController: ConversationPickerViewController {
 
         let databaseStorage = SSKEnvironment.shared.databaseStorageRef
         self.mentionCandidates = databaseStorage.read { tx in
-            let groupThread = TSGroupThread.anyFetchGroupThread(uniqueId: groupThreadId, transaction: tx)
+            let groupThread = TSGroupThread.fetchGroupThreadViaCache(uniqueId: groupThreadId, transaction: tx)
             owsAssertDebug(groupThread != nil)
             if let groupThread, groupThread.allowsMentionSend {
                 return groupThread.recipientAddresses(with: tx).compactMap(\.aci)

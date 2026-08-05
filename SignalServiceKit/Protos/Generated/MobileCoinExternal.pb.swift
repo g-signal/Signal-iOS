@@ -48,21 +48,21 @@ struct External_PublicAddress: Sendable {
 
   //// View public key
   var viewPublicKey: External_CompressedRistretto {
-    get {return _viewPublicKey ?? External_CompressedRistretto()}
+    get {_viewPublicKey ?? External_CompressedRistretto()}
     set {_viewPublicKey = newValue}
   }
   /// Returns true if `viewPublicKey` has been explicitly set.
-  var hasViewPublicKey: Bool {return self._viewPublicKey != nil}
+  var hasViewPublicKey: Bool {self._viewPublicKey != nil}
   /// Clears the value of `viewPublicKey`. Subsequent reads from it will return its default value.
   mutating func clearViewPublicKey() {self._viewPublicKey = nil}
 
   //// Spend public key
   var spendPublicKey: External_CompressedRistretto {
-    get {return _spendPublicKey ?? External_CompressedRistretto()}
+    get {_spendPublicKey ?? External_CompressedRistretto()}
     set {_spendPublicKey = newValue}
   }
   /// Returns true if `spendPublicKey` has been explicitly set.
-  var hasSpendPublicKey: Bool {return self._spendPublicKey != nil}
+  var hasSpendPublicKey: Bool {self._spendPublicKey != nil}
   /// Clears the value of `spendPublicKey`. Subsequent reads from it will return its default value.
   mutating func clearSpendPublicKey() {self._spendPublicKey = nil}
 
@@ -114,11 +114,11 @@ struct External_MaskedAmount: Sendable {
 
   /// A Pedersen commitment `v*G + s*H`
   var commitment: External_CompressedRistretto {
-    get {return _commitment ?? External_CompressedRistretto()}
+    get {_commitment ?? External_CompressedRistretto()}
     set {_commitment = newValue}
   }
   /// Returns true if `commitment` has been explicitly set.
-  var hasCommitment: Bool {return self._commitment != nil}
+  var hasCommitment: Bool {self._commitment != nil}
   /// Clears the value of `commitment`. Subsequent reads from it will return its default value.
   mutating func clearCommitment() {self._commitment = nil}
 
@@ -149,21 +149,21 @@ struct External_Receipt: Sendable {
 
   /// Public key of the TxOut.
   var publicKey: External_CompressedRistretto {
-    get {return _publicKey ?? External_CompressedRistretto()}
+    get {_publicKey ?? External_CompressedRistretto()}
     set {_publicKey = newValue}
   }
   /// Returns true if `publicKey` has been explicitly set.
-  var hasPublicKey: Bool {return self._publicKey != nil}
+  var hasPublicKey: Bool {self._publicKey != nil}
   /// Clears the value of `publicKey`. Subsequent reads from it will return its default value.
   mutating func clearPublicKey() {self._publicKey = nil}
 
   /// Confirmation number of the TxOut.
   var confirmation: External_TxOutConfirmationNumber {
-    get {return _confirmation ?? External_TxOutConfirmationNumber()}
+    get {_confirmation ?? External_TxOutConfirmationNumber()}
     set {_confirmation = newValue}
   }
   /// Returns true if `confirmation` has been explicitly set.
-  var hasConfirmation: Bool {return self._confirmation != nil}
+  var hasConfirmation: Bool {self._confirmation != nil}
   /// Clears the value of `confirmation`. Subsequent reads from it will return its default value.
   mutating func clearConfirmation() {self._confirmation = nil}
 

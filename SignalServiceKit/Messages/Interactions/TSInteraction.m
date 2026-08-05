@@ -215,7 +215,7 @@ NSString *NSStringFromOWSInteractionType(OWSInteractionType value)
     }
 
     // However, it's also possible that the thread doesn't exist.
-    return [TSThread anyFetchWithUniqueId:self.uniqueThreadId transaction:tx];
+    return [TSThread fetchViaCacheWithUniqueId:self.uniqueThreadId transaction:tx];
 }
 
 #pragma mark Date operations

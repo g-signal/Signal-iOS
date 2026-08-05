@@ -928,7 +928,7 @@ open class ConversationPickerViewController: OWSTableViewController2 {
         case .group(let groupThreadId):
             guard
                 let groupThread = SSKEnvironment.shared.databaseStorageRef.read(block: { transaction in
-                    return TSGroupThread.anyFetchGroupThread(uniqueId: groupThreadId, transaction: transaction)
+                    return TSGroupThread.fetchGroupThreadViaCache(uniqueId: groupThreadId, transaction: transaction)
                 })
             else {
                 owsFailDebug("Missing group thread for blocked thread")
@@ -1302,7 +1302,7 @@ class ConversationPickerCell: ContactTableViewCell {
             configuration = ContactCellConfiguration(address: address, localUserDisplayMode: .noteToSelf)
         case .group(let groupThreadId):
             guard
-                let groupThread = TSGroupThread.anyFetchGroupThread(
+                let groupThread = TSGroupThread.fetchGroupThreadViaCache(
                     uniqueId: groupThreadId,
                     transaction: transaction,
                 )

@@ -152,7 +152,7 @@ public final class OutgoingEditMessage: TransientOutgoingMessage {
     ) {
         super.anyUpdateOutgoingMessage(transaction: tx, block: block)
 
-        if let editedMessage = TSOutgoingMessage.anyFetchOutgoingMessage(uniqueId: editedMessage.uniqueId, transaction: tx) {
+        if let editedMessage = TSOutgoingMessage.fetchOutgoingMessageViaCache(uniqueId: editedMessage.uniqueId, transaction: tx) {
             editedMessage.anyUpdateOutgoingMessage(transaction: tx, block: block)
         }
     }

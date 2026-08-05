@@ -34,9 +34,8 @@ struct ConversationHeaderBuilder {
         for thread: TSThread,
         sizeClass: ConversationAvatarView.Configuration.SizeClass,
         options: Options,
-        delegate: ConversationHeaderDelegate
-    ) -> UIView {
-        if let groupThread = thread as? TSGroupThread {
+        memberLabel: MemberLabelForRendering?,
+        delegate: ConversationHeaderDelegate,
             return ConversationHeaderBuilder.buildHeaderForGroup(
                 groupThread: groupThread,
                 sizeClass: sizeClass,
@@ -128,7 +127,8 @@ struct ConversationHeaderBuilder {
         contactThread: TSContactThread,
         sizeClass: ConversationAvatarView.Configuration.SizeClass,
         options: Options,
-        delegate: ConversationHeaderDelegate
+        memberLabel: MemberLabelForRendering?,
+        delegate: ConversationHeaderDelegate,
     ) -> UIView {
         // Make sure the view is loaded before we open a transaction,
         // because it can end up creating a transaction within.
@@ -148,6 +148,7 @@ struct ConversationHeaderBuilder {
         contactThread: TSContactThread,
         sizeClass: ConversationAvatarView.Configuration.SizeClass,
         options: Options,
+        memberLabel: MemberLabelForRendering?,
         delegate: ConversationHeaderDelegate,
         transaction: DBReadTransaction
     ) -> UIView {
@@ -157,6 +158,13 @@ struct ConversationHeaderBuilder {
             options: options,
             transaction: transaction
         )
+
+        if BuildFlags.MemberLabel.display, let memberLabel {
+            let memberLabelLabel = builder.addMemberLabel(label: memberLabel.label, color: memberLabel.groupNameColor)
+            memberLabelLabel.numberOfLines = 0
+            memberLabelLabel.textAlignment = .center
+        }
+
 
         let address = contactThread.contactAddress
         if !address.isLocalAddress, let bioText = SSKEnvironment.shared.profileManagerRef.userProfile(for: address, tx: transaction)?.bioForDisplay {
@@ -534,6 +542,28 @@ struct ConversationHeaderBuilder {
         return label
     }
 
+    mutating func addMemberLabel(label: String, color: UIColor) -> UILabel {
+        subviews.append(UIView.spacer(withHeight: 4))
+        let memberLabelLabel = CVCapsuleLabel(
+            attributedText: NSAttributedString(string: label),
+            textColor: color,
+            font: nil,
+            highlightRange: NSRange(location: 0, length: (label as NSString).length),
+            highlightFont: .dynamicTypeSubheadlineClamped,
+            axLabelPrefix: OWSLocalizedString(
+                "MEMBER_LABEL_AX_PREFIX",
+                comment: "Accessibility prefix for member labels.",
+            ),
+            isQuotedReply: false,
+            numberOfLines: 1,
+            onTap: { [weak delegate] in
+                delegate?.didTapMemberLabel()
+            },
+        )
+        subviews.append(memberLabelLabel)
+        return memberLabelLabel
+    }
+
     mutating func addGroupIdRow(groupId: String) {
         subviews.append(UIView.spacer(withHeight: 10))
 
@@ -644,6 +674,8 @@ protocol ConversationHeaderDelegate: UIViewController, ConversationAvatarViewDel
 
     var canTapThreadName: Bool { get }
     func didTapThreadName()
+
+    func didTapMemberLabel()
 }
 
 // MARK: -
@@ -790,6 +822,8 @@ extension ConversationSettingsViewController: ConversationHeaderDelegate {
         ContactAboutSheet(thread: contactThread, spoilerState: self.spoilerState)
             .present(from: self)
     }
+
+    func didTapMemberLabel() {}
 }
 
 extension ConversationSettingsViewController: GroupDescriptionViewControllerDelegate {

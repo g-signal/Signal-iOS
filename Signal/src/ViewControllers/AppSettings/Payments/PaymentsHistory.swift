@@ -97,7 +97,7 @@ class PaymentsHistoryDataSource {
                 var displayName: String
                 if paymentModel.isUnidentified {
                     displayName = PaymentsViewUtils.buildUnidentifiedTransactionString(paymentModel: paymentModel)
-                } else if let senderOrRecipientAci = paymentModel.senderOrRecipientAci?.wrappedAciValue {
+                } else if let senderOrRecipientAci = paymentModel.senderOrRecipientAci {
                     displayName = SSKEnvironment.shared.contactManagerRef.displayName(for: SignalServiceAddress(senderOrRecipientAci), tx: transaction).resolvedValue()
                 } else if paymentModel.isOutgoingTransfer {
                     displayName = OWSLocalizedString(
@@ -152,7 +152,7 @@ class PaymentsHistoryDataSource {
 extension PaymentsHistoryDataSource: DatabaseChangeDelegate {
 
     func databaseChangesDidUpdate(databaseChanges: DatabaseChanges) {
-        guard databaseChanges.didUpdate(tableName: TSPaymentModel.table.tableName) else {
+        guard databaseChanges.didUpdate(tableName: TSPaymentModel.databaseTableName) else {
             return
         }
 

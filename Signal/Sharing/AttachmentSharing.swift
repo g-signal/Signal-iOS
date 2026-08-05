@@ -138,8 +138,6 @@ extension Array where Element == ReferencedAttachmentStream {
     public func asShareableAttachments() throws -> [ShareableAttachment] {
         var hadUrlType = false
         var types = [ShareableAttachment.ShareType]()
-        var dedupedSourceFilenames = [String?]()
-        var sourceFilenamesSet = Set<String>()
         for attachment in self {
             let shareType = ShareableAttachment.shareType(attachment.attachmentStream)
             switch shareType {
@@ -149,23 +147,17 @@ extension Array where Element == ReferencedAttachmentStream {
             case .image:
                 types.append(.image)
             }
-
-            let filename = AttachmentSaving.uniqueFilename(
-                sourceFilename: attachment.reference.sourceFilename,
-                existingFilenames: &sourceFilenamesSet,
-            )
-            dedupedSourceFilenames.append(filename)
         }
         if hadUrlType {
             // Once one of them are all file, they all have to be files.
             types = [ShareableAttachment.ShareType](repeating: .decryptedFileURL, count: self.count)
         }
 
-        return try zip(zip(self, types), dedupedSourceFilenames).compactMap {
-            let ((attachment, shareType), sourceFilename) = $0
+        return try zip(self, types).compactMap {
+            let (attachment, shareType) = $0
             return try ShareableAttachment(
                 attachment.attachmentStream,
-                sourceFilename: sourceFilename,
+                sourceFilename: attachment.reference.sourceFilename,
                 shareType: shareType,
             )
         }

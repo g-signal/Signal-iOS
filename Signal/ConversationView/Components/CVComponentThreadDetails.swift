@@ -153,8 +153,11 @@ public class CVComponentThreadDetails: CVComponentBase, CVRootComponent {
             let wallpaperBlurView = componentView.ensureWallpaperBlurView()
             configureWallpaperBlurView(
                 wallpaperBlurView: wallpaperBlurView,
-                maskCornerRadius: 24,
-                componentDelegate: componentDelegate
+                componentDelegate: componentDelegate,
+                bubbleConfig: BubbleConfiguration(
+                    corners: .uniform(24),
+                    stroke: ConversationStyle.bubbleStroke(isDarkThemeEnabled: isDarkThemeEnabled),
+                ),
             )
             innerStackView.addSubviewToFillSuperviewEdges(wallpaperBlurView)
         }
@@ -938,7 +941,6 @@ public class CVComponentThreadDetails: CVComponentBase, CVRootComponent {
             avatarView = nil
 
             wallpaperBlurView?.removeFromSuperview()
-            wallpaperBlurView?.resetContentAndConfiguration()
         }
 
     }

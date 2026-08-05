@@ -195,24 +195,6 @@ final class BackupKeyServiceImpl: BackupKeyService {
             logger.warn("Got 401 deleting Backup: treating like success.")
         }
     }
-
-    // MARK: -
-
-    private struct NetworkAPI {
-        private let networkManager: NetworkManager
-
-        init(networkManager: NetworkManager) {
-            self.networkManager = networkManager
-        }
-
-        func registerBackupKey(
-            backupAuth: BackupServiceAuth,
-        ) async throws {
-            _ = try await networkManager.asyncRequest(
-                .backupSetPublicKeyRequest(backupAuth: backupAuth),
-            )
-        }
-    }
 }
 
 // MARK: -

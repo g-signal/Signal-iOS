@@ -119,7 +119,7 @@ public class SpamChallengeResolver: NSObject, SpamChallengeSchedulingDelegate {
             Logger.info("retrying paused messages: \(pendingInteractionIds)")
 
             pendingInteractionIds
-                .compactMap { TSOutgoingMessage.anyFetchOutgoingMessage(uniqueId: $0, transaction: writeTx) }
+                .compactMap { TSOutgoingMessage.fetchOutgoingMessageViaCache(uniqueId: $0, transaction: writeTx) }
                 .forEach { message in
                     let preparedMessage = PreparedOutgoingMessage.preprepared(
                         forResending: message,

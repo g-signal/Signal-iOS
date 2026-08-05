@@ -1,5 +1,5 @@
 //
-// Copyright 2025 Signal Messenger, LLC
+// Copyright 2026 Signal Messenger, LLC
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
@@ -13,6 +13,7 @@
 // For information on using the generated types, please see the documentation:
 //   https://github.com/apple/swift-protobuf/
 
+//
 // Copyright 2025 Signal Messenger, LLC
 // SPDX-License-Identifier: AGPL-3.0-only
 
@@ -37,46 +38,46 @@ public struct CallQualitySurveyProtos_SubmitCallQualitySurveyRequest: @unchecked
   /// Indicates whether the caller was generally satisfied with the quality of
   /// the call
   public var userSatisfied: Bool {
-    get {return _storage._userSatisfied}
+    get {_storage._userSatisfied}
     set {_uniqueStorage()._userSatisfied = newValue}
   }
 
   /// A list of call quality issues selected by the caller
   public var callQualityIssues: [String] {
-    get {return _storage._callQualityIssues}
+    get {_storage._callQualityIssues}
     set {_uniqueStorage()._callQualityIssues = newValue}
   }
 
   /// A free-form description of any additional issues as written by the caller
   public var additionalIssuesDescription: String {
-    get {return _storage._additionalIssuesDescription ?? String()}
+    get {_storage._additionalIssuesDescription ?? String()}
     set {_uniqueStorage()._additionalIssuesDescription = newValue}
   }
   /// Returns true if `additionalIssuesDescription` has been explicitly set.
-  public var hasAdditionalIssuesDescription: Bool {return _storage._additionalIssuesDescription != nil}
+  public var hasAdditionalIssuesDescription: Bool {_storage._additionalIssuesDescription != nil}
   /// Clears the value of `additionalIssuesDescription`. Subsequent reads from it will return its default value.
   public mutating func clearAdditionalIssuesDescription() {_uniqueStorage()._additionalIssuesDescription = nil}
 
   /// A URL for a set of debug logs associated with the call if the caller chose
   /// to submit debug logs
   public var debugLogURL: String {
-    get {return _storage._debugLogURL ?? String()}
+    get {_storage._debugLogURL ?? String()}
     set {_uniqueStorage()._debugLogURL = newValue}
   }
   /// Returns true if `debugLogURL` has been explicitly set.
-  public var hasDebugLogURL: Bool {return _storage._debugLogURL != nil}
+  public var hasDebugLogURL: Bool {_storage._debugLogURL != nil}
   /// Clears the value of `debugLogURL`. Subsequent reads from it will return its default value.
   public mutating func clearDebugLogURL() {_uniqueStorage()._debugLogURL = nil}
 
   /// The time at which the call started in milliseconds since the epoch
   public var startTimestamp: Int64 {
-    get {return _storage._startTimestamp}
+    get {_storage._startTimestamp}
     set {_uniqueStorage()._startTimestamp = newValue}
   }
 
   /// The time at which the call ended in milliseconds since the epoch
   public var endTimestamp: Int64 {
-    get {return _storage._endTimestamp}
+    get {_storage._endTimestamp}
     set {_uniqueStorage()._endTimestamp = newValue}
   }
 
@@ -85,75 +86,75 @@ public struct CallQualitySurveyProtos_SubmitCallQualitySurveyRequest: @unchecked
   /// initiation time. At the time of writing, expected call types are
   /// "direct_voice", "direct_video", "group", and "call_link".
   public var callType: String {
-    get {return _storage._callType}
+    get {_storage._callType}
     set {_uniqueStorage()._callType = newValue}
   }
 
   /// Indicates whether the call completed without error or if it terminated
   /// abnormally
   public var success: Bool {
-    get {return _storage._success}
+    get {_storage._success}
     set {_uniqueStorage()._success = newValue}
   }
 
   /// A client-defined, but human-readable reason for call termination
   public var callEndReason: String {
-    get {return _storage._callEndReason}
+    get {_storage._callEndReason}
     set {_uniqueStorage()._callEndReason = newValue}
   }
 
   /// The median round-trip time, measured in milliseconds, for STUN/ICE packets
   /// (i.e. connection maintenance and establishment)
   public var connectionRttMedian: Float {
-    get {return _storage._connectionRttMedian ?? 0}
+    get {_storage._connectionRttMedian ?? 0}
     set {_uniqueStorage()._connectionRttMedian = newValue}
   }
   /// Returns true if `connectionRttMedian` has been explicitly set.
-  public var hasConnectionRttMedian: Bool {return _storage._connectionRttMedian != nil}
+  public var hasConnectionRttMedian: Bool {_storage._connectionRttMedian != nil}
   /// Clears the value of `connectionRttMedian`. Subsequent reads from it will return its default value.
   public mutating func clearConnectionRttMedian() {_uniqueStorage()._connectionRttMedian = nil}
 
   /// The median round-trip time, measured in milliseconds, for RTP/RTCP packets
   /// for audio streams
   public var audioRttMedian: Float {
-    get {return _storage._audioRttMedian ?? 0}
+    get {_storage._audioRttMedian ?? 0}
     set {_uniqueStorage()._audioRttMedian = newValue}
   }
   /// Returns true if `audioRttMedian` has been explicitly set.
-  public var hasAudioRttMedian: Bool {return _storage._audioRttMedian != nil}
+  public var hasAudioRttMedian: Bool {_storage._audioRttMedian != nil}
   /// Clears the value of `audioRttMedian`. Subsequent reads from it will return its default value.
   public mutating func clearAudioRttMedian() {_uniqueStorage()._audioRttMedian = nil}
 
   /// The median round-trip time, measured in milliseconds, for RTP/RTCP packets
   /// for video streams
   public var videoRttMedian: Float {
-    get {return _storage._videoRttMedian ?? 0}
+    get {_storage._videoRttMedian ?? 0}
     set {_uniqueStorage()._videoRttMedian = newValue}
   }
   /// Returns true if `videoRttMedian` has been explicitly set.
-  public var hasVideoRttMedian: Bool {return _storage._videoRttMedian != nil}
+  public var hasVideoRttMedian: Bool {_storage._videoRttMedian != nil}
   /// Clears the value of `videoRttMedian`. Subsequent reads from it will return its default value.
   public mutating func clearVideoRttMedian() {_uniqueStorage()._videoRttMedian = nil}
 
   /// The median jitter for audio streams, measured in milliseconds, for the
   /// duration of the call as measured by the client submitting the survey
   public var audioRecvJitterMedian: Float {
-    get {return _storage._audioRecvJitterMedian ?? 0}
+    get {_storage._audioRecvJitterMedian ?? 0}
     set {_uniqueStorage()._audioRecvJitterMedian = newValue}
   }
   /// Returns true if `audioRecvJitterMedian` has been explicitly set.
-  public var hasAudioRecvJitterMedian: Bool {return _storage._audioRecvJitterMedian != nil}
+  public var hasAudioRecvJitterMedian: Bool {_storage._audioRecvJitterMedian != nil}
   /// Clears the value of `audioRecvJitterMedian`. Subsequent reads from it will return its default value.
   public mutating func clearAudioRecvJitterMedian() {_uniqueStorage()._audioRecvJitterMedian = nil}
 
   /// The median jitter for video streams, measured in milliseconds, for the
   /// duration of the call as measured by the client submitting the survey
   public var videoRecvJitterMedian: Float {
-    get {return _storage._videoRecvJitterMedian ?? 0}
+    get {_storage._videoRecvJitterMedian ?? 0}
     set {_uniqueStorage()._videoRecvJitterMedian = newValue}
   }
   /// Returns true if `videoRecvJitterMedian` has been explicitly set.
-  public var hasVideoRecvJitterMedian: Bool {return _storage._videoRecvJitterMedian != nil}
+  public var hasVideoRecvJitterMedian: Bool {_storage._videoRecvJitterMedian != nil}
   /// Clears the value of `videoRecvJitterMedian`. Subsequent reads from it will return its default value.
   public mutating func clearVideoRecvJitterMedian() {_uniqueStorage()._videoRecvJitterMedian = nil}
 
@@ -162,11 +163,11 @@ public struct CallQualitySurveyProtos_SubmitCallQualitySurveyRequest: @unchecked
   /// the peer of the client submitting the survey in a direct call or the SFU in
   /// a group call)
   public var audioSendJitterMedian: Float {
-    get {return _storage._audioSendJitterMedian ?? 0}
+    get {_storage._audioSendJitterMedian ?? 0}
     set {_uniqueStorage()._audioSendJitterMedian = newValue}
   }
   /// Returns true if `audioSendJitterMedian` has been explicitly set.
-  public var hasAudioSendJitterMedian: Bool {return _storage._audioSendJitterMedian != nil}
+  public var hasAudioSendJitterMedian: Bool {_storage._audioSendJitterMedian != nil}
   /// Clears the value of `audioSendJitterMedian`. Subsequent reads from it will return its default value.
   public mutating func clearAudioSendJitterMedian() {_uniqueStorage()._audioSendJitterMedian = nil}
 
@@ -175,33 +176,33 @@ public struct CallQualitySurveyProtos_SubmitCallQualitySurveyRequest: @unchecked
   /// the peer of the client submitting the survey in a direct call or the SFU in
   /// a group call)
   public var videoSendJitterMedian: Float {
-    get {return _storage._videoSendJitterMedian ?? 0}
+    get {_storage._videoSendJitterMedian ?? 0}
     set {_uniqueStorage()._videoSendJitterMedian = newValue}
   }
   /// Returns true if `videoSendJitterMedian` has been explicitly set.
-  public var hasVideoSendJitterMedian: Bool {return _storage._videoSendJitterMedian != nil}
+  public var hasVideoSendJitterMedian: Bool {_storage._videoSendJitterMedian != nil}
   /// Clears the value of `videoSendJitterMedian`. Subsequent reads from it will return its default value.
   public mutating func clearVideoSendJitterMedian() {_uniqueStorage()._videoSendJitterMedian = nil}
 
   /// The fraction of audio packets lost over the duration of the call as
   /// measured by the client submitting the survey
   public var audioRecvPacketLossFraction: Float {
-    get {return _storage._audioRecvPacketLossFraction ?? 0}
+    get {_storage._audioRecvPacketLossFraction ?? 0}
     set {_uniqueStorage()._audioRecvPacketLossFraction = newValue}
   }
   /// Returns true if `audioRecvPacketLossFraction` has been explicitly set.
-  public var hasAudioRecvPacketLossFraction: Bool {return _storage._audioRecvPacketLossFraction != nil}
+  public var hasAudioRecvPacketLossFraction: Bool {_storage._audioRecvPacketLossFraction != nil}
   /// Clears the value of `audioRecvPacketLossFraction`. Subsequent reads from it will return its default value.
   public mutating func clearAudioRecvPacketLossFraction() {_uniqueStorage()._audioRecvPacketLossFraction = nil}
 
   /// The fraction of video packets lost over the duration of the call as
   /// measured by the client submitting the survey
   public var videoRecvPacketLossFraction: Float {
-    get {return _storage._videoRecvPacketLossFraction ?? 0}
+    get {_storage._videoRecvPacketLossFraction ?? 0}
     set {_uniqueStorage()._videoRecvPacketLossFraction = newValue}
   }
   /// Returns true if `videoRecvPacketLossFraction` has been explicitly set.
-  public var hasVideoRecvPacketLossFraction: Bool {return _storage._videoRecvPacketLossFraction != nil}
+  public var hasVideoRecvPacketLossFraction: Bool {_storage._videoRecvPacketLossFraction != nil}
   /// Clears the value of `videoRecvPacketLossFraction`. Subsequent reads from it will return its default value.
   public mutating func clearVideoRecvPacketLossFraction() {_uniqueStorage()._videoRecvPacketLossFraction = nil}
 
@@ -209,11 +210,11 @@ public struct CallQualitySurveyProtos_SubmitCallQualitySurveyRequest: @unchecked
   /// measured by the remote endpoint in the call (either the peer of the client
   /// submitting the survey in a direct call or the SFU in a group call)
   public var audioSendPacketLossFraction: Float {
-    get {return _storage._audioSendPacketLossFraction ?? 0}
+    get {_storage._audioSendPacketLossFraction ?? 0}
     set {_uniqueStorage()._audioSendPacketLossFraction = newValue}
   }
   /// Returns true if `audioSendPacketLossFraction` has been explicitly set.
-  public var hasAudioSendPacketLossFraction: Bool {return _storage._audioSendPacketLossFraction != nil}
+  public var hasAudioSendPacketLossFraction: Bool {_storage._audioSendPacketLossFraction != nil}
   /// Clears the value of `audioSendPacketLossFraction`. Subsequent reads from it will return its default value.
   public mutating func clearAudioSendPacketLossFraction() {_uniqueStorage()._audioSendPacketLossFraction = nil}
 
@@ -221,11 +222,11 @@ public struct CallQualitySurveyProtos_SubmitCallQualitySurveyRequest: @unchecked
   /// measured by the remote endpoint in the call (either the peer of the client
   /// submitting the survey in a direct call or the SFU in a group call)
   public var videoSendPacketLossFraction: Float {
-    get {return _storage._videoSendPacketLossFraction ?? 0}
+    get {_storage._videoSendPacketLossFraction ?? 0}
     set {_uniqueStorage()._videoSendPacketLossFraction = newValue}
   }
   /// Returns true if `videoSendPacketLossFraction` has been explicitly set.
-  public var hasVideoSendPacketLossFraction: Bool {return _storage._videoSendPacketLossFraction != nil}
+  public var hasVideoSendPacketLossFraction: Bool {_storage._videoSendPacketLossFraction != nil}
   /// Clears the value of `videoSendPacketLossFraction`. Subsequent reads from it will return its default value.
   public mutating func clearVideoSendPacketLossFraction() {_uniqueStorage()._videoSendPacketLossFraction = nil}
 
@@ -233,11 +234,11 @@ public struct CallQualitySurveyProtos_SubmitCallQualitySurveyRequest: @unchecked
   /// entity generated (and, critically, explained to the user!) by the calling
   /// library
   public var callTelemetry: Data {
-    get {return _storage._callTelemetry ?? Data()}
+    get {_storage._callTelemetry ?? Data()}
     set {_uniqueStorage()._callTelemetry = newValue}
   }
   /// Returns true if `callTelemetry` has been explicitly set.
-  public var hasCallTelemetry: Bool {return _storage._callTelemetry != nil}
+  public var hasCallTelemetry: Bool {_storage._callTelemetry != nil}
   /// Clears the value of `callTelemetry`. Subsequent reads from it will return its default value.
   public mutating func clearCallTelemetry() {_uniqueStorage()._callTelemetry = nil}
 

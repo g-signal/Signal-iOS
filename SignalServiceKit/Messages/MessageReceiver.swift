@@ -399,13 +399,6 @@ public final class MessageReceiver {
                     return
                 }
 
-                if dataMessage.pollCreate != nil || dataMessage.pollTerminate != nil || dataMessage.pollVote != nil {
-                    guard RemoteConfig.current.pollReceive else {
-                        Logger.warn("Polls not supported on this device")
-                        return
-                    }
-                }
-
                 if dataMessage.pinMessage != nil || dataMessage.unpinMessage != nil {
                     guard BuildFlags.PinnedMessages.receive else {
                         Logger.warn("Pinned messages are not supported on this device")
@@ -475,7 +468,7 @@ public final class MessageReceiver {
                         )
                     }
                 } else if let delete = dataMessage.delete {
-                    let result = TSMessage.tryToRemotelyDeleteMessage(
+                    let result = TSMessage.tryToRemotelyDeleteMessageAsNonAdmin(
                         fromAuthor: decryptedEnvelope.sourceAci,
                         sentAtTimestamp: delete.targetSentTimestamp,
                         threadUniqueId: transcript.threadForDataMessage?.uniqueId,
@@ -494,6 +487,52 @@ public final class MessageReceiver {
                             wasReceivedByUD: request.wasReceivedByUD,
                             serverDeliveryTimestamp: request.serverDeliveryTimestamp,
                             associatedMessageTimestamp: delete.targetSentTimestamp,
+                            associatedMessageAuthor: decryptedEnvelope.sourceAci,
+                            transaction: tx,
+                        )
+                    }
+                } else if let adminDelete = dataMessage.adminDelete {
+                    guard BuildFlags.AdminDelete.receive else {
+                        Logger.warn("Dropping admin delete message because build flag is not enabled")
+                        return
+                    }
+
+                    let adminDeleteManager = DependenciesBridge.shared.adminDeleteManager
+                    let earlyMessageManager = SSKEnvironment.shared.earlyMessageManagerRef
+                    guard let groupThread = transcript.threadForDataMessage as? TSGroupThread else {
+                        owsFailDebug("Could not process admin delete thread from sync transcript.")
+                        return
+                    }
+
+                    guard
+                        let targetAuthorAciBinary = adminDelete.targetAuthorAciBinary,
+                        let targetAuthorAci = try? Aci.parseFrom(serviceIdBinary: targetAuthorAciBinary)
+                    else {
+                        Logger.error("Couldn't process admin delete for invalid aci")
+                        return
+                    }
+                    let result = adminDeleteManager.tryToAdminDeleteMessage(
+                        originalMessageAuthorAci: targetAuthorAci,
+                        deleteAuthorAci: localIdentifiers.aci,
+                        sentAtTimestamp: adminDelete.targetSentTimestamp,
+                        groupThread: groupThread,
+                        threadUniqueId: groupThread.uniqueId,
+                        serverTimestamp: envelope.serverTimestamp,
+                        transaction: tx,
+                    )
+
+                    switch result {
+                    case .success:
+                        break
+                    case .invalidDelete:
+                        Logger.warn("Couldn't process invalid admin delete")
+                    case .deletedMessageMissing:
+                        earlyMessageManager.recordEarlyEnvelope(
+                            envelope,
+                            plainTextData: request.plaintextData,
+                            wasReceivedByUD: request.wasReceivedByUD,
+                            serverDeliveryTimestamp: request.serverDeliveryTimestamp,
+                            associatedMessageTimestamp: adminDelete.targetSentTimestamp,
                             associatedMessageAuthor: decryptedEnvelope.sourceAci,
                             transaction: tx,
                         )
@@ -527,8 +566,8 @@ public final class MessageReceiver {
                         if let targetMessage {
                             SSKEnvironment.shared.databaseStorageRef.touch(interaction: targetMessage, shouldReindex: false, tx: tx)
 
-                            guard let groupThread = targetMessage.thread(tx: tx) as? TSGroupThread else {
-                                throw OWSAssertionError("Message thread is not a group thread")
+                            guard let thread = targetMessage.thread(tx: tx) else {
+                                throw OWSAssertionError("Invalid message thread")
                             }
 
                             guard let pollQuestion = targetMessage.body?.nilIfEmpty else {
@@ -537,7 +576,7 @@ public final class MessageReceiver {
 
                             DependenciesBridge.shared.pollMessageManager.insertInfoMessageForEndPoll(
                                 timestamp: Date().ows_millisecondsSince1970,
-                                groupThread: groupThread,
+                                thread: thread,
                                 targetPollTimestamp: targetMessage.timestamp,
                                 pollQuestion: pollQuestion,
                                 terminateAuthor: localIdentifiers.aci,
@@ -1088,7 +1127,7 @@ public final class MessageReceiver {
         }
 
         if let delete = dataMessage.delete {
-            let result = TSMessage.tryToRemotelyDeleteMessage(
+            let result = TSMessage.tryToRemotelyDeleteMessageAsNonAdmin(
                 fromAuthor: envelope.sourceAci,
                 sentAtTimestamp: delete.targetSentTimestamp,
                 threadUniqueId: thread.uniqueId,
@@ -1107,6 +1146,54 @@ public final class MessageReceiver {
                     wasReceivedByUD: request.wasReceivedByUD,
                     serverDeliveryTimestamp: request.serverDeliveryTimestamp,
                     associatedMessageTimestamp: delete.targetSentTimestamp,
+                    associatedMessageAuthor: envelope.sourceAci,
+                    transaction: tx,
+                )
+            }
+            return nil
+        }
+
+        if let adminDelete = dataMessage.adminDelete {
+            guard BuildFlags.AdminDelete.receive else {
+                Logger.warn("Dropping admin delete message because build flag is not enabled")
+                return nil
+            }
+
+            let adminDeleteManager = DependenciesBridge.shared.adminDeleteManager
+            guard let groupThread = (thread as? TSGroupThread) else {
+                Logger.error("Couldn't process admin delete for non-group thread")
+                return nil
+            }
+
+            guard
+                let targetAuthorAciBinary = adminDelete.targetAuthorAciBinary,
+                let targetAuthorAci = try? Aci.parseFrom(serviceIdBinary: targetAuthorAciBinary)
+            else {
+                Logger.error("Couldn't process admin delete for invalid aci")
+                return nil
+            }
+            let result = adminDeleteManager.tryToAdminDeleteMessage(
+                originalMessageAuthorAci: targetAuthorAci,
+                deleteAuthorAci: envelope.sourceAci,
+                sentAtTimestamp: adminDelete.targetSentTimestamp,
+                groupThread: groupThread,
+                threadUniqueId: thread.uniqueId,
+                serverTimestamp: envelope.serverTimestamp,
+                transaction: tx,
+            )
+
+            switch result {
+            case .success:
+                break
+            case .invalidDelete:
+                Logger.warn("Couldn't process invalid admin delete")
+            case .deletedMessageMissing:
+                SSKEnvironment.shared.earlyMessageManagerRef.recordEarlyEnvelope(
+                    envelope.envelope,
+                    plainTextData: request.plaintextData,
+                    wasReceivedByUD: request.wasReceivedByUD,
+                    serverDeliveryTimestamp: request.serverDeliveryTimestamp,
+                    associatedMessageTimestamp: adminDelete.targetSentTimestamp,
                     associatedMessageAuthor: envelope.sourceAci,
                     transaction: tx,
                 )
@@ -1304,13 +1391,6 @@ public final class MessageReceiver {
             }
         }
 
-        if dataMessage.pollCreate != nil || dataMessage.pollTerminate != nil || dataMessage.pollVote != nil {
-            guard RemoteConfig.current.pollReceive else {
-                Logger.warn("Polls not supported on this device")
-                return nil
-            }
-        }
-
         let validatedPollCreate: ValidatedIncomingPollCreate?
         if let pollCreateProto = dataMessage.pollCreate {
             do {
@@ -1330,11 +1410,6 @@ public final class MessageReceiver {
         }
 
         if let pollTerminate = dataMessage.pollTerminate {
-            guard let groupThread = thread as? TSGroupThread else {
-                Logger.error("Poll terminate sent to thread that is not a group thread")
-                return nil
-            }
-
             do {
                 let targetMessage = try DependenciesBridge.shared.pollMessageManager.processIncomingPollTerminate(
                     pollTerminateProto: pollTerminate,
@@ -1352,7 +1427,7 @@ public final class MessageReceiver {
                     if let question = targetMessage.body {
                         DependenciesBridge.shared.pollMessageManager.insertInfoMessageForEndPoll(
                             timestamp: Date().ows_millisecondsSince1970,
-                            groupThread: groupThread,
+                            thread: thread,
                             targetPollTimestamp: pollTerminate.targetSentTimestamp,
                             pollQuestion: question,
                             terminateAuthor: envelope.sourceAci,
@@ -1491,13 +1566,13 @@ public final class MessageReceiver {
 
         // Inserting the message may have modified the thread on disk, so reload
         // it. For example, we may have marked the thread as visible.
-        let updatedThread = TSThread.anyFetch(uniqueId: thread.uniqueId, transaction: tx) ?? thread
+        let updatedThread = TSThread.fetchViaCache(uniqueId: thread.uniqueId, transaction: tx) ?? thread
 
         do {
             let attachmentManager = DependenciesBridge.shared.attachmentManager
 
             for (idx, proto) in dataMessage.attachments.enumerated() {
-                try attachmentManager.createAttachmentPointer(
+                let attachmentID = try attachmentManager.createAttachmentPointer(
                     from: OwnedAttachmentPointerProto(
                         proto: proto,
                         owner: .messageBodyAttachment(.init(
@@ -1511,13 +1586,14 @@ public final class MessageReceiver {
                     ),
                     tx: tx,
                 )
+                Logger.info("Created body attachment \(attachmentID) (idx \(idx)) for received message \(envelope.timestamp)")
             }
 
             if
                 let quotedReplyAttachmentDataSource = validatedQuotedReply?.thumbnailDataSource,
                 MimeTypeUtil.isSupportedVisualMediaMimeType(quotedReplyAttachmentDataSource.originalAttachmentMimeType)
             {
-                try attachmentManager.createQuotedReplyMessageThumbnail(
+                let attachmentID = try attachmentManager.createQuotedReplyMessageThumbnail(
                     from: quotedReplyAttachmentDataSource,
                     owningMessageAttachmentBuilder: .init(
                         messageRowId: message.sqliteRowId!,
@@ -1527,10 +1603,11 @@ public final class MessageReceiver {
                     ),
                     tx: tx,
                 )
+                Logger.info("Created quoted-reply thumbnail attachment \(attachmentID) for received message \(envelope.timestamp)")
             }
 
             if let linkPreviewImageProto = validatedLinkPreview?.imageProto {
-                try attachmentManager.createAttachmentPointer(
+                let attachmentID = try attachmentManager.createAttachmentPointer(
                     from: OwnedAttachmentPointerProto(
                         proto: linkPreviewImageProto,
                         owner: .messageLinkPreview(.init(
@@ -1542,10 +1619,11 @@ public final class MessageReceiver {
                     ),
                     tx: tx,
                 )
+                Logger.info("Created link preview attachment \(attachmentID) for received message \(envelope.timestamp)")
             }
 
             if let validatedMessageSticker {
-                try attachmentManager.createAttachmentPointer(
+                let attachmentID = try attachmentManager.createAttachmentPointer(
                     from: OwnedAttachmentPointerProto(
                         proto: validatedMessageSticker.proto,
                         owner: .messageSticker(.init(
@@ -1559,10 +1637,11 @@ public final class MessageReceiver {
                     ),
                     tx: tx,
                 )
+                Logger.info("Created sticker attachment \(attachmentID) for received message \(envelope.timestamp)")
             }
 
             if let contactAvatarProto = validatedContactShare?.avatarProto {
-                try attachmentManager.createAttachmentPointer(
+                let attachmentID = try attachmentManager.createAttachmentPointer(
                     from: OwnedAttachmentPointerProto(
                         proto: contactAvatarProto,
                         owner: .messageContactAvatar(.init(
@@ -1574,6 +1653,7 @@ public final class MessageReceiver {
                     ),
                     tx: tx,
                 )
+                Logger.info("Created contact avatar attachment \(attachmentID) for received message \(envelope.timestamp)")
             }
         } catch {
             owsFailDebug("Could not build attachments!")

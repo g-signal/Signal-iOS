@@ -401,7 +401,7 @@ class DeleteAccountConfirmationViewController: OWSTableViewController2 {
         for uniqueId in databaseStorage.read(block: ThreadFinder().fetchUniqueIds(tx:)) {
             let leavePromise = await databaseStorage.awaitableWrite { tx -> Promise<[Promise<Void>]> in
                 guard
-                    let thread = TSThread.anyFetch(uniqueId: uniqueId, transaction: tx),
+                    let thread = TSThread.fetchViaCache(uniqueId: uniqueId, transaction: tx),
                     let groupThread = thread as? TSGroupThread,
                     groupThread.isGroupV2Thread,
                     let groupModel = groupThread.groupModel as? TSGroupModelV2

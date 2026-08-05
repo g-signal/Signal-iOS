@@ -195,7 +195,7 @@ public extension TSGroupThread {
 
             while let groupThreadId = try cursor.next() {
                 guard
-                    let groupThread = TSGroupThread.anyFetchGroupThread(
+                    let groupThread = TSGroupThread.fetchGroupThreadViaCache(
                         uniqueId: groupThreadId,
                         transaction: transaction,
                     )
@@ -232,7 +232,7 @@ public extension TSGroupThread {
 
         while let groupThreadId = try! cursor.next() {
             guard
-                let groupThread = TSGroupThread.anyFetchGroupThread(
+                let groupThread = TSGroupThread.fetchGroupThreadViaCache(
                     uniqueId: groupThreadId,
                     transaction: transaction,
                 )

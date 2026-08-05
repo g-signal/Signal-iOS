@@ -424,7 +424,7 @@ extension ObservedDatabaseChanges {
         let tableNames: Set<String> = _tableNames
         let tableRowIds: [String: Set<Int64>] = _tableRowIds
         let didUpdateInteractions: Bool = tableNames.contains(TSInteraction.table.tableName)
-        let didUpdateThreads: Bool = tableNames.contains(TSThread.table.tableName)
+        let didUpdateThreads: Bool = tableNames.contains(TSThread.databaseTableName)
         let lastError = _lastError
 
         return DatabaseChangesSnapshot(
@@ -487,7 +487,7 @@ extension ObservedDatabaseChanges {
                 rowIds: threads.rowIds,
                 uniqueIds: threads.uniqueIds,
                 rowIdToUniqueIdMap: threads.rowIdToUniqueIdMap,
-                tableName: "\(ThreadRecord.databaseTableName)",
+                tableName: "\(TSThread.databaseTableName)",
                 uniqueIdColumnName: "\(threadColumn: .uniqueId)",
             ),
         )

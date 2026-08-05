@@ -261,7 +261,7 @@ public class MessageSenderJobQueue {
         }
 
         TSOutgoingMessage
-            .anyFetch(
+            .fetchViaCache(
                 uniqueId: uniqueId,
                 transaction: transaction,
             )

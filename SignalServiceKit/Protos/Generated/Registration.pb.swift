@@ -63,11 +63,11 @@ struct RegistrationProtos_RegistrationProvisionMessage: Sendable {
   var backupTimestampMs: UInt64 = 0
 
   var tier: RegistrationProtos_RegistrationProvisionMessage.Tier {
-    get {return _tier ?? .free}
+    get {_tier ?? .free}
     set {_tier = newValue}
   }
   /// Returns true if `tier` has been explicitly set.
-  var hasTier: Bool {return self._tier != nil}
+  var hasTier: Bool {self._tier != nil}
   /// Clears the value of `tier`. Subsequent reads from it will return its default value.
   mutating func clearTier() {self._tier = nil}
 

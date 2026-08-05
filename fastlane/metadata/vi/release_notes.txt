@@ -1,3 +1,1 @@
-• Giúp dễ dàng tham khảo thông tin quan trọng với tính năng ghim tin nhắn. Những câu hỏi thường gặp nhất, đặt chỗ bữa tối và lịch trình kỳ nghỉ là các thông tin cần "ghim" trong đầu. Nay bạn cũng có thể ghim tin nhắn trong cuộc trò chuyện.
-
-
+• Ra mắt tính năng Sao lưu bảo mật Signal! Giờ đây, bạn có thể chọn kích hoạt sao lưu mã hóa đầu cuối tự động để không bao giờ mất tin nhắn khi sử dụng điện thoại mới hoặc cài đặt lại Signal. Bạn có thể sao lưu tất cả tin nhắn của mình và tập tin đa phương tiện của 45 ngày gần nhất miễn phí, hoặc bạn có thể trả một khoản phí nhỏ mỗi tháng để nhận 100 GB dung lượng lưu trữ để sao lưu mọi tập tin đính kèm. Nhấn vào sao lưu trong cài đặt Signal để bắt đầu. Cảm ơn tất cả những người dùng đã giúp chúng tôi thử nghiệm tính năng này trong giai đoạn beta!

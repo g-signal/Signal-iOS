@@ -117,7 +117,7 @@ public final class OutgoingDeleteMessage: TransientOutgoingMessage {
         // unique id. We want to mirror our sending state onto the original
         // message, so it shows up within the conversation.
         if let messageUniqueId {
-            let deletedMessage = TSOutgoingMessage.anyFetchOutgoingMessage(uniqueId: messageUniqueId, transaction: transaction)
+            let deletedMessage = TSOutgoingMessage.fetchOutgoingMessageViaCache(uniqueId: messageUniqueId, transaction: transaction)
             deletedMessage?.updateWithRecipientAddressStates(self.recipientAddressStates, tx: transaction)
         }
     }

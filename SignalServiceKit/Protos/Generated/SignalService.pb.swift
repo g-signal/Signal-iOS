@@ -39,157 +39,157 @@ struct SignalServiceProtos_Envelope: Sendable {
   // methods supported on all messages.
 
   var type: SignalServiceProtos_Envelope.TypeEnum {
-    get {return _type ?? .unknown}
+    get {_type ?? .unknown}
     set {_type = newValue}
   }
   /// Returns true if `type` has been explicitly set.
-  var hasType: Bool {return self._type != nil}
+  var hasType: Bool {self._type != nil}
   /// Clears the value of `type`. Subsequent reads from it will return its default value.
   mutating func clearType() {self._type = nil}
 
   var sourceDevice: UInt32 {
-    get {return _sourceDevice ?? 0}
+    get {_sourceDevice ?? 0}
     set {_sourceDevice = newValue}
   }
   /// Returns true if `sourceDevice` has been explicitly set.
-  var hasSourceDevice: Bool {return self._sourceDevice != nil}
+  var hasSourceDevice: Bool {self._sourceDevice != nil}
   /// Clears the value of `sourceDevice`. Subsequent reads from it will return its default value.
   mutating func clearSourceDevice() {self._sourceDevice = nil}
 
   var destinationServiceID: String {
-    get {return _destinationServiceID ?? String()}
+    get {_destinationServiceID ?? String()}
     set {_destinationServiceID = newValue}
   }
   /// Returns true if `destinationServiceID` has been explicitly set.
-  var hasDestinationServiceID: Bool {return self._destinationServiceID != nil}
+  var hasDestinationServiceID: Bool {self._destinationServiceID != nil}
   /// Clears the value of `destinationServiceID`. Subsequent reads from it will return its default value.
   mutating func clearDestinationServiceID() {self._destinationServiceID = nil}
 
   /// @required
   var timestamp: UInt64 {
-    get {return _timestamp ?? 0}
+    get {_timestamp ?? 0}
     set {_timestamp = newValue}
   }
   /// Returns true if `timestamp` has been explicitly set.
-  var hasTimestamp: Bool {return self._timestamp != nil}
+  var hasTimestamp: Bool {self._timestamp != nil}
   /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
   mutating func clearTimestamp() {self._timestamp = nil}
 
   /// Contains an encrypted Content
   var content: Data {
-    get {return _content ?? Data()}
+    get {_content ?? Data()}
     set {_content = newValue}
   }
   /// Returns true if `content` has been explicitly set.
-  var hasContent: Bool {return self._content != nil}
+  var hasContent: Bool {self._content != nil}
   /// Clears the value of `content`. Subsequent reads from it will return its default value.
   mutating func clearContent() {self._content = nil}
 
   /// We may eventually want to make this required.
   var serverGuid: String {
-    get {return _serverGuid ?? String()}
+    get {_serverGuid ?? String()}
     set {_serverGuid = newValue}
   }
   /// Returns true if `serverGuid` has been explicitly set.
-  var hasServerGuid: Bool {return self._serverGuid != nil}
+  var hasServerGuid: Bool {self._serverGuid != nil}
   /// Clears the value of `serverGuid`. Subsequent reads from it will return its default value.
   mutating func clearServerGuid() {self._serverGuid = nil}
 
   /// We may eventually want to make this required.
   var serverTimestamp: UInt64 {
-    get {return _serverTimestamp ?? 0}
+    get {_serverTimestamp ?? 0}
     set {_serverTimestamp = newValue}
   }
   /// Returns true if `serverTimestamp` has been explicitly set.
-  var hasServerTimestamp: Bool {return self._serverTimestamp != nil}
+  var hasServerTimestamp: Bool {self._serverTimestamp != nil}
   /// Clears the value of `serverTimestamp`. Subsequent reads from it will return its default value.
   mutating func clearServerTimestamp() {self._serverTimestamp = nil}
 
   var sourceServiceID: String {
-    get {return _sourceServiceID ?? String()}
+    get {_sourceServiceID ?? String()}
     set {_sourceServiceID = newValue}
   }
   /// Returns true if `sourceServiceID` has been explicitly set.
-  var hasSourceServiceID: Bool {return self._sourceServiceID != nil}
+  var hasSourceServiceID: Bool {self._sourceServiceID != nil}
   /// Clears the value of `sourceServiceID`. Subsequent reads from it will return its default value.
   mutating func clearSourceServiceID() {self._sourceServiceID = nil}
 
   /// indicates that the content is considered timely by the sender; defaults to true so senders have to opt-out to say something isn't time critical
   var urgent: Bool {
-    get {return _urgent ?? true}
+    get {_urgent ?? true}
     set {_urgent = newValue}
   }
   /// Returns true if `urgent` has been explicitly set.
-  var hasUrgent: Bool {return self._urgent != nil}
+  var hasUrgent: Bool {self._urgent != nil}
   /// Clears the value of `urgent`. Subsequent reads from it will return its default value.
   mutating func clearUrgent() {self._urgent = nil}
 
   /// On change-number sync messages delivered to linked devices, this will
   /// contain the account's new PNI.
   var updatedPni: String {
-    get {return _updatedPni ?? String()}
+    get {_updatedPni ?? String()}
     set {_updatedPni = newValue}
   }
   /// Returns true if `updatedPni` has been explicitly set.
-  var hasUpdatedPni: Bool {return self._updatedPni != nil}
+  var hasUpdatedPni: Bool {self._updatedPni != nil}
   /// Clears the value of `updatedPni`. Subsequent reads from it will return its default value.
   mutating func clearUpdatedPni() {self._updatedPni = nil}
 
   var story: Bool {
-    get {return _story ?? false}
+    get {_story ?? false}
     set {_story = newValue}
   }
   /// Returns true if `story` has been explicitly set.
-  var hasStory: Bool {return self._story != nil}
+  var hasStory: Bool {self._story != nil}
   /// Clears the value of `story`. Subsequent reads from it will return its default value.
   mutating func clearStory() {self._story = nil}
 
   var spamReportingToken: Data {
-    get {return _spamReportingToken ?? Data()}
+    get {_spamReportingToken ?? Data()}
     set {_spamReportingToken = newValue}
   }
   /// Returns true if `spamReportingToken` has been explicitly set.
-  var hasSpamReportingToken: Bool {return self._spamReportingToken != nil}
+  var hasSpamReportingToken: Bool {self._spamReportingToken != nil}
   /// Clears the value of `spamReportingToken`. Subsequent reads from it will return its default value.
   mutating func clearSpamReportingToken() {self._spamReportingToken = nil}
 
   /// service ID binary (i.e. 16 byte UUID for ACI, 1 byte prefix + 16 byte UUID for PNI)
   var sourceServiceIDBinary: Data {
-    get {return _sourceServiceIDBinary ?? Data()}
+    get {_sourceServiceIDBinary ?? Data()}
     set {_sourceServiceIDBinary = newValue}
   }
   /// Returns true if `sourceServiceIDBinary` has been explicitly set.
-  var hasSourceServiceIDBinary: Bool {return self._sourceServiceIDBinary != nil}
+  var hasSourceServiceIDBinary: Bool {self._sourceServiceIDBinary != nil}
   /// Clears the value of `sourceServiceIDBinary`. Subsequent reads from it will return its default value.
   mutating func clearSourceServiceIDBinary() {self._sourceServiceIDBinary = nil}
 
   /// service ID binary (i.e. 16 byte UUID for ACI, 1 byte prefix + 16 byte UUID for PNI)
   var destinationServiceIDBinary: Data {
-    get {return _destinationServiceIDBinary ?? Data()}
+    get {_destinationServiceIDBinary ?? Data()}
     set {_destinationServiceIDBinary = newValue}
   }
   /// Returns true if `destinationServiceIDBinary` has been explicitly set.
-  var hasDestinationServiceIDBinary: Bool {return self._destinationServiceIDBinary != nil}
+  var hasDestinationServiceIDBinary: Bool {self._destinationServiceIDBinary != nil}
   /// Clears the value of `destinationServiceIDBinary`. Subsequent reads from it will return its default value.
   mutating func clearDestinationServiceIDBinary() {self._destinationServiceIDBinary = nil}
 
   /// 16-byte UUID
   var serverGuidBinary: Data {
-    get {return _serverGuidBinary ?? Data()}
+    get {_serverGuidBinary ?? Data()}
     set {_serverGuidBinary = newValue}
   }
   /// Returns true if `serverGuidBinary` has been explicitly set.
-  var hasServerGuidBinary: Bool {return self._serverGuidBinary != nil}
+  var hasServerGuidBinary: Bool {self._serverGuidBinary != nil}
   /// Clears the value of `serverGuidBinary`. Subsequent reads from it will return its default value.
   mutating func clearServerGuidBinary() {self._serverGuidBinary = nil}
 
   /// 16-byte UUID
   var updatedPniBinary: Data {
-    get {return _updatedPniBinary ?? Data()}
+    get {_updatedPniBinary ?? Data()}
     set {_updatedPniBinary = newValue}
   }
   /// Returns true if `updatedPniBinary` has been explicitly set.
-  var hasUpdatedPniBinary: Bool {return self._updatedPniBinary != nil}
+  var hasUpdatedPniBinary: Bool {self._updatedPniBinary != nil}
   /// Clears the value of `updatedPniBinary`. Subsequent reads from it will return its default value.
   mutating func clearUpdatedPniBinary() {self._updatedPniBinary = nil}
 
@@ -236,29 +236,29 @@ struct SignalServiceProtos_TypingMessage: Sendable {
 
   /// @required
   var timestamp: UInt64 {
-    get {return _timestamp ?? 0}
+    get {_timestamp ?? 0}
     set {_timestamp = newValue}
   }
   /// Returns true if `timestamp` has been explicitly set.
-  var hasTimestamp: Bool {return self._timestamp != nil}
+  var hasTimestamp: Bool {self._timestamp != nil}
   /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
   mutating func clearTimestamp() {self._timestamp = nil}
 
   var action: SignalServiceProtos_TypingMessage.Action {
-    get {return _action ?? .started}
+    get {_action ?? .started}
     set {_action = newValue}
   }
   /// Returns true if `action` has been explicitly set.
-  var hasAction: Bool {return self._action != nil}
+  var hasAction: Bool {self._action != nil}
   /// Clears the value of `action`. Subsequent reads from it will return its default value.
   mutating func clearAction() {self._action = nil}
 
   var groupID: Data {
-    get {return _groupID ?? Data()}
+    get {_groupID ?? Data()}
     set {_groupID = newValue}
   }
   /// Returns true if `groupID` has been explicitly set.
-  var hasGroupID: Bool {return self._groupID != nil}
+  var hasGroupID: Bool {self._groupID != nil}
   /// Clears the value of `groupID`. Subsequent reads from it will return its default value.
   mutating func clearGroupID() {self._groupID = nil}
 
@@ -287,54 +287,54 @@ struct SignalServiceProtos_StoryMessage: @unchecked Sendable {
   // methods supported on all messages.
 
   var profileKey: Data {
-    get {return _storage._profileKey ?? Data()}
+    get {_storage._profileKey ?? Data()}
     set {_uniqueStorage()._profileKey = newValue}
   }
   /// Returns true if `profileKey` has been explicitly set.
-  var hasProfileKey: Bool {return _storage._profileKey != nil}
+  var hasProfileKey: Bool {_storage._profileKey != nil}
   /// Clears the value of `profileKey`. Subsequent reads from it will return its default value.
   mutating func clearProfileKey() {_uniqueStorage()._profileKey = nil}
 
   var group: SignalServiceProtos_GroupContextV2 {
-    get {return _storage._group ?? SignalServiceProtos_GroupContextV2()}
+    get {_storage._group ?? SignalServiceProtos_GroupContextV2()}
     set {_uniqueStorage()._group = newValue}
   }
   /// Returns true if `group` has been explicitly set.
-  var hasGroup: Bool {return _storage._group != nil}
+  var hasGroup: Bool {_storage._group != nil}
   /// Clears the value of `group`. Subsequent reads from it will return its default value.
   mutating func clearGroup() {_uniqueStorage()._group = nil}
 
   /// oneof attachment {
   var fileAttachment: SignalServiceProtos_AttachmentPointer {
-    get {return _storage._fileAttachment ?? SignalServiceProtos_AttachmentPointer()}
+    get {_storage._fileAttachment ?? SignalServiceProtos_AttachmentPointer()}
     set {_uniqueStorage()._fileAttachment = newValue}
   }
   /// Returns true if `fileAttachment` has been explicitly set.
-  var hasFileAttachment: Bool {return _storage._fileAttachment != nil}
+  var hasFileAttachment: Bool {_storage._fileAttachment != nil}
   /// Clears the value of `fileAttachment`. Subsequent reads from it will return its default value.
   mutating func clearFileAttachment() {_uniqueStorage()._fileAttachment = nil}
 
   var textAttachment: SignalServiceProtos_TextAttachment {
-    get {return _storage._textAttachment ?? SignalServiceProtos_TextAttachment()}
+    get {_storage._textAttachment ?? SignalServiceProtos_TextAttachment()}
     set {_uniqueStorage()._textAttachment = newValue}
   }
   /// Returns true if `textAttachment` has been explicitly set.
-  var hasTextAttachment: Bool {return _storage._textAttachment != nil}
+  var hasTextAttachment: Bool {_storage._textAttachment != nil}
   /// Clears the value of `textAttachment`. Subsequent reads from it will return its default value.
   mutating func clearTextAttachment() {_uniqueStorage()._textAttachment = nil}
 
   /// }
   var allowsReplies: Bool {
-    get {return _storage._allowsReplies ?? false}
+    get {_storage._allowsReplies ?? false}
     set {_uniqueStorage()._allowsReplies = newValue}
   }
   /// Returns true if `allowsReplies` has been explicitly set.
-  var hasAllowsReplies: Bool {return _storage._allowsReplies != nil}
+  var hasAllowsReplies: Bool {_storage._allowsReplies != nil}
   /// Clears the value of `allowsReplies`. Subsequent reads from it will return its default value.
   mutating func clearAllowsReplies() {_uniqueStorage()._allowsReplies = nil}
 
   var bodyRanges: [SignalServiceProtos_BodyRange] {
-    get {return _storage._bodyRanges}
+    get {_storage._bodyRanges}
     set {_uniqueStorage()._bodyRanges = newValue}
   }
 
@@ -352,47 +352,47 @@ struct SignalServiceProtos_Preview: @unchecked Sendable {
 
   /// @required
   var url: String {
-    get {return _storage._url ?? String()}
+    get {_storage._url ?? String()}
     set {_uniqueStorage()._url = newValue}
   }
   /// Returns true if `url` has been explicitly set.
-  var hasURL: Bool {return _storage._url != nil}
+  var hasURL: Bool {_storage._url != nil}
   /// Clears the value of `url`. Subsequent reads from it will return its default value.
   mutating func clearURL() {_uniqueStorage()._url = nil}
 
   var title: String {
-    get {return _storage._title ?? String()}
+    get {_storage._title ?? String()}
     set {_uniqueStorage()._title = newValue}
   }
   /// Returns true if `title` has been explicitly set.
-  var hasTitle: Bool {return _storage._title != nil}
+  var hasTitle: Bool {_storage._title != nil}
   /// Clears the value of `title`. Subsequent reads from it will return its default value.
   mutating func clearTitle() {_uniqueStorage()._title = nil}
 
   var image: SignalServiceProtos_AttachmentPointer {
-    get {return _storage._image ?? SignalServiceProtos_AttachmentPointer()}
+    get {_storage._image ?? SignalServiceProtos_AttachmentPointer()}
     set {_uniqueStorage()._image = newValue}
   }
   /// Returns true if `image` has been explicitly set.
-  var hasImage: Bool {return _storage._image != nil}
+  var hasImage: Bool {_storage._image != nil}
   /// Clears the value of `image`. Subsequent reads from it will return its default value.
   mutating func clearImage() {_uniqueStorage()._image = nil}
 
   var previewDescription: String {
-    get {return _storage._previewDescription ?? String()}
+    get {_storage._previewDescription ?? String()}
     set {_uniqueStorage()._previewDescription = newValue}
   }
   /// Returns true if `previewDescription` has been explicitly set.
-  var hasPreviewDescription: Bool {return _storage._previewDescription != nil}
+  var hasPreviewDescription: Bool {_storage._previewDescription != nil}
   /// Clears the value of `previewDescription`. Subsequent reads from it will return its default value.
   mutating func clearPreviewDescription() {_uniqueStorage()._previewDescription = nil}
 
   var date: UInt64 {
-    get {return _storage._date ?? 0}
+    get {_storage._date ?? 0}
     set {_uniqueStorage()._date = newValue}
   }
   /// Returns true if `date` has been explicitly set.
-  var hasDate: Bool {return _storage._date != nil}
+  var hasDate: Bool {_storage._date != nil}
   /// Clears the value of `date`. Subsequent reads from it will return its default value.
   mutating func clearDate() {_uniqueStorage()._date = nil}
 
@@ -409,68 +409,68 @@ struct SignalServiceProtos_TextAttachment: Sendable {
   // methods supported on all messages.
 
   var text: String {
-    get {return _text ?? String()}
+    get {_text ?? String()}
     set {_text = newValue}
   }
   /// Returns true if `text` has been explicitly set.
-  var hasText: Bool {return self._text != nil}
+  var hasText: Bool {self._text != nil}
   /// Clears the value of `text`. Subsequent reads from it will return its default value.
   mutating func clearText() {self._text = nil}
 
   var textStyle: SignalServiceProtos_TextAttachment.Style {
-    get {return _textStyle ?? .default}
+    get {_textStyle ?? .default}
     set {_textStyle = newValue}
   }
   /// Returns true if `textStyle` has been explicitly set.
-  var hasTextStyle: Bool {return self._textStyle != nil}
+  var hasTextStyle: Bool {self._textStyle != nil}
   /// Clears the value of `textStyle`. Subsequent reads from it will return its default value.
   mutating func clearTextStyle() {self._textStyle = nil}
 
   /// integer representation of hex color
   var textForegroundColor: UInt32 {
-    get {return _textForegroundColor ?? 0}
+    get {_textForegroundColor ?? 0}
     set {_textForegroundColor = newValue}
   }
   /// Returns true if `textForegroundColor` has been explicitly set.
-  var hasTextForegroundColor: Bool {return self._textForegroundColor != nil}
+  var hasTextForegroundColor: Bool {self._textForegroundColor != nil}
   /// Clears the value of `textForegroundColor`. Subsequent reads from it will return its default value.
   mutating func clearTextForegroundColor() {self._textForegroundColor = nil}
 
   var textBackgroundColor: UInt32 {
-    get {return _textBackgroundColor ?? 0}
+    get {_textBackgroundColor ?? 0}
     set {_textBackgroundColor = newValue}
   }
   /// Returns true if `textBackgroundColor` has been explicitly set.
-  var hasTextBackgroundColor: Bool {return self._textBackgroundColor != nil}
+  var hasTextBackgroundColor: Bool {self._textBackgroundColor != nil}
   /// Clears the value of `textBackgroundColor`. Subsequent reads from it will return its default value.
   mutating func clearTextBackgroundColor() {self._textBackgroundColor = nil}
 
   var preview: SignalServiceProtos_Preview {
-    get {return _preview ?? SignalServiceProtos_Preview()}
+    get {_preview ?? SignalServiceProtos_Preview()}
     set {_preview = newValue}
   }
   /// Returns true if `preview` has been explicitly set.
-  var hasPreview: Bool {return self._preview != nil}
+  var hasPreview: Bool {self._preview != nil}
   /// Clears the value of `preview`. Subsequent reads from it will return its default value.
   mutating func clearPreview() {self._preview = nil}
 
   /// oneof background {
   var gradient: SignalServiceProtos_TextAttachment.Gradient {
-    get {return _gradient ?? SignalServiceProtos_TextAttachment.Gradient()}
+    get {_gradient ?? SignalServiceProtos_TextAttachment.Gradient()}
     set {_gradient = newValue}
   }
   /// Returns true if `gradient` has been explicitly set.
-  var hasGradient: Bool {return self._gradient != nil}
+  var hasGradient: Bool {self._gradient != nil}
   /// Clears the value of `gradient`. Subsequent reads from it will return its default value.
   mutating func clearGradient() {self._gradient = nil}
 
   /// }
   var color: UInt32 {
-    get {return _color ?? 0}
+    get {_color ?? 0}
     set {_color = newValue}
   }
   /// Returns true if `color` has been explicitly set.
-  var hasColor: Bool {return self._color != nil}
+  var hasColor: Bool {self._color != nil}
   /// Clears the value of `color`. Subsequent reads from it will return its default value.
   mutating func clearColor() {self._color = nil}
 
@@ -497,31 +497,31 @@ struct SignalServiceProtos_TextAttachment: Sendable {
 
     /// deprecated: this field will be removed in a future release.
     var startColor: UInt32 {
-      get {return _startColor ?? 0}
+      get {_startColor ?? 0}
       set {_startColor = newValue}
     }
     /// Returns true if `startColor` has been explicitly set.
-    var hasStartColor: Bool {return self._startColor != nil}
+    var hasStartColor: Bool {self._startColor != nil}
     /// Clears the value of `startColor`. Subsequent reads from it will return its default value.
     mutating func clearStartColor() {self._startColor = nil}
 
     /// deprecated: this field will be removed in a future release.
     var endColor: UInt32 {
-      get {return _endColor ?? 0}
+      get {_endColor ?? 0}
       set {_endColor = newValue}
     }
     /// Returns true if `endColor` has been explicitly set.
-    var hasEndColor: Bool {return self._endColor != nil}
+    var hasEndColor: Bool {self._endColor != nil}
     /// Clears the value of `endColor`. Subsequent reads from it will return its default value.
     mutating func clearEndColor() {self._endColor = nil}
 
     /// degrees
     var angle: UInt32 {
-      get {return _angle ?? 0}
+      get {_angle ?? 0}
       set {_angle = newValue}
     }
     /// Returns true if `angle` has been explicitly set.
-    var hasAngle: Bool {return self._angle != nil}
+    var hasAngle: Bool {self._angle != nil}
     /// Clears the value of `angle`. Subsequent reads from it will return its default value.
     mutating func clearAngle() {self._angle = nil}
 
@@ -556,103 +556,103 @@ struct SignalServiceProtos_Content: @unchecked Sendable {
   // methods supported on all messages.
 
   var dataMessage: SignalServiceProtos_DataMessage {
-    get {return _storage._dataMessage ?? SignalServiceProtos_DataMessage()}
+    get {_storage._dataMessage ?? SignalServiceProtos_DataMessage()}
     set {_uniqueStorage()._dataMessage = newValue}
   }
   /// Returns true if `dataMessage` has been explicitly set.
-  var hasDataMessage: Bool {return _storage._dataMessage != nil}
+  var hasDataMessage: Bool {_storage._dataMessage != nil}
   /// Clears the value of `dataMessage`. Subsequent reads from it will return its default value.
   mutating func clearDataMessage() {_uniqueStorage()._dataMessage = nil}
 
   var syncMessage: SignalServiceProtos_SyncMessage {
-    get {return _storage._syncMessage ?? SignalServiceProtos_SyncMessage()}
+    get {_storage._syncMessage ?? SignalServiceProtos_SyncMessage()}
     set {_uniqueStorage()._syncMessage = newValue}
   }
   /// Returns true if `syncMessage` has been explicitly set.
-  var hasSyncMessage: Bool {return _storage._syncMessage != nil}
+  var hasSyncMessage: Bool {_storage._syncMessage != nil}
   /// Clears the value of `syncMessage`. Subsequent reads from it will return its default value.
   mutating func clearSyncMessage() {_uniqueStorage()._syncMessage = nil}
 
   var callMessage: SignalServiceProtos_CallMessage {
-    get {return _storage._callMessage ?? SignalServiceProtos_CallMessage()}
+    get {_storage._callMessage ?? SignalServiceProtos_CallMessage()}
     set {_uniqueStorage()._callMessage = newValue}
   }
   /// Returns true if `callMessage` has been explicitly set.
-  var hasCallMessage: Bool {return _storage._callMessage != nil}
+  var hasCallMessage: Bool {_storage._callMessage != nil}
   /// Clears the value of `callMessage`. Subsequent reads from it will return its default value.
   mutating func clearCallMessage() {_uniqueStorage()._callMessage = nil}
 
   var nullMessage: SignalServiceProtos_NullMessage {
-    get {return _storage._nullMessage ?? SignalServiceProtos_NullMessage()}
+    get {_storage._nullMessage ?? SignalServiceProtos_NullMessage()}
     set {_uniqueStorage()._nullMessage = newValue}
   }
   /// Returns true if `nullMessage` has been explicitly set.
-  var hasNullMessage: Bool {return _storage._nullMessage != nil}
+  var hasNullMessage: Bool {_storage._nullMessage != nil}
   /// Clears the value of `nullMessage`. Subsequent reads from it will return its default value.
   mutating func clearNullMessage() {_uniqueStorage()._nullMessage = nil}
 
   var receiptMessage: SignalServiceProtos_ReceiptMessage {
-    get {return _storage._receiptMessage ?? SignalServiceProtos_ReceiptMessage()}
+    get {_storage._receiptMessage ?? SignalServiceProtos_ReceiptMessage()}
     set {_uniqueStorage()._receiptMessage = newValue}
   }
   /// Returns true if `receiptMessage` has been explicitly set.
-  var hasReceiptMessage: Bool {return _storage._receiptMessage != nil}
+  var hasReceiptMessage: Bool {_storage._receiptMessage != nil}
   /// Clears the value of `receiptMessage`. Subsequent reads from it will return its default value.
   mutating func clearReceiptMessage() {_uniqueStorage()._receiptMessage = nil}
 
   var typingMessage: SignalServiceProtos_TypingMessage {
-    get {return _storage._typingMessage ?? SignalServiceProtos_TypingMessage()}
+    get {_storage._typingMessage ?? SignalServiceProtos_TypingMessage()}
     set {_uniqueStorage()._typingMessage = newValue}
   }
   /// Returns true if `typingMessage` has been explicitly set.
-  var hasTypingMessage: Bool {return _storage._typingMessage != nil}
+  var hasTypingMessage: Bool {_storage._typingMessage != nil}
   /// Clears the value of `typingMessage`. Subsequent reads from it will return its default value.
   mutating func clearTypingMessage() {_uniqueStorage()._typingMessage = nil}
 
   /// Serialized SKDM
   var senderKeyDistributionMessage: Data {
-    get {return _storage._senderKeyDistributionMessage ?? Data()}
+    get {_storage._senderKeyDistributionMessage ?? Data()}
     set {_uniqueStorage()._senderKeyDistributionMessage = newValue}
   }
   /// Returns true if `senderKeyDistributionMessage` has been explicitly set.
-  var hasSenderKeyDistributionMessage: Bool {return _storage._senderKeyDistributionMessage != nil}
+  var hasSenderKeyDistributionMessage: Bool {_storage._senderKeyDistributionMessage != nil}
   /// Clears the value of `senderKeyDistributionMessage`. Subsequent reads from it will return its default value.
   mutating func clearSenderKeyDistributionMessage() {_uniqueStorage()._senderKeyDistributionMessage = nil}
 
   /// Serialized decryption error
   var decryptionErrorMessage: Data {
-    get {return _storage._decryptionErrorMessage ?? Data()}
+    get {_storage._decryptionErrorMessage ?? Data()}
     set {_uniqueStorage()._decryptionErrorMessage = newValue}
   }
   /// Returns true if `decryptionErrorMessage` has been explicitly set.
-  var hasDecryptionErrorMessage: Bool {return _storage._decryptionErrorMessage != nil}
+  var hasDecryptionErrorMessage: Bool {_storage._decryptionErrorMessage != nil}
   /// Clears the value of `decryptionErrorMessage`. Subsequent reads from it will return its default value.
   mutating func clearDecryptionErrorMessage() {_uniqueStorage()._decryptionErrorMessage = nil}
 
   var storyMessage: SignalServiceProtos_StoryMessage {
-    get {return _storage._storyMessage ?? SignalServiceProtos_StoryMessage()}
+    get {_storage._storyMessage ?? SignalServiceProtos_StoryMessage()}
     set {_uniqueStorage()._storyMessage = newValue}
   }
   /// Returns true if `storyMessage` has been explicitly set.
-  var hasStoryMessage: Bool {return _storage._storyMessage != nil}
+  var hasStoryMessage: Bool {_storage._storyMessage != nil}
   /// Clears the value of `storyMessage`. Subsequent reads from it will return its default value.
   mutating func clearStoryMessage() {_uniqueStorage()._storyMessage = nil}
 
   var pniSignatureMessage: SignalServiceProtos_PniSignatureMessage {
-    get {return _storage._pniSignatureMessage ?? SignalServiceProtos_PniSignatureMessage()}
+    get {_storage._pniSignatureMessage ?? SignalServiceProtos_PniSignatureMessage()}
     set {_uniqueStorage()._pniSignatureMessage = newValue}
   }
   /// Returns true if `pniSignatureMessage` has been explicitly set.
-  var hasPniSignatureMessage: Bool {return _storage._pniSignatureMessage != nil}
+  var hasPniSignatureMessage: Bool {_storage._pniSignatureMessage != nil}
   /// Clears the value of `pniSignatureMessage`. Subsequent reads from it will return its default value.
   mutating func clearPniSignatureMessage() {_uniqueStorage()._pniSignatureMessage = nil}
 
   var editMessage: SignalServiceProtos_EditMessage {
-    get {return _storage._editMessage ?? SignalServiceProtos_EditMessage()}
+    get {_storage._editMessage ?? SignalServiceProtos_EditMessage()}
     set {_uniqueStorage()._editMessage = newValue}
   }
   /// Returns true if `editMessage` has been explicitly set.
-  var hasEditMessage: Bool {return _storage._editMessage != nil}
+  var hasEditMessage: Bool {_storage._editMessage != nil}
   /// Clears the value of `editMessage`. Subsequent reads from it will return its default value.
   mutating func clearEditMessage() {_uniqueStorage()._editMessage = nil}
 
@@ -669,67 +669,67 @@ struct SignalServiceProtos_CallMessage: Sendable {
   // methods supported on all messages.
 
   var offer: SignalServiceProtos_CallMessage.Offer {
-    get {return _offer ?? SignalServiceProtos_CallMessage.Offer()}
+    get {_offer ?? SignalServiceProtos_CallMessage.Offer()}
     set {_offer = newValue}
   }
   /// Returns true if `offer` has been explicitly set.
-  var hasOffer: Bool {return self._offer != nil}
+  var hasOffer: Bool {self._offer != nil}
   /// Clears the value of `offer`. Subsequent reads from it will return its default value.
   mutating func clearOffer() {self._offer = nil}
 
   var answer: SignalServiceProtos_CallMessage.Answer {
-    get {return _answer ?? SignalServiceProtos_CallMessage.Answer()}
+    get {_answer ?? SignalServiceProtos_CallMessage.Answer()}
     set {_answer = newValue}
   }
   /// Returns true if `answer` has been explicitly set.
-  var hasAnswer: Bool {return self._answer != nil}
+  var hasAnswer: Bool {self._answer != nil}
   /// Clears the value of `answer`. Subsequent reads from it will return its default value.
   mutating func clearAnswer() {self._answer = nil}
 
   var iceUpdate: [SignalServiceProtos_CallMessage.IceUpdate] = []
 
   var busy: SignalServiceProtos_CallMessage.Busy {
-    get {return _busy ?? SignalServiceProtos_CallMessage.Busy()}
+    get {_busy ?? SignalServiceProtos_CallMessage.Busy()}
     set {_busy = newValue}
   }
   /// Returns true if `busy` has been explicitly set.
-  var hasBusy: Bool {return self._busy != nil}
+  var hasBusy: Bool {self._busy != nil}
   /// Clears the value of `busy`. Subsequent reads from it will return its default value.
   mutating func clearBusy() {self._busy = nil}
 
   var profileKey: Data {
-    get {return _profileKey ?? Data()}
+    get {_profileKey ?? Data()}
     set {_profileKey = newValue}
   }
   /// Returns true if `profileKey` has been explicitly set.
-  var hasProfileKey: Bool {return self._profileKey != nil}
+  var hasProfileKey: Bool {self._profileKey != nil}
   /// Clears the value of `profileKey`. Subsequent reads from it will return its default value.
   mutating func clearProfileKey() {self._profileKey = nil}
 
   var hangup: SignalServiceProtos_CallMessage.Hangup {
-    get {return _hangup ?? SignalServiceProtos_CallMessage.Hangup()}
+    get {_hangup ?? SignalServiceProtos_CallMessage.Hangup()}
     set {_hangup = newValue}
   }
   /// Returns true if `hangup` has been explicitly set.
-  var hasHangup: Bool {return self._hangup != nil}
+  var hasHangup: Bool {self._hangup != nil}
   /// Clears the value of `hangup`. Subsequent reads from it will return its default value.
   mutating func clearHangup() {self._hangup = nil}
 
   var destinationDeviceID: UInt32 {
-    get {return _destinationDeviceID ?? 0}
+    get {_destinationDeviceID ?? 0}
     set {_destinationDeviceID = newValue}
   }
   /// Returns true if `destinationDeviceID` has been explicitly set.
-  var hasDestinationDeviceID: Bool {return self._destinationDeviceID != nil}
+  var hasDestinationDeviceID: Bool {self._destinationDeviceID != nil}
   /// Clears the value of `destinationDeviceID`. Subsequent reads from it will return its default value.
   mutating func clearDestinationDeviceID() {self._destinationDeviceID = nil}
 
   var opaque: SignalServiceProtos_CallMessage.Opaque {
-    get {return _opaque ?? SignalServiceProtos_CallMessage.Opaque()}
+    get {_opaque ?? SignalServiceProtos_CallMessage.Opaque()}
     set {_opaque = newValue}
   }
   /// Returns true if `opaque` has been explicitly set.
-  var hasOpaque: Bool {return self._opaque != nil}
+  var hasOpaque: Bool {self._opaque != nil}
   /// Clears the value of `opaque`. Subsequent reads from it will return its default value.
   mutating func clearOpaque() {self._opaque = nil}
 
@@ -742,29 +742,29 @@ struct SignalServiceProtos_CallMessage: Sendable {
 
     /// @required
     var id: UInt64 {
-      get {return _id ?? 0}
+      get {_id ?? 0}
       set {_id = newValue}
     }
     /// Returns true if `id` has been explicitly set.
-    var hasID: Bool {return self._id != nil}
+    var hasID: Bool {self._id != nil}
     /// Clears the value of `id`. Subsequent reads from it will return its default value.
     mutating func clearID() {self._id = nil}
 
     var type: SignalServiceProtos_CallMessage.Offer.TypeEnum {
-      get {return _type ?? .offerAudioCall}
+      get {_type ?? .offerAudioCall}
       set {_type = newValue}
     }
     /// Returns true if `type` has been explicitly set.
-    var hasType: Bool {return self._type != nil}
+    var hasType: Bool {self._type != nil}
     /// Clears the value of `type`. Subsequent reads from it will return its default value.
     mutating func clearType() {self._type = nil}
 
     var opaque: Data {
-      get {return _opaque ?? Data()}
+      get {_opaque ?? Data()}
       set {_opaque = newValue}
     }
     /// Returns true if `opaque` has been explicitly set.
-    var hasOpaque: Bool {return self._opaque != nil}
+    var hasOpaque: Bool {self._opaque != nil}
     /// Clears the value of `opaque`. Subsequent reads from it will return its default value.
     mutating func clearOpaque() {self._opaque = nil}
 
@@ -796,20 +796,20 @@ struct SignalServiceProtos_CallMessage: Sendable {
 
     /// @required
     var id: UInt64 {
-      get {return _id ?? 0}
+      get {_id ?? 0}
       set {_id = newValue}
     }
     /// Returns true if `id` has been explicitly set.
-    var hasID: Bool {return self._id != nil}
+    var hasID: Bool {self._id != nil}
     /// Clears the value of `id`. Subsequent reads from it will return its default value.
     mutating func clearID() {self._id = nil}
 
     var opaque: Data {
-      get {return _opaque ?? Data()}
+      get {_opaque ?? Data()}
       set {_opaque = newValue}
     }
     /// Returns true if `opaque` has been explicitly set.
-    var hasOpaque: Bool {return self._opaque != nil}
+    var hasOpaque: Bool {self._opaque != nil}
     /// Clears the value of `opaque`. Subsequent reads from it will return its default value.
     mutating func clearOpaque() {self._opaque = nil}
 
@@ -828,20 +828,20 @@ struct SignalServiceProtos_CallMessage: Sendable {
 
     /// @required
     var id: UInt64 {
-      get {return _id ?? 0}
+      get {_id ?? 0}
       set {_id = newValue}
     }
     /// Returns true if `id` has been explicitly set.
-    var hasID: Bool {return self._id != nil}
+    var hasID: Bool {self._id != nil}
     /// Clears the value of `id`. Subsequent reads from it will return its default value.
     mutating func clearID() {self._id = nil}
 
     var opaque: Data {
-      get {return _opaque ?? Data()}
+      get {_opaque ?? Data()}
       set {_opaque = newValue}
     }
     /// Returns true if `opaque` has been explicitly set.
-    var hasOpaque: Bool {return self._opaque != nil}
+    var hasOpaque: Bool {self._opaque != nil}
     /// Clears the value of `opaque`. Subsequent reads from it will return its default value.
     mutating func clearOpaque() {self._opaque = nil}
 
@@ -860,11 +860,11 @@ struct SignalServiceProtos_CallMessage: Sendable {
 
     /// @required
     var id: UInt64 {
-      get {return _id ?? 0}
+      get {_id ?? 0}
       set {_id = newValue}
     }
     /// Returns true if `id` has been explicitly set.
-    var hasID: Bool {return self._id != nil}
+    var hasID: Bool {self._id != nil}
     /// Clears the value of `id`. Subsequent reads from it will return its default value.
     mutating func clearID() {self._id = nil}
 
@@ -882,29 +882,29 @@ struct SignalServiceProtos_CallMessage: Sendable {
 
     /// @required
     var id: UInt64 {
-      get {return _id ?? 0}
+      get {_id ?? 0}
       set {_id = newValue}
     }
     /// Returns true if `id` has been explicitly set.
-    var hasID: Bool {return self._id != nil}
+    var hasID: Bool {self._id != nil}
     /// Clears the value of `id`. Subsequent reads from it will return its default value.
     mutating func clearID() {self._id = nil}
 
     var type: SignalServiceProtos_CallMessage.Hangup.TypeEnum {
-      get {return _type ?? .hangupNormal}
+      get {_type ?? .hangupNormal}
       set {_type = newValue}
     }
     /// Returns true if `type` has been explicitly set.
-    var hasType: Bool {return self._type != nil}
+    var hasType: Bool {self._type != nil}
     /// Clears the value of `type`. Subsequent reads from it will return its default value.
     mutating func clearType() {self._type = nil}
 
     var deviceID: UInt32 {
-      get {return _deviceID ?? 0}
+      get {_deviceID ?? 0}
       set {_deviceID = newValue}
     }
     /// Returns true if `deviceID` has been explicitly set.
-    var hasDeviceID: Bool {return self._deviceID != nil}
+    var hasDeviceID: Bool {self._deviceID != nil}
     /// Clears the value of `deviceID`. Subsequent reads from it will return its default value.
     mutating func clearDeviceID() {self._deviceID = nil}
 
@@ -936,20 +936,20 @@ struct SignalServiceProtos_CallMessage: Sendable {
     // methods supported on all messages.
 
     var data: Data {
-      get {return _data ?? Data()}
+      get {_data ?? Data()}
       set {_data = newValue}
     }
     /// Returns true if `data` has been explicitly set.
-    var hasData: Bool {return self._data != nil}
+    var hasData: Bool {self._data != nil}
     /// Clears the value of `data`. Subsequent reads from it will return its default value.
     mutating func clearData() {self._data = nil}
 
     var urgency: SignalServiceProtos_CallMessage.Opaque.Urgency {
-      get {return _urgency ?? .droppable}
+      get {_urgency ?? .droppable}
       set {_urgency = newValue}
     }
     /// Returns true if `urgency` has been explicitly set.
-    var hasUrgency: Bool {return self._urgency != nil}
+    var hasUrgency: Bool {self._urgency != nil}
     /// Clears the value of `urgency`. Subsequent reads from it will return its default value.
     mutating func clearUrgency() {self._urgency = nil}
 
@@ -988,223 +988,232 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
   // methods supported on all messages.
 
   var body: String {
-    get {return _storage._body ?? String()}
+    get {_storage._body ?? String()}
     set {_uniqueStorage()._body = newValue}
   }
   /// Returns true if `body` has been explicitly set.
-  var hasBody: Bool {return _storage._body != nil}
+  var hasBody: Bool {_storage._body != nil}
   /// Clears the value of `body`. Subsequent reads from it will return its default value.
   mutating func clearBody() {_uniqueStorage()._body = nil}
 
   var attachments: [SignalServiceProtos_AttachmentPointer] {
-    get {return _storage._attachments}
+    get {_storage._attachments}
     set {_uniqueStorage()._attachments = newValue}
   }
 
   var groupV2: SignalServiceProtos_GroupContextV2 {
-    get {return _storage._groupV2 ?? SignalServiceProtos_GroupContextV2()}
+    get {_storage._groupV2 ?? SignalServiceProtos_GroupContextV2()}
     set {_uniqueStorage()._groupV2 = newValue}
   }
   /// Returns true if `groupV2` has been explicitly set.
-  var hasGroupV2: Bool {return _storage._groupV2 != nil}
+  var hasGroupV2: Bool {_storage._groupV2 != nil}
   /// Clears the value of `groupV2`. Subsequent reads from it will return its default value.
   mutating func clearGroupV2() {_uniqueStorage()._groupV2 = nil}
 
   var flags: UInt32 {
-    get {return _storage._flags ?? 0}
+    get {_storage._flags ?? 0}
     set {_uniqueStorage()._flags = newValue}
   }
   /// Returns true if `flags` has been explicitly set.
-  var hasFlags: Bool {return _storage._flags != nil}
+  var hasFlags: Bool {_storage._flags != nil}
   /// Clears the value of `flags`. Subsequent reads from it will return its default value.
   mutating func clearFlags() {_uniqueStorage()._flags = nil}
 
   var expireTimer: UInt32 {
-    get {return _storage._expireTimer ?? 0}
+    get {_storage._expireTimer ?? 0}
     set {_uniqueStorage()._expireTimer = newValue}
   }
   /// Returns true if `expireTimer` has been explicitly set.
-  var hasExpireTimer: Bool {return _storage._expireTimer != nil}
+  var hasExpireTimer: Bool {_storage._expireTimer != nil}
   /// Clears the value of `expireTimer`. Subsequent reads from it will return its default value.
   mutating func clearExpireTimer() {_uniqueStorage()._expireTimer = nil}
 
   var expireTimerVersion: UInt32 {
-    get {return _storage._expireTimerVersion ?? 0}
+    get {_storage._expireTimerVersion ?? 0}
     set {_uniqueStorage()._expireTimerVersion = newValue}
   }
   /// Returns true if `expireTimerVersion` has been explicitly set.
-  var hasExpireTimerVersion: Bool {return _storage._expireTimerVersion != nil}
+  var hasExpireTimerVersion: Bool {_storage._expireTimerVersion != nil}
   /// Clears the value of `expireTimerVersion`. Subsequent reads from it will return its default value.
   mutating func clearExpireTimerVersion() {_uniqueStorage()._expireTimerVersion = nil}
 
   var profileKey: Data {
-    get {return _storage._profileKey ?? Data()}
+    get {_storage._profileKey ?? Data()}
     set {_uniqueStorage()._profileKey = newValue}
   }
   /// Returns true if `profileKey` has been explicitly set.
-  var hasProfileKey: Bool {return _storage._profileKey != nil}
+  var hasProfileKey: Bool {_storage._profileKey != nil}
   /// Clears the value of `profileKey`. Subsequent reads from it will return its default value.
   mutating func clearProfileKey() {_uniqueStorage()._profileKey = nil}
 
   var timestamp: UInt64 {
-    get {return _storage._timestamp ?? 0}
+    get {_storage._timestamp ?? 0}
     set {_uniqueStorage()._timestamp = newValue}
   }
   /// Returns true if `timestamp` has been explicitly set.
-  var hasTimestamp: Bool {return _storage._timestamp != nil}
+  var hasTimestamp: Bool {_storage._timestamp != nil}
   /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
   mutating func clearTimestamp() {_uniqueStorage()._timestamp = nil}
 
   var quote: SignalServiceProtos_DataMessage.Quote {
-    get {return _storage._quote ?? SignalServiceProtos_DataMessage.Quote()}
+    get {_storage._quote ?? SignalServiceProtos_DataMessage.Quote()}
     set {_uniqueStorage()._quote = newValue}
   }
   /// Returns true if `quote` has been explicitly set.
-  var hasQuote: Bool {return _storage._quote != nil}
+  var hasQuote: Bool {_storage._quote != nil}
   /// Clears the value of `quote`. Subsequent reads from it will return its default value.
   mutating func clearQuote() {_uniqueStorage()._quote = nil}
 
   var contact: [SignalServiceProtos_DataMessage.Contact] {
-    get {return _storage._contact}
+    get {_storage._contact}
     set {_uniqueStorage()._contact = newValue}
   }
 
   var preview: [SignalServiceProtos_Preview] {
-    get {return _storage._preview}
+    get {_storage._preview}
     set {_uniqueStorage()._preview = newValue}
   }
 
   var sticker: SignalServiceProtos_DataMessage.Sticker {
-    get {return _storage._sticker ?? SignalServiceProtos_DataMessage.Sticker()}
+    get {_storage._sticker ?? SignalServiceProtos_DataMessage.Sticker()}
     set {_uniqueStorage()._sticker = newValue}
   }
   /// Returns true if `sticker` has been explicitly set.
-  var hasSticker: Bool {return _storage._sticker != nil}
+  var hasSticker: Bool {_storage._sticker != nil}
   /// Clears the value of `sticker`. Subsequent reads from it will return its default value.
   mutating func clearSticker() {_uniqueStorage()._sticker = nil}
 
   var requiredProtocolVersion: UInt32 {
-    get {return _storage._requiredProtocolVersion ?? 0}
+    get {_storage._requiredProtocolVersion ?? 0}
     set {_uniqueStorage()._requiredProtocolVersion = newValue}
   }
   /// Returns true if `requiredProtocolVersion` has been explicitly set.
-  var hasRequiredProtocolVersion: Bool {return _storage._requiredProtocolVersion != nil}
+  var hasRequiredProtocolVersion: Bool {_storage._requiredProtocolVersion != nil}
   /// Clears the value of `requiredProtocolVersion`. Subsequent reads from it will return its default value.
   mutating func clearRequiredProtocolVersion() {_uniqueStorage()._requiredProtocolVersion = nil}
 
   var isViewOnce: Bool {
-    get {return _storage._isViewOnce ?? false}
+    get {_storage._isViewOnce ?? false}
     set {_uniqueStorage()._isViewOnce = newValue}
   }
   /// Returns true if `isViewOnce` has been explicitly set.
-  var hasIsViewOnce: Bool {return _storage._isViewOnce != nil}
+  var hasIsViewOnce: Bool {_storage._isViewOnce != nil}
   /// Clears the value of `isViewOnce`. Subsequent reads from it will return its default value.
   mutating func clearIsViewOnce() {_uniqueStorage()._isViewOnce = nil}
 
   var reaction: SignalServiceProtos_DataMessage.Reaction {
-    get {return _storage._reaction ?? SignalServiceProtos_DataMessage.Reaction()}
+    get {_storage._reaction ?? SignalServiceProtos_DataMessage.Reaction()}
     set {_uniqueStorage()._reaction = newValue}
   }
   /// Returns true if `reaction` has been explicitly set.
-  var hasReaction: Bool {return _storage._reaction != nil}
+  var hasReaction: Bool {_storage._reaction != nil}
   /// Clears the value of `reaction`. Subsequent reads from it will return its default value.
   mutating func clearReaction() {_uniqueStorage()._reaction = nil}
 
   var delete: SignalServiceProtos_DataMessage.Delete {
-    get {return _storage._delete ?? SignalServiceProtos_DataMessage.Delete()}
+    get {_storage._delete ?? SignalServiceProtos_DataMessage.Delete()}
     set {_uniqueStorage()._delete = newValue}
   }
   /// Returns true if `delete` has been explicitly set.
-  var hasDelete: Bool {return _storage._delete != nil}
+  var hasDelete: Bool {_storage._delete != nil}
   /// Clears the value of `delete`. Subsequent reads from it will return its default value.
   mutating func clearDelete() {_uniqueStorage()._delete = nil}
 
   var bodyRanges: [SignalServiceProtos_BodyRange] {
-    get {return _storage._bodyRanges}
+    get {_storage._bodyRanges}
     set {_uniqueStorage()._bodyRanges = newValue}
   }
 
   var groupCallUpdate: SignalServiceProtos_DataMessage.GroupCallUpdate {
-    get {return _storage._groupCallUpdate ?? SignalServiceProtos_DataMessage.GroupCallUpdate()}
+    get {_storage._groupCallUpdate ?? SignalServiceProtos_DataMessage.GroupCallUpdate()}
     set {_uniqueStorage()._groupCallUpdate = newValue}
   }
   /// Returns true if `groupCallUpdate` has been explicitly set.
-  var hasGroupCallUpdate: Bool {return _storage._groupCallUpdate != nil}
+  var hasGroupCallUpdate: Bool {_storage._groupCallUpdate != nil}
   /// Clears the value of `groupCallUpdate`. Subsequent reads from it will return its default value.
   mutating func clearGroupCallUpdate() {_uniqueStorage()._groupCallUpdate = nil}
 
   var payment: SignalServiceProtos_DataMessage.Payment {
-    get {return _storage._payment ?? SignalServiceProtos_DataMessage.Payment()}
+    get {_storage._payment ?? SignalServiceProtos_DataMessage.Payment()}
     set {_uniqueStorage()._payment = newValue}
   }
   /// Returns true if `payment` has been explicitly set.
-  var hasPayment: Bool {return _storage._payment != nil}
+  var hasPayment: Bool {_storage._payment != nil}
   /// Clears the value of `payment`. Subsequent reads from it will return its default value.
   mutating func clearPayment() {_uniqueStorage()._payment = nil}
 
   var storyContext: SignalServiceProtos_DataMessage.StoryContext {
-    get {return _storage._storyContext ?? SignalServiceProtos_DataMessage.StoryContext()}
+    get {_storage._storyContext ?? SignalServiceProtos_DataMessage.StoryContext()}
     set {_uniqueStorage()._storyContext = newValue}
   }
   /// Returns true if `storyContext` has been explicitly set.
-  var hasStoryContext: Bool {return _storage._storyContext != nil}
+  var hasStoryContext: Bool {_storage._storyContext != nil}
   /// Clears the value of `storyContext`. Subsequent reads from it will return its default value.
   mutating func clearStoryContext() {_uniqueStorage()._storyContext = nil}
 
   var giftBadge: SignalServiceProtos_DataMessage.GiftBadge {
-    get {return _storage._giftBadge ?? SignalServiceProtos_DataMessage.GiftBadge()}
+    get {_storage._giftBadge ?? SignalServiceProtos_DataMessage.GiftBadge()}
     set {_uniqueStorage()._giftBadge = newValue}
   }
   /// Returns true if `giftBadge` has been explicitly set.
-  var hasGiftBadge: Bool {return _storage._giftBadge != nil}
+  var hasGiftBadge: Bool {_storage._giftBadge != nil}
   /// Clears the value of `giftBadge`. Subsequent reads from it will return its default value.
   mutating func clearGiftBadge() {_uniqueStorage()._giftBadge = nil}
 
   var pollCreate: SignalServiceProtos_DataMessage.PollCreate {
-    get {return _storage._pollCreate ?? SignalServiceProtos_DataMessage.PollCreate()}
+    get {_storage._pollCreate ?? SignalServiceProtos_DataMessage.PollCreate()}
     set {_uniqueStorage()._pollCreate = newValue}
   }
   /// Returns true if `pollCreate` has been explicitly set.
-  var hasPollCreate: Bool {return _storage._pollCreate != nil}
+  var hasPollCreate: Bool {_storage._pollCreate != nil}
   /// Clears the value of `pollCreate`. Subsequent reads from it will return its default value.
   mutating func clearPollCreate() {_uniqueStorage()._pollCreate = nil}
 
   var pollTerminate: SignalServiceProtos_DataMessage.PollTerminate {
-    get {return _storage._pollTerminate ?? SignalServiceProtos_DataMessage.PollTerminate()}
+    get {_storage._pollTerminate ?? SignalServiceProtos_DataMessage.PollTerminate()}
     set {_uniqueStorage()._pollTerminate = newValue}
   }
   /// Returns true if `pollTerminate` has been explicitly set.
-  var hasPollTerminate: Bool {return _storage._pollTerminate != nil}
+  var hasPollTerminate: Bool {_storage._pollTerminate != nil}
   /// Clears the value of `pollTerminate`. Subsequent reads from it will return its default value.
   mutating func clearPollTerminate() {_uniqueStorage()._pollTerminate = nil}
 
   var pollVote: SignalServiceProtos_DataMessage.PollVote {
-    get {return _storage._pollVote ?? SignalServiceProtos_DataMessage.PollVote()}
+    get {_storage._pollVote ?? SignalServiceProtos_DataMessage.PollVote()}
     set {_uniqueStorage()._pollVote = newValue}
   }
   /// Returns true if `pollVote` has been explicitly set.
-  var hasPollVote: Bool {return _storage._pollVote != nil}
+  var hasPollVote: Bool {_storage._pollVote != nil}
   /// Clears the value of `pollVote`. Subsequent reads from it will return its default value.
   mutating func clearPollVote() {_uniqueStorage()._pollVote = nil}
 
   var pinMessage: SignalServiceProtos_DataMessage.PinMessage {
-    get {return _storage._pinMessage ?? SignalServiceProtos_DataMessage.PinMessage()}
+    get {_storage._pinMessage ?? SignalServiceProtos_DataMessage.PinMessage()}
     set {_uniqueStorage()._pinMessage = newValue}
   }
   /// Returns true if `pinMessage` has been explicitly set.
-  var hasPinMessage: Bool {return _storage._pinMessage != nil}
+  var hasPinMessage: Bool {_storage._pinMessage != nil}
   /// Clears the value of `pinMessage`. Subsequent reads from it will return its default value.
   mutating func clearPinMessage() {_uniqueStorage()._pinMessage = nil}
 
-  /// NEXT ID: 29
   var unpinMessage: SignalServiceProtos_DataMessage.UnpinMessage {
-    get {return _storage._unpinMessage ?? SignalServiceProtos_DataMessage.UnpinMessage()}
+    get {_storage._unpinMessage ?? SignalServiceProtos_DataMessage.UnpinMessage()}
     set {_uniqueStorage()._unpinMessage = newValue}
   }
   /// Returns true if `unpinMessage` has been explicitly set.
-  var hasUnpinMessage: Bool {return _storage._unpinMessage != nil}
+  var hasUnpinMessage: Bool {_storage._unpinMessage != nil}
   /// Clears the value of `unpinMessage`. Subsequent reads from it will return its default value.
   mutating func clearUnpinMessage() {_uniqueStorage()._unpinMessage = nil}
+
+  /// NEXT ID: 30
+  var adminDelete: SignalServiceProtos_DataMessage.AdminDelete {
+    get {_storage._adminDelete ?? SignalServiceProtos_DataMessage.AdminDelete()}
+    set {_uniqueStorage()._adminDelete = newValue}
+  }
+  /// Returns true if `adminDelete` has been explicitly set.
+  var hasAdminDelete: Bool {_storage._adminDelete != nil}
+  /// Clears the value of `adminDelete`. Subsequent reads from it will return its default value.
+  mutating func clearAdminDelete() {_uniqueStorage()._adminDelete = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -1244,29 +1253,29 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
 
     /// @required
     var id: UInt64 {
-      get {return _id ?? 0}
+      get {_id ?? 0}
       set {_id = newValue}
     }
     /// Returns true if `id` has been explicitly set.
-    var hasID: Bool {return self._id != nil}
+    var hasID: Bool {self._id != nil}
     /// Clears the value of `id`. Subsequent reads from it will return its default value.
     mutating func clearID() {self._id = nil}
 
     var authorAci: String {
-      get {return _authorAci ?? String()}
+      get {_authorAci ?? String()}
       set {_authorAci = newValue}
     }
     /// Returns true if `authorAci` has been explicitly set.
-    var hasAuthorAci: Bool {return self._authorAci != nil}
+    var hasAuthorAci: Bool {self._authorAci != nil}
     /// Clears the value of `authorAci`. Subsequent reads from it will return its default value.
     mutating func clearAuthorAci() {self._authorAci = nil}
 
     var text: String {
-      get {return _text ?? String()}
+      get {_text ?? String()}
       set {_text = newValue}
     }
     /// Returns true if `text` has been explicitly set.
-    var hasText: Bool {return self._text != nil}
+    var hasText: Bool {self._text != nil}
     /// Clears the value of `text`. Subsequent reads from it will return its default value.
     mutating func clearText() {self._text = nil}
 
@@ -1275,21 +1284,21 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
     var bodyRanges: [SignalServiceProtos_BodyRange] = []
 
     var type: SignalServiceProtos_DataMessage.Quote.TypeEnum {
-      get {return _type ?? .normal}
+      get {_type ?? .normal}
       set {_type = newValue}
     }
     /// Returns true if `type` has been explicitly set.
-    var hasType: Bool {return self._type != nil}
+    var hasType: Bool {self._type != nil}
     /// Clears the value of `type`. Subsequent reads from it will return its default value.
     mutating func clearType() {self._type = nil}
 
     /// 16-byte UUID
     var authorAciBinary: Data {
-      get {return _authorAciBinary ?? Data()}
+      get {_authorAciBinary ?? Data()}
       set {_authorAciBinary = newValue}
     }
     /// Returns true if `authorAciBinary` has been explicitly set.
-    var hasAuthorAciBinary: Bool {return self._authorAciBinary != nil}
+    var hasAuthorAciBinary: Bool {self._authorAciBinary != nil}
     /// Clears the value of `authorAciBinary`. Subsequent reads from it will return its default value.
     mutating func clearAuthorAciBinary() {self._authorAciBinary = nil}
 
@@ -1311,29 +1320,29 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var contentType: String {
-        get {return _storage._contentType ?? String()}
+        get {_storage._contentType ?? String()}
         set {_uniqueStorage()._contentType = newValue}
       }
       /// Returns true if `contentType` has been explicitly set.
-      var hasContentType: Bool {return _storage._contentType != nil}
+      var hasContentType: Bool {_storage._contentType != nil}
       /// Clears the value of `contentType`. Subsequent reads from it will return its default value.
       mutating func clearContentType() {_uniqueStorage()._contentType = nil}
 
       var fileName: String {
-        get {return _storage._fileName ?? String()}
+        get {_storage._fileName ?? String()}
         set {_uniqueStorage()._fileName = newValue}
       }
       /// Returns true if `fileName` has been explicitly set.
-      var hasFileName: Bool {return _storage._fileName != nil}
+      var hasFileName: Bool {_storage._fileName != nil}
       /// Clears the value of `fileName`. Subsequent reads from it will return its default value.
       mutating func clearFileName() {_uniqueStorage()._fileName = nil}
 
       var thumbnail: SignalServiceProtos_AttachmentPointer {
-        get {return _storage._thumbnail ?? SignalServiceProtos_AttachmentPointer()}
+        get {_storage._thumbnail ?? SignalServiceProtos_AttachmentPointer()}
         set {_uniqueStorage()._thumbnail = newValue}
       }
       /// Returns true if `thumbnail` has been explicitly set.
-      var hasThumbnail: Bool {return _storage._thumbnail != nil}
+      var hasThumbnail: Bool {_storage._thumbnail != nil}
       /// Clears the value of `thumbnail`. Subsequent reads from it will return its default value.
       mutating func clearThumbnail() {_uniqueStorage()._thumbnail = nil}
 
@@ -1359,11 +1368,11 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var name: SignalServiceProtos_DataMessage.Contact.Name {
-      get {return _name ?? SignalServiceProtos_DataMessage.Contact.Name()}
+      get {_name ?? SignalServiceProtos_DataMessage.Contact.Name()}
       set {_name = newValue}
     }
     /// Returns true if `name` has been explicitly set.
-    var hasName: Bool {return self._name != nil}
+    var hasName: Bool {self._name != nil}
     /// Clears the value of `name`. Subsequent reads from it will return its default value.
     mutating func clearName() {self._name = nil}
 
@@ -1374,20 +1383,20 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
     var address: [SignalServiceProtos_DataMessage.Contact.PostalAddress] = []
 
     var avatar: SignalServiceProtos_DataMessage.Contact.Avatar {
-      get {return _avatar ?? SignalServiceProtos_DataMessage.Contact.Avatar()}
+      get {_avatar ?? SignalServiceProtos_DataMessage.Contact.Avatar()}
       set {_avatar = newValue}
     }
     /// Returns true if `avatar` has been explicitly set.
-    var hasAvatar: Bool {return self._avatar != nil}
+    var hasAvatar: Bool {self._avatar != nil}
     /// Clears the value of `avatar`. Subsequent reads from it will return its default value.
     mutating func clearAvatar() {self._avatar = nil}
 
     var organization: String {
-      get {return _organization ?? String()}
+      get {_organization ?? String()}
       set {_organization = newValue}
     }
     /// Returns true if `organization` has been explicitly set.
-    var hasOrganization: Bool {return self._organization != nil}
+    var hasOrganization: Bool {self._organization != nil}
     /// Clears the value of `organization`. Subsequent reads from it will return its default value.
     mutating func clearOrganization() {self._organization = nil}
 
@@ -1399,47 +1408,47 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var givenName: String {
-        get {return _givenName ?? String()}
+        get {_givenName ?? String()}
         set {_givenName = newValue}
       }
       /// Returns true if `givenName` has been explicitly set.
-      var hasGivenName: Bool {return self._givenName != nil}
+      var hasGivenName: Bool {self._givenName != nil}
       /// Clears the value of `givenName`. Subsequent reads from it will return its default value.
       mutating func clearGivenName() {self._givenName = nil}
 
       var familyName: String {
-        get {return _familyName ?? String()}
+        get {_familyName ?? String()}
         set {_familyName = newValue}
       }
       /// Returns true if `familyName` has been explicitly set.
-      var hasFamilyName: Bool {return self._familyName != nil}
+      var hasFamilyName: Bool {self._familyName != nil}
       /// Clears the value of `familyName`. Subsequent reads from it will return its default value.
       mutating func clearFamilyName() {self._familyName = nil}
 
       var prefix: String {
-        get {return _prefix ?? String()}
+        get {_prefix ?? String()}
         set {_prefix = newValue}
       }
       /// Returns true if `prefix` has been explicitly set.
-      var hasPrefix: Bool {return self._prefix != nil}
+      var hasPrefix: Bool {self._prefix != nil}
       /// Clears the value of `prefix`. Subsequent reads from it will return its default value.
       mutating func clearPrefix() {self._prefix = nil}
 
       var suffix: String {
-        get {return _suffix ?? String()}
+        get {_suffix ?? String()}
         set {_suffix = newValue}
       }
       /// Returns true if `suffix` has been explicitly set.
-      var hasSuffix: Bool {return self._suffix != nil}
+      var hasSuffix: Bool {self._suffix != nil}
       /// Clears the value of `suffix`. Subsequent reads from it will return its default value.
       mutating func clearSuffix() {self._suffix = nil}
 
       var middleName: String {
-        get {return _middleName ?? String()}
+        get {_middleName ?? String()}
         set {_middleName = newValue}
       }
       /// Returns true if `middleName` has been explicitly set.
-      var hasMiddleName: Bool {return self._middleName != nil}
+      var hasMiddleName: Bool {self._middleName != nil}
       /// Clears the value of `middleName`. Subsequent reads from it will return its default value.
       mutating func clearMiddleName() {self._middleName = nil}
 
@@ -1460,29 +1469,29 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var value: String {
-        get {return _value ?? String()}
+        get {_value ?? String()}
         set {_value = newValue}
       }
       /// Returns true if `value` has been explicitly set.
-      var hasValue: Bool {return self._value != nil}
+      var hasValue: Bool {self._value != nil}
       /// Clears the value of `value`. Subsequent reads from it will return its default value.
       mutating func clearValue() {self._value = nil}
 
       var type: SignalServiceProtos_DataMessage.Contact.Phone.TypeEnum {
-        get {return _type ?? .home}
+        get {_type ?? .home}
         set {_type = newValue}
       }
       /// Returns true if `type` has been explicitly set.
-      var hasType: Bool {return self._type != nil}
+      var hasType: Bool {self._type != nil}
       /// Clears the value of `type`. Subsequent reads from it will return its default value.
       mutating func clearType() {self._type = nil}
 
       var label: String {
-        get {return _label ?? String()}
+        get {_label ?? String()}
         set {_label = newValue}
       }
       /// Returns true if `label` has been explicitly set.
-      var hasLabel: Bool {return self._label != nil}
+      var hasLabel: Bool {self._label != nil}
       /// Clears the value of `label`. Subsequent reads from it will return its default value.
       mutating func clearLabel() {self._label = nil}
 
@@ -1513,29 +1522,29 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var value: String {
-        get {return _value ?? String()}
+        get {_value ?? String()}
         set {_value = newValue}
       }
       /// Returns true if `value` has been explicitly set.
-      var hasValue: Bool {return self._value != nil}
+      var hasValue: Bool {self._value != nil}
       /// Clears the value of `value`. Subsequent reads from it will return its default value.
       mutating func clearValue() {self._value = nil}
 
       var type: SignalServiceProtos_DataMessage.Contact.Email.TypeEnum {
-        get {return _type ?? .home}
+        get {_type ?? .home}
         set {_type = newValue}
       }
       /// Returns true if `type` has been explicitly set.
-      var hasType: Bool {return self._type != nil}
+      var hasType: Bool {self._type != nil}
       /// Clears the value of `type`. Subsequent reads from it will return its default value.
       mutating func clearType() {self._type = nil}
 
       var label: String {
-        get {return _label ?? String()}
+        get {_label ?? String()}
         set {_label = newValue}
       }
       /// Returns true if `label` has been explicitly set.
-      var hasLabel: Bool {return self._label != nil}
+      var hasLabel: Bool {self._label != nil}
       /// Clears the value of `label`. Subsequent reads from it will return its default value.
       mutating func clearLabel() {self._label = nil}
 
@@ -1566,83 +1575,83 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var type: SignalServiceProtos_DataMessage.Contact.PostalAddress.TypeEnum {
-        get {return _type ?? .home}
+        get {_type ?? .home}
         set {_type = newValue}
       }
       /// Returns true if `type` has been explicitly set.
-      var hasType: Bool {return self._type != nil}
+      var hasType: Bool {self._type != nil}
       /// Clears the value of `type`. Subsequent reads from it will return its default value.
       mutating func clearType() {self._type = nil}
 
       var label: String {
-        get {return _label ?? String()}
+        get {_label ?? String()}
         set {_label = newValue}
       }
       /// Returns true if `label` has been explicitly set.
-      var hasLabel: Bool {return self._label != nil}
+      var hasLabel: Bool {self._label != nil}
       /// Clears the value of `label`. Subsequent reads from it will return its default value.
       mutating func clearLabel() {self._label = nil}
 
       var street: String {
-        get {return _street ?? String()}
+        get {_street ?? String()}
         set {_street = newValue}
       }
       /// Returns true if `street` has been explicitly set.
-      var hasStreet: Bool {return self._street != nil}
+      var hasStreet: Bool {self._street != nil}
       /// Clears the value of `street`. Subsequent reads from it will return its default value.
       mutating func clearStreet() {self._street = nil}
 
       var pobox: String {
-        get {return _pobox ?? String()}
+        get {_pobox ?? String()}
         set {_pobox = newValue}
       }
       /// Returns true if `pobox` has been explicitly set.
-      var hasPobox: Bool {return self._pobox != nil}
+      var hasPobox: Bool {self._pobox != nil}
       /// Clears the value of `pobox`. Subsequent reads from it will return its default value.
       mutating func clearPobox() {self._pobox = nil}
 
       var neighborhood: String {
-        get {return _neighborhood ?? String()}
+        get {_neighborhood ?? String()}
         set {_neighborhood = newValue}
       }
       /// Returns true if `neighborhood` has been explicitly set.
-      var hasNeighborhood: Bool {return self._neighborhood != nil}
+      var hasNeighborhood: Bool {self._neighborhood != nil}
       /// Clears the value of `neighborhood`. Subsequent reads from it will return its default value.
       mutating func clearNeighborhood() {self._neighborhood = nil}
 
       var city: String {
-        get {return _city ?? String()}
+        get {_city ?? String()}
         set {_city = newValue}
       }
       /// Returns true if `city` has been explicitly set.
-      var hasCity: Bool {return self._city != nil}
+      var hasCity: Bool {self._city != nil}
       /// Clears the value of `city`. Subsequent reads from it will return its default value.
       mutating func clearCity() {self._city = nil}
 
       var region: String {
-        get {return _region ?? String()}
+        get {_region ?? String()}
         set {_region = newValue}
       }
       /// Returns true if `region` has been explicitly set.
-      var hasRegion: Bool {return self._region != nil}
+      var hasRegion: Bool {self._region != nil}
       /// Clears the value of `region`. Subsequent reads from it will return its default value.
       mutating func clearRegion() {self._region = nil}
 
       var postcode: String {
-        get {return _postcode ?? String()}
+        get {_postcode ?? String()}
         set {_postcode = newValue}
       }
       /// Returns true if `postcode` has been explicitly set.
-      var hasPostcode: Bool {return self._postcode != nil}
+      var hasPostcode: Bool {self._postcode != nil}
       /// Clears the value of `postcode`. Subsequent reads from it will return its default value.
       mutating func clearPostcode() {self._postcode = nil}
 
       var country: String {
-        get {return _country ?? String()}
+        get {_country ?? String()}
         set {_country = newValue}
       }
       /// Returns true if `country` has been explicitly set.
-      var hasCountry: Bool {return self._country != nil}
+      var hasCountry: Bool {self._country != nil}
       /// Clears the value of `country`. Subsequent reads from it will return its default value.
       mutating func clearCountry() {self._country = nil}
 
@@ -1678,20 +1687,20 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var avatar: SignalServiceProtos_AttachmentPointer {
-        get {return _storage._avatar ?? SignalServiceProtos_AttachmentPointer()}
+        get {_storage._avatar ?? SignalServiceProtos_AttachmentPointer()}
         set {_uniqueStorage()._avatar = newValue}
       }
       /// Returns true if `avatar` has been explicitly set.
-      var hasAvatar: Bool {return _storage._avatar != nil}
+      var hasAvatar: Bool {_storage._avatar != nil}
       /// Clears the value of `avatar`. Subsequent reads from it will return its default value.
       mutating func clearAvatar() {_uniqueStorage()._avatar = nil}
 
       var isProfile: Bool {
-        get {return _storage._isProfile ?? false}
+        get {_storage._isProfile ?? false}
         set {_uniqueStorage()._isProfile = newValue}
       }
       /// Returns true if `isProfile` has been explicitly set.
-      var hasIsProfile: Bool {return _storage._isProfile != nil}
+      var hasIsProfile: Bool {_storage._isProfile != nil}
       /// Clears the value of `isProfile`. Subsequent reads from it will return its default value.
       mutating func clearIsProfile() {_uniqueStorage()._isProfile = nil}
 
@@ -1716,50 +1725,50 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
 
     /// @required
     var packID: Data {
-      get {return _storage._packID ?? Data()}
+      get {_storage._packID ?? Data()}
       set {_uniqueStorage()._packID = newValue}
     }
     /// Returns true if `packID` has been explicitly set.
-    var hasPackID: Bool {return _storage._packID != nil}
+    var hasPackID: Bool {_storage._packID != nil}
     /// Clears the value of `packID`. Subsequent reads from it will return its default value.
     mutating func clearPackID() {_uniqueStorage()._packID = nil}
 
     /// @required
     var packKey: Data {
-      get {return _storage._packKey ?? Data()}
+      get {_storage._packKey ?? Data()}
       set {_uniqueStorage()._packKey = newValue}
     }
     /// Returns true if `packKey` has been explicitly set.
-    var hasPackKey: Bool {return _storage._packKey != nil}
+    var hasPackKey: Bool {_storage._packKey != nil}
     /// Clears the value of `packKey`. Subsequent reads from it will return its default value.
     mutating func clearPackKey() {_uniqueStorage()._packKey = nil}
 
     /// @required
     var stickerID: UInt32 {
-      get {return _storage._stickerID ?? 0}
+      get {_storage._stickerID ?? 0}
       set {_uniqueStorage()._stickerID = newValue}
     }
     /// Returns true if `stickerID` has been explicitly set.
-    var hasStickerID: Bool {return _storage._stickerID != nil}
+    var hasStickerID: Bool {_storage._stickerID != nil}
     /// Clears the value of `stickerID`. Subsequent reads from it will return its default value.
     mutating func clearStickerID() {_uniqueStorage()._stickerID = nil}
 
     /// @required
     var data: SignalServiceProtos_AttachmentPointer {
-      get {return _storage._data ?? SignalServiceProtos_AttachmentPointer()}
+      get {_storage._data ?? SignalServiceProtos_AttachmentPointer()}
       set {_uniqueStorage()._data = newValue}
     }
     /// Returns true if `data` has been explicitly set.
-    var hasData: Bool {return _storage._data != nil}
+    var hasData: Bool {_storage._data != nil}
     /// Clears the value of `data`. Subsequent reads from it will return its default value.
     mutating func clearData() {_uniqueStorage()._data = nil}
 
     var emoji: String {
-      get {return _storage._emoji ?? String()}
+      get {_storage._emoji ?? String()}
       set {_uniqueStorage()._emoji = newValue}
     }
     /// Returns true if `emoji` has been explicitly set.
-    var hasEmoji: Bool {return _storage._emoji != nil}
+    var hasEmoji: Bool {_storage._emoji != nil}
     /// Clears the value of `emoji`. Subsequent reads from it will return its default value.
     mutating func clearEmoji() {_uniqueStorage()._emoji = nil}
 
@@ -1777,49 +1786,49 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
 
     /// @required
     var emoji: String {
-      get {return _emoji ?? String()}
+      get {_emoji ?? String()}
       set {_emoji = newValue}
     }
     /// Returns true if `emoji` has been explicitly set.
-    var hasEmoji: Bool {return self._emoji != nil}
+    var hasEmoji: Bool {self._emoji != nil}
     /// Clears the value of `emoji`. Subsequent reads from it will return its default value.
     mutating func clearEmoji() {self._emoji = nil}
 
     var remove: Bool {
-      get {return _remove ?? false}
+      get {_remove ?? false}
       set {_remove = newValue}
     }
     /// Returns true if `remove` has been explicitly set.
-    var hasRemove: Bool {return self._remove != nil}
+    var hasRemove: Bool {self._remove != nil}
     /// Clears the value of `remove`. Subsequent reads from it will return its default value.
     mutating func clearRemove() {self._remove = nil}
 
     var targetAuthorAci: String {
-      get {return _targetAuthorAci ?? String()}
+      get {_targetAuthorAci ?? String()}
       set {_targetAuthorAci = newValue}
     }
     /// Returns true if `targetAuthorAci` has been explicitly set.
-    var hasTargetAuthorAci: Bool {return self._targetAuthorAci != nil}
+    var hasTargetAuthorAci: Bool {self._targetAuthorAci != nil}
     /// Clears the value of `targetAuthorAci`. Subsequent reads from it will return its default value.
     mutating func clearTargetAuthorAci() {self._targetAuthorAci = nil}
 
     /// @required
     var timestamp: UInt64 {
-      get {return _timestamp ?? 0}
+      get {_timestamp ?? 0}
       set {_timestamp = newValue}
     }
     /// Returns true if `timestamp` has been explicitly set.
-    var hasTimestamp: Bool {return self._timestamp != nil}
+    var hasTimestamp: Bool {self._timestamp != nil}
     /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
     mutating func clearTimestamp() {self._timestamp = nil}
 
     /// 16-byte UUID
     var targetAuthorAciBinary: Data {
-      get {return _targetAuthorAciBinary ?? Data()}
+      get {_targetAuthorAciBinary ?? Data()}
       set {_targetAuthorAciBinary = newValue}
     }
     /// Returns true if `targetAuthorAciBinary` has been explicitly set.
-    var hasTargetAuthorAciBinary: Bool {return self._targetAuthorAciBinary != nil}
+    var hasTargetAuthorAciBinary: Bool {self._targetAuthorAciBinary != nil}
     /// Clears the value of `targetAuthorAciBinary`. Subsequent reads from it will return its default value.
     mutating func clearTargetAuthorAciBinary() {self._targetAuthorAciBinary = nil}
 
@@ -1841,11 +1850,11 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
 
     /// @required
     var targetSentTimestamp: UInt64 {
-      get {return _targetSentTimestamp ?? 0}
+      get {_targetSentTimestamp ?? 0}
       set {_targetSentTimestamp = newValue}
     }
     /// Returns true if `targetSentTimestamp` has been explicitly set.
-    var hasTargetSentTimestamp: Bool {return self._targetSentTimestamp != nil}
+    var hasTargetSentTimestamp: Bool {self._targetSentTimestamp != nil}
     /// Clears the value of `targetSentTimestamp`. Subsequent reads from it will return its default value.
     mutating func clearTargetSentTimestamp() {self._targetSentTimestamp = nil}
 
@@ -1862,11 +1871,11 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var eraID: String {
-      get {return _eraID ?? String()}
+      get {_eraID ?? String()}
       set {_eraID = newValue}
     }
     /// Returns true if `eraID` has been explicitly set.
-    var hasEraID: Bool {return self._eraID != nil}
+    var hasEraID: Bool {self._eraID != nil}
     /// Clears the value of `eraID`. Subsequent reads from it will return its default value.
     mutating func clearEraID() {self._eraID = nil}
 
@@ -1885,20 +1894,20 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
     /// oneof commented out
     /// oneof Item {
     var notification: SignalServiceProtos_DataMessage.Payment.Notification {
-      get {return _notification ?? SignalServiceProtos_DataMessage.Payment.Notification()}
+      get {_notification ?? SignalServiceProtos_DataMessage.Payment.Notification()}
       set {_notification = newValue}
     }
     /// Returns true if `notification` has been explicitly set.
-    var hasNotification: Bool {return self._notification != nil}
+    var hasNotification: Bool {self._notification != nil}
     /// Clears the value of `notification`. Subsequent reads from it will return its default value.
     mutating func clearNotification() {self._notification = nil}
 
     var activation: SignalServiceProtos_DataMessage.Payment.Activation {
-      get {return _activation ?? SignalServiceProtos_DataMessage.Payment.Activation()}
+      get {_activation ?? SignalServiceProtos_DataMessage.Payment.Activation()}
       set {_activation = newValue}
     }
     /// Returns true if `activation` has been explicitly set.
-    var hasActivation: Bool {return self._activation != nil}
+    var hasActivation: Bool {self._activation != nil}
     /// Clears the value of `activation`. Subsequent reads from it will return its default value.
     mutating func clearActivation() {self._activation = nil}
 
@@ -1912,11 +1921,11 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
       /// oneof commented out
       /// oneof Amount {
       var mobileCoin: SignalServiceProtos_DataMessage.Payment.Amount.MobileCoin {
-        get {return _mobileCoin ?? SignalServiceProtos_DataMessage.Payment.Amount.MobileCoin()}
+        get {_mobileCoin ?? SignalServiceProtos_DataMessage.Payment.Amount.MobileCoin()}
         set {_mobileCoin = newValue}
       }
       /// Returns true if `mobileCoin` has been explicitly set.
-      var hasMobileCoin: Bool {return self._mobileCoin != nil}
+      var hasMobileCoin: Bool {self._mobileCoin != nil}
       /// Clears the value of `mobileCoin`. Subsequent reads from it will return its default value.
       mutating func clearMobileCoin() {self._mobileCoin = nil}
 
@@ -1929,11 +1938,11 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
 
         /// @required
         var picoMob: UInt64 {
-          get {return _picoMob ?? 0}
+          get {_picoMob ?? 0}
           set {_picoMob = newValue}
         }
         /// Returns true if `picoMob` has been explicitly set.
-        var hasPicoMob: Bool {return self._picoMob != nil}
+        var hasPicoMob: Bool {self._picoMob != nil}
         /// Clears the value of `picoMob`. Subsequent reads from it will return its default value.
         mutating func clearPicoMob() {self._picoMob = nil}
 
@@ -1957,20 +1966,20 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
       /// oneof commented out
       /// oneof Transaction {
       var mobileCoin: SignalServiceProtos_DataMessage.Payment.Notification.MobileCoin {
-        get {return _mobileCoin ?? SignalServiceProtos_DataMessage.Payment.Notification.MobileCoin()}
+        get {_mobileCoin ?? SignalServiceProtos_DataMessage.Payment.Notification.MobileCoin()}
         set {_mobileCoin = newValue}
       }
       /// Returns true if `mobileCoin` has been explicitly set.
-      var hasMobileCoin: Bool {return self._mobileCoin != nil}
+      var hasMobileCoin: Bool {self._mobileCoin != nil}
       /// Clears the value of `mobileCoin`. Subsequent reads from it will return its default value.
       mutating func clearMobileCoin() {self._mobileCoin = nil}
 
       var note: String {
-        get {return _note ?? String()}
+        get {_note ?? String()}
         set {_note = newValue}
       }
       /// Returns true if `note` has been explicitly set.
-      var hasNote: Bool {return self._note != nil}
+      var hasNote: Bool {self._note != nil}
       /// Clears the value of `note`. Subsequent reads from it will return its default value.
       mutating func clearNote() {self._note = nil}
 
@@ -1983,11 +1992,11 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
 
         /// @required
         var receipt: Data {
-          get {return _receipt ?? Data()}
+          get {_receipt ?? Data()}
           set {_receipt = newValue}
         }
         /// Returns true if `receipt` has been explicitly set.
-        var hasReceipt: Bool {return self._receipt != nil}
+        var hasReceipt: Bool {self._receipt != nil}
         /// Clears the value of `receipt`. Subsequent reads from it will return its default value.
         mutating func clearReceipt() {self._receipt = nil}
 
@@ -2010,11 +2019,11 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var type: SignalServiceProtos_DataMessage.Payment.Activation.TypeEnum {
-        get {return _type ?? .request}
+        get {_type ?? .request}
         set {_type = newValue}
       }
       /// Returns true if `type` has been explicitly set.
-      var hasType: Bool {return self._type != nil}
+      var hasType: Bool {self._type != nil}
       /// Clears the value of `type`. Subsequent reads from it will return its default value.
       mutating func clearType() {self._type = nil}
 
@@ -2047,30 +2056,30 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var authorAci: String {
-      get {return _authorAci ?? String()}
+      get {_authorAci ?? String()}
       set {_authorAci = newValue}
     }
     /// Returns true if `authorAci` has been explicitly set.
-    var hasAuthorAci: Bool {return self._authorAci != nil}
+    var hasAuthorAci: Bool {self._authorAci != nil}
     /// Clears the value of `authorAci`. Subsequent reads from it will return its default value.
     mutating func clearAuthorAci() {self._authorAci = nil}
 
     var sentTimestamp: UInt64 {
-      get {return _sentTimestamp ?? 0}
+      get {_sentTimestamp ?? 0}
       set {_sentTimestamp = newValue}
     }
     /// Returns true if `sentTimestamp` has been explicitly set.
-    var hasSentTimestamp: Bool {return self._sentTimestamp != nil}
+    var hasSentTimestamp: Bool {self._sentTimestamp != nil}
     /// Clears the value of `sentTimestamp`. Subsequent reads from it will return its default value.
     mutating func clearSentTimestamp() {self._sentTimestamp = nil}
 
     /// 16-byte UUID
     var authorAciBinary: Data {
-      get {return _authorAciBinary ?? Data()}
+      get {_authorAciBinary ?? Data()}
       set {_authorAciBinary = newValue}
     }
     /// Returns true if `authorAciBinary` has been explicitly set.
-    var hasAuthorAciBinary: Bool {return self._authorAciBinary != nil}
+    var hasAuthorAciBinary: Bool {self._authorAciBinary != nil}
     /// Clears the value of `authorAciBinary`. Subsequent reads from it will return its default value.
     mutating func clearAuthorAciBinary() {self._authorAciBinary = nil}
 
@@ -2089,11 +2098,11 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var receiptCredentialPresentation: Data {
-      get {return _receiptCredentialPresentation ?? Data()}
+      get {_receiptCredentialPresentation ?? Data()}
       set {_receiptCredentialPresentation = newValue}
     }
     /// Returns true if `receiptCredentialPresentation` has been explicitly set.
-    var hasReceiptCredentialPresentation: Bool {return self._receiptCredentialPresentation != nil}
+    var hasReceiptCredentialPresentation: Bool {self._receiptCredentialPresentation != nil}
     /// Clears the value of `receiptCredentialPresentation`. Subsequent reads from it will return its default value.
     mutating func clearReceiptCredentialPresentation() {self._receiptCredentialPresentation = nil}
 
@@ -2110,20 +2119,20 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var question: String {
-      get {return _question ?? String()}
+      get {_question ?? String()}
       set {_question = newValue}
     }
     /// Returns true if `question` has been explicitly set.
-    var hasQuestion: Bool {return self._question != nil}
+    var hasQuestion: Bool {self._question != nil}
     /// Clears the value of `question`. Subsequent reads from it will return its default value.
     mutating func clearQuestion() {self._question = nil}
 
     var allowMultiple: Bool {
-      get {return _allowMultiple ?? false}
+      get {_allowMultiple ?? false}
       set {_allowMultiple = newValue}
     }
     /// Returns true if `allowMultiple` has been explicitly set.
-    var hasAllowMultiple: Bool {return self._allowMultiple != nil}
+    var hasAllowMultiple: Bool {self._allowMultiple != nil}
     /// Clears the value of `allowMultiple`. Subsequent reads from it will return its default value.
     mutating func clearAllowMultiple() {self._allowMultiple = nil}
 
@@ -2143,11 +2152,11 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var targetSentTimestamp: UInt64 {
-      get {return _targetSentTimestamp ?? 0}
+      get {_targetSentTimestamp ?? 0}
       set {_targetSentTimestamp = newValue}
     }
     /// Returns true if `targetSentTimestamp` has been explicitly set.
-    var hasTargetSentTimestamp: Bool {return self._targetSentTimestamp != nil}
+    var hasTargetSentTimestamp: Bool {self._targetSentTimestamp != nil}
     /// Clears the value of `targetSentTimestamp`. Subsequent reads from it will return its default value.
     mutating func clearTargetSentTimestamp() {self._targetSentTimestamp = nil}
 
@@ -2164,31 +2173,31 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var targetAuthorAciBinary: Data {
-      get {return _targetAuthorAciBinary ?? Data()}
+      get {_targetAuthorAciBinary ?? Data()}
       set {_targetAuthorAciBinary = newValue}
     }
     /// Returns true if `targetAuthorAciBinary` has been explicitly set.
-    var hasTargetAuthorAciBinary: Bool {return self._targetAuthorAciBinary != nil}
+    var hasTargetAuthorAciBinary: Bool {self._targetAuthorAciBinary != nil}
     /// Clears the value of `targetAuthorAciBinary`. Subsequent reads from it will return its default value.
     mutating func clearTargetAuthorAciBinary() {self._targetAuthorAciBinary = nil}
 
     var targetSentTimestamp: UInt64 {
-      get {return _targetSentTimestamp ?? 0}
+      get {_targetSentTimestamp ?? 0}
       set {_targetSentTimestamp = newValue}
     }
     /// Returns true if `targetSentTimestamp` has been explicitly set.
-    var hasTargetSentTimestamp: Bool {return self._targetSentTimestamp != nil}
+    var hasTargetSentTimestamp: Bool {self._targetSentTimestamp != nil}
     /// Clears the value of `targetSentTimestamp`. Subsequent reads from it will return its default value.
     mutating func clearTargetSentTimestamp() {self._targetSentTimestamp = nil}
 
     var optionIndexes: [UInt32] = []
 
     var voteCount: UInt32 {
-      get {return _voteCount ?? 0}
+      get {_voteCount ?? 0}
       set {_voteCount = newValue}
     }
     /// Returns true if `voteCount` has been explicitly set.
-    var hasVoteCount: Bool {return self._voteCount != nil}
+    var hasVoteCount: Bool {self._voteCount != nil}
     /// Clears the value of `voteCount`. Subsequent reads from it will return its default value.
     mutating func clearVoteCount() {self._voteCount = nil}
 
@@ -2208,40 +2217,40 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
 
     /// 16-byte UUID
     var targetAuthorAciBinary: Data {
-      get {return _targetAuthorAciBinary ?? Data()}
+      get {_targetAuthorAciBinary ?? Data()}
       set {_targetAuthorAciBinary = newValue}
     }
     /// Returns true if `targetAuthorAciBinary` has been explicitly set.
-    var hasTargetAuthorAciBinary: Bool {return self._targetAuthorAciBinary != nil}
+    var hasTargetAuthorAciBinary: Bool {self._targetAuthorAciBinary != nil}
     /// Clears the value of `targetAuthorAciBinary`. Subsequent reads from it will return its default value.
     mutating func clearTargetAuthorAciBinary() {self._targetAuthorAciBinary = nil}
 
     var targetSentTimestamp: UInt64 {
-      get {return _targetSentTimestamp ?? 0}
+      get {_targetSentTimestamp ?? 0}
       set {_targetSentTimestamp = newValue}
     }
     /// Returns true if `targetSentTimestamp` has been explicitly set.
-    var hasTargetSentTimestamp: Bool {return self._targetSentTimestamp != nil}
+    var hasTargetSentTimestamp: Bool {self._targetSentTimestamp != nil}
     /// Clears the value of `targetSentTimestamp`. Subsequent reads from it will return its default value.
     mutating func clearTargetSentTimestamp() {self._targetSentTimestamp = nil}
 
     /// oneof pinDuration {
     var pinDurationSeconds: UInt32 {
-      get {return _pinDurationSeconds ?? 0}
+      get {_pinDurationSeconds ?? 0}
       set {_pinDurationSeconds = newValue}
     }
     /// Returns true if `pinDurationSeconds` has been explicitly set.
-    var hasPinDurationSeconds: Bool {return self._pinDurationSeconds != nil}
+    var hasPinDurationSeconds: Bool {self._pinDurationSeconds != nil}
     /// Clears the value of `pinDurationSeconds`. Subsequent reads from it will return its default value.
     mutating func clearPinDurationSeconds() {self._pinDurationSeconds = nil}
 
     /// }
     var pinDurationForever: Bool {
-      get {return _pinDurationForever ?? false}
+      get {_pinDurationForever ?? false}
       set {_pinDurationForever = newValue}
     }
     /// Returns true if `pinDurationForever` has been explicitly set.
-    var hasPinDurationForever: Bool {return self._pinDurationForever != nil}
+    var hasPinDurationForever: Bool {self._pinDurationForever != nil}
     /// Clears the value of `pinDurationForever`. Subsequent reads from it will return its default value.
     mutating func clearPinDurationForever() {self._pinDurationForever = nil}
 
@@ -2262,20 +2271,52 @@ struct SignalServiceProtos_DataMessage: @unchecked Sendable {
 
     /// 16-byte UUID
     var targetAuthorAciBinary: Data {
-      get {return _targetAuthorAciBinary ?? Data()}
+      get {_targetAuthorAciBinary ?? Data()}
       set {_targetAuthorAciBinary = newValue}
     }
     /// Returns true if `targetAuthorAciBinary` has been explicitly set.
-    var hasTargetAuthorAciBinary: Bool {return self._targetAuthorAciBinary != nil}
+    var hasTargetAuthorAciBinary: Bool {self._targetAuthorAciBinary != nil}
     /// Clears the value of `targetAuthorAciBinary`. Subsequent reads from it will return its default value.
     mutating func clearTargetAuthorAciBinary() {self._targetAuthorAciBinary = nil}
 
     var targetSentTimestamp: UInt64 {
-      get {return _targetSentTimestamp ?? 0}
+      get {_targetSentTimestamp ?? 0}
       set {_targetSentTimestamp = newValue}
     }
     /// Returns true if `targetSentTimestamp` has been explicitly set.
-    var hasTargetSentTimestamp: Bool {return self._targetSentTimestamp != nil}
+    var hasTargetSentTimestamp: Bool {self._targetSentTimestamp != nil}
+    /// Clears the value of `targetSentTimestamp`. Subsequent reads from it will return its default value.
+    mutating func clearTargetSentTimestamp() {self._targetSentTimestamp = nil}
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _targetAuthorAciBinary: Data? = nil
+    fileprivate var _targetSentTimestamp: UInt64? = nil
+  }
+
+  struct AdminDelete: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    /// 16-byte UUID
+    var targetAuthorAciBinary: Data {
+      get {_targetAuthorAciBinary ?? Data()}
+      set {_targetAuthorAciBinary = newValue}
+    }
+    /// Returns true if `targetAuthorAciBinary` has been explicitly set.
+    var hasTargetAuthorAciBinary: Bool {self._targetAuthorAciBinary != nil}
+    /// Clears the value of `targetAuthorAciBinary`. Subsequent reads from it will return its default value.
+    mutating func clearTargetAuthorAciBinary() {self._targetAuthorAciBinary = nil}
+
+    var targetSentTimestamp: UInt64 {
+      get {_targetSentTimestamp ?? 0}
+      set {_targetSentTimestamp = newValue}
+    }
+    /// Returns true if `targetSentTimestamp` has been explicitly set.
+    var hasTargetSentTimestamp: Bool {self._targetSentTimestamp != nil}
     /// Clears the value of `targetSentTimestamp`. Subsequent reads from it will return its default value.
     mutating func clearTargetSentTimestamp() {self._targetSentTimestamp = nil}
 
@@ -2298,11 +2339,11 @@ struct SignalServiceProtos_NullMessage: Sendable {
   // methods supported on all messages.
 
   var padding: Data {
-    get {return _padding ?? Data()}
+    get {_padding ?? Data()}
     set {_padding = newValue}
   }
   /// Returns true if `padding` has been explicitly set.
-  var hasPadding: Bool {return self._padding != nil}
+  var hasPadding: Bool {self._padding != nil}
   /// Clears the value of `padding`. Subsequent reads from it will return its default value.
   mutating func clearPadding() {self._padding = nil}
 
@@ -2319,11 +2360,11 @@ struct SignalServiceProtos_ReceiptMessage: Sendable {
   // methods supported on all messages.
 
   var type: SignalServiceProtos_ReceiptMessage.TypeEnum {
-    get {return _type ?? .delivery}
+    get {_type ?? .delivery}
     set {_type = newValue}
   }
   /// Returns true if `type` has been explicitly set.
-  var hasType: Bool {return self._type != nil}
+  var hasType: Bool {self._type != nil}
   /// Clears the value of `type`. Subsequent reads from it will return its default value.
   mutating func clearType() {self._type = nil}
 
@@ -2353,48 +2394,48 @@ struct SignalServiceProtos_Verified: Sendable {
   // methods supported on all messages.
 
   var destinationAci: String {
-    get {return _destinationAci ?? String()}
+    get {_destinationAci ?? String()}
     set {_destinationAci = newValue}
   }
   /// Returns true if `destinationAci` has been explicitly set.
-  var hasDestinationAci: Bool {return self._destinationAci != nil}
+  var hasDestinationAci: Bool {self._destinationAci != nil}
   /// Clears the value of `destinationAci`. Subsequent reads from it will return its default value.
   mutating func clearDestinationAci() {self._destinationAci = nil}
 
   var identityKey: Data {
-    get {return _identityKey ?? Data()}
+    get {_identityKey ?? Data()}
     set {_identityKey = newValue}
   }
   /// Returns true if `identityKey` has been explicitly set.
-  var hasIdentityKey: Bool {return self._identityKey != nil}
+  var hasIdentityKey: Bool {self._identityKey != nil}
   /// Clears the value of `identityKey`. Subsequent reads from it will return its default value.
   mutating func clearIdentityKey() {self._identityKey = nil}
 
   var state: SignalServiceProtos_Verified.State {
-    get {return _state ?? .default}
+    get {_state ?? .default}
     set {_state = newValue}
   }
   /// Returns true if `state` has been explicitly set.
-  var hasState: Bool {return self._state != nil}
+  var hasState: Bool {self._state != nil}
   /// Clears the value of `state`. Subsequent reads from it will return its default value.
   mutating func clearState() {self._state = nil}
 
   var nullMessage: Data {
-    get {return _nullMessage ?? Data()}
+    get {_nullMessage ?? Data()}
     set {_nullMessage = newValue}
   }
   /// Returns true if `nullMessage` has been explicitly set.
-  var hasNullMessage: Bool {return self._nullMessage != nil}
+  var hasNullMessage: Bool {self._nullMessage != nil}
   /// Clears the value of `nullMessage`. Subsequent reads from it will return its default value.
   mutating func clearNullMessage() {self._nullMessage = nil}
 
   /// 16-byte UUID
   var destinationAciBinary: Data {
-    get {return _destinationAciBinary ?? Data()}
+    get {_destinationAciBinary ?? Data()}
     set {_destinationAciBinary = newValue}
   }
   /// Returns true if `destinationAciBinary` has been explicitly set.
-  var hasDestinationAciBinary: Bool {return self._destinationAciBinary != nil}
+  var hasDestinationAciBinary: Bool {self._destinationAciBinary != nil}
   /// Clears the value of `destinationAciBinary`. Subsequent reads from it will return its default value.
   mutating func clearDestinationAciBinary() {self._destinationAciBinary = nil}
 
@@ -2426,179 +2467,179 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
   // methods supported on all messages.
 
   var sent: SignalServiceProtos_SyncMessage.Sent {
-    get {return _storage._sent ?? SignalServiceProtos_SyncMessage.Sent()}
+    get {_storage._sent ?? SignalServiceProtos_SyncMessage.Sent()}
     set {_uniqueStorage()._sent = newValue}
   }
   /// Returns true if `sent` has been explicitly set.
-  var hasSent: Bool {return _storage._sent != nil}
+  var hasSent: Bool {_storage._sent != nil}
   /// Clears the value of `sent`. Subsequent reads from it will return its default value.
   mutating func clearSent() {_uniqueStorage()._sent = nil}
 
   var contacts: SignalServiceProtos_SyncMessage.Contacts {
-    get {return _storage._contacts ?? SignalServiceProtos_SyncMessage.Contacts()}
+    get {_storage._contacts ?? SignalServiceProtos_SyncMessage.Contacts()}
     set {_uniqueStorage()._contacts = newValue}
   }
   /// Returns true if `contacts` has been explicitly set.
-  var hasContacts: Bool {return _storage._contacts != nil}
+  var hasContacts: Bool {_storage._contacts != nil}
   /// Clears the value of `contacts`. Subsequent reads from it will return its default value.
   mutating func clearContacts() {_uniqueStorage()._contacts = nil}
 
   var request: SignalServiceProtos_SyncMessage.Request {
-    get {return _storage._request ?? SignalServiceProtos_SyncMessage.Request()}
+    get {_storage._request ?? SignalServiceProtos_SyncMessage.Request()}
     set {_uniqueStorage()._request = newValue}
   }
   /// Returns true if `request` has been explicitly set.
-  var hasRequest: Bool {return _storage._request != nil}
+  var hasRequest: Bool {_storage._request != nil}
   /// Clears the value of `request`. Subsequent reads from it will return its default value.
   mutating func clearRequest() {_uniqueStorage()._request = nil}
 
   var read: [SignalServiceProtos_SyncMessage.Read] {
-    get {return _storage._read}
+    get {_storage._read}
     set {_uniqueStorage()._read = newValue}
   }
 
   var blocked: SignalServiceProtos_SyncMessage.Blocked {
-    get {return _storage._blocked ?? SignalServiceProtos_SyncMessage.Blocked()}
+    get {_storage._blocked ?? SignalServiceProtos_SyncMessage.Blocked()}
     set {_uniqueStorage()._blocked = newValue}
   }
   /// Returns true if `blocked` has been explicitly set.
-  var hasBlocked: Bool {return _storage._blocked != nil}
+  var hasBlocked: Bool {_storage._blocked != nil}
   /// Clears the value of `blocked`. Subsequent reads from it will return its default value.
   mutating func clearBlocked() {_uniqueStorage()._blocked = nil}
 
   var verified: SignalServiceProtos_Verified {
-    get {return _storage._verified ?? SignalServiceProtos_Verified()}
+    get {_storage._verified ?? SignalServiceProtos_Verified()}
     set {_uniqueStorage()._verified = newValue}
   }
   /// Returns true if `verified` has been explicitly set.
-  var hasVerified: Bool {return _storage._verified != nil}
+  var hasVerified: Bool {_storage._verified != nil}
   /// Clears the value of `verified`. Subsequent reads from it will return its default value.
   mutating func clearVerified() {_uniqueStorage()._verified = nil}
 
   var configuration: SignalServiceProtos_SyncMessage.Configuration {
-    get {return _storage._configuration ?? SignalServiceProtos_SyncMessage.Configuration()}
+    get {_storage._configuration ?? SignalServiceProtos_SyncMessage.Configuration()}
     set {_uniqueStorage()._configuration = newValue}
   }
   /// Returns true if `configuration` has been explicitly set.
-  var hasConfiguration: Bool {return _storage._configuration != nil}
+  var hasConfiguration: Bool {_storage._configuration != nil}
   /// Clears the value of `configuration`. Subsequent reads from it will return its default value.
   mutating func clearConfiguration() {_uniqueStorage()._configuration = nil}
 
   var padding: Data {
-    get {return _storage._padding ?? Data()}
+    get {_storage._padding ?? Data()}
     set {_uniqueStorage()._padding = newValue}
   }
   /// Returns true if `padding` has been explicitly set.
-  var hasPadding: Bool {return _storage._padding != nil}
+  var hasPadding: Bool {_storage._padding != nil}
   /// Clears the value of `padding`. Subsequent reads from it will return its default value.
   mutating func clearPadding() {_uniqueStorage()._padding = nil}
 
   var stickerPackOperation: [SignalServiceProtos_SyncMessage.StickerPackOperation] {
-    get {return _storage._stickerPackOperation}
+    get {_storage._stickerPackOperation}
     set {_uniqueStorage()._stickerPackOperation = newValue}
   }
 
   var viewOnceOpen: SignalServiceProtos_SyncMessage.ViewOnceOpen {
-    get {return _storage._viewOnceOpen ?? SignalServiceProtos_SyncMessage.ViewOnceOpen()}
+    get {_storage._viewOnceOpen ?? SignalServiceProtos_SyncMessage.ViewOnceOpen()}
     set {_uniqueStorage()._viewOnceOpen = newValue}
   }
   /// Returns true if `viewOnceOpen` has been explicitly set.
-  var hasViewOnceOpen: Bool {return _storage._viewOnceOpen != nil}
+  var hasViewOnceOpen: Bool {_storage._viewOnceOpen != nil}
   /// Clears the value of `viewOnceOpen`. Subsequent reads from it will return its default value.
   mutating func clearViewOnceOpen() {_uniqueStorage()._viewOnceOpen = nil}
 
   var fetchLatest: SignalServiceProtos_SyncMessage.FetchLatest {
-    get {return _storage._fetchLatest ?? SignalServiceProtos_SyncMessage.FetchLatest()}
+    get {_storage._fetchLatest ?? SignalServiceProtos_SyncMessage.FetchLatest()}
     set {_uniqueStorage()._fetchLatest = newValue}
   }
   /// Returns true if `fetchLatest` has been explicitly set.
-  var hasFetchLatest: Bool {return _storage._fetchLatest != nil}
+  var hasFetchLatest: Bool {_storage._fetchLatest != nil}
   /// Clears the value of `fetchLatest`. Subsequent reads from it will return its default value.
   mutating func clearFetchLatest() {_uniqueStorage()._fetchLatest = nil}
 
   var keys: SignalServiceProtos_SyncMessage.Keys {
-    get {return _storage._keys ?? SignalServiceProtos_SyncMessage.Keys()}
+    get {_storage._keys ?? SignalServiceProtos_SyncMessage.Keys()}
     set {_uniqueStorage()._keys = newValue}
   }
   /// Returns true if `keys` has been explicitly set.
-  var hasKeys: Bool {return _storage._keys != nil}
+  var hasKeys: Bool {_storage._keys != nil}
   /// Clears the value of `keys`. Subsequent reads from it will return its default value.
   mutating func clearKeys() {_uniqueStorage()._keys = nil}
 
   var messageRequestResponse: SignalServiceProtos_SyncMessage.MessageRequestResponse {
-    get {return _storage._messageRequestResponse ?? SignalServiceProtos_SyncMessage.MessageRequestResponse()}
+    get {_storage._messageRequestResponse ?? SignalServiceProtos_SyncMessage.MessageRequestResponse()}
     set {_uniqueStorage()._messageRequestResponse = newValue}
   }
   /// Returns true if `messageRequestResponse` has been explicitly set.
-  var hasMessageRequestResponse: Bool {return _storage._messageRequestResponse != nil}
+  var hasMessageRequestResponse: Bool {_storage._messageRequestResponse != nil}
   /// Clears the value of `messageRequestResponse`. Subsequent reads from it will return its default value.
   mutating func clearMessageRequestResponse() {_uniqueStorage()._messageRequestResponse = nil}
 
   var outgoingPayment: SignalServiceProtos_SyncMessage.OutgoingPayment {
-    get {return _storage._outgoingPayment ?? SignalServiceProtos_SyncMessage.OutgoingPayment()}
+    get {_storage._outgoingPayment ?? SignalServiceProtos_SyncMessage.OutgoingPayment()}
     set {_uniqueStorage()._outgoingPayment = newValue}
   }
   /// Returns true if `outgoingPayment` has been explicitly set.
-  var hasOutgoingPayment: Bool {return _storage._outgoingPayment != nil}
+  var hasOutgoingPayment: Bool {_storage._outgoingPayment != nil}
   /// Clears the value of `outgoingPayment`. Subsequent reads from it will return its default value.
   mutating func clearOutgoingPayment() {_uniqueStorage()._outgoingPayment = nil}
 
   var viewed: [SignalServiceProtos_SyncMessage.Viewed] {
-    get {return _storage._viewed}
+    get {_storage._viewed}
     set {_uniqueStorage()._viewed = newValue}
   }
 
   var pniChangeNumber: SignalServiceProtos_SyncMessage.PniChangeNumber {
-    get {return _storage._pniChangeNumber ?? SignalServiceProtos_SyncMessage.PniChangeNumber()}
+    get {_storage._pniChangeNumber ?? SignalServiceProtos_SyncMessage.PniChangeNumber()}
     set {_uniqueStorage()._pniChangeNumber = newValue}
   }
   /// Returns true if `pniChangeNumber` has been explicitly set.
-  var hasPniChangeNumber: Bool {return _storage._pniChangeNumber != nil}
+  var hasPniChangeNumber: Bool {_storage._pniChangeNumber != nil}
   /// Clears the value of `pniChangeNumber`. Subsequent reads from it will return its default value.
   mutating func clearPniChangeNumber() {_uniqueStorage()._pniChangeNumber = nil}
 
   var callEvent: SignalServiceProtos_SyncMessage.CallEvent {
-    get {return _storage._callEvent ?? SignalServiceProtos_SyncMessage.CallEvent()}
+    get {_storage._callEvent ?? SignalServiceProtos_SyncMessage.CallEvent()}
     set {_uniqueStorage()._callEvent = newValue}
   }
   /// Returns true if `callEvent` has been explicitly set.
-  var hasCallEvent: Bool {return _storage._callEvent != nil}
+  var hasCallEvent: Bool {_storage._callEvent != nil}
   /// Clears the value of `callEvent`. Subsequent reads from it will return its default value.
   mutating func clearCallEvent() {_uniqueStorage()._callEvent = nil}
 
   var callLinkUpdate: SignalServiceProtos_SyncMessage.CallLinkUpdate {
-    get {return _storage._callLinkUpdate ?? SignalServiceProtos_SyncMessage.CallLinkUpdate()}
+    get {_storage._callLinkUpdate ?? SignalServiceProtos_SyncMessage.CallLinkUpdate()}
     set {_uniqueStorage()._callLinkUpdate = newValue}
   }
   /// Returns true if `callLinkUpdate` has been explicitly set.
-  var hasCallLinkUpdate: Bool {return _storage._callLinkUpdate != nil}
+  var hasCallLinkUpdate: Bool {_storage._callLinkUpdate != nil}
   /// Clears the value of `callLinkUpdate`. Subsequent reads from it will return its default value.
   mutating func clearCallLinkUpdate() {_uniqueStorage()._callLinkUpdate = nil}
 
   var callLogEvent: SignalServiceProtos_SyncMessage.CallLogEvent {
-    get {return _storage._callLogEvent ?? SignalServiceProtos_SyncMessage.CallLogEvent()}
+    get {_storage._callLogEvent ?? SignalServiceProtos_SyncMessage.CallLogEvent()}
     set {_uniqueStorage()._callLogEvent = newValue}
   }
   /// Returns true if `callLogEvent` has been explicitly set.
-  var hasCallLogEvent: Bool {return _storage._callLogEvent != nil}
+  var hasCallLogEvent: Bool {_storage._callLogEvent != nil}
   /// Clears the value of `callLogEvent`. Subsequent reads from it will return its default value.
   mutating func clearCallLogEvent() {_uniqueStorage()._callLogEvent = nil}
 
   var deleteForMe: SignalServiceProtos_SyncMessage.DeleteForMe {
-    get {return _storage._deleteForMe ?? SignalServiceProtos_SyncMessage.DeleteForMe()}
+    get {_storage._deleteForMe ?? SignalServiceProtos_SyncMessage.DeleteForMe()}
     set {_uniqueStorage()._deleteForMe = newValue}
   }
   /// Returns true if `deleteForMe` has been explicitly set.
-  var hasDeleteForMe: Bool {return _storage._deleteForMe != nil}
+  var hasDeleteForMe: Bool {_storage._deleteForMe != nil}
   /// Clears the value of `deleteForMe`. Subsequent reads from it will return its default value.
   mutating func clearDeleteForMe() {_uniqueStorage()._deleteForMe = nil}
 
   var deviceNameChange: SignalServiceProtos_SyncMessage.DeviceNameChange {
-    get {return _storage._deviceNameChange ?? SignalServiceProtos_SyncMessage.DeviceNameChange()}
+    get {_storage._deviceNameChange ?? SignalServiceProtos_SyncMessage.DeviceNameChange()}
     set {_uniqueStorage()._deviceNameChange = newValue}
   }
   /// Returns true if `deviceNameChange` has been explicitly set.
-  var hasDeviceNameChange: Bool {return _storage._deviceNameChange != nil}
+  var hasDeviceNameChange: Bool {_storage._deviceNameChange != nil}
   /// Clears the value of `deviceNameChange`. Subsequent reads from it will return its default value.
   mutating func clearDeviceNameChange() {_uniqueStorage()._deviceNameChange = nil}
 
@@ -2610,88 +2651,88 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var destinationE164: String {
-      get {return _destinationE164 ?? String()}
+      get {_destinationE164 ?? String()}
       set {_destinationE164 = newValue}
     }
     /// Returns true if `destinationE164` has been explicitly set.
-    var hasDestinationE164: Bool {return self._destinationE164 != nil}
+    var hasDestinationE164: Bool {self._destinationE164 != nil}
     /// Clears the value of `destinationE164`. Subsequent reads from it will return its default value.
     mutating func clearDestinationE164() {self._destinationE164 = nil}
 
     var destinationServiceID: String {
-      get {return _destinationServiceID ?? String()}
+      get {_destinationServiceID ?? String()}
       set {_destinationServiceID = newValue}
     }
     /// Returns true if `destinationServiceID` has been explicitly set.
-    var hasDestinationServiceID: Bool {return self._destinationServiceID != nil}
+    var hasDestinationServiceID: Bool {self._destinationServiceID != nil}
     /// Clears the value of `destinationServiceID`. Subsequent reads from it will return its default value.
     mutating func clearDestinationServiceID() {self._destinationServiceID = nil}
 
     var timestamp: UInt64 {
-      get {return _timestamp ?? 0}
+      get {_timestamp ?? 0}
       set {_timestamp = newValue}
     }
     /// Returns true if `timestamp` has been explicitly set.
-    var hasTimestamp: Bool {return self._timestamp != nil}
+    var hasTimestamp: Bool {self._timestamp != nil}
     /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
     mutating func clearTimestamp() {self._timestamp = nil}
 
     var message: SignalServiceProtos_DataMessage {
-      get {return _message ?? SignalServiceProtos_DataMessage()}
+      get {_message ?? SignalServiceProtos_DataMessage()}
       set {_message = newValue}
     }
     /// Returns true if `message` has been explicitly set.
-    var hasMessage: Bool {return self._message != nil}
+    var hasMessage: Bool {self._message != nil}
     /// Clears the value of `message`. Subsequent reads from it will return its default value.
     mutating func clearMessage() {self._message = nil}
 
     var expirationStartTimestamp: UInt64 {
-      get {return _expirationStartTimestamp ?? 0}
+      get {_expirationStartTimestamp ?? 0}
       set {_expirationStartTimestamp = newValue}
     }
     /// Returns true if `expirationStartTimestamp` has been explicitly set.
-    var hasExpirationStartTimestamp: Bool {return self._expirationStartTimestamp != nil}
+    var hasExpirationStartTimestamp: Bool {self._expirationStartTimestamp != nil}
     /// Clears the value of `expirationStartTimestamp`. Subsequent reads from it will return its default value.
     mutating func clearExpirationStartTimestamp() {self._expirationStartTimestamp = nil}
 
     var unidentifiedStatus: [SignalServiceProtos_SyncMessage.Sent.UnidentifiedDeliveryStatus] = []
 
     var isRecipientUpdate: Bool {
-      get {return _isRecipientUpdate ?? false}
+      get {_isRecipientUpdate ?? false}
       set {_isRecipientUpdate = newValue}
     }
     /// Returns true if `isRecipientUpdate` has been explicitly set.
-    var hasIsRecipientUpdate: Bool {return self._isRecipientUpdate != nil}
+    var hasIsRecipientUpdate: Bool {self._isRecipientUpdate != nil}
     /// Clears the value of `isRecipientUpdate`. Subsequent reads from it will return its default value.
     mutating func clearIsRecipientUpdate() {self._isRecipientUpdate = nil}
 
     var storyMessage: SignalServiceProtos_StoryMessage {
-      get {return _storyMessage ?? SignalServiceProtos_StoryMessage()}
+      get {_storyMessage ?? SignalServiceProtos_StoryMessage()}
       set {_storyMessage = newValue}
     }
     /// Returns true if `storyMessage` has been explicitly set.
-    var hasStoryMessage: Bool {return self._storyMessage != nil}
+    var hasStoryMessage: Bool {self._storyMessage != nil}
     /// Clears the value of `storyMessage`. Subsequent reads from it will return its default value.
     mutating func clearStoryMessage() {self._storyMessage = nil}
 
     var storyMessageRecipients: [SignalServiceProtos_SyncMessage.Sent.StoryMessageRecipient] = []
 
     var editMessage: SignalServiceProtos_EditMessage {
-      get {return _editMessage ?? SignalServiceProtos_EditMessage()}
+      get {_editMessage ?? SignalServiceProtos_EditMessage()}
       set {_editMessage = newValue}
     }
     /// Returns true if `editMessage` has been explicitly set.
-    var hasEditMessage: Bool {return self._editMessage != nil}
+    var hasEditMessage: Bool {self._editMessage != nil}
     /// Clears the value of `editMessage`. Subsequent reads from it will return its default value.
     mutating func clearEditMessage() {self._editMessage = nil}
 
     /// service ID binary (i.e. 16 byte UUID for ACI, 1 byte prefix + 16 byte UUID for PNI)
     var destinationServiceIDBinary: Data {
-      get {return _destinationServiceIDBinary ?? Data()}
+      get {_destinationServiceIDBinary ?? Data()}
       set {_destinationServiceIDBinary = newValue}
     }
     /// Returns true if `destinationServiceIDBinary` has been explicitly set.
-    var hasDestinationServiceIDBinary: Bool {return self._destinationServiceIDBinary != nil}
+    var hasDestinationServiceIDBinary: Bool {self._destinationServiceIDBinary != nil}
     /// Clears the value of `destinationServiceIDBinary`. Subsequent reads from it will return its default value.
     mutating func clearDestinationServiceIDBinary() {self._destinationServiceIDBinary = nil}
 
@@ -2703,30 +2744,30 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var destinationServiceID: String {
-        get {return _destinationServiceID ?? String()}
+        get {_destinationServiceID ?? String()}
         set {_destinationServiceID = newValue}
       }
       /// Returns true if `destinationServiceID` has been explicitly set.
-      var hasDestinationServiceID: Bool {return self._destinationServiceID != nil}
+      var hasDestinationServiceID: Bool {self._destinationServiceID != nil}
       /// Clears the value of `destinationServiceID`. Subsequent reads from it will return its default value.
       mutating func clearDestinationServiceID() {self._destinationServiceID = nil}
 
       var unidentified: Bool {
-        get {return _unidentified ?? false}
+        get {_unidentified ?? false}
         set {_unidentified = newValue}
       }
       /// Returns true if `unidentified` has been explicitly set.
-      var hasUnidentified: Bool {return self._unidentified != nil}
+      var hasUnidentified: Bool {self._unidentified != nil}
       /// Clears the value of `unidentified`. Subsequent reads from it will return its default value.
       mutating func clearUnidentified() {self._unidentified = nil}
 
       /// service ID binary (i.e. 16 byte UUID for ACI, 1 byte prefix + 16 byte UUID for PNI)
       var destinationServiceIDBinary: Data {
-        get {return _destinationServiceIDBinary ?? Data()}
+        get {_destinationServiceIDBinary ?? Data()}
         set {_destinationServiceIDBinary = newValue}
       }
       /// Returns true if `destinationServiceIDBinary` has been explicitly set.
-      var hasDestinationServiceIDBinary: Bool {return self._destinationServiceIDBinary != nil}
+      var hasDestinationServiceIDBinary: Bool {self._destinationServiceIDBinary != nil}
       /// Clears the value of `destinationServiceIDBinary`. Subsequent reads from it will return its default value.
       mutating func clearDestinationServiceIDBinary() {self._destinationServiceIDBinary = nil}
 
@@ -2745,32 +2786,32 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var destinationServiceID: String {
-        get {return _destinationServiceID ?? String()}
+        get {_destinationServiceID ?? String()}
         set {_destinationServiceID = newValue}
       }
       /// Returns true if `destinationServiceID` has been explicitly set.
-      var hasDestinationServiceID: Bool {return self._destinationServiceID != nil}
+      var hasDestinationServiceID: Bool {self._destinationServiceID != nil}
       /// Clears the value of `destinationServiceID`. Subsequent reads from it will return its default value.
       mutating func clearDestinationServiceID() {self._destinationServiceID = nil}
 
       var distributionListIds: [String] = []
 
       var isAllowedToReply: Bool {
-        get {return _isAllowedToReply ?? false}
+        get {_isAllowedToReply ?? false}
         set {_isAllowedToReply = newValue}
       }
       /// Returns true if `isAllowedToReply` has been explicitly set.
-      var hasIsAllowedToReply: Bool {return self._isAllowedToReply != nil}
+      var hasIsAllowedToReply: Bool {self._isAllowedToReply != nil}
       /// Clears the value of `isAllowedToReply`. Subsequent reads from it will return its default value.
       mutating func clearIsAllowedToReply() {self._isAllowedToReply = nil}
 
       /// service ID binary (i.e. 16 byte UUID for ACI, 1 byte prefix + 16 byte UUID for PNI)
       var destinationServiceIDBinary: Data {
-        get {return _destinationServiceIDBinary ?? Data()}
+        get {_destinationServiceIDBinary ?? Data()}
         set {_destinationServiceIDBinary = newValue}
       }
       /// Returns true if `destinationServiceIDBinary` has been explicitly set.
-      var hasDestinationServiceIDBinary: Bool {return self._destinationServiceIDBinary != nil}
+      var hasDestinationServiceIDBinary: Bool {self._destinationServiceIDBinary != nil}
       /// Clears the value of `destinationServiceIDBinary`. Subsequent reads from it will return its default value.
       mutating func clearDestinationServiceIDBinary() {self._destinationServiceIDBinary = nil}
 
@@ -2803,21 +2844,21 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
 
     /// @required
     var blob: SignalServiceProtos_AttachmentPointer {
-      get {return _storage._blob ?? SignalServiceProtos_AttachmentPointer()}
+      get {_storage._blob ?? SignalServiceProtos_AttachmentPointer()}
       set {_uniqueStorage()._blob = newValue}
     }
     /// Returns true if `blob` has been explicitly set.
-    var hasBlob: Bool {return _storage._blob != nil}
+    var hasBlob: Bool {_storage._blob != nil}
     /// Clears the value of `blob`. Subsequent reads from it will return its default value.
     mutating func clearBlob() {_uniqueStorage()._blob = nil}
 
     /// Signal-iOS renamed this property.
     var isComplete: Bool {
-      get {return _storage._isComplete ?? false}
+      get {_storage._isComplete ?? false}
       set {_uniqueStorage()._isComplete = newValue}
     }
     /// Returns true if `isComplete` has been explicitly set.
-    var hasIsComplete: Bool {return _storage._isComplete != nil}
+    var hasIsComplete: Bool {_storage._isComplete != nil}
     /// Clears the value of `isComplete`. Subsequent reads from it will return its default value.
     mutating func clearIsComplete() {_uniqueStorage()._isComplete = nil}
 
@@ -2853,11 +2894,11 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var type: SignalServiceProtos_SyncMessage.Request.TypeEnum {
-      get {return _type ?? .unknown}
+      get {_type ?? .unknown}
       set {_type = newValue}
     }
     /// Returns true if `type` has been explicitly set.
-    var hasType: Bool {return self._type != nil}
+    var hasType: Bool {self._type != nil}
     /// Clears the value of `type`. Subsequent reads from it will return its default value.
     mutating func clearType() {self._type = nil}
 
@@ -2887,31 +2928,31 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var senderAci: String {
-      get {return _senderAci ?? String()}
+      get {_senderAci ?? String()}
       set {_senderAci = newValue}
     }
     /// Returns true if `senderAci` has been explicitly set.
-    var hasSenderAci: Bool {return self._senderAci != nil}
+    var hasSenderAci: Bool {self._senderAci != nil}
     /// Clears the value of `senderAci`. Subsequent reads from it will return its default value.
     mutating func clearSenderAci() {self._senderAci = nil}
 
     /// @required
     var timestamp: UInt64 {
-      get {return _timestamp ?? 0}
+      get {_timestamp ?? 0}
       set {_timestamp = newValue}
     }
     /// Returns true if `timestamp` has been explicitly set.
-    var hasTimestamp: Bool {return self._timestamp != nil}
+    var hasTimestamp: Bool {self._timestamp != nil}
     /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
     mutating func clearTimestamp() {self._timestamp = nil}
 
     /// 16-byte UUID
     var senderAciBinary: Data {
-      get {return _senderAciBinary ?? Data()}
+      get {_senderAciBinary ?? Data()}
       set {_senderAciBinary = newValue}
     }
     /// Returns true if `senderAciBinary` has been explicitly set.
-    var hasSenderAciBinary: Bool {return self._senderAciBinary != nil}
+    var hasSenderAciBinary: Bool {self._senderAciBinary != nil}
     /// Clears the value of `senderAciBinary`. Subsequent reads from it will return its default value.
     mutating func clearSenderAciBinary() {self._senderAciBinary = nil}
 
@@ -2930,31 +2971,31 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var senderAci: String {
-      get {return _senderAci ?? String()}
+      get {_senderAci ?? String()}
       set {_senderAci = newValue}
     }
     /// Returns true if `senderAci` has been explicitly set.
-    var hasSenderAci: Bool {return self._senderAci != nil}
+    var hasSenderAci: Bool {self._senderAci != nil}
     /// Clears the value of `senderAci`. Subsequent reads from it will return its default value.
     mutating func clearSenderAci() {self._senderAci = nil}
 
     /// @required
     var timestamp: UInt64 {
-      get {return _timestamp ?? 0}
+      get {_timestamp ?? 0}
       set {_timestamp = newValue}
     }
     /// Returns true if `timestamp` has been explicitly set.
-    var hasTimestamp: Bool {return self._timestamp != nil}
+    var hasTimestamp: Bool {self._timestamp != nil}
     /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
     mutating func clearTimestamp() {self._timestamp = nil}
 
     /// 16-byte UUID
     var senderAciBinary: Data {
-      get {return _senderAciBinary ?? Data()}
+      get {_senderAciBinary ?? Data()}
       set {_senderAciBinary = newValue}
     }
     /// Returns true if `senderAciBinary` has been explicitly set.
-    var hasSenderAciBinary: Bool {return self._senderAciBinary != nil}
+    var hasSenderAciBinary: Bool {self._senderAciBinary != nil}
     /// Clears the value of `senderAciBinary`. Subsequent reads from it will return its default value.
     mutating func clearSenderAciBinary() {self._senderAciBinary = nil}
 
@@ -2973,47 +3014,47 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var readReceipts: Bool {
-      get {return _readReceipts ?? false}
+      get {_readReceipts ?? false}
       set {_readReceipts = newValue}
     }
     /// Returns true if `readReceipts` has been explicitly set.
-    var hasReadReceipts: Bool {return self._readReceipts != nil}
+    var hasReadReceipts: Bool {self._readReceipts != nil}
     /// Clears the value of `readReceipts`. Subsequent reads from it will return its default value.
     mutating func clearReadReceipts() {self._readReceipts = nil}
 
     var unidentifiedDeliveryIndicators: Bool {
-      get {return _unidentifiedDeliveryIndicators ?? false}
+      get {_unidentifiedDeliveryIndicators ?? false}
       set {_unidentifiedDeliveryIndicators = newValue}
     }
     /// Returns true if `unidentifiedDeliveryIndicators` has been explicitly set.
-    var hasUnidentifiedDeliveryIndicators: Bool {return self._unidentifiedDeliveryIndicators != nil}
+    var hasUnidentifiedDeliveryIndicators: Bool {self._unidentifiedDeliveryIndicators != nil}
     /// Clears the value of `unidentifiedDeliveryIndicators`. Subsequent reads from it will return its default value.
     mutating func clearUnidentifiedDeliveryIndicators() {self._unidentifiedDeliveryIndicators = nil}
 
     var typingIndicators: Bool {
-      get {return _typingIndicators ?? false}
+      get {_typingIndicators ?? false}
       set {_typingIndicators = newValue}
     }
     /// Returns true if `typingIndicators` has been explicitly set.
-    var hasTypingIndicators: Bool {return self._typingIndicators != nil}
+    var hasTypingIndicators: Bool {self._typingIndicators != nil}
     /// Clears the value of `typingIndicators`. Subsequent reads from it will return its default value.
     mutating func clearTypingIndicators() {self._typingIndicators = nil}
 
     var provisioningVersion: UInt32 {
-      get {return _provisioningVersion ?? 0}
+      get {_provisioningVersion ?? 0}
       set {_provisioningVersion = newValue}
     }
     /// Returns true if `provisioningVersion` has been explicitly set.
-    var hasProvisioningVersion: Bool {return self._provisioningVersion != nil}
+    var hasProvisioningVersion: Bool {self._provisioningVersion != nil}
     /// Clears the value of `provisioningVersion`. Subsequent reads from it will return its default value.
     mutating func clearProvisioningVersion() {self._provisioningVersion = nil}
 
     var linkPreviews: Bool {
-      get {return _linkPreviews ?? false}
+      get {_linkPreviews ?? false}
       set {_linkPreviews = newValue}
     }
     /// Returns true if `linkPreviews` has been explicitly set.
-    var hasLinkPreviews: Bool {return self._linkPreviews != nil}
+    var hasLinkPreviews: Bool {self._linkPreviews != nil}
     /// Clears the value of `linkPreviews`. Subsequent reads from it will return its default value.
     mutating func clearLinkPreviews() {self._linkPreviews = nil}
 
@@ -3035,30 +3076,30 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
 
     /// @required
     var packID: Data {
-      get {return _packID ?? Data()}
+      get {_packID ?? Data()}
       set {_packID = newValue}
     }
     /// Returns true if `packID` has been explicitly set.
-    var hasPackID: Bool {return self._packID != nil}
+    var hasPackID: Bool {self._packID != nil}
     /// Clears the value of `packID`. Subsequent reads from it will return its default value.
     mutating func clearPackID() {self._packID = nil}
 
     /// @required
     var packKey: Data {
-      get {return _packKey ?? Data()}
+      get {_packKey ?? Data()}
       set {_packKey = newValue}
     }
     /// Returns true if `packKey` has been explicitly set.
-    var hasPackKey: Bool {return self._packKey != nil}
+    var hasPackKey: Bool {self._packKey != nil}
     /// Clears the value of `packKey`. Subsequent reads from it will return its default value.
     mutating func clearPackKey() {self._packKey = nil}
 
     var type: SignalServiceProtos_SyncMessage.StickerPackOperation.TypeEnum {
-      get {return _type ?? .install}
+      get {_type ?? .install}
       set {_type = newValue}
     }
     /// Returns true if `type` has been explicitly set.
-    var hasType: Bool {return self._type != nil}
+    var hasType: Bool {self._type != nil}
     /// Clears the value of `type`. Subsequent reads from it will return its default value.
     mutating func clearType() {self._type = nil}
 
@@ -3087,31 +3128,31 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var senderAci: String {
-      get {return _senderAci ?? String()}
+      get {_senderAci ?? String()}
       set {_senderAci = newValue}
     }
     /// Returns true if `senderAci` has been explicitly set.
-    var hasSenderAci: Bool {return self._senderAci != nil}
+    var hasSenderAci: Bool {self._senderAci != nil}
     /// Clears the value of `senderAci`. Subsequent reads from it will return its default value.
     mutating func clearSenderAci() {self._senderAci = nil}
 
     /// @required
     var timestamp: UInt64 {
-      get {return _timestamp ?? 0}
+      get {_timestamp ?? 0}
       set {_timestamp = newValue}
     }
     /// Returns true if `timestamp` has been explicitly set.
-    var hasTimestamp: Bool {return self._timestamp != nil}
+    var hasTimestamp: Bool {self._timestamp != nil}
     /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
     mutating func clearTimestamp() {self._timestamp = nil}
 
     /// 16-byte UUID
     var senderAciBinary: Data {
-      get {return _senderAciBinary ?? Data()}
+      get {_senderAciBinary ?? Data()}
       set {_senderAciBinary = newValue}
     }
     /// Returns true if `senderAciBinary` has been explicitly set.
-    var hasSenderAciBinary: Bool {return self._senderAciBinary != nil}
+    var hasSenderAciBinary: Bool {self._senderAciBinary != nil}
     /// Clears the value of `senderAciBinary`. Subsequent reads from it will return its default value.
     mutating func clearSenderAciBinary() {self._senderAciBinary = nil}
 
@@ -3130,11 +3171,11 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var type: SignalServiceProtos_SyncMessage.FetchLatest.TypeEnum {
-      get {return _type ?? .unknown}
+      get {_type ?? .unknown}
       set {_type = newValue}
     }
     /// Returns true if `type` has been explicitly set.
-    var hasType: Bool {return self._type != nil}
+    var hasType: Bool {self._type != nil}
     /// Clears the value of `type`. Subsequent reads from it will return its default value.
     mutating func clearType() {self._type = nil}
 
@@ -3163,29 +3204,29 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var master: Data {
-      get {return _master ?? Data()}
+      get {_master ?? Data()}
       set {_master = newValue}
     }
     /// Returns true if `master` has been explicitly set.
-    var hasMaster: Bool {return self._master != nil}
+    var hasMaster: Bool {self._master != nil}
     /// Clears the value of `master`. Subsequent reads from it will return its default value.
     mutating func clearMaster() {self._master = nil}
 
     var accountEntropyPool: String {
-      get {return _accountEntropyPool ?? String()}
+      get {_accountEntropyPool ?? String()}
       set {_accountEntropyPool = newValue}
     }
     /// Returns true if `accountEntropyPool` has been explicitly set.
-    var hasAccountEntropyPool: Bool {return self._accountEntropyPool != nil}
+    var hasAccountEntropyPool: Bool {self._accountEntropyPool != nil}
     /// Clears the value of `accountEntropyPool`. Subsequent reads from it will return its default value.
     mutating func clearAccountEntropyPool() {self._accountEntropyPool = nil}
 
     var mediaRootBackupKey: Data {
-      get {return _mediaRootBackupKey ?? Data()}
+      get {_mediaRootBackupKey ?? Data()}
       set {_mediaRootBackupKey = newValue}
     }
     /// Returns true if `mediaRootBackupKey` has been explicitly set.
-    var hasMediaRootBackupKey: Bool {return self._mediaRootBackupKey != nil}
+    var hasMediaRootBackupKey: Bool {self._mediaRootBackupKey != nil}
     /// Clears the value of `mediaRootBackupKey`. Subsequent reads from it will return its default value.
     mutating func clearMediaRootBackupKey() {self._mediaRootBackupKey = nil}
 
@@ -3204,39 +3245,39 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var threadAci: String {
-      get {return _threadAci ?? String()}
+      get {_threadAci ?? String()}
       set {_threadAci = newValue}
     }
     /// Returns true if `threadAci` has been explicitly set.
-    var hasThreadAci: Bool {return self._threadAci != nil}
+    var hasThreadAci: Bool {self._threadAci != nil}
     /// Clears the value of `threadAci`. Subsequent reads from it will return its default value.
     mutating func clearThreadAci() {self._threadAci = nil}
 
     var groupID: Data {
-      get {return _groupID ?? Data()}
+      get {_groupID ?? Data()}
       set {_groupID = newValue}
     }
     /// Returns true if `groupID` has been explicitly set.
-    var hasGroupID: Bool {return self._groupID != nil}
+    var hasGroupID: Bool {self._groupID != nil}
     /// Clears the value of `groupID`. Subsequent reads from it will return its default value.
     mutating func clearGroupID() {self._groupID = nil}
 
     var type: SignalServiceProtos_SyncMessage.MessageRequestResponse.TypeEnum {
-      get {return _type ?? .unknown}
+      get {_type ?? .unknown}
       set {_type = newValue}
     }
     /// Returns true if `type` has been explicitly set.
-    var hasType: Bool {return self._type != nil}
+    var hasType: Bool {self._type != nil}
     /// Clears the value of `type`. Subsequent reads from it will return its default value.
     mutating func clearType() {self._type = nil}
 
     /// 16-byte UUID
     var threadAciBinary: Data {
-      get {return _threadAciBinary ?? Data()}
+      get {_threadAciBinary ?? Data()}
       set {_threadAciBinary = newValue}
     }
     /// Returns true if `threadAciBinary` has been explicitly set.
-    var hasThreadAciBinary: Bool {return self._threadAciBinary != nil}
+    var hasThreadAciBinary: Bool {self._threadAciBinary != nil}
     /// Clears the value of `threadAciBinary`. Subsequent reads from it will return its default value.
     mutating func clearThreadAciBinary() {self._threadAciBinary = nil}
 
@@ -3271,30 +3312,30 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var recipientServiceID: String {
-      get {return _recipientServiceID ?? String()}
+      get {_recipientServiceID ?? String()}
       set {_recipientServiceID = newValue}
     }
     /// Returns true if `recipientServiceID` has been explicitly set.
-    var hasRecipientServiceID: Bool {return self._recipientServiceID != nil}
+    var hasRecipientServiceID: Bool {self._recipientServiceID != nil}
     /// Clears the value of `recipientServiceID`. Subsequent reads from it will return its default value.
     mutating func clearRecipientServiceID() {self._recipientServiceID = nil}
 
     var note: String {
-      get {return _note ?? String()}
+      get {_note ?? String()}
       set {_note = newValue}
     }
     /// Returns true if `note` has been explicitly set.
-    var hasNote: Bool {return self._note != nil}
+    var hasNote: Bool {self._note != nil}
     /// Clears the value of `note`. Subsequent reads from it will return its default value.
     mutating func clearNote() {self._note = nil}
 
     /// oneof attachment_identifier {
     var mobileCoin: SignalServiceProtos_SyncMessage.OutgoingPayment.MobileCoin {
-      get {return _mobileCoin ?? SignalServiceProtos_SyncMessage.OutgoingPayment.MobileCoin()}
+      get {_mobileCoin ?? SignalServiceProtos_SyncMessage.OutgoingPayment.MobileCoin()}
       set {_mobileCoin = newValue}
     }
     /// Returns true if `mobileCoin` has been explicitly set.
-    var hasMobileCoin: Bool {return self._mobileCoin != nil}
+    var hasMobileCoin: Bool {self._mobileCoin != nil}
     /// Clears the value of `mobileCoin`. Subsequent reads from it will return its default value.
     mutating func clearMobileCoin() {self._mobileCoin = nil}
 
@@ -3306,59 +3347,59 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var recipientAddress: Data {
-        get {return _recipientAddress ?? Data()}
+        get {_recipientAddress ?? Data()}
         set {_recipientAddress = newValue}
       }
       /// Returns true if `recipientAddress` has been explicitly set.
-      var hasRecipientAddress: Bool {return self._recipientAddress != nil}
+      var hasRecipientAddress: Bool {self._recipientAddress != nil}
       /// Clears the value of `recipientAddress`. Subsequent reads from it will return its default value.
       mutating func clearRecipientAddress() {self._recipientAddress = nil}
 
       /// @required
       var amountPicoMob: UInt64 {
-        get {return _amountPicoMob ?? 0}
+        get {_amountPicoMob ?? 0}
         set {_amountPicoMob = newValue}
       }
       /// Returns true if `amountPicoMob` has been explicitly set.
-      var hasAmountPicoMob: Bool {return self._amountPicoMob != nil}
+      var hasAmountPicoMob: Bool {self._amountPicoMob != nil}
       /// Clears the value of `amountPicoMob`. Subsequent reads from it will return its default value.
       mutating func clearAmountPicoMob() {self._amountPicoMob = nil}
 
       /// @required
       var feePicoMob: UInt64 {
-        get {return _feePicoMob ?? 0}
+        get {_feePicoMob ?? 0}
         set {_feePicoMob = newValue}
       }
       /// Returns true if `feePicoMob` has been explicitly set.
-      var hasFeePicoMob: Bool {return self._feePicoMob != nil}
+      var hasFeePicoMob: Bool {self._feePicoMob != nil}
       /// Clears the value of `feePicoMob`. Subsequent reads from it will return its default value.
       mutating func clearFeePicoMob() {self._feePicoMob = nil}
 
       var receipt: Data {
-        get {return _receipt ?? Data()}
+        get {_receipt ?? Data()}
         set {_receipt = newValue}
       }
       /// Returns true if `receipt` has been explicitly set.
-      var hasReceipt: Bool {return self._receipt != nil}
+      var hasReceipt: Bool {self._receipt != nil}
       /// Clears the value of `receipt`. Subsequent reads from it will return its default value.
       mutating func clearReceipt() {self._receipt = nil}
 
       var ledgerBlockTimestamp: UInt64 {
-        get {return _ledgerBlockTimestamp ?? 0}
+        get {_ledgerBlockTimestamp ?? 0}
         set {_ledgerBlockTimestamp = newValue}
       }
       /// Returns true if `ledgerBlockTimestamp` has been explicitly set.
-      var hasLedgerBlockTimestamp: Bool {return self._ledgerBlockTimestamp != nil}
+      var hasLedgerBlockTimestamp: Bool {self._ledgerBlockTimestamp != nil}
       /// Clears the value of `ledgerBlockTimestamp`. Subsequent reads from it will return its default value.
       mutating func clearLedgerBlockTimestamp() {self._ledgerBlockTimestamp = nil}
 
       /// @required
       var ledgerBlockIndex: UInt64 {
-        get {return _ledgerBlockIndex ?? 0}
+        get {_ledgerBlockIndex ?? 0}
         set {_ledgerBlockIndex = newValue}
       }
       /// Returns true if `ledgerBlockIndex` has been explicitly set.
-      var hasLedgerBlockIndex: Bool {return self._ledgerBlockIndex != nil}
+      var hasLedgerBlockIndex: Bool {self._ledgerBlockIndex != nil}
       /// Clears the value of `ledgerBlockIndex`. Subsequent reads from it will return its default value.
       mutating func clearLedgerBlockIndex() {self._ledgerBlockIndex = nil}
 
@@ -3392,49 +3433,49 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
 
     /// Serialized libsignal-client IdentityKeyPair
     var identityKeyPair: Data {
-      get {return _identityKeyPair ?? Data()}
+      get {_identityKeyPair ?? Data()}
       set {_identityKeyPair = newValue}
     }
     /// Returns true if `identityKeyPair` has been explicitly set.
-    var hasIdentityKeyPair: Bool {return self._identityKeyPair != nil}
+    var hasIdentityKeyPair: Bool {self._identityKeyPair != nil}
     /// Clears the value of `identityKeyPair`. Subsequent reads from it will return its default value.
     mutating func clearIdentityKeyPair() {self._identityKeyPair = nil}
 
     /// Serialized libsignal-client SignedPreKeyRecord
     var signedPreKey: Data {
-      get {return _signedPreKey ?? Data()}
+      get {_signedPreKey ?? Data()}
       set {_signedPreKey = newValue}
     }
     /// Returns true if `signedPreKey` has been explicitly set.
-    var hasSignedPreKey: Bool {return self._signedPreKey != nil}
+    var hasSignedPreKey: Bool {self._signedPreKey != nil}
     /// Clears the value of `signedPreKey`. Subsequent reads from it will return its default value.
     mutating func clearSignedPreKey() {self._signedPreKey = nil}
 
     /// Serialized libsignal-client KyberPreKeyRecord
     var lastResortKyberPreKey: Data {
-      get {return _lastResortKyberPreKey ?? Data()}
+      get {_lastResortKyberPreKey ?? Data()}
       set {_lastResortKyberPreKey = newValue}
     }
     /// Returns true if `lastResortKyberPreKey` has been explicitly set.
-    var hasLastResortKyberPreKey: Bool {return self._lastResortKyberPreKey != nil}
+    var hasLastResortKyberPreKey: Bool {self._lastResortKyberPreKey != nil}
     /// Clears the value of `lastResortKyberPreKey`. Subsequent reads from it will return its default value.
     mutating func clearLastResortKyberPreKey() {self._lastResortKyberPreKey = nil}
 
     var registrationID: UInt32 {
-      get {return _registrationID ?? 0}
+      get {_registrationID ?? 0}
       set {_registrationID = newValue}
     }
     /// Returns true if `registrationID` has been explicitly set.
-    var hasRegistrationID: Bool {return self._registrationID != nil}
+    var hasRegistrationID: Bool {self._registrationID != nil}
     /// Clears the value of `registrationID`. Subsequent reads from it will return its default value.
     mutating func clearRegistrationID() {self._registrationID = nil}
 
     var newE164: String {
-      get {return _newE164 ?? String()}
+      get {_newE164 ?? String()}
       set {_newE164 = newValue}
     }
     /// Returns true if `newE164` has been explicitly set.
-    var hasNewE164: Bool {return self._newE164 != nil}
+    var hasNewE164: Bool {self._newE164 != nil}
     /// Clears the value of `newE164`. Subsequent reads from it will return its default value.
     mutating func clearNewE164() {self._newE164 = nil}
 
@@ -3458,58 +3499,58 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     /// group, or the room ID for an ad-hoc call. See also
     /// `CallLogEvent/conversationId`. 
     var conversationID: Data {
-      get {return _conversationID ?? Data()}
+      get {_conversationID ?? Data()}
       set {_conversationID = newValue}
     }
     /// Returns true if `conversationID` has been explicitly set.
-    var hasConversationID: Bool {return self._conversationID != nil}
+    var hasConversationID: Bool {self._conversationID != nil}
     /// Clears the value of `conversationID`. Subsequent reads from it will return its default value.
     mutating func clearConversationID() {self._conversationID = nil}
 
     /// An identifier for a call. Generated directly for 1:1, or derived from
     /// the era ID for group and ad-hoc calls. See also `CallLogEvent/callId`. 
     var callID: UInt64 {
-      get {return _callID ?? 0}
+      get {_callID ?? 0}
       set {_callID = newValue}
     }
     /// Returns true if `callID` has been explicitly set.
-    var hasCallID: Bool {return self._callID != nil}
+    var hasCallID: Bool {self._callID != nil}
     /// Clears the value of `callID`. Subsequent reads from it will return its default value.
     mutating func clearCallID() {self._callID = nil}
 
     var timestamp: UInt64 {
-      get {return _timestamp ?? 0}
+      get {_timestamp ?? 0}
       set {_timestamp = newValue}
     }
     /// Returns true if `timestamp` has been explicitly set.
-    var hasTimestamp: Bool {return self._timestamp != nil}
+    var hasTimestamp: Bool {self._timestamp != nil}
     /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
     mutating func clearTimestamp() {self._timestamp = nil}
 
     var type: SignalServiceProtos_SyncMessage.CallEvent.TypeEnum {
-      get {return _type ?? .unknownType}
+      get {_type ?? .unknownType}
       set {_type = newValue}
     }
     /// Returns true if `type` has been explicitly set.
-    var hasType: Bool {return self._type != nil}
+    var hasType: Bool {self._type != nil}
     /// Clears the value of `type`. Subsequent reads from it will return its default value.
     mutating func clearType() {self._type = nil}
 
     var direction: SignalServiceProtos_SyncMessage.CallEvent.Direction {
-      get {return _direction ?? .unknownDirection}
+      get {_direction ?? .unknownDirection}
       set {_direction = newValue}
     }
     /// Returns true if `direction` has been explicitly set.
-    var hasDirection: Bool {return self._direction != nil}
+    var hasDirection: Bool {self._direction != nil}
     /// Clears the value of `direction`. Subsequent reads from it will return its default value.
     mutating func clearDirection() {self._direction = nil}
 
     var event: SignalServiceProtos_SyncMessage.CallEvent.Event {
-      get {return _event ?? .unknownAction}
+      get {_event ?? .unknownAction}
       set {_event = newValue}
     }
     /// Returns true if `event` has been explicitly set.
-    var hasEvent: Bool {return self._event != nil}
+    var hasEvent: Bool {self._event != nil}
     /// Clears the value of `event`. Subsequent reads from it will return its default value.
     mutating func clearEvent() {self._event = nil}
 
@@ -3568,30 +3609,30 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var rootKey: Data {
-      get {return _rootKey ?? Data()}
+      get {_rootKey ?? Data()}
       set {_rootKey = newValue}
     }
     /// Returns true if `rootKey` has been explicitly set.
-    var hasRootKey: Bool {return self._rootKey != nil}
+    var hasRootKey: Bool {self._rootKey != nil}
     /// Clears the value of `rootKey`. Subsequent reads from it will return its default value.
     mutating func clearRootKey() {self._rootKey = nil}
 
     var adminPasskey: Data {
-      get {return _adminPasskey ?? Data()}
+      get {_adminPasskey ?? Data()}
       set {_adminPasskey = newValue}
     }
     /// Returns true if `adminPasskey` has been explicitly set.
-    var hasAdminPasskey: Bool {return self._adminPasskey != nil}
+    var hasAdminPasskey: Bool {self._adminPasskey != nil}
     /// Clears the value of `adminPasskey`. Subsequent reads from it will return its default value.
     mutating func clearAdminPasskey() {self._adminPasskey = nil}
 
     /// defaults to UPDATE
     var type: SignalServiceProtos_SyncMessage.CallLinkUpdate.TypeEnum {
-      get {return _type ?? .update}
+      get {_type ?? .update}
       set {_type = newValue}
     }
     /// Returns true if `type` has been explicitly set.
-    var hasType: Bool {return self._type != nil}
+    var hasType: Bool {self._type != nil}
     /// Clears the value of `type`. Subsequent reads from it will return its default value.
     mutating func clearType() {self._type = nil}
 
@@ -3619,20 +3660,20 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var type: SignalServiceProtos_SyncMessage.CallLogEvent.TypeEnum {
-      get {return _type ?? .cleared}
+      get {_type ?? .cleared}
       set {_type = newValue}
     }
     /// Returns true if `type` has been explicitly set.
-    var hasType: Bool {return self._type != nil}
+    var hasType: Bool {self._type != nil}
     /// Clears the value of `type`. Subsequent reads from it will return its default value.
     mutating func clearType() {self._type = nil}
 
     var timestamp: UInt64 {
-      get {return _timestamp ?? 0}
+      get {_timestamp ?? 0}
       set {_timestamp = newValue}
     }
     /// Returns true if `timestamp` has been explicitly set.
-    var hasTimestamp: Bool {return self._timestamp != nil}
+    var hasTimestamp: Bool {self._timestamp != nil}
     /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
     mutating func clearTimestamp() {self._timestamp = nil}
 
@@ -3640,22 +3681,22 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     /// group, or the room ID for an ad-hoc call. See also
     /// `CallEvent/conversationId`. 
     var conversationID: Data {
-      get {return _conversationID ?? Data()}
+      get {_conversationID ?? Data()}
       set {_conversationID = newValue}
     }
     /// Returns true if `conversationID` has been explicitly set.
-    var hasConversationID: Bool {return self._conversationID != nil}
+    var hasConversationID: Bool {self._conversationID != nil}
     /// Clears the value of `conversationID`. Subsequent reads from it will return its default value.
     mutating func clearConversationID() {self._conversationID = nil}
 
     /// An identifier for a call. Generated directly for 1:1, or derived from
     /// the era ID for group and ad-hoc calls. See also `CallEvent/callId`. 
     var callID: UInt64 {
-      get {return _callID ?? 0}
+      get {_callID ?? 0}
       set {_callID = newValue}
     }
     /// Returns true if `callID` has been explicitly set.
-    var hasCallID: Bool {return self._callID != nil}
+    var hasCallID: Bool {self._callID != nil}
     /// Clears the value of `callID`. Subsequent reads from it will return its default value.
     mutating func clearCallID() {self._callID = nil}
 
@@ -3702,39 +3743,39 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
 
       /// oneof identifier {
       var threadServiceID: String {
-        get {return _threadServiceID ?? String()}
+        get {_threadServiceID ?? String()}
         set {_threadServiceID = newValue}
       }
       /// Returns true if `threadServiceID` has been explicitly set.
-      var hasThreadServiceID: Bool {return self._threadServiceID != nil}
+      var hasThreadServiceID: Bool {self._threadServiceID != nil}
       /// Clears the value of `threadServiceID`. Subsequent reads from it will return its default value.
       mutating func clearThreadServiceID() {self._threadServiceID = nil}
 
       var threadGroupID: Data {
-        get {return _threadGroupID ?? Data()}
+        get {_threadGroupID ?? Data()}
         set {_threadGroupID = newValue}
       }
       /// Returns true if `threadGroupID` has been explicitly set.
-      var hasThreadGroupID: Bool {return self._threadGroupID != nil}
+      var hasThreadGroupID: Bool {self._threadGroupID != nil}
       /// Clears the value of `threadGroupID`. Subsequent reads from it will return its default value.
       mutating func clearThreadGroupID() {self._threadGroupID = nil}
 
       var threadE164: String {
-        get {return _threadE164 ?? String()}
+        get {_threadE164 ?? String()}
         set {_threadE164 = newValue}
       }
       /// Returns true if `threadE164` has been explicitly set.
-      var hasThreadE164: Bool {return self._threadE164 != nil}
+      var hasThreadE164: Bool {self._threadE164 != nil}
       /// Clears the value of `threadE164`. Subsequent reads from it will return its default value.
       mutating func clearThreadE164() {self._threadE164 = nil}
 
       /// service ID binary (i.e. 16 byte UUID for ACI, 1 byte prefix + 16 byte UUID for PNI)
       var threadServiceIDBinary: Data {
-        get {return _threadServiceIDBinary ?? Data()}
+        get {_threadServiceIDBinary ?? Data()}
         set {_threadServiceIDBinary = newValue}
       }
       /// Returns true if `threadServiceIDBinary` has been explicitly set.
-      var hasThreadServiceIDBinary: Bool {return self._threadServiceIDBinary != nil}
+      var hasThreadServiceIDBinary: Bool {self._threadServiceIDBinary != nil}
       /// Clears the value of `threadServiceIDBinary`. Subsequent reads from it will return its default value.
       mutating func clearThreadServiceIDBinary() {self._threadServiceIDBinary = nil}
 
@@ -3755,40 +3796,40 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
 
       /// oneof author {
       var authorServiceID: String {
-        get {return _authorServiceID ?? String()}
+        get {_authorServiceID ?? String()}
         set {_authorServiceID = newValue}
       }
       /// Returns true if `authorServiceID` has been explicitly set.
-      var hasAuthorServiceID: Bool {return self._authorServiceID != nil}
+      var hasAuthorServiceID: Bool {self._authorServiceID != nil}
       /// Clears the value of `authorServiceID`. Subsequent reads from it will return its default value.
       mutating func clearAuthorServiceID() {self._authorServiceID = nil}
 
       var authorE164: String {
-        get {return _authorE164 ?? String()}
+        get {_authorE164 ?? String()}
         set {_authorE164 = newValue}
       }
       /// Returns true if `authorE164` has been explicitly set.
-      var hasAuthorE164: Bool {return self._authorE164 != nil}
+      var hasAuthorE164: Bool {self._authorE164 != nil}
       /// Clears the value of `authorE164`. Subsequent reads from it will return its default value.
       mutating func clearAuthorE164() {self._authorE164 = nil}
 
       /// service ID binary (i.e. 16 byte UUID for ACI, 1 byte prefix + 16 byte UUID for PNI)
       var authorServiceIDBinary: Data {
-        get {return _authorServiceIDBinary ?? Data()}
+        get {_authorServiceIDBinary ?? Data()}
         set {_authorServiceIDBinary = newValue}
       }
       /// Returns true if `authorServiceIDBinary` has been explicitly set.
-      var hasAuthorServiceIDBinary: Bool {return self._authorServiceIDBinary != nil}
+      var hasAuthorServiceIDBinary: Bool {self._authorServiceIDBinary != nil}
       /// Clears the value of `authorServiceIDBinary`. Subsequent reads from it will return its default value.
       mutating func clearAuthorServiceIDBinary() {self._authorServiceIDBinary = nil}
 
       /// }
       var sentTimestamp: UInt64 {
-        get {return _sentTimestamp ?? 0}
+        get {_sentTimestamp ?? 0}
         set {_sentTimestamp = newValue}
       }
       /// Returns true if `sentTimestamp` has been explicitly set.
-      var hasSentTimestamp: Bool {return self._sentTimestamp != nil}
+      var hasSentTimestamp: Bool {self._sentTimestamp != nil}
       /// Clears the value of `sentTimestamp`. Subsequent reads from it will return its default value.
       mutating func clearSentTimestamp() {self._sentTimestamp = nil}
 
@@ -3808,11 +3849,11 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var conversation: SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier {
-        get {return _conversation ?? SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier()}
+        get {_conversation ?? SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier()}
         set {_conversation = newValue}
       }
       /// Returns true if `conversation` has been explicitly set.
-      var hasConversation: Bool {return self._conversation != nil}
+      var hasConversation: Bool {self._conversation != nil}
       /// Clears the value of `conversation`. Subsequent reads from it will return its default value.
       mutating func clearConversation() {self._conversation = nil}
 
@@ -3831,50 +3872,50 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var conversation: SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier {
-        get {return _conversation ?? SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier()}
+        get {_conversation ?? SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier()}
         set {_conversation = newValue}
       }
       /// Returns true if `conversation` has been explicitly set.
-      var hasConversation: Bool {return self._conversation != nil}
+      var hasConversation: Bool {self._conversation != nil}
       /// Clears the value of `conversation`. Subsequent reads from it will return its default value.
       mutating func clearConversation() {self._conversation = nil}
 
       var targetMessage: SignalServiceProtos_SyncMessage.DeleteForMe.AddressableMessage {
-        get {return _targetMessage ?? SignalServiceProtos_SyncMessage.DeleteForMe.AddressableMessage()}
+        get {_targetMessage ?? SignalServiceProtos_SyncMessage.DeleteForMe.AddressableMessage()}
         set {_targetMessage = newValue}
       }
       /// Returns true if `targetMessage` has been explicitly set.
-      var hasTargetMessage: Bool {return self._targetMessage != nil}
+      var hasTargetMessage: Bool {self._targetMessage != nil}
       /// Clears the value of `targetMessage`. Subsequent reads from it will return its default value.
       mutating func clearTargetMessage() {self._targetMessage = nil}
 
       /// The `clientUuid` from `AttachmentPointer`.
       var clientUuid: Data {
-        get {return _clientUuid ?? Data()}
+        get {_clientUuid ?? Data()}
         set {_clientUuid = newValue}
       }
       /// Returns true if `clientUuid` has been explicitly set.
-      var hasClientUuid: Bool {return self._clientUuid != nil}
+      var hasClientUuid: Bool {self._clientUuid != nil}
       /// Clears the value of `clientUuid`. Subsequent reads from it will return its default value.
       mutating func clearClientUuid() {self._clientUuid = nil}
 
       /// SHA256 hash of the (encrypted, padded, etc.) attachment blob on the CDN.
       var fallbackDigest: Data {
-        get {return _fallbackDigest ?? Data()}
+        get {_fallbackDigest ?? Data()}
         set {_fallbackDigest = newValue}
       }
       /// Returns true if `fallbackDigest` has been explicitly set.
-      var hasFallbackDigest: Bool {return self._fallbackDigest != nil}
+      var hasFallbackDigest: Bool {self._fallbackDigest != nil}
       /// Clears the value of `fallbackDigest`. Subsequent reads from it will return its default value.
       mutating func clearFallbackDigest() {self._fallbackDigest = nil}
 
       /// SHA256 hash of the plaintext content of the attachment.
       var fallbackPlaintextHash: Data {
-        get {return _fallbackPlaintextHash ?? Data()}
+        get {_fallbackPlaintextHash ?? Data()}
         set {_fallbackPlaintextHash = newValue}
       }
       /// Returns true if `fallbackPlaintextHash` has been explicitly set.
-      var hasFallbackPlaintextHash: Bool {return self._fallbackPlaintextHash != nil}
+      var hasFallbackPlaintextHash: Bool {self._fallbackPlaintextHash != nil}
       /// Clears the value of `fallbackPlaintextHash`. Subsequent reads from it will return its default value.
       mutating func clearFallbackPlaintextHash() {self._fallbackPlaintextHash = nil}
 
@@ -3895,11 +3936,11 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var conversation: SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier {
-        get {return _conversation ?? SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier()}
+        get {_conversation ?? SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier()}
         set {_conversation = newValue}
       }
       /// Returns true if `conversation` has been explicitly set.
-      var hasConversation: Bool {return self._conversation != nil}
+      var hasConversation: Bool {self._conversation != nil}
       /// Clears the value of `conversation`. Subsequent reads from it will return its default value.
       mutating func clearConversation() {self._conversation = nil}
 
@@ -3908,11 +3949,11 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
       var mostRecentNonExpiringMessages: [SignalServiceProtos_SyncMessage.DeleteForMe.AddressableMessage] = []
 
       var isFullDelete: Bool {
-        get {return _isFullDelete ?? false}
+        get {_isFullDelete ?? false}
         set {_isFullDelete = newValue}
       }
       /// Returns true if `isFullDelete` has been explicitly set.
-      var hasIsFullDelete: Bool {return self._isFullDelete != nil}
+      var hasIsFullDelete: Bool {self._isFullDelete != nil}
       /// Clears the value of `isFullDelete`. Subsequent reads from it will return its default value.
       mutating func clearIsFullDelete() {self._isFullDelete = nil}
 
@@ -3930,11 +3971,11 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
       // methods supported on all messages.
 
       var conversation: SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier {
-        get {return _conversation ?? SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier()}
+        get {_conversation ?? SignalServiceProtos_SyncMessage.DeleteForMe.ConversationIdentifier()}
         set {_conversation = newValue}
       }
       /// Returns true if `conversation` has been explicitly set.
-      var hasConversation: Bool {return self._conversation != nil}
+      var hasConversation: Bool {self._conversation != nil}
       /// Clears the value of `conversation`. Subsequent reads from it will return its default value.
       mutating func clearConversation() {self._conversation = nil}
 
@@ -3954,11 +3995,11 @@ struct SignalServiceProtos_SyncMessage: @unchecked Sendable {
     // methods supported on all messages.
 
     var deviceID: UInt32 {
-      get {return _deviceID ?? 0}
+      get {_deviceID ?? 0}
       set {_deviceID = newValue}
     }
     /// Returns true if `deviceID` has been explicitly set.
-    var hasDeviceID: Bool {return self._deviceID != nil}
+    var hasDeviceID: Bool {self._deviceID != nil}
     /// Clears the value of `deviceID`. Subsequent reads from it will return its default value.
     mutating func clearDeviceID() {self._deviceID = nil}
 
@@ -3985,150 +4026,150 @@ struct SignalServiceProtos_AttachmentPointer: Sendable {
   ///
   /// oneof attachment_identifier {
   var cdnID: UInt64 {
-    get {return _cdnID ?? 0}
+    get {_cdnID ?? 0}
     set {_cdnID = newValue}
   }
   /// Returns true if `cdnID` has been explicitly set.
-  var hasCdnID: Bool {return self._cdnID != nil}
+  var hasCdnID: Bool {self._cdnID != nil}
   /// Clears the value of `cdnID`. Subsequent reads from it will return its default value.
   mutating func clearCdnID() {self._cdnID = nil}
 
   /// }
   var cdnKey: String {
-    get {return _cdnKey ?? String()}
+    get {_cdnKey ?? String()}
     set {_cdnKey = newValue}
   }
   /// Returns true if `cdnKey` has been explicitly set.
-  var hasCdnKey: Bool {return self._cdnKey != nil}
+  var hasCdnKey: Bool {self._cdnKey != nil}
   /// Clears the value of `cdnKey`. Subsequent reads from it will return its default value.
   mutating func clearCdnKey() {self._cdnKey = nil}
 
   /// Cross-client identifier for this attachment among all attachments on the
   /// owning message.
   var clientUuid: Data {
-    get {return _clientUuid ?? Data()}
+    get {_clientUuid ?? Data()}
     set {_clientUuid = newValue}
   }
   /// Returns true if `clientUuid` has been explicitly set.
-  var hasClientUuid: Bool {return self._clientUuid != nil}
+  var hasClientUuid: Bool {self._clientUuid != nil}
   /// Clears the value of `clientUuid`. Subsequent reads from it will return its default value.
   mutating func clearClientUuid() {self._clientUuid = nil}
 
   var contentType: String {
-    get {return _contentType ?? String()}
+    get {_contentType ?? String()}
     set {_contentType = newValue}
   }
   /// Returns true if `contentType` has been explicitly set.
-  var hasContentType: Bool {return self._contentType != nil}
+  var hasContentType: Bool {self._contentType != nil}
   /// Clears the value of `contentType`. Subsequent reads from it will return its default value.
   mutating func clearContentType() {self._contentType = nil}
 
   var key: Data {
-    get {return _key ?? Data()}
+    get {_key ?? Data()}
     set {_key = newValue}
   }
   /// Returns true if `key` has been explicitly set.
-  var hasKey: Bool {return self._key != nil}
+  var hasKey: Bool {self._key != nil}
   /// Clears the value of `key`. Subsequent reads from it will return its default value.
   mutating func clearKey() {self._key = nil}
 
   var size: UInt32 {
-    get {return _size ?? 0}
+    get {_size ?? 0}
     set {_size = newValue}
   }
   /// Returns true if `size` has been explicitly set.
-  var hasSize: Bool {return self._size != nil}
+  var hasSize: Bool {self._size != nil}
   /// Clears the value of `size`. Subsequent reads from it will return its default value.
   mutating func clearSize() {self._size = nil}
 
   var thumbnail: Data {
-    get {return _thumbnail ?? Data()}
+    get {_thumbnail ?? Data()}
     set {_thumbnail = newValue}
   }
   /// Returns true if `thumbnail` has been explicitly set.
-  var hasThumbnail: Bool {return self._thumbnail != nil}
+  var hasThumbnail: Bool {self._thumbnail != nil}
   /// Clears the value of `thumbnail`. Subsequent reads from it will return its default value.
   mutating func clearThumbnail() {self._thumbnail = nil}
 
   var digest: Data {
-    get {return _digest ?? Data()}
+    get {_digest ?? Data()}
     set {_digest = newValue}
   }
   /// Returns true if `digest` has been explicitly set.
-  var hasDigest: Bool {return self._digest != nil}
+  var hasDigest: Bool {self._digest != nil}
   /// Clears the value of `digest`. Subsequent reads from it will return its default value.
   mutating func clearDigest() {self._digest = nil}
 
   var fileName: String {
-    get {return _fileName ?? String()}
+    get {_fileName ?? String()}
     set {_fileName = newValue}
   }
   /// Returns true if `fileName` has been explicitly set.
-  var hasFileName: Bool {return self._fileName != nil}
+  var hasFileName: Bool {self._fileName != nil}
   /// Clears the value of `fileName`. Subsequent reads from it will return its default value.
   mutating func clearFileName() {self._fileName = nil}
 
   var flags: UInt32 {
-    get {return _flags ?? 0}
+    get {_flags ?? 0}
     set {_flags = newValue}
   }
   /// Returns true if `flags` has been explicitly set.
-  var hasFlags: Bool {return self._flags != nil}
+  var hasFlags: Bool {self._flags != nil}
   /// Clears the value of `flags`. Subsequent reads from it will return its default value.
   mutating func clearFlags() {self._flags = nil}
 
   var width: UInt32 {
-    get {return _width ?? 0}
+    get {_width ?? 0}
     set {_width = newValue}
   }
   /// Returns true if `width` has been explicitly set.
-  var hasWidth: Bool {return self._width != nil}
+  var hasWidth: Bool {self._width != nil}
   /// Clears the value of `width`. Subsequent reads from it will return its default value.
   mutating func clearWidth() {self._width = nil}
 
   var height: UInt32 {
-    get {return _height ?? 0}
+    get {_height ?? 0}
     set {_height = newValue}
   }
   /// Returns true if `height` has been explicitly set.
-  var hasHeight: Bool {return self._height != nil}
+  var hasHeight: Bool {self._height != nil}
   /// Clears the value of `height`. Subsequent reads from it will return its default value.
   mutating func clearHeight() {self._height = nil}
 
   var caption: String {
-    get {return _caption ?? String()}
+    get {_caption ?? String()}
     set {_caption = newValue}
   }
   /// Returns true if `caption` has been explicitly set.
-  var hasCaption: Bool {return self._caption != nil}
+  var hasCaption: Bool {self._caption != nil}
   /// Clears the value of `caption`. Subsequent reads from it will return its default value.
   mutating func clearCaption() {self._caption = nil}
 
   var blurHash: String {
-    get {return _blurHash ?? String()}
+    get {_blurHash ?? String()}
     set {_blurHash = newValue}
   }
   /// Returns true if `blurHash` has been explicitly set.
-  var hasBlurHash: Bool {return self._blurHash != nil}
+  var hasBlurHash: Bool {self._blurHash != nil}
   /// Clears the value of `blurHash`. Subsequent reads from it will return its default value.
   mutating func clearBlurHash() {self._blurHash = nil}
 
   var uploadTimestamp: UInt64 {
-    get {return _uploadTimestamp ?? 0}
+    get {_uploadTimestamp ?? 0}
     set {_uploadTimestamp = newValue}
   }
   /// Returns true if `uploadTimestamp` has been explicitly set.
-  var hasUploadTimestamp: Bool {return self._uploadTimestamp != nil}
+  var hasUploadTimestamp: Bool {self._uploadTimestamp != nil}
   /// Clears the value of `uploadTimestamp`. Subsequent reads from it will return its default value.
   mutating func clearUploadTimestamp() {self._uploadTimestamp = nil}
 
   /// Next ID: 21
   var cdnNumber: UInt32 {
-    get {return _cdnNumber ?? 0}
+    get {_cdnNumber ?? 0}
     set {_cdnNumber = newValue}
   }
   /// Returns true if `cdnNumber` has been explicitly set.
-  var hasCdnNumber: Bool {return self._cdnNumber != nil}
+  var hasCdnNumber: Bool {self._cdnNumber != nil}
   /// Clears the value of `cdnNumber`. Subsequent reads from it will return its default value.
   mutating func clearCdnNumber() {self._cdnNumber = nil}
 
@@ -4171,29 +4212,29 @@ struct SignalServiceProtos_GroupContextV2: Sendable {
   // methods supported on all messages.
 
   var masterKey: Data {
-    get {return _masterKey ?? Data()}
+    get {_masterKey ?? Data()}
     set {_masterKey = newValue}
   }
   /// Returns true if `masterKey` has been explicitly set.
-  var hasMasterKey: Bool {return self._masterKey != nil}
+  var hasMasterKey: Bool {self._masterKey != nil}
   /// Clears the value of `masterKey`. Subsequent reads from it will return its default value.
   mutating func clearMasterKey() {self._masterKey = nil}
 
   var revision: UInt32 {
-    get {return _revision ?? 0}
+    get {_revision ?? 0}
     set {_revision = newValue}
   }
   /// Returns true if `revision` has been explicitly set.
-  var hasRevision: Bool {return self._revision != nil}
+  var hasRevision: Bool {self._revision != nil}
   /// Clears the value of `revision`. Subsequent reads from it will return its default value.
   mutating func clearRevision() {self._revision = nil}
 
   var groupChange: Data {
-    get {return _groupChange ?? Data()}
+    get {_groupChange ?? Data()}
     set {_groupChange = newValue}
   }
   /// Returns true if `groupChange` has been explicitly set.
-  var hasGroupChange: Bool {return self._groupChange != nil}
+  var hasGroupChange: Bool {self._groupChange != nil}
   /// Clears the value of `groupChange`. Subsequent reads from it will return its default value.
   mutating func clearGroupChange() {self._groupChange = nil}
 
@@ -4212,75 +4253,75 @@ struct SignalServiceProtos_ContactDetails: Sendable {
   // methods supported on all messages.
 
   var contactE164: String {
-    get {return _contactE164 ?? String()}
+    get {_contactE164 ?? String()}
     set {_contactE164 = newValue}
   }
   /// Returns true if `contactE164` has been explicitly set.
-  var hasContactE164: Bool {return self._contactE164 != nil}
+  var hasContactE164: Bool {self._contactE164 != nil}
   /// Clears the value of `contactE164`. Subsequent reads from it will return its default value.
   mutating func clearContactE164() {self._contactE164 = nil}
 
   var aci: String {
-    get {return _aci ?? String()}
+    get {_aci ?? String()}
     set {_aci = newValue}
   }
   /// Returns true if `aci` has been explicitly set.
-  var hasAci: Bool {return self._aci != nil}
+  var hasAci: Bool {self._aci != nil}
   /// Clears the value of `aci`. Subsequent reads from it will return its default value.
   mutating func clearAci() {self._aci = nil}
 
   /// 16-byte UUID
   var aciBinary: Data {
-    get {return _aciBinary ?? Data()}
+    get {_aciBinary ?? Data()}
     set {_aciBinary = newValue}
   }
   /// Returns true if `aciBinary` has been explicitly set.
-  var hasAciBinary: Bool {return self._aciBinary != nil}
+  var hasAciBinary: Bool {self._aciBinary != nil}
   /// Clears the value of `aciBinary`. Subsequent reads from it will return its default value.
   mutating func clearAciBinary() {self._aciBinary = nil}
 
   var name: String {
-    get {return _name ?? String()}
+    get {_name ?? String()}
     set {_name = newValue}
   }
   /// Returns true if `name` has been explicitly set.
-  var hasName: Bool {return self._name != nil}
+  var hasName: Bool {self._name != nil}
   /// Clears the value of `name`. Subsequent reads from it will return its default value.
   mutating func clearName() {self._name = nil}
 
   var avatar: SignalServiceProtos_ContactDetails.Avatar {
-    get {return _avatar ?? SignalServiceProtos_ContactDetails.Avatar()}
+    get {_avatar ?? SignalServiceProtos_ContactDetails.Avatar()}
     set {_avatar = newValue}
   }
   /// Returns true if `avatar` has been explicitly set.
-  var hasAvatar: Bool {return self._avatar != nil}
+  var hasAvatar: Bool {self._avatar != nil}
   /// Clears the value of `avatar`. Subsequent reads from it will return its default value.
   mutating func clearAvatar() {self._avatar = nil}
 
   var expireTimer: UInt32 {
-    get {return _expireTimer ?? 0}
+    get {_expireTimer ?? 0}
     set {_expireTimer = newValue}
   }
   /// Returns true if `expireTimer` has been explicitly set.
-  var hasExpireTimer: Bool {return self._expireTimer != nil}
+  var hasExpireTimer: Bool {self._expireTimer != nil}
   /// Clears the value of `expireTimer`. Subsequent reads from it will return its default value.
   mutating func clearExpireTimer() {self._expireTimer = nil}
 
   var expireTimerVersion: UInt32 {
-    get {return _expireTimerVersion ?? 0}
+    get {_expireTimerVersion ?? 0}
     set {_expireTimerVersion = newValue}
   }
   /// Returns true if `expireTimerVersion` has been explicitly set.
-  var hasExpireTimerVersion: Bool {return self._expireTimerVersion != nil}
+  var hasExpireTimerVersion: Bool {self._expireTimerVersion != nil}
   /// Clears the value of `expireTimerVersion`. Subsequent reads from it will return its default value.
   mutating func clearExpireTimerVersion() {self._expireTimerVersion = nil}
 
   var inboxPosition: UInt32 {
-    get {return _inboxPosition ?? 0}
+    get {_inboxPosition ?? 0}
     set {_inboxPosition = newValue}
   }
   /// Returns true if `inboxPosition` has been explicitly set.
-  var hasInboxPosition: Bool {return self._inboxPosition != nil}
+  var hasInboxPosition: Bool {self._inboxPosition != nil}
   /// Clears the value of `inboxPosition`. Subsequent reads from it will return its default value.
   mutating func clearInboxPosition() {self._inboxPosition = nil}
 
@@ -4292,20 +4333,20 @@ struct SignalServiceProtos_ContactDetails: Sendable {
     // methods supported on all messages.
 
     var contentType: String {
-      get {return _contentType ?? String()}
+      get {_contentType ?? String()}
       set {_contentType = newValue}
     }
     /// Returns true if `contentType` has been explicitly set.
-    var hasContentType: Bool {return self._contentType != nil}
+    var hasContentType: Bool {self._contentType != nil}
     /// Clears the value of `contentType`. Subsequent reads from it will return its default value.
     mutating func clearContentType() {self._contentType = nil}
 
     var length: UInt32 {
-      get {return _length ?? 0}
+      get {_length ?? 0}
       set {_length = newValue}
     }
     /// Returns true if `length` has been explicitly set.
-    var hasLength: Bool {return self._length != nil}
+    var hasLength: Bool {self._length != nil}
     /// Clears the value of `length`. Subsequent reads from it will return its default value.
     mutating func clearLength() {self._length = nil}
 
@@ -4335,29 +4376,29 @@ struct SignalServiceProtos_Pack: Sendable {
   // methods supported on all messages.
 
   var title: String {
-    get {return _title ?? String()}
+    get {_title ?? String()}
     set {_title = newValue}
   }
   /// Returns true if `title` has been explicitly set.
-  var hasTitle: Bool {return self._title != nil}
+  var hasTitle: Bool {self._title != nil}
   /// Clears the value of `title`. Subsequent reads from it will return its default value.
   mutating func clearTitle() {self._title = nil}
 
   var author: String {
-    get {return _author ?? String()}
+    get {_author ?? String()}
     set {_author = newValue}
   }
   /// Returns true if `author` has been explicitly set.
-  var hasAuthor: Bool {return self._author != nil}
+  var hasAuthor: Bool {self._author != nil}
   /// Clears the value of `author`. Subsequent reads from it will return its default value.
   mutating func clearAuthor() {self._author = nil}
 
   var cover: SignalServiceProtos_Pack.Sticker {
-    get {return _cover ?? SignalServiceProtos_Pack.Sticker()}
+    get {_cover ?? SignalServiceProtos_Pack.Sticker()}
     set {_cover = newValue}
   }
   /// Returns true if `cover` has been explicitly set.
-  var hasCover: Bool {return self._cover != nil}
+  var hasCover: Bool {self._cover != nil}
   /// Clears the value of `cover`. Subsequent reads from it will return its default value.
   mutating func clearCover() {self._cover = nil}
 
@@ -4372,29 +4413,29 @@ struct SignalServiceProtos_Pack: Sendable {
 
     /// @required
     var id: UInt32 {
-      get {return _id ?? 0}
+      get {_id ?? 0}
       set {_id = newValue}
     }
     /// Returns true if `id` has been explicitly set.
-    var hasID: Bool {return self._id != nil}
+    var hasID: Bool {self._id != nil}
     /// Clears the value of `id`. Subsequent reads from it will return its default value.
     mutating func clearID() {self._id = nil}
 
     var emoji: String {
-      get {return _emoji ?? String()}
+      get {_emoji ?? String()}
       set {_emoji = newValue}
     }
     /// Returns true if `emoji` has been explicitly set.
-    var hasEmoji: Bool {return self._emoji != nil}
+    var hasEmoji: Bool {self._emoji != nil}
     /// Clears the value of `emoji`. Subsequent reads from it will return its default value.
     mutating func clearEmoji() {self._emoji = nil}
 
     var contentType: String {
-      get {return _contentType ?? String()}
+      get {_contentType ?? String()}
       set {_contentType = newValue}
     }
     /// Returns true if `contentType` has been explicitly set.
-    var hasContentType: Bool {return self._contentType != nil}
+    var hasContentType: Bool {self._contentType != nil}
     /// Clears the value of `contentType`. Subsequent reads from it will return its default value.
     mutating func clearContentType() {self._contentType = nil}
 
@@ -4422,11 +4463,11 @@ struct SignalServiceProtos_PaymentAddress: Sendable {
   /// oneof commented out
   /// oneof Address {
   var mobileCoin: SignalServiceProtos_PaymentAddress.MobileCoin {
-    get {return _mobileCoin ?? SignalServiceProtos_PaymentAddress.MobileCoin()}
+    get {_mobileCoin ?? SignalServiceProtos_PaymentAddress.MobileCoin()}
     set {_mobileCoin = newValue}
   }
   /// Returns true if `mobileCoin` has been explicitly set.
-  var hasMobileCoin: Bool {return self._mobileCoin != nil}
+  var hasMobileCoin: Bool {self._mobileCoin != nil}
   /// Clears the value of `mobileCoin`. Subsequent reads from it will return its default value.
   mutating func clearMobileCoin() {self._mobileCoin = nil}
 
@@ -4439,21 +4480,21 @@ struct SignalServiceProtos_PaymentAddress: Sendable {
 
     /// @required
     var publicAddress: Data {
-      get {return _publicAddress ?? Data()}
+      get {_publicAddress ?? Data()}
       set {_publicAddress = newValue}
     }
     /// Returns true if `publicAddress` has been explicitly set.
-    var hasPublicAddress: Bool {return self._publicAddress != nil}
+    var hasPublicAddress: Bool {self._publicAddress != nil}
     /// Clears the value of `publicAddress`. Subsequent reads from it will return its default value.
     mutating func clearPublicAddress() {self._publicAddress = nil}
 
     /// @required
     var signature: Data {
-      get {return _signature ?? Data()}
+      get {_signature ?? Data()}
       set {_signature = newValue}
     }
     /// Returns true if `signature` has been explicitly set.
-    var hasSignature: Bool {return self._signature != nil}
+    var hasSignature: Bool {self._signature != nil}
     /// Clears the value of `signature`. Subsequent reads from it will return its default value.
     mutating func clearSignature() {self._signature = nil}
 
@@ -4476,29 +4517,29 @@ struct SignalServiceProtos_DecryptionErrorMessage: Sendable {
   // methods supported on all messages.
 
   var ratchetKey: Data {
-    get {return _ratchetKey ?? Data()}
+    get {_ratchetKey ?? Data()}
     set {_ratchetKey = newValue}
   }
   /// Returns true if `ratchetKey` has been explicitly set.
-  var hasRatchetKey: Bool {return self._ratchetKey != nil}
+  var hasRatchetKey: Bool {self._ratchetKey != nil}
   /// Clears the value of `ratchetKey`. Subsequent reads from it will return its default value.
   mutating func clearRatchetKey() {self._ratchetKey = nil}
 
   var timestamp: UInt64 {
-    get {return _timestamp ?? 0}
+    get {_timestamp ?? 0}
     set {_timestamp = newValue}
   }
   /// Returns true if `timestamp` has been explicitly set.
-  var hasTimestamp: Bool {return self._timestamp != nil}
+  var hasTimestamp: Bool {self._timestamp != nil}
   /// Clears the value of `timestamp`. Subsequent reads from it will return its default value.
   mutating func clearTimestamp() {self._timestamp = nil}
 
   var deviceID: UInt32 {
-    get {return _deviceID ?? 0}
+    get {_deviceID ?? 0}
     set {_deviceID = newValue}
   }
   /// Returns true if `deviceID` has been explicitly set.
-  var hasDeviceID: Bool {return self._deviceID != nil}
+  var hasDeviceID: Bool {self._deviceID != nil}
   /// Clears the value of `deviceID`. Subsequent reads from it will return its default value.
   mutating func clearDeviceID() {self._deviceID = nil}
 
@@ -4517,21 +4558,21 @@ struct SignalServiceProtos_PniSignatureMessage: Sendable {
   // methods supported on all messages.
 
   var pni: Data {
-    get {return _pni ?? Data()}
+    get {_pni ?? Data()}
     set {_pni = newValue}
   }
   /// Returns true if `pni` has been explicitly set.
-  var hasPni: Bool {return self._pni != nil}
+  var hasPni: Bool {self._pni != nil}
   /// Clears the value of `pni`. Subsequent reads from it will return its default value.
   mutating func clearPni() {self._pni = nil}
 
   /// Signature *by* the PNI identity key *of* the ACI identity key
   var signature: Data {
-    get {return _signature ?? Data()}
+    get {_signature ?? Data()}
     set {_signature = newValue}
   }
   /// Returns true if `signature` has been explicitly set.
-  var hasSignature: Bool {return self._signature != nil}
+  var hasSignature: Bool {self._signature != nil}
   /// Clears the value of `signature`. Subsequent reads from it will return its default value.
   mutating func clearSignature() {self._signature = nil}
 
@@ -4549,20 +4590,20 @@ struct SignalServiceProtos_BodyRange: Sendable {
   // methods supported on all messages.
 
   var start: UInt32 {
-    get {return _start ?? 0}
+    get {_start ?? 0}
     set {_start = newValue}
   }
   /// Returns true if `start` has been explicitly set.
-  var hasStart: Bool {return self._start != nil}
+  var hasStart: Bool {self._start != nil}
   /// Clears the value of `start`. Subsequent reads from it will return its default value.
   mutating func clearStart() {self._start = nil}
 
   var length: UInt32 {
-    get {return _length ?? 0}
+    get {_length ?? 0}
     set {_length = newValue}
   }
   /// Returns true if `length` has been explicitly set.
-  var hasLength: Bool {return self._length != nil}
+  var hasLength: Bool {self._length != nil}
   /// Clears the value of `length`. Subsequent reads from it will return its default value.
   mutating func clearLength() {self._length = nil}
 
@@ -4572,30 +4613,30 @@ struct SignalServiceProtos_BodyRange: Sendable {
   ///
   /// oneof associatedValue {
   var mentionAci: String {
-    get {return _mentionAci ?? String()}
+    get {_mentionAci ?? String()}
     set {_mentionAci = newValue}
   }
   /// Returns true if `mentionAci` has been explicitly set.
-  var hasMentionAci: Bool {return self._mentionAci != nil}
+  var hasMentionAci: Bool {self._mentionAci != nil}
   /// Clears the value of `mentionAci`. Subsequent reads from it will return its default value.
   mutating func clearMentionAci() {self._mentionAci = nil}
 
   var style: SignalServiceProtos_BodyRange.Style {
-    get {return _style ?? .none}
+    get {_style ?? .none}
     set {_style = newValue}
   }
   /// Returns true if `style` has been explicitly set.
-  var hasStyle: Bool {return self._style != nil}
+  var hasStyle: Bool {self._style != nil}
   /// Clears the value of `style`. Subsequent reads from it will return its default value.
   mutating func clearStyle() {self._style = nil}
 
   /// 16-byte UUID
   var mentionAciBinary: Data {
-    get {return _mentionAciBinary ?? Data()}
+    get {_mentionAciBinary ?? Data()}
     set {_mentionAciBinary = newValue}
   }
   /// Returns true if `mentionAciBinary` has been explicitly set.
-  var hasMentionAciBinary: Bool {return self._mentionAciBinary != nil}
+  var hasMentionAciBinary: Bool {self._mentionAciBinary != nil}
   /// Clears the value of `mentionAciBinary`. Subsequent reads from it will return its default value.
   mutating func clearMentionAciBinary() {self._mentionAciBinary = nil}
 
@@ -4630,20 +4671,20 @@ struct SignalServiceProtos_EditMessage: Sendable {
   // methods supported on all messages.
 
   var targetSentTimestamp: UInt64 {
-    get {return _targetSentTimestamp ?? 0}
+    get {_targetSentTimestamp ?? 0}
     set {_targetSentTimestamp = newValue}
   }
   /// Returns true if `targetSentTimestamp` has been explicitly set.
-  var hasTargetSentTimestamp: Bool {return self._targetSentTimestamp != nil}
+  var hasTargetSentTimestamp: Bool {self._targetSentTimestamp != nil}
   /// Clears the value of `targetSentTimestamp`. Subsequent reads from it will return its default value.
   mutating func clearTargetSentTimestamp() {self._targetSentTimestamp = nil}
 
   var dataMessage: SignalServiceProtos_DataMessage {
-    get {return _dataMessage ?? SignalServiceProtos_DataMessage()}
+    get {_dataMessage ?? SignalServiceProtos_DataMessage()}
     set {_dataMessage = newValue}
   }
   /// Returns true if `dataMessage` has been explicitly set.
-  var hasDataMessage: Bool {return self._dataMessage != nil}
+  var hasDataMessage: Bool {self._dataMessage != nil}
   /// Clears the value of `dataMessage`. Subsequent reads from it will return its default value.
   mutating func clearDataMessage() {self._dataMessage = nil}
 
@@ -5607,7 +5648,7 @@ extension SignalServiceProtos_CallMessage.Opaque.Urgency: SwiftProtobuf._ProtoNa
 
 extension SignalServiceProtos_DataMessage: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".DataMessage"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}body\0\u{1}attachments\0\u{2}\u{2}flags\0\u{1}expireTimer\0\u{1}profileKey\0\u{1}timestamp\0\u{1}quote\0\u{1}contact\0\u{1}preview\0\u{1}sticker\0\u{1}requiredProtocolVersion\0\u{2}\u{2}isViewOnce\0\u{1}groupV2\0\u{1}reaction\0\u{1}delete\0\u{1}bodyRanges\0\u{1}groupCallUpdate\0\u{1}payment\0\u{1}storyContext\0\u{1}giftBadge\0\u{1}expireTimerVersion\0\u{1}pollCreate\0\u{1}pollTerminate\0\u{1}pollVote\0\u{1}pinMessage\0\u{1}unpinMessage\0\u{c}\u{3}\u{1}")
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}body\0\u{1}attachments\0\u{2}\u{2}flags\0\u{1}expireTimer\0\u{1}profileKey\0\u{1}timestamp\0\u{1}quote\0\u{1}contact\0\u{1}preview\0\u{1}sticker\0\u{1}requiredProtocolVersion\0\u{2}\u{2}isViewOnce\0\u{1}groupV2\0\u{1}reaction\0\u{1}delete\0\u{1}bodyRanges\0\u{1}groupCallUpdate\0\u{1}payment\0\u{1}storyContext\0\u{1}giftBadge\0\u{1}expireTimerVersion\0\u{1}pollCreate\0\u{1}pollTerminate\0\u{1}pollVote\0\u{1}pinMessage\0\u{1}unpinMessage\0\u{1}adminDelete\0\u{c}\u{3}\u{1}")
 
   fileprivate class _StorageClass {
     var _body: String? = nil
@@ -5636,6 +5677,7 @@ extension SignalServiceProtos_DataMessage: SwiftProtobuf.Message, SwiftProtobuf.
     var _pollVote: SignalServiceProtos_DataMessage.PollVote? = nil
     var _pinMessage: SignalServiceProtos_DataMessage.PinMessage? = nil
     var _unpinMessage: SignalServiceProtos_DataMessage.UnpinMessage? = nil
+    var _adminDelete: SignalServiceProtos_DataMessage.AdminDelete? = nil
 
       // This property is used as the initial default value for new instances of the type.
       // The type itself is protecting the reference to its storage via CoW semantics.
@@ -5672,6 +5714,7 @@ extension SignalServiceProtos_DataMessage: SwiftProtobuf.Message, SwiftProtobuf.
       _pollVote = source._pollVote
       _pinMessage = source._pinMessage
       _unpinMessage = source._unpinMessage
+      _adminDelete = source._adminDelete
     }
   }
 
@@ -5716,6 +5759,7 @@ extension SignalServiceProtos_DataMessage: SwiftProtobuf.Message, SwiftProtobuf.
         case 26: try { try decoder.decodeSingularMessageField(value: &_storage._pollVote) }()
         case 27: try { try decoder.decodeSingularMessageField(value: &_storage._pinMessage) }()
         case 28: try { try decoder.decodeSingularMessageField(value: &_storage._unpinMessage) }()
+        case 29: try { try decoder.decodeSingularMessageField(value: &_storage._adminDelete) }()
         default: break
         }
       }
@@ -5806,6 +5850,9 @@ extension SignalServiceProtos_DataMessage: SwiftProtobuf.Message, SwiftProtobuf.
       try { if let v = _storage._unpinMessage {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 28)
       } }()
+      try { if let v = _storage._adminDelete {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 29)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -5841,6 +5888,7 @@ extension SignalServiceProtos_DataMessage: SwiftProtobuf.Message, SwiftProtobuf.
         if _storage._pollVote != rhs_storage._pollVote {return false}
         if _storage._pinMessage != rhs_storage._pinMessage {return false}
         if _storage._unpinMessage != rhs_storage._unpinMessage {return false}
+        if _storage._adminDelete != rhs_storage._adminDelete {return false}
         return true
       }
       if !storagesAreEqual {return false}
@@ -7098,6 +7146,45 @@ extension SignalServiceProtos_DataMessage.UnpinMessage: SwiftProtobuf.Message, S
   }
 
   static func ==(lhs: SignalServiceProtos_DataMessage.UnpinMessage, rhs: SignalServiceProtos_DataMessage.UnpinMessage) -> Bool {
+    if lhs._targetAuthorAciBinary != rhs._targetAuthorAciBinary {return false}
+    if lhs._targetSentTimestamp != rhs._targetSentTimestamp {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension SignalServiceProtos_DataMessage.AdminDelete: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = SignalServiceProtos_DataMessage.protoMessageName + ".AdminDelete"
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}targetAuthorAciBinary\0\u{1}targetSentTimestamp\0")
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBytesField(value: &self._targetAuthorAciBinary) }()
+      case 2: try { try decoder.decodeSingularUInt64Field(value: &self._targetSentTimestamp) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._targetAuthorAciBinary {
+      try visitor.visitSingularBytesField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._targetSentTimestamp {
+      try visitor.visitSingularUInt64Field(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: SignalServiceProtos_DataMessage.AdminDelete, rhs: SignalServiceProtos_DataMessage.AdminDelete) -> Bool {
     if lhs._targetAuthorAciBinary != rhs._targetAuthorAciBinary {return false}
     if lhs._targetSentTimestamp != rhs._targetSentTimestamp {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

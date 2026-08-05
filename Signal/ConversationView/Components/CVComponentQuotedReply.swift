@@ -32,16 +32,6 @@ public class CVComponentQuotedReply: CVComponentBase, CVComponent {
         CVComponentViewQuotedReply()
     }
 
-    override public func updateScrollingContent(componentView: CVComponentView) {
-        super.updateScrollingContent(componentView: componentView)
-
-        guard let componentView = componentView as? CVComponentViewQuotedReply else {
-            owsFailDebug("Unexpected componentView.")
-            return
-        }
-        componentView.quotedMessageView.updateAppearance()
-    }
-
     public func configureForRendering(
         componentView componentViewParam: CVComponentView,
         cellMeasurement: CVCellMeasurement,
@@ -54,7 +44,7 @@ public class CVComponentQuotedReply: CVComponentBase, CVComponent {
         }
 
         let quotedMessageView = componentView.quotedMessageView
-        let adapter = QuotedMessageViewAdapter(interactionUniqueId: interaction.uniqueId)
+        let adapter = CVQuotedMessageViewAdapter(interactionUniqueId: interaction.uniqueId)
         quotedMessageView.configureForRendering(
             state: quotedReply.viewState,
             delegate: adapter,
@@ -76,7 +66,7 @@ public class CVComponentQuotedReply: CVComponentBase, CVComponent {
     public func measure(maxWidth: CGFloat, measurementBuilder: CVCellMeasurement.Builder) -> CGSize {
         owsAssertDebug(maxWidth > 0)
 
-        return QuotedMessageView.measure(
+        return CVQuotedMessageView.measure(
             state: quotedReply.viewState,
             maxWidth: maxWidth,
             measurementBuilder: measurementBuilder,
@@ -102,7 +92,7 @@ public class CVComponentQuotedReply: CVComponentBase, CVComponent {
     // It could be the entire item or some part thereof.
     public class CVComponentViewQuotedReply: NSObject, CVComponentView {
 
-        fileprivate let quotedMessageView = QuotedMessageView(name: "quotedMessageView")
+        fileprivate let quotedMessageView = CVQuotedMessageView(name: "quotedMessageView")
 
         public var isDedicatedCellView = false
 
@@ -141,7 +131,7 @@ extension CVComponentQuotedReply: CVAccessibilityComponent {
 
 // MARK: -
 
-private class QuotedMessageViewAdapter: QuotedMessageViewDelegate {
+private class CVQuotedMessageViewAdapter: CVQuotedMessageViewDelegate {
 
     private let interactionUniqueId: String
 
@@ -151,7 +141,7 @@ private class QuotedMessageViewAdapter: QuotedMessageViewDelegate {
 
     func didTapDownloadQuotedReplyAttachment(_ quotedReply: QuotedReplyModel) {
         SSKEnvironment.shared.databaseStorageRef.write { tx in
-            guard let message = TSMessage.anyFetchMessage(uniqueId: interactionUniqueId, transaction: tx) else {
+            guard let message = TSMessage.fetchMessageViaCache(uniqueId: interactionUniqueId, transaction: tx) else {
                 return
             }
             DependenciesBridge.shared.attachmentDownloadManager.enqueueDownloadOfAttachmentsForMessage(
@@ -160,9 +150,5 @@ private class QuotedMessageViewAdapter: QuotedMessageViewDelegate {
                 tx: tx,
             )
         }
-    }
-
-    func didCancelQuotedReply() {
-        owsFailDebug("Unexpected method invocation.")
     }
 }

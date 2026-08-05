@@ -22,6 +22,8 @@ class GroupViewHelper {
 
     let threadViewModel: ThreadViewModel
 
+    let memberLabelCoordinator: MemberLabelCoordinator?
+
     var thread: TSThread {
         return threadViewModel.threadRecord
     }
@@ -30,8 +32,9 @@ class GroupViewHelper {
         return delegate?.fromViewController
     }
 
-    init(threadViewModel: ThreadViewModel) {
+    init(threadViewModel: ThreadViewModel, memberLabelCoordinator: MemberLabelCoordinator?) {
         self.threadViewModel = threadViewModel
+        self.memberLabelCoordinator = memberLabelCoordinator
     }
 
     // MARK: - Accessors
@@ -91,11 +94,17 @@ class GroupViewHelper {
     // * Group title (if group)
     // * Group avatar (if group)
     // * Pinned Messages (if group)
-    // * Member Labels (if group)
     var canEditConversationAttributes: Bool {
         return canLocalUserEditConversation { groupAccess in
             return groupAccess.attributes
         }
+    }
+
+    var canEditMemberLabels: Bool {
+        guard BuildFlags.MemberLabel.send else {
+            return false
+        }
+        return true
     }
 
     // Can local user edit group membership.

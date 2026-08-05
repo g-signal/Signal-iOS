@@ -28,8 +28,6 @@ protocol SendableMessage {
     /// are urgent and receipts are not).
     var isUrgent: Bool { get }
 
-    var canSendToLocalAddress: Bool { get }
-
     /// Indicates desired behavior if decryption fails.
     var contentHint: SealedSenderContentHint { get }
 
@@ -43,8 +41,6 @@ protocol SendableMessage {
     // TODO: Merge this into the return value when sending a message.
     var wasSentToAnyRecipient: Bool { get }
 
-    func recipientAddresses() -> [SignalServiceAddress]
-
     func sendingRecipientAddresses() -> [SignalServiceAddress]
 
     func sentRecipientAddresses() -> [SignalServiceAddress]
@@ -55,13 +51,9 @@ protocol SendableMessage {
 
     func updateWithSkippedRecipients(_ skippedRecipients: some Sequence<SignalServiceAddress>, tx: DBWriteTransaction)
 
-    func updateWithFailedRecipients(_ recipientErrors: some Collection<(serviceId: ServiceId, error: Error)>, tx: DBWriteTransaction)
+    func updateWithFailedRecipients(_ recipientErrors: some Sequence<(serviceId: ServiceId, error: Error)>, tx: DBWriteTransaction)
 
-    func updateWithSentRecipients(_ serviceIds: [ServiceId], wasSentByUD: Bool, transaction: DBWriteTransaction)
-
-    func update(withReadRecipient recipientAddress: SignalServiceAddress, deviceId: DeviceId, readTimestamp timestamp: UInt64, tx: DBWriteTransaction)
-
-    func update(withViewedRecipient recipientAddress: SignalServiceAddress, deviceId: DeviceId, viewedTimestamp timestamp: UInt64, tx: DBWriteTransaction)
+    func updateWithSentRecipients(_ serviceIds: some Sequence<ServiceId>, wasSentByUD: Bool, tx: DBWriteTransaction)
 
     // TODO: Add SyncTranscriptableMessage protocol for these properties.
 
@@ -85,10 +77,6 @@ protocol SendableMessage {
     var relatedUniqueIds: Set<String> { get }
 
     func envelopeGroupIdWithTransaction(_ transaction: DBReadTransaction) -> Data?
-
-    var isVoiceMessage: Bool { get }
-
-    var isViewOnceMessage: Bool { get }
 
     func update(withHasSyncedTranscript: Bool, transaction: DBWriteTransaction)
 }

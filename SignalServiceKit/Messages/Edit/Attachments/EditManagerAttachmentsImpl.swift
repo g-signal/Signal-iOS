@@ -130,14 +130,14 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
             switch quotedReplyEdit {
             case .keep:
                 // Update the reference's timestamp to match the latest revision.
-                try attachmentStore.update(
-                    latestRevisionAttachmentReference,
-                    withReceivedAtTimestamp: latestRevision.receivedAtTimestamp,
+                attachmentStore.updateReceivedAtTimestamp(
+                    owningMessageSource: messageSource,
+                    newReceivedAtTimestamp: latestRevision.receivedAtTimestamp,
                     tx: tx,
                 )
             case .change:
                 // Drop the reference.
-                try attachmentStore.removeReference(
+                attachmentStore.removeReference(
                     reference: latestRevisionAttachmentReference,
                     tx: tx,
                 )
@@ -188,7 +188,7 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
 
             // Remove the latest revision reference, since it's either been
             // edited out or we'll create a new one below.
-            try attachmentStore.removeReference(
+            attachmentStore.removeReference(
                 reference: latestRevisionAttachmentReference,
                 tx: tx,
             )
@@ -207,7 +207,7 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
             latestRevision.update(with: validatedLinkPreview.preview, transaction: tx)
 
             if let imageDataSource = validatedLinkPreview.imageDataSource {
-                try attachmentManager.createAttachmentStream(
+                let attachmentID = try attachmentManager.createAttachmentStream(
                     from: OwnedAttachmentDataSource(
                         dataSource: imageDataSource,
                         owner: .messageLinkPreview(.init(
@@ -219,6 +219,7 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
                     ),
                     tx: tx,
                 )
+                Logger.info("Created link preview attachment \(attachmentID) from dataSource for edit \(latestRevision.timestamp)")
             }
         case .proto(let preview, let dataMessage):
             do {
@@ -230,7 +231,7 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
                 latestRevision.update(with: validatedLinkPreview.preview, transaction: tx)
 
                 if let linkPreviewImageProto = validatedLinkPreview.imageProto {
-                    try attachmentManager.createAttachmentPointer(
+                    let attachmentID = try attachmentManager.createAttachmentPointer(
                         from: OwnedAttachmentPointerProto(
                             proto: linkPreviewImageProto,
                             owner: .messageLinkPreview(.init(
@@ -242,6 +243,7 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
                         ),
                         tx: tx,
                     )
+                    Logger.info("Created link preview attachment \(attachmentID) from proto for edit \(latestRevision.timestamp)")
                 }
             } catch LinkPreviewError.invalidPreview {
                 // Just drop the link preview, but keep the message
@@ -288,7 +290,7 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
 
             // Remove the latest revision reference, since it's either been
             // edited out or we'll create a new one below.
-            try attachmentStore.removeReference(
+            attachmentStore.removeReference(
                 reference: latestRevisionAttachmentReference,
                 tx: tx,
             )
@@ -300,7 +302,7 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
             break
         case .dataSource(let dataSource):
             let attachmentDataSource = dataSource
-            try attachmentManager.createAttachmentStream(
+            let attachmentID = try attachmentManager.createAttachmentStream(
                 from: OwnedAttachmentDataSource(
                     dataSource: attachmentDataSource,
                     owner: .messageOversizeText(.init(
@@ -312,8 +314,9 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
                 ),
                 tx: tx,
             )
+            Logger.info("Created oversize-text attachment \(attachmentID) from dataSource for edit \(latestRevision.timestamp)")
         case .proto(let protoPointer):
-            try attachmentManager.createAttachmentPointer(
+            let attachmentID = try attachmentManager.createAttachmentPointer(
                 from: OwnedAttachmentPointerProto(
                     proto: protoPointer,
                     owner: .messageOversizeText(.init(
@@ -325,6 +328,7 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
                 ),
                 tx: tx,
             )
+            Logger.info("Created oversize-text attachment \(attachmentID) from proto for edit \(latestRevision.timestamp)")
         }
     }
 
@@ -366,9 +370,9 @@ public class EditManagerAttachmentsImpl: EditManagerAttachments {
             // Body attachments can't be edited, so the latest revision remains
             // an owner. Update the reference's timestamp to match the latest
             // revision.
-            try attachmentStore.update(
-                latestRevisionAttachmentReference,
-                withReceivedAtTimestamp: latestRevision.receivedAtTimestamp,
+            attachmentStore.updateReceivedAtTimestamp(
+                owningMessageSource: messageSource,
+                newReceivedAtTimestamp: latestRevision.receivedAtTimestamp,
                 tx: tx,
             )
         }

@@ -19,6 +19,7 @@ extension GroupViewHelper {
     private func showMemberActionConfirmationActionSheet<T: ServiceId>(
         address: SignalServiceAddress,
         titleFormat: String,
+        message: String?,
         actionTitle: String,
         updateDescription: String,
         updateBlock: @escaping (TSGroupModelV2, T) async throws -> Void,
@@ -45,7 +46,7 @@ extension GroupViewHelper {
         let title = String(format: titleFormat, SSKEnvironment.shared.databaseStorageRef.read { tx in
             return SSKEnvironment.shared.contactManagerRef.displayName(for: address, tx: tx).resolvedValue()
         })
-        let actionSheet = ActionSheetController(title: title)
+        let actionSheet = ActionSheetController(title: title, message: message)
         actionSheet.addAction(ActionSheetAction(title: actionTitle, style: .default, handler: { _ in actionBlock() }))
         actionSheet.addAction(OWSActionSheets.cancelAction)
         fromViewController.presentActionSheet(actionSheet)
@@ -86,6 +87,7 @@ extension GroupViewHelper {
         showMemberActionConfirmationActionSheet(
             address: address,
             titleFormat: titleFormat,
+            message: nil,
             actionTitle: actionTitle,
             updateDescription: "Make group admin",
             updateBlock: { (oldGroupModel, aci: Aci) in
@@ -123,9 +125,11 @@ extension GroupViewHelper {
             "CONVERSATION_SETTINGS_REVOKE_GROUP_ADMIN_BUTTON",
             comment: "Label for 'revoke group admin' button in conversation settings view.",
         )
+
         showMemberActionConfirmationActionSheet(
             address: address,
             titleFormat: titleFormat,
+            message: nil,
             actionTitle: actionTitle,
             updateDescription: "Revoke group admin",
             updateBlock: { (oldGroupModel, aci: Aci) in
@@ -169,6 +173,7 @@ extension GroupViewHelper {
         showMemberActionConfirmationActionSheet(
             address: address,
             titleFormat: titleFormat,
+            message: nil,
             actionTitle: actionTitle,
             updateDescription: "Remove user from group",
             updateBlock: { (oldGroupModel, serviceId: ServiceId) in

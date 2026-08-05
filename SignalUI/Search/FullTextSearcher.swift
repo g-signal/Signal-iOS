@@ -420,7 +420,7 @@ public class FullTextSearcher: NSObject {
             if let thread = threadCache[threadUniqueId] {
                 return thread as? T
             }
-            let thread = TSThread.anyFetch(uniqueId: threadUniqueId, transaction: transaction)
+            let thread = TSThread.fetchViaCache(uniqueId: threadUniqueId, transaction: transaction)
             threadCache[threadUniqueId] = thread
             return thread as? T
         }
@@ -659,6 +659,22 @@ public class FullTextSearcher: NSObject {
 
         if Task.isCancelled {
             throw CancellationError()
+        }
+
+        if
+            DebugFlags.internalLogging,
+            searchText.count == 13,
+            let timestamp = UInt64(searchText),
+            let interactions = try? DependenciesBridge.shared.interactionStore.fetchInteractions(
+                timestamp: timestamp,
+                tx: transaction,
+            )
+        {
+            for interaction in interactions {
+                if let message = interaction as? TSMessage {
+                    appendMessage(message, snippet: nil)
+                }
+            }
         }
 
         // Order the conversation and message results in reverse chronological order.

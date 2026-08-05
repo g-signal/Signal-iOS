@@ -197,7 +197,7 @@ public class InteractionFinder: NSObject {
 
             var markedUnreadThreadQuery = """
             SELECT COUNT(*)
-            FROM \(ThreadRecord.databaseTableName)
+            FROM \(TSThread.databaseTableName)
             INNER JOIN \(ThreadAssociatedData.databaseTableName) AS associatedData
                 ON associatedData.threadUniqueId = \(threadColumn: .uniqueId)
             WHERE associatedData.isMarkedUnread = 1

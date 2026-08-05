@@ -139,12 +139,12 @@ public class CVComponentViewOnce: CVComponentBase, CVComponent {
                     downloadState: .enqueuedOrDownloading,
                 ),
                 diameter: iconSize,
-                isDarkThemeEnabled: conversationStyle.isDarkThemeEnabled,
+                colorConfiguration: .init(conversationStyle: conversationStyle, isIncoming: isIncoming),
                 mediaCache: mediaCache,
             )
             subviews.append(progressView)
         default:
-            if shouldShowIcon, let iconName = self.iconName {
+            if shouldShowIcon, let iconName {
                 let iconView = componentView.iconView
                 iconView.setTemplateImageName(iconName, tintColor: iconColor)
                 subviews.append(iconView)

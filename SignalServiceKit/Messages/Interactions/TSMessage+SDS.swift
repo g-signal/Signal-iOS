@@ -14,15 +14,14 @@ import GRDB
 @objc
 public extension TSMessage {
     // NOTE: This method will fail if the object has unexpected type.
-    class func anyFetchMessage(
+    class func fetchMessageViaCache(
         uniqueId: String,
         transaction: DBReadTransaction
     ) -> TSMessage? {
         assert(!uniqueId.isEmpty)
 
-        guard let object = anyFetch(uniqueId: uniqueId,
-                                    transaction: transaction) else {
-                                        return nil
+        guard let object = fetchViaCache(uniqueId: uniqueId, transaction: transaction) else {
+            return nil
         }
         guard let instance = object as? TSMessage else {
             owsFailDebug("Object has unexpected type: \(type(of: object))")

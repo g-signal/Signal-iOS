@@ -170,6 +170,7 @@ extension AppSetup {
 extension AppSetup.GlobalsContinuation {
     @MainActor
     public func initGlobals(
+        appContext: AppContext,
         appReadiness: AppReadiness,
         backupArchiveErrorPresenterFactory: BackupArchiveErrorPresenterFactory,
         deviceBatteryLevelManager: (any DeviceBatteryLevelManager)?,
@@ -356,7 +357,7 @@ extension AppSetup.GlobalsContinuation {
             usernameLookupManager: usernameLookupManager,
         )
 
-        let authCredentialStore = AuthCredentialStore(dateProvider: dateProvider)
+        let authCredentialStore = AuthCredentialStore()
 
         let callLinkPublicParams = try! GenericServerPublicParams(contents: tsConstants.callLinkPublicParams)
         let authCredentialManager = AuthCredentialManagerImpl(
@@ -393,6 +394,7 @@ extension AppSetup.GlobalsContinuation {
         )
 
         let backupNonceMetadataStore = BackupNonceMetadataStore()
+        let backupExportJobStore = BackupExportJobStore()
         let backupSettingsStore = BackupSettingsStore()
         let accountKeyStore = AccountKeyStore(
             backupSettingsStore: backupSettingsStore,
@@ -477,6 +479,7 @@ extension AppSetup.GlobalsContinuation {
 
         let backupSubscriptionIssueStore = BackupSubscriptionIssueStore()
         let backupSubscriptionManager = BackupSubscriptionManagerImpl(
+            appContext: appContext,
             backupPlanManager: backupPlanManager,
             backupSubscriptionIssueStore: backupSubscriptionIssueStore,
             backupSubscriptionRedeemer: BackupSubscriptionRedeemer(
@@ -584,6 +587,12 @@ extension AppSetup.GlobalsContinuation {
             tsAccountManager: tsAccountManager,
         )
 
+        let backupMediaErrorNotificationPresenter = BackupMediaErrorNotificationPresenter(
+            dateProvider: dateProvider,
+            db: db,
+            notificationPresenter: notificationPresenter,
+        )
+
         let backupAttachmentDownloadProgress = BackupAttachmentDownloadProgressImpl(
             appContext: appContext,
             appReadiness: appReadiness,
@@ -594,12 +603,13 @@ extension AppSetup.GlobalsContinuation {
             remoteConfigProvider: remoteConfigManager,
         )
 
-        let backupAttachmentUploadScheduler = BackupAttachmentUploadSchedulerImpl(
+        let backupAttachmentUploadScheduler = BackupAttachmentUploadScheduler(
             attachmentStore: attachmentStore,
             backupAttachmentUploadStore: backupAttachmentUploadStore,
             backupAttachmentUploadEraStore: backupAttachmentUploadEraStore,
             dateProvider: dateProvider,
             interactionStore: interactionStore,
+            remoteConfigProvider: remoteConfigProvider,
         )
 
         let backupListMediaStore = BackupListMediaStore()
@@ -614,6 +624,7 @@ extension AppSetup.GlobalsContinuation {
             backupAttachmentUploadStore: backupAttachmentUploadStore,
             backupAttachmentUploadEraStore: backupAttachmentUploadEraStore,
             backupListMediaStore: backupListMediaStore,
+            backupMediaErrorNotificationPresenter: backupMediaErrorNotificationPresenter,
             backupRequestManager: backupRequestManager,
             backupSettingsStore: backupSettingsStore,
             dateProvider: dateProvider,
@@ -666,6 +677,7 @@ extension AppSetup.GlobalsContinuation {
                 attachmentUploadStore: attachmentUploadStore,
                 backupAttachmentDownloadStore: backupAttachmentDownloadStore,
                 backupAttachmentUploadScheduler: backupAttachmentUploadScheduler,
+                backupMediaErrorNotificationPresenter: backupMediaErrorNotificationPresenter,
                 backupListMediaManager: backupListMediaManager,
                 backupSettingsStore: backupSettingsStore,
                 dateProvider: dateProvider,
@@ -712,6 +724,7 @@ extension AppSetup.GlobalsContinuation {
                 backupAttachmentUploadStore: backupAttachmentUploadStore,
                 backupAttachmentUploadEraStore: backupAttachmentUploadEraStore,
                 backupListMediaManager: backupListMediaManager,
+                backupMediaErrorNotificationPresenter: backupMediaErrorNotificationPresenter,
                 backupRequestManager: backupRequestManager,
                 backupSettingsStore: backupSettingsStore,
                 dateProvider: dateProvider,
@@ -1082,40 +1095,7 @@ extension AppSetup.GlobalsContinuation {
             tsAccountManager: tsAccountManager,
         )
 
-        let backupDisablingManager = BackupDisablingManager(
-            accountEntropyPoolManager: accountEntropyPoolManager,
-            authCredentialStore: authCredentialStore,
-            backupAttachmentCoordinator: backupAttachmentCoordinator,
-            backupAttachmentDownloadQueueStatusManager: backupAttachmentDownloadQueueStatusManager,
-            backupCDNCredentialStore: backupCDNCredentialStore,
-            backupKeyService: backupKeyService,
-            backupPlanManager: backupPlanManager,
-            backupSettingsStore: backupSettingsStore,
-            db: db,
-            tsAccountManager: tsAccountManager,
-        )
-
-        let accountChecker = AccountChecker(
-            db: db,
-            networkManager: networkManager,
-            recipientFetcher: recipientFetcher,
-            recipientManager: recipientManager,
-            recipientMerger: recipientMerger,
-            recipientStore: recipientDatabaseTable,
-            tsAccountManager: tsAccountManager,
-        )
-
-        let messageSender = testDependencies.messageSender(accountChecker) ?? MessageSender(
-            accountChecker: accountChecker,
-            groupSendEndorsementStore: groupSendEndorsementStore,
-        )
-
-        let pniDistributionParameterBuilder = PniDistributionParameterBuilderImpl(
-            db: db,
-            messageSender: PniDistributionParameterBuilderImpl.Wrappers.MessageSender(messageSender),
-            pniKyberPreKeyStore: pniProtocolStore.kyberPreKeyStore,
-            registrationIdGenerator: RegistrationIdGenerator(),
-        )
+        let inactivePrimaryDeviceStore = InactivePrimaryDeviceStore()
 
         let registrationStateChangeManager = RegistrationStateChangeManagerImpl(
             authCredentialStore: authCredentialStore,
@@ -1141,6 +1121,40 @@ extension AppSetup.GlobalsContinuation {
             versionedProfiles: versionedProfiles,
         )
 
+        let chatConnectionManager = ChatConnectionManagerImpl(
+            accountManager: tsAccountManager,
+            appContext: appContext,
+            appExpiry: appExpiry,
+            appReadiness: appReadiness,
+            db: db,
+            inactivePrimaryDeviceStore: inactivePrimaryDeviceStore,
+            libsignalNet: libsignalNet,
+            registrationStateChangeManager: registrationStateChangeManager,
+        )
+
+        let accountChecker = AccountChecker(
+            db: db,
+            networkManager: networkManager,
+            recipientFetcher: recipientFetcher,
+            recipientManager: recipientManager,
+            recipientMerger: recipientMerger,
+            recipientStore: recipientDatabaseTable,
+            tsAccountManager: tsAccountManager,
+            chatConnectionManager: chatConnectionManager,
+        )
+
+        let messageSender = testDependencies.messageSender(accountChecker) ?? MessageSender(
+            accountChecker: accountChecker,
+            groupSendEndorsementStore: groupSendEndorsementStore,
+        )
+
+        let pniDistributionParameterBuilder = PniDistributionParameterBuilderImpl(
+            db: db,
+            messageSender: PniDistributionParameterBuilderImpl.Wrappers.MessageSender(messageSender),
+            pniKyberPreKeyStore: pniProtocolStore.kyberPreKeyStore,
+            registrationIdGenerator: RegistrationIdGenerator(),
+        )
+
         let identityKeyChecker = IdentityKeyCheckerImpl(
             db: db,
             identityManager: identityManager,
@@ -1153,19 +1167,6 @@ extension AppSetup.GlobalsContinuation {
             registrationStateChangeManager: registrationStateChangeManager,
             tsAccountManager: tsAccountManager,
             whoAmIManager: whoAmIManager,
-        )
-
-        let inactivePrimaryDeviceStore = InactivePrimaryDeviceStore()
-
-        let chatConnectionManager = ChatConnectionManagerImpl(
-            accountManager: tsAccountManager,
-            appContext: appContext,
-            appExpiry: appExpiry,
-            appReadiness: appReadiness,
-            db: db,
-            inactivePrimaryDeviceStore: inactivePrimaryDeviceStore,
-            libsignalNet: libsignalNet,
-            registrationStateChangeManager: registrationStateChangeManager,
         )
 
         let preKeyTaskAPIClient = PreKeyTaskAPIClientImpl(networkManager: networkManager)
@@ -1210,6 +1211,7 @@ extension AppSetup.GlobalsContinuation {
 
         let usernameApiClient = UsernameApiClientImpl(
             networkManager: networkManager,
+            chatConnectionManager: chatConnectionManager,
         )
         let usernameEducationManager = UsernameEducationManagerImpl()
         let usernameLinkManager = UsernameLinkManagerImpl(
@@ -1231,6 +1233,20 @@ extension AppSetup.GlobalsContinuation {
             usernameLinkManager: usernameLinkManager,
             whoAmIManager: whoAmIManager,
         ))
+
+        let keyTransparencyStore = KeyTransparencyStore()
+        let keyTransparencyManager = KeyTransparencyManager(
+            chatConnectionManager: chatConnectionManager,
+            dateProvider: dateProvider,
+            db: db,
+            identityManager: identityManager,
+            keyTransparencyStore: keyTransparencyStore,
+            localUsernameManager: localUsernameManager,
+            recipientDatabaseTable: recipientDatabaseTable,
+            storageServiceManager: storageServiceManager,
+            tsAccountManager: tsAccountManager,
+            udManager: udManager,
+        )
 
         let incomingPniChangeNumberProcessor = IncomingPniChangeNumberProcessorImpl(
             identityManager: identityManager,
@@ -1366,6 +1382,7 @@ extension AppSetup.GlobalsContinuation {
             avatarFetcher: backupArchiveAvatarFetcher,
             blockingManager: BackupArchive.Wrappers.BlockingManager(blockingManager),
             contactManager: BackupArchive.Wrappers.ContactManager(contactManager),
+            keyTransparencyStore: keyTransparencyStore,
             nicknameManager: nicknameManager,
             profileManager: BackupArchive.Wrappers.ProfileManager(profileManager),
             recipientHidingManager: recipientHidingManager,
@@ -1389,6 +1406,7 @@ extension AppSetup.GlobalsContinuation {
             attachmentManager: attachmentManager,
             attachmentStore: attachmentStore,
             db: db,
+            orphanedAttachmentStore: orphanedAttachmentStore,
         )
         let backupReactionArchiver = BackupArchiveReactionArchiver(
             reactionStore: BackupArchiveReactionStore(),
@@ -1409,6 +1427,8 @@ extension AppSetup.GlobalsContinuation {
                 disappearingMessageConfigurationStore: disappearingMessagesConfigurationStore,
                 donationSubscriptionManager: BackupArchive.Wrappers.DonationSubscriptionManager(),
                 imageQuality: BackupArchive.Wrappers.ImageQuality(),
+                keyTransparencyManager: keyTransparencyManager,
+                keyTransparencyStore: keyTransparencyStore,
                 linkPreviewSettingStore: linkPreviewSettingStore,
                 localUsernameManager: localUsernameManager,
                 mediaBandwidthPreferenceStore: mediaBandwidthPreferenceStore,
@@ -1601,6 +1621,7 @@ extension AppSetup.GlobalsContinuation {
             messageProcessor: messageProcessor,
             messageSenderJobQueue: messageSenderJobQueue,
             receiptSender: receiptSender,
+            storageServiceManager: storageServiceManager,
         )
 
         let backupExportJob = BackupExportJobImpl(
@@ -1610,6 +1631,7 @@ extension AppSetup.GlobalsContinuation {
             backupAttachmentDownloadQueueStatusManager: backupAttachmentDownloadQueueStatusManager,
             backupAttachmentUploadProgress: backupAttachmentUploadProgress,
             backupAttachmentUploadQueueStatusManager: backupAttachmentUploadQueueStatusManager,
+            backupExportJobStore: backupExportJobStore,
             backupSettingsStore: backupSettingsStore,
             db: db,
             messageProcessor: messageProcessor,
@@ -1618,6 +1640,8 @@ extension AppSetup.GlobalsContinuation {
         )
         let backupExportJobRunner = BackupExportJobRunnerImpl(
             backupExportJob: backupExportJob,
+            backupExportJobStore: backupExportJobStore,
+            db: db,
         )
 
         let backupFailureStateManager = BackupFailureStateManager(
@@ -1626,10 +1650,16 @@ extension AppSetup.GlobalsContinuation {
             tsAccountManager: tsAccountManager,
         )
 
+        let adminDeleteManager = AdminDeleteManager(
+            recipientDatabaseTable: recipientDatabaseTable,
+            tsAccountManager: tsAccountManager,
+        )
+
         let dependenciesBridge = DependenciesBridge(
             accountAttributesUpdater: accountAttributesUpdater,
             accountEntropyPoolManager: accountEntropyPoolManager,
             adHocCallRecordManager: adHocCallRecordManager,
+            adminDeleteManager: adminDeleteManager,
             appExpiry: appExpiry,
             attachmentContentValidator: attachmentContentValidator,
             attachmentDownloadManager: attachmentDownloadManager,
@@ -1648,12 +1678,11 @@ extension AppSetup.GlobalsContinuation {
             backupArchiveManager: backupArchiveManager,
             backupAttachmentDownloadProgress: backupAttachmentDownloadProgress,
             backupAttachmentDownloadStore: backupAttachmentDownloadStore,
-            backupAttachmentDownloadQueueStatusReporter: backupAttachmentDownloadQueueStatusManager,
+            backupAttachmentDownloadQueueStatusManager: backupAttachmentDownloadQueueStatusManager,
             backupAttachmentCoordinator: backupAttachmentCoordinator,
             backupAttachmentUploadProgress: backupAttachmentUploadProgress,
-            backupAttachmentUploadQueueStatusReporter: backupAttachmentUploadQueueStatusManager,
+            backupAttachmentUploadQueueStatusManager: backupAttachmentUploadQueueStatusManager,
             backupAttachmentUploadStore: backupAttachmentUploadStore,
-            backupDisablingManager: backupDisablingManager,
             backupExportJob: backupExportJob,
             backupExportJobRunner: backupExportJobRunner,
             backupFailureStateManager: backupFailureStateManager,
@@ -1709,6 +1738,7 @@ extension AppSetup.GlobalsContinuation {
             individualCallRecordManager: individualCallRecordManager,
             interactionDeleteManager: interactionDeleteManager,
             interactionStore: interactionStore,
+            keyTransparencyManager: keyTransparencyManager,
             lastVisibleInteractionStore: lastVisibleInteractionStore,
             linkAndSyncManager: linkAndSyncManager,
             linkPreviewManager: linkPreviewManager,

@@ -11,13 +11,13 @@ struct ProfileSheetSheetCoordinator {
     private let address: SignalServiceAddress
     private let groupViewHelper: GroupViewHelper?
     private let spoilerState: SpoilerRenderState
-    private let memberLabel: MemberLabel?
+    private let memberLabel: MemberLabelForRendering?
 
     init(
         address: SignalServiceAddress,
         groupViewHelper: GroupViewHelper?,
         spoilerState: SpoilerRenderState,
-        memberLabel: MemberLabel? = nil,
+        memberLabel: MemberLabelForRendering? = nil,
     ) {
         self.address = address
         self.groupViewHelper = groupViewHelper
@@ -68,14 +68,14 @@ class MemberActionSheet: OWSTableSheetViewController {
     var threadViewModel: ThreadViewModel
     let address: SignalServiceAddress
     let spoilerState: SpoilerRenderState
-    let memberLabel: MemberLabel?
+    let memberLabel: MemberLabelForRendering?
 
     fileprivate init(
         threadViewModel: ThreadViewModel,
         address: SignalServiceAddress,
         groupViewHelper: GroupViewHelper?,
         spoilerState: SpoilerRenderState,
-        memberLabel: MemberLabel?,
+        memberLabel: MemberLabelForRendering?,
     ) {
         self.threadViewModel = threadViewModel
         self.groupViewHelper = groupViewHelper
@@ -275,7 +275,9 @@ class MemberActionSheet: OWSTableSheetViewController {
                     actionBlock: { [weak self] in
                         guard let self else { return }
                         self.dismiss(animated: true) {
-                            self.groupViewHelper?.memberActionSheetRevokeGroupAdminWasSelected(address: self.address)
+                            self.groupViewHelper?.memberActionSheetRevokeGroupAdminWasSelected(
+                                address: self.address,
+                            )
                         }
                     },
                 ))
@@ -481,6 +483,28 @@ extension MemberActionSheet: ConversationHeaderDelegate {
         dismiss(animated: true) {
             guard let fromViewController = self.fromViewController else { return }
             sheet.present(from: fromViewController)
+        }
+    }
+
+    func didTapMemberLabel() {
+        guard
+            BuildFlags.MemberLabel.send,
+            let presenter = self.fromViewController as? MemberLabelViewControllerPresenter,
+            let groupViewHelper,
+            let groupThread = groupViewHelper.thread as? TSGroupThread,
+            let groupModel = groupThread.groupModel as? TSGroupModelV2,
+            let memberLabelCoordinator = groupViewHelper.memberLabelCoordinator
+        else {
+            return
+        }
+
+        let localUserHasMemberLabel = groupModel.groupMembership.localUserMemberLabel != nil
+        dismiss(animated: true) {
+            memberLabelCoordinator.presenter = presenter
+            memberLabelCoordinator.presentWithEducationSheet(
+                localUserHasMemberLabel: localUserHasMemberLabel,
+                canEditMemberLabel: groupViewHelper.canEditMemberLabels,
+            )
         }
     }
 }

@@ -320,6 +320,8 @@ public class GRDBSchemaMigrator {
         case deprecateStoredShouldStartExpireTimer
         case addSession
         case addRecipientStatus
+        case createKeyTransparencyTable
+        case addAdminDeleteTable
 
         // NOTE: Every time we add a migration id, consider
         // incrementing grdbSchemaVersionLatest.
@@ -443,7 +445,7 @@ public class GRDBSchemaMigrator {
     }
 
     public static let grdbSchemaVersionDefault: UInt = 0
-    public static let grdbSchemaVersionLatest: UInt = 139
+    public static let grdbSchemaVersionLatest: UInt = 141
 
     private class DatabaseMigratorWrapper {
         var migrator = DatabaseMigrator()
@@ -5036,6 +5038,36 @@ public class GRDBSchemaMigrator {
             return .success(())
         }
 
+        migrator.registerMigration(.createKeyTransparencyTable) { tx in
+            try createKeyTransparencyTable(tx: tx)
+            return .success(())
+        }
+
+        migrator.registerMigration(.addAdminDeleteTable) { tx in
+            try tx.database.create(
+                table: "AdminDelete",
+            ) { table in
+                table.column("interactionId", .integer)
+                    .primaryKey()
+                    .notNull()
+                    .unique()
+                    .references(
+                        "model_TSInteraction",
+                        column: "id",
+                        onDelete: .cascade,
+                        onUpdate: .cascade,
+                    )
+                table.column("deleteAuthorId", .integer)
+                    .references(
+                        "model_SignalRecipient",
+                        column: "id",
+                        onDelete: .cascade,
+                        onUpdate: .cascade,
+                    )
+            }
+            return .success(())
+        }
+
         // MARK: - Schema Migration Insertion Point
     }
 
@@ -5129,12 +5161,11 @@ public class GRDBSchemaMigrator {
         }
 
         migrator.registerMigration(.dataMigration_scheduleStorageServiceUpdateForMutedThreads) { transaction in
-            let cursor = TSThread.grdbFetchCursor(
-                sql: "SELECT * FROM \(ThreadRecord.databaseTableName) WHERE \(threadColumn: .mutedUntilTimestamp) > 0",
+            TSThread.anyEnumerate(
                 transaction: transaction,
-            )
-
-            while let thread = try cursor.next() {
+                sql: "SELECT * FROM \(TSThread.databaseTableName) WHERE \(threadColumn: .mutedUntilTimestamp) > 0",
+                arguments: [],
+            ) { thread, _ in
                 if let thread = thread as? TSContactThread {
                     SSKEnvironment.shared.storageServiceManagerRef.recordPendingUpdates(updatedAddresses: [thread.contactAddress])
                 } else if let thread = thread as? TSGroupThread {
@@ -5147,20 +5178,17 @@ public class GRDBSchemaMigrator {
         }
 
         migrator.registerMigration(.dataMigration_populateGroupMember) { transaction in
-            let cursor = TSThread.grdbFetchCursor(
+            TSThread.anyEnumerate(
+                transaction: transaction,
                 sql: """
                     SELECT *
-                    FROM \(ThreadRecord.databaseTableName)
+                    FROM \(TSThread.databaseTableName)
                     WHERE \(threadColumn: .recordType) = \(SDSRecordType.groupThread.rawValue)
                 """,
-                transaction: transaction,
-            )
-
-            while let thread = try cursor.next() {
-                guard let groupThread = thread as? TSGroupThread else {
-                    owsFail("Unexpected thread type \(thread)")
-                }
-
+                arguments: [],
+            ) { thread, _ in
+                // [SDS] TODO: Fetch TSGroupThreads directly.
+                let groupThread = thread as! TSGroupThread
                 let groupThreadId = groupThread.uniqueId
                 let interactionFinder = InteractionFinder(threadUniqueId: groupThreadId)
 
@@ -5243,13 +5271,14 @@ public class GRDBSchemaMigrator {
         }
 
         migrator.registerMigration(.dataMigration_reindexGroupMembershipAndMigrateLegacyAvatarDataFixed) { transaction in
-            let threadCursor = TSThread.grdbFetchCursor(
-                sql: "SELECT * FROM \(ThreadRecord.databaseTableName) WHERE \(threadColumn: .recordType) = \(SDSRecordType.groupThread.rawValue)",
+            TSThread.anyEnumerate(
                 transaction: transaction,
-            )
-
-            while let thread = try threadCursor.next() as? TSGroupThread {
-                try autoreleasepool {
+                sql: "SELECT * FROM \(TSThread.databaseTableName) WHERE \(threadColumn: .recordType) = \(SDSRecordType.groupThread.rawValue)",
+                arguments: [],
+            ) { thread, _ in
+                // [SDS] TODO: Fetch TSGroupThreads directly.
+                let thread = thread as! TSGroupThread
+                autoreleasepool {
                     let groupModel = thread.groupModel
 
                     guard
@@ -5262,7 +5291,9 @@ public class GRDBSchemaMigrator {
                         return
                     }
 
-                    try groupModel.persistAvatarData(legacyAvatarData)
+                    failIfThrows {
+                        try groupModel.persistAvatarData(legacyAvatarData)
+                    }
                     groupModel.legacyAvatarData = nil
 
                     thread.anyUpsert(transaction: transaction)
@@ -7527,6 +7558,13 @@ public class GRDBSchemaMigrator {
 
         for collection in [serviceIdCollection, phoneNumberCollection] {
             try tx.database.execute(sql: "DELETE FROM keyvalue WHERE collection = ?", arguments: [collection])
+        }
+    }
+
+    static func createKeyTransparencyTable(tx: DBWriteTransaction) throws {
+        try tx.database.create(table: "KeyTransparency") { table in
+            table.column("aci", .blob).primaryKey().notNull()
+            table.column("libsignalBlob", .blob).notNull()
         }
     }
 }

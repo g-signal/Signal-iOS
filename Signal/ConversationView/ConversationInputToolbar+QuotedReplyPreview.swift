@@ -458,11 +458,10 @@ private class QuotedMessageSnippetView: UIView {
             },
         )
         cancelButton.configuration?.image = UIImage(imageLiteralResourceName: "x-compact-bold")
-        cancelButton.configuration?.baseBackgroundColor = .init(dynamicProvider: { traitCollection in
-            traitCollection.userInterfaceStyle == .dark
-                ? UIColor(rgbHex: 0x787880, alpha: 0.4)
-                : UIColor(rgbHex: 0xF5F5F5, alpha: 0.9)
-        })
+        cancelButton.configuration?.baseBackgroundColor = UIColor(
+            light: UIColor(rgbHex: 0xF5F5F5, alpha: 0.9),
+            dark: UIColor(rgbHex: 0x787880, alpha: 0.4),
+        )
         cancelButton.configuration?.background.visualEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         cancelButton.tintColor = ConversationInputToolbar.Style.primaryTextColor
         cancelButton.configuration?.cornerStyle = .capsule
@@ -508,7 +507,7 @@ private class QuotedMessageSnippetView: UIView {
             switch stub.renderingFlag {
             case .voiceMessage:
                 break
-            case .default, .borderless, .shouldLoop:
+            case nil, .default, .borderless, .shouldLoop:
                 thumbnailView = createStubAttachmentView()
             }
 
@@ -616,7 +615,7 @@ private class QuotedMessageSnippetView: UIView {
 
     private func mimeTypeAndRenderingFlag(
         _ content: DraftQuotedReplyModel.Content,
-    ) -> (String, AttachmentReference.RenderingFlag)? {
+    ) -> (String, AttachmentReference.RenderingFlag?)? {
         switch content {
         case .attachmentStub(_, let stub):
             if let mimeType = stub.mimeType {

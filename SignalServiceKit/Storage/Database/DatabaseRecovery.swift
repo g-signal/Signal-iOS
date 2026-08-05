@@ -213,7 +213,10 @@ public enum DatabaseRecovery {
 
         private static func temporaryDatabaseFileUrl() -> URL {
             logger.info("Creating temporary database file...")
-            let result = OWSFileSystem.temporaryFileUrl()
+            let result = OWSFileSystem.temporaryFileUrl(
+                fileExtension: nil,
+                isAvailableWhileDeviceLocked: false,
+            )
             logger.info("Created at \(result)")
             return result
         }
@@ -299,8 +302,8 @@ public enum DatabaseRecovery {
             TSInteraction.table.tableName,
             TSGroupMember.databaseTableName,
             TSMention.databaseTableName,
-            TSPaymentModel.table.tableName,
-            TSThread.table.tableName,
+            TSPaymentModel.databaseTableName,
+            TSThread.databaseTableName,
             ThreadAssociatedData.databaseTableName,
             // We'd like to get receipts back, but it's okay if we don't get them all.
             DonationReceipt.databaseTableName,
@@ -334,10 +337,12 @@ public enum DatabaseRecovery {
             GroupMessageProcessorJob.databaseTableName,
             "ListedBackupMediaObject",
             "BackupOversizeTextCache",
-            "Poll",
-            "PollOption",
-            "PollVote",
-            "PinnedMessage",
+            PollRecord.databaseTableName,
+            PollOptionRecord.databaseTableName,
+            PollVoteRecord.databaseTableName,
+            PinnedMessageRecord.databaseTableName,
+            "KeyTransparency",
+            AdminDeleteRecord.databaseTableName,
         ]
 
         private static func prepareToCopyTablesWithBestEffort(
@@ -526,12 +531,12 @@ public enum DatabaseRecovery {
             PendingViewedReceiptRecord.databaseTableName,
             // Can be recovered in other ways, after recovery is done.
             ProfileBadge.databaseTableName,
-            StickerPack.table.tableName,
+            StickerPackRecord.databaseTableName,
             HiddenRecipient.databaseTableName,
             // Not essential.
             StoryContextAssociatedData.databaseTableName,
             ExperienceUpgrade.databaseTableName,
-            InstalledSticker.table.tableName,
+            InstalledStickerRecord.databaseTableName,
             CancelledGroupRing.databaseTableName,
             CdsPreviousE164.databaseTableName,
             SpamReportingTokenRecord.databaseTableName,

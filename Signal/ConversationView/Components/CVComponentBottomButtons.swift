@@ -41,12 +41,17 @@ public class CVComponentBottomButtons: CVComponentBase, CVComponent {
         var subviews = [UIView]()
         for action in actions {
             let buttonView = CVMessageActionButton(action: action)
-            if !isIncoming || isDarkThemeEnabled {
-                buttonView.backgroundColor = UIColor(white: 1, alpha: 0.16)
+            if isIncoming {
+                if conversationStyle.hasWallpaper {
+                    buttonView.backgroundColor = .Signal.MaterialBase.button
+                } else {
+                    buttonView.backgroundColor = .Signal.LightBase.button
+                }
+                buttonView.textColor = .Signal.label
             } else {
-                buttonView.backgroundColor = UIColor(white: 1, alpha: 0.8)
+                buttonView.backgroundColor = .Signal.ColorBase.button
+                buttonView.textColor = .Signal.ColorBase.labelPrimary
             }
-            buttonView.textColor = conversationStyle.bubbleTextColor(isIncoming: isIncoming)
             subviews.append(buttonView)
             componentView.buttonViews.append(buttonView)
         }
@@ -139,18 +144,18 @@ public class CVComponentBottomButtons: CVComponentBase, CVComponent {
         private func configure() {
             layoutMargins = .zero
             layer.masksToBounds = true
-            layer.cornerRadius = 16
+            layer.cornerRadius = Self.buttonHeight / 2
             text = action.title
             font = Self.buttonFont
             textAlignment = .center
         }
 
-        private static var buttonFont: UIFont { UIFont.dynamicTypeSubheadlineClamped.medium() }
+        private static var buttonFont: UIFont { UIFont.dynamicTypeFootnoteClamped.medium() }
 
-        private static let buttonVMargin: CGFloat = 6
+        private static let buttonVMargin: CGFloat = 5
 
         static var buttonHeight: CGFloat {
-            ceil(buttonFont.lineHeight + buttonVMargin * 2).clamp(32, 44)
+            ceil(buttonFont.lineHeight + buttonVMargin * 2).clamp(28, 44)
         }
     }
 
