@@ -507,21 +507,26 @@ class BackupSettingsViewController:
         shouldShowWelcomeToBackupsSheet: Bool,
     ) async {
         do throws(SheetDisplayableError) {
-            let chooseBackupPlanViewController: ChooseBackupPlanViewController = try await .load(
-                fromViewController: self,
-                initialPlanSelection: initialPlanSelection,
-                onConfirmPlanSelectionBlock: { [weak self] chooseBackupPlanViewController, planSelection in
-                    Task { [weak self] in
-                        guard let self else { return }
+            let chooseBackupPlanViewController: ChooseBackupPlanViewController
+            do {
+                chooseBackupPlanViewController = try await .load(
+                    fromViewController: self,
+                    initialPlanSelection: initialPlanSelection,
+                    onConfirmPlanSelectionBlock: { [weak self] chooseBackupPlanViewController, planSelection in
+                        Task { [weak self] in
+                            guard let self else { return }
 
-                        await _enableBackups(
-                            fromViewController: chooseBackupPlanViewController,
-                            planSelection: planSelection,
-                            shouldShowWelcomeToBackupsSheet: shouldShowWelcomeToBackupsSheet,
-                        )
-                    }
-                },
-            )
+                            await _enableBackups(
+                                fromViewController: chooseBackupPlanViewController,
+                                planSelection: planSelection,
+                                shouldShowWelcomeToBackupsSheet: shouldShowWelcomeToBackupsSheet,
+                            )
+                        }
+                    },
+                )
+            } catch {
+                throw SheetDisplayableError.genericError
+            }
 
             navigationController?.pushViewController(
                 chooseBackupPlanViewController,

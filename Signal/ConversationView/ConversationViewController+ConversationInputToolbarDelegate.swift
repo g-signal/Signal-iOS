@@ -531,7 +531,7 @@ extension ConversationViewController: ConversationInputToolbarDelegate {
     public func pollButtonPressed() {
         AssertIsOnMainThread()
 
-        if !BuildFlags.pollSend {
+        if !BuildFlags.pollOneOnOneSend && !(thread is TSGroupThread) {
             return
         }
 

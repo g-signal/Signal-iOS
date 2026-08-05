@@ -287,16 +287,6 @@ extension ConversationViewController: MessageActionsDelegate {
 }
 
 extension ConversationViewController {
-    func messageActionsEndPoll(_ itemViewModel: CVItemViewModelImpl) {
-        if let poll = itemViewModel.componentState.poll?.state.poll {
-            do {
-                try DependenciesBridge.shared.pollMessageManager.sendPollTerminateMessage(poll: poll, thread: thread)
-            } catch {
-                Logger.error("Failed to end poll: \(error)")
-            }
-        }
-    }
-
     func sendPinMessageChange(pinMessage: TransientOutgoingMessage) async throws {
         let db = DependenciesBridge.shared.db
         let messageSenderJobQueue = SSKEnvironment.shared.messageSenderJobQueueRef
