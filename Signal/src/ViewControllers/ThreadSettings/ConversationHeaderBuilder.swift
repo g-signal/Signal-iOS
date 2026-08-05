@@ -42,6 +42,7 @@ struct ConversationHeaderBuilder {
                 groupThread: groupThread,
                 sizeClass: sizeClass,
                 options: options,
+                memberLabel: memberLabel,
                 delegate: delegate
             )
         } else if let contactThread = thread as? TSContactThread {
@@ -49,6 +50,7 @@ struct ConversationHeaderBuilder {
                 contactThread: contactThread,
                 sizeClass: sizeClass,
                 options: options,
+                memberLabel: memberLabel,
                 delegate: delegate
             )
         } else {
@@ -140,6 +142,7 @@ struct ConversationHeaderBuilder {
                 contactThread: contactThread,
                 sizeClass: sizeClass,
                 options: options,
+                memberLabel: memberLabel,
                 delegate: delegate,
                 transaction: transaction
             )
@@ -796,6 +799,7 @@ extension ConversationSettingsViewController: ConversationHeaderDelegate {
             for: thread,
             sizeClass: .eightyEight,
             options: options,
+            memberLabel: nil,
             delegate: self
         )
     }
