@@ -550,9 +550,6 @@
 /* Text used as placeholder in recovery key text view. */
 "BACKUP_KEY_PLACEHOLDER" = "Clave de copia de seguridad";
 
-/* Title of button to tap if you forgot your recovery key. */
-"BACKUP_KEY_REMINDER_FORGOT_KEY" = "¿No recuerdas la clave?";
-
 /* Action text for Recovery Key reminder megaphone */
 "BACKUP_KEY_REMINDER_MEGAPHONE_ACTION" = "Verificar";
 
@@ -611,7 +608,7 @@
 "BACKUP_ONBOARDING_INTRO_TITLE" = "Copias de seguridad de B&A";
 
 /* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
-"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "Tu clave de recuperación es un código de 64 caracteres que necesitarás para recuperar tu copia de seguridad.";
+"BACKUP_ONBOARDING_KEY_INTRO_BULLET_1" = "Tu clave de recuperación es un código de 64 caracteres que necesitarás para restaurar tu copia de seguridad.";
 
 /* Text for a bullet point in a view introducing the 'Recovery Key' during an onboarding flow. */
 "BACKUP_ONBOARDING_KEY_INTRO_BULLET_2" = "Guarda tu clave de recuperación en un lugar seguro, como un gestor de contraseñas, y no la compartas con nadie.";
@@ -648,6 +645,15 @@
 
 /* Title for a view allowing users to record their 'Recovery Key'. */
 "BACKUP_RECORD_KEY_TITLE" = "Guarda la clave de tu copia de seguridad";
+
+/* Title for a button offering help if the user has forgotten their recovery key. */
+"BACKUP_RECOVERY_KEY_REMINDER_FORGOT_KEY_BUTTON" = "¿No recuerdas la clave?";
+
+/* Subtitle for a screen asking users to enter their recovery key, for reminder purposes. */
+"BACKUP_RECOVERY_KEY_REMINDER_SUBTITLE" = "Tu clave de recuperación es un código de 64 caracteres que necesitarás para recuperar tu cuenta y tus datos.";
+
+/* Title for a screen asking users to enter their recovery key, for reminder purposes. */
+"BACKUP_RECOVERY_KEY_REMINDER_TITLE" = "Introduce tu clave de recuperación";
 
 /* Subtitle for a progress spinner on a modal tracking active downloading. Embeds 1:{{ the amount downloaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to download as a file size, e.g. 1 GB }}; 3:{{ the amount downloaded as a percentage, e.g. 10% }}. */
 "BACKUP_RESTORE_MODAL_DOWNLOAD_PROGRESS_SUBTITLE" = "%1$@ de %2$@ (%3$@)";
@@ -690,9 +696,6 @@
 
 /* Message for an action sheet explaining that you must be registered to make a Backup. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "Debes registrarte para poder crear una copia de seguridad.";
-
-/* Description for a progress bar tracking the optimizing of Backup media. */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "Optimizando archivos…";
 
 /* Description for a progress bar tracking the preparation of a Backup. Embeds 1:{{ the percentage completed preformatted as a percent, e.g. 10% }}. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PREPARING_BACKUP" = "Preparando copia de seguridad (%1$@)";
@@ -887,7 +890,7 @@
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_DISK_SPACE" = "No hay suficiente espacio para descargar tus archivos. Para continuar, libera %1$@ de espacio.";
 
 /* Subtitle for a progress bar tracking downloads that are paused because they need internet. */
-"BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_INTERNET" = "Descarga en pausa: no tienes internet…";
+"BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_INTERNET" = "Descarga en pausa: sin conexión a Internet…";
 
 /* Subtitle for a progress bar tracking downloads that are paused because they need WiFi. */
 "BACKUP_SETTINGS_DOWNLOAD_PROGRESS_SUBTITLE_PAUSED_NEEDS_WIFI" = "Descarga en pausa: esperando red Wi-Fi…";
@@ -1018,6 +1021,9 @@
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "Subiendo %1$@ de %2$@ (%3$@)";
 
+/* Subtitle for a progress bar tracking active uploading. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING_GENERIC" = "Cargando…";
+
 /* Message for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE" = "Dependiendo del tamaño de tu copia de seguridad, este proceso puede llevar bastante tiempo. Mientras se realiza la copia de seguridad, podrás seguir usando tu teléfono como de costumbre.";
 
@@ -1033,11 +1039,11 @@
 /* Title for a sheet shown when your Backup subscription fails to renew. */
 "BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "No se ha renovado tu suscripción a las copias de seguridad";
 
-/* Body for system notification when we detect paid backup media uploads have encountered a problem */
-"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "Envíanos tus registros de depuración para ayudarnos a resolver el problema. ¡Gracias!";
+/* Body for system notification when we detect an issue with Backup media. */
+"BACKUPS_MEDIA_ERROR_NOTIFICATION_BODY" = "Se ha producido un error inesperado durante el proceso de copia de seguridad de tus archivos. Envíanos tus registros de depuración para ayudarnos a resolver el problema.";
 
-/* Title for system notification when we detect paid backup media uploads have encountered a problem */
-"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "Se ha producido un error al hacer una copia de seguridad de tus archivos multimedia";
+/* Title for system notification when we detect an issue with Backup media. */
+"BACKUPS_MEDIA_ERROR_NOTIFICATION_TITLE" = "Error de copia de seguridad de archivos";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "Copias de seguridad de B&A";
@@ -1068,8 +1074,6 @@
 
 /* String explaining to the user that their boost badge has expired while they are a current subscription sustainer on the badge expiry sheet. */
 "BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "Tu insignia Apoyo B&A ha caducado y ya no se muestra en tu perfil.
-
-Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 días más.";
 
 /* Title for boost on the badge expiration sheet. */
 "BADGE_EXPIRED_BOOST_TITLE" = "Insignia caducada";
@@ -1791,6 +1795,72 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 /* Tooltip highlighting the auto chat color option. */
 "CHAT_COLORS_AUTO_TOOLTIP" = "Hace que el color de las burbujas combine con el del fondo de pantalla del chat";
 
+/* Message shown in an action sheet when the user tries to cancel a backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_CANCEL_CONFIRMATION_MESSAGE" = "Puedes cancelar el proceso de copia de seguridad, pero no se eliminará tu copia de seguridad. Puedes reanudar el proceso en cualquier momento desde Ajustes de copia de seguridad.";
+
+/* Title for the action sheet shown when the user tries to cancel a backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_CANCEL_CONFIRMATION_TITLE" = "¿Cancelar copia de seguridad?";
+
+/* Toast shown after the user cancels the backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_CANCELED_TOAST" = "Copia de seguridad cancelada";
+
+/* Title label shown in the chat list backup progress view when the backup is complete. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_COMPLETE_TITLE" = "Copia de seguridad completada";
+
+/* Title label shown in the chat list backup progress view when the backup is paused. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_PAUSED_TITLE" = "Copia de seguridad en pausa";
+
+/* Button in the cancel backup action sheet that confirms cancellation. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_CANCEL_BACKUP_BUTTON" = "Cancelar copia de seguridad";
+
+/* Title for the context menu action that cancels the backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_CANCEL_BACKUP_CONTEXT_MENU_ACTION" = "Cancelar copia de seguridad";
+
+/* Button in the cancel backup action sheet that dismisses the sheet and continues the backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_CONTINUE_BACKUP_BUTTON" = "Continuar con la copia de seguridad";
+
+/* Title for the context menu action that hides the backup progress view. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_HIDE_CONTEXT_MENU_ACTION" = "Ocultar";
+
+/* Toast shown after the user hides the backup progress view. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_HIDE_TOAST" = "Para ver el progreso de tu copia de seguridad, ve a Ajustes de copia de seguridad.";
+
+/* Button in the action sheet to dismiss and resume backup later on Wi-Fi. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_LATER_ON_WIFI_BUTTON" = "Más tarde, con Wi-Fi";
+
+/* Trailing accessory label shown when backup is paused due to low battery. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_LOW_BATTERY_LABEL" = "Batería baja…";
+
+/* Trailing accessory label shown when backup is paused due to Low Power Mode. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_LOW_POWER_MODE_LABEL" = "Modo de bajo consumo…";
+
+/* Trailing accessory label shown when backup is paused due to no internet connection. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_NO_INTERNET_LABEL" = "Sin conexión a Internet…";
+
+/* Title label shown in the chat list backup progress view while the backup file is being prepared. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_PREPARING_BACKUP_TITLE" = "Preparando copia de seguridad";
+
+/* Button in the action sheet to resume backup using cellular data. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_CELLULAR_DATA_BUTTON" = "Reanudar";
+
+/* Message shown in an action sheet when the user tries to resume backup using cellular data. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_CELLULAR_DATA_MESSAGE" = "Es posible que se apliquen cargos si haces una copia de seguridad de tus archivos multimedia usando datos móviles. Tu copia de seguridad puede tardar bastante en subirse. Para evitar interrupciones, mantén la aplicación Signal abierta.";
+
+/* Title for the action sheet shown when the user tries to resume backup using cellular data. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_CELLULAR_DATA_TITLE" = "¿Reanudar usando datos móviles?";
+
+/* Button shown in the backup progress view trailing accessory to resume uploading over Wi-Fi. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_WIFI_BUTTON" = "Reanudar";
+
+/* Progress label showing the amount uploaded out of the total. Embeds {{ %1$@ bytes uploaded, %2$@ total bytes to upload }}. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_UPLOAD_PROGRESS_FORMAT" = "%1$@ de %2$@";
+
+/* Title label shown in the chat list backup progress view while backup attachments are being uploaded. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_UPLOADING_BACKUP_TITLE" = "Cargando copia de seguridad";
+
+/* Title label shown in the chat list backup progress view when waiting for Wi-Fi. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_WAITING_FOR_WIFI_TITLE" = "Esperando red Wi-Fi";
+
 /* Title for context menu action to disable chat list filter (e.g., Filter by Unread) */
 "CHAT_LIST_CLEAR_FILTER_MENU_ACTION" = "Dejar de filtrar por chats no leídos";
 
@@ -1808,6 +1878,9 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 
 /* Message displayed on chat list when Filter by Unread is enabled but no unread chats are available */
 "CHAT_LIST_UNREAD_FILTER_NO_CHATS" = "No hay chats sin leer";
+
+/* Message indicating a user should check connection and try again. */
+"CHECK_YOUR_CONNECTION_TRY_AGAIN_WARNING" = "Comprueba tu conexión a Internet e inténtalo de nuevo.";
 
 /* Text for a bullet point in a list of Backup features, describing that all media is included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_MEDIA_BACKUP" = "Copia de seguridad de todos tus archivos multimedia";
@@ -2235,11 +2308,11 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 /* Header title for the section showing all media in conversation settings */
 "CONVERSATION_SETTINGS_ALL_MEDIA_HEADER" = "Todos los archivos";
 
-/* Footer for the 'attributes access' section in conversation settings view. */
-"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "Elige quién puede modificar el nombre, descripción e imagen del grupo y la duración de los mensajes temporales.";
-
 /* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "Elige quién puede modificar el nombre, la descripción y la imagen del grupo, la duración de los mensajes temporales y los mensajes fijados.";
+
+/* Footer for the 'attributes access' section in conversation settings view with member labels added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V3" = "Elige quién puede modificar el nombre, la descripción y la imagen del grupo, la duración de los mensajes temporales, los mensajes fijados y añadir categorías de participantes.";
 
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "Apoya a B&A y consigue insignias para mostrar en tu perfil. Toca sobre una insignia para obtener más información.";
@@ -2587,7 +2660,7 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 "DEBUG_LOG_ALERT_OPTION_SHARE" = "Compartir";
 
 /* Title of the debug log alert. */
-"DEBUG_LOG_ALERT_TITLE" = "Un paso más";
+"DEBUG_LOG_ALERT_TITLE" = "Solo queda un paso…";
 
 /* Accessibility label for the ? vector asset used to get info about debug logs */
 "DEBUG_LOG_INFO_BUTTON" = "Acerca de los registros de depuración";
@@ -2669,6 +2742,12 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "Se eliminará este mensaje de todos tus dispositivos.";
+
+/* Text indicating the message was remotely deleted by an admin. Embeds {{admin display name}} */
+"DELETED_BY_ADMIN" = "%1$@ (admin) ha eliminado este mensaje";
+
+/* Text indicating the message was remotely deleted by its author. Embeds {{ author name }} */
+"DELETED_THIS_MESSAGE" = "%1$@ ha eliminado este mensaje";
 
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "Cuenta eliminada";
@@ -4692,6 +4771,18 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 /* A keyboard command to unarchive the current conversation. */
 "KEY_COMMAND_UNARCHIVE" = "Desarchivar chat";
 
+/* Body for a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_BODY" = "Los registros de depuración nos ayudan a diagnosticar y solucionar el problema, y no contienen información que pueda identificarte.";
+
+/* Title for the primary button in a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_PRIMARY_BUTTON_TITLE" = "Enviar";
+
+/* Title for the secondary button in a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_SECONDARY_BUTTON_TITLE" = "No, gracias";
+
+/* Title for a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_TITLE" = "Actualmente, la verificación automática de claves no está disponible para tu dispositivo. ¿Quieres enviar tu registro de depuración?";
+
 /* Label for the 'learn more' button. */
 "LEARN_MORE" = "Más información";
 
@@ -4998,8 +5089,50 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 /* Label for an action to add a member label */
 "MEMBER_LABEL_ADD" = "Añadir categoría de participante";
 
+/* Label that shows up under a local user's row in contacts prompting them to add a member label */
+"MEMBER_LABEL_ADD_CSVC" = "Añadir categoría de participante";
+
+/* Accessibility prefix for member labels. */
+"MEMBER_LABEL_AX_PREFIX" = "Categoría de participante: ";
+
+/* Button label on action sheet when attempting to change the group attributes access to 'administrator' and then continue */
+"MEMBER_LABEL_CLEAR_CHANGE_PERMISSION_CONTINUE" = "Cambiar permiso";
+
+/* Body for action sheet when attempting to change the group attributes access to 'administrator' */
+"MEMBER_LABEL_CLEAR_WARNING_BODY" = "Si cambias este permiso a \"Solo admins\", se eliminarán las categorías que hayan añadido los participantes que no sean admins.";
+
+/* Title for action sheet when attempting to change the group attributes access to 'administrator' */
+"MEMBER_LABEL_CLEAR_WARNING_TITLE" = "Se eliminarán las categorías de participantes";
+
+/* Text for a button to set a member label */
+"MEMBER_LABEL_EDIT" = "Editar categoría";
+
+/* Error indicating member label could not save. */
+"MEMBER_LABEL_FAIL_TO_SAVE" = "No se ha podido guardar la categoría de participante";
+
+/* Section header for a list of group member labels */
+"MEMBER_LABEL_GROUP_LABELS_SECTION_TITLE" = "Group Members with Labels";
+
+/* Body for a sheet shown if a user will show their member label over their About message in a group. */
+"MEMBER_LABEL_HERO_SHEET_ABOUT_OVERRIDE_BODY" = "En este grupo, se mostrará tu categoría de participante junto a tu foto en lugar de la información sobre ti.";
+
+/* Title for a sheet shown if a user will show their member label over their About message in a group. */
+"MEMBER_LABEL_HERO_SHEET_ABOUT_OVERRIDE_TITLE" = "Mostrar categoría de participante";
+
+/* Body for a sheet shown if a user taps on someone else's member label. */
+"MEMBER_LABEL_HERO_SHEET_EDUCATION_BODY" = "Añade una categoría de participante que te describa a ti o tu rol dentro del grupo. La categoría que elijas solo se mostrará dentro de este grupo.";
+
+/* Title for a sheet shown if a user taps on someone else's member label. */
+"MEMBER_LABEL_HERO_SHEET_EDUCATION_TITLE" = "Categorías de participantes";
+
+/* Text for section that shows other group member labels, when there are none */
+"MEMBER_LABEL_NO_OTHER_GROUP_MEMBERS_HAVE_LABELS" = "No other members have labels";
+
 /* Heading shown above the preview of a message bubble with the edited member label. */
 "MEMBER_LABEL_PREVIEW_HEADING" = "Vista previa";
+
+/* Text for a button to edit an existing member label */
+"MEMBER_LABEL_SET" = "Añadir tu categoría de participante";
 
 /* Text shown in the preview message bubble when a user is editing their member label. */
 "MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "Hola!";
@@ -5008,7 +5141,7 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 "MEMBER_LABEL_VIEW_PLACEHOLDER_TEXT" = "Añade tu categoría";
 
 /* Subtitle for a view where users can edit and preview their member label. */
-"MEMBER_LABEL_VIEW_SUBTITLE" = "Añade una categoría de participante que te describa a ti o a tu rol dentro del grupo. La categoría que elijas solo se mostrará dentro de este grupo.";
+"MEMBER_LABEL_VIEW_SUBTITLE" = "Añade una categoría de participante que te describa a ti o tu rol dentro del grupo. La categoría que elijas solo se mostrará dentro de este grupo.";
 
 /* Title for a view where users can edit and preview their member label. */
 "MEMBER_LABEL_VIEW_TITLE" = "Categoría de participante";
@@ -5890,7 +6023,7 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 "ONBOARDING_VERIFICATION_CALL_ME_COUNTDOWN_FORMAT" = "Llamarme en %1$@";
 
 /* Label for a progress spinner currently validating code */
-"ONBOARDING_VERIFICATION_CODE_VALIDATION_PROGRESS_LABEL" = "Verificando código…";
+"ONBOARDING_VERIFICATION_CODE_VALIDATION_PROGRESS_LABEL" = "Verificando clave…";
 
 /* First bullet point for the explainer sheet for registering via verification code. */
 "ONBOARDING_VERIFICATION_HELP_BULLET_1" = "Asegúrate de que tu teléfono tenga señal para recibir SMS o llamadas.";
@@ -5905,13 +6038,13 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 "ONBOARDING_VERIFICATION_HELP_LINK" = "¿Tienes problemas para registrarte?";
 
 /* Label for button to resend SMS verification code. */
-"ONBOARDING_VERIFICATION_RESEND_CODE_BUTTON" = "Reenviar código";
+"ONBOARDING_VERIFICATION_RESEND_CODE_BUTTON" = "Reenviar clave";
 
 /* Format string for button counting down time until SMS code can be resent. Embeds {{time remaining}}. */
-"ONBOARDING_VERIFICATION_RESEND_CODE_COUNTDOWN_FORMAT" = "Reenviar código en %1$@";
+"ONBOARDING_VERIFICATION_RESEND_CODE_COUNTDOWN_FORMAT" = "Reenviar clave en %1$@";
 
 /* Format for the title of the 'onboarding verification' view. Embeds {{the user's phone number}}. */
-"ONBOARDING_VERIFICATION_TITLE_DEFAULT_FORMAT" = "Introduce el código que hemos enviado al %1$@";
+"ONBOARDING_VERIFICATION_TITLE_DEFAULT_FORMAT" = "Introduce la clave que hemos enviado al %1$@";
 
 /* Title label for the onboarding verification page */
 "ONBOARDING_VERIFICATION_TITLE_LABEL" = "Clave de verificación";
@@ -6789,8 +6922,8 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 /* String to display when a poll has no votes */
 "POLL_NO_VOTES" = "Sin votos";
 
-/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
-"POLL_OPTION_PLACEHOLDER_PREFIX" = "Opción";
+/* Format text for the placeholder of an option row when creating a poll. Embeds {{ the number of this option in a list, as a pre-localized string }}, so it should look like , . */
+"POLL_OPTION_PLACEHOLDER_FORMAT" = "Opción %1$@";
 
 /* Header for the poll options text boxes when making a new poll */
 "POLL_OPTIONS_LABEL" = "Opciones";
@@ -7393,13 +7526,13 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 "REGISTRATION_SMS_CODE_FAILED_TRY_VOICE_ERROR" = "No hemos podido enviarte la clave de verificación por SMS. Intenta recibir tu clave mediante llamada.";
 
 /* Alert shown when running out of attempts at submitting a verification code. */
-"REGISTRATION_SUBMIT_CODE_ATTEMPTS_EXHAUSTED_ALERT" = "Has realizado demasiados intentos para introducir el código. Vuelve a solicitar el código e inténtalo de nuevo.";
+"REGISTRATION_SUBMIT_CODE_ATTEMPTS_EXHAUSTED_ALERT" = "Has realizado demasiados intentos para introducir la clave. Vuelve a solicitar la clave e inténtalo de nuevo.";
 
 /* Alert shown when submitting a verification code too many times. Embeds {{ duration }}, such as \"5:00\" */
-"REGISTRATION_SUBMIT_CODE_RATE_LIMIT_ALERT_FORMAT" = "Has realizado demasiados intentos para introducir el código. Vuelve a intentarlo en %1$@.";
+"REGISTRATION_SUBMIT_CODE_RATE_LIMIT_ALERT_FORMAT" = "Has realizado demasiados intentos para introducir la clave. Vuelve a intentarlo en %1$@.";
 
 /* During registration and re-registration, users may have to enter a code to verify ownership of their phone number. If they enter an invalid code, they will see this error message. */
-"REGISTRATION_VERIFICATION_ERROR_INVALID_VERIFICATION_CODE" = "El código que has introducido no es válido. Vuelve a solicitar el código e inténtalo de nuevo.";
+"REGISTRATION_VERIFICATION_ERROR_INVALID_VERIFICATION_CODE" = "La clave que has introducido no es válida. Vuelve a solicitar la clave e inténtalo de nuevo.";
 
 /* Message of alert indicating that users needs to enter a valid phone number to register. */
 "REGISTRATION_VIEW_INVALID_PHONE_NUMBER_ALERT_MESSAGE" = "Introduce un número de teléfono válido para registrarte.";
@@ -7507,7 +7640,7 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 "RESTORING_MEDIA_BANNER_PAUSED_LOW_POWER_MODE_SUBTITLE" = "Modo de bajo consumo";
 
 /* Subtitle shown on chat list banner for restoring media from a backup when paused because the device has no internet connection */
-"RESTORING_MEDIA_BANNER_PAUSED_NOT_REACHABLE_SUBTITLE" = "Sin conexión a Internet";
+"RESTORING_MEDIA_BANNER_PAUSED_NOT_REACHABLE_SUBTITLE" = "Sin conexión a Internet…";
 
 /* Title shown on chat list banner for restoring media from a backup when paused for some reason */
 "RESTORING_MEDIA_BANNER_PAUSED_TITLE" = "Descarga en pausa";
@@ -7583,6 +7716,48 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 
 /* Snippet to share {{safety number}} with a friend. sent e.g. via SMS */
 "SAFETY_NUMBER_SHARE_FORMAT" = "El número de seguridad de nuestro chat en B&A es:\n%1$@";
+
+/* Title for a button offering automatic key verification. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFY" = "Verificar automáticamente";
+
+/* Title for a button when automatic key verification fails. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFY_FAILURE" = "Verificación automática no disponible";
+
+/* Title for a button when automatic key verification succeeds. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFY_SUCCESS" = "Cifrado verificado";
+
+/* Title for a button while automatic key verification is ongoing. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFYING" = "Verificando cifrado…";
+
+/* Body for a sheet introducing Key Transparency. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_EDUCATION_SHEET_BODY" = "Para los contactos con los que hayas iniciado la comunicación mediante un número de teléfono, Signal puede confirmar automáticamente si la conexión es segura usando un proceso llamado transparencia de claves. Para mayor seguridad, puedes seguir verificando manualmente tus contactos usando un código QR o comparando los números de seguridad.";
+
+/* Title for a sheet introducing Key Transparency. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_EDUCATION_SHEET_TITLE" = "Ahora, Signal puede verificar automáticamente el cifrado";
+
+/* Body for a sheet explaining that encryption auto-verification did not succeed. Embeds {{ 1: the contact's name }}. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_FAILURE_SHEET_BODY_FORMAT" = "Signal ya no puede verificar automáticamente el cifrado de este chat. Es probable que %1$@ haya cambiado su número de teléfono. Verifica manualmente el cifrado de extremo a extremo comparando los números en la pantalla anterior o escaneando el código que se muestra en su dispositivo.";
+
+/* Title for a sheet explaining that encryption auto-verification did not succeed. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_FAILURE_SHEET_TITLE" = "La verificación automática ya no está disponible para este chat";
+
+/* Footer explaining that automatic verification is not available for all chats */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_FOOTER" = "La verificación automática no está disponible para todos los chats.";
+
+/* Header for automatic key verification */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_HEADER" = "Verificación automática de clave";
+
+/* Body for a sheet explaining that encryption auto-verification is not available. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_NOT_AVAILABLE_SHEET_BODY" = "Signal solo puede verificar automáticamente el cifrado en los chats que hayas empezado con alguien mediante un número de teléfono. Si iniciaste un chat con alguien a través de un alias o un grupo en común, verifica el cifrado de extremo a extremo comparando los números en la pantalla anterior o escaneando el código que se muestra en su dispositivo.";
+
+/* Title for a sheet explaining that encryption auto-verification is not available. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_NOT_AVAILABLE_SHEET_TITLE" = "La verificación automática no está disponible para este chat";
+
+/* Body for a sheet explaining that encryption auto-verification succeeded. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_SUCCESS_SHEET_BODY" = "Para los contactos con los que hayas iniciado la comunicación mediante un número de teléfono, Signal puede confirmar automáticamente si la conexión es segura usando un proceso llamado transparencia de claves. Para mayor seguridad, verifica manualmente el cifrado de extremo a extremo comparando los números en la pantalla anterior o escaneando el código que se muestra en el dispositivo de la otra persona.";
+
+/* Title for a sheet explaining that encryption auto-verification succeeded. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_SUCCESS_SHEET_TITLE" = "El cifrado para este chat se ha verificado automáticamente";
 
 /* Title for Safety Tips button in thread details. */
 "SAFETY_TIPS_BUTTON_ACTION_TITLE" = "Consejos de seguridad";
@@ -7983,8 +8158,6 @@ Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 d
 /* Format for the description text in the 'change phone number splash' view. Embeds: {{ %1$@ the old phone number, %2$@ the new phone number }}. */
 "SETTINGS_CHANGE_PHONE_NUMBER_CONFIRM_DESCRIPTION_FORMAT" = "Vas a cambiar tu número de teléfono en B&A de %1$@ a %2$@.
 
-Antes de continuar, comprueba que el número a continuación es correcto.";
-
 /* Label for the 'country code' row in the 'change phone number' settings. */
 "SETTINGS_CHANGE_PHONE_NUMBER_COUNTRY_CODE_FIELD" = "Código de país";
 
@@ -8103,7 +8276,13 @@ Antes de continuar, comprueba que el número a continuación es correcto.";
 "SETTINGS_KEEP_MUTED_ARCHIVED_DESCRIPTION" = "Los chats silenciados que hayas archivado permanecerán archivados aunque recibas un nuevo mensaje.";
 
 /* When a chat is archived and receives a new message, it is unarchived. Turning this switch on disables this feature if the chat in question is also muted. This string is a brief label for a switch paired with a longer description underneath, in the Chats settings. */
-"SETTINGS_KEEP_MUTED_ARCHIVED_LABEL" = "Dejar archivados chats silenciados";
+"SETTINGS_KEEP_MUTED_ARCHIVED_LABEL" = "Dejar archivados los chats silenciados";
+
+/* Footer for settings section describing Key Transparency. */
+"SETTINGS_KEY_TRANSPARENCY_OPT_OUT_FOOTER" = "Cuando esta opción está activada, Signal intentará verificar automáticamente el cifrado de los chats individuales.";
+
+/* Title for for a settings option describing that Key Transparency is enabled. */
+"SETTINGS_KEY_TRANSPARENCY_OPT_OUT_SWITCH_TITLE" = "Verificación automática de clave";
 
 /* No comment provided by engineer. */
 "SETTINGS_LEGAL_TERMS_CELL" = "Términos y Política de privacidad";
@@ -9842,9 +10021,6 @@ Antes de continuar, comprueba que el número a continuación es correcto.";
 /* An error indicating to the user that we failed to clear the wallpaper. */
 "WALLPAPER_SETTINGS_FAILED_TO_CLEAR" = "No se ha podido eliminar el fondo de pantalla. Inténtalo de nuevo más tarde o contacta con el equipo de Asistencia si el problema persiste.";
 
-/* An error indicating to the user that we failed to reset all wallpapers. */
-"WALLPAPER_SETTINGS_FAILED_TO_RESET" = "No se han podido restablecer todos los fondos de pantalla. Inténtalo de nuevo más tarde o contacta con el equipo de Asistencia si el problema persiste.";
-
 /* Label for 'reset all chat colors' action in the global wallpaper settings. */
 "WALLPAPER_SETTINGS_RESET_ALL_CHAT_COLORS" = "Restablecer todos";
 
@@ -9891,7 +10067,7 @@ Antes de continuar, comprueba que el número a continuación es correcto.";
 "YOU" = "Tú";
 
 /* text indicating the message was remotely deleted by you */
-"YOU_DELETED_THIS_MESSAGE" = "Has eliminado este mensaje.";
+"YOU_DELETED_THIS_MESSAGE" = "Has eliminado este mensaje";
 
 /* Info Message when you disabled disappearing messages. */
 "YOU_DISABLED_DISAPPEARING_MESSAGES_CONFIGURATION" = "Has desactivado los mensajes temporales.";
@@ -9979,4 +10155,3 @@ Antes de continuar, comprueba que el número a continuación es correcto.";
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "La plataforma BA no respondió a tiempo. Por favor, inténtalo de nuevo.";
 
 "LINK_BA_PLATFORM_ERROR_TITLE" = "Error";
-

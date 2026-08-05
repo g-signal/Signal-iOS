@@ -550,9 +550,6 @@
 /* Text used as placeholder in recovery key text view. */
 "BACKUP_KEY_PLACEHOLDER" = "מפתח גיבוי";
 
-/* Title of button to tap if you forgot your recovery key. */
-"BACKUP_KEY_REMINDER_FORGOT_KEY" = "שכחת את המפתח?";
-
 /* Action text for Recovery Key reminder megaphone */
 "BACKUP_KEY_REMINDER_MEGAPHONE_ACTION" = "אימות";
 
@@ -649,6 +646,15 @@
 /* Title for a view allowing users to record their 'Recovery Key'. */
 "BACKUP_RECORD_KEY_TITLE" = "תיעוד מפתח הגיבוי שלך";
 
+/* Title for a button offering help if the user has forgotten their recovery key. */
+"BACKUP_RECOVERY_KEY_REMINDER_FORGOT_KEY_BUTTON" = "שכחת את המפתח?";
+
+/* Subtitle for a screen asking users to enter their recovery key, for reminder purposes. */
+"BACKUP_RECOVERY_KEY_REMINDER_SUBTITLE" = "מפתח השחזור שלך הוא קוד בן 64 ספרות שמאפשר לך לשחזר את החשבון והנתונים שלך.";
+
+/* Title for a screen asking users to enter their recovery key, for reminder purposes. */
+"BACKUP_RECOVERY_KEY_REMINDER_TITLE" = "הזנת מפתח השחזור שלך";
+
 /* Subtitle for a progress spinner on a modal tracking active downloading. Embeds 1:{{ the amount downloaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to download as a file size, e.g. 1 GB }}; 3:{{ the amount downloaded as a percentage, e.g. 10% }}. */
 "BACKUP_RESTORE_MODAL_DOWNLOAD_PROGRESS_SUBTITLE" = "%1$@ מתוך %2$@ (%3$@)";
 
@@ -658,10 +664,10 @@
 /* Title for a progress spinner on a modal when restoring messages */
 "BACKUP_RESTORE_MODAL_TITLE" = "משחזרים הודעות…";
 
-/* Message describing that the Background App Refresh permission is disabled for B&A. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
-"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "גיבויים אוטומטיים מושבתים. אפשר להפעיל גיבויים אוטומטיים על ידי עדכון ההרשאות של B&A.";
+/* Message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+"BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE" = "גיבויים אוטומטיים מושבתים. אפשר להפעיל גיבויים אוטומטיים על ידי עדכון ההרשאות של Signal.";
 
-/* Add-on to a message describing that the Background App Refresh permission is disabled for B&A. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
+/* Add-on to a message describing that the Background App Refresh permission is disabled for Signal. \"Background App Refresh\" should be localized the same way it is in iOS Settings app permissions. */
 "BACKUP_SETTINGS_BACKGROUND_APP_REFRESH_DISABLED_MESSAGE_UPDATE_NOW" = "עדכון כעת";
 
 /* Title for a button that takes the users to Signal's iOS Settings page. */
@@ -690,9 +696,6 @@
 
 /* Message for an action sheet explaining that you must be registered to make a Backup. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "יש להירשם כדי ליצור גיבוי.";
-
-/* Description for a progress bar tracking the optimizing of Backup media. */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "מדיה באופטימיזציה…";
 
 /* Description for a progress bar tracking the preparation of a Backup. Embeds 1:{{ the percentage completed preformatted as a percent, e.g. 10% }}. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PREPARING_BACKUP" = "גיבוי בהכנה (%1$@)";
@@ -1018,6 +1021,9 @@
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "בהעלאה: %1$@ מתוך %2$@ (%3$@)";
 
+/* Subtitle for a progress bar tracking active uploading. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING_GENERIC" = "מעלה…";
+
 /* Message for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE" = "בהתאם לגודל הגיבוי שלך, זה עשוי להימשך זמן רב. אפשר להשתמש בטלפון שלך כרגיל בזמן שהגיבוי מתבצע.";
 
@@ -1033,11 +1039,11 @@
 /* Title for a sheet shown when your Backup subscription fails to renew. */
 "BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "לא ניתן היה לחדש את מנוי הגיבויים שלך";
 
-/* Body for system notification when we detect paid backup media uploads have encountered a problem */
-"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "חשוב לשלוח לנו יומני שגיאות כדי שנוכל לפתור את הבעיה!";
+/* Body for system notification when we detect an issue with Backup media. */
+"BACKUPS_MEDIA_ERROR_NOTIFICATION_BODY" = "אירעה שגיאה לא צפויה בגיבוי המדיה שלך. חשוב לשלוח לנו יומן ניפוי באגים כדי לעזור לנו לפתור את הבעיה.";
 
-/* Title for system notification when we detect paid backup media uploads have encountered a problem */
-"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "אירעה שגיאה בגיבוי המדיה שלך";
+/* Title for system notification when we detect an issue with Backup media. */
+"BACKUPS_MEDIA_ERROR_NOTIFICATION_TITLE" = "שגיאה בגיבוי המדיה";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "גיבויי B&A";
@@ -1363,8 +1369,8 @@
 /* Name of a toggle switch to enable/disable admin approval for joining a Call Link. */
 "CALL_LINK_REQUIRE_APPROVAL" = "לדרוש אישור מנהל/ת";
 
-/* Button to open UI to share a Call Link with someone on B&A. */
-"CALL_LINK_SHARE_VIA_SIGNAL" = "שיתוף לינק דרך B&A";
+/* Button to open UI to share a Call Link with someone on Signal. */
+"CALL_LINK_SHARE_VIA_SIGNAL" = "שיתוף לינק דרך Signal";
 
 /* Button to open the system share sheet to share a Call Link. */
 "CALL_LINK_SHARE_VIA_SYSTEM" = "שתף קישור";
@@ -1789,6 +1795,72 @@
 /* Tooltip highlighting the auto chat color option. */
 "CHAT_COLORS_AUTO_TOOLTIP" = "מתאים באופן אוטומטי את הצבע אל הטפט";
 
+/* Message shown in an action sheet when the user tries to cancel a backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_CANCEL_CONFIRMATION_MESSAGE" = "ביטול הגיבוי שלך לא ימחק אותו. ניתן לחדש את הגיבוי בכל עת מהגדרות הגיבוי.";
+
+/* Title for the action sheet shown when the user tries to cancel a backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_CANCEL_CONFIRMATION_TITLE" = "לבטל גיבוי?";
+
+/* Toast shown after the user cancels the backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_CANCELED_TOAST" = "הגיבוי בוטל";
+
+/* Title label shown in the chat list backup progress view when the backup is complete. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_COMPLETE_TITLE" = "הגיבוי הושלם";
+
+/* Title label shown in the chat list backup progress view when the backup is paused. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_PAUSED_TITLE" = "הגיבוי הושהה";
+
+/* Button in the cancel backup action sheet that confirms cancellation. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_CANCEL_BACKUP_BUTTON" = "ביטול גיבוי";
+
+/* Title for the context menu action that cancels the backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_CANCEL_BACKUP_CONTEXT_MENU_ACTION" = "ביטול גיבוי";
+
+/* Button in the cancel backup action sheet that dismisses the sheet and continues the backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_CONTINUE_BACKUP_BUTTON" = "המשך גיבוי";
+
+/* Title for the context menu action that hides the backup progress view. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_HIDE_CONTEXT_MENU_ACTION" = "הסתר";
+
+/* Toast shown after the user hides the backup progress view. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_HIDE_TOAST" = "אפשר לראות את התקדמות הגיבוי בהגדרות הגיבוי";
+
+/* Button in the action sheet to dismiss and resume backup later on Wi-Fi. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_LATER_ON_WIFI_BUTTON" = "מאוחר יותר עם Wi–Fi";
+
+/* Trailing accessory label shown when backup is paused due to low battery. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_LOW_BATTERY_LABEL" = "סוללה חלשה…";
+
+/* Trailing accessory label shown when backup is paused due to Low Power Mode. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_LOW_POWER_MODE_LABEL" = "מצב חיסכון בסוללה…";
+
+/* Trailing accessory label shown when backup is paused due to no internet connection. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_NO_INTERNET_LABEL" = "אין אינטרנט…";
+
+/* Title label shown in the chat list backup progress view while the backup file is being prepared. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_PREPARING_BACKUP_TITLE" = "הגיבוי בהכנה…";
+
+/* Button in the action sheet to resume backup using cellular data. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_CELLULAR_DATA_BUTTON" = "חידוש";
+
+/* Message shown in an action sheet when the user tries to resume backup using cellular data. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_CELLULAR_DATA_MESSAGE" = "גיבוי המדיה באמצעות נתונים סלולריים עלול לגרום לחיובים עבור שימוש בנתונים. ייתכן שהורדת הגיבוי שלך תיקח זמן רב, יש להשאיר את Signal פתוחה כדי למנוע הפרעות.";
+
+/* Title for the action sheet shown when the user tries to resume backup using cellular data. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_CELLULAR_DATA_TITLE" = "להמשיך באמצעות נתונים סלולריים?";
+
+/* Button shown in the backup progress view trailing accessory to resume uploading over Wi-Fi. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_WIFI_BUTTON" = "חידוש";
+
+/* Progress label showing the amount uploaded out of the total. Embeds {{ %1$@ bytes uploaded, %2$@ total bytes to upload }}. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_UPLOAD_PROGRESS_FORMAT" = "%1$@ מתוך %2$@";
+
+/* Title label shown in the chat list backup progress view while backup attachments are being uploaded. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_UPLOADING_BACKUP_TITLE" = "מעלה גיבוי...";
+
+/* Title label shown in the chat list backup progress view when waiting for Wi-Fi. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_WAITING_FOR_WIFI_TITLE" = "בהמתנה ל–Wi-Fi";
+
 /* Title for context menu action to disable chat list filter (e.g., Filter by Unread) */
 "CHAT_LIST_CLEAR_FILTER_MENU_ACTION" = "ניקוי מסנן צ׳אטים שלא נקראו";
 
@@ -1806,6 +1878,9 @@
 
 /* Message displayed on chat list when Filter by Unread is enabled but no unread chats are available */
 "CHAT_LIST_UNREAD_FILTER_NO_CHATS" = "אין צ׳אטים שלא נקראו";
+
+/* Message indicating a user should check connection and try again. */
+"CHECK_YOUR_CONNECTION_TRY_AGAIN_WARNING" = "יש לבדוק את חיבור האינטרנט שלך ולנסות שוב.";
 
 /* Text for a bullet point in a list of Backup features, describing that all media is included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_MEDIA_BACKUP" = "גיבוי מלא של מדיה";
@@ -2233,11 +2308,11 @@
 /* Header title for the section showing all media in conversation settings */
 "CONVERSATION_SETTINGS_ALL_MEDIA_HEADER" = "כל המדיה";
 
-/* Footer for the 'attributes access' section in conversation settings view. */
-"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "בחר מי יכול לערוך את השם, התמונה, התיאור וקוצב זמן ההודעות הנעלמות של הקבוצה.";
-
 /* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "ניתן לבחור מי יוכל לערוך את שם הקבוצה, התמונה, התיאור, הודעות נעלמות והודעות מוצמדות.";
+
+/* Footer for the 'attributes access' section in conversation settings view with member labels added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V3" = "ניתן לבחור מי יכול לערוך את שם הקבוצה, התמונה, התיאור, טיימר ההודעות הנעלמות, הודעות מוצמדות ולהוסיף תוויות חברים.";
 
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "השג תגים עבור הפרופיל שלך ע״י תמיכה ב־B&A. הקש על תג כדי ללמוד עוד.";
@@ -2270,7 +2345,7 @@
 "CONVERSATION_SETTINGS_CALL_DETAILS_OUTGOING_VOICE_CALL" = "שיחה קולית יוצאת";
 
 /* Label for 'edit attributes access' action in conversation settings view. */
-"CONVERSATION_SETTINGS_EDIT_ATTRIBUTES_ACCESS" = "ערוך מידע קבוצה";
+"CONVERSATION_SETTINGS_EDIT_ATTRIBUTES_ACCESS" = "עריכת מידע קבוצה";
 
 /* Label for button that sets 'group attributes access' to 'administrators-only'. */
 "CONVERSATION_SETTINGS_EDIT_ATTRIBUTES_ACCESS_ALERT_ADMINISTRATORS_BUTTON" = "רק מנהלנים";
@@ -2667,6 +2742,12 @@
 
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "ההודעה הזו תימחק מכל המכשירים שלך.";
+
+/* Text indicating the message was remotely deleted by an admin. Embeds {{admin display name}} */
+"DELETED_BY_ADMIN" = "ההודעה הזו נמחקה על ידי מנהל/ת הקבוצה %1$@";
+
+/* Text indicating the message was remotely deleted by its author. Embeds {{ author name }} */
+"DELETED_THIS_MESSAGE" = "ההודעה הזו נמחקה על ידי %1$@";
 
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "חשבון שנמחק";
@@ -3070,17 +3151,17 @@
 /* A friend has donated on your behalf and you received a badge. This text says that you received a badge, and from whom. Embeds {{contact's short name, such as a first name}}. */
 "DONATION_ON_BEHALF_OF_A_FRIEND_YOU_RECEIVED_A_BADGE_FORMAT" = "%1$@ ביצע/ה תרומה ל–B&A בשמך! אפשר להשוויץ בתמיכה שלך ב–B&A בפרופיל.";
 
-/* Body text for a sheet discussing donating to B&A. */
-"DONATION_READ_MORE_SHEET_BODY" = "כעמותה עצמאית ללא מטרות רווח, B&A מחויבת להודעות ולשיחות פרטיות. בלי פרסומות, בלי מעקב, בלי ריגול. תרמו היום כדי לתמוך ב-B&A.";
+/* Body text for a sheet discussing donating to Signal. */
+"DONATION_READ_MORE_SHEET_BODY" = "כעמותה עצמאית ללא מטרות רווח, Signal מחויבת להודעות ולשיחות פרטיות. בלי פרסומות, בלי מעקב, בלי ריגול. תרמו היום כדי לתמוך ב-Signal.";
 
-/* Bullet point for a sheet discussing donating to B&A. */
+/* Bullet point for a sheet discussing donating to Signal. */
 "DONATION_READ_MORE_SHEET_BULLET_1" = "ניתן לקבל תג לפרופיל בעת תרומה";
 
-/* Bullet point for a sheet discussing donating to B&A. */
+/* Bullet point for a sheet discussing donating to Signal. */
 "DONATION_READ_MORE_SHEET_BULLET_2" = "הפרטיות שלך היא המשימה שלנו";
 
-/* Bullet point for a sheet discussing donating to B&A. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
-"DONATION_READ_MORE_SHEET_BULLET_3" = "B&A היא עמותה ללא מטרות רווח.";
+/* Bullet point for a sheet discussing donating to Signal. For non-English languages, skip the word 501c3, and skip the language about US donations being tax deductible. */
+"DONATION_READ_MORE_SHEET_BULLET_3" = "Signal היא עמותה ללא מטרות רווח.";
 
 /* Section title for donation amount on receipts */
 "DONATION_RECEIPT_AMOUNT" = "סכום";
@@ -3277,8 +3358,8 @@
 /* Edit failed for an unexpected reason */
 "EDIT_MESSAGE_SEND_MESSAGE_UNKNOWN_ERROR" = "EDIT_MESSAGE_SEND_MESSAGE_UNKNOWN_ERROR";
 
-/* body of email sent to contacts when inviting to install B&A. Embeds {{link to install Signal}} and {{link to the Signal home page}} */
-"EMAIL_INVITE_BODY" = "היי,\n\nלאחרונה עברתי להשתמש ב–B&A כדי לשמור על הצ׳אטים ב–iPhone שלי פרטיים. זה יהיה מעולה אם גם לך תהיה את האפליקציה, כדי שנוכל לדעת בוודאות שרק לנו יש גישה להודעות ולשיחות הקוליות שלנו.\n\nB&A זמינה עבור iPhone, Android, ושולחן העבודה. אפשר להוריד אותה כאן: %1$@\n\nB&A עובדת כמו אפליקציית ההודעות הקיימת שלך. אפשר לשלוח תמונות וסרטונים, לבצע שיחות ולהתחיל צ׳אטים קבוצתיים. החלק הכי טוב הוא שאף אחד לא יכול לראות שום דבר מזה, אפילו לא האנשים שיוצרים את B&A!\n\nאפשר לקרוא עוד על B&A כאן: %2$@";
+/* body of email sent to contacts when inviting to install Signal. Embeds {{link to install Signal}} and {{link to the Signal home page}} */
+"EMAIL_INVITE_BODY" = "היי,\n\nלאחרונה עברתי להשתמש ב–Signal כדי לשמור על הצ׳אטים ב–iPhone שלי פרטיים. זה יהיה מעולה אם גם לך תהיה את האפליקציה, כדי שנוכל לדעת בוודאות שרק לנו יש גישה להודעות ולשיחות הקוליות שלנו.\n\nSignal זמינה עבור iPhone, Android, ושולחן העבודה. אפשר להוריד אותה כאן: %1$@\n\nSignal עובדת כמו אפליקציית ההודעות הקיימת שלך. אפשר לשלוח תמונות וסרטונים, לבצע שיחות ולהתחיל צ׳אטים קבוצתיים. החלק הכי טוב הוא שאף אחד לא יכול לראות שום דבר מזה, אפילו לא האנשים שיוצרים את Signal!\n\nאפשר לקרוא עוד על Signal כאן: %2$@";
 
 /* subject of email sent to contacts when inviting to install Signal */
 "EMAIL_INVITE_SUBJECT" = "בוא נחליף אל B&A";
@@ -3457,7 +3538,7 @@
 /* Label notifying the user that the app has expired. */
 "EXPIRATION_ERROR" = "גרסה זו של B&A כבר לא בתוקף. צריך לעדכן כדי לשלוח ולקבל הודעות.";
 
-/* If the user's app is too old, they'll be shown a warning asking them to upgrade. This is the text on the warning, and tapping it will open the App Store page for B&A. */
+/* If the user's app is too old, they'll be shown a warning asking them to upgrade. This is the text on the warning, and tapping it will open the App Store page for Signal. */
 "EXPIRATION_WARNING_ACTION_TITLE" = "עדכון כעת";
 
 /* Label warning the user that the app will expire soon. Embeds {{date}}. */
@@ -4690,6 +4771,18 @@
 /* A keyboard command to unarchive the current conversation. */
 "KEY_COMMAND_UNARCHIVE" = "הוצאת צ׳אט מארכיון";
 
+/* Body for a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_BODY" = "יומני ניפוי באגים עוזרים לנו לאבחן ולפתור את הבעיה ואינם כוללים מידע מזהה.";
+
+/* Title for the primary button in a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_PRIMARY_BUTTON_TITLE" = "הגש";
+
+/* Title for the secondary button in a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_SECONDARY_BUTTON_TITLE" = "לא תודה";
+
+/* Title for a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_TITLE" = "אימות מפתח אוטומטי אינו זמין כרגע עבור המכשיר שלך. להגיש יומן ניפוי באגים?";
+
 /* Label for the 'learn more' button. */
 "LEARN_MORE" = "למידע נוסף";
 
@@ -4996,8 +5089,50 @@
 /* Label for an action to add a member label */
 "MEMBER_LABEL_ADD" = "הוספת תווית";
 
+/* Label that shows up under a local user's row in contacts prompting them to add a member label */
+"MEMBER_LABEL_ADD_CSVC" = "הוספת תווית חבר/ה";
+
+/* Accessibility prefix for member labels. */
+"MEMBER_LABEL_AX_PREFIX" = "תווית חבר או חברה: ";
+
+/* Button label on action sheet when attempting to change the group attributes access to 'administrator' and then continue */
+"MEMBER_LABEL_CLEAR_CHANGE_PERMISSION_CONTINUE" = "שינוי הרשאה";
+
+/* Body for action sheet when attempting to change the group attributes access to 'administrator' */
+"MEMBER_LABEL_CLEAR_WARNING_BODY" = "שינוי הרשאה זו ל\"רק מנהלים\" ימחק תוויות חבר/ה שהוגדרו על ידי אנשים שאינם מנהלים בקבוצה זו.";
+
+/* Title for action sheet when attempting to change the group attributes access to 'administrator' */
+"MEMBER_LABEL_CLEAR_WARNING_TITLE" = "תוויות החברים יימחקו";
+
+/* Text for a button to set a member label */
+"MEMBER_LABEL_EDIT" = "עריכת התווית שלך";
+
+/* Error indicating member label could not save. */
+"MEMBER_LABEL_FAIL_TO_SAVE" = "לא ניתן לשמור תווית חבר/ה";
+
+/* Section header for a list of group member labels */
+"MEMBER_LABEL_GROUP_LABELS_SECTION_TITLE" = "Group Members with Labels";
+
+/* Body for a sheet shown if a user will show their member label over their About message in a group. */
+"MEMBER_LABEL_HERO_SHEET_ABOUT_OVERRIDE_BODY" = "בקבוצה זו, תווית החבר/ה שלך תוצג לצד התמונה שלך במקום ה\"אודות\" שלך.";
+
+/* Title for a sheet shown if a user will show their member label over their About message in a group. */
+"MEMBER_LABEL_HERO_SHEET_ABOUT_OVERRIDE_TITLE" = "תצוגת תווית חבר/ה";
+
+/* Body for a sheet shown if a user taps on someone else's member label. */
+"MEMBER_LABEL_HERO_SHEET_EDUCATION_BODY" = "אפשר להשתמש בתווית חבר/ה לתיאור הזהות או התפקיד שלך בקבוצה. תוויות מוצגות רק בתוך הקבוצה.";
+
+/* Title for a sheet shown if a user taps on someone else's member label. */
+"MEMBER_LABEL_HERO_SHEET_EDUCATION_TITLE" = "תוויות חבר/ה";
+
+/* Text for section that shows other group member labels, when there are none */
+"MEMBER_LABEL_NO_OTHER_GROUP_MEMBERS_HAVE_LABELS" = "No other members have labels";
+
 /* Heading shown above the preview of a message bubble with the edited member label. */
 "MEMBER_LABEL_PREVIEW_HEADING" = "תצוגה מקדימה";
+
+/* Text for a button to edit an existing member label */
+"MEMBER_LABEL_SET" = "הגדרת תווית החבר/ה שלך";
 
 /* Text shown in the preview message bubble when a user is editing their member label. */
 "MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "שלום!";
@@ -5920,17 +6055,17 @@
 /* Button text which opens the settings app */
 "OPEN_SETTINGS_BUTTON" = "הגדרות";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're on unsupported version. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this text. */
-"OS_EXPIRED_AND_CAN_UPGRADE_OS" = "אפליקציית B&A כבר לא פועלת במכשיר הזה. כדי להשתמש ב–B&A שוב, צריך לעדכן את המכשיר לגרסה חדשה יותר של iOS.";
+/* Signal doesn't support old versions of iOS and shows a warning if you're on unsupported version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. */
+"OS_EXPIRED_AND_CAN_UPGRADE_OS" = "אפליקציית Signal כבר לא פועלת במכשיר הזה. כדי להשתמש ב–Signal שוב, צריך לעדכן את המכשיר לגרסה חדשה יותר של iOS.";
 
 /* Signal doesn't support old devices. If that's the case, they'll be shown this action, and tapping it will open information about Signal's minimum supported operating systems. */
 "OS_EXPIRED_AND_DEVICE_IS_STUCK" = "אפליקציית B&A כבר לא פועלת במכשיר הזה. כדי להשתמש ב–B&A שוב, צריך להחליף למכשיר חדש יותר.";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're on an old version. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this action, and tapping it will open device update instructions. */
+/* Signal doesn't support old versions of iOS and shows a warning if you're on an old version. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this action, and tapping it will open device update instructions. */
 "OS_SOON_TO_EXPIRE_ACTION_TITLE" = "עדכון כעת";
 
-/* Signal doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using B&A. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
-"OS_SOON_TO_EXPIRE_AND_CAN_UPGRADE_OS_FORMAT" = "בקרוב B&A תפסיק לתמוך בגרסת iOS של המכשיר שלך. כדי להמשיך להשתמש ב–B&A, צריך לעדכן את המכשיר לגרסה חדשה יותר של iOS עד %1$@.";
+/* Signal doesn't support old versions of iOS and shows a warning if you're an old version that will soon lose support. Some users can upgrade their device to a newer version of iOS to continue using Signal. If that's the case, they'll be shown this text. Embeds {{expiration date}}. */
+"OS_SOON_TO_EXPIRE_AND_CAN_UPGRADE_OS_FORMAT" = "בקרוב Signal תפסיק לתמוך בגרסת iOS של המכשיר שלך. כדי להמשיך להשתמש ב–Signal, צריך לעדכן את המכשיר לגרסה חדשה יותר של iOS עד %1$@.";
 
 /* Signal doesn't support old versions of iOS and shows a warning if you're on an old version that will soon lose support. This is the text on that warning when users can't upgrade iOS without getting a new device. Embeds {{expiration date}}. */
 "OS_SOON_TO_EXPIRE_AND_DEVICE_WILL_BE_STUCK_FORMAT" = "בקרוב B&A תפסיק לתמוך בגרסת iOS של המכשיר שלך. כדי להמשיך להשתמש ב–B&A, צריך להחליף למכשיר חדש יותר עד %1$@.";
@@ -6787,8 +6922,8 @@
 /* String to display when a poll has no votes */
 "POLL_NO_VOTES" = "אין הצבעות";
 
-/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
-"POLL_OPTION_PLACEHOLDER_PREFIX" = "אפשרות";
+/* Format text for the placeholder of an option row when creating a poll. Embeds {{ the number of this option in a list, as a pre-localized string }}, so it should look like , . */
+"POLL_OPTION_PLACEHOLDER_FORMAT" = "אפשרות %1$@";
 
 /* Header for the poll options text boxes when making a new poll */
 "POLL_OPTIONS_LABEL" = "אפשרויות";
@@ -7582,6 +7717,48 @@
 /* Snippet to share {{safety number}} with a friend. sent e.g. via SMS */
 "SAFETY_NUMBER_SHARE_FORMAT" = "מספר ביטחון B&A שלנו:\n%1$@";
 
+/* Title for a button offering automatic key verification. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFY" = "אימות אוטומטי";
+
+/* Title for a button when automatic key verification fails. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFY_FAILURE" = "אימות אוטומטי לא זמין";
+
+/* Title for a button when automatic key verification succeeds. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFY_SUCCESS" = "ההצפנה אומתה";
+
+/* Title for a button while automatic key verification is ongoing. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFYING" = "מתבצע אימות הצפנה…";
+
+/* Body for a sheet introducing Key Transparency. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_EDUCATION_SHEET_BODY" = "עבור אנשי קשר שהחיבור איתם נוצר באמצעות מספר טלפון, Signal יכולה לאשר אוטומטית שהחיבור מאובטח באמצעות שימוש בתהליך הנקרא שקיפות מפתחות. לאבטחה נוספת, ניתן עדיין לאמת חיבורים ידנית באמצעות קוד QR או השוואת מספרי בטיחות.";
+
+/* Title for a sheet introducing Key Transparency. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_EDUCATION_SHEET_TITLE" = "Signal יכולה כעת לאמת הצפנה באופן אוטומטי";
+
+/* Body for a sheet explaining that encryption auto-verification did not succeed. Embeds {{ 1: the contact's name }}. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_FAILURE_SHEET_BODY_FORMAT" = "Signal אינה יכולה עוד לאמת אוטומטית את ההצפנה עבור צ׳אט זה. זה כנראה בגלל ש%1$@ החליפ/ה מספר טלפון. יש לאמת ידנית הצפנה מקצה לקצה ידנית באמצעות השוואת המספרים במסך הקודם או סריקת הקוד במכשיר שלו או שלה.";
+
+/* Title for a sheet explaining that encryption auto-verification did not succeed. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_FAILURE_SHEET_TITLE" = "אימות אוטומטי אינו זמין עוד עבור צ'אט זה";
+
+/* Footer explaining that automatic verification is not available for all chats */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_FOOTER" = "אימות אוטומטי אינו זמין עבור כל הצ׳אטים.";
+
+/* Header for automatic key verification */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_HEADER" = "אימות מפתח אוטומטי";
+
+/* Body for a sheet explaining that encryption auto-verification is not available. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_NOT_AVAILABLE_SHEET_BODY" = "Signal יכולה לאמת אוטומטית את ההצפנה רק הצ׳אטים שבהם החיבור עם הצד השני מתבצע באמצעות מספר טלפון. אם הצ׳אט התחיל באמצעות שם משתמש או קבוצה משותפת, יש לאמת את ההצפנה מקצה לקצה באמצעות השוואת המספרים במסך הקודם או סריקת הקוד במכשיר שלו או שלה.";
+
+/* Title for a sheet explaining that encryption auto-verification is not available. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_NOT_AVAILABLE_SHEET_TITLE" = "אימות אוטומטי אינו זמין עבור צ'אט זה";
+
+/* Body for a sheet explaining that encryption auto-verification succeeded. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_SUCCESS_SHEET_BODY" = "עבור אנשי קשר שהחיבור איתם נוצר באמצעות מספר טלפון, Signal יכולה לאשר אוטומטית שהחיבור מאובטח באמצעות שימוש בתהליך הנקרא שקיפות מפתחות. לבטיחות משופרת, אפשר לאמת הצפנה מקצה לקצה באופן ידני באמצעות השוואת המספרים במסך הקודם או סריקת הקוד במכשיר שלו או שלה.";
+
+/* Title for a sheet explaining that encryption auto-verification succeeded. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_SUCCESS_SHEET_TITLE" = "ההצפנה אומתה אוטומטית עבור צ'אט זה";
+
 /* Title for Safety Tips button in thread details. */
 "SAFETY_TIPS_BUTTON_ACTION_TITLE" = "טיפים לבטיחות";
 
@@ -7663,8 +7840,8 @@
 /* Title for alert indicating that screen lock could not be unlocked. */
 "SCREEN_LOCK_UNLOCK_FAILED" = "אימות נכשל";
 
-/* Label for button on lock screen that lets users unlock B&A. */
-"SCREEN_LOCK_UNLOCK_SIGNAL" = "שחרר נעילת B&A";
+/* Label for button on lock screen that lets users unlock Signal. */
+"SCREEN_LOCK_UNLOCK_SIGNAL" = "שחרר נעילת Signal";
 
 /* Placeholder text indicating the user can search for contacts by name, username, or phone number. */
 "SEARCH_BY_NAME_OR_USERNAME_OR_NUMBER_PLACEHOLDER_TEXT" = "שם, שם משתמש או מספר";
@@ -8100,6 +8277,12 @@
 
 /* When a chat is archived and receives a new message, it is unarchived. Turning this switch on disables this feature if the chat in question is also muted. This string is a brief label for a switch paired with a longer description underneath, in the Chats settings. */
 "SETTINGS_KEEP_MUTED_ARCHIVED_LABEL" = "השארת צ׳אטים מושתקים בארכיון";
+
+/* Footer for settings section describing Key Transparency. */
+"SETTINGS_KEY_TRANSPARENCY_OPT_OUT_FOOTER" = "כשהאפשרות הזו מופעלת, Signal תנסה לאמת אוטומטית את ההצפנה של צ׳אטים אישיים.";
+
+/* Title for for a settings option describing that Key Transparency is enabled. */
+"SETTINGS_KEY_TRANSPARENCY_OPT_OUT_SWITCH_TITLE" = "אימות מפתח אוטומטי";
 
 /* No comment provided by engineer. */
 "SETTINGS_LEGAL_TERMS_CELL" = "תנאים ומדיניות פרטיות";
@@ -9838,9 +10021,6 @@
 /* An error indicating to the user that we failed to clear the wallpaper. */
 "WALLPAPER_SETTINGS_FAILED_TO_CLEAR" = "הטפט לא היה יכול להתנקות, אנא נסה שוב מאוחר יותר או צור קשר עם התמיכה אם הבעיה נמשכת.";
 
-/* An error indicating to the user that we failed to reset all wallpapers. */
-"WALLPAPER_SETTINGS_FAILED_TO_RESET" = "כל הטפטים לא יכלו להתאפס, אנא נסה שוב מאוחר יותר או צור קשר עם התמיכה אם הבעיה נמשכת.";
-
 /* Label for 'reset all chat colors' action in the global wallpaper settings. */
 "WALLPAPER_SETTINGS_RESET_ALL_CHAT_COLORS" = "אפס את כל הצבעים";
 
@@ -9887,7 +10067,7 @@
 "YOU" = "את/ה";
 
 /* text indicating the message was remotely deleted by you */
-"YOU_DELETED_THIS_MESSAGE" = "מחקת הודעה זו.";
+"YOU_DELETED_THIS_MESSAGE" = "ההודעה הזו נמחקה על ידך";
 
 /* Info Message when you disabled disappearing messages. */
 "YOU_DISABLED_DISAPPEARING_MESSAGES_CONFIGURATION" = "הִשְׁבַּתָּ הודעות נעלמות.";
@@ -9975,4 +10155,3 @@
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "פלטפורמת BA לא הגיבה בזמן. אנא נסה שוב.";
 
 "LINK_BA_PLATFORM_ERROR_TITLE" = "שגיאה";
-

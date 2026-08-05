@@ -550,9 +550,6 @@
 /* Text used as placeholder in recovery key text view. */
 "BACKUP_KEY_PLACEHOLDER" = "备份密钥";
 
-/* Title of button to tap if you forgot your recovery key. */
-"BACKUP_KEY_REMINDER_FORGOT_KEY" = "忘记密钥？";
-
 /* Action text for Recovery Key reminder megaphone */
 "BACKUP_KEY_REMINDER_MEGAPHONE_ACTION" = "验证";
 
@@ -649,6 +646,15 @@
 /* Title for a view allowing users to record their 'Recovery Key'. */
 "BACKUP_RECORD_KEY_TITLE" = "记录您的备份密钥";
 
+/* Title for a button offering help if the user has forgotten their recovery key. */
+"BACKUP_RECOVERY_KEY_REMINDER_FORGOT_KEY_BUTTON" = "忘记密钥？";
+
+/* Subtitle for a screen asking users to enter their recovery key, for reminder purposes. */
+"BACKUP_RECOVERY_KEY_REMINDER_SUBTITLE" = "您的恢复密钥是一个 64 个字符的代码，是恢复账户和数据的必要密钥。";
+
+/* Title for a screen asking users to enter their recovery key, for reminder purposes. */
+"BACKUP_RECOVERY_KEY_REMINDER_TITLE" = "输入您的恢复密钥";
+
 /* Subtitle for a progress spinner on a modal tracking active downloading. Embeds 1:{{ the amount downloaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to download as a file size, e.g. 1 GB }}; 3:{{ the amount downloaded as a percentage, e.g. 10% }}. */
 "BACKUP_RESTORE_MODAL_DOWNLOAD_PROGRESS_SUBTITLE" = "%1$@/%2$@（%3$@）";
 
@@ -690,9 +696,6 @@
 
 /* Message for an action sheet explaining that you must be registered to make a Backup. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_ERROR_SHEET_NOT_REGISTERED" = "您必须注册才能创建备份。";
-
-/* Description for a progress bar tracking the optimizing of Backup media. */
-"BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_OPTIMIZING_MEDIA" = "正在优化媒体...";
 
 /* Description for a progress bar tracking the preparation of a Backup. Embeds 1:{{ the percentage completed preformatted as a percent, e.g. 10% }}. */
 "BACKUP_SETTINGS_BACKUP_EXPORT_PROGRESS_DESCRIPTION_PREPARING_BACKUP" = "正在准备备份（%1$@）";
@@ -1018,6 +1021,9 @@
 /* Subtitle for a progress bar tracking active uploading. Embeds 1:{{ the amount uploaded as a file size, e.g. 100 MB }}; 2:{{ the total amount to upload as a file size, e.g. 1 GB }}; 3:{{ the percentage uploaded as a percent, e.g. 40% }}. */
 "BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING" = "正在上传 %1$@/%2$@ (%3$@)";
 
+/* Subtitle for a progress bar tracking active uploading. */
+"BACKUP_SETTINGS_UPLOAD_PROGRESS_SUBTITLE_RUNNING_GENERIC" = "上传中……";
+
 /* Message for a sheet shown after the user enables backups. */
 "BACKUP_SETTINGS_WELCOME_TO_BACKUPS_SHEET_MESSAGE" = "根据备份的大小，这可能需要很长时间。在备份过程中，您可以正常使用手机。";
 
@@ -1033,11 +1039,11 @@
 /* Title for a sheet shown when your Backup subscription fails to renew. */
 "BACKUP_SUBSCRIPTION_FAILED_TO_RENEW_SHEET_TITLE" = "您的备份套餐续订失败";
 
-/* Body for system notification when we detect paid backup media uploads have encountered a problem */
-"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_BODY" = "请将调试日志发送给我们，帮助我们解决此问题！";
+/* Body for system notification when we detect an issue with Backup media. */
+"BACKUPS_MEDIA_ERROR_NOTIFICATION_BODY" = "您的媒体备份出现了意外情况。请提交调试日志以帮助我们解决此问题。";
 
-/* Title for system notification when we detect paid backup media uploads have encountered a problem */
-"BACKUPS_MEDIA_UPLOAD_FAILURE_NOTIFICATION_TITLE" = "备份您的媒体时遇到错误";
+/* Title for system notification when we detect an issue with Backup media. */
+"BACKUPS_MEDIA_ERROR_NOTIFICATION_TITLE" = "备份媒体出错";
 
 /* Title for the 'Backup' settings menu. */
 "BACKUPS_SETTINGS_TITLE" = "B&A 备份";
@@ -1068,8 +1074,6 @@
 
 /* String explaining to the user that their boost badge has expired while they are a current subscription sustainer on the badge expiry sheet. */
 "BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "您的随手捐徽章已到期，无法继续显示在您的个人资料中。
-
-您可以给 B&A 单次捐款，将您的随手捐徽章重新激活 30 天。";
 
 /* Title for boost on the badge expiration sheet. */
 "BADGE_EXPIRED_BOOST_TITLE" = "徽章已到期";
@@ -1791,6 +1795,72 @@
 /* Tooltip highlighting the auto chat color option. */
 "CHAT_COLORS_AUTO_TOOLTIP" = "颜色自动匹配墙纸";
 
+/* Message shown in an action sheet when the user tries to cancel a backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_CANCEL_CONFIRMATION_MESSAGE" = "取消备份不会删除备份。您可以随时在“备份设置”中恢复备份。";
+
+/* Title for the action sheet shown when the user tries to cancel a backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_CANCEL_CONFIRMATION_TITLE" = "要取消备份吗？";
+
+/* Toast shown after the user cancels the backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_CANCELED_TOAST" = "备份已取消";
+
+/* Title label shown in the chat list backup progress view when the backup is complete. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_COMPLETE_TITLE" = "备份完成";
+
+/* Title label shown in the chat list backup progress view when the backup is paused. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_BACKUP_PAUSED_TITLE" = "备份已暂停";
+
+/* Button in the cancel backup action sheet that confirms cancellation. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_CANCEL_BACKUP_BUTTON" = "取消备份";
+
+/* Title for the context menu action that cancels the backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_CANCEL_BACKUP_CONTEXT_MENU_ACTION" = "取消备份";
+
+/* Button in the cancel backup action sheet that dismisses the sheet and continues the backup. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_CONTINUE_BACKUP_BUTTON" = "继续备份";
+
+/* Title for the context menu action that hides the backup progress view. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_HIDE_CONTEXT_MENU_ACTION" = "隐藏";
+
+/* Toast shown after the user hides the backup progress view. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_HIDE_TOAST" = "在备份设置中查看备份进度";
+
+/* Button in the action sheet to dismiss and resume backup later on Wi-Fi. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_LATER_ON_WIFI_BUTTON" = "稍后使用 Wi-Fi";
+
+/* Trailing accessory label shown when backup is paused due to low battery. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_LOW_BATTERY_LABEL" = "电池电量不足…";
+
+/* Trailing accessory label shown when backup is paused due to Low Power Mode. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_LOW_POWER_MODE_LABEL" = "低电量模式…";
+
+/* Trailing accessory label shown when backup is paused due to no internet connection. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_NO_INTERNET_LABEL" = "没有网络…";
+
+/* Title label shown in the chat list backup progress view while the backup file is being prepared. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_PREPARING_BACKUP_TITLE" = "正在准备备份";
+
+/* Button in the action sheet to resume backup using cellular data. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_CELLULAR_DATA_BUTTON" = "继续";
+
+/* Message shown in an action sheet when the user tries to resume backup using cellular data. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_CELLULAR_DATA_MESSAGE" = "使用蜂窝数据备份媒体可能会产生流量费用。上传备份可能需要很长时间，请保持 Signal 处于打开状态以免中断。";
+
+/* Title for the action sheet shown when the user tries to resume backup using cellular data. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_CELLULAR_DATA_TITLE" = "要使用蜂窝数据继续备份吗？";
+
+/* Button shown in the backup progress view trailing accessory to resume uploading over Wi-Fi. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_RESUME_WIFI_BUTTON" = "继续";
+
+/* Progress label showing the amount uploaded out of the total. Embeds {{ %1$@ bytes uploaded, %2$@ total bytes to upload }}. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_UPLOAD_PROGRESS_FORMAT" = "%1$@ / %2$@";
+
+/* Title label shown in the chat list backup progress view while backup attachments are being uploaded. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_UPLOADING_BACKUP_TITLE" = "正在上传备份";
+
+/* Title label shown in the chat list backup progress view when waiting for Wi-Fi. */
+"CHAT_LIST_BACKUP_PROGRESS_VIEW_WAITING_FOR_WIFI_TITLE" = "正在等待 Wi-Fi 连接";
+
 /* Title for context menu action to disable chat list filter (e.g., Filter by Unread) */
 "CHAT_LIST_CLEAR_FILTER_MENU_ACTION" = "清除未读筛选";
 
@@ -1808,6 +1878,9 @@
 
 /* Message displayed on chat list when Filter by Unread is enabled but no unread chats are available */
 "CHAT_LIST_UNREAD_FILTER_NO_CHATS" = "没有未读的聊天记录";
+
+/* Message indicating a user should check connection and try again. */
+"CHECK_YOUR_CONNECTION_TRY_AGAIN_WARNING" = "请检查您的网络连接并重试。";
 
 /* Text for a bullet point in a list of Backup features, describing that all media is included. */
 "CHOOSE_BACKUP_PLAN_BULLET_FULL_MEDIA_BACKUP" = "备份所有媒体";
@@ -2235,11 +2308,11 @@
 /* Header title for the section showing all media in conversation settings */
 "CONVERSATION_SETTINGS_ALL_MEDIA_HEADER" = "全部媒体";
 
-/* Footer for the 'attributes access' section in conversation settings view. */
-"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER" = "选择谁可以编辑群组名称、图片、描述和限时消息计时器。";
-
 /* Footer for the 'attributes access' section in conversation settings view with pinned messages added. */
 "CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V2" = "请选择谁可以编辑群组名称、图片、描述、限时消息定时器和置顶消息。";
+
+/* Footer for the 'attributes access' section in conversation settings view with member labels added. */
+"CONVERSATION_SETTINGS_ATTRIBUTES_ACCESS_SECTION_FOOTER_V3" = "请选择谁可以编辑群组名称、头像、描述、限时消息定时器、置顶消息，以及添加成员标签。";
 
 /* Footer string for a contact's badges in conversation settings */
 "CONVERSATION_SETTINGS_BADGES_FOOTER" = "支持 B&A，为您的个人资料添加徽章吧。点击徽章了解详情。";
@@ -2669,6 +2742,12 @@
 
 /* Subheader for an action sheet explaining that a Note to Self deleted on this device will be deleted on the user's other devices as well. */
 "DELETE_FOR_ME_NOTE_TO_SELF_LINKED_DEVICES_PRESENT_ACTION_SHEET_SUBHEADER" = "此消息将会从您的所有设备上删除。";
+
+/* Text indicating the message was remotely deleted by an admin. Embeds {{admin display name}} */
+"DELETED_BY_ADMIN" = "管理员%1$@删除了此消息";
+
+/* Text indicating the message was remotely deleted by its author. Embeds {{ author name }} */
+"DELETED_THIS_MESSAGE" = "%1$@删除了此消息";
 
 /* Label indicating a user who deleted their account. */
 "DELETED_USER" = "删除账户";
@@ -4692,6 +4771,18 @@
 /* A keyboard command to unarchive the current conversation. */
 "KEY_COMMAND_UNARCHIVE" = "激活聊天";
 
+/* Body for a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_BODY" = "调试日志能帮助我们诊断和解决问题，并且不包含任何识别身份的信息。";
+
+/* Title for the primary button in a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_PRIMARY_BUTTON_TITLE" = "提交";
+
+/* Title for the secondary button in a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_SECONDARY_BUTTON_TITLE" = "不，谢谢。";
+
+/* Title for a sheet shown when a Key Transparency self-check fails. */
+"KEY_TRANSPARENCY_SELF_CHECK_FAILED_SHEET_TITLE" = "您的设备目前无法使用自动密钥验证功能。要提交调试日志吗？";
+
 /* Label for the 'learn more' button. */
 "LEARN_MORE" = "了解更多";
 
@@ -4998,8 +5089,50 @@
 /* Label for an action to add a member label */
 "MEMBER_LABEL_ADD" = "添加成员标签";
 
+/* Label that shows up under a local user's row in contacts prompting them to add a member label */
+"MEMBER_LABEL_ADD_CSVC" = "添加成员标签";
+
+/* Accessibility prefix for member labels. */
+"MEMBER_LABEL_AX_PREFIX" = "成员标签： ";
+
+/* Button label on action sheet when attempting to change the group attributes access to 'administrator' and then continue */
+"MEMBER_LABEL_CLEAR_CHANGE_PERMISSION_CONTINUE" = "更改权限";
+
+/* Body for action sheet when attempting to change the group attributes access to 'administrator' */
+"MEMBER_LABEL_CLEAR_WARNING_BODY" = "将此权限更改为“仅限管理员”将会清除此群组中由非管理员设置的成员标签。";
+
+/* Title for action sheet when attempting to change the group attributes access to 'administrator' */
+"MEMBER_LABEL_CLEAR_WARNING_TITLE" = "成员标签将会被清除";
+
+/* Text for a button to set a member label */
+"MEMBER_LABEL_EDIT" = "编辑您的标签";
+
+/* Error indicating member label could not save. */
+"MEMBER_LABEL_FAIL_TO_SAVE" = "无法保存成员标签";
+
+/* Section header for a list of group member labels */
+"MEMBER_LABEL_GROUP_LABELS_SECTION_TITLE" = "Group Members with Labels";
+
+/* Body for a sheet shown if a user will show their member label over their About message in a group. */
+"MEMBER_LABEL_HERO_SHEET_ABOUT_OVERRIDE_BODY" = "在此群组中，您的成员标签将会取代“关于”显示在您的头像旁。";
+
+/* Title for a sheet shown if a user will show their member label over their About message in a group. */
+"MEMBER_LABEL_HERO_SHEET_ABOUT_OVERRIDE_TITLE" = "成员标签显示";
+
+/* Body for a sheet shown if a user taps on someone else's member label. */
+"MEMBER_LABEL_HERO_SHEET_EDUCATION_BODY" = "您可以设置成员标签来描述您自己或您在此群组中的角色。成员标签仅在此群组内可见。";
+
+/* Title for a sheet shown if a user taps on someone else's member label. */
+"MEMBER_LABEL_HERO_SHEET_EDUCATION_TITLE" = "成员标签";
+
+/* Text for section that shows other group member labels, when there are none */
+"MEMBER_LABEL_NO_OTHER_GROUP_MEMBERS_HAVE_LABELS" = "No other members have labels";
+
 /* Heading shown above the preview of a message bubble with the edited member label. */
 "MEMBER_LABEL_PREVIEW_HEADING" = "预览";
+
+/* Text for a button to edit an existing member label */
+"MEMBER_LABEL_SET" = "设置您的成员标签";
 
 /* Text shown in the preview message bubble when a user is editing their member label. */
 "MEMBER_LABEL_VIEW_MESSAGE_PREVIEW_TEXT" = "你好！";
@@ -6789,8 +6922,8 @@
 /* String to display when a poll has no votes */
 "POLL_NO_VOTES" = "无投票";
 
-/* Placeholder text for an option row when creating a poll. This will have a number appended to it (Option 1, Option 2) */
-"POLL_OPTION_PLACEHOLDER_PREFIX" = "选项";
+/* Format text for the placeholder of an option row when creating a poll. Embeds {{ the number of this option in a list, as a pre-localized string }}, so it should look like , . */
+"POLL_OPTION_PLACEHOLDER_FORMAT" = "选项 %1$@";
 
 /* Header for the poll options text boxes when making a new poll */
 "POLL_OPTIONS_LABEL" = "选项";
@@ -7584,6 +7717,48 @@
 /* Snippet to share {{safety number}} with a friend. sent e.g. via SMS */
 "SAFETY_NUMBER_SHARE_FORMAT" = "我们的 B&A 安全码:\n%1$@";
 
+/* Title for a button offering automatic key verification. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFY" = "自动验证";
+
+/* Title for a button when automatic key verification fails. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFY_FAILURE" = "自动验证不可用";
+
+/* Title for a button when automatic key verification succeeds. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFY_SUCCESS" = "加密已验证";
+
+/* Title for a button while automatic key verification is ongoing. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_BUTTON_VERIFYING" = "正在验证加密…";
+
+/* Body for a sheet introducing Key Transparency. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_EDUCATION_SHEET_BODY" = "对于通过手机号码连接的联系人，Signal 可以使用一个名为“密钥透明度”的流程自动确认连接是否安全。如要提高安全性，您还可以使用二维码或比对安全码手动验证连接。";
+
+/* Title for a sheet introducing Key Transparency. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_EDUCATION_SHEET_TITLE" = "Signal 现在可以自动验证加密";
+
+/* Body for a sheet explaining that encryption auto-verification did not succeed. Embeds {{ 1: the contact's name }}. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_FAILURE_SHEET_BODY_FORMAT" = "Signal 已无法自动验证此聊天的加密。这可能是因为 %1$@ 更改了手机号码。请通过比对前一个屏幕上的数字或扫描对方设备上的二维码手动验证端对端加密。";
+
+/* Title for a sheet explaining that encryption auto-verification did not succeed. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_FAILURE_SHEET_TITLE" = "此聊天已无法使用自动验证";
+
+/* Footer explaining that automatic verification is not available for all chats */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_FOOTER" = "自动验证并非对所有聊天均可用。";
+
+/* Header for automatic key verification */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_HEADER" = "自动密钥验证";
+
+/* Body for a sheet explaining that encryption auto-verification is not available. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_NOT_AVAILABLE_SHEET_BODY" = "Signal 只能对通过手机号码连接的联系人的聊天进行自动加密验证。如果使用用户名或在共同群组中发起聊天，请通过比对前一个屏幕上的数字或扫描对方设备上的二维码验证端对端加密。";
+
+/* Title for a sheet explaining that encryption auto-verification is not available. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_NOT_AVAILABLE_SHEET_TITLE" = "此聊天无法使用自动验证";
+
+/* Body for a sheet explaining that encryption auto-verification succeeded. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_SUCCESS_SHEET_BODY" = "对于通过手机号码连接的联系人，Signal 可以使用一个名为“密钥透明度”的流程自动确认连接是否安全。如要提高安全性，您可以比对前一个屏幕上的数字或扫描对方设备上的二维码以手动验证端对端加密。";
+
+/* Title for a sheet explaining that encryption auto-verification succeeded. */
+"SAFETY_NUMBERS_AUTOMATIC_VERIFICATION_SUCCESS_SHEET_TITLE" = "此聊天加密已自动验证";
+
 /* Title for Safety Tips button in thread details. */
 "SAFETY_TIPS_BUTTON_ACTION_TITLE" = "安全提示";
 
@@ -8102,6 +8277,12 @@
 
 /* When a chat is archived and receives a new message, it is unarchived. Turning this switch on disables this feature if the chat in question is also muted. This string is a brief label for a switch paired with a longer description underneath, in the Chats settings. */
 "SETTINGS_KEEP_MUTED_ARCHIVED_LABEL" = "继续存档静音聊天";
+
+/* Footer for settings section describing Key Transparency. */
+"SETTINGS_KEY_TRANSPARENCY_OPT_OUT_FOOTER" = "如果启用此功能，Signal 会尝试自动验证一对一聊天加密。";
+
+/* Title for for a settings option describing that Key Transparency is enabled. */
+"SETTINGS_KEY_TRANSPARENCY_OPT_OUT_SWITCH_TITLE" = "自动密钥验证";
 
 /* No comment provided by engineer. */
 "SETTINGS_LEGAL_TERMS_CELL" = "条款和隐私政策";
@@ -9840,9 +10021,6 @@
 /* An error indicating to the user that we failed to clear the wallpaper. */
 "WALLPAPER_SETTINGS_FAILED_TO_CLEAR" = "无法清除该墙纸，请稍后重试。如果该错误仍然存在，请联系支持人员。";
 
-/* An error indicating to the user that we failed to reset all wallpapers. */
-"WALLPAPER_SETTINGS_FAILED_TO_RESET" = "无法重置全部墙纸，请稍后重试。如果该错误仍然存在，请联系支持人员。";
-
 /* Label for 'reset all chat colors' action in the global wallpaper settings. */
 "WALLPAPER_SETTINGS_RESET_ALL_CHAT_COLORS" = "重置全部颜色";
 
@@ -9889,7 +10067,7 @@
 "YOU" = "您";
 
 /* text indicating the message was remotely deleted by you */
-"YOU_DELETED_THIS_MESSAGE" = "您删除了此消息。";
+"YOU_DELETED_THIS_MESSAGE" = "您删除了此消息";
 
 /* Info Message when you disabled disappearing messages. */
 "YOU_DISABLED_DISAPPEARING_MESSAGES_CONFIGURATION" = "您取消了阅后即焚。";
@@ -9977,4 +10155,3 @@
 "LINK_BA_PLATFORM_TIMEOUT_MESSAGE" = "BAXS未在规定时间内响应，请重试。";
 
 "LINK_BA_PLATFORM_ERROR_TITLE" = "错误";
-

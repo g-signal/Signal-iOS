@@ -1,9 +1,9 @@
+NSAppleMusicUsageDescription = "Signal trenger tilgang til Apple Music for å spille av mediavedlegg.";
+NSCameraUsageDescription = "Signal bruker kameraet ditt til å ta bilder og i videosamtaler.";
+NSContactsUsageDescription = "Signal benytter kontaktene dine for å finne brukere du kjenner. Vi lagrer ikke kontaktene dine på våre servere.";
+NSFaceIDUsageDescription = "Signal sin skjermlås benytter Face ID.";
+NSLocationWhenInUseUsageDescription = "Signal trenger stedstilgang for å dele posisjonen din.";
+NSMicrophoneUsageDescription = "Signal trenger tilgang til mikrofonen din for å kunne foreta anrop, motta telefonsamtaler og ta opp talemeldinger.";
+NSPhotoLibraryAddUsageDescription = "Signal vil lagre bilder i biblioteket ditt.";
+NSPhotoLibraryUsageDescription = "Signal vil la deg velge hvilke bilder du ønsker å dele fra biblioteket ditt.";
 NSAppleMusicUsageDescription = "B&A trenger tilgang til Apple Music for å spille av mediavedlegg.";
-NSCameraUsageDescription = "B&A bruker kameraet ditt til å ta bilder og i videosamtaler.";
-NSContactsUsageDescription = "B&A benytter kontaktene dine for å finne brukere du kjenner. Vi lagrer ikke kontaktene dine på våre servere.";
-NSFaceIDUsageDescription = "B&A sin skjermlås benytter Face ID.";
-NSLocationWhenInUseUsageDescription = "B&A trenger stedstilgang for å dele posisjonen din.";
-NSMicrophoneUsageDescription = "B&A trenger tilgang til mikrofonen din for å kunne foreta anrop, motta telefonsamtaler og ta opp talemeldinger.";
-NSPhotoLibraryAddUsageDescription = "B&A vil lagre bilder i biblioteket ditt.";
-NSPhotoLibraryUsageDescription = "B&A vil la deg velge hvilke bilder du ønsker å dele fra biblioteket ditt.";
-NSLocalNetworkUsageDescription = "B&A benytter seg av det lokale nettverket for å flytte kontoen din til en ny telefon. Det vil ikke bli benyttet med mindre du eksplisitt velger å starte en overføring til en ny enhet.";
