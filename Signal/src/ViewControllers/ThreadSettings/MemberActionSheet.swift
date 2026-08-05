@@ -154,6 +154,7 @@ class MemberActionSheet: OWSTableSheetViewController {
             for: thread,
             sizeClass: .eighty,
             options: [.message, .videoCall, .audioCall],
+            memberLabel: nil,
             delegate: self,
         )
 

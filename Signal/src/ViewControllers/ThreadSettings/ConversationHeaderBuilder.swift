@@ -63,6 +63,7 @@ struct ConversationHeaderBuilder {
         groupThread: TSGroupThread,
         sizeClass: ConversationAvatarView.Configuration.SizeClass,
         options: Options,
+        memberLabel: MemberLabelForRendering? = nil,
         delegate: ConversationHeaderDelegate
     ) -> UIView {
         // Make sure the view is loaded before we open a transaction,
