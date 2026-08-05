@@ -1199,15 +1199,15 @@ class BackupSettingsViewController:
                     showCreateKeySheet()
                 },
             ))
-            actionSheet.addAction(ActionSheetAction(
-                title: CommonStrings.learnMore,
-                handler: { _ in
-                    CurrentAppContext().open(
-                        URL.Support.backups,
-                        completion: nil,
-                    )
-                },
-            ))
+//            actionSheet.addAction(ActionSheetAction(
+//                title: CommonStrings.learnMore,
+//                handler: { _ in
+//                    CurrentAppContext().open(
+//                        URL.Support.backups,
+//                        completion: nil,
+//                    )
+//                },
+//            ))
             actionSheet.addAction(ActionSheetAction(
                 title: CommonStrings.okButton,
                 handler: { _ in },
@@ -1799,12 +1799,12 @@ struct BackupSettingsView: View {
                                         ).formatted(.owsByteCount()),
                                     ),
                                 )
-                                .appendLink(CommonStrings.learnMore, useBold: true, tint: .Signal.label) {
-                                    CurrentAppContext().open(
-                                        URL.Support.backups,
-                                        completion: nil,
-                                    )
-                                }
+//                                .appendLink(CommonStrings.learnMore, useBold: true, tint: .Signal.label) {
+//                                    CurrentAppContext().open(
+//                                        URL.Support.backups,
+//                                        completion: nil,
+//                                    )
+//                                }
                                 .font(.subheadline)
                                 .foregroundStyle(Color.Signal.label)
                                 .monospacedDigit()
