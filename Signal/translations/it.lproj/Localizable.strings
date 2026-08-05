@@ -1075,6 +1075,8 @@
 /* String explaining to the user that their boost badge has expired while they are a current subscription sustainer on the badge expiry sheet. */
 "BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "Il Badge B&A - Boost è scaduto e non è più visibile sul tuo profilo.
 
+Puoi riattivare il tuo Badge B&A - Boost per altri 30 giorni con una donazione singola.";
+
 /* Title for boost on the badge expiration sheet. */
 "BADGE_EXPIRED_BOOST_TITLE" = "Badge scaduto";
 

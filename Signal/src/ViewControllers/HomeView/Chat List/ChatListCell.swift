@@ -37,6 +37,9 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
         }
     }
 
+    /// If set to `true` background in `selected` state would have rounded corners.
+    var useSidebarAppearance = false
+
     private var cvViews: [CVView] {
         [
             nameLabel,
@@ -174,14 +177,31 @@ class ChatListCell: UITableViewCell, ReusableTableViewCell {
     }
 
     private func commonInit() {
-        multipleSelectionBackgroundView = UIView(frame: contentView.bounds)
         contentView.addSubview(outerHStack)
         outerHStack.shouldDeactivateConstraints = false
-        outerHStack.autoPinEdge(toSuperviewEdge: .leading)
-        outerHStack.autoPinEdge(toSuperviewEdge: .trailing)
-        outerHStack.autoPinHeightToSuperview()
+        outerHStack.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addConstraints([
+            outerHStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            outerHStack.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+            outerHStack.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+            outerHStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
 
-        self.selectionStyle = .default
+        selectionStyle = .default
+        automaticallyUpdatesBackgroundConfiguration = false
+    }
+
+    override func updateConfiguration(using state: UICellConfigurationState) {
+        var configuration = UIBackgroundConfiguration.clear()
+        if state.isSelected || state.isHighlighted {
+            configuration.backgroundColor = Theme.tableCell2SelectedBackgroundColor
+            if useSidebarAppearance {
+                configuration.cornerRadius = 24
+            }
+        } else {
+            configuration.backgroundColor = .Signal.background
+        }
+        backgroundConfiguration = configuration
     }
 
     // This method can be invoked from any thread.

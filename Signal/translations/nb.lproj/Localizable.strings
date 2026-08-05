@@ -1075,6 +1075,8 @@
 /* String explaining to the user that their boost badge has expired while they are a current subscription sustainer on the badge expiry sheet. */
 "BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "Boost-merket ditt er utløpt og vises ikke lenger på profilen din.
 
+Du kan aktivere Boost-merket på nytt i 30 dager ved å gi et engangsbeløp til B&A.";
+
 /* Title for boost on the badge expiration sheet. */
 "BADGE_EXPIRED_BOOST_TITLE" = "Merket er utløpt";
 

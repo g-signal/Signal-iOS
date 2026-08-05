@@ -1073,7 +1073,7 @@
 "BADGE_EXPIRED_BOOST_BODY" = "您的随手捐徽章已到期，无法继续显示在您的个人资料中。\n\n您可以继续使用 B&A，不过您也可以考虑成为每月定期捐款人，支持为用户而生的 B&A 技术。";
 
 /* String explaining to the user that their boost badge has expired while they are a current subscription sustainer on the badge expiry sheet. */
-"BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "您的随手捐徽章已到期，无法继续显示在您的个人资料中。
+"BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "您的随手捐徽章已到期，无法继续显示在您的个人资料中。\n\n您可以给 B&A 单次捐款，将您的随手捐徽章重新激活 30 天。";
 
 /* Title for boost on the badge expiration sheet. */
 "BADGE_EXPIRED_BOOST_TITLE" = "徽章已到期";

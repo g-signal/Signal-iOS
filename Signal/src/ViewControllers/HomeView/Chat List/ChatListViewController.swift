@@ -99,10 +99,6 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         updateUsernameReminderView()
         updateTableViewPaddingIfNeeded()
         observeNotifications()
-        DependenciesBridge.shared.db.read { tx in
-            self.viewState.backupDownloadProgressViewState.refetchDBState(tx: tx)
-        }
-        self.viewState.backupDownloadProgressView.update(viewState: self.viewState.backupDownloadProgressViewState)
     }
 
     public override func viewWillAppear(_ animated: Bool) {
@@ -333,6 +329,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
         // transition occurs. For iPhone, this moment is _during_ the
         // transition. We reload in the right places accordingly.
         if UIDevice.current.isIPad {
+            updateTableViewPaddingIfNeeded()
             reloadTableDataAndResetCellContentCache()
         }
 
@@ -340,6 +337,7 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
             self.applyTheme()
 
             if !UIDevice.current.isIPad {
+                self.updateTableViewPaddingIfNeeded()
                 self.reloadTableDataAndResetCellContentCache()
             }
 
@@ -621,6 +619,22 @@ public class ChatListViewController: OWSViewController, HomeTabViewController {
     }
 
     // MARK: UI Helpers
+
+    /// iOS 26+: checks if this VC is displayed in the collapsed split view controller
+    /// and updates `containerView.tableViewHorizontalInset` accordingly.
+    /// Does nothing on prior iOS versions.
+    private func updateTableViewPaddingIfNeeded() {
+        guard #available(iOS 26, *) else { return }
+
+        let useSidebarChatListCellAppearance: Bool
+        if let splitViewController, !splitViewController.isCollapsed {
+            useSidebarChatListCellAppearance = true
+        } else {
+            useSidebarChatListCellAppearance = false
+        }
+        containerView.tableViewHorizontalInset = useSidebarChatListCellAppearance ? 16 : 0
+        tableDataSource.useSideBarChatListCellAppearance = useSidebarChatListCellAppearance
+    }
 
     private var getStartedBanner: GetStartedBannerViewController?
 

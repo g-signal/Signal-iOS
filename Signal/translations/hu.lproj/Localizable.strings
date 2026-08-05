@@ -8176,6 +8176,8 @@
 /* Description text in the 'change phone number splash' view. */
 "SETTINGS_CHANGE_PHONE_NUMBER_SPLASH_DESCRIPTION" = "Itt a B&A által regisztrált, aktuálisan használt telefonszámodat változtathatod meg egy másikra. Ez a művelet nem vonható vissza.
 
+Kezdés előtt győződj meg róla, hogy az új számon tudsz SMS-t, vagy hívást fogadni!";
+
 /* Title text in the 'change phone number splash' view. */
 "SETTINGS_CHANGE_PHONE_NUMBER_SPLASH_TITLE" = "Telefonszám cseréje";
 

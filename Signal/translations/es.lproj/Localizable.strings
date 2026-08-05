@@ -1075,6 +1075,8 @@
 /* String explaining to the user that their boost badge has expired while they are a current subscription sustainer on the badge expiry sheet. */
 "BADGE_EXPIRED_BOOST_CURRENT_SUSTAINER_BODY" = "Tu insignia Apoyo B&A ha caducado y ya no se muestra en tu perfil.
 
+Puedes hacer una donación puntual para reactivar tu insignia Apoyo B&A por 30 días más.";
+
 /* Title for boost on the badge expiration sheet. */
 "BADGE_EXPIRED_BOOST_TITLE" = "Insignia caducada";
 
@@ -8157,6 +8159,8 @@
 
 /* Format for the description text in the 'change phone number splash' view. Embeds: {{ %1$@ the old phone number, %2$@ the new phone number }}. */
 "SETTINGS_CHANGE_PHONE_NUMBER_CONFIRM_DESCRIPTION_FORMAT" = "Vas a cambiar tu número de teléfono en B&A de %1$@ a %2$@.
+
+Antes de continuar, comprueba que el número a continuación es correcto.";
 
 /* Label for the 'country code' row in the 'change phone number' settings. */
 "SETTINGS_CHANGE_PHONE_NUMBER_COUNTRY_CODE_FIELD" = "Código de país";

@@ -8176,6 +8176,8 @@
 /* Description text in the 'change phone number splash' view. */
 "SETTINGS_CHANGE_PHONE_NUMBER_SPLASH_DESCRIPTION" = "Gebruik dit als je B&A met een ander telefoonnummer wilt blijven gebruiken. Je kunt het overstappen naar een nieuw telefoonnummer niet ongedaan maken.
 
+Ga voordat je verder gaat na dat je op het nieuwe telefoonnummer sms-berichten of oproepen kunt ontvangen.";
+
 /* Title text in the 'change phone number splash' view. */
 "SETTINGS_CHANGE_PHONE_NUMBER_SPLASH_TITLE" = "Telefoonnummer wijzigen";
 

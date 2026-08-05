@@ -234,7 +234,7 @@ extension ChatListViewController {
         }
 
         if isPrimaryDevice {
-            showAppSettings(mode: .backups())
+            showAppSettings(mode: .backups)
         } else {
             showCancelBackupDownloadsHeroSheet()
         }

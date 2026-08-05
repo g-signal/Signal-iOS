@@ -8176,6 +8176,8 @@
 /* Description text in the 'change phone number splash' view. */
 "SETTINGS_CHANGE_PHONE_NUMBER_SPLASH_DESCRIPTION" = "Voit vaihtaa B&Aiin kytketyn puhelinnumeron toiseen. Toimintoa ei voi kumota.
 
+Varmista ensin, että uuteen numeroon voi vastaanottaa tekstiviestejä tai puheluja.";
+
 /* Title text in the 'change phone number splash' view. */
 "SETTINGS_CHANGE_PHONE_NUMBER_SPLASH_TITLE" = "Vaihda puhelinnumeroa";
 

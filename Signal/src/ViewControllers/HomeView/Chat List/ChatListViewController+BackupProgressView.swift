@@ -468,7 +468,7 @@ class CLVBackupProgressView: BackupProgressView.Delegate {
 
 extension ChatListViewController {
     func handleBackupProgressViewTapped() {
-        SignalApp.shared.showAppSettings(mode: .backups())
+        SignalApp.shared.showAppSettings(mode: .backups)
     }
 }
 

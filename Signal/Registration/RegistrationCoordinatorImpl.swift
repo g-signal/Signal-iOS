@@ -1504,7 +1504,8 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
                 }
                 return .enterRecoveryKey(
                     RegistrationEnterAccountEntropyPoolState(
-                        canShowBackButton: persistedState.accountIdentity == nil
+                        canShowBackButton: persistedState.accountIdentity == nil,
+                        canShowNoKeyHelpButton: true
                     ))
             case .skipRestore:
                 return await updateRestoreMethod(method: .declined).awaitable()
@@ -1848,7 +1849,8 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
 
         return .enterRecoveryKey(
             RegistrationEnterAccountEntropyPoolState(
-                canShowBackButton: persistedState.accountIdentity == nil
+                canShowBackButton: persistedState.accountIdentity == nil,
+                canShowNoKeyHelpButton: true
             ))
     }
 
@@ -1899,7 +1901,8 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
             // for the AEP before continuing with registration
             return .enterRecoveryKey(
                 RegistrationEnterAccountEntropyPoolState(
-                    canShowBackButton: persistedState.accountIdentity == nil
+                    canShowBackButton: persistedState.accountIdentity == nil,
+                    canShowNoKeyHelpButton: true
                 ))
         }
 
@@ -2061,7 +2064,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
                     owsFailDebug("Encountered unexpected recovery path for incorrect recovery key.")
                     fallthrough
                 case .incorrectRecoveryKey, .tryAgain:
-                    return .enterRecoveryKey(.init(canShowBackButton: true))
+                    return .enterRecoveryKey(.init(canShowBackButton: true, canShowNoKeyHelpButton: true))
                 case .restartQuickRestore:
                     return .scanQuickRegistrationQrCode
                 }
@@ -3466,7 +3469,7 @@ public class RegistrationCoordinatorImpl: RegistrationCoordinator {
         } else {
             if isBackup {
                 // If the user want's to restore from backup, ask for the key
-                return .enterRecoveryKey(RegistrationEnterAccountEntropyPoolState(canShowBackButton: false))
+                return .enterRecoveryKey(RegistrationEnterAccountEntropyPoolState(canShowBackButton: false, canShowNoKeyHelpButton: true))
             } else {
                 // If the AccountEntropyPool doesn't exist yet, create one.
                 accountEntropyPool = getOrGenerateAccountEntropyPool()
