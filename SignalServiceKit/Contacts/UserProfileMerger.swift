@@ -80,6 +80,14 @@ class UserProfileMerger: RecipientMergeObserver {
         userProfileToMergeInto.phoneNumber = normalizedAddress?.phoneNumber
         userProfileStore.updateUserProfile(userProfileToMergeInto, tx: tx)
 
+        // Keep gext_recipient.aci in sync with the new serviceIdString so that
+        // ext tag lookups (which use ACI) don't lose the tag between the merge
+        // and the next profile fetch.
+        if let profileId = userProfileToMergeInto.id,
+           let newAci = normalizedAddress?.serviceId?.serviceIdUppercaseString {
+            GExtTagStore.shared.updateAci(profileId: profileId, newAci: newAci, transaction: tx)
+        }
+
         for userProfileToMergeFrom in userProfiles.dropFirst() {
             if userProfileToMergeInto.profileKey == nil, let profileKey = userProfileToMergeFrom.profileKey {
                 setProfileKeyShim(userProfileToMergeInto, profileKey, tx)
