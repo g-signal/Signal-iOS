@@ -89,14 +89,6 @@ public class RegistrationSplashViewController: OWSViewController, OWSNavigationC
         }()
         let titleLabel = UILabel.titleLabelForRegistration(text: titleText)
 
-        // Nonprofit label
-        let nonprofitAwarenessLabel = UILabel.explanationLabelForRegistration(
-            text: OWSLocalizedString(
-                "ONBOARDING_SPLASH_NONPROFIT",
-                comment: "Text indicating Signal is a nonprofit on the 'onboarding splash' view. For non-English languages, exclude the word '501c3'.",
-            ),
-        )
-
         // Terms of service and privacy policy.
         let tosPPButton = UIButton(
             configuration: .smallBorderless(title: OWSLocalizedString(
@@ -135,13 +127,11 @@ public class RegistrationSplashViewController: OWSViewController, OWSNavigationC
         let stackView = addStaticContentStackView(arrangedSubviews: [
             heroImageContainer,
             titleLabel,
-            nonprofitAwarenessLabel,
             tosPPButton,
             largeButtonsContainer,
         ])
         stackView.setCustomSpacing(44, after: imageView)
         stackView.setCustomSpacing(24, after: titleLabel)
-        stackView.setCustomSpacing(0, after: nonprofitAwarenessLabel)
         stackView.setCustomSpacing(80, after: tosPPButton)
 
         view.sendSubviewToBack(stackView)
