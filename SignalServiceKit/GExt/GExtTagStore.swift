@@ -105,6 +105,7 @@ public class GExtTagStore: NSObject {
                 INSERT INTO gext_recipient (_id, aci, tags, last_updated)
                 VALUES (?, ?, ?, ?)
                 ON CONFLICT(_id) DO UPDATE SET
+                    aci = excluded.aci,
                     tags = excluded.tags,
                     last_updated = excluded.last_updated
             """, arguments: [profileId, aciString, tagsData, Int64(now)])
@@ -138,6 +139,7 @@ public class GExtTagStore: NSObject {
                 INSERT INTO gext_recipient (_id, aci, tags, last_updated, robot)
                 VALUES (?, ?, ?, ?, ?)
                 ON CONFLICT(_id) DO UPDATE SET
+                    aci = excluded.aci,
                     robot = excluded.robot,
                     last_updated = excluded.last_updated
             """, arguments: [profileId, aciString, emptyTagsData, Int64(now), robotData])
