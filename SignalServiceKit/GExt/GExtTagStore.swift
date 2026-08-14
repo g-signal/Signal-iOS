@@ -254,6 +254,21 @@ public class GExtTagStore: NSObject {
         }
     }
 
+    /// profile merge 时同步更新 gext_recipient.aci，避免 tag 在 ACI 被揭露后短暂消失
+    public func updateAci(
+        profileId: Int64,
+        newAci: String,
+        transaction: DBWriteTransaction
+    ) {
+        do {
+            try transaction.database.execute(sql: """
+                UPDATE gext_recipient SET aci = ? WHERE _id = ?
+            """, arguments: [newAci, profileId])
+        } catch {
+            owsFailDebug("Failed to update gext_recipient aci for profileId \(profileId): \(error)")
+        }
+    }
+
     // MARK: - 私有辅助方法
 
     /// 获取用户ACI字符串
