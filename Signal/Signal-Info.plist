@@ -13,11 +13,11 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Wed Jul 22 06:59:27 UTC 2026</string>
+		<string>Fri Aug 14 12:44:58 UTC 2026</string>
 		<key>SignalCommit</key>
-		<string>b3fbc8579775ddddf8794d455a9d12c4de0b07dd 7.79</string>
+		<string>7fb79d9501b5245ba7fb8b7565503bb7b7f51608 Sync gext_recipient.aci immediately on profile merge</string>
 		<key>Timestamp</key>
-		<integer>1784703567</integer>
+		<integer>1786711498</integer>
 		<key>XCodeVersion</key>
 		<string>2600.2660</string>
 	</dict>
@@ -40,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.79.1</string>
+	<string>7.79.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
