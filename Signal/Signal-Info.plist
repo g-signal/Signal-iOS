@@ -12,11 +12,11 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Wed Jul 29 11:21:17 UTC 2026</string>
+		<string>Mon Aug 17 02:26:45 UTC 2026</string>
 		<key>SignalCommit</key>
-		<string>ea31f867b9811a6c504613a063085dc0ca9b91eb Change default attachment filename prefix from signal to ba</string>
+		<string>c90243f252f41012d15f82e1b7e33f82129079ea Sync gext_recipient.aci immediately on profile merge</string>
 		<key>Timestamp</key>
-		<integer>1785324077</integer>
+		<integer>1786933605</integer>
 		<key>XCodeVersion</key>
 		<string>2600.2660</string>
 	</dict>
