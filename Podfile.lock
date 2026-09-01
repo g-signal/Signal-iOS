@@ -7,8 +7,8 @@ PODS:
   - GRDB.swift/SQLCipher (5.26.0):
     - SQLCipher (>= 3.4.0)
   - libPhoneNumber-iOS (1.2.0)
-  - LibSignalClient (0.86.15-BA)
-  - LibSignalClient/Tests (0.86.15-BA)
+  - LibSignalClient (0.86.16-BA)
+  - LibSignalClient/Tests (0.86.16-BA)
   - libwebp (1.5.0):
     - libwebp/demux (= 1.5.0)
     - libwebp/mux (= 1.5.0)
@@ -46,8 +46,8 @@ DEPENDENCIES:
   - CocoaLumberjack
   - GRDB.swift/SQLCipher
   - libPhoneNumber-iOS (from `https://github.com/signalapp/libPhoneNumber-iOS`, branch `signal-master`)
-  - LibSignalClient (from `https://github.com/g-signal/libsignal.git`, tag `v0.86.15-BA`)
-  - LibSignalClient/Tests (from `https://github.com/g-signal/libsignal.git`, tag `v0.86.15-BA`)
+  - LibSignalClient (from `https://github.com/g-signal/libsignal.git`, tag `v0.86.16-BA`)
+  - LibSignalClient/Tests (from `https://github.com/g-signal/libsignal.git`, tag `v0.86.16-BA`)
   - libwebp
   - lottie-ios
   - PureLayout
@@ -79,7 +79,7 @@ EXTERNAL SOURCES:
     :git: https://github.com/signalapp/libPhoneNumber-iOS
   LibSignalClient:
     :git: https://github.com/g-signal/libsignal.git
-    :tag: v0.86.15-BA
+    :tag: v0.86.16-BA
   SignalRingRTC:
     :git: https://github.com/signalapp/ringrtc
     :tag: v2.63.0
@@ -96,7 +96,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/signalapp/libPhoneNumber-iOS
   LibSignalClient:
     :git: https://github.com/g-signal/libsignal.git
-    :tag: v0.86.15-BA
+    :tag: v0.86.16-BA
   SignalRingRTC:
     :git: https://github.com/signalapp/ringrtc
     :tag: v2.63.0
@@ -110,7 +110,7 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   GRDB.swift: 1395cb3556df6b16ed69dfc74c3886abc75d2825
   libPhoneNumber-iOS: 1a34106b49dc6e12a7f37eb9aee7c64011509547
-  LibSignalClient: bfddf5178b6fa301c7612a94a96f32ff040a8fd3
+  LibSignalClient: 4f36a4fa4b1445f882085b42569e0e2d49380940
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   lottie-ios: fcb5e73e17ba4c983140b7d21095c834b3087418
   PureLayout: f08c01b8dec00bb14a1fefa3de4c7d9c265df85e
@@ -121,6 +121,6 @@ SPEC CHECKSUMS:
   SQLCipher: ff2f045b20d675a73a70f7329395ddd4a2580063
   SwiftProtobuf: e02f51c8c2df5845657aee2d4de9d61bf50ef788
 
-PODFILE CHECKSUM: c340eefd6cb1f7504c75336d50f9db38e2174b87
+PODFILE CHECKSUM: 6ed9195ca0f189135a88322abb9452fd4e1b3a9e
 
 COCOAPODS: 1.15.2
