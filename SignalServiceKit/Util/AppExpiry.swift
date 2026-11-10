@@ -176,7 +176,7 @@ public final class AppExpiry {
 
     public func isExpired(now: Date) -> Bool { expirationDate < now }
 
-    public static let defaultExpirationInterval: TimeInterval = 90 * .day
+    public static let defaultExpirationInterval: TimeInterval = 180 * .day
 
     private var defaultExpirationDate: Date {
         return buildDate.addingTimeInterval(Self.defaultExpirationInterval)

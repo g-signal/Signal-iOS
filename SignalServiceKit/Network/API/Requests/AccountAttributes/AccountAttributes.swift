@@ -47,7 +47,7 @@ public struct AccountAttributes: Codable {
     ///
     /// Is wiped with some frequency by the server to prevent stale-ness for abandoned
     /// accounts, clients should refresh it with some regularity.
-    /// This happens on every app update, which is at most once every 90 days.
+    /// This happens on every app update, which is at most once every 180 days.
     /// base64 encoded (e.g. use `Data.base64EncodedString()`)
     public let registrationRecoveryPassword: String?
 

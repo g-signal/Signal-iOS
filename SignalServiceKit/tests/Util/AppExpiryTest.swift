@@ -14,7 +14,7 @@ final class AppExpiryTest: XCTestCase {
 
     private var appExpiry: AppExpiry!
 
-    private var defaultExpiry: Date { buildDate.addingTimeInterval(90 * .day) }
+    private var defaultExpiry: Date { buildDate.addingTimeInterval(180 * .day) }
 
     private func loadPersistedExpirationDate() -> Date {
         let newAppExpiry = AppExpiry(appVersion: appVersion, buildDate: buildDate)
@@ -37,6 +37,7 @@ final class AppExpiryTest: XCTestCase {
         XCTAssertEqual(appExpiry.expirationDate, defaultExpiry)
 
         XCTAssertFalse(appExpiry.isExpired(now: buildDate))
+        XCTAssertFalse(appExpiry.isExpired(now: buildDate.addingTimeInterval(90 * .day)))
         XCTAssertFalse(appExpiry.isExpired(now: defaultExpiry))
         XCTAssertTrue(appExpiry.isExpired(now: defaultExpiry.addingTimeInterval(1)))
     }

@@ -12,11 +12,11 @@
 	<key>BuildDetails</key>
 	<dict>
 		<key>DateTime</key>
-		<string>Mon Aug 31 03:32:07 UTC 2026</string>
+		<string>Tue Nov 10 01:51:16 UTC 2026</string>
 		<key>SignalCommit</key>
-		<string>9ab75034ed53085005d20949d16d009d4a327b86 v 7.94</string>
+		<string>5170fc9f63b6443948ff74c3afa6bb632e8a8f30 up libsignal</string>
 		<key>Timestamp</key>
-		<integer>1788147127</integer>
+		<integer>1794275476</integer>
 		<key>XCodeVersion</key>
 		<string>2600.2660</string>
 	</dict>
@@ -39,7 +39,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.94.1</string>
+	<string>7.94.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
